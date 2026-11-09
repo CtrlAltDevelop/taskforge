@@ -115,3 +115,26 @@ def test_guessing_from_many_addresses_hits_an_account_wide_ceiling(db: None) -> 
         _login_from(client, "guess-guess-1", f"192.0.2.{n + 1}")
 
     assert _login_from(client, "Xq7-mnbvcz", "198.51.100.200") == 429
+
+
+def test_a_common_password_is_refused_at_signup(db: None) -> None:
+    assert _signup(Client(), "password123") == 400
+
+
+def test_a_common_password_is_refused_on_change(db: None) -> None:
+    client = Client()
+    signup = client.post(
+        SIGNUP,
+        {"identifier": "zoe@example.com", "password": "Xq7-mnbvcz", "email": "zoe@example.com"},
+        content_type="application/json",
+    ).json()
+    headers = {"HTTP_AUTHORIZATION": f"Bearer {signup['data']['credentials']['access_token']}"}
+
+    response = client.post(
+        "/api/v1/auth/password/change",
+        {"current_password": "Xq7-mnbvcz", "new_password": "password123"},
+        content_type="application/json",
+        **headers,
+    )
+
+    assert response.status_code == 400
