@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package config.projects;
+
+service ProjectController {
+    rpc AddMember(ProjectAddMemberRequest) returns (ProjectMember) {}
+    rpc Archive(ProjectArchiveRequest) returns (Project) {}
+    rpc Create(ProjectCreateRequest) returns (Project) {}
+    rpc Favorite(ProjectFavoriteRequest) returns (Project) {}
+    rpc Get(ProjectGetRequest) returns (Project) {}
+    rpc List(ProjectListRequest) returns (ProjectList) {}
+    rpc ListMembers(ProjectListMembersRequest) returns (ProjectMemberList) {}
+    rpc ListPrivate(ProjectListPrivateRequest) returns (PrivateProjectList) {}
+    rpc RemoveMember(ProjectRemoveMemberRequest) returns (ProjectEmpty) {}
+    rpc Restore(ProjectRestoreRequest) returns (Project) {}
+    rpc SetFeatures(ProjectSetFeaturesRequest) returns (Project) {}
+    rpc Update(ProjectUpdateRequest) returns (Project) {}
+}
+
+message Feature {
+    string key = 1;
+    bool enabled = 2;
+}
+
+message FeatureInfo {
+    string key = 1;
+    string label = 2;
+    string description = 3;
+}
+
+message FeatureResponse {
+    string key = 1;
+    bool enabled = 2;
+}
+
+message PrivateProjectList {
+    repeated Project projects = 1;
+}
+
+message Project {
+    string id = 1;
+    string workspace_id = 2;
+    string name = 3;
+    string key = 4;
+    string description = 5;
+    string icon = 6;
+    string color = 7;
+    string visibility = 8;
+    string archived_at = 9;
+    int32 version = 10;
+    int32 task_counter = 11;
+    repeated Feature features = 12;
+    bool is_favorite = 13;
+    int32 member_count = 14;
+    bool is_member = 15;
+    bool can_open = 16;
+    string created_by = 17;
+}
+
+message ProjectAddMemberRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string user_id = 3;
+}
+
+message ProjectArchiveRequest {
+    string workspace_id = 1;
+    string id = 2;
+    int32 expected_version = 3;
+}
+
+message ProjectCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    string key = 3;
+    string description = 4;
+    string icon = 5;
+    string color = 6;
+    string visibility = 7;
+}
+
+message ProjectEmpty {
+}
+
+message ProjectFavoriteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    bool favorite = 3;
+}
+
+message ProjectGetRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message ProjectList {
+    repeated Project projects = 1;
+    repeated FeatureInfo feature_info = 2;
+}
+
+message ProjectListMembersRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message ProjectListPrivateRequest {
+    string workspace_id = 1;
+}
+
+message ProjectListRequest {
+    string workspace_id = 1;
+    bool include_archived = 2;
+}
+
+message ProjectMember {
+    string user_id = 1;
+    string display_name = 2;
+    string email = 3;
+    string added_at = 4;
+}
+
+message ProjectMemberList {
+    repeated ProjectMember members = 1;
+}
+
+message ProjectRemoveMemberRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string user_id = 3;
+}
+
+message ProjectRestoreRequest {
+    string workspace_id = 1;
+    string id = 2;
+    int32 expected_version = 3;
+}
+
+message ProjectSetFeaturesRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    repeated string enabled_keys = 3;
+    int32 expected_version = 4;
+}
+
+message ProjectUpdateRequest {
+    string workspace_id = 1;
+    string id = 2;
+    int32 expected_version = 3;
+    optional string name = 4;
+    optional string key = 5;
+    optional string description = 6;
+    optional string icon = 7;
+    optional string color = 8;
+    optional string visibility = 9;
+}
+

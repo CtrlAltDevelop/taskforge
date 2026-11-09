@@ -17,6 +17,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from google.protobuf.empty_pb2 import Empty
 
+from infrastructure.projects import members as project_members
+from infrastructure.projects import services as project_services
+from infrastructure.projects.grpc import projects_pb2 as ppb
+from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
 from infrastructure.workspaces import access, invitations, roles, services
 from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 from infrastructure.workspaces.grpc import workspaces_pb2_grpc as stubs
@@ -39,6 +43,8 @@ class World:
     target: Any
     custom_role_id: str
     invitation_id: str
+    project_id: str  # an open project
+    private_id: str  # a private project the Owner belongs to
     role_ids: dict[str, str] = field(default_factory=dict)
 
     @property
@@ -74,6 +80,14 @@ class RestRefusal(Exception):
     def __init__(self, response: Any) -> None:
         super().__init__(response.status_code)
         self.response = response
+
+
+def _archive_project(w: World) -> None:
+    project_services.archive(w.workspace.created_by, w.workspace, w.project_id, 1)
+
+
+def _add_target_to_private(w: World) -> None:
+    project_members.add_member(w.workspace.created_by, w.workspace, w.private_id, str(w.target.pk))
 
 
 def _soft_delete(w: World) -> None:
@@ -221,6 +235,91 @@ ENDPOINTS: tuple[Endpoint, ...] = (
     ),
 )
 
+PR = pstubs.ProjectControllerStub
+_PROJECT_CALLS = (  # (rpc, permission, request builder, prepare)
+    ("List", "workspace.view", lambda w: ppb.ProjectListRequest(workspace_id=w.ws), None),
+    (
+        "Get",
+        "workspace.view",
+        lambda w: ppb.ProjectGetRequest(workspace_id=w.ws, id=w.project_id),
+        None,
+    ),
+    (
+        "Create",
+        "project.create",
+        lambda w: ppb.ProjectCreateRequest(workspace_id=w.ws, name="New", key="NEW"),
+        None,
+    ),
+    (
+        "Update",
+        "project.update",
+        lambda w: ppb.ProjectUpdateRequest(
+            workspace_id=w.ws, id=w.project_id, expected_version=1, name="Renamed"
+        ),
+        None,
+    ),
+    (
+        "SetFeatures",
+        "project.update",
+        lambda w: ppb.ProjectSetFeaturesRequest(
+            workspace_id=w.ws, project_id=w.project_id, enabled_keys=["sprints"], expected_version=1
+        ),
+        None,
+    ),
+    (
+        "Archive",
+        "project.archive",
+        lambda w: ppb.ProjectArchiveRequest(workspace_id=w.ws, id=w.project_id, expected_version=1),
+        None,
+    ),
+    (
+        "Restore",
+        "project.archive",
+        lambda w: ppb.ProjectRestoreRequest(workspace_id=w.ws, id=w.project_id, expected_version=2),
+        _archive_project,
+    ),
+    (
+        "Favorite",
+        "workspace.view",
+        lambda w: ppb.ProjectFavoriteRequest(
+            workspace_id=w.ws, project_id=w.project_id, favorite=True
+        ),
+        None,
+    ),
+    (
+        "ListMembers",
+        "workspace.view",
+        lambda w: ppb.ProjectListMembersRequest(workspace_id=w.ws, project_id=w.project_id),
+        None,
+    ),
+    (
+        "AddMember",
+        "project.member.manage",
+        lambda w: ppb.ProjectAddMemberRequest(
+            workspace_id=w.ws, project_id=w.private_id, user_id=str(w.target.pk)
+        ),
+        None,
+    ),
+    (
+        "RemoveMember",
+        "project.member.manage",
+        lambda w: ppb.ProjectRemoveMemberRequest(
+            workspace_id=w.ws, project_id=w.private_id, user_id=str(w.target.pk)
+        ),
+        _add_target_to_private,
+    ),
+    (
+        "ListPrivate",
+        "project.view_private",
+        lambda w: ppb.ProjectListPrivateRequest(workspace_id=w.ws),
+        None,
+    ),
+)
+ENDPOINTS += tuple(
+    Endpoint(f"ProjectController.{rpc}", permission, _grpc(PR, rpc, build), prepare=prepare)
+    for rpc, permission, build, prepare in _PROJECT_CALLS
+)
+
 # Handlers that need no workspace permission, and why.
 EXEMPT = {
     "WorkspaceController.List": "account-level: the caller's own workspaces",
@@ -312,12 +411,17 @@ def _world(people: dict[str, Any], n: int) -> World:
     invite = invitations.create_invitations(
         workspace, users["Owner"], ["pending@example.com"]
     ).created[0]
+    owner = users["Owner"]
+    open_project = project_services.create(owner, workspace, "Web", "WEB").project
+    private = project_services.create(owner, workspace, "Sec", "SEC", visibility="private").project
     return World(
         workspace,
         people["tokens"],
         users["Target"],
         str(custom.role.pk),
         str(invite.invitation.pk),
+        str(open_project.pk),
+        str(private.pk),
         ids,
     )
 

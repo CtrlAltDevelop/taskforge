@@ -94,6 +94,11 @@ translate. Registry of keys and built-in grants: `registry.py` (single source of
 | `member.set_role` | Member.SetRole | x | x | | |
 | `role.view` | Role.List (roles + registry), matrix screen | x | x | x | x |
 | `role.manage` | Role.Create/Update/Delete | x | x | | |
+| `project.create` | Project.Create ([projects](projects.md)) | x | x | x | |
+| `project.update` | Project.Update, SetFeatures | x | x | | |
+| `project.archive` | Project.Archive, Restore | x | x | | |
+| `project.member.manage` | Project.AddMember, RemoveMember | x | x | | |
+| `project.view_private` | Project.ListPrivate (admin list) | x | x | | |
 
 - **API**: `can(actor, key, resource) -> Decision(allowed, permission, role, hint)` never raises
   (unknown key = programming error, `ValueError`); `require(actor, key, workspace)` raises and

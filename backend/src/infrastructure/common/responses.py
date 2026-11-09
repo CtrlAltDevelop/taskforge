@@ -130,6 +130,12 @@ class ResponseTitle(StrEnum):
     ROLE_BUILTIN = "ROLE_BUILTIN"
     ROLE_NAME_TAKEN = "ROLE_NAME_TAKEN"
 
+    # Projects
+    KEY_TAKEN = "KEY_TAKEN"
+    KEY_LOCKED = "KEY_LOCKED"
+    PROJECT_ARCHIVED = "PROJECT_ARCHIVED"
+    LAST_MEMBER = "LAST_MEMBER"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -169,6 +175,10 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.PERMISSION_DENIED_REASON: "Your role lacks a permission this needs.",
     ResponseTitle.ROLE_BUILTIN: "Built-in roles cannot be changed or deleted.",
     ResponseTitle.ROLE_NAME_TAKEN: "A role with that name already exists.",
+    ResponseTitle.KEY_TAKEN: "That project key is already used in this workspace.",
+    ResponseTitle.KEY_LOCKED: "The project key cannot change once the project has tasks.",
+    ResponseTitle.PROJECT_ARCHIVED: "This project is archived and read-only.",
+    ResponseTitle.LAST_MEMBER: "A private project needs at least one member.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

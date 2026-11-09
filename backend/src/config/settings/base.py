@@ -1037,6 +1037,8 @@ INSTALLED_APPS = [
     # that model from the first migration rather than swap it in later.
     ACCOUNTS_APP,
     *registered_app_configs(BASE_DIR / "src" / "config" / "api_registry.json"),
+    # gRPC only, so no registry route installs it.
+    "infrastructure.projects.apps.ProjectsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

@@ -40,6 +40,11 @@ PERMISSIONS: Final = (
     Permission("member.set_role", "Change a member's role"),
     Permission("role.view", "See roles and the permission matrix"),
     Permission("role.manage", "Create, edit and delete custom roles"),
+    Permission("project.create", "Create projects"),
+    Permission("project.update", "Edit a project: name, key, look, visibility, features"),
+    Permission("project.archive", "Archive and restore projects"),
+    Permission("project.member.manage", "Add and remove members of private projects"),
+    Permission("project.view_private", "List the workspace's private projects (admin list)"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -47,7 +52,7 @@ _VIEWER_KEYS = frozenset({"workspace.view", "member.view", "role.view"})
 BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
     OWNER: ALL_KEYS,
     ADMIN: ALL_KEYS - {"workspace.delete"},
-    MEMBER: _VIEWER_KEYS | {"member.invite"},  # phase 03: any member may invite
+    MEMBER: _VIEWER_KEYS | {"member.invite", "project.create"},  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,
 }
 

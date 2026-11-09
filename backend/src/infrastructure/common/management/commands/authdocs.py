@@ -49,6 +49,7 @@ PROJECT_LABELS = frozenset(
         "cms",
         "club",
         "notifications",
+        "projects",
         "shop",
         "support",
         "wallet",

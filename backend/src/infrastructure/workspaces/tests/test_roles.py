@@ -12,7 +12,15 @@ from infrastructure.workspaces.models import MemberStatus, Role, WorkspaceMember
 from infrastructure.workspaces.registry import BUILTIN_GRANTS
 
 # a superset of Member, so it may remove Members (nobody acts on a stronger role)
-RECRUITER = ["workspace.view", "member.view", "member.invite", "member.remove", "role.view"]
+# project.create: it can only remove a Member if it holds everything Member holds (escalation guard)
+RECRUITER = [
+    "workspace.view",
+    "member.view",
+    "member.invite",
+    "member.remove",
+    "role.view",
+    "project.create",
+]
 
 
 @pytest.fixture

@@ -156,6 +156,10 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `PERMISSION_DENIED_REASON` | Your role lacks a permission this needs. |
 | `ROLE_BUILTIN` | Built-in roles cannot be changed or deleted. |
 | `ROLE_NAME_TAKEN` | A role with that name already exists. |
+| `KEY_TAKEN` | That project key is already used in this workspace. |
+| `KEY_LOCKED` | The project key cannot change once the project has tasks. |
+| `PROJECT_ARCHIVED` | This project is archived and read-only. |
+| `LAST_MEMBER` | A private project needs at least one member. |
 
 ## Writing an endpoint
 

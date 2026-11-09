@@ -91,12 +91,28 @@ def grant_of(actor: Any, resource: Any) -> Grant | None:
     return None if member is None else Grant(member.role, role_keys(member.role))
 
 
-def _decision(permission: str, grant: Grant | None) -> Decision:
+# The creator rule: whoever created a project (and still may create projects) manages it,
+# even when their role lacks these keys. Never other keys, never other projects.
+CREATOR_KEYS = frozenset({"project.update", "project.archive", "project.member.manage"})
+CREATOR_GATE = "project.create"
+
+
+def _creator_allows(actor: Any, permission: str, grant: Grant, resource: Any) -> bool:
+    return (
+        permission in CREATOR_KEYS
+        and CREATOR_GATE in grant.keys
+        and getattr(resource, "created_by_id", None) == getattr(actor, "pk", object())
+    )
+
+
+def _decision(
+    permission: str, grant: Grant | None, actor: Any = None, resource: Any = None
+) -> Decision:
     if permission not in ALL_KEYS:
         raise ValueError(f"unknown permission key {permission!r}; add it to registry.py")
     if grant is None:
         return Decision(False, permission, "", "")
-    if permission in grant.keys:
+    if permission in grant.keys or _creator_allows(actor, permission, grant, resource):
         return Decision(True, permission, grant.role.name, "")
     return Decision(False, permission, grant.role.name, _hint([permission], grant.role.name))
 
@@ -108,10 +124,10 @@ def _hint(missing: Iterable[str], role: str) -> str:
 def can(actor: Any, permission: str, resource: Any = None) -> Decision:
     """Decide without raising. ``resource`` is a Workspace, or anything with ``workspace_id``.
 
-    Phase 05+ passes a project/task here so per-project overrides can apply; for now
-    only its workspace matters. ``None`` has no workspace, so it is denied.
+    A project passed here also triggers the creator rule (``CREATOR_KEYS``). ``None`` has no
+    workspace, so it is denied.
     """
-    return _decision(permission, grant_of(actor, resource))
+    return _decision(permission, grant_of(actor, resource), actor, resource)
 
 
 def lock(workspace: Workspace) -> None:
@@ -123,10 +139,12 @@ def lock(workspace: Workspace) -> None:
     Workspace.objects.select_for_update().filter(pk=workspace.pk).first()
 
 
-def require(actor: Any, permission: str, workspace: Any) -> Grant:
-    """Raise unless the actor holds ``permission`` in ``workspace``; return what they hold."""
+def require(actor: Any, permission: str, workspace: Any, resource: Any = None) -> Grant:
+    """Raise unless the actor holds ``permission`` in ``workspace``; return what they hold.
+
+    ``resource`` (a project) enables the creator rule for ``CREATOR_KEYS``."""
     grant = grant_of(actor, workspace)
-    decision = _decision(permission, grant)
+    decision = _decision(permission, grant, actor, resource)
     if grant is None:
         raise forbidden()
     if not decision.allowed:
