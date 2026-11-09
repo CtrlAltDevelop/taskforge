@@ -11,6 +11,11 @@ abstract final class Perm {
   static const memberSetRole = 'member.set_role';
   static const roleView = 'role.view';
   static const roleManage = 'role.manage';
+  static const projectCreate = 'project.create';
+  static const projectUpdate = 'project.update';
+  static const projectArchive = 'project.archive';
+  static const projectMemberManage = 'project.member.manage';
+  static const projectViewPrivate = 'project.view_private';
 
   static const all = [
     workspaceView,
@@ -22,6 +27,11 @@ abstract final class Perm {
     memberSetRole,
     roleView,
     roleManage,
+    projectCreate,
+    projectUpdate,
+    projectArchive,
+    projectMemberManage,
+    projectViewPrivate,
   ];
 }
 

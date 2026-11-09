@@ -14,6 +14,10 @@ import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
+import 'package:taskforge/features/projects/presentation/archived_screen.dart';
+import 'package:taskforge/features/projects/presentation/private_projects_screen.dart';
+import 'package:taskforge/features/projects/presentation/project_screen.dart';
+import 'package:taskforge/features/projects/presentation/project_settings_screen.dart';
 import 'package:taskforge/features/roles/presentation/roles_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
@@ -58,7 +62,15 @@ final routerProvider = Provider<GoRouter>((ref) {
   final workspacesChanged = ValueNotifier(0);
   ref.listen(workspacesProvider, (_, _) => workspacesChanged.value++);
   ref.onDispose(workspacesChanged.dispose);
-  return GoRouter(
+  late final GoRouter router;
+  // A project belongs to one workspace: leave its pages when the workspace changes.
+  ref.listen(workspaceScopeProvider, (previous, next) {
+    final path = router.routeInformationProvider.value.uri.path;
+    if (previous != null && next != previous && path.startsWith('/projects/')) {
+      router.go('/');
+    }
+  });
+  router = GoRouter(
     refreshListenable: Listenable.merge([session, workspacesChanged]),
     redirect: (context, state) {
       final native = customSchemeRoute(state.uri);
@@ -104,6 +116,25 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/workspaces/roles',
         builder: (_, _) => const RolesScreen(),
       ),
+      // Fixed paths first: `:id` would otherwise swallow them.
+      GoRoute(
+        path: '/projects/archived',
+        builder: (_, _) => const ArchivedProjectsScreen(),
+      ),
+      GoRoute(
+        path: '/projects/private',
+        builder: (_, _) => const PrivateProjectsScreen(),
+      ),
+      GoRoute(
+        path: '/projects/:id',
+        builder: (_, state) =>
+            ProjectScreen(projectId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/projects/:id/settings',
+        builder: (_, state) =>
+            ProjectSettingsScreen(projectId: state.pathParameters['id']!),
+      ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(
         path: '/invite/:token',
@@ -140,4 +171,5 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
+  return router;
 });

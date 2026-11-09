@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:taskforge/features/projects/application/projects_providers.dart';
+import 'package:taskforge/features/projects/domain/projects.dart';
+import 'package:taskforge/features/projects/presentation/app_shell.dart';
+import 'package:taskforge/features/projects/presentation/archived_banner.dart';
+import 'package:taskforge/features/projects/presentation/project_actions.dart';
+import 'package:taskforge/features/projects/presentation/project_avatar.dart';
+
+/// Placeholder project page: tasks arrive in phase 06.
+class ProjectScreen extends ConsumerWidget {
+  const ProjectScreen({super.key, required this.projectId});
+
+  final String projectId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final catalog = ref.watch(projectCatalogProvider(true));
+    final project = ref.watch(projectProvider(projectId));
+    return ShellScaffold(
+      appBar: AppBar(
+        title: Text(project?.name ?? 'Project'),
+        actions: [
+          if (project != null) ...[
+            IconButton(
+              key: const Key('favorite-toggle'),
+              tooltip: project.isFavorite ? 'Remove favorite' : 'Add favorite',
+              icon: Icon(project.isFavorite ? Icons.star : Icons.star_border),
+              // The server refuses starring an archived project.
+              onPressed: project.isArchived
+                  ? null
+                  : () => runProjectAction(
+                      context,
+                      () => ref
+                          .read(projectsControllerProvider)
+                          .favorite(project, !project.isFavorite),
+                    ),
+            ),
+            IconButton(
+              key: const Key('open-project-settings'),
+              tooltip: 'Project settings',
+              icon: const Icon(Icons.settings),
+              onPressed: () => context.push('/projects/${project.id}/settings'),
+            ),
+          ],
+        ],
+      ),
+      body: switch (project) {
+        final p? => _Body(project: p),
+        null when catalog.hasError => Center(
+          child: TextButton(
+            key: const Key('retry-projects'),
+            onPressed: () => ref.invalidate(projectsProvider),
+            child: const Text('Could not load the project. Retry'),
+          ),
+        ),
+        null when catalog.hasValue => const Center(
+          child: Text('Project not found.', key: Key('project-missing')),
+        ),
+        _ => const Center(child: CircularProgressIndicator()),
+      },
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  const _Body({required this.project});
+
+  final Project project;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        if (project.isArchived) ArchivedBanner(project: project),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Row(
+                children: [
+                  ProjectAvatar(project: project, radius: 24),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          project.name,
+                          key: const Key('project-title'),
+                          style: theme.textTheme.headlineSmall,
+                        ),
+                        Text(project.key, key: const Key('project-key-label')),
+                      ],
+                    ),
+                  ),
+                  if (project.isPrivate) const Icon(Icons.lock),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (project.description.isNotEmpty)
+                Text(project.description, key: const Key('project-desc')),
+              const SizedBox(height: 24),
+              const Text('Tasks will appear here.'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

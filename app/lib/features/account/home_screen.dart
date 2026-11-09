@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
@@ -28,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
     if (!workspaces.hasValue) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    return Scaffold(
+    return ShellScaffold(
       appBar: AppBar(
         title: const WorkspaceSwitcher(),
         actions: [

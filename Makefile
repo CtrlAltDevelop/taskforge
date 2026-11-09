@@ -34,6 +34,7 @@ grpc:
 DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/accounts/grpc/accounts.proto \
 	infrastructure/workspaces/grpc/workspaces.proto \
+	infrastructure/projects/grpc/projects.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos

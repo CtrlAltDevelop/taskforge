@@ -11,12 +11,14 @@ import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/data/workspace_client.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
 
+import '../projects/fakes.dart';
 import '../roles/fakes.dart';
 
 class MockAuthApi extends Mock implements AuthApi {
@@ -140,6 +142,7 @@ Future<ProviderContainer> pumpSignedIn(
   FakeWorkspaceClient client, {
   List<Override> overrides = const [],
   FakeRolesClient? roles,
+  FakeProjectsClient? projects,
 }) async {
   final store = MemoryTokenStore();
   await store.write(
@@ -161,6 +164,9 @@ Future<ProviderContainer> pumpSignedIn(
                   ? 'Member'
                   : 'Owner',
             ),
+      ),
+      projectsClientProvider.overrideWithValue(
+        projects ?? FakeProjectsClient(),
       ),
       logoPickerProvider.overrideWithValue(() async => null),
       ...overrides,
