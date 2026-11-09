@@ -18,6 +18,7 @@ import '../workspaces/fakes.dart' show FakeWorkspaceClient, ws;
 
 class _FakeApi implements AuthApi {
   AuthApiException? failWith;
+  NetworkUnavailable? offline;
   AuthApiException? refreshFails;
   Exception? revokeFails;
   final revoked = <String>[];
@@ -28,6 +29,7 @@ class _FakeApi implements AuthApi {
 
   @override
   Future<AuthTokens> signIn(String email, String password) async {
+    if (offline != null) throw offline!;
     if (failWith != null) throw failWith!;
     return _tokens;
   }
@@ -175,6 +177,49 @@ void main() {
       expect(find.byKey(const Key('email')), findsOneWidget);
     },
   );
+
+  testWidgets('sign-in while offline says so and stays on sign-in', (
+    tester,
+  ) async {
+    final (_, api) = await _pump(tester);
+    api.offline = const NetworkUnavailable('socket closed');
+
+    await tester.enterText(find.byKey(const Key('email')), 'zoe@example.com');
+    await tester.enterText(find.byKey(const Key('password')), 'Xq7-mnbvcz');
+    await tester.tap(find.byKey(const Key('submit')));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Cannot reach the server'), findsOneWidget);
+    expect(find.byKey(const Key('email')), findsOneWidget);
+    expect(find.byType(HomeScreen), findsNothing);
+  });
+
+  for (final screen in ['sign-in', 'sign-up']) {
+    testWidgets('$screen password can be shown and hidden', (tester) async {
+      await _pump(tester);
+      if (screen == 'sign-up') {
+        await tester.tap(find.byKey(const Key('go-sign-up')));
+        await tester.pumpAndSettle();
+      }
+      bool obscured() => tester
+          .widget<TextField>(
+            find.descendant(
+              of: find.byKey(const Key('password')),
+              matching: find.byType(TextField),
+            ),
+          )
+          .obscureText;
+      expect(obscured(), isTrue);
+
+      await tester.tap(find.byTooltip('Show password'));
+      await tester.pump();
+      expect(obscured(), isFalse);
+
+      await tester.tap(find.byTooltip('Hide password'));
+      await tester.pump();
+      expect(obscured(), isTrue);
+    });
+  }
 
   testWidgets('a short password is rejected before any request is made', (
     tester,

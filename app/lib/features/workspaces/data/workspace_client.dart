@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart';
 
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/gen/infrastructure/workspaces/grpc/workspaces.pbgrpc.dart'
@@ -36,9 +37,14 @@ abstract interface class WorkspaceClient {
 WorkspaceException mapWorkspaceError(Object error) {
   if (error is WorkspaceException) return error;
   if (error is GrpcError) {
+    final denied = parsePermissionDenied(error);
     return switch (error.code) {
       StatusCode.alreadyExists => const WorkspaceException(
         WorkspaceFailure.slugTaken,
+      ),
+      StatusCode.permissionDenied when denied != null => WorkspaceException(
+        WorkspaceFailure.denied,
+        denied.message,
       ),
       StatusCode.permissionDenied => const WorkspaceException(
         WorkspaceFailure.forbidden,
@@ -79,6 +85,7 @@ class GrpcWorkspaceClient implements WorkspaceClient {
     required this.restUrl,
     required String? Function() selectedWorkspace,
     http.Client? httpClient,
+    this.onRefusal,
   }) : _rpc = pb.WorkspaceControllerClient(channel),
        _selected = selectedWorkspace,
        _http = httpClient ?? http.Client();
@@ -89,11 +96,14 @@ class GrpcWorkspaceClient implements WorkspaceClient {
   final String? Function() _selected;
   final http.Client _http;
 
+  /// Called when a mutating call is refused (permissions may be stale).
+  final void Function()? onRefusal;
+
   // Workspace calls name their workspace in the body, so no x-workspace header.
   late final _options = scopedCallOptions(_session, () => null);
 
   /// Runs [call]; one refresh-and-retry when the token is rejected.
-  Future<T> _run<T>(Future<T> Function() call) async {
+  Future<T> _run<T>(Future<T> Function() call, {bool isRead = false}) async {
     try {
       try {
         return await call();
@@ -103,13 +113,26 @@ class GrpcWorkspaceClient implements WorkspaceClient {
         return await call();
       }
     } on Object catch (e) {
-      throw mapWorkspaceError(e);
+      throw _mapAndNotify(e, isRead: isRead);
     }
+  }
+
+  WorkspaceException _mapAndNotify(Object e, {bool isRead = false}) {
+    final mapped = mapWorkspaceError(e);
+    if (!isRead &&
+        (mapped.failure == WorkspaceFailure.denied ||
+            mapped.failure == WorkspaceFailure.forbidden)) {
+      onRefusal?.call();
+    }
+    return mapped;
   }
 
   @override
   Future<List<Workspace>> list() async {
-    final reply = await _run(() => _rpc.list(Empty(), options: _options));
+    final reply = await _run(
+      () => _rpc.list(Empty(), options: _options),
+      isRead: true,
+    );
     return [for (final w in reply.workspaces) _fromPb(w)];
   }
 
@@ -196,7 +219,7 @@ class GrpcWorkspaceClient implements WorkspaceClient {
       );
       return _parseLogoReply(workspace, response);
     } on Object catch (e) {
-      throw mapWorkspaceError(e);
+      throw _mapAndNotify(e);
     }
   }
 
@@ -204,7 +227,8 @@ class GrpcWorkspaceClient implements WorkspaceClient {
     final status = response.statusCode;
     if (status >= 400) {
       throw switch (status) {
-        401 || 403 => const WorkspaceException(WorkspaceFailure.forbidden),
+        403 => _forbidden(response),
+        401 => const WorkspaceException(WorkspaceFailure.forbidden),
         409 => const WorkspaceException(WorkspaceFailure.stale),
         404 => const WorkspaceException(WorkspaceFailure.notFound),
         _ => WorkspaceException(
@@ -224,6 +248,24 @@ class GrpcWorkspaceClient implements WorkspaceClient {
       version: data['version'] as int,
       isOwner: old.isOwner,
     );
+  }
+
+  /// REST envelope of a permission denial: `data = {permission, role, hint}`.
+  WorkspaceException _forbidden(http.Response response) {
+    try {
+      final data = (jsonDecode(response.body) as Map)['data'];
+      if (data is Map && data['permission'] is String) {
+        final denied = PermissionDenied(
+          permission: data['permission'] as String,
+          role: (data['role'] as String?) ?? '',
+          hint: (data['hint'] as String?) ?? '',
+        );
+        return WorkspaceException(WorkspaceFailure.denied, denied.message);
+      }
+    } on Object {
+      // Not a denial envelope: plain forbidden below.
+    }
+    return const WorkspaceException(WorkspaceFailure.forbidden);
   }
 
   String? _firstError(http.Response response) {

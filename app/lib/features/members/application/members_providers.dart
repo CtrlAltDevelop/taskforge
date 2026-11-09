@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/members/data/members_client.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -12,11 +13,13 @@ final membersClientProvider = Provider<MembersClient>(
     ref.watch(grpcChannelProvider),
     ref.watch(authSessionProvider),
     restUrl: AppConfig.restUrl,
+    onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
   ),
 );
 
 /// Members of the current workspace; rebuilt on a workspace switch.
 final membersProvider = FutureProvider.autoDispose<List<Member>>((ref) async {
+  ref.watch(refusalCountProvider);
   final id = ref.watch(workspaceScopeProvider);
   if (id == null) return const [];
   return ref.watch(membersClientProvider).listMembers(id);

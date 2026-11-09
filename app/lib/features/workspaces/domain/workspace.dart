@@ -79,6 +79,7 @@ String? stripErrorTitle(String? message) =>
 enum WorkspaceFailure {
   slugTaken,
   forbidden,
+  denied,
   stale,
   invalid,
   notFound,
@@ -103,6 +104,7 @@ String workspaceErrorMessage(Object error) {
     WorkspaceFailure.slugTaken => 'That URL is taken',
     WorkspaceFailure.forbidden =>
       'You do not have permission to do that in this workspace.',
+    WorkspaceFailure.denied => error.detail ?? 'You do not have permission.',
     WorkspaceFailure.stale => 'This workspace was changed elsewhere. Refresh to see the latest version.',
     WorkspaceFailure.invalid =>
       error.detail ?? 'Check the values and try again.',

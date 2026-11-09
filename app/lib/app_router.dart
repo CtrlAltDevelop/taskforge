@@ -14,6 +14,7 @@ import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
+import 'package:taskforge/features/roles/presentation/roles_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
 import 'package:taskforge/features/workspaces/presentation/settings_screen.dart';
@@ -98,6 +99,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/workspaces/settings',
         builder: (_, _) => const WorkspaceSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/workspaces/roles',
+        builder: (_, _) => const RolesScreen(),
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(

@@ -6,6 +6,8 @@ import 'package:taskforge/features/auth/validators.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/pending_tab.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 class InviteDialog extends StatelessWidget {
@@ -58,6 +60,7 @@ class EmailInviteTab extends ConsumerStatefulWidget {
 class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
   final _input = TextEditingController();
   List<String> _emails = const [];
+  String _roleId = '';
   String? _fieldError;
   String? _error;
   InviteResult? _result;
@@ -108,7 +111,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
     try {
       final result = await ref
           .read(membersClientProvider)
-          .invite(workspaceId, _emails);
+          .invite(workspaceId, _emails, roleId: _roleId);
       final tokens = ref.read(knownTokensProvider.notifier);
       for (final i in result.invitations) {
         tokens.remember(i);
@@ -154,6 +157,11 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
             ),
           ),
           onSubmitted: (_) => _add(),
+        ),
+        InviteRoleField(
+          name: 'invite-role',
+          roleId: _roleId,
+          onChanged: (id) => setState(() => _roleId = id),
         ),
         Wrap(
           spacing: 8,
@@ -218,6 +226,7 @@ class LinkInviteTab extends ConsumerStatefulWidget {
 class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
   final _maxUses = TextEditingController();
   int _days = 7;
+  String _roleId = '';
   String? _usesError;
   String? _error;
   String? _token;
@@ -253,6 +262,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             workspaceId,
             expiresIn: _days * _dayInSeconds,
             maxUses: uses,
+            roleId: _roleId,
           );
       ref.read(knownTokensProvider.notifier).remember(link);
       ref.invalidate(invitationsProvider);
@@ -300,6 +310,11 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             errorText: _usesError,
           ),
         ),
+        InviteRoleField(
+          name: 'link-role',
+          roleId: _roleId,
+          onChanged: (id) => setState(() => _roleId = id),
+        ),
         if (_error != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -330,6 +345,51 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Role the joiner gets. '' = the server default (Member). Hidden without
+/// `role.view`; roles the caller may not grant are refused by the server.
+class InviteRoleField extends ConsumerWidget {
+  const InviteRoleField({
+    super.key,
+    required this.name,
+    required this.roleId,
+    required this.onChanged,
+  });
+
+  /// Key prefix: the field is `name`, its options `name-option-<role id>`.
+  final String name;
+  final String roleId;
+  final ValueChanged<String> onChanged;
+
+  /// Member is sent as '' so the server applies its own default.
+  static String _valueOf(Role r) =>
+      r.isBuiltin && r.name == 'Member' ? '' : r.id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final canView = ref.watch(permissionSetProvider).can(Perm.roleView);
+    final roles = ref.watch(rolesProvider).value?.roles;
+    if (!canView || roles == null) return const SizedBox.shrink();
+    final values = {for (final r in roles) _valueOf(r)};
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: DropdownButtonFormField<String>(
+        key: Key(name),
+        initialValue: values.contains(roleId) ? roleId : null,
+        decoration: const InputDecoration(labelText: 'Role'),
+        items: [
+          for (final r in roles)
+            DropdownMenuItem(
+              key: Key('$name-option-${r.id}'),
+              value: _valueOf(r),
+              child: Text(r.name),
+            ),
+        ],
+        onChanged: (v) => onChanged(v ?? ''),
+      ),
     );
   }
 }

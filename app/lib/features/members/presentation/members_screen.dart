@@ -6,6 +6,9 @@ import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/invite_dialog.dart';
 import 'package:taskforge/features/members/presentation/pending_tab.dart';
+import 'package:taskforge/features/members/presentation/role_picker.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 String formatDate(DateTime? date) {
@@ -47,13 +50,17 @@ class MembersScreen extends ConsumerWidget {
           ),
           title: const Text('Members'),
           actions: [
-            TextButton.icon(
-              key: const Key('open-invite'),
-              icon: const Icon(Icons.person_add),
-              label: const Text('Invite'),
-              onPressed: () => showDialog<void>(
-                context: context,
-                builder: (_) => const InviteDialog(),
+            PermissionGate(
+              permission: Perm.memberInvite,
+              disabledWhenDenied: true,
+              child: TextButton.icon(
+                key: const Key('open-invite'),
+                icon: const Icon(Icons.person_add),
+                label: const Text('Invite'),
+                onPressed: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => const InviteDialog(),
+                ),
               ),
             ),
           ],
@@ -117,7 +124,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
     if (removed) ref.invalidate(membersProvider);
   }
 
-  void _showProfile(String workspaceId, bool canRemove, Member m) {
+  void _showProfile(String workspaceId, Member m) {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
@@ -134,16 +141,23 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
               Text(m.email),
               Text('Joined ${formatDate(m.joinedAt)}'),
               const SizedBox(height: 8),
-              Chip(label: Text(m.isOwner ? 'Owner' : 'Member')),
-              if (canRemove && !m.isOwner)
-                TextButton.icon(
-                  key: const Key('profile-remove'),
-                  icon: const Icon(Icons.person_remove),
-                  label: const Text('Remove from workspace'),
-                  onPressed: () {
-                    Navigator.of(sheet).pop();
-                    _remove(workspaceId, m);
-                  },
+              RolePicker(
+                key: const Key('profile-role'),
+                member: m,
+                onChanged: () => Navigator.of(sheet).pop(),
+              ),
+              if (!m.isOwner)
+                PermissionGate(
+                  permission: Perm.memberRemove,
+                  child: TextButton.icon(
+                    key: const Key('profile-remove'),
+                    icon: const Icon(Icons.person_remove),
+                    label: const Text('Remove from workspace'),
+                    onPressed: () {
+                      Navigator.of(sheet).pop();
+                      _remove(workspaceId, m);
+                    },
+                  ),
                 ),
             ],
           ),
@@ -207,23 +221,29 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
             for (final m in shown)
               ListTile(
                 key: Key('member-${m.userId}'),
-                onTap: () => _showProfile(workspace.id, workspace.isOwner, m),
+                onTap: () => _showProfile(workspace.id, m),
                 leading: CircleAvatar(child: Text(m.initials)),
                 title: Text(m.label),
                 subtitle: Text(
                   'Joined ${formatDate(m.joinedAt)}'
                   '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
                 ),
-                trailing: m.isOwner
-                    ? const Chip(label: Text('Owner'))
-                    : workspace.isOwner
-                    ? IconButton(
-                        key: Key('remove-${m.userId}'),
-                        tooltip: 'Remove ${m.label}',
-                        icon: const Icon(Icons.person_remove),
-                        onPressed: () => _remove(workspace.id, m),
-                      )
-                    : null,
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RolePicker(key: Key('role-${m.userId}'), member: m),
+                    if (!m.isOwner)
+                      PermissionGate(
+                        permission: Perm.memberRemove,
+                        child: IconButton(
+                          key: Key('remove-${m.userId}'),
+                          tooltip: 'Remove ${m.label}',
+                          icon: const Icon(Icons.person_remove),
+                          onPressed: () => _remove(workspace.id, m),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             const Divider(),
             if (workspace.isOwner)

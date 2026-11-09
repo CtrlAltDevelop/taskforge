@@ -5,6 +5,7 @@ import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:http/http.dart' as http;
 
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
@@ -14,15 +15,21 @@ import 'package:taskforge/gen/infrastructure/workspaces/grpc/workspaces.pbgrpc.d
 abstract interface class MembersClient {
   Future<List<Member>> listMembers(String workspaceId);
   Future<void> removeMember(String workspaceId, String userId);
+  Future<Member> setRole(String workspaceId, String userId, String roleId);
   Future<void> leave(String workspaceId);
 
-  Future<InviteResult> invite(String workspaceId, List<String> emails);
+  Future<InviteResult> invite(
+    String workspaceId,
+    List<String> emails, {
+    String roleId = '',
+  });
 
   /// [expiresIn] in seconds (0 = server default); [maxUses] 0 = unlimited.
   Future<Invitation> createLink(
     String workspaceId, {
     required int expiresIn,
     required int maxUses,
+    String roleId = '',
   });
   Future<List<Invitation>> listInvitations(String workspaceId);
   Future<Invitation> revoke(String workspaceId, String id);
@@ -42,6 +49,7 @@ InviteException mapInviteError(Object error) {
   if (error is GrpcError) {
     final message = error.message ?? '';
     final title = RegExp(r'^([A-Z][A-Z0-9_]*): ').firstMatch(message)?.group(1);
+    final denied = parsePermissionDenied(error);
     return switch (error.code) {
       StatusCode.notFound => InviteException(switch (title) {
         'INVITE_EXPIRED' => InviteFailure.expired,
@@ -50,6 +58,10 @@ InviteException mapInviteError(Object error) {
         'INVITE_BEFORE_REMOVAL' => InviteFailure.beforeRemoval,
         _ => InviteFailure.notFound,
       }),
+      StatusCode.permissionDenied when denied != null => InviteException(
+        InviteFailure.denied,
+        denied.message,
+      ),
       StatusCode.permissionDenied => InviteException(switch (title) {
         'OWNER_PROTECTED' => InviteFailure.ownerProtected,
         'INVITE_EMAIL_MISMATCH' => InviteFailure.emailMismatch,
@@ -84,6 +96,18 @@ Invitation _invitation(pb.Invitation i) => Invitation(
   uses: i.uses,
   state: parseInviteState(i.state),
   token: i.token,
+  roleId: i.roleId,
+  roleName: i.roleName,
+);
+
+Member _member(pb.Member m) => Member(
+  userId: m.userId,
+  displayName: m.displayName,
+  email: m.email,
+  isOwner: m.isOwner,
+  roleId: m.roleId,
+  roleName: m.roleName,
+  joinedAt: DateTime.tryParse(m.joinedAt),
 );
 
 class GrpcMembersClient implements MembersClient {
@@ -92,6 +116,7 @@ class GrpcMembersClient implements MembersClient {
     this._session, {
     required this.restUrl,
     http.Client? httpClient,
+    this.onRefusal,
   }) : _members = pb.MemberControllerClient(channel),
        _invites = pb.InvitationControllerClient(channel),
        _http = httpClient ?? http.Client();
@@ -102,11 +127,14 @@ class GrpcMembersClient implements MembersClient {
   final String restUrl;
   final http.Client _http;
 
+  /// Called when a mutating call is refused (permissions may be stale).
+  final void Function()? onRefusal;
+
   // The workspace id travels in each request body, so no x-workspace header.
   late final _options = scopedCallOptions(_session, () => null);
 
   /// Runs [call]; one refresh-and-retry when the token is rejected.
-  Future<T> _run<T>(Future<T> Function() call) async {
+  Future<T> _run<T>(Future<T> Function() call, {bool isRead = false}) async {
     try {
       try {
         return await call();
@@ -116,7 +144,13 @@ class GrpcMembersClient implements MembersClient {
         return await call();
       }
     } on Object catch (e) {
-      throw mapInviteError(e);
+      final mapped = mapInviteError(e);
+      if (!isRead &&
+          (mapped.failure == InviteFailure.denied ||
+              mapped.failure == InviteFailure.forbidden)) {
+        onRefusal?.call();
+      }
+      throw mapped;
     }
   }
 
@@ -127,18 +161,28 @@ class GrpcMembersClient implements MembersClient {
         pb.MemberListRequest(workspaceId: workspaceId),
         options: _options,
       ),
+      isRead: true,
     );
-    return [
-      for (final m in reply.members)
-        Member(
-          userId: m.userId,
-          displayName: m.displayName,
-          email: m.email,
-          isOwner: m.isOwner,
-          joinedAt: DateTime.tryParse(m.joinedAt),
-        ),
-    ];
+    return [for (final m in reply.members) _member(m)];
   }
+
+  @override
+  Future<Member> setRole(
+    String workspaceId,
+    String userId,
+    String roleId,
+  ) async => _member(
+    await _run(
+      () => _members.setRole(
+        pb.MemberSetRoleRequest(
+          workspaceId: workspaceId,
+          userId: userId,
+          roleId: roleId,
+        ),
+        options: _options,
+      ),
+    ),
+  );
 
   @override
   Future<void> removeMember(String workspaceId, String userId) async {
@@ -161,10 +205,18 @@ class GrpcMembersClient implements MembersClient {
   }
 
   @override
-  Future<InviteResult> invite(String workspaceId, List<String> emails) async {
+  Future<InviteResult> invite(
+    String workspaceId,
+    List<String> emails, {
+    String roleId = '',
+  }) async {
     final reply = await _run(
       () => _invites.create(
-        pb.InvitationCreateRequest(workspaceId: workspaceId, emails: emails),
+        pb.InvitationCreateRequest(
+          workspaceId: workspaceId,
+          emails: emails,
+          roleId: roleId,
+        ),
         options: _options,
       ),
     );
@@ -179,6 +231,7 @@ class GrpcMembersClient implements MembersClient {
     String workspaceId, {
     required int expiresIn,
     required int maxUses,
+    String roleId = '',
   }) async => _invitation(
     await _run(
       () => _invites.createLink(
@@ -186,6 +239,7 @@ class GrpcMembersClient implements MembersClient {
           workspaceId: workspaceId,
           expiresIn: expiresIn,
           maxUses: maxUses,
+          roleId: roleId,
         ),
         options: _options,
       ),
@@ -199,6 +253,7 @@ class GrpcMembersClient implements MembersClient {
         pb.InvitationListRequest(workspaceId: workspaceId),
         options: _options,
       ),
+      isRead: true,
     );
     return [for (final i in reply.invitations) _invitation(i)];
   }

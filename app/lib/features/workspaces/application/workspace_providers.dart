@@ -5,6 +5,7 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/workspaces/data/workspace_client.dart';
 import 'package:taskforge/features/workspaces/data/workspace_store.dart';
@@ -21,6 +22,7 @@ final workspaceClientProvider = Provider<WorkspaceClient>(
     ref.watch(authSessionProvider),
     restUrl: AppConfig.restUrl,
     selectedWorkspace: () => ref.read(workspaceScopeProvider),
+    onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
   ),
 );
 

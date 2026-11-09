@@ -6,6 +6,8 @@ import 'package:taskforge/core/config.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 String stateLabel(InviteState s) => switch (s) {
@@ -107,28 +109,37 @@ class _InvitationTile extends ConsumerWidget {
         spacing: 4,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
+          if (i.roleName.isNotEmpty)
+            Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
           Chip(key: Key('state-${i.id}'), label: Text(stateLabel(i.state))),
-          if (i.isLink && token.isNotEmpty && live)
-            IconButton(
-              key: Key('copy-${i.id}'),
-              tooltip: 'Copy link',
-              icon: const Icon(Icons.copy),
-              onPressed: () => copyInviteLink(context, token),
+          PermissionGate(
+            permission: Perm.memberInvite,
+            child: Wrap(
+              children: [
+                if (i.isLink && token.isNotEmpty && live)
+                  IconButton(
+                    key: Key('copy-${i.id}'),
+                    tooltip: 'Copy link',
+                    icon: const Icon(Icons.copy),
+                    onPressed: () => copyInviteLink(context, token),
+                  ),
+                if (!i.isLink && i.state != InviteState.revoked)
+                  IconButton(
+                    key: Key('resend-${i.id}'),
+                    tooltip: 'Resend',
+                    icon: const Icon(Icons.send),
+                    onPressed: () => _resend(context, ref),
+                  ),
+                if (live)
+                  IconButton(
+                    key: Key('revoke-${i.id}'),
+                    tooltip: 'Revoke',
+                    icon: const Icon(Icons.block),
+                    onPressed: () => _revoke(context, ref),
+                  ),
+              ],
             ),
-          if (!i.isLink && i.state != InviteState.revoked)
-            IconButton(
-              key: Key('resend-${i.id}'),
-              tooltip: 'Resend',
-              icon: const Icon(Icons.send),
-              onPressed: () => _resend(context, ref),
-            ),
-          if (live)
-            IconButton(
-              key: Key('revoke-${i.id}'),
-              tooltip: 'Revoke',
-              icon: const Icon(Icons.block),
-              onPressed: () => _revoke(context, ref),
-            ),
+          ),
         ],
       ),
     );

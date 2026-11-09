@@ -10,6 +10,8 @@ class Member {
     required this.displayName,
     required this.email,
     required this.isOwner,
+    this.roleId = '',
+    this.roleName = '',
     this.joinedAt,
   });
 
@@ -17,6 +19,8 @@ class Member {
   final String displayName;
   final String email;
   final bool isOwner;
+  final String roleId;
+  final String roleName;
   final DateTime? joinedAt;
 
   /// Name shown to people; falls back to the email when none was set.
@@ -53,6 +57,8 @@ class Invitation {
     required this.uses,
     required this.state,
     this.token = '',
+    this.roleId = '',
+    this.roleName = '',
   });
 
   final String id;
@@ -68,6 +74,10 @@ class Invitation {
 
   /// Only known right after create / resend; empty when listed.
   final String token;
+
+  /// The role the joiner receives ('' / empty name = server default, Member).
+  final String roleId;
+  final String roleName;
 }
 
 /// Outcome of inviting several addresses at once.
@@ -97,6 +107,7 @@ class InvitePreview {
 
 enum InviteFailure {
   forbidden,
+  denied,
   ownerProtected,
   emailMismatch,
   expired,
@@ -126,8 +137,8 @@ String inviteErrorMessage(Object error) {
   if (error is! InviteException) return 'Something went wrong. Try again.';
   return switch (error.failure) {
     InviteFailure.forbidden => 'You do not have permission to do that.',
-    InviteFailure.ownerProtected =>
-      'The owner cannot be removed and cannot leave this workspace.',
+    InviteFailure.denied => error.detail ?? 'You do not have permission.',
+    InviteFailure.ownerProtected => 'A workspace needs at least one owner.',
     InviteFailure.emailMismatch =>
       'This invitation is for another email address.',
     InviteFailure.expired => 'This invitation has expired. Ask for a new one.',

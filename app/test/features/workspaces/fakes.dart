@@ -11,10 +11,13 @@ import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/data/workspace_client.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
+
+import '../roles/fakes.dart';
 
 class MockAuthApi extends Mock implements AuthApi {
   @override
@@ -136,6 +139,7 @@ Future<ProviderContainer> pumpSignedIn(
   WidgetTester tester,
   FakeWorkspaceClient client, {
   List<Override> overrides = const [],
+  FakeRolesClient? roles,
 }) async {
   final store = MemoryTokenStore();
   await store.write(
@@ -148,6 +152,16 @@ Future<ProviderContainer> pumpSignedIn(
       authSessionProvider.overrideWithValue(session),
       accountClientProvider.overrideWithValue(FakeAccounts()),
       workspaceClientProvider.overrideWithValue(client),
+      // By default the caller is Owner where the workspace says so, else Member.
+      rolesClientProvider.overrideWithValue(
+        roles ??
+            FakeRolesClient(
+              callerRole: (id) =>
+                  client.items.any((w) => w.id == id && !w.isOwner)
+                  ? 'Member'
+                  : 'Owner',
+            ),
+      ),
       logoPickerProvider.overrideWithValue(() async => null),
       ...overrides,
     ],

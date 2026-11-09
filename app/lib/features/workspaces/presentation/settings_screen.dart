@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/danger_zone.dart';
@@ -46,14 +49,30 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   key: ValueKey('${workspace.id}/${workspace.version}'),
                   workspace: workspace,
                 ),
-                if (workspace.isOwner) DangerZone(workspace: workspace),
+                PermissionGate(
+                  permission: Perm.workspaceDelete,
+                  child: DangerZone(workspace: workspace),
+                ),
                 const RecentlyDeleted(),
-                ListTile(
-                  key: const Key('open-members'),
-                  leading: const Icon(Icons.group),
-                  title: const Text('Members'),
-                  subtitle: const Text('People, invitations and leaving'),
-                  onTap: () => context.push('/members'),
+                PermissionGate(
+                  permission: Perm.memberView,
+                  child: ListTile(
+                    key: const Key('open-members'),
+                    leading: const Icon(Icons.group),
+                    title: const Text('Members'),
+                    subtitle: const Text('People, invitations and leaving'),
+                    onTap: () => context.push('/members'),
+                  ),
+                ),
+                PermissionGate(
+                  permission: Perm.roleView,
+                  child: ListTile(
+                    key: const Key('open-roles'),
+                    leading: const Icon(Icons.admin_panel_settings),
+                    title: const Text('Roles and permissions'),
+                    subtitle: const Text('Who can do what'),
+                    onTap: () => context.push('/workspaces/roles'),
+                  ),
                 ),
               ],
             ),
@@ -151,7 +170,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
   @override
   Widget build(BuildContext context) {
     final w = widget.workspace;
-    final canEdit = w.isOwner;
+    final canEdit = ref.watch(permissionSetProvider).can(Perm.workspaceUpdate);
     return Form(
       key: _form,
       child: Column(

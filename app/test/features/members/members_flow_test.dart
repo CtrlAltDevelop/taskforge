@@ -171,7 +171,7 @@ void main() {
       await tester.tap(byKey('confirm-action'));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('owner cannot be removed'), findsOneWidget);
+      expect(find.textContaining('needs at least one owner'), findsOneWidget);
       expect(byKey('member-u2'), findsOneWidget);
     });
   });
