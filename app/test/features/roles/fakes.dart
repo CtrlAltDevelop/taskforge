@@ -20,6 +20,9 @@ final _builtinGrants = <String, Set<String>>{
     Perm.projectArchive,
     Perm.projectMemberManage,
     Perm.projectViewPrivate,
+    Perm.taskCreate,
+    Perm.taskUpdate,
+    Perm.taskDelete,
   },
   'Member': {
     Perm.workspaceView,
@@ -27,6 +30,9 @@ final _builtinGrants = <String, Set<String>>{
     Perm.memberInvite,
     Perm.roleView,
     Perm.projectCreate,
+    Perm.taskCreate,
+    Perm.taskUpdate,
+    Perm.taskDelete,
   },
   'Viewer': {Perm.workspaceView, Perm.memberView, Perm.roleView},
 };
@@ -53,6 +59,11 @@ const registry = [
     PermissionInfo(Perm.projectArchive, 'Archive projects'),
     PermissionInfo(Perm.projectMemberManage, 'Manage project members'),
     PermissionInfo(Perm.projectViewPrivate, 'See private projects'),
+  ]),
+  PermissionArea('Tasks', [
+    PermissionInfo(Perm.taskCreate, 'Create tasks'),
+    PermissionInfo(Perm.taskUpdate, 'Edit tasks'),
+    PermissionInfo(Perm.taskDelete, 'Delete tasks'),
   ]),
 ];
 

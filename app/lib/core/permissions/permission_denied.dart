@@ -61,3 +61,7 @@ PermissionDenied? parsePermissionDenied(GrpcError error) {
   }
   return PermissionDenied(permission: permission, role: role, hint: hint);
 }
+
+/// The text of binary error trailer [key] (`x-error-<name>-bin`), or ''.
+String errorTrailer(GrpcError error, String key) =>
+    _trailer(error.trailers, key);

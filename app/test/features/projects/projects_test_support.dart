@@ -4,6 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
+import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+
+import '../tasks/fakes.dart';
 
 import '../members/fakes.dart';
 import '../roles/fakes.dart';
@@ -35,6 +38,7 @@ Future<Pumped> pumpProjects(
   String role = 'Owner',
   List<Project> projects = const [],
   FakeProjectsClient? server,
+  FakeTasksClient? tasks,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -47,7 +51,10 @@ Future<Pumped> pumpProjects(
     FakeWorkspaceClient([for (final id in workspaces) ws(id, 'WS $id')]),
     roles: FakeRolesClient(callerRole: (_) => role),
     projects: fake,
-    overrides: [membersClientProvider.overrideWithValue(team())],
+    overrides: [
+      membersClientProvider.overrideWithValue(team()),
+      tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
+    ],
   );
   return Pumped(container, fake);
 }

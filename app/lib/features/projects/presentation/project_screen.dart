@@ -8,8 +8,12 @@ import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/projects/presentation/archived_banner.dart';
 import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/tasks/presentation/task_trash_screen.dart';
+import 'package:taskforge/features/tasks/presentation/task_section.dart';
 
-/// Placeholder project page: tasks arrive in phase 06.
+/// A project's page: its header and its tasks.
 class ProjectScreen extends ConsumerWidget {
   const ProjectScreen({super.key, required this.projectId});
 
@@ -38,6 +42,17 @@ class ProjectScreen extends ConsumerWidget {
                           .favorite(project, !project.isFavorite),
                     ),
             ),
+            if (ref.watch(permissionSetProvider).can(Perm.taskDelete))
+              IconButton(
+                key: const Key('open-task-trash'),
+                tooltip: 'Trash',
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () => Navigator.of(context).push<void>(
+                  MaterialPageRoute(
+                    builder: (_) => TaskTrashScreen(project: project),
+                  ),
+                ),
+              ),
             IconButton(
               key: const Key('open-project-settings'),
               tooltip: 'Project settings',
@@ -76,38 +91,32 @@ class _Body extends StatelessWidget {
     return Column(
       children: [
         if (project.isArchived) ArchivedBanner(project: project),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              Row(
-                children: [
-                  ProjectAvatar(project: project, radius: 24),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          project.name,
-                          key: const Key('project-title'),
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                        Text(project.key, key: const Key('project-key-label')),
-                      ],
+              ProjectAvatar(project: project, radius: 24),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      project.name,
+                      key: const Key('project-title'),
+                      style: theme.textTheme.headlineSmall,
                     ),
-                  ),
-                  if (project.isPrivate) const Icon(Icons.lock),
-                ],
+                    Text(project.key, key: const Key('project-key-label')),
+                    if (project.description.isNotEmpty)
+                      Text(project.description, key: const Key('project-desc')),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-              if (project.description.isNotEmpty)
-                Text(project.description, key: const Key('project-desc')),
-              const SizedBox(height: 24),
-              const Text('Tasks will appear here.'),
+              if (project.isPrivate) const Icon(Icons.lock),
             ],
           ),
         ),
+        Expanded(child: TaskSection(project: project)),
       ],
     );
   }

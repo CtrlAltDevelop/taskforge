@@ -16,6 +16,9 @@ abstract final class Perm {
   static const projectArchive = 'project.archive';
   static const projectMemberManage = 'project.member.manage';
   static const projectViewPrivate = 'project.view_private';
+  static const taskCreate = 'task.create';
+  static const taskUpdate = 'task.update';
+  static const taskDelete = 'task.delete';
 
   static const all = [
     workspaceView,
@@ -32,6 +35,9 @@ abstract final class Perm {
     projectArchive,
     projectMemberManage,
     projectViewPrivate,
+    taskCreate,
+    taskUpdate,
+    taskDelete,
   ];
 }
 
