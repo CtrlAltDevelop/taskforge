@@ -1,5 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:taskforge/core/auth/secure_storage.dart';
+
 /// Remembers the selected workspace id on this device.
 abstract interface class WorkspaceStore {
   Future<String?> read();
@@ -19,7 +21,7 @@ class MemoryWorkspaceStore implements WorkspaceStore {
 /// Same storage as the tokens; the id is not secret but needs no second plugin.
 class SecureWorkspaceStore implements WorkspaceStore {
   SecureWorkspaceStore([FlutterSecureStorage? storage])
-    : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? appSecureStorage();
 
   static const _key = 'workspace.selected';
   final FlutterSecureStorage _storage;

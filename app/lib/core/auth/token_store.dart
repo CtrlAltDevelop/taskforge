@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:taskforge/core/auth/auth_tokens.dart';
+import 'package:taskforge/core/auth/secure_storage.dart';
 
 /// Where tokens live between launches.
 abstract interface class TokenStore {
@@ -33,7 +34,7 @@ class MemoryTokenStore implements TokenStore {
 /// token next to an already-spent refresh token.
 class SecureTokenStore implements TokenStore {
   SecureTokenStore([FlutterSecureStorage? storage])
-    : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? appSecureStorage();
 
   static const _key = 'auth.tokens';
 
