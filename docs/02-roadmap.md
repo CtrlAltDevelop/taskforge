@@ -1,0 +1,68 @@
+# 02 — Roadmap
+
+One feature per phase. Do them in order; each lists its dependencies.
+Groups are just for reading — a phase is still exactly one feature.
+
+## A. Foundation
+- [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)
+
+## B. Identity and tenancy
+- [01 Authentication](phases/phase-01-authentication.md)
+- [02 Workspaces](phases/phase-02-workspaces.md)
+- [03 Members and invitations](phases/phase-03-members-invitations.md)
+- [04 Roles and permissions](phases/phase-04-roles-permissions.md)
+
+## C. Core work items
+- [05 Projects](phases/phase-05-projects.md)
+- [06 Tasks](phases/phase-06-tasks.md)
+- [07 Custom workflows and statuses](phases/phase-07-workflows.md)
+- [08 Subtasks](phases/phase-08-subtasks.md)
+- [09 Task dependencies](phases/phase-09-dependencies.md)
+- [10 Custom fields](phases/phase-10-custom-fields.md)
+
+## D. Views
+- [11 List view](phases/phase-11-list-view.md)
+- [12 Board (Kanban) view](phases/phase-12-board-view.md)
+- [13 Calendar view](phases/phase-13-calendar-view.md)
+- [14 Saved filters and query language](phases/phase-14-filters-query.md)
+- [15 Timeline (Gantt) view](phases/phase-15-timeline-view.md)
+
+## E. Collaboration
+- [16 Realtime sync](phases/phase-16-realtime-sync.md)
+- [17 Comments and mentions](phases/phase-17-comments-mentions.md)
+- [18 Attachments](phases/phase-18-attachments.md)
+- [19 Notifications](phases/phase-19-notifications.md)
+- [20 Global search](phases/phase-20-search.md)
+
+## F. Planning and tracking
+- [21 Time tracking](phases/phase-21-time-tracking.md)
+- [22 Sprints](phases/phase-22-sprints.md)
+- [23 Docs (wiki)](phases/phase-23-docs.md)
+- [24 Automations](phases/phase-24-automations.md)
+
+## G. Speed and insight
+- [25 Command palette and shortcuts](phases/phase-25-command-palette.md)
+- [26 Dashboards and reports](phases/phase-26-dashboards.md)
+- [27 Audit log](phases/phase-27-audit-log.md)
+- [28 Recurring tasks](phases/phase-28-recurring-tasks.md)
+
+## H. Reach and trust
+- [29 Import and export](phases/phase-29-import-export.md)
+- [30 Offline mode](phases/phase-30-offline.md)
+- [31 Localization and RTL](phases/phase-31-i18n-rtl.md)
+- [32 Webhooks and API tokens](phases/phase-32-webhooks-api-tokens.md)
+- [33 Intake forms](phases/phase-33-intake-forms.md)
+- [34 Goals (OKRs)](phases/phase-34-goals.md)
+- [35 Templates](phases/phase-35-templates.md)
+- [36 Workload and capacity](phases/phase-36-workload.md)
+- [37 Two-factor auth and SSO](phases/phase-37-2fa-sso.md)
+- [38 Release and deployment](phases/phase-38-release-deploy.md)
+
+## Milestones
+
+| Milestone | Phases | You can… |
+|-----------|--------|----------|
+| M1 "Usable" | 00–06, 11 | Sign in, make a workspace/project, manage tasks in a list |
+| M2 "Jira-class" | 07–10, 12, 14, 16, 22 | Workflows, boards, queries, sprints, live sync |
+| M3 "ClickUp-class" | 13, 15, 17–21, 23–26 | All views, docs, automations, dashboards |
+| M4 "Switch over" | 27–38 | Import from Jira/ClickUp, offline, deploy for a team |
