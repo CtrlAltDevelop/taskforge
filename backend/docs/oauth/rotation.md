@@ -81,6 +81,7 @@ Active when `DJANGO_AUTH_TOKEN_MODE=rotation`, and the default when
 | `rotation_index` | PositiveInteger |  |
 | `used_at` | DateTime | nullable |
 | `reuse_detected_at` | DateTime | nullable |
+| `used_request_hash` | Char |  |
 
 #### `TokenFamily`
 

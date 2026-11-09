@@ -102,6 +102,7 @@ class ResponseTitle(StrEnum):
     TOKEN_INVALID = "TOKEN_INVALID"
     TOKEN_EXPIRED = "TOKEN_EXPIRED"
     TOKEN_REUSED = "TOKEN_REUSED"
+    REFRESH_RACE = "REFRESH_RACE"
     TOKENS_UNSUPPORTED = "TOKENS_UNSUPPORTED"
     SESSION_ENDED = "SESSION_ENDED"
     SESSION_NOT_FOUND = "SESSION_NOT_FOUND"
@@ -153,6 +154,7 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.TOKEN_INVALID: "The token is not one this deployment issued.",
     ResponseTitle.TOKEN_EXPIRED: "The token has expired.",
     ResponseTitle.TOKEN_REUSED: "A spent token was presented again; the session was ended.",
+    ResponseTitle.REFRESH_RACE: "That refresh token was just spent; retry with the newer one.",
     ResponseTitle.TOKENS_UNSUPPORTED: "This deployment does not issue that kind of credential.",
     ResponseTitle.SESSION_ENDED: "The session has ended. Sign in again.",
     ResponseTitle.SESSION_NOT_FOUND: "No such session.",

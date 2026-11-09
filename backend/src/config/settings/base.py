@@ -320,8 +320,15 @@ AUTH_PENDING_LOGIN_TTL_SECONDS = int(os.getenv("DJANGO_AUTH_PENDING_LOGIN_TTL_SE
 AUTH_CODE_DIGITS = int(os.getenv("DJANGO_AUTH_CODE_DIGITS", "6"))
 AUTH_RESEND_COOLDOWN_SECONDS = int(os.getenv("DJANGO_AUTH_RESEND_COOLDOWN_SECONDS", "30"))
 AUTH_MAX_SENDS_PER_HOUR = int(os.getenv("DJANGO_AUTH_MAX_SENDS_PER_HOUR", "10"))
-AUTH_ACCESS_TOKEN_TTL_SECONDS = int(os.getenv("DJANGO_AUTH_ACCESS_TOKEN_TTL_SECONDS", "3600"))
-AUTH_REFRESH_TOKEN_TTL_SECONDS = int(os.getenv("DJANGO_AUTH_REFRESH_TOKEN_TTL_SECONDS", "1209600"))
+# TaskForge: short access tokens (15 min), long-lived rotating refresh tokens (30 days).
+AUTH_ACCESS_TOKEN_TTL_SECONDS = int(os.getenv("DJANGO_AUTH_ACCESS_TOKEN_TTL_SECONDS", "900"))
+AUTH_REFRESH_TOKEN_TTL_SECONDS = int(os.getenv("DJANGO_AUTH_REFRESH_TOKEN_TTL_SECONDS", "2592000"))
+# A refresh token spent this recently is a client race (two requests refreshing at
+# once), not theft: answer 409 and keep the session. 0 treats every replay as theft.
+# A client that tagged a refresh with a request id may retry it this long after the
+# original (the response was lost); see rotation/services.py.
+AUTH_REFRESH_RECOVERY_SECONDS = int(os.getenv("DJANGO_AUTH_REFRESH_RECOVERY_SECONDS", "900"))
+AUTH_REFRESH_REUSE_GRACE_SECONDS = int(os.getenv("DJANGO_AUTH_REFRESH_REUSE_GRACE_SECONDS", "10"))
 AUTH_SLIDING_IDLE_TIMEOUT_SECONDS = int(
     os.getenv("DJANGO_AUTH_SLIDING_IDLE_TIMEOUT_SECONDS", "900")
 )
@@ -1101,6 +1108,7 @@ UNFOLD = {
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # before CommonMiddleware
+    "infrastructure.auth.core.refresh_cookie.RefreshCookieMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -1117,7 +1125,16 @@ CORS_ALLOWED_ORIGINS = [
     for origin in os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",")
     if origin.strip()
 ]
-CORS_ALLOW_HEADERS = (*default_cors_headers, "x-workspace")
+CORS_ALLOW_HEADERS = (*default_cors_headers, "x-workspace", "x-refresh-transport")
+# Web clients send the refresh cookie cross-origin; origins stay an explicit allowlist.
+CORS_ALLOW_CREDENTIALS = True
+
+# The web refresh-token cookie (see infrastructure/auth/core/refresh_cookie.py).
+# Secure by default; development.py relaxes it for http://localhost. For an API on a
+# different *site* than the app, set SAMESITE=None (which requires Secure).
+REFRESH_COOKIE_NAME = "tf_refresh"
+REFRESH_COOKIE_SECURE = os.getenv("DJANGO_REFRESH_COOKIE_SECURE", "true").lower() == "true"
+REFRESH_COOKIE_SAMESITE = os.getenv("DJANGO_REFRESH_COOKIE_SAMESITE", "Strict")
 
 ROOT_URLCONF = "config.urls"
 TEMPLATES = [
@@ -1153,7 +1170,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 10},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]

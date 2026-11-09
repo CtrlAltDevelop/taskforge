@@ -33,4 +33,8 @@ def refresh(request: HttpRequest, payload: RefreshIn) -> CredentialsOut:
     Presenting one that has already been spent ends the whole family: see
     :mod:`infrastructure.oauth.rotation.services` for why that is the safe read.
     """
-    return credentials_out(token_service.refresh(request, refresh_token=payload.refresh_token))
+    return credentials_out(
+        token_service.refresh(
+            request, refresh_token=payload.refresh_token, request_id=payload.request_id
+        )
+    )

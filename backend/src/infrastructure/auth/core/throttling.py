@@ -48,3 +48,19 @@ def guard_attempts(scope: str, subject: str, *, limit: int, window: int = HOUR_S
     tag = f"{scope}:{fingerprint(subject)}"
     if limit > 0 and store.increment(f"attempts:{tag}", window) > limit:
         raise RateLimited("Too many attempts. Try again later.", window)
+
+
+def attempts_exhausted(scope: str, subject: str, *, limit: int) -> bool:
+    """Whether [subject] has already used up its failed attempts. Does not count one."""
+    tag = f"{scope}:{fingerprint(subject)}"
+    return limit > 0 and get_challenge_store().count(f"attempts:{tag}") >= limit
+
+
+def record_failed_attempt(scope: str, subject: str, *, window: int) -> None:
+    """Charge one failed attempt, so only wrong guesses (never successes) add up."""
+    get_challenge_store().increment(f"attempts:{scope}:{fingerprint(subject)}", window)
+
+
+def clear_attempts(scope: str, subject: str) -> None:
+    """Forget a subject's failures, e.g. after the owner signs in properly."""
+    get_challenge_store().clear(f"attempts:{scope}:{fingerprint(subject)}")

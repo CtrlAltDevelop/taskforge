@@ -29,6 +29,9 @@ class RefreshIn(Schema):
     """The refresh half of a pair. Empty for sliding, which has only one token."""
 
     refresh_token: str = ""
+    # A secret the client picks per refresh and reuses when it retries one whose
+    # response was lost (rotation mode only; ignored elsewhere).
+    request_id: str = ""
 
 
 class RevokeIn(Schema):

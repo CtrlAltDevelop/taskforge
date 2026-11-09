@@ -85,6 +85,10 @@ class ChallengeStore(Protocol):
 
     def increment(self, key: str, ttl: int) -> int: ...
 
+    def count(self, key: str) -> int: ...
+
+    def clear(self, key: str) -> None: ...
+
 
 def _record(
     purpose: str,
@@ -217,6 +221,12 @@ class RedisChallengeStore:
         current, _ = pipeline.execute()
         return int(current)
 
+    def count(self, key: str) -> int:
+        return int(self.client.get(f"{COUNTER_PREFIX}{key}") or 0)
+
+    def clear(self, key: str) -> None:
+        self.client.delete(f"{COUNTER_PREFIX}{key}")
+
 
 class LocMemChallengeStore:
     """In-process fallback for development and tests without a Redis server.
@@ -326,6 +336,13 @@ class LocMemChallengeStore:
         expires_at, count = entry
         self._counters[key] = (expires_at, count + 1)
         return count + 1
+
+    def count(self, key: str) -> int:
+        entry = self._counters.get(key)
+        return entry[1] if entry is not None and entry[0] > time.monotonic() else 0
+
+    def clear(self, key: str) -> None:
+        self._counters.pop(key, None)
 
 
 _store: ChallengeStore | None = None

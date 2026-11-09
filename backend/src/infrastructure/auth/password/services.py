@@ -40,11 +40,26 @@ from infrastructure.auth.core.identities import (
 )
 from infrastructure.auth.core.models import AuthEventType
 from infrastructure.auth.core.sessions import revoke_all_for_user, revoke_credentials
-from infrastructure.auth.core.throttling import guard_attempts
+from infrastructure.auth.core.throttling import (
+    RateLimited,
+    attempts_exhausted,
+    clear_attempts,
+    record_failed_attempt,
+)
 from infrastructure.common.responses import ResponseTitle
+from infrastructure.oauth.core.credentials import client_ip
 
 METHOD = "password"
-LOGIN_ATTEMPT_LIMIT = 10
+# Only failed sign-ins count. Five per (account, address) pair in 15 minutes locks that
+# pair out, so a stranger's guesses cannot lock the owner out from their own address;
+# an account-wide ceiling still stops guessing spread across many addresses.
+# ponytail: the address comes from X-Forwarded-For as `client_ip` reads it, so behind no
+# trusted proxy a forged header sidesteps the pair limit (the account ceiling still holds).
+PAIR_SCOPE = f"{METHOD}:login:pair"
+ACCOUNT_SCOPE = f"{METHOD}:login:account"
+LOGIN_ATTEMPT_LIMIT = 5
+ACCOUNT_ATTEMPT_LIMIT = 20
+LOGIN_ATTEMPT_WINDOW_SECONDS = 15 * 60
 RESET_PURPOSE = "password_reset"
 
 
@@ -109,12 +124,20 @@ class PasswordService:
 
     def login(self, request: HttpRequest, *, identifier: str, password: str) -> LoginResult:
         identifier = identifier.strip()
-        guard_attempts(f"{METHOD}:login", identifier.lower(), limit=LOGIN_ATTEMPT_LIMIT)
+        login_name = identifier.lower()
+        # The same address and name: the owner is not locked out by someone else's guesses.
+        pair = f"{login_name}|{client_ip(request) or 'unknown'}"
+        if attempts_exhausted(PAIR_SCOPE, pair, limit=LOGIN_ATTEMPT_LIMIT) or attempts_exhausted(
+            ACCOUNT_SCOPE, login_name, limit=ACCOUNT_ATTEMPT_LIMIT
+        ):
+            raise RateLimited("Too many attempts. Try again later.", LOGIN_ATTEMPT_WINDOW_SECONDS)
         try:
             user = user_by_login(identifier)
         except IdentityError:
             user = None
         if not self.password_matches(user, password):
+            record_failed_attempt(PAIR_SCOPE, pair, window=LOGIN_ATTEMPT_WINDOW_SECONDS)
+            record_failed_attempt(ACCOUNT_SCOPE, login_name, window=LOGIN_ATTEMPT_WINDOW_SECONDS)
             record_event(
                 request,
                 AuthEventType.LOGIN_FAILED,
@@ -127,6 +150,7 @@ class PasswordService:
                 status=401,
                 title=ResponseTitle.INVALID_CREDENTIALS,
             )
+        clear_attempts(PAIR_SCOPE, pair)
         return complete_login(request, user, method=METHOD, identifier=identifier)
 
     def logout(self, request: HttpRequest, *, token: str = "") -> str:

@@ -11,6 +11,7 @@ legitimate client are indistinguishable at that point, so the safe move is to
 end the session and make both sign in again.
 """
 
+import hmac
 from datetime import timedelta
 from typing import Any
 
@@ -67,7 +68,76 @@ class _Reused(Exception):
         self.token = token
 
 
-def rotate(request: HttpRequest, refresh_token: str) -> IssuedCredentials:
+def _issue_pair(
+    request: HttpRequest, refresh_row: Any, refresh_handle: str, access_model: Any
+) -> IssuedCredentials:
+    """Mint an access token bound to [refresh_row] and sign the pair for the client."""
+    family = refresh_row.family
+    now = timezone.now()
+    access_lifetime = timedelta(seconds=settings.AUTH_ACCESS_TOKEN_TTL_SECONDS)
+    access_handle = jwt_tokens.new_handle()
+    method = str(refresh_row.metadata.get("auth_method", ""))
+    access_model.objects.create(
+        user=refresh_row.user,
+        family=family,
+        issued_from=refresh_row,
+        token_hash=hash_token(access_handle),
+        expires_at=now + access_lifetime,
+        issued_ip=client_ip(request),
+        user_agent=user_agent(request),
+        metadata={"auth_method": method},
+    )
+    return sign_pair(
+        refresh_row.user,
+        mode=MODE,
+        session_id=str(family.id),
+        methods=[method] if method else [],
+        access_handle=access_handle,
+        refresh_handle=refresh_handle,
+        access_lifetime=access_lifetime,
+        refresh_lifetime=family.expires_at - now,
+    )
+
+
+def _is_retry_of_lost_request(presented: Any, request_id: str) -> bool:
+    """Whether this replay is the *same request* whose response never arrived.
+
+    The client's request id is a secret only it (and, in transit, TLS) has seen, so
+    presenting it proves the replay is a retry rather than a thief holding a stolen
+    copy of the spent token. It is honoured only while the successor it produced
+    has never been used and the recovery window is open.
+    """
+    if not request_id or not presented.used_request_hash or presented.replaced_by_id is None:
+        return False
+    if not hmac.compare_digest(presented.used_request_hash, hash_token(request_id)):
+        return False
+    window = timedelta(seconds=settings.AUTH_REFRESH_RECOVERY_SECONDS)
+    return timezone.now() - presented.used_at <= window
+
+
+def _reissue(
+    request: HttpRequest, presented: Any, refresh_model: Any, access_model: Any
+) -> IssuedCredentials | None:
+    """Give the lost successor a new secret, killing the copy lost in transit.
+
+    Returns ``None`` when the successor has meanwhile been used, which means the
+    client did get its answer and this replay is not a recovery after all.
+    """
+    successor = refresh_model.objects.select_for_update().get(pk=presented.replaced_by_id)
+    if successor.used_at is not None or successor.revoked_at is not None:
+        return None
+    refresh_handle = jwt_tokens.new_handle()
+    successor.token_hash = hash_token(refresh_handle)
+    successor.issued_ip = client_ip(request)
+    successor.user_agent = user_agent(request)
+    successor.save(update_fields=["token_hash", "issued_ip", "user_agent"])
+    access_model.objects.filter(issued_from=successor, revoked_at__isnull=True).update(
+        revoked_at=timezone.now(), revocation_reason=access_model.RevocationReason.ROTATED
+    )
+    return _issue_pair(request, successor, refresh_handle, access_model)
+
+
+def rotate(request: HttpRequest, refresh_token: str, request_id: str = "") -> IssuedCredentials:
     """Spend a refresh token and return its successor pair.
 
     Read and write happen under one row lock: two clients racing with the same
@@ -97,6 +167,26 @@ def rotate(request: HttpRequest, refresh_token: str) -> IssuedCredentials:
                     title=ResponseTitle.TOKEN_INVALID,
                 )
             if presented.used_at is not None:
+                grace = timedelta(seconds=settings.AUTH_REFRESH_REUSE_GRACE_SECONDS)
+                if presented.family.revoked_at is not None:
+                    # Spent *and* ended: not a race and not fresh theft evidence.
+                    raise ApiError(
+                        "This session has ended. Sign in again.",
+                        status=401,
+                        title=ResponseTitle.SESSION_ENDED,
+                    )
+                if _is_retry_of_lost_request(presented, request_id):
+                    recovered = _reissue(request, presented, refresh_model, access_model)
+                    if recovered is not None:
+                        return recovered
+                if timezone.now() - presented.used_at <= grace:
+                    # Two requests refreshed at once: the other one won. Keep the
+                    # session; the client retries with the successor it was given.
+                    raise ApiError(
+                        "That refresh token was just spent. Retry with the newer one.",
+                        status=409,
+                        title=ResponseTitle.REFRESH_RACE,
+                    )
                 raise _Reused(presented)
             if presented.family.revoked_at is not None:
                 raise ApiError(
@@ -109,16 +199,10 @@ def rotate(request: HttpRequest, refresh_token: str) -> IssuedCredentials:
                     "That refresh token has expired.", status=401, title=ResponseTitle.TOKEN_EXPIRED
                 )
 
-            user = presented.user
             family = presented.family
-            now = timezone.now()
-            access_lifetime = timedelta(seconds=settings.AUTH_ACCESS_TOKEN_TTL_SECONDS)
-            access_handle = jwt_tokens.new_handle()
             refresh_handle = jwt_tokens.new_handle()
-            method = str(presented.metadata.get("auth_method", ""))
-
             successor = refresh_model.objects.create(
-                user=user,
+                user=presented.user,
                 family=family,
                 parent=presented,
                 token_hash=hash_token(refresh_handle),
@@ -126,30 +210,12 @@ def rotate(request: HttpRequest, refresh_token: str) -> IssuedCredentials:
                 expires_at=family.expires_at,
                 issued_ip=client_ip(request),
                 user_agent=user_agent(request),
-                metadata={"auth_method": method},
+                metadata={"auth_method": str(presented.metadata.get("auth_method", ""))},
             )
-            presented.mark_used(successor)
-            access_model.objects.create(
-                user=user,
-                family=family,
-                issued_from=successor,
-                token_hash=hash_token(access_handle),
-                expires_at=now + access_lifetime,
-                issued_ip=client_ip(request),
-                user_agent=user_agent(request),
-                metadata={"auth_method": method},
+            presented.mark_used(
+                successor, request_hash=hash_token(request_id) if request_id else ""
             )
-
-            return sign_pair(
-                user,
-                mode=MODE,
-                session_id=str(family.id),
-                methods=[method] if method else [],
-                access_handle=access_handle,
-                refresh_handle=refresh_handle,
-                access_lifetime=access_lifetime,
-                refresh_lifetime=family.expires_at - now,
-            )
+            return _issue_pair(request, successor, refresh_handle, access_model)
     except _Reused as reuse:
         _record_reuse(request, reuse.token)
         raise ApiError(
@@ -191,7 +257,9 @@ class RotationTokenService(TokenModeService):
 
     mode = MODE
 
-    def refresh(self, request: HttpRequest, *, refresh_token: str = "") -> IssuedCredentials:
+    def refresh(
+        self, request: HttpRequest, *, refresh_token: str = "", request_id: str = ""
+    ) -> IssuedCredentials:
         """Spend the presented refresh token and return its successor.
 
         Unlike the sliding mode there is a second token here, so an empty one is
@@ -201,7 +269,7 @@ class RotationTokenService(TokenModeService):
             raise ApiError(
                 "A refresh token is required.", status=400, title=ResponseTitle.TOKEN_REQUIRED
             )
-        return rotate(request, refresh_token)
+        return rotate(request, refresh_token, request_id)
 
     def sessions(self, user: Any) -> SessionList:
         return SessionList(

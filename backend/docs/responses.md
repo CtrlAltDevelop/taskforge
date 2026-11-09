@@ -123,6 +123,7 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `TOKEN_INVALID` | The token is not one this deployment issued. |
 | `TOKEN_EXPIRED` | The token has expired. |
 | `TOKEN_REUSED` | A spent token was presented again; the session was ended. |
+| `REFRESH_RACE` | That refresh token was just spent; retry with the newer one. |
 | `TOKENS_UNSUPPORTED` | This deployment does not issue that kind of credential. |
 | `SESSION_ENDED` | The session has ended. Sign in again. |
 | `SESSION_NOT_FOUND` | No such session. |

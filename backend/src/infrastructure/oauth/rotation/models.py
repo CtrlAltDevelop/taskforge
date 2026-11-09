@@ -95,6 +95,9 @@ class RotatingRefreshToken(AbstractOAuthToken):
     rotation_index = models.PositiveIntegerField(default=0)
     used_at = models.DateTimeField(null=True, blank=True)
     reuse_detected_at = models.DateTimeField(null=True, blank=True)
+    # Digest of the client's per-request id, kept so a retry of this exact refresh
+    # (whose response was lost) can be told apart from a thief replaying the token.
+    used_request_hash = models.CharField(max_length=64, blank=True, default="")
 
     class Meta(AbstractOAuthToken.Meta):
         verbose_name = "rotating refresh token"
@@ -113,12 +116,21 @@ class RotatingRefreshToken(AbstractOAuthToken):
     def is_active(self) -> bool:
         return super().is_active and self.used_at is None and self.family.is_active
 
-    def mark_used(self, replacement: "RotatingRefreshToken") -> None:
+    def mark_used(self, replacement: "RotatingRefreshToken", request_hash: str = "") -> None:
+        self.used_request_hash = request_hash
         self.used_at = timezone.now()
         self.replaced_by = replacement
         self.revoked_at = self.used_at
         self.revocation_reason = self.RevocationReason.ROTATED
-        self.save(update_fields=["used_at", "replaced_by", "revoked_at", "revocation_reason"])
+        self.save(
+            update_fields=[
+                "used_at",
+                "replaced_by",
+                "revoked_at",
+                "revocation_reason",
+                "used_request_hash",
+            ]
+        )
         self.family.last_rotated_at = self.used_at
         self.family.save(update_fields=["last_rotated_at"])
 

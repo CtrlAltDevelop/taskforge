@@ -6,6 +6,12 @@ os.environ.setdefault("DJANGO_SHOP_ENABLED", "true")
 os.environ.setdefault("DJANGO_SUPPORT_ENABLED", "true")
 os.environ.setdefault("DJANGO_WALLET_ENABLED", "true")
 os.environ.setdefault("DJANGO_CLUB_ENABLED", "true")
+# Fast local default; CI and `make test-postgres` set DJANGO_DB_ENGINE explicitly, which wins.
+if "DJANGO_DB_ENGINE" not in os.environ:
+    os.environ["DJANGO_DB_ENGINE"] = "django.db.backends.sqlite3"
+    os.environ["DJANGO_DB_NAME"] = ":memory:"
+# The starter's own reuse tests replay a token immediately; the grace window has its own tests.
+os.environ.setdefault("DJANGO_AUTH_REFRESH_REUSE_GRACE_SECONDS", "0")
 os.environ.setdefault("DJANGO_OAUTH_MODE", "all")
 os.environ.setdefault("DJANGO_AUTH_TOKEN_MODE", "rotation")
 os.environ.setdefault("DJANGO_AUTH_METHODS", "password,email_code,sms_code,magic_link")
