@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package config.tasks;
+
+service TaskController {
+    rpc Create(TaskCreateRequest) returns (Task) {}
+    rpc Delete(TaskDeleteRequest) returns (Task) {}
+    rpc Get(TaskGetRequest) returns (Task) {}
+    rpc List(TaskListRequest) returns (stream Task) {}
+    rpc ListTrash(TaskListTrashRequest) returns (TaskTrash) {}
+    rpc Restore(TaskRestoreRequest) returns (Task) {}
+    rpc Update(TaskUpdateRequest) returns (Task) {}
+}
+
+message Task {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    int32 number = 4;
+    string display_id = 5;
+    string title = 6;
+    string description = 7;
+    string status = 8;
+    string priority = 9;
+    string start_date = 10;
+    string due_date = 11;
+    repeated string assignee_ids = 12;
+    string created_by = 13;
+    int32 version = 14;
+    string position = 15;
+    string created_at = 16;
+    string updated_at = 17;
+    string deleted_at = 18;
+}
+
+message TaskCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string title = 3;
+    string description = 4;
+    string status = 5;
+    string priority = 6;
+    string start_date = 7;
+    string due_date = 8;
+    repeated string assignee_ids = 9;
+}
+
+message TaskDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message TaskGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message TaskListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string status = 3;
+    string assignee_id = 4;
+    string cursor = 5;
+    int32 page_size = 6;
+}
+
+message TaskListTrashRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message TaskRestoreRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message TaskTrash {
+    repeated Task tasks = 1;
+}
+
+message TaskUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    optional string title = 5;
+    optional string description = 6;
+    optional string status = 7;
+    optional string priority = 8;
+    optional string start_date = 9;
+    optional string due_date = 10;
+    bool set_assignees = 11;
+    repeated string assignee_ids = 12;
+}
+

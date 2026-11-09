@@ -20,6 +20,9 @@ RECRUITER = [
     "member.remove",
     "role.view",
     "project.create",
+    "task.create",
+    "task.update",
+    "task.delete",
 ]
 
 

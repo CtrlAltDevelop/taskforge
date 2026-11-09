@@ -74,7 +74,10 @@ def grpc_call() -> Callable[..., Any]:
                 async with grpc.aio.insecure_channel(f"127.0.0.1:{port}") as channel:
                     metadata = [("authorization", f"Bearer {token}")] if token else None
                     stub = stub_class(channel)
-                    return await getattr(stub, method)(request, metadata=metadata)
+                    rpc = getattr(stub, method)(request, metadata=metadata)
+                    if hasattr(rpc, "__aiter__"):  # a server-streaming call: collect it
+                        return [message async for message in rpc]
+                    return await rpc
             finally:
                 await server.stop(None)
 

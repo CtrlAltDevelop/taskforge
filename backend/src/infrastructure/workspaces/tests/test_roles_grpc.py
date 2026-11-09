@@ -58,7 +58,7 @@ def test_list_returns_roles_counts_and_the_grouped_registry(team: Any, grpc_call
         ("Viewer", True, 1),
     ]
     assert set(listed.roles[3].permissions) == BUILTIN_GRANTS["Viewer"]
-    assert [a.area for a in listed.registry] == ["workspace", "member", "role", "project"]
+    assert [a.area for a in listed.registry] == ["workspace", "member", "role", "project", "task"]
     assert {p.key for a in listed.registry for p in a.permissions} == ALL_KEYS
     assert all(p.label for a in listed.registry for p in a.permissions)
 

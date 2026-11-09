@@ -1039,6 +1039,7 @@ INSTALLED_APPS = [
     *registered_app_configs(BASE_DIR / "src" / "config" / "api_registry.json"),
     # gRPC only, so no registry route installs it.
     "infrastructure.projects.apps.ProjectsConfig",
+    "infrastructure.tasks.apps.TasksConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

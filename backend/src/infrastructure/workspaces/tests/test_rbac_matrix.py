@@ -21,6 +21,9 @@ from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
 from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
+from infrastructure.tasks import services as task_services
+from infrastructure.tasks.grpc import tasks_pb2 as tpb
+from infrastructure.tasks.grpc import tasks_pb2_grpc as tstubs
 from infrastructure.workspaces import access, invitations, roles, services
 from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 from infrastructure.workspaces.grpc import workspaces_pb2_grpc as stubs
@@ -46,6 +49,7 @@ class World:
     project_id: str  # an open project
     private_id: str  # a private project the Owner belongs to
     role_ids: dict[str, str] = field(default_factory=dict)
+    task_id: str = ""  # set by the prepare of the task endpoints that need one
 
     @property
     def ws(self) -> str:
@@ -88,6 +92,16 @@ def _archive_project(w: World) -> None:
 
 def _add_target_to_private(w: World) -> None:
     project_members.add_member(w.workspace.created_by, w.workspace, w.private_id, str(w.target.pk))
+
+
+def _make_task(w: World) -> None:
+    owner = w.workspace.created_by
+    w.task_id = str(task_services.create(owner, w.workspace, w.project_id, "Seed").pk)
+
+
+def _make_deleted_task(w: World) -> None:
+    _make_task(w)
+    task_services.delete(w.workspace.created_by, w.workspace, w.project_id, w.task_id)
 
 
 def _soft_delete(w: World) -> None:
@@ -318,6 +332,47 @@ _PROJECT_CALLS = (  # (rpc, permission, request builder, prepare)
 ENDPOINTS += tuple(
     Endpoint(f"ProjectController.{rpc}", permission, _grpc(PR, rpc, build), prepare=prepare)
     for rpc, permission, build, prepare in _PROJECT_CALLS
+)
+
+TK = tstubs.TaskControllerStub
+
+
+def _task_request(message: Any, **extra: Any) -> Callable[[World], Any]:
+    return lambda w: message(workspace_id=w.ws, project_id=w.project_id, id=w.task_id, **extra)
+
+
+_TASK_CALLS = (  # (rpc, permission, request builder, prepare)
+    ("Get", "workspace.view", _task_request(tpb.TaskGetRequest), _make_task),
+    (
+        "List",
+        "workspace.view",
+        lambda w: tpb.TaskListRequest(workspace_id=w.ws, project_id=w.project_id),
+        None,
+    ),
+    (
+        "Create",
+        "task.create",
+        lambda w: tpb.TaskCreateRequest(workspace_id=w.ws, project_id=w.project_id, title="New"),
+        None,
+    ),
+    (
+        "Update",
+        "task.update",
+        _task_request(tpb.TaskUpdateRequest, expected_version=1, title="Renamed"),
+        _make_task,
+    ),
+    ("Delete", "task.delete", _task_request(tpb.TaskDeleteRequest), _make_task),
+    ("Restore", "task.delete", _task_request(tpb.TaskRestoreRequest), _make_deleted_task),
+    (
+        "ListTrash",
+        "task.delete",
+        lambda w: tpb.TaskListTrashRequest(workspace_id=w.ws, project_id=w.project_id),
+        None,
+    ),
+)
+ENDPOINTS += tuple(
+    Endpoint(f"TaskController.{rpc}", permission, _grpc(TK, rpc, build), prepare=prepare)
+    for rpc, permission, build, prepare in _TASK_CALLS
 )
 
 # Handlers that need no workspace permission, and why.

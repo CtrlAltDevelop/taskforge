@@ -6,7 +6,7 @@ carries the `title` a client keys its translations off -- the same vocabulary
 the REST envelope and the GraphQL `extensions` use.
 """
 
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable
 from functools import wraps
 from typing import Any
 
@@ -65,6 +65,23 @@ def action(function: Callable[..., Awaitable[Any]]) -> Callable[..., Awaitable[A
     async def wrapper(self: Any, request: Any, context: Any) -> Any:
         try:
             return await function(self, request, context)
+        except ApiError as error:
+            await abort(context, error)
+
+    return wrapper
+
+
+def stream_action(
+    function: Callable[..., AsyncIterator[Any]],
+) -> Callable[..., AsyncIterator[Any]]:
+    """``action`` for a server-streaming call (an async generator): a refusal raised before or
+    between messages ends the stream with the same status and title as a unary refusal."""
+
+    @wraps(function)
+    async def wrapper(self: Any, request: Any, context: Any) -> AsyncIterator[Any]:
+        try:
+            async for message in function(self, request, context):
+                yield message
         except ApiError as error:
             await abort(context, error)
 

@@ -1,0 +1,212 @@
+"""Tasks over gRPC (``TaskController``). Adapters resolve the caller and workspace and render
+what ``infrastructure.tasks`` decides.
+
+Permissions: Get/List need only workspace membership; Create ``task.create``; Update
+``task.update``; Delete/Restore ``task.delete``. A task or project the caller may not see is
+NOT_FOUND. ``List`` is server-streamed in pages of up to 100 so a 10,000-task project starts
+rendering after the first page and never sits whole in memory. ``Update`` sends only the fields
+to change (``HasField``) plus ``expected_version``; a clash on the same field is ABORTED
+VERSION_CONFLICT with ``x-error-{field,current,version}-bin`` trailers. Other refusals as in
+``infrastructure.projects.grpc.services``.
+"""
+
+import json
+from collections.abc import AsyncIterator
+from typing import Any
+
+from asgiref.sync import sync_to_async
+from django_socio_grpc import generics
+from django_socio_grpc.decorators import grpc_action
+
+from infrastructure.common.grpc.errors import action, require_caller, stream_action
+from infrastructure.common.identity import grpc_caller
+from infrastructure.tasks import services
+from infrastructure.tasks.grpc.serializers import Task
+from infrastructure.tasks.models import Task as TaskRow
+from infrastructure.workspaces.scoping import require_workspace
+
+IDS = [
+    {"name": "workspace_id", "type": "string"},
+    {"name": "project_id", "type": "string"},
+]
+ID = {"name": "id", "type": "string"}
+VERSION = {"name": "expected_version", "type": "int32"}
+TEXT_FIELDS = ("title", "description", "status", "priority", "start_date", "due_date")
+CREATE_FIELDS = [
+    *({"name": n, "type": "string"} for n in TEXT_FIELDS),
+    {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
+]
+
+
+def _pb() -> Any:
+    from infrastructure.tasks.grpc import tasks_pb2
+
+    return tasks_pb2
+
+
+def _message(task: TaskRow) -> Any:
+    return _pb().Task(
+        id=str(task.pk),
+        workspace_id=str(task.workspace_id),
+        project_id=str(task.project_id),
+        number=task.number,
+        display_id=task.display_id,
+        title=task.title,
+        description=json.dumps(task.description) if task.description else "",
+        status=task.status,
+        priority=task.priority,
+        start_date=task.start_date.isoformat() if task.start_date else "",
+        due_date=task.due_date.isoformat() if task.due_date else "",
+        assignee_ids=sorted(str(i) for i in task.assignee_ids()),
+        created_by=str(task.created_by_id),
+        version=task.version,
+        position=task.position,
+        created_at=task.created_at.isoformat(),
+        updated_at=task.updated_at.isoformat(),
+        deleted_at=task.deleted_at.isoformat() if task.deleted_at else "",
+    )
+
+
+async def _scope(request: Any, context: Any) -> tuple[Any, Any]:
+    user = require_caller(await grpc_caller(context))
+    workspace = await sync_to_async(require_workspace)(user, request.workspace_id)
+    return user, workspace
+
+
+async def _one(request: Any, context: Any, call: Any) -> Any:
+    user, workspace = await _scope(request, context)
+    return await sync_to_async(lambda: _message(call(user, workspace)))()
+
+
+def _page(user: Any, workspace: Any, request: Any, cursor: str) -> tuple[list[Any], str]:
+    tasks, following = services.list_page(
+        user,
+        workspace,
+        request.project_id,
+        status=request.status,
+        assignee_id=request.assignee_id,
+        cursor=cursor,
+        limit=request.page_size or services.PAGE_DEFAULT,
+    )
+    return [_message(t) for t in tasks], following
+
+
+class TaskService(generics.GenericService):
+    @grpc_action(
+        request=[*IDS, ID], request_name="TaskGetRequest", response=Task, response_name="Task"
+    )
+    @action
+    async def Get(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request, context, lambda u, w: services.get(u, w, request.project_id, request.id)
+        )
+
+    @grpc_action(
+        request=[*IDS, *CREATE_FIELDS],
+        request_name="TaskCreateRequest",
+        response=Task,
+        response_name="Task",
+    )
+    @action
+    async def Create(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request,
+            context,
+            lambda u, w: services.create(
+                u,
+                w,
+                request.project_id,
+                request.title,
+                description=request.description,
+                status=request.status or "todo",
+                priority=request.priority or "none",
+                start_date=request.start_date,
+                due_date=request.due_date,
+                assignee_ids=list(request.assignee_ids),
+            ),
+        )
+
+    @grpc_action(
+        request=[
+            *IDS,
+            ID,
+            VERSION,
+            *({"name": n, "type": "string", "cardinality": "optional"} for n in TEXT_FIELDS),
+            {"name": "set_assignees", "type": "bool"},
+            {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
+        ],
+        request_name="TaskUpdateRequest",
+        response=Task,
+        response_name="Task",
+    )
+    @action
+    async def Update(self, request: Any, context: Any) -> Any:
+        sent: dict[str, Any] = {n: getattr(request, n) for n in TEXT_FIELDS if request.HasField(n)}
+        if request.set_assignees:
+            sent["assignee_ids"] = list(request.assignee_ids)
+        return await _one(
+            request,
+            context,
+            lambda u, w: services.update(
+                u, w, request.project_id, request.id, request.expected_version, sent
+            ),
+        )
+
+    @grpc_action(
+        request=[*IDS, ID], request_name="TaskDeleteRequest", response=Task, response_name="Task"
+    )
+    @action
+    async def Delete(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request, context, lambda u, w: services.delete(u, w, request.project_id, request.id)
+        )
+
+    @grpc_action(
+        request=[*IDS, ID], request_name="TaskRestoreRequest", response=Task, response_name="Task"
+    )
+    @action
+    async def Restore(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request, context, lambda u, w: services.restore(u, w, request.project_id, request.id)
+        )
+
+    @grpc_action(
+        request=IDS,
+        request_name="TaskListTrashRequest",
+        response=[{"name": "tasks", "cardinality": "repeated", "type": Task}],
+        response_name="TaskTrash",
+    )
+    @action
+    async def ListTrash(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        rows = await sync_to_async(
+            lambda: [_message(t) for t in services.list_trash(user, workspace, request.project_id)]
+        )()
+        return _pb().TaskTrash(tasks=rows)
+
+    @grpc_action(
+        request=[
+            *IDS,
+            {"name": "status", "type": "string"},
+            {"name": "assignee_id", "type": "string"},
+            {"name": "cursor", "type": "string"},
+            {"name": "page_size", "type": "int32"},
+        ],
+        request_name="TaskListRequest",
+        response=Task,
+        response_name="Task",
+        response_stream=True,
+    )
+    @stream_action
+    async def List(self, request: Any, context: Any) -> AsyncIterator[Any]:
+        user, workspace = await _scope(request, context)
+        cursor = request.cursor
+        while True:
+            page, cursor = await sync_to_async(_page)(user, workspace, request, cursor)
+            for message in page:
+                yield message
+            if not cursor:
+                return
+
+
+GRPC_SERVICES = [TaskService]
