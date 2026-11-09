@@ -3,6 +3,7 @@
 Each `docs/phases/phase-NN-<feature>.md` has these sections, in this order.
 **Rule: one phase = one feature.**
 
+0. **Status** — line under the title: `**Status:** TODO` or `DONE` (DONE only when every acceptance criterion is verified in code and tests).
 1. **Feature** — one sentence.
 2. **Why it exists** — the user problem and the Jira/ClickUp weakness it fixes.
 3. **How it works (plain words)** — explanation a new teammate can understand.

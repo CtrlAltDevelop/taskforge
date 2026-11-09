@@ -1,5 +1,7 @@
 # Phase 35 — Templates
 
+**Status:** TODO
+
 ## Feature
 Save a **task, subtask tree, or whole project** as a template and create new ones from it.
 

@@ -1,5 +1,7 @@
 # Phase 18 — Attachments
 
+**Status:** TODO
+
 ## Feature
 Attach **files and images** to tasks (and comments), with upload progress, preview and secure download.
 

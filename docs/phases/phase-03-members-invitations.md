@@ -1,5 +1,7 @@
 # Phase 03 — Members and Invitations
 
+**Status:** TODO
+
 ## Feature
 Invite people to a workspace by email or shareable link, and manage the member list.
 

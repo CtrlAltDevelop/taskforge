@@ -1,5 +1,7 @@
 # Phase 36 — Workload and Capacity
 
+**Status:** TODO
+
 ## Feature
 A **workload view** showing how much work each person has per day/week versus their capacity, with drag-to-rebalance.
 

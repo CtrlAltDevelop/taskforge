@@ -1,5 +1,7 @@
 # Phase 27 — Audit Log and Task History
 
+**Status:** TODO
+
 ## Feature
 An immutable **audit log** of who did what and when, with a per-task **activity history**.
 

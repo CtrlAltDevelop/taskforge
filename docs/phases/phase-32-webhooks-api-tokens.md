@@ -1,5 +1,7 @@
 # Phase 32 — Webhooks and API Tokens
 
+**Status:** TODO
+
 ## Feature
 A **public REST API** secured by personal/service **API tokens**, plus outgoing **webhooks** for events.
 

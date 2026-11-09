@@ -1,5 +1,7 @@
 # Phase 15 — Timeline (Gantt) View
 
+**Status:** TODO
+
 ## Feature
 A **timeline** showing tasks as bars on a time axis with dependency arrows, drag-to-reschedule, and critical-path highlighting.
 

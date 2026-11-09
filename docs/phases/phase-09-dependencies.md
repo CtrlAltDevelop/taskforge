@@ -1,5 +1,7 @@
 # Phase 09 — Task Dependencies
 
+**Status:** TODO
+
 ## Feature
 Link tasks with typed relations — **blocks / blocked by**, **relates to**, **duplicates** — with cycle protection and a "blocked" indicator.
 

@@ -1,5 +1,7 @@
 # Phase 07 — Custom Workflows and Statuses
 
+**Status:** TODO
+
 ## Feature
 Each project defines its own **statuses** grouped into categories, and optional **transition rules** between them, edited in a visual workflow editor.
 

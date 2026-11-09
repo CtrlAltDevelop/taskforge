@@ -1,5 +1,7 @@
 # Phase 05 — Projects
 
+**Status:** TODO
+
 ## Feature
 Create and manage **projects** inside a workspace, each with a short key (e.g. `WEB`), a description, and per-project switches for optional features.
 

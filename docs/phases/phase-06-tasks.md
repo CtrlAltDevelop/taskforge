@@ -1,5 +1,7 @@
 # Phase 06 — Tasks
 
+**Status:** TODO
+
 ## Feature
 Create, view, edit and delete **tasks** (title, description, assignee, priority, due date, status) with fast paginated listing over gRPC.
 

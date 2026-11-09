@@ -1,5 +1,7 @@
 # Phase 10 — Custom Fields
 
+**Status:** TODO
+
 ## Feature
 Admins define extra **typed fields** (text, number, select, multi-select, date, checkbox, URL, user, money) on a project; tasks store values for them.
 

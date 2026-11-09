@@ -1,5 +1,7 @@
 # Phase 19 — Notifications
 
+**Status:** TODO
+
 ## Feature
 A notification system with **in-app inbox, push, and email**, controlled by per-event preferences, quiet hours and digests.
 

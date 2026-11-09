@@ -1,5 +1,7 @@
 # Phase 14 — Saved Filters and Query Language
 
+**Status:** TODO
+
 ## Feature
 A **visual filter builder** that compiles to a readable **text query language (TFQL)**, with saved, shareable filters usable in every view.
 

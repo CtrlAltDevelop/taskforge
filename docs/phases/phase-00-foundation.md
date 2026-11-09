@@ -1,5 +1,7 @@
 # Phase 00 — Foundation
 
+**Status:** TODO
+
 ## Feature
 A working skeleton: Flutter app and Django backend that talk over **REST, gRPC and WebSocket** with one "ping" each, running locally with one command.
 

@@ -1,5 +1,7 @@
 # Phase 08 — Subtasks
 
+**Status:** TODO
+
 ## Feature
 Tasks can have **subtasks** nested to any depth, with progress roll-up and tree-aware moves.
 

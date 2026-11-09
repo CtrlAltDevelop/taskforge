@@ -1,5 +1,7 @@
 # Phase 26 — Dashboards and Reports
 
+**Status:** TODO
+
 ## Feature
 Customizable **dashboards** made of widgets (charts, counters, lists) driven by saved filters.
 

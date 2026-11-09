@@ -1,5 +1,7 @@
 # Phase 16 — Realtime Sync
 
+**Status:** TODO
+
 ## Feature
 Every open view updates **live** when anyone changes data, via WebSocket events, plus presence ("who is viewing this task").
 

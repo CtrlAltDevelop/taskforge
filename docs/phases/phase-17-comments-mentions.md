@@ -1,5 +1,7 @@
 # Phase 17 — Comments and Mentions
 
+**Status:** TODO
+
 ## Feature
 Threaded **comments** on tasks with rich text, `@mentions`, reactions and edit/delete history.
 

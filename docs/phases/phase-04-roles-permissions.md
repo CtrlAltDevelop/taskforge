@@ -1,5 +1,7 @@
 # Phase 04 — Roles and Permissions
 
+**Status:** TODO
+
 ## Feature
 Role-based access control with a clear permission matrix and a "why can't I do this?" explanation.
 

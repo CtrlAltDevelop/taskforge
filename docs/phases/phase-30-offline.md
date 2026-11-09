@@ -1,5 +1,7 @@
 # Phase 30 — Offline Mode
 
+**Status:** TODO
+
 ## Feature
 The app works **without a connection**: browse cached data, make edits that queue, and sync automatically when back online.
 

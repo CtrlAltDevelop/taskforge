@@ -1,5 +1,7 @@
 # Phase 23 — Docs (Wiki)
 
+**Status:** TODO
+
 ## Feature
 A built-in **docs** space: nested pages with a rich-text block editor, links to tasks, and page history.
 

@@ -1,5 +1,7 @@
 # Phase 13 — Calendar View
 
+**Status:** TODO
+
 ## Feature
 A **calendar** (month / week / day) showing tasks by start–due dates, with drag to reschedule.
 

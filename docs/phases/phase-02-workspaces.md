@@ -1,5 +1,7 @@
 # Phase 02 — Workspaces
 
+**Status:** TODO
+
 ## Feature
 A **workspace** is the top-level container (a company or team). Users can create several, switch between them, and everything else belongs to exactly one.
 

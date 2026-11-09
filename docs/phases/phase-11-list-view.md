@@ -1,5 +1,7 @@
 # Phase 11 — List View
 
+**Status:** TODO
+
 ## Feature
 A fast, virtualized **list/table view** of tasks with sortable, resizable, show/hide columns and grouping.
 

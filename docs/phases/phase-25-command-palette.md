@@ -1,5 +1,7 @@
 # Phase 25 — Command Palette and Keyboard Shortcuts
 
+**Status:** TODO
+
 ## Feature
 A **command palette** (`Cmd/Ctrl+K`) to run any action or jump anywhere, plus a consistent set of customizable keyboard shortcuts.
 

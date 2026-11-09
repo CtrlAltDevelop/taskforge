@@ -1,5 +1,7 @@
 # Phase 31 — Localization and RTL
 
+**Status:** TODO
+
 ## Feature
 Full **multi-language UI** with right-to-left layout support (Persian/Dari, Pashto, Arabic) plus localized dates, numbers and calendars.
 

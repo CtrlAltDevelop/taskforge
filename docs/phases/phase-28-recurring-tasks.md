@@ -1,5 +1,7 @@
 # Phase 28 — Recurring Tasks
 
+**Status:** TODO
+
 ## Feature
 Tasks that **repeat on a schedule** (daily, weekly, monthly, custom, or after completion).
 

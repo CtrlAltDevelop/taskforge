@@ -1,5 +1,7 @@
 # Phase 24 — Automations
 
+**Status:** TODO
+
 ## Feature
 No-code **rules**: *When* something happens, *if* conditions match, *then* do actions — unlimited runs, with a run history.
 

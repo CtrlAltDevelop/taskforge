@@ -1,5 +1,7 @@
 # Phase 34 — Goals (OKRs)
 
+**Status:** TODO
+
 ## Feature
 Set **goals** with measurable **key results** that update automatically from tasks or manually.
 

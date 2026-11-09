@@ -1,5 +1,7 @@
 # Phase 20 — Global Search
 
+**Status:** TODO
+
 ## Feature
 One search box that finds **tasks, comments, projects, people and docs** quickly, respecting permissions.
 

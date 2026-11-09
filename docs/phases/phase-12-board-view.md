@@ -1,5 +1,7 @@
 # Phase 12 — Board (Kanban) View
 
+**Status:** TODO
+
 ## Feature
 A **Kanban board** where columns are statuses (or another field) and cards are tasks, with drag-and-drop and WIP limits.
 

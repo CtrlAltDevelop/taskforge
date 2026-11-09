@@ -1,5 +1,7 @@
 # Phase 21 — Time Tracking
 
+**Status:** TODO
+
 ## Feature
 Track time on tasks with a **start/stop timer** and manual entries, plus estimates and timesheets.
 
