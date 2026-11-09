@@ -1,0 +1,25 @@
+# Local dev services. The Django servers and Flutter run on the host for fast reload.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: taskforge
+      POSTGRES_USER: taskforge
+      POSTGRES_PASSWORD: taskforge-dev-only
+    ports: ["127.0.0.1:5432:5432"]  # loopback only: dev password is in the repo
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskforge"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]  # loopback only: no password
+  envoy:
+    image: envoyproxy/envoy:v1.32-latest
+    command: ["-c", "/etc/envoy/envoy.yaml"]
+    volumes: ["./envoy.yaml:/etc/envoy/envoy.yaml:ro"]
+    ports: ["127.0.0.1:8081:8080"]  # host 8081: 8080 is commonly taken
+    extra_hosts: ["host.docker.internal:host-gateway"]
+volumes:
+  pgdata:

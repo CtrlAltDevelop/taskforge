@@ -1,0 +1,6 @@
+version: v2
+modules:
+  - path: backend/src
+lint:
+  use: [BASIC]
+  except: [PACKAGE_DIRECTORY_MATCH, PACKAGE_VERSION_SUFFIX]

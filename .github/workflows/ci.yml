@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main, stage, develop]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: make check
+      - run: make test
+
+  app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v6
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+      - run: flutter test --coverage
+
+  proto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: bufbuild/buf-setup-action@v1
+      - run: buf lint
+      # Dart stubs are committed; fail if they drift from the .proto files.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - run: dart pub global activate protoc_plugin 25.1.0  # same version the stubs were generated with
+      - run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          rm -rf app/lib/gen && mkdir -p app/lib/gen
+          protoc -I backend/src --dart_out=grpc:app/lib/gen infrastructure/common/grpc/common.proto
+          rm -rf app/lib/gen/google
+          git diff --exit-code -- app/lib/gen
