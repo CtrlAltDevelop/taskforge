@@ -23,7 +23,7 @@ _This app publishes no routes of its own._
 | `number` | PositiveInteger |  |
 | `title` | Char |  |
 | `description` | JSON |  |
-| `status` | Char |  |
+| `status` | ForeignKey | → `workflows.Status` |
 | `priority` | Char |  |
 | `start_date` | Date | nullable |
 | `due_date` | Date | nullable |
@@ -69,7 +69,7 @@ _This app requires no settings of its own._
 ### Rules
 
 - **Display id** `KEY-N`: `N` comes from `projects.services.next_task_number` inside the creating transaction (the project row lock). Numbers are never reused, including after delete. Unique per `(project, number)`; 50 parallel creates are tested on PostgreSQL (`make test-postgres`).
-- **Title** 1-500 characters. **Status** `todo | in_progress | done` (custom statuses are phase 07). **Priority** `urgent | high | normal | low | none`. **Dates** `YYYY-MM-DD` or empty; `due_date` may not precede `start_date` (checked against the stored other date on update).
+- **Title** 1-500 characters. **Status** is one of the project's workflow statuses ([workflows](workflows.md)), sent as the status id (`status_name` and `status_category` come back with it); a new task starts in the default status unless `Create` names another (a project can turn that off with *Restrict creation*: then only the default status is accepted). A status change must be allowed by the workflow (`TRANSITION_NOT_ALLOWED`); `Move` is `Update` of the status alone. **Priority** `urgent | high | normal | low | none`. **Dates** `YYYY-MM-DD` or empty; `due_date` may not precede `start_date` (checked against the stored other date on update).
 - **Description** is the rich-text JSON document sent as a string: `{"type": "doc", "content": [...]}` with block nodes `paragraph heading bullet_list ordered_list list_item checklist checklist_item code_block blockquote horizontal_rule` and inline nodes `text hard_break link`, at most 8 levels deep and 200 KB. `""` clears it. The format is shared with Docs later.
 - **Assignees** (multiple): each must be an active workspace member and, for a private project, one of its members; otherwise `INVALID_ARGUMENT`. The same user in any letter case counts once.
 - **Update by field mask**: `TaskUpdateRequest` carries only the fields to change (proto3 `optional`, so `""` is a real value that clears a date) plus `expected_version`; `set_assignees` plus `assignee_ids` replaces the assignee set. The task keeps `field_versions` (field -> version that last changed it). A field conflicts only if it changed after `expected_version`; different fields merge. A conflict is `ABORTED` / `VERSION_CONFLICT` with trailers `x-error-field-bin`, `x-error-current-bin` (the current value; assignees as sorted comma-joined ids; description as JSON) and `x-error-version-bin`. The row is locked `select_for_update` for the check and write, and `version` bumps once per update. `expected_version` must be between 1 and the task's current version, otherwise `INVALID_ARGUMENT`: a made-up huge version would pass every field check and silently defeat the lock.
@@ -87,6 +87,6 @@ All requests carry `workspace_id` and `project_id`. Responses are `Task` (`List`
 
 `TaskTrash{tasks[]}` is the `ListTrash` reply.
 
-`Task{id, workspace_id, project_id, number, display_id, title, description, status, priority, start_date, due_date, assignee_ids[], created_by, version, position, created_at, updated_at, deleted_at}` (dates and timestamps are ISO strings, `""` when unset).
+`Task{id, workspace_id, project_id, number, display_id, title, description, status, status_name, status_category, priority, start_date, due_date, assignee_ids[], created_by, version, position, created_at, updated_at, deleted_at}` (dates and timestamps are ISO strings, `""` when unset).
 
 Errors as in [projects](projects.md): `PERMISSION_DENIED` (with reason trailers), `NOT_FOUND`, `INVALID_ARGUMENT`, `ALREADY_EXISTS` `PROJECT_ARCHIVED`, `ABORTED` `VERSION_CONFLICT`. A refusal raised inside the `List` stream ends it with the same status.

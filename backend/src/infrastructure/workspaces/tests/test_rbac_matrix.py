@@ -24,6 +24,9 @@ from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
 from infrastructure.tasks.grpc import tasks_pb2_grpc as tstubs
+from infrastructure.workflows import services as workflow_services
+from infrastructure.workflows.grpc import workflows_pb2 as wpb
+from infrastructure.workflows.grpc import workflows_pb2_grpc as wstubs
 from infrastructure.workspaces import access, invitations, roles, services
 from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 from infrastructure.workspaces.grpc import workspaces_pb2_grpc as stubs
@@ -373,6 +376,69 @@ _TASK_CALLS = (  # (rpc, permission, request builder, prepare)
 ENDPOINTS += tuple(
     Endpoint(f"TaskController.{rpc}", permission, _grpc(TK, rpc, build), prepare=prepare)
     for rpc, permission, build, prepare in _TASK_CALLS
+)
+
+WF = wstubs.WorkflowControllerStub
+
+
+def _workflow_fields(w: World) -> dict[str, Any]:
+    """The project's current workflow, re-sent unchanged (so the call is valid for any role)."""
+    view = workflow_services.get(w.workspace.created_by, w.workspace, w.project_id)
+    return {
+        "workspace_id": w.ws,
+        "project_id": w.project_id,
+        "restrict_transitions": view.workflow.restrict_transitions,
+        "restrict_creation": view.workflow.restrict_creation,
+        "statuses": [
+            wpb.StatusInput(
+                key=str(s.pk),
+                name=s.name,
+                color=s.color,
+                category=s.category,
+                is_default=s.is_default,
+            )
+            for s in view.statuses
+        ],
+    }
+
+
+def _workflow_get(w: World) -> Any:
+    return wpb.WorkflowGetRequest(workspace_id=w.ws, project_id=w.project_id)
+
+
+def _workflow_update(w: World) -> Any:
+    version = workflow_services.get(w.workspace.created_by, w.workspace, w.project_id)
+    return wpb.WorkflowUpdateRequest(
+        expected_version=version.workflow.version, **_workflow_fields(w)
+    )
+
+
+def _workflow_validate(w: World) -> Any:
+    return wpb.WorkflowValidateRequest(**_workflow_fields(w))
+
+
+def _move_request(w: World) -> Any:
+    """Move a task to its own status (a valid no-op for every role that may move at all)."""
+    status, version = "", 1
+    if w.task_id:  # the outsider check builds requests for a world with no task
+        task = task_services.get(w.workspace.created_by, w.workspace, w.project_id, w.task_id)
+        status, version = str(task.status_id), task.version
+    return tpb.TaskMoveRequest(
+        workspace_id=w.ws,
+        project_id=w.project_id,
+        id=w.task_id,
+        expected_version=version,
+        status=status,
+    )
+
+
+ENDPOINTS += (
+    Endpoint("WorkflowController.Get", "workspace.view", _grpc(WF, "Get", _workflow_get)),
+    Endpoint("WorkflowController.Update", "project.update", _grpc(WF, "Update", _workflow_update)),
+    Endpoint(
+        "WorkflowController.Validate", "project.update", _grpc(WF, "Validate", _workflow_validate)
+    ),
+    Endpoint("TaskController.Move", "task.update", _grpc(TK, "Move", _move_request), _make_task),
 )
 
 # Handlers that need no workspace permission, and why.

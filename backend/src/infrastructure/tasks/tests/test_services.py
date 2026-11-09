@@ -9,9 +9,17 @@ from infrastructure.projects import members as project_members
 from infrastructure.projects import services as projects
 from infrastructure.tasks import services
 from infrastructure.tasks.models import Task
+from infrastructure.workflows import services as workflows
+from infrastructure.workflows.models import Status
 from infrastructure.workspaces import access
 
 pytestmark = pytest.mark.django_db
+
+
+def _status(project: Any, name: str) -> str:
+    """The id of the project's default-workflow status called ``name`` (made on first use)."""
+    workflows.ensure(project)
+    return str(Status.objects.get(project=project, name=name).pk)
 
 
 def _make(team: Any, project: Any, actor: Any = None, **kw: Any) -> Task:
@@ -24,7 +32,7 @@ def test_create_numbers_tasks_from_the_project_counter(team: Any, project: Any) 
 
     assert (first.number, second.number) == (1, 2)
     assert first.display_id == "WEB-1"
-    assert first.status == "todo" and first.priority == "none" and first.version == 1
+    assert first.status.name == "To do" and first.priority == "none" and first.version == 1
     assert first.position < second.position
     project.refresh_from_db()
     assert project.task_counter == 2
@@ -38,7 +46,7 @@ def test_create_validates_and_stores_every_field(team: Any, project: Any) -> Non
         title=" Ship ",
         description=doc,
         priority="high",
-        status="in_progress",
+        status=_status(project, "In progress"),
         start_date="2026-03-01",
         due_date="2026-03-05",
         assignee_ids=[str(team.member.pk)],
@@ -123,10 +131,15 @@ def test_assignee_must_be_able_to_open_the_project(team: Any, project: Any) -> N
 def test_update_changes_only_the_sent_fields_and_bumps_the_version(team: Any, project: Any) -> None:
     task = _make(team, project, priority="low")
     updated = services.update(
-        team.member, team.ws, str(project.pk), str(task.pk), 1, {"title": "New", "status": "done"}
+        team.member,
+        team.ws,
+        str(project.pk),
+        str(task.pk),
+        1,
+        {"title": "New", "status": _status(project, "Done")},
     )
 
-    assert (updated.title, updated.status, updated.priority) == ("New", "done", "low")
+    assert (updated.title, updated.status.name, updated.priority) == ("New", "Done", "low")
     assert updated.version == 2
 
 
@@ -243,11 +256,11 @@ def test_list_pages_by_cursor_in_position_order(team: Any, project: Any) -> None
 
 def test_list_filters_by_status_and_assignee(team: Any, project: Any) -> None:
     mine = _make(team, project, assignee_ids=[str(team.member.pk)])
-    done = _make(team, project, status="done")
+    done = _make(team, project, status=_status(project, "Done"))
     _make(team, project)
     pid = str(project.pk)
 
-    by_status, _ = services.list_page(team.viewer, team.ws, pid, status="done")
+    by_status, _ = services.list_page(team.viewer, team.ws, pid, status=_status(project, "Done"))
     by_user, _ = services.list_page(team.viewer, team.ws, pid, assignee_id=str(team.member.pk))
     assert [t.pk for t in by_status] == [done.pk]
     assert [t.pk for t in by_user] == [mine.pk]

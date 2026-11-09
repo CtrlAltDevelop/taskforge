@@ -160,6 +160,8 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `KEY_LOCKED` | The project key cannot change once the project has tasks. |
 | `PROJECT_ARCHIVED` | This project is archived and read-only. |
 | `LAST_MEMBER` | A private project needs at least one member. |
+| `WORKFLOW_INVALID` | The workflow has problems; see the list. |
+| `TRANSITION_NOT_ALLOWED` | The workflow does not allow that move. |
 
 ## Writing an endpoint
 

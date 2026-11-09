@@ -34,6 +34,10 @@ async def abort(context: Any, error: ApiError) -> None:
     # re-read and retry (docs/01-architecture.md section 6).
     if error.title is ResponseTitle.VERSION_CONFLICT:
         code = grpc.StatusCode.ABORTED
+    # A workflow rule refusing a move is not a clash of names: the call is well formed but the
+    # state of the workflow does not permit it.
+    if error.title is ResponseTitle.TRANSITION_NOT_ALLOWED:
+        code = grpc.StatusCode.FAILED_PRECONDITION
     if error.data:
         # Structured detail beside the "TITLE: message" text: trailers x-error-<key>-bin
         # holding UTF-8 bytes (binary, so a custom role name may be any Unicode).

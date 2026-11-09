@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from infrastructure.projects import services as projects
 from infrastructure.tasks.grpc import tasks_pb2 as pb
 from infrastructure.tasks.grpc import tasks_pb2_grpc as stubs
+from infrastructure.workflows.models import Status
 from infrastructure.workspaces import services as workspace_services
 from infrastructure.workspaces.tests.test_grpc import _token
 
@@ -66,7 +67,9 @@ def test_create_and_get_round_trip_with_the_full_payload(team: Any, grpc_call: G
     )
 
     assert got == created
-    assert (got.display_id, got.number, got.version, got.status) == ("WEB-1", 1, 1, "todo")
+    assert (got.display_id, got.number, got.version) == ("WEB-1", 1, 1)
+    assert (got.status_name, got.status_category) == ("To do", "not_started")
+    assert got.status == str(Status.objects.get(project_id=team["project"], name="To do").pk)
     assert got.priority == "high" and got.due_date == "2026-03-05"
     assert list(got.assignee_ids) == [assignee]
     assert json.loads(got.description) == json.loads(DOC)
@@ -173,7 +176,11 @@ def test_list_streams_every_task_in_order_across_pages(team: Any, grpc_call: Grp
     done = grpc_call(
         T,
         "List",
-        pb.TaskListRequest(workspace_id=team["ws"], project_id=team["project"], status="done"),
+        pb.TaskListRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            status=str(Status.objects.get(project_id=team["project"], name="Done").pk),
+        ),
         token=team["tokens"]["vic"],
     )
 

@@ -14,12 +14,10 @@ def test_title_is_trimmed_and_required() -> None:
     assert fields.clean_title("x" * 500)
 
 
-def test_priority_and_status_are_from_the_fixed_lists() -> None:
+def test_priority_is_from_the_fixed_list() -> None:
     assert fields.clean_priority("urgent") == "urgent"
-    assert fields.clean_status("in_progress") == "in_progress"
-    for fn in (fields.clean_priority, fields.clean_status):
-        with pytest.raises(ApiError):
-            fn("bogus")
+    with pytest.raises(ApiError):
+        fields.clean_priority("bogus")
 
 
 def test_description_accepts_the_shared_rich_text_shape() -> None:

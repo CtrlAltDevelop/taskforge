@@ -8,6 +8,7 @@ service TaskController {
     rpc Get(TaskGetRequest) returns (Task) {}
     rpc List(TaskListRequest) returns (stream Task) {}
     rpc ListTrash(TaskListTrashRequest) returns (TaskTrash) {}
+    rpc Move(TaskMoveRequest) returns (Task) {}
     rpc Restore(TaskRestoreRequest) returns (Task) {}
     rpc Update(TaskUpdateRequest) returns (Task) {}
 }
@@ -31,6 +32,8 @@ message Task {
     string created_at = 16;
     string updated_at = 17;
     string deleted_at = 18;
+    string status_name = 19;
+    string status_category = 20;
 }
 
 message TaskCreateRequest {
@@ -69,6 +72,14 @@ message TaskListRequest {
 message TaskListTrashRequest {
     string workspace_id = 1;
     string project_id = 2;
+}
+
+message TaskMoveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string status = 5;
 }
 
 message TaskRestoreRequest {

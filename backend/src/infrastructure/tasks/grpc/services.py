@@ -1,12 +1,14 @@
 """Tasks over gRPC (``TaskController``). Adapters resolve the caller and workspace and render
 what ``infrastructure.tasks`` decides.
 
-Permissions: Get/List need only workspace membership; Create ``task.create``; Update
-``task.update``; Delete/Restore ``task.delete``. A task or project the caller may not see is
-NOT_FOUND. ``List`` is server-streamed in pages of up to 100 so a 10,000-task project starts
-rendering after the first page and never sits whole in memory. ``Update`` sends only the fields
-to change (``HasField``) plus ``expected_version``; a clash on the same field is ABORTED
-VERSION_CONFLICT with ``x-error-{field,current,version}-bin`` trailers. Other refusals as in
+Permissions: Get/List need only workspace membership; Create ``task.create``; Update and Move
+``task.update`` (a status change must also be allowed by the project's workflow:
+FAILED_PRECONDITION TRANSITION_NOT_ALLOWED with ``x-error-{from,to,reason}-bin``);
+Delete/Restore/ListTrash ``task.delete``. A task or project the caller may not see is NOT_FOUND.
+``List`` is server-streamed in pages of up to 100 so a 10,000-task project starts rendering after
+the first page and never sits whole in memory. ``Update`` sends only the fields to change
+(``HasField``) plus ``expected_version``; a clash on the same field is ABORTED VERSION_CONFLICT
+with ``x-error-{field,current,version}-bin`` trailers. Other refusals as in
 ``infrastructure.projects.grpc.services``.
 """
 
@@ -53,7 +55,9 @@ def _message(task: TaskRow) -> Any:
         display_id=task.display_id,
         title=task.title,
         description=json.dumps(task.description) if task.description else "",
-        status=task.status,
+        status=str(task.status_id),
+        status_name=task.status.name,
+        status_category=task.status.category,
         priority=task.priority,
         start_date=task.start_date.isoformat() if task.start_date else "",
         due_date=task.due_date.isoformat() if task.due_date else "",
@@ -118,7 +122,7 @@ class TaskService(generics.GenericService):
                 request.project_id,
                 request.title,
                 description=request.description,
-                status=request.status or "todo",
+                status=request.status,
                 priority=request.priority or "none",
                 start_date=request.start_date,
                 due_date=request.due_date,
@@ -149,6 +153,22 @@ class TaskService(generics.GenericService):
             context,
             lambda u, w: services.update(
                 u, w, request.project_id, request.id, request.expected_version, sent
+            ),
+        )
+
+    @grpc_action(
+        request=[*IDS, ID, VERSION, {"name": "status", "type": "string"}],
+        request_name="TaskMoveRequest",
+        response=Task,
+        response_name="Task",
+    )
+    @action
+    async def Move(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request,
+            context,
+            lambda u, w: services.move(
+                u, w, request.project_id, request.id, request.expected_version, request.status
             ),
         )
 

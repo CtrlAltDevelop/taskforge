@@ -136,6 +136,10 @@ class ResponseTitle(StrEnum):
     PROJECT_ARCHIVED = "PROJECT_ARCHIVED"
     LAST_MEMBER = "LAST_MEMBER"
 
+    # Workflows
+    WORKFLOW_INVALID = "WORKFLOW_INVALID"
+    TRANSITION_NOT_ALLOWED = "TRANSITION_NOT_ALLOWED"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -179,6 +183,8 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.KEY_LOCKED: "The project key cannot change once the project has tasks.",
     ResponseTitle.PROJECT_ARCHIVED: "This project is archived and read-only.",
     ResponseTitle.LAST_MEMBER: "A private project needs at least one member.",
+    ResponseTitle.WORKFLOW_INVALID: "The workflow has problems; see the list.",
+    ResponseTitle.TRANSITION_NOT_ALLOWED: "The workflow does not allow that move.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

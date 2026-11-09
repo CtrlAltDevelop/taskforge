@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, Final
 
 from infrastructure.common.errors import ApiError
-from infrastructure.tasks.models import Priority, Status
+from infrastructure.tasks.models import Priority
 
 TITLE_MAX: Final = 500
 DESCRIPTION_MAX_BYTES: Final = 200 * 1024
@@ -37,12 +37,6 @@ def clean_title(value: str) -> str:
 def clean_priority(value: str) -> str:
     if value not in Priority.values:
         raise ApiError(f"The priority must be one of: {', '.join(Priority.values)}.")
-    return value
-
-
-def clean_status(value: str) -> str:
-    if value not in Status.values:
-        raise ApiError(f"The status must be one of: {', '.join(Status.values)}.")
     return value
 
 

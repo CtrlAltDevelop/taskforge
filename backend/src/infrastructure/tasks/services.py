@@ -4,6 +4,8 @@ Order of checks: the workspace-level ``access.require`` first, then the project 
 ``projects.services.load`` (so an invisible or foreign project is the same 404), then the task
 inside that project. Writes refuse an archived project and a trashed task.
 
+A status change is checked against the project's workflow (``workflows.check_move``).
+
 Edits are optimistic: ``update`` takes only the fields that changed plus ``expected_version``.
 A field conflicts only if it changed after that version (``Task.field_versions``), so two people
 editing different fields merge; the same field answers ``VERSION_CONFLICT`` with its current value.
@@ -26,8 +28,9 @@ from infrastructure.common.responses import ResponseTitle
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
 from infrastructure.tasks import fields, rank
-from infrastructure.tasks.models import Status, Task, TaskAssignee
+from infrastructure.tasks.models import Task, TaskAssignee
 from infrastructure.tasks.signals import announce
+from infrastructure.workflows import services as workflows
 from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
 
@@ -38,12 +41,11 @@ TRASH_MAX: Final = 200
 SCALAR_FIELDS: Final[dict[str, Callable[[str], Any]]] = {
     "title": fields.clean_title,
     "description": fields.clean_description,
-    "status": fields.clean_status,
     "priority": fields.clean_priority,
     "start_date": fields.clean_date,
     "due_date": fields.clean_date,
 }
-EDITABLE: Final = (*SCALAR_FIELDS, "assignee_ids")
+EDITABLE: Final = (*SCALAR_FIELDS, "status", "assignee_ids")
 
 
 def not_found() -> ApiError:
@@ -55,7 +57,7 @@ def _with_assignees() -> Prefetch[Any]:
 
 
 def _scoped(project: Project) -> Any:
-    return Task.objects.filter(project=project).select_related("project")
+    return Task.objects.filter(project=project).select_related("project", "status")
 
 
 def _load_task(
@@ -133,6 +135,8 @@ def _clean(
     cleaned: dict[str, Any] = {
         name: SCALAR_FIELDS[name](value) for name, value in changes.items() if name in SCALAR_FIELDS
     }
+    if "status" in changes:
+        cleaned["status"] = workflows.status_of(project, changes["status"])
     if "assignee_ids" in changes:
         cleaned["assignee_ids"] = _assignees(project, changes["assignee_ids"])
     start = (
@@ -159,7 +163,7 @@ def create(
     title: str,
     *,
     description: str = "",
-    status: str = Status.TODO,
+    status: str = "",
     priority: str = "none",
     start_date: str = "",
     due_date: str = "",
@@ -172,7 +176,7 @@ def create(
             {
                 "title": title,
                 "description": description,
-                "status": status,
+                "status": status or str(workflows.default_status(project).pk),
                 "priority": priority,
                 "start_date": start_date,
                 "due_date": due_date,
@@ -180,6 +184,7 @@ def create(
             },
         )
         users = cleaned.pop("assignee_ids")
+        workflows.check_create(project, cleaned["status"])
         number = projects.next_task_number(project)
         last = (
             Task.objects.filter(project=project)
@@ -208,6 +213,8 @@ def get(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task
 def _conflict(task: Task, name: str) -> ApiError:
     if name == "assignee_ids":
         current: Any = ",".join(sorted(str(i) for i in task.assignee_ids()))
+    elif name == "status":
+        current = str(task.status_id)
     else:
         value = getattr(task, name)
         current = (
@@ -242,6 +249,15 @@ def update(
             if seen.get(name, 1) > expected_version:
                 raise _conflict(task, name)
         users = cleaned.pop("assignee_ids", None)
+        if "status" in cleaned:
+            workflows.check_move(
+                actor,
+                workspace,
+                project,
+                task.status,
+                cleaned["status"],
+                assignee_count=len(users) if users is not None else task.assignees.count(),
+            )
         task.version += 1
         for name, value in cleaned.items():
             setattr(task, name, value)
@@ -252,6 +268,18 @@ def update(
             _set_assignees(task, users)
         announce(task, "updated")
     return _reload(task)
+
+
+def move(
+    actor: Any,
+    workspace: Workspace,
+    project_id: str,
+    task_id: str,
+    expected_version: int,
+    status_id: str,
+) -> Task:
+    """Change only the status of a task: ``update`` with the workflow's rules applied."""
+    return update(actor, workspace, project_id, task_id, expected_version, {"status": status_id})
 
 
 def _soft(task: Task, deleted: bool) -> Task:
@@ -312,7 +340,7 @@ def list_page(
     project = _project(actor, workspace, project_id, VIEW, False)
     rows = _scoped(project).filter(deleted_at__isnull=True)
     if status:
-        rows = rows.filter(status=fields.clean_status(status))
+        rows = rows.filter(status=workflows.status_of(project, status))
     if assignee_id:
         rows = rows.filter(assignees__user_id__in=_valid_pks([assignee_id]) or [None])
     after = _decode(cursor)

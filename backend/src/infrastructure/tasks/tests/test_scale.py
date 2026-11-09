@@ -8,6 +8,7 @@ import pytest
 
 from infrastructure.tasks import rank, services
 from infrastructure.tasks.models import Task
+from infrastructure.workflows import services as workflows
 
 pytestmark = pytest.mark.django_db
 
@@ -18,6 +19,7 @@ FIRST_PAGE_BUDGET_SECONDS = 0.5
 def _seed(team: Any, project: Any) -> None:
     position = None
     rows = []
+    status = workflows.default_status(project)
     for number in range(1, TOTAL + 1):
         position = rank.after(position)
         rows.append(
@@ -26,6 +28,7 @@ def _seed(team: Any, project: Any) -> None:
                 project=project,
                 number=number,
                 title=f"Task {number}",
+                status=status,
                 created_by=team.owner,
                 position=position,
             )

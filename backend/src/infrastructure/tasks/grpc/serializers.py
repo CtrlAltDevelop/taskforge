@@ -4,7 +4,9 @@ from rest_framework import serializers
 
 
 class Task(serializers.Serializer[dict[str, object]]):
-    """A task. ``description`` is the rich-text JSON document as a string (``""`` when empty);
+    """A task. ``status`` is the id of one of the project's statuses (see the workflow);
+    ``status_name`` and ``status_category`` are copies for display and reports.
+    ``description`` is the rich-text JSON document as a string (``""`` when empty);
     dates are ``YYYY-MM-DD`` or ``""``; ``deleted_at`` is set only in the trash."""
 
     id = serializers.CharField()
@@ -15,6 +17,8 @@ class Task(serializers.Serializer[dict[str, object]]):
     title = serializers.CharField()
     description = serializers.CharField()
     status = serializers.CharField()
+    status_name = serializers.CharField()
+    status_category = serializers.CharField()
     priority = serializers.CharField()
     start_date = serializers.CharField()
     due_date = serializers.CharField()

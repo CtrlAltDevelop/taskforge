@@ -1,4 +1,4 @@
-"""Tasks and who they are assigned to."""
+"""Tasks and who they are assigned to. A task's status is one of its project's workflow statuses."""
 
 import uuid
 from typing import Any
@@ -9,12 +9,6 @@ from django.utils import timezone
 
 from infrastructure.projects.models import Project
 from infrastructure.workspaces.models import Workspace
-
-
-class Status(models.TextChoices):
-    TODO = "todo"
-    IN_PROGRESS = "in_progress"
-    DONE = "done"
 
 
 class Priority(models.TextChoices):
@@ -35,7 +29,7 @@ class Task(models.Model):
     number = models.PositiveIntegerField()
     title = models.CharField(max_length=500)
     description = models.JSONField(default=dict, blank=True)
-    status = models.CharField(max_length=16, choices=Status.choices, default=Status.TODO)
+    status = models.ForeignKey("workflows.Status", on_delete=models.PROTECT, related_name="tasks")
     priority = models.CharField(max_length=8, choices=Priority.choices, default=Priority.NONE)
     start_date = models.DateField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)

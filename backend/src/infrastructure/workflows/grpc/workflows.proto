@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package config.workflows;
+
+service WorkflowController {
+    rpc Get(WorkflowGetRequest) returns (Workflow) {}
+    rpc Update(WorkflowUpdateRequest) returns (Workflow) {}
+    rpc Validate(WorkflowValidateRequest) returns (WorkflowProblems) {}
+}
+
+message MigrationInput {
+    string from_key = 1;
+    string to_key = 2;
+}
+
+message StatusInput {
+    string key = 1;
+    string name = 2;
+    string color = 3;
+    string category = 4;
+    bool is_default = 5;
+}
+
+message StatusResponse {
+    string id = 1;
+    string name = 2;
+    string color = 3;
+    string category = 4;
+    int32 position = 5;
+    bool is_default = 6;
+    int32 task_count = 7;
+}
+
+message TransitionInput {
+    string from_key = 1;
+    string to_key = 2;
+    string required_role_id = 3;
+    bool require_assignee = 4;
+}
+
+message TransitionResponse {
+    string from_status = 1;
+    string to_status = 2;
+    string required_role_id = 3;
+    bool require_assignee = 4;
+}
+
+message Workflow {
+    string project_id = 1;
+    bool restrict_transitions = 2;
+    int32 version = 3;
+    repeated StatusResponse statuses = 4;
+    repeated TransitionResponse transitions = 5;
+    bool restrict_creation = 6;
+}
+
+message WorkflowGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message WorkflowProblem {
+    string code = 1;
+    string message = 2;
+    string status_key = 3;
+}
+
+message WorkflowProblems {
+    repeated WorkflowProblem problems = 1;
+}
+
+message WorkflowUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    int32 expected_version = 3;
+    bool restrict_transitions = 4;
+    repeated StatusInput statuses = 5;
+    repeated TransitionInput transitions = 6;
+    repeated MigrationInput migrations = 7;
+    bool restrict_creation = 8;
+}
+
+message WorkflowValidateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    bool restrict_transitions = 3;
+    repeated StatusInput statuses = 4;
+    repeated TransitionInput transitions = 5;
+    repeated MigrationInput migrations = 6;
+    bool restrict_creation = 7;
+}
+

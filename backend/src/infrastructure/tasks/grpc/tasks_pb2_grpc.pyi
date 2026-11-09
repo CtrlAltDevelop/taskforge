@@ -36,6 +36,7 @@ class TaskControllerStub:
     Get: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]
     List: _grpc.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]
     ListTrash: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]
+    Move: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskMoveRequest, _tasks_pb2.Task]
     Restore: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskRestoreRequest, _tasks_pb2.Task]
     Update: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskUpdateRequest, _tasks_pb2.Task]
 
@@ -47,6 +48,7 @@ class TaskControllerAsyncStub(TaskControllerStub):
     Get: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     List: _aio.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     ListTrash: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]  # type: ignore[assignment]
+    Move: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskMoveRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Restore: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskRestoreRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Update: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskUpdateRequest, _tasks_pb2.Task]  # type: ignore[assignment]
 
@@ -85,6 +87,13 @@ class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
         request: _tasks_pb2.TaskListTrashRequest,
         context: _ServicerContext,
     ) -> _typing.Union[_tasks_pb2.TaskTrash, _abc.Awaitable[_tasks_pb2.TaskTrash]]: ...
+
+    @_abc_1.abstractmethod
+    def Move(
+        self,
+        request: _tasks_pb2.TaskMoveRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
 
     @_abc_1.abstractmethod
     def Restore(

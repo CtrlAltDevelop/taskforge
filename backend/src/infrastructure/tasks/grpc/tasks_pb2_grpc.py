@@ -59,6 +59,11 @@ class TaskControllerStub:
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListTrashRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskTrash.FromString,
                 _registered_method=True)
+        self.Move = channel.unary_unary(
+                '/config.tasks.TaskController/Move',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskMoveRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
         self.Restore = channel.unary_unary(
                 '/config.tasks.TaskController/Restore',
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskRestoreRequest.SerializeToString,
@@ -104,6 +109,12 @@ class TaskControllerServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Move(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Restore(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -143,6 +154,11 @@ def add_TaskControllerServicer_to_server(servicer, server):
                     servicer.ListTrash,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListTrashRequest.FromString,
                     response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskTrash.SerializeToString,
+            ),
+            'Move': grpc.unary_unary_rpc_method_handler(
+                    servicer.Move,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskMoveRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
             ),
             'Restore': grpc.unary_unary_rpc_method_handler(
                     servicer.Restore,
@@ -290,6 +306,33 @@ class TaskController:
             '/config.tasks.TaskController/ListTrash',
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListTrashRequest.SerializeToString,
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskTrash.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Move(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TaskController/Move',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskMoveRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
             options,
             channel_credentials,
             insecure,
