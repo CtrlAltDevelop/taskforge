@@ -1,6 +1,6 @@
 import 'package:grpc/grpc_web.dart';
 
-import '../config.dart';
+import 'package:taskforge/core/config.dart';
 
 /// Web: gRPC-Web through the Envoy proxy.
 GrpcWebClientChannel createGrpcChannel() =>

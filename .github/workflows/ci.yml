@@ -24,6 +24,37 @@ jobs:
       - run: make check
       - run: make test
 
+  backend-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: taskforge
+          POSTGRES_USER: taskforge
+          POSTGRES_PASSWORD: taskforge-ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U taskforge" --health-interval 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DJANGO_DB_ENGINE: django.db.backends.postgresql
+      DJANGO_DB_NAME: taskforge
+      DJANGO_DB_USER: taskforge
+      DJANGO_DB_PASSWORD: taskforge-ci-only
+      DJANGO_DB_HOST: 127.0.0.1
+      DJANGO_DB_PORT: "5432"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: make -f Makefile test-postgres
+
   app:
     runs-on: ubuntu-latest
     defaults:
@@ -55,6 +86,9 @@ jobs:
       - run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
           rm -rf app/lib/gen && mkdir -p app/lib/gen
-          protoc -I backend/src --dart_out=grpc:app/lib/gen infrastructure/common/grpc/common.proto
+          protoc -I backend/src --dart_out=grpc:app/lib/gen \
+            infrastructure/common/grpc/common.proto \
+            infrastructure/accounts/grpc/accounts.proto \
+            infrastructure/oauth/rotation/grpc/oauth_rotation.proto
           rm -rf app/lib/gen/google
           git diff --exit-code -- app/lib/gen

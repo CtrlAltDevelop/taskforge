@@ -1,6 +1,6 @@
 import 'package:grpc/grpc.dart';
 
-import '../config.dart';
+import 'package:taskforge/core/config.dart';
 
 /// Mobile and desktop: plain gRPC over HTTP/2.
 ClientChannel createGrpcChannel() => ClientChannel(

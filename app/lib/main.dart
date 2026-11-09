@@ -1,24 +1,28 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/debug/debug_screen.dart';
+import 'package:taskforge/app.dart';
+import 'package:taskforge/core/auth/auth_api.dart';
+import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/auth/token_store.dart';
+import 'package:taskforge/core/config.dart';
 
-void main() => runApp(const ProviderScope(child: TaskForgeApp()));
-
-class TaskForgeApp extends StatelessWidget {
-  const TaskForgeApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TaskForge',
-      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
-      darkTheme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      home: const DebugScreen(),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Web: the refresh token stays in an HttpOnly cookie and only the short-lived
+  // access token is held, in memory. Elsewhere tokens live in the Keychain/Keystore.
+  final session = AuthSession(
+    api: HttpAuthApi(AppConfig.restUrl, cookieMode: kIsWeb),
+    store: kIsWeb ? MemoryTokenStore() : SecureTokenStore(),
+    cookieSession: kIsWeb,
+  );
+  await session.restore();
+  runApp(
+    ProviderScope(
+      overrides: [authSessionProvider.overrideWithValue(session)],
+      child: const TaskForgeApp(),
+    ),
+  );
 }

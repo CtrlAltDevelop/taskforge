@@ -1,0 +1,223 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:taskforge/core/auth/http_client.dart';
+
+import 'package:taskforge/core/auth/auth_tokens.dart';
+
+/// The server refused or failed a request. [title] is the response `title`
+/// (e.g. `INVALID_CREDENTIALS`, `REFRESH_RACE`) for code to branch on.
+class AuthApiException implements Exception {
+  const AuthApiException({
+    required this.status,
+    required this.title,
+    required this.message,
+  });
+
+  final int status;
+  final String title;
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+/// The server could not be reached; the user's session is untouched.
+class NetworkUnavailable implements Exception {
+  const NetworkUnavailable(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+abstract interface class AuthApi {
+  Future<AuthTokens> signUp(String email, String password);
+  Future<AuthTokens> signIn(String email, String password);
+
+  /// [requestId] identifies this refresh attempt: repeat it when retrying a
+  /// refresh whose response was lost.
+  Future<AuthTokens> refresh(String refreshToken, {String? requestId});
+  Future<void> logout(String refreshToken);
+  Future<void> revokeSession(String accessToken, String sessionId);
+
+  /// The server ends every session of the account on success, this one included.
+  Future<void> changePassword(
+    String accessToken,
+    String currentPassword,
+    String newPassword,
+  );
+
+  /// Emails a one-time code; returns the ticket to present with it.
+  Future<String> requestPasswordReset(String email);
+
+  Future<void> resetPassword({
+    required String ticket,
+    required String code,
+    required String newPassword,
+  });
+}
+
+class HttpAuthApi implements AuthApi {
+  /// [cookieMode] is for browsers: the server keeps the refresh token in an
+  /// HttpOnly cookie, so no script (and no stored value) ever holds it.
+  HttpAuthApi(this.baseUrl, {http.Client? client, this.cookieMode = false})
+    : _client = client ?? (cookieMode ? createAuthHttpClient() : http.Client());
+
+  final bool cookieMode;
+  final String baseUrl;
+  final http.Client _client;
+
+  static const _timeout = Duration(seconds: 10);
+
+  @override
+  Future<AuthTokens> signUp(String email, String password) async {
+    // The account's login name is its email address.
+    final body = await _send(
+      'POST',
+      '/api/v1/auth/password/signup',
+      json: {'identifier': email, 'email': email, 'password': password},
+    );
+    return _credentials(body['data']['credentials'] as Map<String, dynamic>);
+  }
+
+  @override
+  Future<AuthTokens> signIn(String email, String password) async {
+    final body = await _send(
+      'POST',
+      '/api/v1/auth/password/login',
+      json: {'identifier': email, 'password': password},
+    );
+    final data = body['data'] as Map<String, dynamic>;
+    if (data['requires_second_factor'] == true) {
+      throw const AuthApiException(
+        status: 400,
+        title: 'SECOND_FACTOR_REQUIRED',
+        message: 'Second factor required.',
+      );
+    }
+    return _credentials(data['credentials'] as Map<String, dynamic>);
+  }
+
+  @override
+  Future<AuthTokens> refresh(String refreshToken, {String? requestId}) async {
+    final body = await _send(
+      'POST',
+      '/api/v1/auth/token/refresh',
+      json: {'refresh_token': refreshToken, 'request_id': ?requestId},
+    );
+    return _credentials(body['data'] as Map<String, dynamic>);
+  }
+
+  @override
+  Future<void> logout(String refreshToken) async {
+    await _send(
+      'POST',
+      '/api/v1/auth/password/logout',
+      json: {'token': refreshToken},
+    );
+  }
+
+  @override
+  Future<void> revokeSession(String accessToken, String sessionId) async {
+    await _send(
+      'DELETE',
+      '/api/v1/auth/token/sessions/$sessionId',
+      bearer: accessToken,
+    );
+  }
+
+  @override
+  Future<void> changePassword(
+    String accessToken,
+    String currentPassword,
+    String newPassword,
+  ) async {
+    await _send(
+      'POST',
+      '/api/v1/auth/password/change',
+      bearer: accessToken,
+      json: {'current_password': currentPassword, 'new_password': newPassword},
+    );
+  }
+
+  @override
+  Future<String> requestPasswordReset(String email) async {
+    final body = await _send(
+      'POST',
+      '/api/v1/auth/password/forgot',
+      json: {'email': email},
+    );
+    return (body['data'] as Map<String, dynamic>)['ticket'] as String;
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String ticket,
+    required String code,
+    required String newPassword,
+  }) async {
+    await _send(
+      'POST',
+      '/api/v1/auth/password/reset',
+      json: {'ticket': ticket, 'code': code, 'password': newPassword},
+    );
+  }
+
+  AuthTokens _credentials(Map<String, dynamic> data) => AuthTokens(
+    accessToken: data['access_token'] as String,
+    refreshToken: data['refresh_token'] as String,
+    sessionId: data['session_id'] as String,
+  );
+
+  Future<Map<String, dynamic>> _send(
+    String method,
+    String path, {
+    Object? json,
+    String? bearer,
+  }) async {
+    final request = http.Request(method, Uri.parse('$baseUrl$path'))
+      ..headers['Content-Type'] = 'application/json'
+      ..headers['Accept'] = 'application/json';
+    if (cookieMode) request.headers['X-Refresh-Transport'] = 'cookie';
+    if (bearer != null) request.headers['Authorization'] = 'Bearer $bearer';
+    if (json != null) request.body = jsonEncode(json);
+
+    final http.Response response;
+    try {
+      response = await http.Response.fromStream(
+        await _client.send(request).timeout(_timeout),
+      );
+    } on http.ClientException catch (e) {
+      throw NetworkUnavailable(e.message);
+    } on TimeoutException {
+      throw const NetworkUnavailable('The server did not answer in time.');
+    }
+
+    final Map<String, dynamic> body;
+    try {
+      body =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    } on FormatException {
+      throw AuthApiException(
+        status: response.statusCode,
+        title: 'BAD_RESPONSE',
+        message: 'Unexpected server answer.',
+      );
+    }
+    if (response.statusCode >= 200 && response.statusCode < 300) return body;
+
+    final errors =
+        (body['errors'] as List?)?.map((e) => e.toString()).toList() ??
+        const [];
+    throw AuthApiException(
+      status: response.statusCode,
+      title: (body['title'] as String?) ?? 'ERROR',
+      message: errors.isNotEmpty
+          ? errors.join('\n')
+          : ((body['description'] as String?) ?? 'Request failed.'),
+    );
+  }
+}

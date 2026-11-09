@@ -2,8 +2,8 @@ import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:grpc/service_api.dart' show CallOptions;
 import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart';
 
-import '../../gen/infrastructure/common/grpc/common.pbgrpc.dart';
-import 'ping_client.dart';
+import 'package:taskforge/gen/infrastructure/common/grpc/common.pbgrpc.dart';
+import 'package:taskforge/core/ping/ping_client.dart';
 
 const _timeout = Duration(seconds: 5);
 

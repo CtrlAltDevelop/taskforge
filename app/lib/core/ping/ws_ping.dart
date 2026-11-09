@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'ping_client.dart';
+import 'package:taskforge/core/ping/ping_client.dart';
 
 class WsPing implements PingClient {
   WsPing(this.url);

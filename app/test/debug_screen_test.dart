@@ -51,7 +51,7 @@ void main() {
 
   testWidgets('shows the error when a ping fails', (tester) async {
     await tester.pumpWidget(
-      _app([_FakePing('REST', error: 'connection refused')]),
+      _app([_FakePing('REST', error: Exception('connection refused'))]),
     );
 
     await tester.tap(find.text('REST ping'));

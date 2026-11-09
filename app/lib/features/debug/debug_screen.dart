@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../core/ping/ping_client.dart';
-import 'ping_providers.dart';
+import 'package:taskforge/core/ping/ping_client.dart';
+import 'package:taskforge/features/debug/ping_providers.dart';
 
 /// Phase 00: three buttons prove REST, gRPC and WebSocket reach the server.
 class DebugScreen extends ConsumerWidget {
@@ -12,7 +13,14 @@ class DebugScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final clients = ref.watch(pingClientsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('TaskForge — connectivity')),
+      appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'Back',
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
+        title: const Text('TaskForge — connectivity'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [for (final client in clients) PingTile(client: client)],
@@ -46,7 +54,7 @@ class _PingTileState extends State<PingTile> {
     String? error;
     try {
       reply = await widget.client.ping();
-    } catch (e) {
+    } on Exception catch (e) {
       error = e.toString();
     }
     if (!mounted) return;

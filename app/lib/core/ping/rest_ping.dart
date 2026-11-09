@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'ping_client.dart';
+import 'package:taskforge/core/ping/ping_client.dart';
 
 class RestPing implements PingClient {
   RestPing(this.baseUrl, {http.Client? client})
