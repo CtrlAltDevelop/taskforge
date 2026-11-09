@@ -106,6 +106,7 @@ Run (three terminals, from the repo root):
 | `make serve` | Django REST + WebSocket (uvicorn, development settings) | 8010 |
 | `make grpc` | gRPC server | 50051 |
 | `make web` | Flutter web dev server in Chrome | 5173 |
+| `make migrate` | Apply pending migrations to the dev database. Run it after pulling or finishing a phase, or the app errors on missing tables | |
 
 Quality:
 

@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down serve grpc web proto proto-lint check test
+.PHONY: setup dev down serve grpc migrate web proto proto-lint check test
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -25,6 +25,10 @@ serve:
 
 web:
 	cd app && flutter run -d chrome --web-port 5173
+
+# Apply pending migrations to the dev database (run after pulling or finishing a phase).
+migrate:
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py migrate
 
 grpc:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py grpcrunaioserver
