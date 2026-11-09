@@ -27,6 +27,122 @@ class _ServicerContext(_grpc.ServicerContext, _aio.ServicerContext):  # type: ig
 GRPC_GENERATED_VERSION: str
 GRPC_VERSION: str
 
+class InvitationControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> InvitationControllerAsyncStub: ...
+    Accept: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationAcceptRequest, _workspaces_pb2.Workspace]
+    Create: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationCreateRequest, _workspaces_pb2.InvitationCreateResponse]
+    CreateLink: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationCreateLinkRequest, _workspaces_pb2.Invitation]
+    Decline: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationDeclineRequest, _workspaces_pb2.InvitationEmpty]
+    List: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationListRequest, _workspaces_pb2.InvitationList]
+    Resend: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationResendRequest, _workspaces_pb2.Invitation]
+    Revoke: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationRevokeRequest, _workspaces_pb2.Invitation]
+
+@_typing.type_check_only
+class InvitationControllerAsyncStub(InvitationControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Accept: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationAcceptRequest, _workspaces_pb2.Workspace]  # type: ignore[assignment]
+    Create: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationCreateRequest, _workspaces_pb2.InvitationCreateResponse]  # type: ignore[assignment]
+    CreateLink: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationCreateLinkRequest, _workspaces_pb2.Invitation]  # type: ignore[assignment]
+    Decline: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationDeclineRequest, _workspaces_pb2.InvitationEmpty]  # type: ignore[assignment]
+    List: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationListRequest, _workspaces_pb2.InvitationList]  # type: ignore[assignment]
+    Resend: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationResendRequest, _workspaces_pb2.Invitation]  # type: ignore[assignment]
+    Revoke: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.InvitationRevokeRequest, _workspaces_pb2.Invitation]  # type: ignore[assignment]
+
+class InvitationControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Accept(
+        self,
+        request: _workspaces_pb2.InvitationAcceptRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Workspace, _abc.Awaitable[_workspaces_pb2.Workspace]]: ...
+
+    @_abc_1.abstractmethod
+    def Create(
+        self,
+        request: _workspaces_pb2.InvitationCreateRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.InvitationCreateResponse, _abc.Awaitable[_workspaces_pb2.InvitationCreateResponse]]: ...
+
+    @_abc_1.abstractmethod
+    def CreateLink(
+        self,
+        request: _workspaces_pb2.InvitationCreateLinkRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Invitation, _abc.Awaitable[_workspaces_pb2.Invitation]]: ...
+
+    @_abc_1.abstractmethod
+    def Decline(
+        self,
+        request: _workspaces_pb2.InvitationDeclineRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.InvitationEmpty, _abc.Awaitable[_workspaces_pb2.InvitationEmpty]]: ...
+
+    @_abc_1.abstractmethod
+    def List(
+        self,
+        request: _workspaces_pb2.InvitationListRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.InvitationList, _abc.Awaitable[_workspaces_pb2.InvitationList]]: ...
+
+    @_abc_1.abstractmethod
+    def Resend(
+        self,
+        request: _workspaces_pb2.InvitationResendRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Invitation, _abc.Awaitable[_workspaces_pb2.Invitation]]: ...
+
+    @_abc_1.abstractmethod
+    def Revoke(
+        self,
+        request: _workspaces_pb2.InvitationRevokeRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Invitation, _abc.Awaitable[_workspaces_pb2.Invitation]]: ...
+
+def add_InvitationControllerServicer_to_server(servicer: InvitationControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
+class MemberControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> MemberControllerAsyncStub: ...
+    Leave: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberLeaveRequest, _workspaces_pb2.MemberEmpty]
+    List: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberListRequest, _workspaces_pb2.MemberList]
+    Remove: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberRemoveRequest, _workspaces_pb2.MemberEmpty]
+
+@_typing.type_check_only
+class MemberControllerAsyncStub(MemberControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Leave: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberLeaveRequest, _workspaces_pb2.MemberEmpty]  # type: ignore[assignment]
+    List: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberListRequest, _workspaces_pb2.MemberList]  # type: ignore[assignment]
+    Remove: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberRemoveRequest, _workspaces_pb2.MemberEmpty]  # type: ignore[assignment]
+
+class MemberControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Leave(
+        self,
+        request: _workspaces_pb2.MemberLeaveRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.MemberEmpty, _abc.Awaitable[_workspaces_pb2.MemberEmpty]]: ...
+
+    @_abc_1.abstractmethod
+    def List(
+        self,
+        request: _workspaces_pb2.MemberListRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.MemberList, _abc.Awaitable[_workspaces_pb2.MemberList]]: ...
+
+    @_abc_1.abstractmethod
+    def Remove(
+        self,
+        request: _workspaces_pb2.MemberRemoveRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.MemberEmpty, _abc.Awaitable[_workspaces_pb2.MemberEmpty]]: ...
+
+def add_MemberControllerServicer_to_server(servicer: MemberControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
 class WorkspaceControllerStub:
     @_typing.overload
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...

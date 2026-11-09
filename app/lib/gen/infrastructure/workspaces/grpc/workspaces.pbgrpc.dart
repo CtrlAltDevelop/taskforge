@@ -21,6 +21,336 @@ import 'workspaces.pb.dart' as $0;
 
 export 'workspaces.pb.dart';
 
+@$pb.GrpcServiceName('config.workspaces.InvitationController')
+class InvitationControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  InvitationControllerClient(super.channel,
+      {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.Workspace> accept(
+    $0.InvitationAcceptRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$accept, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.InvitationCreateResponse> create(
+    $0.InvitationCreateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$create, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Invitation> createLink(
+    $0.InvitationCreateLinkRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$createLink, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.InvitationEmpty> decline(
+    $0.InvitationDeclineRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$decline, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.InvitationList> list(
+    $0.InvitationListRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$list, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Invitation> resend(
+    $0.InvitationResendRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$resend, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Invitation> revoke(
+    $0.InvitationRevokeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$revoke, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$accept =
+      $grpc.ClientMethod<$0.InvitationAcceptRequest, $0.Workspace>(
+          '/config.workspaces.InvitationController/Accept',
+          ($0.InvitationAcceptRequest value) => value.writeToBuffer(),
+          $0.Workspace.fromBuffer);
+  static final _$create = $grpc.ClientMethod<$0.InvitationCreateRequest,
+          $0.InvitationCreateResponse>(
+      '/config.workspaces.InvitationController/Create',
+      ($0.InvitationCreateRequest value) => value.writeToBuffer(),
+      $0.InvitationCreateResponse.fromBuffer);
+  static final _$createLink =
+      $grpc.ClientMethod<$0.InvitationCreateLinkRequest, $0.Invitation>(
+          '/config.workspaces.InvitationController/CreateLink',
+          ($0.InvitationCreateLinkRequest value) => value.writeToBuffer(),
+          $0.Invitation.fromBuffer);
+  static final _$decline =
+      $grpc.ClientMethod<$0.InvitationDeclineRequest, $0.InvitationEmpty>(
+          '/config.workspaces.InvitationController/Decline',
+          ($0.InvitationDeclineRequest value) => value.writeToBuffer(),
+          $0.InvitationEmpty.fromBuffer);
+  static final _$list =
+      $grpc.ClientMethod<$0.InvitationListRequest, $0.InvitationList>(
+          '/config.workspaces.InvitationController/List',
+          ($0.InvitationListRequest value) => value.writeToBuffer(),
+          $0.InvitationList.fromBuffer);
+  static final _$resend =
+      $grpc.ClientMethod<$0.InvitationResendRequest, $0.Invitation>(
+          '/config.workspaces.InvitationController/Resend',
+          ($0.InvitationResendRequest value) => value.writeToBuffer(),
+          $0.Invitation.fromBuffer);
+  static final _$revoke =
+      $grpc.ClientMethod<$0.InvitationRevokeRequest, $0.Invitation>(
+          '/config.workspaces.InvitationController/Revoke',
+          ($0.InvitationRevokeRequest value) => value.writeToBuffer(),
+          $0.Invitation.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.workspaces.InvitationController')
+abstract class InvitationControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.workspaces.InvitationController';
+
+  InvitationControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.InvitationAcceptRequest, $0.Workspace>(
+        'Accept',
+        accept_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InvitationAcceptRequest.fromBuffer(value),
+        ($0.Workspace value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.InvitationCreateRequest,
+            $0.InvitationCreateResponse>(
+        'Create',
+        create_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InvitationCreateRequest.fromBuffer(value),
+        ($0.InvitationCreateResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.InvitationCreateLinkRequest, $0.Invitation>(
+            'CreateLink',
+            createLink_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.InvitationCreateLinkRequest.fromBuffer(value),
+            ($0.Invitation value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.InvitationDeclineRequest, $0.InvitationEmpty>(
+            'Decline',
+            decline_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.InvitationDeclineRequest.fromBuffer(value),
+            ($0.InvitationEmpty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.InvitationListRequest, $0.InvitationList>(
+        'List',
+        list_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InvitationListRequest.fromBuffer(value),
+        ($0.InvitationList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.InvitationResendRequest, $0.Invitation>(
+        'Resend',
+        resend_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InvitationResendRequest.fromBuffer(value),
+        ($0.Invitation value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.InvitationRevokeRequest, $0.Invitation>(
+        'Revoke',
+        revoke_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.InvitationRevokeRequest.fromBuffer(value),
+        ($0.Invitation value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.Workspace> accept_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationAcceptRequest> $request) async {
+    return accept($call, await $request);
+  }
+
+  $async.Future<$0.Workspace> accept(
+      $grpc.ServiceCall call, $0.InvitationAcceptRequest request);
+
+  $async.Future<$0.InvitationCreateResponse> create_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationCreateRequest> $request) async {
+    return create($call, await $request);
+  }
+
+  $async.Future<$0.InvitationCreateResponse> create(
+      $grpc.ServiceCall call, $0.InvitationCreateRequest request);
+
+  $async.Future<$0.Invitation> createLink_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationCreateLinkRequest> $request) async {
+    return createLink($call, await $request);
+  }
+
+  $async.Future<$0.Invitation> createLink(
+      $grpc.ServiceCall call, $0.InvitationCreateLinkRequest request);
+
+  $async.Future<$0.InvitationEmpty> decline_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationDeclineRequest> $request) async {
+    return decline($call, await $request);
+  }
+
+  $async.Future<$0.InvitationEmpty> decline(
+      $grpc.ServiceCall call, $0.InvitationDeclineRequest request);
+
+  $async.Future<$0.InvitationList> list_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationListRequest> $request) async {
+    return list($call, await $request);
+  }
+
+  $async.Future<$0.InvitationList> list(
+      $grpc.ServiceCall call, $0.InvitationListRequest request);
+
+  $async.Future<$0.Invitation> resend_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationResendRequest> $request) async {
+    return resend($call, await $request);
+  }
+
+  $async.Future<$0.Invitation> resend(
+      $grpc.ServiceCall call, $0.InvitationResendRequest request);
+
+  $async.Future<$0.Invitation> revoke_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.InvitationRevokeRequest> $request) async {
+    return revoke($call, await $request);
+  }
+
+  $async.Future<$0.Invitation> revoke(
+      $grpc.ServiceCall call, $0.InvitationRevokeRequest request);
+}
+
+@$pb.GrpcServiceName('config.workspaces.MemberController')
+class MemberControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  MemberControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.MemberEmpty> leave(
+    $0.MemberLeaveRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$leave, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.MemberList> list(
+    $0.MemberListRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$list, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.MemberEmpty> remove(
+    $0.MemberRemoveRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$remove, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$leave =
+      $grpc.ClientMethod<$0.MemberLeaveRequest, $0.MemberEmpty>(
+          '/config.workspaces.MemberController/Leave',
+          ($0.MemberLeaveRequest value) => value.writeToBuffer(),
+          $0.MemberEmpty.fromBuffer);
+  static final _$list = $grpc.ClientMethod<$0.MemberListRequest, $0.MemberList>(
+      '/config.workspaces.MemberController/List',
+      ($0.MemberListRequest value) => value.writeToBuffer(),
+      $0.MemberList.fromBuffer);
+  static final _$remove =
+      $grpc.ClientMethod<$0.MemberRemoveRequest, $0.MemberEmpty>(
+          '/config.workspaces.MemberController/Remove',
+          ($0.MemberRemoveRequest value) => value.writeToBuffer(),
+          $0.MemberEmpty.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.workspaces.MemberController')
+abstract class MemberControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.workspaces.MemberController';
+
+  MemberControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.MemberLeaveRequest, $0.MemberEmpty>(
+        'Leave',
+        leave_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.MemberLeaveRequest.fromBuffer(value),
+        ($0.MemberEmpty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.MemberListRequest, $0.MemberList>(
+        'List',
+        list_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.MemberListRequest.fromBuffer(value),
+        ($0.MemberList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.MemberRemoveRequest, $0.MemberEmpty>(
+        'Remove',
+        remove_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.MemberRemoveRequest.fromBuffer(value),
+        ($0.MemberEmpty value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.MemberEmpty> leave_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.MemberLeaveRequest> $request) async {
+    return leave($call, await $request);
+  }
+
+  $async.Future<$0.MemberEmpty> leave(
+      $grpc.ServiceCall call, $0.MemberLeaveRequest request);
+
+  $async.Future<$0.MemberList> list_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.MemberListRequest> $request) async {
+    return list($call, await $request);
+  }
+
+  $async.Future<$0.MemberList> list(
+      $grpc.ServiceCall call, $0.MemberListRequest request);
+
+  $async.Future<$0.MemberEmpty> remove_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.MemberRemoveRequest> $request) async {
+    return remove($call, await $request);
+  }
+
+  $async.Future<$0.MemberEmpty> remove(
+      $grpc.ServiceCall call, $0.MemberRemoveRequest request);
+}
+
 @$pb.GrpcServiceName('config.workspaces.WorkspaceController')
 class WorkspaceControllerClient extends $grpc.Client {
   /// The hostname for this service.

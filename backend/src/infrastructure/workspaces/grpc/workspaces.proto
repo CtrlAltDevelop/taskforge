@@ -4,6 +4,22 @@ package config.workspaces;
 
 import "google/protobuf/empty.proto";
 
+service InvitationController {
+    rpc Accept(InvitationAcceptRequest) returns (Workspace) {}
+    rpc Create(InvitationCreateRequest) returns (InvitationCreateResponse) {}
+    rpc CreateLink(InvitationCreateLinkRequest) returns (Invitation) {}
+    rpc Decline(InvitationDeclineRequest) returns (InvitationEmpty) {}
+    rpc List(InvitationListRequest) returns (InvitationList) {}
+    rpc Resend(InvitationResendRequest) returns (Invitation) {}
+    rpc Revoke(InvitationRevokeRequest) returns (Invitation) {}
+}
+
+service MemberController {
+    rpc Leave(MemberLeaveRequest) returns (MemberEmpty) {}
+    rpc List(MemberListRequest) returns (MemberList) {}
+    rpc Remove(MemberRemoveRequest) returns (MemberEmpty) {}
+}
+
 service WorkspaceController {
     rpc Create(WorkspaceCreateRequest) returns (Workspace) {}
     rpc Delete(WorkspaceDeleteRequest) returns (Workspace) {}
@@ -11,6 +27,96 @@ service WorkspaceController {
     rpc ListDeleted(google.protobuf.Empty) returns (WorkspaceList) {}
     rpc Restore(WorkspaceRestoreRequest) returns (Workspace) {}
     rpc Update(WorkspaceUpdateRequest) returns (Workspace) {}
+}
+
+message Invitation {
+    string id = 1;
+    string workspace_id = 2;
+    string email = 3;
+    bool is_link = 4;
+    string created_by = 5;
+    string created_by_name = 6;
+    string created_at = 7;
+    string expires_at = 8;
+    int32 max_uses = 9;
+    int32 uses = 10;
+    string state = 11;
+    string token = 12;
+}
+
+message InvitationAcceptRequest {
+    string token = 1;
+}
+
+message InvitationCreateLinkRequest {
+    string workspace_id = 1;
+    int32 expires_in = 2;
+    int32 max_uses = 3;
+}
+
+message InvitationCreateRequest {
+    string workspace_id = 1;
+    repeated string emails = 2;
+}
+
+message InvitationCreateResponse {
+    repeated Invitation invitations = 1;
+    repeated string skipped_emails = 2;
+    repeated string undelivered_emails = 3;
+}
+
+message InvitationDeclineRequest {
+    string token = 1;
+}
+
+message InvitationEmpty {
+}
+
+message InvitationList {
+    repeated Invitation invitations = 1;
+}
+
+message InvitationListRequest {
+    string workspace_id = 1;
+}
+
+message InvitationResendRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message InvitationRevokeRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message Member {
+    string user_id = 1;
+    string display_name = 2;
+    string email = 3;
+    string joined_at = 4;
+    bool is_owner = 5;
+    string status = 6;
+}
+
+message MemberEmpty {
+}
+
+message MemberLeaveRequest {
+    string workspace_id = 1;
+}
+
+message MemberList {
+    repeated Member members = 1;
+}
+
+message MemberListRequest {
+    string workspace_id = 1;
+}
+
+message MemberRemoveRequest {
+    string workspace_id = 1;
+    string user_id = 2;
 }
 
 message Workspace {

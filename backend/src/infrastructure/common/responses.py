@@ -119,6 +119,13 @@ class ResponseTitle(StrEnum):
     SLUG_TAKEN = "SLUG_TAKEN"
     CONFIRMATION_MISMATCH = "CONFIRMATION_MISMATCH"
     UPLOAD_INVALID = "UPLOAD_INVALID"
+    INVITE_EXPIRED = "INVITE_EXPIRED"
+    INVITE_REVOKED = "INVITE_REVOKED"
+    INVITE_USED_UP = "INVITE_USED_UP"
+    INVITE_EMAIL_MISMATCH = "INVITE_EMAIL_MISMATCH"
+    INVITE_NOT_PENDING = "INVITE_NOT_PENDING"
+    INVITE_BEFORE_REMOVAL = "INVITE_BEFORE_REMOVAL"
+    OWNER_PROTECTED = "OWNER_PROTECTED"
 
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
@@ -149,6 +156,13 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SLUG_TAKEN: "That URL name is already in use.",
     ResponseTitle.CONFIRMATION_MISMATCH: "The confirmation text does not match.",
     ResponseTitle.UPLOAD_INVALID: "The uploaded file is too large or not a supported image.",
+    ResponseTitle.INVITE_EXPIRED: "This invitation has expired.",
+    ResponseTitle.INVITE_REVOKED: "This invitation was revoked.",
+    ResponseTitle.INVITE_USED_UP: "This invitation has no uses left.",
+    ResponseTitle.INVITE_EMAIL_MISMATCH: "This invitation is for a different email.",
+    ResponseTitle.INVITE_NOT_PENDING: "This invitation is no longer pending.",
+    ResponseTitle.INVITE_BEFORE_REMOVAL: "This invitation predates your removal.",
+    ResponseTitle.OWNER_PROTECTED: "The workspace owner cannot be removed or leave.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

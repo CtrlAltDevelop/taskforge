@@ -17,7 +17,7 @@ from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
-from infrastructure.workspaces.models import Workspace, WorkspaceMember
+from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
 from infrastructure.workspaces.slugs import validate_slug
 
 RESTORE_WINDOW: Final = timedelta(days=7)
@@ -47,7 +47,7 @@ def _find(actor: Any, workspace_id: str, *, deleted: bool | None = False) -> Wor
         pk = uuid.UUID(str(workspace_id))
     except ValueError:
         raise _forbidden() from None
-    rows = Workspace.objects.filter(pk=pk, members__user=actor)
+    rows = Workspace.objects.filter(pk=pk, members__user=actor, members__status=MemberStatus.ACTIVE)
     if deleted is not None:
         rows = rows.filter(deleted_at__isnull=not deleted)
     workspace = rows.first()
@@ -92,9 +92,9 @@ def create(actor: Any, name: str, slug: str) -> Workspace:
 
 def list_mine(actor: Any) -> list[Workspace]:
     return list(
-        Workspace.objects.filter(deleted_at__isnull=True, members__user=actor).order_by(
-            "created_at"
-        )
+        Workspace.objects.filter(
+            deleted_at__isnull=True, members__user=actor, members__status=MemberStatus.ACTIVE
+        ).order_by("created_at")
     )
 
 
@@ -104,6 +104,7 @@ def list_deleted(actor: Any) -> list[Workspace]:
         Workspace.objects.filter(
             deleted_at__gte=timezone.now() - RESTORE_WINDOW,
             members__user=actor,
+            members__status=MemberStatus.ACTIVE,
             created_by=actor,
         ).order_by("-deleted_at")
     )

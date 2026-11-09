@@ -27,7 +27,7 @@ from django.http import HttpRequest
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
-from infrastructure.workspaces.models import Workspace
+from infrastructure.workspaces.models import MemberStatus, Workspace
 
 WORKSPACE_METADATA_KEY = "x-workspace"
 WORKSPACE_META_KEY = "HTTP_X_WORKSPACE"
@@ -46,7 +46,10 @@ def require_workspace(user: Any, raw_id: str | None) -> Workspace:
     except ValueError:
         raise _forbidden() from None
     workspace = Workspace.objects.filter(
-        pk=workspace_id, deleted_at__isnull=True, members__user=user
+        pk=workspace_id,
+        deleted_at__isnull=True,
+        members__user=user,
+        members__status=MemberStatus.ACTIVE,
     ).first()
     if workspace is None:
         raise _forbidden()

@@ -949,6 +949,20 @@ API_THROTTLE_ANON = os.getenv("DJANGO_API_THROTTLE_ANON", "120/min")
 API_THROTTLE_AUTH = os.getenv("DJANGO_API_THROTTLE_AUTH", "600/min")
 API_THROTTLE_LOGIN = os.getenv("DJANGO_API_THROTTLE_LOGIN", "60/min")
 API_THROTTLE_UPLOAD = os.getenv("DJANGO_API_THROTTLE_UPLOAD", "60/hour")
+# Public invitation preview, counted per IP.
+API_THROTTLE_INVITE = os.getenv("DJANGO_API_THROTTLE_INVITE", "30/min")
+
+# Workspace invitations: how many one workspace may create (or resend) per hour, and the
+# link in the email (`{token}` is replaced). Phase 03.
+WORKSPACE_INVITES_PER_HOUR = int(os.getenv("DJANGO_WORKSPACE_INVITES_PER_HOUR", "50"))
+WORKSPACE_INVITE_URL = os.getenv(
+    "DJANGO_WORKSPACE_INVITE_URL", "http://localhost:5173/invite/{token}"
+)
+
+# Invitation emails go out on an in-process pool after commit (`workspaces/invite_mail.py`).
+# Off = inline (tests); the backoff is seconds, times the attempt number.
+WORKSPACE_EMAIL_ASYNC = os.getenv("DJANGO_WORKSPACE_EMAIL_ASYNC", "true").lower() == "true"
+WORKSPACE_EMAIL_BACKOFF_SECONDS = float(os.getenv("DJANGO_WORKSPACE_EMAIL_BACKOFF_SECONDS", "1"))
 
 GRAPHQL_ENABLED = os.getenv("DJANGO_GRAPHQL_ENABLED", "true").lower() == "true"
 # The in-browser query editor. Handy in development, and an unauthenticated

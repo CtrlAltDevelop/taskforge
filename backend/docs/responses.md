@@ -146,6 +146,13 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `SLUG_TAKEN` | That URL name is already in use. |
 | `CONFIRMATION_MISMATCH` | The confirmation text does not match. |
 | `UPLOAD_INVALID` | The uploaded file is too large or not a supported image. |
+| `INVITE_EXPIRED` | This invitation has expired. |
+| `INVITE_REVOKED` | This invitation was revoked. |
+| `INVITE_USED_UP` | This invitation has no uses left. |
+| `INVITE_EMAIL_MISMATCH` | This invitation is for a different email. |
+| `INVITE_NOT_PENDING` | This invitation is no longer pending. |
+| `INVITE_BEFORE_REMOVAL` | This invitation predates your removal. |
+| `OWNER_PROTECTED` | The workspace owner cannot be removed or leave. |
 
 ## Writing an endpoint
 

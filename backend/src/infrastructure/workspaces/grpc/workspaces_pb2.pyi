@@ -19,6 +19,399 @@ else:
 DESCRIPTOR: _descriptor.FileDescriptor
 
 @_typing.final
+class Invitation(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ID_FIELD_NUMBER: _builtins.int
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    EMAIL_FIELD_NUMBER: _builtins.int
+    IS_LINK_FIELD_NUMBER: _builtins.int
+    CREATED_BY_FIELD_NUMBER: _builtins.int
+    CREATED_BY_NAME_FIELD_NUMBER: _builtins.int
+    CREATED_AT_FIELD_NUMBER: _builtins.int
+    EXPIRES_AT_FIELD_NUMBER: _builtins.int
+    MAX_USES_FIELD_NUMBER: _builtins.int
+    USES_FIELD_NUMBER: _builtins.int
+    STATE_FIELD_NUMBER: _builtins.int
+    TOKEN_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    workspace_id: _builtins.str
+    email: _builtins.str
+    is_link: _builtins.bool
+    created_by: _builtins.str
+    created_by_name: _builtins.str
+    created_at: _builtins.str
+    expires_at: _builtins.str
+    max_uses: _builtins.int
+    uses: _builtins.int
+    state: _builtins.str
+    token: _builtins.str
+    def __init__(
+        self,
+        *,
+        id: _builtins.str = ...,
+        workspace_id: _builtins.str = ...,
+        email: _builtins.str = ...,
+        is_link: _builtins.bool = ...,
+        created_by: _builtins.str = ...,
+        created_by_name: _builtins.str = ...,
+        created_at: _builtins.str = ...,
+        expires_at: _builtins.str = ...,
+        max_uses: _builtins.int = ...,
+        uses: _builtins.int = ...,
+        state: _builtins.str = ...,
+        token: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["created_at", b"created_at", "created_by", b"created_by", "created_by_name", b"created_by_name", "email", b"email", "expires_at", b"expires_at", "id", b"id", "is_link", b"is_link", "max_uses", b"max_uses", "state", b"state", "token", b"token", "uses", b"uses", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___Invitation: _TypeAlias = Invitation  # noqa: Y015
+
+@_typing.final
+class InvitationAcceptRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TOKEN_FIELD_NUMBER: _builtins.int
+    token: _builtins.str
+    def __init__(
+        self,
+        *,
+        token: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["token", b"token"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationAcceptRequest: _TypeAlias = InvitationAcceptRequest  # noqa: Y015
+
+@_typing.final
+class InvitationCreateLinkRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    EXPIRES_IN_FIELD_NUMBER: _builtins.int
+    MAX_USES_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    expires_in: _builtins.int
+    max_uses: _builtins.int
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        expires_in: _builtins.int = ...,
+        max_uses: _builtins.int = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["expires_in", b"expires_in", "max_uses", b"max_uses", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationCreateLinkRequest: _TypeAlias = InvitationCreateLinkRequest  # noqa: Y015
+
+@_typing.final
+class InvitationCreateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    EMAILS_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    @_builtins.property
+    def emails(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        emails: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["emails", b"emails", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationCreateRequest: _TypeAlias = InvitationCreateRequest  # noqa: Y015
+
+@_typing.final
+class InvitationCreateResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    INVITATIONS_FIELD_NUMBER: _builtins.int
+    SKIPPED_EMAILS_FIELD_NUMBER: _builtins.int
+    UNDELIVERED_EMAILS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def invitations(self) -> _containers.RepeatedCompositeFieldContainer[Global___Invitation]: ...
+    @_builtins.property
+    def skipped_emails(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def undelivered_emails(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        invitations: _abc.Iterable[Global___Invitation] | None = ...,
+        skipped_emails: _abc.Iterable[_builtins.str] | None = ...,
+        undelivered_emails: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["invitations", b"invitations", "skipped_emails", b"skipped_emails", "undelivered_emails", b"undelivered_emails"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationCreateResponse: _TypeAlias = InvitationCreateResponse  # noqa: Y015
+
+@_typing.final
+class InvitationDeclineRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TOKEN_FIELD_NUMBER: _builtins.int
+    token: _builtins.str
+    def __init__(
+        self,
+        *,
+        token: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["token", b"token"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationDeclineRequest: _TypeAlias = InvitationDeclineRequest  # noqa: Y015
+
+@_typing.final
+class InvitationEmpty(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationEmpty: _TypeAlias = InvitationEmpty  # noqa: Y015
+
+@_typing.final
+class InvitationList(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    INVITATIONS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def invitations(self) -> _containers.RepeatedCompositeFieldContainer[Global___Invitation]: ...
+    def __init__(
+        self,
+        *,
+        invitations: _abc.Iterable[Global___Invitation] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["invitations", b"invitations"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationList: _TypeAlias = InvitationList  # noqa: Y015
+
+@_typing.final
+class InvitationListRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationListRequest: _TypeAlias = InvitationListRequest  # noqa: Y015
+
+@_typing.final
+class InvitationResendRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationResendRequest: _TypeAlias = InvitationResendRequest  # noqa: Y015
+
+@_typing.final
+class InvitationRevokeRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___InvitationRevokeRequest: _TypeAlias = InvitationRevokeRequest  # noqa: Y015
+
+@_typing.final
+class Member(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    USER_ID_FIELD_NUMBER: _builtins.int
+    DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    EMAIL_FIELD_NUMBER: _builtins.int
+    JOINED_AT_FIELD_NUMBER: _builtins.int
+    IS_OWNER_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    user_id: _builtins.str
+    display_name: _builtins.str
+    email: _builtins.str
+    joined_at: _builtins.str
+    is_owner: _builtins.bool
+    status: _builtins.str
+    def __init__(
+        self,
+        *,
+        user_id: _builtins.str = ...,
+        display_name: _builtins.str = ...,
+        email: _builtins.str = ...,
+        joined_at: _builtins.str = ...,
+        is_owner: _builtins.bool = ...,
+        status: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["display_name", b"display_name", "email", b"email", "is_owner", b"is_owner", "joined_at", b"joined_at", "status", b"status", "user_id", b"user_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___Member: _TypeAlias = Member  # noqa: Y015
+
+@_typing.final
+class MemberEmpty(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___MemberEmpty: _TypeAlias = MemberEmpty  # noqa: Y015
+
+@_typing.final
+class MemberLeaveRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___MemberLeaveRequest: _TypeAlias = MemberLeaveRequest  # noqa: Y015
+
+@_typing.final
+class MemberList(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MEMBERS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def members(self) -> _containers.RepeatedCompositeFieldContainer[Global___Member]: ...
+    def __init__(
+        self,
+        *,
+        members: _abc.Iterable[Global___Member] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["members", b"members"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___MemberList: _TypeAlias = MemberList  # noqa: Y015
+
+@_typing.final
+class MemberListRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___MemberListRequest: _TypeAlias = MemberListRequest  # noqa: Y015
+
+@_typing.final
+class MemberRemoveRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    USER_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    user_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        user_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["user_id", b"user_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___MemberRemoveRequest: _TypeAlias = MemberRemoveRequest  # noqa: Y015
+
+@_typing.final
 class Workspace(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 

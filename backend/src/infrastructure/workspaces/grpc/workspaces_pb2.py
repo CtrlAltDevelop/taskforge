@@ -25,25 +25,63 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n/infrastructure/workspaces/grpc/workspaces.proto\x12\x11\x63onfig.workspaces\x1a\x1bgoogle/protobuf/empty.proto\"\xa0\x01\n\tWorkspace\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04slug\x18\x03 \x01(\t\x12\x0c\n\x04logo\x18\x04 \x01(\t\x12\x12\n\ncreated_by\x18\x05 \x01(\t\x12\x12\n\ncreated_at\x18\x06 \x01(\t\x12\x12\n\ndeleted_at\x18\x07 \x01(\t\x12\x0f\n\x07version\x18\x08 \x01(\x05\x12\x10\n\x08is_owner\x18\t \x01(\x08\"4\n\x16WorkspaceCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04slug\x18\x02 \x01(\t\":\n\x16WorkspaceDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0c\x63onfirmation\x18\x02 \x01(\t\"A\n\rWorkspaceList\x12\x30\n\nworkspaces\x18\x01 \x03(\x0b\x32\x1c.config.workspaces.Workspace\"%\n\x17WorkspaceRestoreRequest\x12\n\n\x02id\x18\x01 \x01(\t\"v\n\x16WorkspaceUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x02 \x01(\x05\x12\x11\n\x04name\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x11\n\x04slug\x18\x04 \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_nameB\x07\n\x05_slug2\xfa\x03\n\x13WorkspaceController\x12S\n\x06\x43reate\x12).config.workspaces.WorkspaceCreateRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12S\n\x06\x44\x65lete\x12).config.workspaces.WorkspaceDeleteRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12\x42\n\x04List\x12\x16.google.protobuf.Empty\x1a .config.workspaces.WorkspaceList\"\x00\x12I\n\x0bListDeleted\x12\x16.google.protobuf.Empty\x1a .config.workspaces.WorkspaceList\"\x00\x12U\n\x07Restore\x12*.config.workspaces.WorkspaceRestoreRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12S\n\x06Update\x12).config.workspaces.WorkspaceUpdateRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n/infrastructure/workspaces/grpc/workspaces.proto\x12\x11\x63onfig.workspaces\x1a\x1bgoogle/protobuf/empty.proto\"\xe1\x01\n\nInvitation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cworkspace_id\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x0f\n\x07is_link\x18\x04 \x01(\x08\x12\x12\n\ncreated_by\x18\x05 \x01(\t\x12\x17\n\x0f\x63reated_by_name\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\t\x12\x12\n\nexpires_at\x18\x08 \x01(\t\x12\x10\n\x08max_uses\x18\t \x01(\x05\x12\x0c\n\x04uses\x18\n \x01(\x05\x12\r\n\x05state\x18\x0b \x01(\t\x12\r\n\x05token\x18\x0c \x01(\t\"(\n\x17InvitationAcceptRequest\x12\r\n\x05token\x18\x01 \x01(\t\"Y\n\x1bInvitationCreateLinkRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nexpires_in\x18\x02 \x01(\x05\x12\x10\n\x08max_uses\x18\x03 \x01(\x05\"?\n\x17InvitationCreateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x0e\n\x06\x65mails\x18\x02 \x03(\t\"\x82\x01\n\x18InvitationCreateResponse\x12\x32\n\x0binvitations\x18\x01 \x03(\x0b\x32\x1d.config.workspaces.Invitation\x12\x16\n\x0eskipped_emails\x18\x02 \x03(\t\x12\x1a\n\x12undelivered_emails\x18\x03 \x03(\t\")\n\x18InvitationDeclineRequest\x12\r\n\x05token\x18\x01 \x01(\t\"\x11\n\x0fInvitationEmpty\"D\n\x0eInvitationList\x12\x32\n\x0binvitations\x18\x01 \x03(\x0b\x32\x1d.config.workspaces.Invitation\"-\n\x15InvitationListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\";\n\x17InvitationResendRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\t\";\n\x17InvitationRevokeRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\t\"s\n\x06Member\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x11\n\tjoined_at\x18\x04 \x01(\t\x12\x10\n\x08is_owner\x18\x05 \x01(\x08\x12\x0e\n\x06status\x18\x06 \x01(\t\"\r\n\x0bMemberEmpty\"*\n\x12MemberLeaveRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\"8\n\nMemberList\x12*\n\x07members\x18\x01 \x03(\x0b\x32\x19.config.workspaces.Member\")\n\x11MemberListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\"<\n\x13MemberRemoveRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\t\"\xa0\x01\n\tWorkspace\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04slug\x18\x03 \x01(\t\x12\x0c\n\x04logo\x18\x04 \x01(\t\x12\x12\n\ncreated_by\x18\x05 \x01(\t\x12\x12\n\ncreated_at\x18\x06 \x01(\t\x12\x12\n\ndeleted_at\x18\x07 \x01(\t\x12\x0f\n\x07version\x18\x08 \x01(\x05\x12\x10\n\x08is_owner\x18\t \x01(\x08\"4\n\x16WorkspaceCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04slug\x18\x02 \x01(\t\":\n\x16WorkspaceDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0c\x63onfirmation\x18\x02 \x01(\t\"A\n\rWorkspaceList\x12\x30\n\nworkspaces\x18\x01 \x03(\x0b\x32\x1c.config.workspaces.Workspace\"%\n\x17WorkspaceRestoreRequest\x12\n\n\x02id\x18\x01 \x01(\t\"v\n\x16WorkspaceUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x02 \x01(\x05\x12\x11\n\x04name\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x11\n\x04slug\x18\x04 \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_nameB\x07\n\x05_slug2\x93\x05\n\x14InvitationController\x12T\n\x06\x41\x63\x63\x65pt\x12*.config.workspaces.InvitationAcceptRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12\x63\n\x06\x43reate\x12*.config.workspaces.InvitationCreateRequest\x1a+.config.workspaces.InvitationCreateResponse\"\x00\x12]\n\nCreateLink\x12..config.workspaces.InvitationCreateLinkRequest\x1a\x1d.config.workspaces.Invitation\"\x00\x12\\\n\x07\x44\x65\x63line\x12+.config.workspaces.InvitationDeclineRequest\x1a\".config.workspaces.InvitationEmpty\"\x00\x12U\n\x04List\x12(.config.workspaces.InvitationListRequest\x1a!.config.workspaces.InvitationList\"\x00\x12U\n\x06Resend\x12*.config.workspaces.InvitationResendRequest\x1a\x1d.config.workspaces.Invitation\"\x00\x12U\n\x06Revoke\x12*.config.workspaces.InvitationRevokeRequest\x1a\x1d.config.workspaces.Invitation\"\x00\x32\x87\x02\n\x10MemberController\x12P\n\x05Leave\x12%.config.workspaces.MemberLeaveRequest\x1a\x1e.config.workspaces.MemberEmpty\"\x00\x12M\n\x04List\x12$.config.workspaces.MemberListRequest\x1a\x1d.config.workspaces.MemberList\"\x00\x12R\n\x06Remove\x12&.config.workspaces.MemberRemoveRequest\x1a\x1e.config.workspaces.MemberEmpty\"\x00\x32\xfa\x03\n\x13WorkspaceController\x12S\n\x06\x43reate\x12).config.workspaces.WorkspaceCreateRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12S\n\x06\x44\x65lete\x12).config.workspaces.WorkspaceDeleteRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12\x42\n\x04List\x12\x16.google.protobuf.Empty\x1a .config.workspaces.WorkspaceList\"\x00\x12I\n\x0bListDeleted\x12\x16.google.protobuf.Empty\x1a .config.workspaces.WorkspaceList\"\x00\x12U\n\x07Restore\x12*.config.workspaces.WorkspaceRestoreRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x12S\n\x06Update\x12).config.workspaces.WorkspaceUpdateRequest\x1a\x1c.config.workspaces.Workspace\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'infrastructure.workspaces.grpc.workspaces_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_WORKSPACE']._serialized_start=100
-  _globals['_WORKSPACE']._serialized_end=260
-  _globals['_WORKSPACECREATEREQUEST']._serialized_start=262
-  _globals['_WORKSPACECREATEREQUEST']._serialized_end=314
-  _globals['_WORKSPACEDELETEREQUEST']._serialized_start=316
-  _globals['_WORKSPACEDELETEREQUEST']._serialized_end=374
-  _globals['_WORKSPACELIST']._serialized_start=376
-  _globals['_WORKSPACELIST']._serialized_end=441
-  _globals['_WORKSPACERESTOREREQUEST']._serialized_start=443
-  _globals['_WORKSPACERESTOREREQUEST']._serialized_end=480
-  _globals['_WORKSPACEUPDATEREQUEST']._serialized_start=482
-  _globals['_WORKSPACEUPDATEREQUEST']._serialized_end=600
-  _globals['_WORKSPACECONTROLLER']._serialized_start=603
-  _globals['_WORKSPACECONTROLLER']._serialized_end=1109
+  _globals['_INVITATION']._serialized_start=100
+  _globals['_INVITATION']._serialized_end=325
+  _globals['_INVITATIONACCEPTREQUEST']._serialized_start=327
+  _globals['_INVITATIONACCEPTREQUEST']._serialized_end=367
+  _globals['_INVITATIONCREATELINKREQUEST']._serialized_start=369
+  _globals['_INVITATIONCREATELINKREQUEST']._serialized_end=458
+  _globals['_INVITATIONCREATEREQUEST']._serialized_start=460
+  _globals['_INVITATIONCREATEREQUEST']._serialized_end=523
+  _globals['_INVITATIONCREATERESPONSE']._serialized_start=526
+  _globals['_INVITATIONCREATERESPONSE']._serialized_end=656
+  _globals['_INVITATIONDECLINEREQUEST']._serialized_start=658
+  _globals['_INVITATIONDECLINEREQUEST']._serialized_end=699
+  _globals['_INVITATIONEMPTY']._serialized_start=701
+  _globals['_INVITATIONEMPTY']._serialized_end=718
+  _globals['_INVITATIONLIST']._serialized_start=720
+  _globals['_INVITATIONLIST']._serialized_end=788
+  _globals['_INVITATIONLISTREQUEST']._serialized_start=790
+  _globals['_INVITATIONLISTREQUEST']._serialized_end=835
+  _globals['_INVITATIONRESENDREQUEST']._serialized_start=837
+  _globals['_INVITATIONRESENDREQUEST']._serialized_end=896
+  _globals['_INVITATIONREVOKEREQUEST']._serialized_start=898
+  _globals['_INVITATIONREVOKEREQUEST']._serialized_end=957
+  _globals['_MEMBER']._serialized_start=959
+  _globals['_MEMBER']._serialized_end=1074
+  _globals['_MEMBEREMPTY']._serialized_start=1076
+  _globals['_MEMBEREMPTY']._serialized_end=1089
+  _globals['_MEMBERLEAVEREQUEST']._serialized_start=1091
+  _globals['_MEMBERLEAVEREQUEST']._serialized_end=1133
+  _globals['_MEMBERLIST']._serialized_start=1135
+  _globals['_MEMBERLIST']._serialized_end=1191
+  _globals['_MEMBERLISTREQUEST']._serialized_start=1193
+  _globals['_MEMBERLISTREQUEST']._serialized_end=1234
+  _globals['_MEMBERREMOVEREQUEST']._serialized_start=1236
+  _globals['_MEMBERREMOVEREQUEST']._serialized_end=1296
+  _globals['_WORKSPACE']._serialized_start=1299
+  _globals['_WORKSPACE']._serialized_end=1459
+  _globals['_WORKSPACECREATEREQUEST']._serialized_start=1461
+  _globals['_WORKSPACECREATEREQUEST']._serialized_end=1513
+  _globals['_WORKSPACEDELETEREQUEST']._serialized_start=1515
+  _globals['_WORKSPACEDELETEREQUEST']._serialized_end=1573
+  _globals['_WORKSPACELIST']._serialized_start=1575
+  _globals['_WORKSPACELIST']._serialized_end=1640
+  _globals['_WORKSPACERESTOREREQUEST']._serialized_start=1642
+  _globals['_WORKSPACERESTOREREQUEST']._serialized_end=1679
+  _globals['_WORKSPACEUPDATEREQUEST']._serialized_start=1681
+  _globals['_WORKSPACEUPDATEREQUEST']._serialized_end=1799
+  _globals['_INVITATIONCONTROLLER']._serialized_start=1802
+  _globals['_INVITATIONCONTROLLER']._serialized_end=2461
+  _globals['_MEMBERCONTROLLER']._serialized_start=2464
+  _globals['_MEMBERCONTROLLER']._serialized_end=2727
+  _globals['_WORKSPACECONTROLLER']._serialized_start=2730
+  _globals['_WORKSPACECONTROLLER']._serialized_end=3236
 # @@protoc_insertion_point(module_scope)

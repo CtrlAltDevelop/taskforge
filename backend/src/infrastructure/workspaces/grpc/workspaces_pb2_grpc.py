@@ -26,6 +26,494 @@ if _version_not_supported:
     )
 
 
+class InvitationControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Accept = channel.unary_unary(
+                '/config.workspaces.InvitationController/Accept',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationAcceptRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Workspace.FromString,
+                _registered_method=True)
+        self.Create = channel.unary_unary(
+                '/config.workspaces.InvitationController/Create',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateResponse.FromString,
+                _registered_method=True)
+        self.CreateLink = channel.unary_unary(
+                '/config.workspaces.InvitationController/CreateLink',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateLinkRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+                _registered_method=True)
+        self.Decline = channel.unary_unary(
+                '/config.workspaces.InvitationController/Decline',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationDeclineRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationEmpty.FromString,
+                _registered_method=True)
+        self.List = channel.unary_unary(
+                '/config.workspaces.InvitationController/List',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationListRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationList.FromString,
+                _registered_method=True)
+        self.Resend = channel.unary_unary(
+                '/config.workspaces.InvitationController/Resend',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationResendRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+                _registered_method=True)
+        self.Revoke = channel.unary_unary(
+                '/config.workspaces.InvitationController/Revoke',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationRevokeRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+                _registered_method=True)
+
+
+class InvitationControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Accept(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Create(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CreateLink(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Decline(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def List(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Resend(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Revoke(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_InvitationControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Accept': grpc.unary_unary_rpc_method_handler(
+                    servicer.Accept,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationAcceptRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Workspace.SerializeToString,
+            ),
+            'Create': grpc.unary_unary_rpc_method_handler(
+                    servicer.Create,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateResponse.SerializeToString,
+            ),
+            'CreateLink': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateLink,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateLinkRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.SerializeToString,
+            ),
+            'Decline': grpc.unary_unary_rpc_method_handler(
+                    servicer.Decline,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationDeclineRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationEmpty.SerializeToString,
+            ),
+            'List': grpc.unary_unary_rpc_method_handler(
+                    servicer.List,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationListRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationList.SerializeToString,
+            ),
+            'Resend': grpc.unary_unary_rpc_method_handler(
+                    servicer.Resend,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationResendRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.SerializeToString,
+            ),
+            'Revoke': grpc.unary_unary_rpc_method_handler(
+                    servicer.Revoke,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationRevokeRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.workspaces.InvitationController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.workspaces.InvitationController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class InvitationController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Accept(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/Accept',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationAcceptRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Workspace.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Create(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/Create',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CreateLink(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/CreateLink',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationCreateLinkRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Decline(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/Decline',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationDeclineRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationEmpty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def List(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/List',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationListRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Resend(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/Resend',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationResendRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Revoke(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.InvitationController/Revoke',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.InvitationRevokeRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Invitation.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class MemberControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Leave = channel.unary_unary(
+                '/config.workspaces.MemberController/Leave',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberLeaveRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
+                _registered_method=True)
+        self.List = channel.unary_unary(
+                '/config.workspaces.MemberController/List',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberListRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberList.FromString,
+                _registered_method=True)
+        self.Remove = channel.unary_unary(
+                '/config.workspaces.MemberController/Remove',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
+                _registered_method=True)
+
+
+class MemberControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Leave(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def List(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Remove(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_MemberControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Leave': grpc.unary_unary_rpc_method_handler(
+                    servicer.Leave,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberLeaveRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.SerializeToString,
+            ),
+            'List': grpc.unary_unary_rpc_method_handler(
+                    servicer.List,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberListRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberList.SerializeToString,
+            ),
+            'Remove': grpc.unary_unary_rpc_method_handler(
+                    servicer.Remove,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.workspaces.MemberController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.workspaces.MemberController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class MemberController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Leave(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.MemberController/Leave',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberLeaveRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def List(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.MemberController/List',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberListRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Remove(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.MemberController/Remove',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
 class WorkspaceControllerStub:
     """Missing associated documentation comment in .proto file."""
 

@@ -18,7 +18,7 @@ from infrastructure.workspaces.grpc.serializers import Workspace
 from infrastructure.workspaces.models import Workspace as WorkspaceRow
 
 
-def _message(workspace: WorkspaceRow, actor: Any) -> Any:
+def workspace_message(workspace: WorkspaceRow, actor: Any) -> Any:
     from infrastructure.workspaces.grpc import workspaces_pb2
 
     return workspaces_pb2.Workspace(
@@ -46,7 +46,9 @@ class WorkspaceService(generics.GenericService):
 
         user = require_caller(await grpc_caller(context))
         rows = await sync_to_async(services.list_mine)(user)
-        return workspaces_pb2.WorkspaceList(workspaces=[_message(row, user) for row in rows])
+        return workspaces_pb2.WorkspaceList(
+            workspaces=[workspace_message(row, user) for row in rows]
+        )
 
     @grpc_action(
         request=[],
@@ -59,7 +61,9 @@ class WorkspaceService(generics.GenericService):
 
         user = require_caller(await grpc_caller(context))
         rows = await sync_to_async(services.list_deleted)(user)
-        return workspaces_pb2.WorkspaceList(workspaces=[_message(row, user) for row in rows])
+        return workspaces_pb2.WorkspaceList(
+            workspaces=[workspace_message(row, user) for row in rows]
+        )
 
     @grpc_action(
         request=[{"name": "name", "type": "string"}, {"name": "slug", "type": "string"}],
@@ -71,7 +75,7 @@ class WorkspaceService(generics.GenericService):
     async def Create(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.create)(user, request.name, request.slug)
-        return _message(row, user)
+        return workspace_message(row, user)
 
     @grpc_action(
         request=[
@@ -94,7 +98,7 @@ class WorkspaceService(generics.GenericService):
             name=request.name if request.HasField("name") else None,
             slug=request.slug if request.HasField("slug") else None,
         )
-        return _message(row, user)
+        return workspace_message(row, user)
 
     @grpc_action(
         request=[
@@ -109,7 +113,7 @@ class WorkspaceService(generics.GenericService):
     async def Delete(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.delete)(user, request.id, request.confirmation)
-        return _message(row, user)
+        return workspace_message(row, user)
 
     @grpc_action(
         request=[{"name": "id", "type": "string"}],
@@ -121,7 +125,14 @@ class WorkspaceService(generics.GenericService):
     async def Restore(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.restore)(user, request.id)
-        return _message(row, user)
+        return workspace_message(row, user)
 
 
-GRPC_SERVICES = [WorkspaceService]
+def _all_services() -> list[type]:
+    # Imported late: members.py imports workspace_message from this module.
+    from infrastructure.workspaces.grpc.members import InvitationService, MemberService
+
+    return [WorkspaceService, MemberService, InvitationService]
+
+
+GRPC_SERVICES = _all_services()

@@ -14,3 +14,6 @@ class WorkspacesConfig(AppConfig):
         summary="The top-level tenant container; every project and task belongs to one.",
         requirements=(),
     )
+
+    def ready(self) -> None:
+        from infrastructure.workspaces import invite_mail  # noqa: F401  (connects the receiver)
