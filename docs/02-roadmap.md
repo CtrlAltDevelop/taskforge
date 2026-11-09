@@ -9,7 +9,8 @@ Groups are just for reading — a phase is still exactly one feature.
 - **Phase 01** — implemented on `develop`: backend policy + refresh grace window + Postgres, Flutter sign-in/up, sessions, gRPC `Me`. Verified: backend suite (SQLite and Postgres), 86 Flutter tests, a live end-to-end run, and the web UI in a real browser. Not yet verified: CI on GitHub (incl. the new Postgres job), the new UI on macOS/Android/iOS.
 - **Phase 02** — implemented on `develop`: workspaces backend (`WorkspaceController`, logo upload, scoping helpers, `purge_workspaces`) and Flutter onboarding/switcher/settings. Verified by tests only; not run in a real browser or on a device. WS non-member close deferred to phase 16.
 - **Phase 03** — implemented on `develop`: members and invitations backend (`MemberController`, `InvitationController`, REST invite preview/accept) and Flutter Members screen, invite dialog and `/invite/:token` deep link. Invite emails go out from a post-commit signal on an in-process worker (durable job queue comes with a later phase). Deep link checked in a real browser (web) and on macOS; not run on Android, iOS, Windows or Linux. Not done: Windows/Linux scheme registration, HTTPS app links; web `/invite/*` SPA fallback is for phase 38.
-- Phases 04–40 — planned.
+- **Phase 04** — implemented on `develop` (uncommitted at time of writing): permission registry, `can()`/`require()` on every workspace-scoped endpoint, custom roles (`RoleController`, `PermissionController`, `MemberController.SetRole`), deny reasons on gRPC and REST, and the Flutter Roles matrix, role picker and `PermissionGate`. Verified by tests only; not run in a real browser or on a device. WebSocket deny detail deferred to phase 16.
+- Phases 05–40 — planned.
 
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)
