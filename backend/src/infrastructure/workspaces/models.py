@@ -4,6 +4,8 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
+from django.db.models.functions import Lower
 from django.utils import timezone
 
 
@@ -35,8 +37,54 @@ class MemberStatus(models.TextChoices):
     REMOVED = "removed"
 
 
+class Role(models.Model):
+    """A named set of permission keys. ``workspace`` NULL means built-in (shared, read-only).
+
+    Names are unique case-insensitively among the built-ins and, separately, within
+    one workspace; the service also refuses a custom name equal to a built-in's.
+    """
+
+    workspace = models.ForeignKey(
+        Workspace, null=True, blank=True, on_delete=models.CASCADE, related_name="roles"
+    )
+    name = models.CharField(max_length=60)
+    is_builtin = models.BooleanField(default=False)
+    version = models.PositiveIntegerField(default=1)  # optimistic lock (architecture section 6)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                "workspace",
+                condition=Q(workspace__isnull=False),
+                name="role_name_unique_per_workspace",
+            ),
+            models.UniqueConstraint(
+                Lower("name"), condition=Q(workspace__isnull=True), name="role_builtin_name_unique"
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class RolePermission(models.Model):
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="permissions")
+    permission_key = models.CharField(max_length=64)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["role", "permission_key"], name="role_permission_unique"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.role_id}:{self.permission_key}"
+
+
 class WorkspaceMember(models.Model):
-    """A user's membership. Roles arrive in phase 04.
+    """A user's membership and role.
 
     A removed member keeps their row (``status=removed``) so re-inviting them
     re-activates it instead of adding a duplicate. Only ``active`` rows count as
@@ -55,6 +103,9 @@ class WorkspaceMember(models.Model):
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
     removed_at = models.DateTimeField(null=True, blank=True)
+    # RESTRICT, not PROTECT: purging a workspace cascades to its roles AND its members in
+    # one collection, which RESTRICT allows; deleting a role that still has members stays refused.
+    role = models.ForeignKey(Role, on_delete=models.RESTRICT, related_name="members")
 
     class Meta:
         constraints = [
@@ -80,6 +131,10 @@ class Invitation(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
     )
     expires_at = models.DateTimeField()
+    # The role the joiner gets; NULL (never set, or the role was deleted) means Member.
+    role = models.ForeignKey(
+        "Role", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+    )
     max_uses = models.PositiveIntegerField(default=0)
     uses = models.PositiveIntegerField(default=0)
     revoked_at = models.DateTimeField(null=True, blank=True)

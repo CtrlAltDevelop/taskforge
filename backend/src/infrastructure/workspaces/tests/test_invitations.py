@@ -92,7 +92,7 @@ def test_link_uses_expiry_and_revoke_have_distinct_errors(
     assert _title(expired) is ResponseTitle.INVITE_EXPIRED
 
     revoked = invitations.create_link(acme, alice)
-    invitations.revoke(acme, str(revoked.invitation.id))
+    invitations.revoke(acme, alice, str(revoked.invitation.id))
     with pytest.raises(ApiError) as gone:
         invitations.accept(revoked.token, make_user("finn"))
     assert _title(gone) is ResponseTitle.INVITE_REVOKED
@@ -149,7 +149,7 @@ def test_resend_refuses_links_and_closed_invites(acme: Any, alice: Any) -> None:
     with pytest.raises(ApiError):
         invitations.resend(acme, alice, str(link.invitation.id))
     made = _invite(acme, alice, "bob@example.com")
-    invitations.revoke(acme, str(made.invitation.id))
+    invitations.revoke(acme, alice, str(made.invitation.id))
     with pytest.raises(ApiError) as refusal:
         invitations.resend(acme, alice, str(made.invitation.id))
     assert refusal.value.status == 409
@@ -160,7 +160,7 @@ def test_reinvite_replaces_pending_and_skips_members(acme: Any, alice: Any, bob:
     result = invitations.create_invitations(acme, alice, ["bob@example.com", "alice@example.com"])
 
     assert result.skipped_emails == ["alice@example.com"]
-    assert [i.email for i in invitations.list_pending(acme)] == ["bob@example.com"]
+    assert [i.email for i in invitations.list_pending(acme, alice)] == ["bob@example.com"]
     first.invitation.refresh_from_db()
     assert first.invitation.revoked_at is not None
 
@@ -211,13 +211,13 @@ def test_cross_tenant_revoke_and_resend_are_not_found(acme: Any, alice: Any, bob
     made = _invite(other, bob, "x@example.com")
 
     for call in (
-        lambda: invitations.revoke(acme, str(made.invitation.id)),
+        lambda: invitations.revoke(acme, alice, str(made.invitation.id)),
         lambda: invitations.resend(acme, alice, str(made.invitation.id)),
     ):
         with pytest.raises(ApiError) as refusal:
             call()
         assert refusal.value.status == 404
-    assert invitations.list_pending(acme) == []
+    assert invitations.list_pending(acme, alice) == []
 
 
 def test_removed_member_is_denied_everywhere_and_reactivated_by_invite(
@@ -232,7 +232,7 @@ def test_removed_member_is_denied_everywhere_and_reactivated_by_invite(
     assert services.list_mine(bob) == []
     with pytest.raises(ApiError):
         services.update(bob, str(acme.id), 1, name="X")
-    assert [m.user for m in members.list_members(acme)] == [alice]
+    assert [m.user for m in members.list_members(acme, alice)] == [alice]
 
     invitations.accept(invitations.create_link(acme, alice).token, bob)
 
@@ -251,7 +251,7 @@ def test_removed_owner_row_cannot_list_deleted(alice: Any) -> None:
 def test_member_rules(acme: Any, alice: Any, bob: Any) -> None:
     invitations.accept(invitations.create_link(acme, alice).token, bob)
 
-    listed = members.list_members(acme)
+    listed = members.list_members(acme, alice)
     assert [(m.user_id == acme.created_by_id) for m in listed] == [True, False]
 
     with pytest.raises(ApiError) as non_owner:
@@ -269,7 +269,7 @@ def test_member_rules(acme: Any, alice: Any, bob: Any) -> None:
         assert missing.value.status == 404
 
     members.leave(acme, bob)
-    assert [m.user for m in members.list_members(acme)] == [alice]
+    assert [m.user for m in members.list_members(acme, alice)] == [alice]
     with pytest.raises(ApiError):
         members.leave(acme, bob)
 
@@ -340,10 +340,10 @@ def test_list_pending_filters_orders_and_caps(acme: Any, alice: Any) -> None:
     recent = invitations.create_link(acme, alice).invitation
     Invitation.objects.filter(pk=recent.pk).update(expires_at=now - timedelta(days=1))
     revoked = invitations.create_link(acme, alice).invitation
-    invitations.revoke(acme, str(revoked.id))
+    invitations.revoke(acme, alice, str(revoked.id))
     fresh = invitations.create_link(acme, alice).invitation
 
-    assert [i.pk for i in invitations.list_pending(acme)] == [fresh.pk, recent.pk]
+    assert [i.pk for i in invitations.list_pending(acme, alice)] == [fresh.pk, recent.pk]
 
 
 def test_list_pending_is_capped(acme: Any, alice: Any) -> None:
@@ -358,4 +358,4 @@ def test_list_pending_is_capped(acme: Any, alice: Any) -> None:
         for i in range(invitations.MAX_PENDING_LISTED + 5)
     )
 
-    assert len(invitations.list_pending(acme)) == invitations.MAX_PENDING_LISTED
+    assert len(invitations.list_pending(acme, alice)) == invitations.MAX_PENDING_LISTED

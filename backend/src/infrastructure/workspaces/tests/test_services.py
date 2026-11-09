@@ -8,8 +8,8 @@ from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
-from infrastructure.workspaces import services
-from infrastructure.workspaces.models import Workspace
+from infrastructure.workspaces import access, members, roles, services
+from infrastructure.workspaces.models import Role, Workspace
 
 
 def test_create_makes_the_creator_the_sole_member(alice: Any) -> None:
@@ -180,9 +180,9 @@ def test_purge_expired_frees_the_slug(alice: Any, bob: Any) -> None:
     services.create(bob, "New", "old")
 
 
-def test_non_owner_cannot_mutate(alice: Any, bob: Any) -> None:
+def test_plain_member_cannot_mutate(alice: Any, bob: Any) -> None:
     workspace = services.create(alice, "Acme", "acme")
-    workspace.members.create(user=bob)
+    workspace.members.create(user=bob, role=access.builtin_role("Member"))
 
     for call in (
         lambda: services.rename(bob, str(workspace.id), "X", expected_version=1),
@@ -273,3 +273,47 @@ def test_purge_workspaces_command_reports_count(alice: Any) -> None:
 
     assert "1" in out.getvalue()
     assert not Workspace.objects.filter(pk=workspace.pk).exists()
+
+
+def _expire(*workspaces: Workspace) -> None:
+    old = timezone.now() - timedelta(days=8)
+    for workspace in workspaces:
+        Workspace.objects.filter(pk=workspace.pk).update(deleted_at=old)
+
+
+def test_purge_expired_removes_a_workspace_with_custom_roles_and_removed_members(
+    alice: Any, bob: Any
+) -> None:
+    workspace = services.create(alice, "Old", "old")
+    custom = roles.create_role(workspace, alice, "Auditor", ["workspace.view"])
+    workspace.members.create(user=bob, role=custom.role)
+    members.remove(workspace, alice, str(bob.pk))
+    _expire(workspace)
+
+    assert services.purge_expired() == 1
+
+    assert not Workspace.objects.filter(pk=workspace.pk).exists()
+    assert not Role.objects.filter(pk=custom.role.pk).exists()
+    assert Role.objects.filter(workspace=None, name="Owner").exists()  # built-ins survive
+
+
+def test_purge_expired_one_failing_workspace_does_not_stop_the_rest(
+    alice: Any, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    bad = services.create(alice, "Secret Bad Name", "bad")
+    good = services.create(alice, "Good", "good")
+    _expire(bad, good)
+    original = Workspace.delete
+
+    def flaky(self: Workspace, *args: Any, **kwargs: Any) -> Any:
+        if self.pk == bad.pk:
+            raise RuntimeError("boom: Secret Bad Name")
+        return original(self, *args, **kwargs)
+
+    monkeypatch.setattr(Workspace, "delete", flaky)
+
+    assert services.purge_expired() == 1
+
+    assert Workspace.objects.filter(pk=bad.pk).exists()
+    assert not Workspace.objects.filter(pk=good.pk).exists()
+    assert str(bad.pk) in caplog.text and "Secret Bad Name" not in caplog.text

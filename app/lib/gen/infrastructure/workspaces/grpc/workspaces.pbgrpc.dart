@@ -278,6 +278,13 @@ class MemberControllerClient extends $grpc.Client {
     return $createUnaryCall(_$remove, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.Member> setRole(
+    $0.MemberSetRoleRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setRole, request, options: options);
+  }
+
   // method descriptors
 
   static final _$leave =
@@ -294,6 +301,11 @@ class MemberControllerClient extends $grpc.Client {
           '/config.workspaces.MemberController/Remove',
           ($0.MemberRemoveRequest value) => value.writeToBuffer(),
           $0.MemberEmpty.fromBuffer);
+  static final _$setRole =
+      $grpc.ClientMethod<$0.MemberSetRoleRequest, $0.Member>(
+          '/config.workspaces.MemberController/SetRole',
+          ($0.MemberSetRoleRequest value) => value.writeToBuffer(),
+          $0.Member.fromBuffer);
 }
 
 @$pb.GrpcServiceName('config.workspaces.MemberController')
@@ -324,6 +336,14 @@ abstract class MemberControllerServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.MemberRemoveRequest.fromBuffer(value),
         ($0.MemberEmpty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.MemberSetRoleRequest, $0.Member>(
+        'SetRole',
+        setRole_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.MemberSetRoleRequest.fromBuffer(value),
+        ($0.Member value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.MemberEmpty> leave_Pre($grpc.ServiceCall $call,
@@ -349,6 +369,197 @@ abstract class MemberControllerServiceBase extends $grpc.Service {
 
   $async.Future<$0.MemberEmpty> remove(
       $grpc.ServiceCall call, $0.MemberRemoveRequest request);
+
+  $async.Future<$0.Member> setRole_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.MemberSetRoleRequest> $request) async {
+    return setRole($call, await $request);
+  }
+
+  $async.Future<$0.Member> setRole(
+      $grpc.ServiceCall call, $0.MemberSetRoleRequest request);
+}
+
+@$pb.GrpcServiceName('config.workspaces.PermissionController')
+class PermissionControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  PermissionControllerClient(super.channel,
+      {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.PermissionCheckResponse> check(
+    $0.PermissionCheckRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$check, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$check =
+      $grpc.ClientMethod<$0.PermissionCheckRequest, $0.PermissionCheckResponse>(
+          '/config.workspaces.PermissionController/Check',
+          ($0.PermissionCheckRequest value) => value.writeToBuffer(),
+          $0.PermissionCheckResponse.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.workspaces.PermissionController')
+abstract class PermissionControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.workspaces.PermissionController';
+
+  PermissionControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.PermissionCheckRequest,
+            $0.PermissionCheckResponse>(
+        'Check',
+        check_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.PermissionCheckRequest.fromBuffer(value),
+        ($0.PermissionCheckResponse value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.PermissionCheckResponse> check_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.PermissionCheckRequest> $request) async {
+    return check($call, await $request);
+  }
+
+  $async.Future<$0.PermissionCheckResponse> check(
+      $grpc.ServiceCall call, $0.PermissionCheckRequest request);
+}
+
+@$pb.GrpcServiceName('config.workspaces.RoleController')
+class RoleControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  RoleControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.Role> create(
+    $0.RoleCreateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$create, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.RoleEmpty> delete(
+    $0.RoleDeleteRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$delete, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.RoleList> list(
+    $0.RoleListRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$list, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Role> update(
+    $0.RoleUpdateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$update, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$create = $grpc.ClientMethod<$0.RoleCreateRequest, $0.Role>(
+      '/config.workspaces.RoleController/Create',
+      ($0.RoleCreateRequest value) => value.writeToBuffer(),
+      $0.Role.fromBuffer);
+  static final _$delete =
+      $grpc.ClientMethod<$0.RoleDeleteRequest, $0.RoleEmpty>(
+          '/config.workspaces.RoleController/Delete',
+          ($0.RoleDeleteRequest value) => value.writeToBuffer(),
+          $0.RoleEmpty.fromBuffer);
+  static final _$list = $grpc.ClientMethod<$0.RoleListRequest, $0.RoleList>(
+      '/config.workspaces.RoleController/List',
+      ($0.RoleListRequest value) => value.writeToBuffer(),
+      $0.RoleList.fromBuffer);
+  static final _$update = $grpc.ClientMethod<$0.RoleUpdateRequest, $0.Role>(
+      '/config.workspaces.RoleController/Update',
+      ($0.RoleUpdateRequest value) => value.writeToBuffer(),
+      $0.Role.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.workspaces.RoleController')
+abstract class RoleControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.workspaces.RoleController';
+
+  RoleControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.RoleCreateRequest, $0.Role>(
+        'Create',
+        create_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.RoleCreateRequest.fromBuffer(value),
+        ($0.Role value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RoleDeleteRequest, $0.RoleEmpty>(
+        'Delete',
+        delete_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.RoleDeleteRequest.fromBuffer(value),
+        ($0.RoleEmpty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RoleListRequest, $0.RoleList>(
+        'List',
+        list_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.RoleListRequest.fromBuffer(value),
+        ($0.RoleList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RoleUpdateRequest, $0.Role>(
+        'Update',
+        update_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.RoleUpdateRequest.fromBuffer(value),
+        ($0.Role value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.Role> create_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RoleCreateRequest> $request) async {
+    return create($call, await $request);
+  }
+
+  $async.Future<$0.Role> create(
+      $grpc.ServiceCall call, $0.RoleCreateRequest request);
+
+  $async.Future<$0.RoleEmpty> delete_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RoleDeleteRequest> $request) async {
+    return delete($call, await $request);
+  }
+
+  $async.Future<$0.RoleEmpty> delete(
+      $grpc.ServiceCall call, $0.RoleDeleteRequest request);
+
+  $async.Future<$0.RoleList> list_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RoleListRequest> $request) async {
+    return list($call, await $request);
+  }
+
+  $async.Future<$0.RoleList> list(
+      $grpc.ServiceCall call, $0.RoleListRequest request);
+
+  $async.Future<$0.Role> update_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RoleUpdateRequest> $request) async {
+    return update($call, await $request);
+  }
+
+  $async.Future<$0.Role> update(
+      $grpc.ServiceCall call, $0.RoleUpdateRequest request);
 }
 
 @$pb.GrpcServiceName('config.workspaces.WorkspaceController')

@@ -34,6 +34,12 @@ async def abort(context: Any, error: ApiError) -> None:
     # re-read and retry (docs/01-architecture.md section 6).
     if error.title is ResponseTitle.VERSION_CONFLICT:
         code = grpc.StatusCode.ABORTED
+    if error.data:
+        # Structured detail beside the "TITLE: message" text: trailers x-error-<key>-bin
+        # holding UTF-8 bytes (binary, so a custom role name may be any Unicode).
+        context.set_trailing_metadata(
+            tuple((f"x-error-{k}-bin", str(v).encode()) for k, v in error.data.items())
+        )
     await context.abort(code, f"{error.title}: {error}")
 
 

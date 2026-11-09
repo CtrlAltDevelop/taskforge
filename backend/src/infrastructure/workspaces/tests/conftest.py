@@ -30,3 +30,17 @@ def _commit_hooks_run_now(monkeypatch: pytest.MonkeyPatch) -> None:
     """The ``db`` fixture never commits, so run on_commit hooks at once; the commit-semantics
     tests (test_invite_mail.py) override this to get Django's real behaviour."""
     monkeypatch.setattr(transaction, "on_commit", lambda func, *a, **k: func())
+
+
+@pytest.fixture
+def add_member(db: None) -> Any:
+    """``add_member(workspace, user, "Viewer")``: an active member with a built-in role."""
+    from infrastructure.workspaces import access
+    from infrastructure.workspaces.models import WorkspaceMember
+
+    def add(workspace: Any, user: Any, role_name: str = "Member") -> Any:
+        return WorkspaceMember.objects.create(
+            workspace=workspace, user=user, role=access.builtin_role(role_name)
+        )
+
+    return add

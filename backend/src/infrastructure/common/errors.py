@@ -33,9 +33,11 @@ class ApiError(RuntimeError):
         *,
         title: ResponseTitle | None = None,
         errors: Iterable[str] | None = None,
+        data: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(message)
         self.status = status
+        self.data = data  # machine-readable detail: REST envelope data, gRPC trailing metadata
         self.title = title or title_for_status(status)
         self.errors = list(errors) if errors is not None else [message]
 
@@ -70,6 +72,7 @@ def register_error_handlers(api: NinjaAPI) -> None:
             request,
             envelope(
                 status=error.status,
+                data=error.data,
                 errors=error.errors,
                 title=error.title,
                 description=str(error),

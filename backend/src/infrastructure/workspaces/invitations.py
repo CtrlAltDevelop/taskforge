@@ -1,8 +1,11 @@
 """Invitations: email invites and share links into a workspace.
 
-Until phase 04 any active member may create, list, revoke and resend; accepting
-needs only a signed-in account. The raw token exists in memory at creation (and in
-the email, sent after commit by ``invite_mail``) and nowhere else: the database holds its SHA-256.
+Creating, listing, revoking and resending need ``member.invite``; accepting
+needs only a signed-in account and gives the joiner the invitation's role (Member when it
+carries none, or its role was deleted meanwhile). The inviter may only put a role on an
+invitation if they hold every permission of it (the SetRole escalation rule).
+The raw token exists in memory at creation (and in the email, sent after commit by
+``invite_mail``) and nowhere else: the database holds its SHA-256.
 
 A token the server does not know, and one whose workspace is deleted, are the same
 404, so nothing can be probed.
@@ -27,8 +30,16 @@ from django.utils import timezone
 from infrastructure.auth.core.challenges import get_challenge_store
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
+from infrastructure.workspaces import access, roles
 from infrastructure.workspaces.invite_mail import invitation_issued
-from infrastructure.workspaces.models import Invitation, MemberStatus, Workspace, WorkspaceMember
+from infrastructure.workspaces.models import (
+    Invitation,
+    MemberStatus,
+    Role,
+    Workspace,
+    WorkspaceMember,
+)
+from infrastructure.workspaces.registry import MEMBER
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +51,7 @@ MAX_LINK_USES: Final = 1000
 MAX_PENDING_LISTED: Final = 200
 EXPIRED_LISTED_FOR: Final = timedelta(days=30)
 HOUR_SECONDS: Final = 3600
+INVITE: Final = "member.invite"
 
 VALID, EXPIRED, REVOKED, USED_UP = "valid", "expired", "revoked", "used_up"
 _STATE_ERRORS: Final = {
@@ -139,8 +151,21 @@ def _announce(invitation: Invitation, token: str, inviter: Any) -> None:
     transaction.on_commit(lambda: invitation_issued.send(sender=Invitation, **payload))
 
 
-def create_invitations(workspace: Workspace, actor: Any, emails: list[str]) -> CreateResult:
+def _invite_role(workspace: Workspace, grant: access.Grant, role_id: str) -> Role | None:
+    """The invitation's role: "" is none (Member), else visible here and held by the inviter."""
+    if not role_id:
+        return None
+    role = roles.visible_role(workspace, role_id)
+    access.require_holds(grant, access.role_keys(role))
+    return role
+
+
+def create_invitations(
+    workspace: Workspace, actor: Any, emails: list[str], role_id: str = ""
+) -> CreateResult:
     """One single-use, email-bound invitation per address; a pending one is replaced."""
+    grant = access.require(actor, INVITE, workspace)
+    role = _invite_role(workspace, grant, role_id)
     cleaned = _clean_emails(emails)
     member_emails = set(
         WorkspaceMember.objects.filter(workspace=workspace, status=MemberStatus.ACTIVE)
@@ -164,6 +189,7 @@ def create_invitations(workspace: Workspace, actor: Any, emails: list[str]) -> C
                 email=email,
                 token_hash=digest,
                 created_by=actor,
+                role=role,
                 expires_at=now + DEFAULT_EXPIRY,
                 max_uses=1,
             )
@@ -173,9 +199,11 @@ def create_invitations(workspace: Workspace, actor: Any, emails: list[str]) -> C
 
 
 def create_link(
-    workspace: Workspace, actor: Any, expires_in: int = 0, max_uses: int = 0
+    workspace: Workspace, actor: Any, expires_in: int = 0, max_uses: int = 0, role_id: str = ""
 ) -> Created:
     """A shareable link. ``expires_in`` seconds (0 = 7 days); ``max_uses`` 0 = unlimited."""
+    grant = access.require(actor, INVITE, workspace)
+    role = _invite_role(workspace, grant, role_id)
     if expires_in == 0:
         lifetime = DEFAULT_EXPIRY
     elif MIN_LINK_EXPIRY_SECONDS <= expires_in <= MAX_LINK_EXPIRY_SECONDS:
@@ -190,22 +218,24 @@ def create_link(
         workspace=workspace,
         token_hash=digest,
         created_by=actor,
+        role=role,
         expires_at=timezone.now() + lifetime,
         max_uses=max_uses,
     )
     return Created(row, raw)
 
 
-def list_pending(workspace: Workspace) -> list[Invitation]:
+def list_pending(workspace: Workspace, actor: Any) -> list[Invitation]:
     """Newest first, at most 200: not revoked, not used up, not expired over 30 days ago.
 
     Recently expired ones stay so they can be resent.
     """
+    access.require(actor, INVITE, workspace)
     rows = (
         Invitation.objects.filter(workspace=workspace, revoked_at__isnull=True)
         .filter(Q(max_uses=0) | Q(uses__lt=F("max_uses")))
         .filter(expires_at__gt=timezone.now() - EXPIRED_LISTED_FOR)
-        .select_related("created_by__profile")
+        .select_related("created_by__profile", "role")
         .order_by("-created_at")
     )
     return list(rows[:MAX_PENDING_LISTED])
@@ -222,7 +252,8 @@ def _owned(workspace: Workspace, invitation_id: str) -> Invitation:
     return row
 
 
-def revoke(workspace: Workspace, invitation_id: str) -> Invitation:
+def revoke(workspace: Workspace, actor: Any, invitation_id: str) -> Invitation:
+    access.require(actor, INVITE, workspace)
     row = _owned(workspace, invitation_id)
     if row.revoked_at is None:
         row.revoked_at = timezone.now()
@@ -232,6 +263,7 @@ def revoke(workspace: Workspace, invitation_id: str) -> Invitation:
 
 def resend(workspace: Workspace, actor: Any, invitation_id: str) -> Created:
     """New token and expiry for a pending email invitation; the old token dies."""
+    access.require(actor, INVITE, workspace)
     row = _owned(workspace, invitation_id)
     if row.email is None:
         raise ApiError("Only email invitations can be resent.")
@@ -284,7 +316,11 @@ def accept(token: str, actor: Any) -> WorkspaceMember:
     """Join the workspace. Idempotent: an active member gets their row back, uses untouched."""
     found = _by_token(token)
     with transaction.atomic():
-        row = Invitation.objects.select_for_update().select_related("workspace").get(pk=found.pk)
+        row = (
+            Invitation.objects.select_for_update(of=("self",))  # role is a nullable join
+            .select_related("workspace", "role")
+            .get(pk=found.pk)
+        )
         previous = WorkspaceMember.objects.filter(workspace=row.workspace, user=actor).first()
         if previous is not None and previous.status == MemberStatus.ACTIVE:
             return previous
@@ -313,6 +349,8 @@ def accept(token: str, actor: Any) -> WorkspaceMember:
                 "joined_at": now,
                 "invited_by": row.created_by,
                 "removed_at": None,
+                # a returning member never keeps an old role
+                "role": row.role or access.builtin_role(MEMBER),
             },
         )
         row.uses += 1

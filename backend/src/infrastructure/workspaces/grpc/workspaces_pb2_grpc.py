@@ -380,6 +380,11 @@ class MemberControllerStub:
                 request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
                 _registered_method=True)
+        self.SetRole = channel.unary_unary(
+                '/config.workspaces.MemberController/SetRole',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberSetRoleRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Member.FromString,
+                _registered_method=True)
 
 
 class MemberControllerServicer:
@@ -403,6 +408,12 @@ class MemberControllerServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetRole(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MemberControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -420,6 +431,11 @@ def add_MemberControllerServicer_to_server(servicer, server):
                     servicer.Remove,
                     request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.FromString,
                     response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.SerializeToString,
+            ),
+            'SetRole': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetRole,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberSetRoleRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Member.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -503,6 +519,306 @@ class MemberController:
             '/config.workspaces.MemberController/Remove',
             infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberRemoveRequest.SerializeToString,
             infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberEmpty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetRole(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.MemberController/SetRole',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.MemberSetRoleRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Member.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class PermissionControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Check = channel.unary_unary(
+                '/config.workspaces.PermissionController/Check',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckResponse.FromString,
+                _registered_method=True)
+
+
+class PermissionControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Check(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_PermissionControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Check': grpc.unary_unary_rpc_method_handler(
+                    servicer.Check,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.workspaces.PermissionController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.workspaces.PermissionController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class PermissionController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Check(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.PermissionController/Check',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.PermissionCheckResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class RoleControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Create = channel.unary_unary(
+                '/config.workspaces.RoleController/Create',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleCreateRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.FromString,
+                _registered_method=True)
+        self.Delete = channel.unary_unary(
+                '/config.workspaces.RoleController/Delete',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleDeleteRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleEmpty.FromString,
+                _registered_method=True)
+        self.List = channel.unary_unary(
+                '/config.workspaces.RoleController/List',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleListRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleList.FromString,
+                _registered_method=True)
+        self.Update = channel.unary_unary(
+                '/config.workspaces.RoleController/Update',
+                request_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleUpdateRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.FromString,
+                _registered_method=True)
+
+
+class RoleControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Create(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Delete(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def List(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Update(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_RoleControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Create': grpc.unary_unary_rpc_method_handler(
+                    servicer.Create,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleCreateRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.SerializeToString,
+            ),
+            'Delete': grpc.unary_unary_rpc_method_handler(
+                    servicer.Delete,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleDeleteRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleEmpty.SerializeToString,
+            ),
+            'List': grpc.unary_unary_rpc_method_handler(
+                    servicer.List,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleListRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleList.SerializeToString,
+            ),
+            'Update': grpc.unary_unary_rpc_method_handler(
+                    servicer.Update,
+                    request_deserializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleUpdateRequest.FromString,
+                    response_serializer=infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.workspaces.RoleController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.workspaces.RoleController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class RoleController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Create(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.RoleController/Create',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleCreateRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Delete(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.RoleController/Delete',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleDeleteRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleEmpty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def List(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.RoleController/List',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleListRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Update(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.workspaces.RoleController/Update',
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.RoleUpdateRequest.SerializeToString,
+            infrastructure_dot_workspaces_dot_grpc_dot_workspaces__pb2.Role.FromString,
             options,
             channel_credentials,
             insecure,

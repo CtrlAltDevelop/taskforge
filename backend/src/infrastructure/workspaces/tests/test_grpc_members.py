@@ -196,3 +196,45 @@ def test_owner_removes_member_and_quota_is_resource_exhausted(
         pb.InvitationCreateLinkRequest(workspace_id=ws.id),
         token=zoe,
     ) is (grpc.StatusCode.RESOURCE_EXHAUSTED)
+
+
+def test_invite_role_over_grpc(zoe: str, max_: str, grpc_call: Callable[..., Any]) -> None:
+    ws = _create(grpc_call, zoe)
+    roles = grpc_call(
+        stubs.RoleControllerStub, "List", pb.RoleListRequest(workspace_id=ws.id), token=zoe
+    )
+    viewer = next(r for r in roles.roles if r.name == "Viewer")
+
+    link = grpc_call(
+        Invites,
+        "CreateLink",
+        pb.InvitationCreateLinkRequest(workspace_id=ws.id, role_id=viewer.id),
+        token=zoe,
+    )
+    plain = grpc_call(
+        Invites,
+        "Create",
+        pb.InvitationCreateRequest(workspace_id=ws.id, emails=["a@b.co"]),
+        token=zoe,
+    )
+    typed = grpc_call(
+        Invites,
+        "Create",
+        pb.InvitationCreateRequest(workspace_id=ws.id, emails=["c@d.co"], role_id=viewer.id),
+        token=zoe,
+    )
+    bad = _code(
+        grpc_call,
+        Invites,
+        "CreateLink",
+        pb.InvitationCreateLinkRequest(workspace_id=ws.id, role_id="999999"),
+        token=zoe,
+    )
+    grpc_call(Invites, "Accept", pb.InvitationAcceptRequest(token=link.token), token=max_)
+    listed = grpc_call(Members, "List", pb.MemberListRequest(workspace_id=ws.id), token=max_)
+
+    assert (link.role_id, link.role_name) == (viewer.id, "Viewer")
+    assert (plain.invitations[0].role_id, plain.invitations[0].role_name) == ("", "")
+    assert typed.invitations[0].role_name == "Viewer"
+    assert bad is grpc.StatusCode.NOT_FOUND
+    assert [m.role_name for m in listed.members] == ["Owner", "Viewer"]

@@ -65,7 +65,7 @@ def test_expired_accept_is_410(db: None) -> None:
     _, (_, owner) = _signup("zoe")
     client, (token, _) = _signup("max")
     link = invitations.create_link(services.create(owner, "Acme", "acme"), owner)
-    invitations.revoke(link.invitation.workspace, str(link.invitation.id))
+    invitations.revoke(link.invitation.workspace, owner, str(link.invitation.id))
 
     response = _post(client, "accept", link.token, token)
 

@@ -16,7 +16,9 @@ Usage::
     # then scope EVERY query:  Task.objects.filter(workspace=workspace, ...)
 
 A non-member, a deleted workspace, a malformed id and an id that does not exist
-all raise the same 403 / PERMISSION_DENIED, so ids cannot be probed.
+all raise the same 403 / PERMISSION_DENIED, so ids cannot be probed. These two
+helpers also require ``workspace.view`` (a member whose role lacks it gets the
+reason); the endpoint itself still calls ``access.require`` for its own key.
 """
 
 import uuid
@@ -25,20 +27,21 @@ from typing import Any
 from asgiref.sync import sync_to_async
 from django.http import HttpRequest
 
-from infrastructure.common.errors import ApiError
-from infrastructure.common.responses import ResponseTitle
+from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace
 
 WORKSPACE_METADATA_KEY = "x-workspace"
 WORKSPACE_META_KEY = "HTTP_X_WORKSPACE"
+VIEW = "workspace.view"
 
 
-def _forbidden() -> ApiError:
-    return ApiError("No access to that workspace.", status=403, title=ResponseTitle.FORBIDDEN)
+def require_workspace(user: Any, raw_id: str | None, permission: str | None = None) -> Workspace:
+    """The live workspace ``raw_id`` if ``user`` is a member (and holds ``permission``), else 403.
 
-
-def require_workspace(user: Any, raw_id: str | None) -> Workspace:
-    """Return the live workspace ``raw_id`` if ``user`` is a member, else raise 403."""
+    Without ``permission`` this is a membership check only: the member and
+    invitation adapters resolve with it and their services check their own key.
+    """
+    _forbidden = access.forbidden
     if user is None or not getattr(user, "is_authenticated", False):
         raise _forbidden()
     try:
@@ -53,19 +56,21 @@ def require_workspace(user: Any, raw_id: str | None) -> Workspace:
     ).first()
     if workspace is None:
         raise _forbidden()
+    if permission is not None:
+        access.require(user, permission, workspace)
     return workspace
 
 
 def workspace_from_request(request: HttpRequest) -> Workspace:
     """REST: resolve ``X-Workspace`` for ``request.user``."""
-    return require_workspace(request.user, request.META.get(WORKSPACE_META_KEY))
+    return require_workspace(request.user, request.META.get(WORKSPACE_META_KEY), VIEW)
 
 
 def _grpc_workspace(context: Any, user: Any) -> Workspace:
     request = getattr(context, "http_request", None)
     meta = request.META if request is not None else {}
     raw = meta.get(WORKSPACE_METADATA_KEY) or meta.get(WORKSPACE_META_KEY)
-    return require_workspace(user, raw)
+    return require_workspace(user, raw, VIEW)
 
 
 async def grpc_workspace(context: Any, user: Any) -> Workspace:

@@ -1,5 +1,7 @@
 """Workspaces over gRPC: list mine, list deleted, create, update, delete, restore.
 
+Update/Delete/Restore/ListDeleted need workspace.update / workspace.delete (ListDeleted
+lists only workspaces where the caller holds it); List and Create are account-level.
 Logo upload is REST (``POST /api/v1/workspaces/{id}/logo``); bytes do not belong
 in these messages. ``expected_version`` on Update is the optimistic lock: a stale
 one is ``ABORTED`` and the caller should re-List and retry.
@@ -13,12 +15,12 @@ from django_socio_grpc.decorators import grpc_action
 
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
-from infrastructure.workspaces import services
+from infrastructure.workspaces import access, services
 from infrastructure.workspaces.grpc.serializers import Workspace
 from infrastructure.workspaces.models import Workspace as WorkspaceRow
 
 
-def workspace_message(workspace: WorkspaceRow, actor: Any) -> Any:
+def workspace_message(workspace: WorkspaceRow, is_owner: bool) -> Any:
     from infrastructure.workspaces.grpc import workspaces_pb2
 
     return workspaces_pb2.Workspace(
@@ -30,8 +32,21 @@ def workspace_message(workspace: WorkspaceRow, actor: Any) -> Any:
         created_at=workspace.created_at.isoformat(),
         deleted_at=workspace.deleted_at.isoformat() if workspace.deleted_at else "",
         version=workspace.version,
-        is_owner=workspace.created_by_id == actor.pk,
+        is_owner=is_owner,  # the caller's role in it is Owner
     )
+
+
+def _render(rows: list[WorkspaceRow], actor: Any) -> Any:
+    from infrastructure.workspaces.grpc import workspaces_pb2
+
+    owned = access.owner_workspace_ids(actor)
+    return workspaces_pb2.WorkspaceList(
+        workspaces=[workspace_message(row, row.pk in owned) for row in rows]
+    )
+
+
+def _one(row: WorkspaceRow, actor: Any) -> Any:
+    return workspace_message(row, row.pk in access.owner_workspace_ids(actor))
 
 
 class WorkspaceService(generics.GenericService):
@@ -42,13 +57,8 @@ class WorkspaceService(generics.GenericService):
     )
     @action
     async def List(self, request: Any, context: Any) -> Any:
-        from infrastructure.workspaces.grpc import workspaces_pb2
-
         user = require_caller(await grpc_caller(context))
-        rows = await sync_to_async(services.list_mine)(user)
-        return workspaces_pb2.WorkspaceList(
-            workspaces=[workspace_message(row, user) for row in rows]
-        )
+        return await sync_to_async(lambda: _render(services.list_mine(user), user))()
 
     @grpc_action(
         request=[],
@@ -57,13 +67,8 @@ class WorkspaceService(generics.GenericService):
     )
     @action
     async def ListDeleted(self, request: Any, context: Any) -> Any:
-        from infrastructure.workspaces.grpc import workspaces_pb2
-
         user = require_caller(await grpc_caller(context))
-        rows = await sync_to_async(services.list_deleted)(user)
-        return workspaces_pb2.WorkspaceList(
-            workspaces=[workspace_message(row, user) for row in rows]
-        )
+        return await sync_to_async(lambda: _render(services.list_deleted(user), user))()
 
     @grpc_action(
         request=[{"name": "name", "type": "string"}, {"name": "slug", "type": "string"}],
@@ -75,7 +80,7 @@ class WorkspaceService(generics.GenericService):
     async def Create(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.create)(user, request.name, request.slug)
-        return workspace_message(row, user)
+        return await sync_to_async(_one)(row, user)
 
     @grpc_action(
         request=[
@@ -98,7 +103,7 @@ class WorkspaceService(generics.GenericService):
             name=request.name if request.HasField("name") else None,
             slug=request.slug if request.HasField("slug") else None,
         )
-        return workspace_message(row, user)
+        return await sync_to_async(_one)(row, user)
 
     @grpc_action(
         request=[
@@ -113,7 +118,7 @@ class WorkspaceService(generics.GenericService):
     async def Delete(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.delete)(user, request.id, request.confirmation)
-        return workspace_message(row, user)
+        return await sync_to_async(_one)(row, user)
 
     @grpc_action(
         request=[{"name": "id", "type": "string"}],
@@ -125,14 +130,15 @@ class WorkspaceService(generics.GenericService):
     async def Restore(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
         row = await sync_to_async(services.restore)(user, request.id)
-        return workspace_message(row, user)
+        return await sync_to_async(_one)(row, user)
 
 
 def _all_services() -> list[type]:
     # Imported late: members.py imports workspace_message from this module.
     from infrastructure.workspaces.grpc.members import InvitationService, MemberService
+    from infrastructure.workspaces.grpc.roles import PermissionService, RoleService
 
-    return [WorkspaceService, MemberService, InvitationService]
+    return [WorkspaceService, MemberService, InvitationService, RoleService, PermissionService]
 
 
 GRPC_SERVICES = _all_services()

@@ -5,6 +5,12 @@ Every call except Accept/Decline names its workspace in the request body
 removed member and an unknown id all get the same PERMISSION_DENIED. Accept and
 Decline need only a signed-in caller; the token is the capability.
 
+Permissions: Member.List needs member.view, Remove member.remove, SetRole member.set_role,
+Invitation.Create/CreateLink/List/Revoke/Resend member.invite (Create/CreateLink may carry
+a role_id: visible in the workspace, else NOT_FOUND, and every key of it held by the
+caller); Leave, Accept and Decline need none. A member lacking one gets PERMISSION_DENIED
+with detail
+"PERMISSION_DENIED_REASON: missing: x; your role: Y" (and x-error-*-bin trailers).
 Refusals: expired/revoked/used-up invitations are NOT_FOUND with title
 INVITE_EXPIRED / INVITE_REVOKED / INVITE_USED_UP; a wrong email is
 PERMISSION_DENIED INVITE_EMAIL_MISMATCH; owner protection is PERMISSION_DENIED
@@ -20,7 +26,7 @@ from django_socio_grpc.decorators import grpc_action
 
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
-from infrastructure.workspaces import invitations, members
+from infrastructure.workspaces import access, invitations, members
 from infrastructure.workspaces.grpc.serializers import Invitation, Member, Workspace
 from infrastructure.workspaces.grpc.services import workspace_message
 from infrastructure.workspaces.models import Invitation as InvitationRow
@@ -30,7 +36,7 @@ from infrastructure.workspaces.scoping import require_workspace
 WS = {"name": "workspace_id", "type": "string"}
 
 
-def _member(row: WorkspaceMember, owner_id: Any) -> Any:
+def _member(row: WorkspaceMember) -> Any:
     from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 
     return pb.Member(
@@ -38,8 +44,10 @@ def _member(row: WorkspaceMember, owner_id: Any) -> Any:
         display_name=row.user.get_full_name(),
         email=row.user.email or "",
         joined_at=row.joined_at.isoformat(),
-        is_owner=row.user_id == owner_id,
+        is_owner=access.is_owner_role(row.role),
         status=row.status,
+        role_id=str(row.role_id),
+        role_name=row.role.name,
     )
 
 
@@ -59,6 +67,8 @@ def _invitation(row: InvitationRow, token: str = "") -> Any:
         uses=row.uses,
         state=invitations.state_of(row),
         token=token if row.email is None else "",  # email tokens travel only by email
+        role_id=str(row.role_id or ""),
+        role_name=row.role.name if row.role else "",
     )
 
 
@@ -79,10 +89,9 @@ class MemberService(generics.GenericService):
     async def List(self, request: Any, context: Any) -> Any:
         from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 
-        _, workspace = await _scope(request, context)
-        owner = workspace.created_by_id
+        user, workspace = await _scope(request, context)
         rows = await sync_to_async(
-            lambda: [_member(r, owner) for r in members.list_members(workspace)]
+            lambda: [_member(r) for r in members.list_members(workspace, user)]
         )()
         return pb.MemberList(members=rows)
 
@@ -101,6 +110,21 @@ class MemberService(generics.GenericService):
         return pb.MemberEmpty()
 
     @grpc_action(
+        request=[WS, {"name": "user_id", "type": "string"}, {"name": "role_id", "type": "string"}],
+        request_name="MemberSetRoleRequest",
+        response=Member,
+        response_name="Member",
+    )
+    @action
+    async def SetRole(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+
+        def run() -> Any:
+            return _member(members.set_role(workspace, user, request.user_id, request.role_id))
+
+        return await sync_to_async(run)()
+
+    @grpc_action(
         request=[WS],
         request_name="MemberLeaveRequest",
         response=[],
@@ -117,7 +141,11 @@ class MemberService(generics.GenericService):
 
 class InvitationService(generics.GenericService):
     @grpc_action(
-        request=[WS, {"name": "emails", "type": "string", "cardinality": "repeated"}],
+        request=[
+            WS,
+            {"name": "emails", "type": "string", "cardinality": "repeated"},
+            {"name": "role_id", "type": "string"},  # "" = Member
+        ],
         request_name="InvitationCreateRequest",
         response=[
             {"name": "invitations", "cardinality": "repeated", "type": Invitation},
@@ -133,7 +161,9 @@ class InvitationService(generics.GenericService):
         user, workspace = await _scope(request, context)
 
         def run() -> Any:
-            result = invitations.create_invitations(workspace, user, list(request.emails))
+            result = invitations.create_invitations(
+                workspace, user, list(request.emails), request.role_id
+            )
             return pb.InvitationCreateResponse(
                 invitations=[_invitation(c.invitation, c.token) for c in result.created],
                 skipped_emails=result.skipped_emails,
@@ -149,6 +179,7 @@ class InvitationService(generics.GenericService):
             WS,
             {"name": "expires_in", "type": "int32"},
             {"name": "max_uses", "type": "int32"},
+            {"name": "role_id", "type": "string"},  # "" = Member
         ],
         request_name="InvitationCreateLinkRequest",
         response=Invitation,
@@ -159,7 +190,9 @@ class InvitationService(generics.GenericService):
         user, workspace = await _scope(request, context)
 
         def run() -> Any:
-            made = invitations.create_link(workspace, user, request.expires_in, request.max_uses)
+            made = invitations.create_link(
+                workspace, user, request.expires_in, request.max_uses, request.role_id
+            )
             return _invitation(made.invitation, made.token)
 
         return await sync_to_async(run)()
@@ -174,9 +207,9 @@ class InvitationService(generics.GenericService):
     async def List(self, request: Any, context: Any) -> Any:
         from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 
-        _, workspace = await _scope(request, context)
+        user, workspace = await _scope(request, context)
         rows = await sync_to_async(
-            lambda: [_invitation(r) for r in invitations.list_pending(workspace)]
+            lambda: [_invitation(r) for r in invitations.list_pending(workspace, user)]
         )()
         return pb.InvitationList(invitations=rows)
 
@@ -188,8 +221,8 @@ class InvitationService(generics.GenericService):
     )
     @action
     async def Revoke(self, request: Any, context: Any) -> Any:
-        _, workspace = await _scope(request, context)
-        row = await sync_to_async(invitations.revoke)(workspace, request.id)
+        user, workspace = await _scope(request, context)
+        row = await sync_to_async(invitations.revoke)(workspace, user, request.id)
         return await sync_to_async(_invitation)(row)
 
     @grpc_action(
@@ -216,7 +249,7 @@ class InvitationService(generics.GenericService):
 
         def run() -> Any:
             member = invitations.accept(request.token, user)
-            return workspace_message(member.workspace, user)
+            return workspace_message(member.workspace, access.is_owner_role(member.role))
 
         return await sync_to_async(run)()
 

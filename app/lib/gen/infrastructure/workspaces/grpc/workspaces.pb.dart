@@ -30,6 +30,8 @@ class Invitation extends $pb.GeneratedMessage {
     $core.int? uses,
     $core.String? state,
     $core.String? token,
+    $core.String? roleId,
+    $core.String? roleName,
   }) {
     final result = Invitation._();
     if (id != null) result.id = id;
@@ -44,6 +46,8 @@ class Invitation extends $pb.GeneratedMessage {
     if (uses != null) result.uses = uses;
     if (state != null) result.state = state;
     if (token != null) result.token = token;
+    if (roleId != null) result.roleId = roleId;
+    if (roleName != null) result.roleName = roleName;
     return result;
   }
 
@@ -73,6 +77,8 @@ class Invitation extends $pb.GeneratedMessage {
     ..aI(10, _omitFieldNames ? '' : 'uses')
     ..aOS(11, _omitFieldNames ? '' : 'state')
     ..aOS(12, _omitFieldNames ? '' : 'token')
+    ..aOS(13, _omitFieldNames ? '' : 'roleId')
+    ..aOS(14, _omitFieldNames ? '' : 'roleName')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -202,6 +208,24 @@ class Invitation extends $pb.GeneratedMessage {
   $core.bool hasToken() => $_has(11);
   @$pb.TagNumber(12)
   void clearToken() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get roleId => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set roleId($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasRoleId() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearRoleId() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get roleName => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set roleName($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasRoleName() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearRoleName() => $_clearField(14);
 }
 
 class InvitationAcceptRequest extends $pb.GeneratedMessage {
@@ -269,11 +293,13 @@ class InvitationCreateLinkRequest extends $pb.GeneratedMessage {
     $core.String? workspaceId,
     $core.int? expiresIn,
     $core.int? maxUses,
+    $core.String? roleId,
   }) {
     final result = InvitationCreateLinkRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
     if (expiresIn != null) result.expiresIn = expiresIn;
     if (maxUses != null) result.maxUses = maxUses;
+    if (roleId != null) result.roleId = roleId;
     return result;
   }
 
@@ -294,6 +320,7 @@ class InvitationCreateLinkRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
     ..aI(2, _omitFieldNames ? '' : 'expiresIn')
     ..aI(3, _omitFieldNames ? '' : 'maxUses')
+    ..aOS(4, _omitFieldNames ? '' : 'roleId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -350,16 +377,27 @@ class InvitationCreateLinkRequest extends $pb.GeneratedMessage {
   $core.bool hasMaxUses() => $_has(2);
   @$pb.TagNumber(3)
   void clearMaxUses() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get roleId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set roleId($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasRoleId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRoleId() => $_clearField(4);
 }
 
 class InvitationCreateRequest extends $pb.GeneratedMessage {
   factory InvitationCreateRequest({
     $core.String? workspaceId,
     $core.Iterable<$core.String>? emails,
+    $core.String? roleId,
   }) {
     final result = InvitationCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
     if (emails != null) result.emails.addAll(emails);
+    if (roleId != null) result.roleId = roleId;
     return result;
   }
 
@@ -379,6 +417,7 @@ class InvitationCreateRequest extends $pb.GeneratedMessage {
       createEmptyInstance: InvitationCreateRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
     ..pPS(2, _omitFieldNames ? '' : 'emails')
+    ..aOS(3, _omitFieldNames ? '' : 'roleId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -416,6 +455,15 @@ class InvitationCreateRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $pb.PbList<$core.String> get emails => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.String get roleId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set roleId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRoleId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoleId() => $_clearField(3);
 }
 
 class InvitationCreateResponse extends $pb.GeneratedMessage {
@@ -855,6 +903,8 @@ class Member extends $pb.GeneratedMessage {
     $core.String? joinedAt,
     $core.bool? isOwner,
     $core.String? status,
+    $core.String? roleId,
+    $core.String? roleName,
   }) {
     final result = Member._();
     if (userId != null) result.userId = userId;
@@ -863,6 +913,8 @@ class Member extends $pb.GeneratedMessage {
     if (joinedAt != null) result.joinedAt = joinedAt;
     if (isOwner != null) result.isOwner = isOwner;
     if (status != null) result.status = status;
+    if (roleId != null) result.roleId = roleId;
+    if (roleName != null) result.roleName = roleName;
     return result;
   }
 
@@ -886,6 +938,8 @@ class Member extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'joinedAt')
     ..aOB(5, _omitFieldNames ? '' : 'isOwner')
     ..aOS(6, _omitFieldNames ? '' : 'status')
+    ..aOS(7, _omitFieldNames ? '' : 'roleId')
+    ..aOS(8, _omitFieldNames ? '' : 'roleName')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -961,6 +1015,24 @@ class Member extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
   void clearStatus() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get roleId => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set roleId($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasRoleId() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearRoleId() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get roleName => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set roleName($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasRoleName() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearRoleName() => $_clearField(8);
 }
 
 class MemberEmpty extends $pb.GeneratedMessage {
@@ -1241,6 +1313,963 @@ class MemberRemoveRequest extends $pb.GeneratedMessage {
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
   void clearUserId() => $_clearField(2);
+}
+
+class MemberSetRoleRequest extends $pb.GeneratedMessage {
+  factory MemberSetRoleRequest({
+    $core.String? workspaceId,
+    $core.String? userId,
+    $core.String? roleId,
+  }) {
+    final result = MemberSetRoleRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (userId != null) result.userId = userId;
+    if (roleId != null) result.roleId = roleId;
+    return result;
+  }
+
+  MemberSetRoleRequest._();
+
+  factory MemberSetRoleRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      MemberSetRoleRequest()..mergeFromBuffer(data, registry);
+  factory MemberSetRoleRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      MemberSetRoleRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'MemberSetRoleRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: MemberSetRoleRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..aOS(3, _omitFieldNames ? '' : 'roleId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MemberSetRoleRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MemberSetRoleRequest copyWith(void Function(MemberSetRoleRequest) updates) =>
+      super.copyWith((message) => updates(message as MemberSetRoleRequest))
+          as MemberSetRoleRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use MemberSetRoleRequest() / MemberSetRoleRequest.new instead')
+  static MemberSetRoleRequest create() => MemberSetRoleRequest._();
+  static $pb.GeneratedMessage $_createMessage() => MemberSetRoleRequest._();
+  @$core.override
+  MemberSetRoleRequest createEmptyInstance() => MemberSetRoleRequest._();
+  @$core.pragma('dart2js:noInline')
+  static MemberSetRoleRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<MemberSetRoleRequest>(
+          MemberSetRoleRequest.$_createMessage);
+  static MemberSetRoleRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get userId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set userId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasUserId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUserId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get roleId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set roleId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRoleId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoleId() => $_clearField(3);
+}
+
+class PermissionAnswer extends $pb.GeneratedMessage {
+  factory PermissionAnswer({
+    $core.String? key,
+    $core.bool? allowed,
+  }) {
+    final result = PermissionAnswer._();
+    if (key != null) result.key = key;
+    if (allowed != null) result.allowed = allowed;
+    return result;
+  }
+
+  PermissionAnswer._();
+
+  factory PermissionAnswer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionAnswer()..mergeFromBuffer(data, registry);
+  factory PermissionAnswer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionAnswer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PermissionAnswer',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: PermissionAnswer.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..aOB(2, _omitFieldNames ? '' : 'allowed')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionAnswer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionAnswer copyWith(void Function(PermissionAnswer) updates) =>
+      super.copyWith((message) => updates(message as PermissionAnswer))
+          as PermissionAnswer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PermissionAnswer() / PermissionAnswer.new instead')
+  static PermissionAnswer create() => PermissionAnswer._();
+  static $pb.GeneratedMessage $_createMessage() => PermissionAnswer._();
+  @$core.override
+  PermissionAnswer createEmptyInstance() => PermissionAnswer._();
+  @$core.pragma('dart2js:noInline')
+  static PermissionAnswer getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PermissionAnswer>(
+          PermissionAnswer.$_createMessage);
+  static PermissionAnswer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get allowed => $_getBF(1);
+  @$pb.TagNumber(2)
+  set allowed($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAllowed() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAllowed() => $_clearField(2);
+}
+
+class PermissionArea extends $pb.GeneratedMessage {
+  factory PermissionArea({
+    $core.String? area,
+    $core.Iterable<PermissionInfo>? permissions,
+  }) {
+    final result = PermissionArea._();
+    if (area != null) result.area = area;
+    if (permissions != null) result.permissions.addAll(permissions);
+    return result;
+  }
+
+  PermissionArea._();
+
+  factory PermissionArea.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionArea()..mergeFromBuffer(data, registry);
+  factory PermissionArea.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionArea()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PermissionArea',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: PermissionArea.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'area')
+    ..pPM<PermissionInfo>(2, _omitFieldNames ? '' : 'permissions',
+        subBuilder: PermissionInfo.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionArea clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionArea copyWith(void Function(PermissionArea) updates) =>
+      super.copyWith((message) => updates(message as PermissionArea))
+          as PermissionArea;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PermissionArea() / PermissionArea.new instead')
+  static PermissionArea create() => PermissionArea._();
+  static $pb.GeneratedMessage $_createMessage() => PermissionArea._();
+  @$core.override
+  PermissionArea createEmptyInstance() => PermissionArea._();
+  @$core.pragma('dart2js:noInline')
+  static PermissionArea getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PermissionArea>(
+          PermissionArea.$_createMessage);
+  static PermissionArea? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get area => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set area($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasArea() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearArea() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<PermissionInfo> get permissions => $_getList(1);
+}
+
+class PermissionCheckRequest extends $pb.GeneratedMessage {
+  factory PermissionCheckRequest({
+    $core.String? workspaceId,
+    $core.Iterable<$core.String>? keys,
+  }) {
+    final result = PermissionCheckRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (keys != null) result.keys.addAll(keys);
+    return result;
+  }
+
+  PermissionCheckRequest._();
+
+  factory PermissionCheckRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionCheckRequest()..mergeFromBuffer(data, registry);
+  factory PermissionCheckRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionCheckRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PermissionCheckRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: PermissionCheckRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..pPS(2, _omitFieldNames ? '' : 'keys')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionCheckRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionCheckRequest copyWith(
+          void Function(PermissionCheckRequest) updates) =>
+      super.copyWith((message) => updates(message as PermissionCheckRequest))
+          as PermissionCheckRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use PermissionCheckRequest() / PermissionCheckRequest.new instead')
+  static PermissionCheckRequest create() => PermissionCheckRequest._();
+  static $pb.GeneratedMessage $_createMessage() => PermissionCheckRequest._();
+  @$core.override
+  PermissionCheckRequest createEmptyInstance() => PermissionCheckRequest._();
+  @$core.pragma('dart2js:noInline')
+  static PermissionCheckRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PermissionCheckRequest>(
+          PermissionCheckRequest.$_createMessage);
+  static PermissionCheckRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get keys => $_getList(1);
+}
+
+class PermissionCheckResponse extends $pb.GeneratedMessage {
+  factory PermissionCheckResponse({
+    $core.Iterable<PermissionAnswer>? answers,
+    $core.String? roleId,
+    $core.String? roleName,
+  }) {
+    final result = PermissionCheckResponse._();
+    if (answers != null) result.answers.addAll(answers);
+    if (roleId != null) result.roleId = roleId;
+    if (roleName != null) result.roleName = roleName;
+    return result;
+  }
+
+  PermissionCheckResponse._();
+
+  factory PermissionCheckResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionCheckResponse()..mergeFromBuffer(data, registry);
+  factory PermissionCheckResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionCheckResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PermissionCheckResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: PermissionCheckResponse.$_createMessage)
+    ..pPM<PermissionAnswer>(1, _omitFieldNames ? '' : 'answers',
+        subBuilder: PermissionAnswer.$_createMessage)
+    ..aOS(2, _omitFieldNames ? '' : 'roleId')
+    ..aOS(3, _omitFieldNames ? '' : 'roleName')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionCheckResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionCheckResponse copyWith(
+          void Function(PermissionCheckResponse) updates) =>
+      super.copyWith((message) => updates(message as PermissionCheckResponse))
+          as PermissionCheckResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use PermissionCheckResponse() / PermissionCheckResponse.new instead')
+  static PermissionCheckResponse create() => PermissionCheckResponse._();
+  static $pb.GeneratedMessage $_createMessage() => PermissionCheckResponse._();
+  @$core.override
+  PermissionCheckResponse createEmptyInstance() => PermissionCheckResponse._();
+  @$core.pragma('dart2js:noInline')
+  static PermissionCheckResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PermissionCheckResponse>(
+          PermissionCheckResponse.$_createMessage);
+  static PermissionCheckResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<PermissionAnswer> get answers => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.String get roleId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set roleId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasRoleId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRoleId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get roleName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set roleName($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRoleName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoleName() => $_clearField(3);
+}
+
+class PermissionInfo extends $pb.GeneratedMessage {
+  factory PermissionInfo({
+    $core.String? key,
+    $core.String? label,
+  }) {
+    final result = PermissionInfo._();
+    if (key != null) result.key = key;
+    if (label != null) result.label = label;
+    return result;
+  }
+
+  PermissionInfo._();
+
+  factory PermissionInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionInfo()..mergeFromBuffer(data, registry);
+  factory PermissionInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PermissionInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PermissionInfo',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: PermissionInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..aOS(2, _omitFieldNames ? '' : 'label')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PermissionInfo copyWith(void Function(PermissionInfo) updates) =>
+      super.copyWith((message) => updates(message as PermissionInfo))
+          as PermissionInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PermissionInfo() / PermissionInfo.new instead')
+  static PermissionInfo create() => PermissionInfo._();
+  static $pb.GeneratedMessage $_createMessage() => PermissionInfo._();
+  @$core.override
+  PermissionInfo createEmptyInstance() => PermissionInfo._();
+  @$core.pragma('dart2js:noInline')
+  static PermissionInfo getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PermissionInfo>(
+          PermissionInfo.$_createMessage);
+  static PermissionInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get label => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set label($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLabel() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLabel() => $_clearField(2);
+}
+
+class Role extends $pb.GeneratedMessage {
+  factory Role({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? isBuiltin,
+    $core.Iterable<$core.String>? permissions,
+    $core.int? memberCount,
+    $core.int? version,
+  }) {
+    final result = Role._();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (isBuiltin != null) result.isBuiltin = isBuiltin;
+    if (permissions != null) result.permissions.addAll(permissions);
+    if (memberCount != null) result.memberCount = memberCount;
+    if (version != null) result.version = version;
+    return result;
+  }
+
+  Role._();
+
+  factory Role.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Role()..mergeFromBuffer(data, registry);
+  factory Role.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Role()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Role',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: Role.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOB(3, _omitFieldNames ? '' : 'isBuiltin')
+    ..pPS(4, _omitFieldNames ? '' : 'permissions')
+    ..aI(5, _omitFieldNames ? '' : 'memberCount')
+    ..aI(6, _omitFieldNames ? '' : 'version')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Role clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Role copyWith(void Function(Role) updates) =>
+      super.copyWith((message) => updates(message as Role)) as Role;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use Role() / Role.new instead')
+  static Role create() => Role._();
+  static $pb.GeneratedMessage $_createMessage() => Role._();
+  @$core.override
+  Role createEmptyInstance() => Role._();
+  @$core.pragma('dart2js:noInline')
+  static Role getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Role>(Role.$_createMessage);
+  static Role? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get isBuiltin => $_getBF(2);
+  @$pb.TagNumber(3)
+  set isBuiltin($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasIsBuiltin() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIsBuiltin() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<$core.String> get permissions => $_getList(3);
+
+  @$pb.TagNumber(5)
+  $core.int get memberCount => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set memberCount($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasMemberCount() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearMemberCount() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get version => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set version($core.int value) => $_setSignedInt32(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasVersion() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearVersion() => $_clearField(6);
+}
+
+class RoleCreateRequest extends $pb.GeneratedMessage {
+  factory RoleCreateRequest({
+    $core.String? workspaceId,
+    $core.String? name,
+    $core.Iterable<$core.String>? permissions,
+  }) {
+    final result = RoleCreateRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (name != null) result.name = name;
+    if (permissions != null) result.permissions.addAll(permissions);
+    return result;
+  }
+
+  RoleCreateRequest._();
+
+  factory RoleCreateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleCreateRequest()..mergeFromBuffer(data, registry);
+  factory RoleCreateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleCreateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleCreateRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleCreateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..pPS(3, _omitFieldNames ? '' : 'permissions')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleCreateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleCreateRequest copyWith(void Function(RoleCreateRequest) updates) =>
+      super.copyWith((message) => updates(message as RoleCreateRequest))
+          as RoleCreateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleCreateRequest() / RoleCreateRequest.new instead')
+  static RoleCreateRequest create() => RoleCreateRequest._();
+  static $pb.GeneratedMessage $_createMessage() => RoleCreateRequest._();
+  @$core.override
+  RoleCreateRequest createEmptyInstance() => RoleCreateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static RoleCreateRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RoleCreateRequest>(
+          RoleCreateRequest.$_createMessage);
+  static RoleCreateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get permissions => $_getList(2);
+}
+
+class RoleDeleteRequest extends $pb.GeneratedMessage {
+  factory RoleDeleteRequest({
+    $core.String? workspaceId,
+    $core.String? id,
+    $core.String? reassignTo,
+  }) {
+    final result = RoleDeleteRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (id != null) result.id = id;
+    if (reassignTo != null) result.reassignTo = reassignTo;
+    return result;
+  }
+
+  RoleDeleteRequest._();
+
+  factory RoleDeleteRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleDeleteRequest()..mergeFromBuffer(data, registry);
+  factory RoleDeleteRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleDeleteRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleDeleteRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleDeleteRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'id')
+    ..aOS(3, _omitFieldNames ? '' : 'reassignTo')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleDeleteRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleDeleteRequest copyWith(void Function(RoleDeleteRequest) updates) =>
+      super.copyWith((message) => updates(message as RoleDeleteRequest))
+          as RoleDeleteRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleDeleteRequest() / RoleDeleteRequest.new instead')
+  static RoleDeleteRequest create() => RoleDeleteRequest._();
+  static $pb.GeneratedMessage $_createMessage() => RoleDeleteRequest._();
+  @$core.override
+  RoleDeleteRequest createEmptyInstance() => RoleDeleteRequest._();
+  @$core.pragma('dart2js:noInline')
+  static RoleDeleteRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RoleDeleteRequest>(
+          RoleDeleteRequest.$_createMessage);
+  static RoleDeleteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get id => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set id($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get reassignTo => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set reassignTo($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasReassignTo() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearReassignTo() => $_clearField(3);
+}
+
+class RoleEmpty extends $pb.GeneratedMessage {
+  factory RoleEmpty() => RoleEmpty._();
+
+  RoleEmpty._();
+
+  factory RoleEmpty.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleEmpty()..mergeFromBuffer(data, registry);
+  factory RoleEmpty.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleEmpty()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleEmpty',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleEmpty.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleEmpty clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleEmpty copyWith(void Function(RoleEmpty) updates) =>
+      super.copyWith((message) => updates(message as RoleEmpty)) as RoleEmpty;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleEmpty() / RoleEmpty.new instead')
+  static RoleEmpty create() => RoleEmpty._();
+  static $pb.GeneratedMessage $_createMessage() => RoleEmpty._();
+  @$core.override
+  RoleEmpty createEmptyInstance() => RoleEmpty._();
+  @$core.pragma('dart2js:noInline')
+  static RoleEmpty getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RoleEmpty>(RoleEmpty.$_createMessage);
+  static RoleEmpty? _defaultInstance;
+}
+
+class RoleList extends $pb.GeneratedMessage {
+  factory RoleList({
+    $core.Iterable<Role>? roles,
+    $core.Iterable<PermissionArea>? registry,
+  }) {
+    final result = RoleList._();
+    if (roles != null) result.roles.addAll(roles);
+    if (registry != null) result.registry.addAll(registry);
+    return result;
+  }
+
+  RoleList._();
+
+  factory RoleList.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleList()..mergeFromBuffer(data, registry);
+  factory RoleList.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleList()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleList',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleList.$_createMessage)
+    ..pPM<Role>(1, _omitFieldNames ? '' : 'roles',
+        subBuilder: Role.$_createMessage)
+    ..pPM<PermissionArea>(2, _omitFieldNames ? '' : 'registry',
+        subBuilder: PermissionArea.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleList clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleList copyWith(void Function(RoleList) updates) =>
+      super.copyWith((message) => updates(message as RoleList)) as RoleList;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleList() / RoleList.new instead')
+  static RoleList create() => RoleList._();
+  static $pb.GeneratedMessage $_createMessage() => RoleList._();
+  @$core.override
+  RoleList createEmptyInstance() => RoleList._();
+  @$core.pragma('dart2js:noInline')
+  static RoleList getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RoleList>(RoleList.$_createMessage);
+  static RoleList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Role> get roles => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<PermissionArea> get registry => $_getList(1);
+}
+
+class RoleListRequest extends $pb.GeneratedMessage {
+  factory RoleListRequest({
+    $core.String? workspaceId,
+  }) {
+    final result = RoleListRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    return result;
+  }
+
+  RoleListRequest._();
+
+  factory RoleListRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleListRequest()..mergeFromBuffer(data, registry);
+  factory RoleListRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleListRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleListRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleListRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleListRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleListRequest copyWith(void Function(RoleListRequest) updates) =>
+      super.copyWith((message) => updates(message as RoleListRequest))
+          as RoleListRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleListRequest() / RoleListRequest.new instead')
+  static RoleListRequest create() => RoleListRequest._();
+  static $pb.GeneratedMessage $_createMessage() => RoleListRequest._();
+  @$core.override
+  RoleListRequest createEmptyInstance() => RoleListRequest._();
+  @$core.pragma('dart2js:noInline')
+  static RoleListRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RoleListRequest>(
+          RoleListRequest.$_createMessage);
+  static RoleListRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+}
+
+class RoleUpdateRequest extends $pb.GeneratedMessage {
+  factory RoleUpdateRequest({
+    $core.String? workspaceId,
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<$core.String>? permissions,
+    $core.int? expectedVersion,
+  }) {
+    final result = RoleUpdateRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (permissions != null) result.permissions.addAll(permissions);
+    if (expectedVersion != null) result.expectedVersion = expectedVersion;
+    return result;
+  }
+
+  RoleUpdateRequest._();
+
+  factory RoleUpdateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleUpdateRequest()..mergeFromBuffer(data, registry);
+  factory RoleUpdateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      RoleUpdateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RoleUpdateRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.workspaces'),
+      createEmptyInstance: RoleUpdateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'id')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..pPS(4, _omitFieldNames ? '' : 'permissions')
+    ..aI(5, _omitFieldNames ? '' : 'expectedVersion')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleUpdateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RoleUpdateRequest copyWith(void Function(RoleUpdateRequest) updates) =>
+      super.copyWith((message) => updates(message as RoleUpdateRequest))
+          as RoleUpdateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use RoleUpdateRequest() / RoleUpdateRequest.new instead')
+  static RoleUpdateRequest create() => RoleUpdateRequest._();
+  static $pb.GeneratedMessage $_createMessage() => RoleUpdateRequest._();
+  @$core.override
+  RoleUpdateRequest createEmptyInstance() => RoleUpdateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static RoleUpdateRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RoleUpdateRequest>(
+          RoleUpdateRequest.$_createMessage);
+  static RoleUpdateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get id => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set id($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<$core.String> get permissions => $_getList(3);
+
+  @$pb.TagNumber(5)
+  $core.int get expectedVersion => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set expectedVersion($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasExpectedVersion() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearExpectedVersion() => $_clearField(5);
 }
 
 class Workspace extends $pb.GeneratedMessage {

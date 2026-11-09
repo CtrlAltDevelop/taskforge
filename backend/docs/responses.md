@@ -152,7 +152,10 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `INVITE_EMAIL_MISMATCH` | This invitation is for a different email. |
 | `INVITE_NOT_PENDING` | This invitation is no longer pending. |
 | `INVITE_BEFORE_REMOVAL` | This invitation predates your removal. |
-| `OWNER_PROTECTED` | The workspace owner cannot be removed or leave. |
+| `OWNER_PROTECTED` | The last workspace owner cannot be demoted, removed or leave. |
+| `PERMISSION_DENIED_REASON` | Your role lacks a permission this needs. |
+| `ROLE_BUILTIN` | Built-in roles cannot be changed or deleted. |
+| `ROLE_NAME_TAKEN` | A role with that name already exists. |
 
 ## Writing an endpoint
 

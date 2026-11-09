@@ -1,6 +1,7 @@
 """Workspace logo upload. Everything else about workspaces is gRPC.
 
-Owner only; a non-member and a missing id both get the same 403.
+Needs workspace.update. A non-member and a missing id both get the same 403; a member
+without the permission gets the reason in the envelope data.
 """
 
 from uuid import UUID

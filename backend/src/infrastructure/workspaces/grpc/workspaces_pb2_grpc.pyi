@@ -111,6 +111,7 @@ class MemberControllerStub:
     Leave: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberLeaveRequest, _workspaces_pb2.MemberEmpty]
     List: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberListRequest, _workspaces_pb2.MemberList]
     Remove: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberRemoveRequest, _workspaces_pb2.MemberEmpty]
+    SetRole: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.MemberSetRoleRequest, _workspaces_pb2.Member]
 
 @_typing.type_check_only
 class MemberControllerAsyncStub(MemberControllerStub):
@@ -118,6 +119,7 @@ class MemberControllerAsyncStub(MemberControllerStub):
     Leave: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberLeaveRequest, _workspaces_pb2.MemberEmpty]  # type: ignore[assignment]
     List: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberListRequest, _workspaces_pb2.MemberList]  # type: ignore[assignment]
     Remove: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberRemoveRequest, _workspaces_pb2.MemberEmpty]  # type: ignore[assignment]
+    SetRole: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.MemberSetRoleRequest, _workspaces_pb2.Member]  # type: ignore[assignment]
 
 class MemberControllerServicer(metaclass=_abc_1.ABCMeta):
     @_abc_1.abstractmethod
@@ -141,7 +143,85 @@ class MemberControllerServicer(metaclass=_abc_1.ABCMeta):
         context: _ServicerContext,
     ) -> _typing.Union[_workspaces_pb2.MemberEmpty, _abc.Awaitable[_workspaces_pb2.MemberEmpty]]: ...
 
+    @_abc_1.abstractmethod
+    def SetRole(
+        self,
+        request: _workspaces_pb2.MemberSetRoleRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Member, _abc.Awaitable[_workspaces_pb2.Member]]: ...
+
 def add_MemberControllerServicer_to_server(servicer: MemberControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
+class PermissionControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> PermissionControllerAsyncStub: ...
+    Check: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.PermissionCheckRequest, _workspaces_pb2.PermissionCheckResponse]
+
+@_typing.type_check_only
+class PermissionControllerAsyncStub(PermissionControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Check: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.PermissionCheckRequest, _workspaces_pb2.PermissionCheckResponse]  # type: ignore[assignment]
+
+class PermissionControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Check(
+        self,
+        request: _workspaces_pb2.PermissionCheckRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.PermissionCheckResponse, _abc.Awaitable[_workspaces_pb2.PermissionCheckResponse]]: ...
+
+def add_PermissionControllerServicer_to_server(servicer: PermissionControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
+class RoleControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> RoleControllerAsyncStub: ...
+    Create: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.RoleCreateRequest, _workspaces_pb2.Role]
+    Delete: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.RoleDeleteRequest, _workspaces_pb2.RoleEmpty]
+    List: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.RoleListRequest, _workspaces_pb2.RoleList]
+    Update: _grpc.UnaryUnaryMultiCallable[_workspaces_pb2.RoleUpdateRequest, _workspaces_pb2.Role]
+
+@_typing.type_check_only
+class RoleControllerAsyncStub(RoleControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Create: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.RoleCreateRequest, _workspaces_pb2.Role]  # type: ignore[assignment]
+    Delete: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.RoleDeleteRequest, _workspaces_pb2.RoleEmpty]  # type: ignore[assignment]
+    List: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.RoleListRequest, _workspaces_pb2.RoleList]  # type: ignore[assignment]
+    Update: _aio.UnaryUnaryMultiCallable[_workspaces_pb2.RoleUpdateRequest, _workspaces_pb2.Role]  # type: ignore[assignment]
+
+class RoleControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Create(
+        self,
+        request: _workspaces_pb2.RoleCreateRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Role, _abc.Awaitable[_workspaces_pb2.Role]]: ...
+
+    @_abc_1.abstractmethod
+    def Delete(
+        self,
+        request: _workspaces_pb2.RoleDeleteRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.RoleEmpty, _abc.Awaitable[_workspaces_pb2.RoleEmpty]]: ...
+
+    @_abc_1.abstractmethod
+    def List(
+        self,
+        request: _workspaces_pb2.RoleListRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.RoleList, _abc.Awaitable[_workspaces_pb2.RoleList]]: ...
+
+    @_abc_1.abstractmethod
+    def Update(
+        self,
+        request: _workspaces_pb2.RoleUpdateRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_workspaces_pb2.Role, _abc.Awaitable[_workspaces_pb2.Role]]: ...
+
+def add_RoleControllerServicer_to_server(servicer: RoleControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
 
 class WorkspaceControllerStub:
     @_typing.overload

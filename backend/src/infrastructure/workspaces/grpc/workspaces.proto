@@ -18,6 +18,18 @@ service MemberController {
     rpc Leave(MemberLeaveRequest) returns (MemberEmpty) {}
     rpc List(MemberListRequest) returns (MemberList) {}
     rpc Remove(MemberRemoveRequest) returns (MemberEmpty) {}
+    rpc SetRole(MemberSetRoleRequest) returns (Member) {}
+}
+
+service PermissionController {
+    rpc Check(PermissionCheckRequest) returns (PermissionCheckResponse) {}
+}
+
+service RoleController {
+    rpc Create(RoleCreateRequest) returns (Role) {}
+    rpc Delete(RoleDeleteRequest) returns (RoleEmpty) {}
+    rpc List(RoleListRequest) returns (RoleList) {}
+    rpc Update(RoleUpdateRequest) returns (Role) {}
 }
 
 service WorkspaceController {
@@ -42,6 +54,8 @@ message Invitation {
     int32 uses = 10;
     string state = 11;
     string token = 12;
+    string role_id = 13;
+    string role_name = 14;
 }
 
 message InvitationAcceptRequest {
@@ -52,11 +66,13 @@ message InvitationCreateLinkRequest {
     string workspace_id = 1;
     int32 expires_in = 2;
     int32 max_uses = 3;
+    string role_id = 4;
 }
 
 message InvitationCreateRequest {
     string workspace_id = 1;
     repeated string emails = 2;
+    string role_id = 3;
 }
 
 message InvitationCreateResponse {
@@ -97,6 +113,8 @@ message Member {
     string joined_at = 4;
     bool is_owner = 5;
     string status = 6;
+    string role_id = 7;
+    string role_name = 8;
 }
 
 message MemberEmpty {
@@ -117,6 +135,79 @@ message MemberListRequest {
 message MemberRemoveRequest {
     string workspace_id = 1;
     string user_id = 2;
+}
+
+message MemberSetRoleRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+    string role_id = 3;
+}
+
+message PermissionAnswer {
+    string key = 1;
+    bool allowed = 2;
+}
+
+message PermissionArea {
+    string area = 1;
+    repeated PermissionInfo permissions = 2;
+}
+
+message PermissionCheckRequest {
+    string workspace_id = 1;
+    repeated string keys = 2;
+}
+
+message PermissionCheckResponse {
+    repeated PermissionAnswer answers = 1;
+    string role_id = 2;
+    string role_name = 3;
+}
+
+message PermissionInfo {
+    string key = 1;
+    string label = 2;
+}
+
+message Role {
+    string id = 1;
+    string name = 2;
+    bool is_builtin = 3;
+    repeated string permissions = 4;
+    int32 member_count = 5;
+    int32 version = 6;
+}
+
+message RoleCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    repeated string permissions = 3;
+}
+
+message RoleDeleteRequest {
+    string workspace_id = 1;
+    string id = 2;
+    string reassign_to = 3;
+}
+
+message RoleEmpty {
+}
+
+message RoleList {
+    repeated Role roles = 1;
+    repeated PermissionArea registry = 2;
+}
+
+message RoleListRequest {
+    string workspace_id = 1;
+}
+
+message RoleUpdateRequest {
+    string workspace_id = 1;
+    string id = 2;
+    string name = 3;
+    repeated string permissions = 4;
+    int32 expected_version = 5;
 }
 
 message Workspace {

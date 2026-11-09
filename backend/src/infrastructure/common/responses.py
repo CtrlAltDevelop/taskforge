@@ -126,6 +126,9 @@ class ResponseTitle(StrEnum):
     INVITE_NOT_PENDING = "INVITE_NOT_PENDING"
     INVITE_BEFORE_REMOVAL = "INVITE_BEFORE_REMOVAL"
     OWNER_PROTECTED = "OWNER_PROTECTED"
+    PERMISSION_DENIED_REASON = "PERMISSION_DENIED_REASON"
+    ROLE_BUILTIN = "ROLE_BUILTIN"
+    ROLE_NAME_TAKEN = "ROLE_NAME_TAKEN"
 
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
@@ -162,7 +165,10 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.INVITE_EMAIL_MISMATCH: "This invitation is for a different email.",
     ResponseTitle.INVITE_NOT_PENDING: "This invitation is no longer pending.",
     ResponseTitle.INVITE_BEFORE_REMOVAL: "This invitation predates your removal.",
-    ResponseTitle.OWNER_PROTECTED: "The workspace owner cannot be removed or leave.",
+    ResponseTitle.OWNER_PROTECTED: "The last workspace owner cannot be demoted, removed or leave.",
+    ResponseTitle.PERMISSION_DENIED_REASON: "Your role lacks a permission this needs.",
+    ResponseTitle.ROLE_BUILTIN: "Built-in roles cannot be changed or deleted.",
+    ResponseTitle.ROLE_NAME_TAKEN: "A role with that name already exists.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",
