@@ -12,6 +12,9 @@ import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/account/home_screen.dart';
 import 'package:taskforge/features/auth/sign_in_screen.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+
+import '../workspaces/fakes.dart' show FakeWorkspaceClient, ws;
 
 class _FakeApi implements AuthApi {
   AuthApiException? failWith;
@@ -119,6 +122,9 @@ Future<(AuthSession, _FakeApi)> _pump(
       overrides: [
         authSessionProvider.overrideWithValue(session),
         accountClientProvider.overrideWithValue(_FakeAccounts()),
+        workspaceClientProvider.overrideWithValue(
+          FakeWorkspaceClient([ws('w1', 'Acme')]),
+        ),
       ],
       child: const TaskForgeApp(),
     ),

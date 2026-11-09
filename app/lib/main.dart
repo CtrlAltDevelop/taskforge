@@ -8,6 +8,8 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/core/config.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/features/workspaces/data/workspace_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,10 @@ Future<void> main() async {
   await session.restore();
   runApp(
     ProviderScope(
-      overrides: [authSessionProvider.overrideWithValue(session)],
+      overrides: [
+        authSessionProvider.overrideWithValue(session),
+        workspaceStoreProvider.overrideWithValue(SecureWorkspaceStore()),
+      ],
       child: const TaskForgeApp(),
     ),
   );

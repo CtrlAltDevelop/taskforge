@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -11,10 +13,31 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
+    final workspaces = ref.watch(workspacesProvider);
+    if (workspaces.hasError && !workspaces.hasValue) {
+      return Scaffold(
+        body: Center(
+          child: TextButton(
+            key: const Key('retry-workspaces'),
+            onPressed: () => ref.invalidate(workspacesProvider),
+            child: const Text('Could not load your workspaces. Retry'),
+          ),
+        ),
+      );
+    }
+    if (!workspaces.hasValue) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TaskForge'),
+        title: const WorkspaceSwitcher(),
         actions: [
+          IconButton(
+            key: const Key('open-workspace-settings'),
+            tooltip: 'Workspace settings',
+            icon: const Icon(Icons.settings),
+            onPressed: () => context.push('/workspaces/settings'),
+          ),
           IconButton(
             key: const Key('sign-out'),
             tooltip: 'Sign out',
