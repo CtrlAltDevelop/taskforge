@@ -37,6 +37,9 @@ Security settings page (QR, codes download/copy), 2FA prompt screen, “Continue
 - [ ] Login via a local Keycloak test instance works on web and one native platform
 - [ ] Forged/unverified-email SSO attempt is refused
 
+## Known starter bug to fix first
+On PostgreSQL, a social profile value longer than the column (`varchar(150)`) returns 500 instead of being clipped (`test_oversized_profile_values_are_clipped_to_their_columns`, deselected in `make test-postgres`). SQLite never enforces lengths, so it only shows on Postgres. Fix and re-enable the test before enabling any `oauth_*` provider.
+
 ## Tests
 TOTP time-step tests, replay rejection, OIDC validation matrix, takeover attempt, policy enforcement.
 
