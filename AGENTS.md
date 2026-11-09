@@ -47,7 +47,9 @@ taskforge/
    Flutter: unit + widget tests; integration test for the main flow.
 4. A phase is done only when every item in its **Acceptance criteria** passes and
    the docs are updated if behaviour differed from the plan.
-5. Commits: `<type>: <description>` (feat, fix, refactor, docs, test, chore, perf, ci).
+5. Commits: `<emoji> <type>(<scope>): <subject>` — types add, fix, refactor, perf,
+   style, test, document, build, ci, chore, ops, revert, release, remove, upgrade;
+   emoji table and rules in `.agents/skills/commit/SKILL.md`. No attribution lines.
 6. Contracts first: change the gRPC service class or Ninja schema, run `make proto`, then code.
 7. Every query is workspace-scoped. Never trust a client-supplied workspace id
    without checking membership. (Multi-tenancy bugs are the #1 risk.)
