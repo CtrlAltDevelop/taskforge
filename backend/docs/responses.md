@@ -137,6 +137,16 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `OAUTH_STATE_MISSING` | The callback arrived without its state. |
 | `OAUTH_FAILED` | The provider did not complete the sign-in. |
 
+### Workspaces
+
+| Title | Means |
+| --- | --- |
+| `VERSION_CONFLICT` | Someone else changed this first; reload and retry. |
+| `SLUG_INVALID` | That URL name is malformed or reserved. |
+| `SLUG_TAKEN` | That URL name is already in use. |
+| `CONFIRMATION_MISMATCH` | The confirmation text does not match. |
+| `UPLOAD_INVALID` | The uploaded file is too large or not a supported image. |
+
 ## Writing an endpoint
 
 Nothing. Return the schema you would have returned anyway:

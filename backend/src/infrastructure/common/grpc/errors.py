@@ -30,6 +30,10 @@ STATUS_CODES = {
 async def abort(context: Any, error: ApiError) -> None:
     """End the call with the status and the title this refusal carries."""
     code = STATUS_CODES.get(error.status, grpc.StatusCode.UNKNOWN)
+    # An optimistic-lock miss is ABORTED, not ALREADY_EXISTS: the client should
+    # re-read and retry (docs/01-architecture.md section 6).
+    if error.title is ResponseTitle.VERSION_CONFLICT:
+        code = grpc.StatusCode.ABORTED
     await context.abort(code, f"{error.title}: {error}")
 
 

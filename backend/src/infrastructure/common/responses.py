@@ -113,6 +113,13 @@ class ResponseTitle(StrEnum):
     OAUTH_STATE_MISSING = "OAUTH_STATE_MISSING"
     OAUTH_FAILED = "OAUTH_FAILED"
 
+    # Workspaces
+    VERSION_CONFLICT = "VERSION_CONFLICT"
+    SLUG_INVALID = "SLUG_INVALID"
+    SLUG_TAKEN = "SLUG_TAKEN"
+    CONFIRMATION_MISMATCH = "CONFIRMATION_MISMATCH"
+    UPLOAD_INVALID = "UPLOAD_INVALID"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -137,6 +144,11 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.ACCOUNT_HAS_NO_EMAIL: "The account has no email address to send to.",
     ResponseTitle.WEAK_PASSWORD: "The password does not meet the policy.",
     ResponseTitle.INCORRECT_PASSWORD: "The current password given is not this account's.",
+    ResponseTitle.VERSION_CONFLICT: "Someone else changed this first; reload and retry.",
+    ResponseTitle.SLUG_INVALID: "That URL name is malformed or reserved.",
+    ResponseTitle.SLUG_TAKEN: "That URL name is already in use.",
+    ResponseTitle.CONFIRMATION_MISMATCH: "The confirmation text does not match.",
+    ResponseTitle.UPLOAD_INVALID: "The uploaded file is too large or not a supported image.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

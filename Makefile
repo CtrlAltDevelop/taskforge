@@ -33,6 +33,7 @@ grpc:
 # Add each new .proto to DART_PROTOS as phases introduce them.
 DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/accounts/grpc/accounts.proto \
+	infrastructure/workspaces/grpc/workspaces.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos

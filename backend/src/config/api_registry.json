@@ -7,6 +7,13 @@
         "router": "infrastructure.common.rest.api.router",
         "tag": "Health",
         "description": "Liveness and readiness probes, for a load balancer and an orchestrator. Public, so a probe needs no credential."
+      },
+      {
+        "app_config": "infrastructure.workspaces.apps.WorkspacesConfig",
+        "prefix": "/workspaces",
+        "router": "infrastructure.workspaces.rest.api.router",
+        "tag": "Workspaces",
+        "description": "The top-level container every project and task belongs to. Logo upload lives here; the rest is gRPC."
       }
     ]
   }

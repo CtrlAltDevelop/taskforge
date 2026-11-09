@@ -9,7 +9,7 @@ themselves — see [keeping these pages honest](#keeping-these-pages-honest).
 
 | | |
 | --- | --- |
-| Always installed | [`common`](common.md), [`accounts`](accounts.md) |
+| Always installed | [`common`](common.md), [`accounts`](accounts.md), [`workspaces`](workspaces.md) |
 | Login methods | [`auth_password`](auth/password.md), [`auth_email_code`](auth/email-code.md), [`auth_sms_code`](auth/sms-code.md), [`auth_magic_link`](auth/magic-link.md) |
 | Second factors | [`auth_twofactor`](auth/twofactor.md) |
 | Social providers | [`oauth_google`](oauth/google.md), [`oauth_apple`](oauth/apple.md), [`oauth_microsoft`](oauth/microsoft.md), [`oauth_github`](oauth/github.md) |
@@ -28,6 +28,8 @@ themselves — see [keeping these pages honest](#keeping-these-pages-honest).
   shows the payload that goes inside it.
 - **[Accounts](accounts.md)** — the user model every login resolves to, and the
   profile attached to it. Always installed.
+- **[Workspaces](workspaces.md)** — the tenant container, the scoping helper every
+  later phase uses, and the logo upload. Always installed.
 - **[Credentials and token modes](credentials.md)** — what every login hands back,
   and how to choose between the three token modes. Read this first; every method
   below ends by minting one of these.
