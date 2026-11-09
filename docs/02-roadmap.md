@@ -7,7 +7,8 @@ Groups are just for reading — a phase is still exactly one feature.
 
 - **Phase 00** — implemented on `develop`; verified on web (real browser) and native Dart. Not yet verified: Android, iOS, Windows, Linux runs, CI on GitHub, fresh-clone boot.
 - **Phase 01** — implemented on `develop`: backend policy + refresh grace window + Postgres, Flutter sign-in/up, sessions, gRPC `Me`. Verified: backend suite (SQLite and Postgres), 86 Flutter tests, a live end-to-end run, and the web UI in a real browser. Not yet verified: CI on GitHub (incl. the new Postgres job), the new UI on macOS/Android/iOS.
-- Phases 02–38 — planned.
+- **Phase 02** — implemented on `develop`: workspaces backend (`WorkspaceController`, logo upload, scoping helpers, `purge_workspaces`) and Flutter onboarding/switcher/settings. Verified by tests only; not run in a real browser or on a device. WS non-member close deferred to phase 16.
+- Phases 03–38 — planned.
 
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)

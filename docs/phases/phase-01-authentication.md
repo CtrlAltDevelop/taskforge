@@ -1,6 +1,6 @@
 # Phase 01 — Authentication
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Email + password sign-up, sign-in, sign-out, and session refresh that works identically on REST, gRPC and WebSocket.
