@@ -8,6 +8,8 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/tasks/presentation/task_detail.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 /// Width from which the detail opens as a side panel instead of a page.
 const wideBreakpoint = 900.0;
@@ -84,6 +86,7 @@ class _TaskList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(taskListProvider(project.id));
+    final flow = ref.watch(workflowProvider(project.id)).value;
     final canCreate =
         !project.isArchived &&
         ref.watch(permissionSetProvider).can(Perm.taskCreate);
@@ -91,12 +94,17 @@ class _TaskList extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (canCreate) QuickAdd(projectId: project.id),
-        Expanded(child: _body(context, ref, state)),
+        Expanded(child: _body(context, ref, state, flow)),
       ],
     );
   }
 
-  Widget _body(BuildContext context, WidgetRef ref, TaskListState state) {
+  Widget _body(
+    BuildContext context,
+    WidgetRef ref,
+    TaskListState state,
+    Workflow? flow,
+  ) {
     if (state.error != null && state.tasks.isEmpty) {
       return Center(
         child: TextButton(
@@ -126,6 +134,7 @@ class _TaskList extends ConsumerWidget {
         final task = state.tasks[i];
         return TaskTile(
           task: task,
+          statusColor: flow?.statusById(task.statusId)?.swatch,
           selected: task.id == selected,
           onTap: () => onOpen(task),
         );
@@ -140,9 +149,13 @@ class TaskTile extends StatelessWidget {
     required this.task,
     required this.onTap,
     this.selected = false,
+    this.statusColor,
   });
 
   final Task task;
+
+  /// The colour of the task's status (grey until the workflow has loaded).
+  final Color? statusColor;
   final VoidCallback onTap;
   final bool selected;
 
@@ -158,16 +171,30 @@ class TaskTile extends StatelessWidget {
     ),
     title: Text(
       task.title,
-      style: task.status == TaskStatus.done
+      style: task.statusCategory == StatusCategory.done
           ? const TextStyle(decoration: TextDecoration.lineThrough)
           : null,
     ),
-    subtitle: Text(
-      [
-        task.displayId,
-        task.status.label,
-        if (task.dueDate.isNotEmpty) 'due ${task.dueDate}',
-      ].join(' · '),
+    subtitle: Row(
+      children: [
+        Icon(
+          Icons.circle,
+          size: 10,
+          color: statusColor ?? Colors.grey,
+          semanticLabel: task.statusName,
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            [
+              task.displayId,
+              task.statusName,
+              if (task.dueDate.isNotEmpty) 'due ${task.dueDate}',
+            ].join(' · '),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     ),
     trailing: task.assigneeIds.isEmpty
         ? null

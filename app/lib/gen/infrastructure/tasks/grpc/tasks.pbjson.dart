@@ -37,6 +37,8 @@ const Task$json = {
     {'1': 'created_at', '3': 16, '4': 1, '5': 9, '10': 'createdAt'},
     {'1': 'updated_at', '3': 17, '4': 1, '5': 9, '10': 'updatedAt'},
     {'1': 'deleted_at', '3': 18, '4': 1, '5': 9, '10': 'deletedAt'},
+    {'1': 'status_name', '3': 19, '4': 1, '5': 9, '10': 'statusName'},
+    {'1': 'status_category', '3': 20, '4': 1, '5': 9, '10': 'statusCategory'},
   ],
 };
 
@@ -51,7 +53,8 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'YXNzaWduZWVJZHMSHQoKY3JlYXRlZF9ieRgNIAEoCVIJY3JlYXRlZEJ5EhgKB3ZlcnNpb24YDi'
     'ABKAVSB3ZlcnNpb24SGgoIcG9zaXRpb24YDyABKAlSCHBvc2l0aW9uEh0KCmNyZWF0ZWRfYXQY'
     'ECABKAlSCWNyZWF0ZWRBdBIdCgp1cGRhdGVkX2F0GBEgASgJUgl1cGRhdGVkQXQSHQoKZGVsZX'
-    'RlZF9hdBgSIAEoCVIJZGVsZXRlZEF0');
+    'RlZF9hdBgSIAEoCVIJZGVsZXRlZEF0Eh8KC3N0YXR1c19uYW1lGBMgASgJUgpzdGF0dXNOYW1l'
+    'EicKD3N0YXR1c19jYXRlZ29yeRgUIAEoCVIOc3RhdHVzQ2F0ZWdvcnk=');
 
 @$core.Deprecated('Use taskCreateRequestDescriptor instead')
 const TaskCreateRequest$json = {
@@ -141,6 +144,25 @@ const TaskListTrashRequest$json = {
 final $typed_data.Uint8List taskListTrashRequestDescriptor = $convert.base64Decode(
     'ChRUYXNrTGlzdFRyYXNoUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
     'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZA==');
+
+@$core.Deprecated('Use taskMoveRequestDescriptor instead')
+const TaskMoveRequest$json = {
+  '1': 'TaskMoveRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'expected_version', '3': 4, '4': 1, '5': 5, '10': 'expectedVersion'},
+    {'1': 'status', '3': 5, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `TaskMoveRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskMoveRequestDescriptor = $convert.base64Decode(
+    'Cg9UYXNrTW92ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
+    'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSDgoCaWQYAyABKAlSAmlkEikKEGV4cGVjdGVk'
+    'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhIWCgZzdGF0dXMYBSABKAlSBnN0YXR1cw'
+    '==');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {

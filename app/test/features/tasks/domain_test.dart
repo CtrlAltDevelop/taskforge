@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 import 'fakes.dart';
 
@@ -9,11 +10,21 @@ void main() {
     final base = task('t1', 'Old', priority: TaskPriority.low, version: 3);
 
     final next = base.apply(
-      const TaskPatch(title: 'New', status: TaskStatus.done),
+      const TaskPatch(
+        title: 'New',
+        status: WorkflowStatus(
+          id: 'done',
+          name: 'Done',
+          category: StatusCategory.done,
+        ),
+      ),
     );
 
     expect(next.title, 'New');
-    expect(next.status, TaskStatus.done);
+    expect(
+      (next.statusId, next.statusName, next.statusCategory),
+      ('done', 'Done', StatusCategory.done),
+    );
     expect(next.priority, TaskPriority.low);
     expect(next.version, 3);
   });
@@ -38,9 +49,7 @@ void main() {
     expect(patch.isEmpty, isFalse);
   });
 
-  test('status and priority parse the wire names, unknown ones fall back', () {
-    expect(TaskStatus.parse('in_progress'), TaskStatus.inProgress);
-    expect(TaskStatus.parse('???'), TaskStatus.todo);
+  test('priority parses the wire names, unknown ones fall back', () {
     expect(TaskPriority.parse('urgent'), TaskPriority.urgent);
     expect(TaskPriority.parse('???'), TaskPriority.none);
   });

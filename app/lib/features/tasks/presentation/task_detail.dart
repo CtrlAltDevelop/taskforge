@@ -11,6 +11,8 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 /// One task's fields. A side panel on wide screens, a page on narrow ones;
 /// every edit sends only that field and shows at once.
@@ -86,55 +88,58 @@ class TaskDetail extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: DropdownButtonFormField<TaskStatus>(
-                key: const Key('detail-status'),
-                isExpanded: true,
-                initialValue: task.status,
-                decoration: const InputDecoration(labelText: 'Status'),
-                items: [
-                  for (final s in TaskStatus.values)
-                    DropdownMenuItem(value: s, child: Text(s.label)),
-                ],
-                onChanged: canEdit
-                    ? (s) {
-                        if (s != null && s != task.status) {
-                          saveTask(context, ref, task, TaskPatch(status: s));
-                        }
-                      }
-                    : null,
+              // Keyed by the value so a rollback (a refused move) shows again.
+              child: KeyedSubtree(
+                key: ValueKey('status-${task.statusId}'),
+                child: _StatusPicker(
+                  task: task,
+                  workflow: ref.watch(workflowProvider(project.id)).value,
+                  roleId: permissions.roleId,
+                  enabled: canEdit,
+                  onPick: (s) =>
+                      saveTask(context, ref, task, TaskPatch(status: s)),
+                ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: DropdownButtonFormField<TaskPriority>(
-                key: const Key('detail-priority'),
-                isExpanded: true,
-                initialValue: task.priority,
-                decoration: const InputDecoration(labelText: 'Priority'),
-                items: [
-                  for (final p in TaskPriority.values)
-                    DropdownMenuItem(
-                      value: p,
-                      child: Row(
-                        children: [
-                          Icon(
-                            priorityIcon(p),
-                            color: priorityColor(p),
-                            size: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(p.label),
-                        ],
+              child: KeyedSubtree(
+                key: ValueKey('priority-${task.priority.wire}'),
+                child: DropdownButtonFormField<TaskPriority>(
+                  key: const Key('detail-priority'),
+                  isExpanded: true,
+                  initialValue: task.priority,
+                  decoration: const InputDecoration(labelText: 'Priority'),
+                  items: [
+                    for (final p in TaskPriority.values)
+                      DropdownMenuItem(
+                        value: p,
+                        child: Row(
+                          children: [
+                            Icon(
+                              priorityIcon(p),
+                              color: priorityColor(p),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(p.label),
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-                onChanged: canEdit
-                    ? (p) {
-                        if (p != null && p != task.priority) {
-                          saveTask(context, ref, task, TaskPatch(priority: p));
+                  ],
+                  onChanged: canEdit
+                      ? (p) {
+                          if (p != null && p != task.priority) {
+                            saveTask(
+                              context,
+                              ref,
+                              task,
+                              TaskPatch(priority: p),
+                            );
+                          }
                         }
-                      }
-                    : null,
+                      : null,
+                ),
               ),
             ),
           ],
@@ -278,6 +283,67 @@ class TaskDetail extends ConsumerWidget {
     } on TaskException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
     }
+  }
+}
+
+/// The status of a task: only where the workflow lets it go (the current one is
+/// always there). Until the workflow has loaded it shows the current status alone.
+class _StatusPicker extends StatelessWidget {
+  const _StatusPicker({
+    required this.task,
+    required this.workflow,
+    required this.roleId,
+    required this.enabled,
+    required this.onPick,
+  });
+
+  final Task task;
+  final Workflow? workflow;
+  final String roleId;
+  final bool enabled;
+  final void Function(WorkflowStatus) onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final flow = workflow;
+    final options = flow == null
+        ? [
+            WorkflowStatus(
+              id: task.statusId,
+              name: task.statusName,
+              category: task.statusCategory,
+            ),
+          ]
+        : flow.targets(
+            from: task.statusId,
+            hasAssignee: task.assigneeIds.isNotEmpty,
+            roleId: roleId,
+          );
+    return DropdownButtonFormField<String>(
+      key: const Key('detail-status'),
+      isExpanded: true,
+      initialValue: task.statusId,
+      decoration: const InputDecoration(labelText: 'Status'),
+      items: [
+        for (final s in options)
+          DropdownMenuItem(
+            value: s.id,
+            child: Row(
+              children: [
+                Icon(Icons.circle, size: 12, color: s.swatch),
+                const SizedBox(width: 8),
+                Flexible(child: Text(s.name, overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+      ],
+      onChanged: enabled && flow != null
+          ? (id) {
+              final target = flow.statusById(id ?? '');
+              if (target != null && target.id != task.statusId) onPick(target);
+            }
+          : null,
+    );
   }
 }
 

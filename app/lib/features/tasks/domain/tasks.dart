@@ -1,22 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 const maxTitleLength = 500;
-
-enum TaskStatus {
-  todo('todo', 'To do'),
-  inProgress('in_progress', 'In progress'),
-  done('done', 'Done');
-
-  const TaskStatus(this.wire, this.label);
-
-  final String wire;
-  final String label;
-
-  static TaskStatus parse(String wire) =>
-      values.firstWhere((s) => s.wire == wire, orElse: () => TaskStatus.todo);
-}
 
 enum TaskPriority {
   urgent('urgent', 'Urgent'),
@@ -43,7 +30,9 @@ class Task {
     required this.displayId,
     required this.title,
     this.description = '',
-    this.status = TaskStatus.todo,
+    required this.statusId,
+    this.statusName = '',
+    this.statusCategory = StatusCategory.notStarted,
     this.priority = TaskPriority.none,
     this.startDate = '',
     this.dueDate = '',
@@ -63,7 +52,12 @@ class Task {
 
   /// The rich-text document as JSON, empty when there is none.
   final String description;
-  final TaskStatus status;
+
+  /// One of the project's statuses (see the workflow); the name and category
+  /// are copies for display.
+  final String statusId;
+  final String statusName;
+  final StatusCategory statusCategory;
   final TaskPriority priority;
 
   /// `YYYY-MM-DD`, empty when unset.
@@ -84,7 +78,9 @@ class Task {
     displayId: displayId,
     title: patch.title ?? title,
     description: patch.description ?? description,
-    status: patch.status ?? status,
+    statusId: patch.status?.id ?? statusId,
+    statusName: patch.status?.name ?? statusName,
+    statusCategory: patch.status?.category ?? statusCategory,
     priority: patch.priority ?? priority,
     startDate: patch.startDate ?? startDate,
     dueDate: patch.dueDate ?? dueDate,
@@ -98,7 +94,7 @@ class Task {
   String valueOf(String name) => switch (name) {
     'title' => title,
     'description' => docToMarkdown(description),
-    'status' => status.label,
+    'status' => statusName,
     'priority' => priority.label,
     'start_date' => startDate,
     'due_date' => dueDate,
@@ -123,7 +119,9 @@ class TaskPatch {
 
   final String? title;
   final String? description;
-  final TaskStatus? status;
+
+  /// Only its id is sent; the rest lets the list show the move at once.
+  final WorkflowStatus? status;
   final TaskPriority? priority;
   final String? startDate;
   final String? dueDate;
@@ -133,7 +131,11 @@ class TaskPatch {
   factory TaskPatch.of(Task task) => TaskPatch(
     title: task.title,
     description: task.description,
-    status: task.status,
+    status: WorkflowStatus(
+      id: task.statusId,
+      name: task.statusName,
+      category: task.statusCategory,
+    ),
     priority: task.priority,
     startDate: task.startDate,
     dueDate: task.dueDate,
@@ -181,6 +183,7 @@ class TaskConflict {
 
 enum TaskFailure {
   conflict,
+  transitionNotAllowed,
   denied,
   forbidden,
   invalid,
@@ -206,6 +209,8 @@ String taskErrorMessage(Object error) {
   if (error is! TaskException) return 'Something went wrong. Try again.';
   return switch (error.failure) {
     TaskFailure.conflict => 'Someone else changed this task first.',
+    TaskFailure.transitionNotAllowed =>
+      error.detail ?? 'The workflow does not allow that move.',
     TaskFailure.denied => error.detail ?? 'You do not have permission.',
     TaskFailure.forbidden => 'You do not have permission to do that.',
     TaskFailure.invalid => error.detail ?? 'Check the values and try again.',

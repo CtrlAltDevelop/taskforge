@@ -68,6 +68,13 @@ class TaskControllerClient extends $grpc.Client {
     return $createUnaryCall(_$listTrash, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.Task> move(
+    $0.TaskMoveRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$move, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.Task> restore(
     $0.TaskRestoreRequest request, {
     $grpc.CallOptions? options,
@@ -105,6 +112,10 @@ class TaskControllerClient extends $grpc.Client {
           '/config.tasks.TaskController/ListTrash',
           ($0.TaskListTrashRequest value) => value.writeToBuffer(),
           $0.TaskTrash.fromBuffer);
+  static final _$move = $grpc.ClientMethod<$0.TaskMoveRequest, $0.Task>(
+      '/config.tasks.TaskController/Move',
+      ($0.TaskMoveRequest value) => value.writeToBuffer(),
+      $0.Task.fromBuffer);
   static final _$restore = $grpc.ClientMethod<$0.TaskRestoreRequest, $0.Task>(
       '/config.tasks.TaskController/Restore',
       ($0.TaskRestoreRequest value) => value.writeToBuffer(),
@@ -156,6 +167,13 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.TaskListTrashRequest.fromBuffer(value),
         ($0.TaskTrash value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TaskMoveRequest, $0.Task>(
+        'Move',
+        move_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.TaskMoveRequest.fromBuffer(value),
+        ($0.Task value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TaskRestoreRequest, $0.Task>(
         'Restore',
         restore_Pre,
@@ -211,6 +229,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
 
   $async.Future<$0.TaskTrash> listTrash(
       $grpc.ServiceCall call, $0.TaskListTrashRequest request);
+
+  $async.Future<$0.Task> move_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TaskMoveRequest> $request) async {
+    return move($call, await $request);
+  }
+
+  $async.Future<$0.Task> move(
+      $grpc.ServiceCall call, $0.TaskMoveRequest request);
 
   $async.Future<$0.Task> restore_Pre($grpc.ServiceCall $call,
       $async.Future<$0.TaskRestoreRequest> $request) async {

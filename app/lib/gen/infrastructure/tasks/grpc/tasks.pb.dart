@@ -36,6 +36,8 @@ class Task extends $pb.GeneratedMessage {
     $core.String? createdAt,
     $core.String? updatedAt,
     $core.String? deletedAt,
+    $core.String? statusName,
+    $core.String? statusCategory,
   }) {
     final result = Task._();
     if (id != null) result.id = id;
@@ -56,6 +58,8 @@ class Task extends $pb.GeneratedMessage {
     if (createdAt != null) result.createdAt = createdAt;
     if (updatedAt != null) result.updatedAt = updatedAt;
     if (deletedAt != null) result.deletedAt = deletedAt;
+    if (statusName != null) result.statusName = statusName;
+    if (statusCategory != null) result.statusCategory = statusCategory;
     return result;
   }
 
@@ -90,6 +94,8 @@ class Task extends $pb.GeneratedMessage {
     ..aOS(16, _omitFieldNames ? '' : 'createdAt')
     ..aOS(17, _omitFieldNames ? '' : 'updatedAt')
     ..aOS(18, _omitFieldNames ? '' : 'deletedAt')
+    ..aOS(19, _omitFieldNames ? '' : 'statusName')
+    ..aOS(20, _omitFieldNames ? '' : 'statusCategory')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -267,6 +273,24 @@ class Task extends $pb.GeneratedMessage {
   $core.bool hasDeletedAt() => $_has(17);
   @$pb.TagNumber(18)
   void clearDeletedAt() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.String get statusName => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set statusName($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasStatusName() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearStatusName() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get statusCategory => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set statusCategory($core.String value) => $_setString(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasStatusCategory() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearStatusCategory() => $_clearField(20);
 }
 
 class TaskCreateRequest extends $pb.GeneratedMessage {
@@ -763,6 +787,111 @@ class TaskListTrashRequest extends $pb.GeneratedMessage {
   $core.bool hasProjectId() => $_has(1);
   @$pb.TagNumber(2)
   void clearProjectId() => $_clearField(2);
+}
+
+class TaskMoveRequest extends $pb.GeneratedMessage {
+  factory TaskMoveRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? id,
+    $core.int? expectedVersion,
+    $core.String? status,
+  }) {
+    final result = TaskMoveRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (id != null) result.id = id;
+    if (expectedVersion != null) result.expectedVersion = expectedVersion;
+    if (status != null) result.status = status;
+    return result;
+  }
+
+  TaskMoveRequest._();
+
+  factory TaskMoveRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskMoveRequest()..mergeFromBuffer(data, registry);
+  factory TaskMoveRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskMoveRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TaskMoveRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TaskMoveRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'id')
+    ..aI(4, _omitFieldNames ? '' : 'expectedVersion')
+    ..aOS(5, _omitFieldNames ? '' : 'status')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskMoveRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskMoveRequest copyWith(void Function(TaskMoveRequest) updates) =>
+      super.copyWith((message) => updates(message as TaskMoveRequest))
+          as TaskMoveRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TaskMoveRequest() / TaskMoveRequest.new instead')
+  static TaskMoveRequest create() => TaskMoveRequest._();
+  static $pb.GeneratedMessage $_createMessage() => TaskMoveRequest._();
+  @$core.override
+  TaskMoveRequest createEmptyInstance() => TaskMoveRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TaskMoveRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TaskMoveRequest>(
+          TaskMoveRequest.$_createMessage);
+  static TaskMoveRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get id => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set id($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get expectedVersion => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set expectedVersion($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasExpectedVersion() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearExpectedVersion() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get status => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set status($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStatus() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStatus() => $_clearField(5);
 }
 
 class TaskRestoreRequest extends $pb.GeneratedMessage {

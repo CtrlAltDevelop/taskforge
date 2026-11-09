@@ -69,6 +69,19 @@ class _Sections extends StatelessWidget {
               project: project,
             ),
             const SizedBox(height: 24),
+            Card(
+              child: ListTile(
+                key: const Key('open-workflow'),
+                leading: const Icon(Icons.account_tree_outlined),
+                title: const Text('Workflow'),
+                subtitle: const Text(
+                  'Statuses, their categories and which moves are allowed.',
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.go('/projects/${project.id}/workflow'),
+              ),
+            ),
+            const SizedBox(height: 24),
             FeaturesSection(project: project, info: featureInfo),
             if (project.isPrivate) ...[
               const SizedBox(height: 24),

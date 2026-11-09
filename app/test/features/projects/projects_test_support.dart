@@ -5,8 +5,10 @@ import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 
 import '../tasks/fakes.dart';
+import '../workflows/fakes.dart';
 
 import '../members/fakes.dart';
 import '../roles/fakes.dart';
@@ -39,6 +41,7 @@ Future<Pumped> pumpProjects(
   List<Project> projects = const [],
   FakeProjectsClient? server,
   FakeTasksClient? tasks,
+  FakeWorkflowsClient? workflows,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -54,6 +57,9 @@ Future<Pumped> pumpProjects(
     overrides: [
       membersClientProvider.overrideWithValue(team()),
       tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
+      workflowsClientProvider.overrideWithValue(
+        workflows ?? FakeWorkflowsClient(),
+      ),
     ],
   );
   return Pumped(container, fake);

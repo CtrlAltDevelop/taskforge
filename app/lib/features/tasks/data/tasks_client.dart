@@ -6,6 +6,7 @@ import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
 import 'package:taskforge/gen/infrastructure/tasks/grpc/tasks.pbgrpc.dart'
@@ -53,6 +54,11 @@ TaskException mapTaskError(Object error) {
       StatusCode.permissionDenied => const TaskException(TaskFailure.forbidden),
       StatusCode.alreadyExists when title == 'PROJECT_ARCHIVED' =>
         const TaskException(TaskFailure.archived),
+      StatusCode.failedPrecondition when title == 'TRANSITION_NOT_ALLOWED' =>
+        TaskException(
+          TaskFailure.transitionNotAllowed,
+          detail: errorTrailer(error, 'x-error-reason-bin'),
+        ),
       StatusCode.invalidArgument => TaskException(
         TaskFailure.invalid,
         detail: stripErrorTitle(message),
@@ -85,7 +91,9 @@ Task _task(pb.Task t) => Task(
   displayId: t.displayId,
   title: t.title,
   description: t.description,
-  status: TaskStatus.parse(t.status),
+  statusId: t.status,
+  statusName: t.statusName,
+  statusCategory: StatusCategory.parse(t.statusCategory),
   priority: TaskPriority.parse(t.priority),
   startDate: t.startDate,
   dueDate: t.dueDate,
@@ -195,7 +203,7 @@ class GrpcTasksClient implements TasksClient {
           expectedVersion: expectedVersion ?? task.version,
           title: patch.title,
           description: patch.description,
-          status: patch.status?.wire,
+          status: patch.status?.id,
           priority: patch.priority?.wire,
           startDate: patch.startDate,
           dueDate: patch.dueDate,

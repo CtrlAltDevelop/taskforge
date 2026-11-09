@@ -185,7 +185,7 @@ void main() {
       ['status'],
     ]);
     expect(server.tasks.single.priority, TaskPriority.urgent);
-    expect(server.tasks.single.status, TaskStatus.done);
+    expect(server.tasks.single.statusName, 'Done');
   });
 
   testWidgets('a refused edit goes back and says why', (tester) async {

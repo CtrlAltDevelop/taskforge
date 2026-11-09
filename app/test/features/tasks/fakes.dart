@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 Task task(
   String id,
   String title, {
   int number = 1,
   String project = 'p1',
-  TaskStatus status = TaskStatus.todo,
+  String statusId = 'todo',
+  String statusName = 'To do',
+  StatusCategory category = StatusCategory.notStarted,
   TaskPriority priority = TaskPriority.none,
   String dueDate = '',
   List<String> assignees = const [],
@@ -19,7 +22,9 @@ Task task(
   number: number,
   displayId: 'WEB-$number',
   title: title,
-  status: status,
+  statusId: statusId,
+  statusName: statusName,
+  statusCategory: category,
   priority: priority,
   dueDate: dueDate,
   assigneeIds: assignees,
@@ -122,7 +127,9 @@ class FakeTasksClient implements TasksClient {
       displayId: next.displayId,
       title: next.title,
       description: next.description,
-      status: next.status,
+      statusId: next.statusId,
+      statusName: next.statusName,
+      statusCategory: next.statusCategory,
       priority: next.priority,
       startDate: next.startDate,
       dueDate: next.dueDate,
