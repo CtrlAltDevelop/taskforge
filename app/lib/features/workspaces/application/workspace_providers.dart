@@ -115,6 +115,22 @@ class WorkspacesNotifier extends AsyncNotifier<List<Workspace>> {
     return restored;
   }
 
+  /// Adds a workspace the user just joined and makes it the current one.
+  Future<void> adopt(Workspace joined) async {
+    final others = [
+      for (final w in _current)
+        if (w.id != joined.id) w,
+    ];
+    state = AsyncData([...others, joined]);
+    await ref.read(selectedWorkspaceIdProvider.notifier).select(joined.id);
+  }
+
+  /// Drops a workspace the user left; the current one falls back to the first.
+  void forget(String id) => state = AsyncData([
+    for (final w in _current)
+      if (w.id != id) w,
+  ]);
+
   /// Re-reads the list, e.g. after a version conflict.
   Future<void> refresh() async {
     ref.invalidateSelf();

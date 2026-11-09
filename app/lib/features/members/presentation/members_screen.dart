@@ -1,0 +1,249 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/features/members/domain/members.dart';
+import 'package:taskforge/features/members/presentation/invite_dialog.dart';
+import 'package:taskforge/features/members/presentation/pending_tab.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+
+String formatDate(DateTime? date) {
+  if (date == null) return '';
+  final d = date.toLocal();
+  String two(int n) => n.toString().padLeft(2, '0');
+  return '${d.year}-${two(d.month)}-${two(d.day)}';
+}
+
+/// Runs [action]; shows the failure as a snackbar. True when it succeeded.
+Future<bool> runWithFeedback(
+  BuildContext context,
+  Future<void> Function() action,
+) async {
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    await action();
+    return true;
+  } on InviteException catch (e) {
+    messenger.showSnackBar(SnackBar(content: Text(inviteErrorMessage(e))));
+    return false;
+  }
+}
+
+class MembersScreen extends ConsumerWidget {
+  const MembersScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            key: const Key('back-home'),
+            tooltip: 'Back',
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/'),
+          ),
+          title: const Text('Members'),
+          actions: [
+            TextButton.icon(
+              key: const Key('open-invite'),
+              icon: const Icon(Icons.person_add),
+              label: const Text('Invite'),
+              onPressed: () => showDialog<void>(
+                context: context,
+                builder: (_) => const InviteDialog(),
+              ),
+            ),
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(key: Key('tab-members'), text: 'Members'),
+              Tab(key: Key('tab-pending'), text: 'Pending'),
+            ],
+          ),
+        ),
+        body: const TabBarView(children: [_MembersTab(), PendingTab()]),
+      ),
+    );
+  }
+}
+
+class _MembersTab extends ConsumerStatefulWidget {
+  const _MembersTab();
+
+  @override
+  ConsumerState<_MembersTab> createState() => _MembersTabState();
+}
+
+class _MembersTabState extends ConsumerState<_MembersTab> {
+  String _query = '';
+
+  Future<bool> _confirm(String title, String body, String action) async =>
+      await showDialog<bool>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: Text(title),
+          content: Text(body),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialog).pop(false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              key: const Key('confirm-action'),
+              onPressed: () => Navigator.of(dialog).pop(true),
+              child: Text(action),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+
+  Future<void> _remove(String workspaceId, Member member) async {
+    final ok = await _confirm(
+      'Remove ${member.label}?',
+      'They lose access to this workspace. You can invite them again later.',
+      'Remove',
+    );
+    if (!ok || !mounted) return;
+    final removed = await runWithFeedback(
+      context,
+      () => ref
+          .read(membersClientProvider)
+          .removeMember(workspaceId, member.userId),
+    );
+    if (removed) ref.invalidate(membersProvider);
+  }
+
+  void _showProfile(String workspaceId, bool canRemove, Member m) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) => SafeArea(
+        child: Padding(
+          key: const Key('member-profile'),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(radius: 32, child: Text(m.initials)),
+              const SizedBox(height: 12),
+              Text(m.label, style: Theme.of(sheet).textTheme.titleLarge),
+              Text(m.email),
+              Text('Joined ${formatDate(m.joinedAt)}'),
+              const SizedBox(height: 8),
+              Chip(label: Text(m.isOwner ? 'Owner' : 'Member')),
+              if (canRemove && !m.isOwner)
+                TextButton.icon(
+                  key: const Key('profile-remove'),
+                  icon: const Icon(Icons.person_remove),
+                  label: const Text('Remove from workspace'),
+                  onPressed: () {
+                    Navigator.of(sheet).pop();
+                    _remove(workspaceId, m);
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _leave(String workspaceId, String name) async {
+    final ok = await _confirm(
+      'Leave $name?',
+      'You will lose access to this workspace until someone invites you again.',
+      'Leave',
+    );
+    if (!ok || !mounted) return;
+    final left = await runWithFeedback(
+      context,
+      () => ref.read(membersClientProvider).leave(workspaceId),
+    );
+    if (!left || !mounted) return;
+    ref.read(workspacesProvider.notifier).forget(workspaceId);
+    // The router's zero-workspace guard sends the user to onboarding if none remain.
+    context.go('/');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final workspace = ref.watch(currentWorkspaceProvider);
+    final members = ref.watch(membersProvider);
+    if (workspace == null) return const SizedBox.shrink();
+    return members.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(
+        child: TextButton(
+          key: const Key('retry-members'),
+          onPressed: () => ref.invalidate(membersProvider),
+          child: Text('${inviteErrorMessage(e)} Retry'),
+        ),
+      ),
+      data: (all) {
+        final q = _query.trim().toLowerCase();
+        final shown = [
+          for (final m in all)
+            if (q.isEmpty ||
+                m.displayName.toLowerCase().contains(q) ||
+                m.email.toLowerCase().contains(q))
+              m,
+        ];
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextField(
+              key: const Key('member-search'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                labelText: 'Search members',
+              ),
+              onChanged: (v) => setState(() => _query = v),
+            ),
+            const SizedBox(height: 8),
+            for (final m in shown)
+              ListTile(
+                key: Key('member-${m.userId}'),
+                onTap: () => _showProfile(workspace.id, workspace.isOwner, m),
+                leading: CircleAvatar(child: Text(m.initials)),
+                title: Text(m.label),
+                subtitle: Text(
+                  'Joined ${formatDate(m.joinedAt)}'
+                  '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
+                ),
+                trailing: m.isOwner
+                    ? const Chip(label: Text('Owner'))
+                    : workspace.isOwner
+                    ? IconButton(
+                        key: Key('remove-${m.userId}'),
+                        tooltip: 'Remove ${m.label}',
+                        icon: const Icon(Icons.person_remove),
+                        onPressed: () => _remove(workspace.id, m),
+                      )
+                    : null,
+              ),
+            const Divider(),
+            if (workspace.isOwner)
+              const ListTile(
+                key: Key('owner-cannot-leave'),
+                leading: Icon(Icons.info_outline),
+                title: Text(
+                  'You own this workspace, so you cannot leave it. '
+                  'Ownership cannot be transferred yet.',
+                ),
+              )
+            else
+              OutlinedButton(
+                key: const Key('leave-workspace'),
+                onPressed: () => _leave(workspace.id, workspace.name),
+                child: const Text('Leave workspace'),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}

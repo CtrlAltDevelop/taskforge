@@ -26,12 +26,19 @@ class AppConfig {
 
   static String get wsUrl => _env('WS_URL', 'ws://$_host:8010/ws/ping/');
 
+  /// Public address of the web app, used to build shareable invite links.
+  static String get webUrl =>
+      _env('WEB_URL', kIsWeb ? Uri.base.origin : 'http://localhost:5173');
+
+  static String inviteUrl(String token) => '$webUrl/invite/$token';
+
   static String _env(String key, String fallback) {
     // `fromEnvironment` only accepts a literal key, so each name is read here.
     final value = switch (key) {
       'REST_URL' => const String.fromEnvironment('REST_URL'),
       'GRPC_HOST' => const String.fromEnvironment('GRPC_HOST'),
       'GRPC_WEB_URL' => const String.fromEnvironment('GRPC_WEB_URL'),
+      'WEB_URL' => const String.fromEnvironment('WEB_URL'),
       'WS_URL' => const String.fromEnvironment('WS_URL'),
       _ => '',
     };

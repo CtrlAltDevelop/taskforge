@@ -12,6 +12,8 @@ import 'package:taskforge/features/auth/reset_password_screen.dart';
 import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
+import 'package:taskforge/features/members/presentation/invite_screen.dart';
+import 'package:taskforge/features/members/presentation/members_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
 import 'package:taskforge/features/workspaces/presentation/settings_screen.dart';
@@ -41,6 +43,14 @@ String safeReturnPath(String? from) {
       : from;
 }
 
+/// Maps the native link `taskforge://invite/<token>` (host `invite`, path
+/// `/<token>`) onto the in-app route; null for every other location.
+String? customSchemeRoute(Uri uri) {
+  if (uri.scheme != 'taskforge' || uri.host != 'invite') return null;
+  final token = uri.pathSegments.where((s) => s.isNotEmpty).firstOrNull;
+  return token == null ? '/' : '/invite/${Uri.encodeComponent(token)}';
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final session = ref.watch(authSessionProvider);
   // Re-run the redirect whenever the workspace list changes (zero-workspace guard).
@@ -50,6 +60,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     refreshListenable: Listenable.merge([session, workspacesChanged]),
     redirect: (context, state) {
+      final native = customSchemeRoute(state.uri);
+      if (native != null) return native;
       final signedIn = session.status == AuthStatus.signedIn;
       final atAuthPage = _authPaths.contains(state.uri.path);
       if (!signedIn && !atAuthPage) {
@@ -68,7 +80,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       final workspaces = ref.read(workspacesProvider).value;
       if (workspaces == null) return null;
       final atOnboarding = state.uri.path == '/onboarding';
-      if (workspaces.isEmpty && !atOnboarding) return '/onboarding';
+      // An invitation may be the way into a first workspace, so it stays reachable.
+      final atInvite = state.uri.path.startsWith('/invite/');
+      if (workspaces.isEmpty && !atOnboarding && !atInvite) {
+        return '/onboarding';
+      }
       if (workspaces.isNotEmpty && atOnboarding) return '/';
       return null;
     },
@@ -82,6 +98,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/workspaces/settings',
         builder: (_, _) => const WorkspaceSettingsScreen(),
+      ),
+      GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
+      GoRoute(
+        path: '/invite/:token',
+        builder: (_, state) =>
+            InviteScreen(token: state.pathParameters['token']!),
       ),
       GoRoute(path: '/sessions', builder: (_, _) => const SessionsScreen()),
       GoRoute(

@@ -48,6 +48,13 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                 ),
                 if (workspace.isOwner) DangerZone(workspace: workspace),
                 const RecentlyDeleted(),
+                ListTile(
+                  key: const Key('open-members'),
+                  leading: const Icon(Icons.group),
+                  title: const Text('Members'),
+                  subtitle: const Text('People, invitations and leaving'),
+                  onTap: () => context.push('/members'),
+                ),
               ],
             ),
     );

@@ -1,0 +1,166 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/features/members/domain/members.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+
+/// `/invite/:token`. Signed-out visitors never get here: the router sends them
+/// to sign-in with this page as the return path.
+class InviteScreen extends ConsumerStatefulWidget {
+  const InviteScreen({super.key, required this.token});
+
+  final String token;
+
+  @override
+  ConsumerState<InviteScreen> createState() => _InviteScreenState();
+}
+
+class _InviteScreenState extends ConsumerState<InviteScreen> {
+  bool _busy = false;
+
+  /// Failure shown instead of the buttons (accept can still fail on a race or
+  /// on an email mismatch).
+  InviteException? _failure;
+
+  Future<void> _accept() async {
+    setState(() {
+      _busy = true;
+      _failure = null;
+    });
+    try {
+      final workspace = await ref
+          .read(membersClientProvider)
+          .accept(widget.token);
+      await ref.read(workspacesProvider.notifier).adopt(workspace);
+      if (mounted) context.go('/');
+    } on InviteException catch (e) {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _failure = e;
+        });
+      }
+    }
+  }
+
+  Future<void> _decline() async {
+    setState(() => _busy = true);
+    try {
+      await ref.read(membersClientProvider).decline(widget.token);
+      if (mounted) context.go('/');
+    } on InviteException catch (e) {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _failure = e;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final preview = ref.watch(invitePreviewProvider(widget.token));
+    return Scaffold(
+      appBar: AppBar(title: const Text('Invitation')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: preview.when(
+              loading: () => const CircularProgressIndicator(),
+              error: (e, _) => _Message(
+                text: inviteErrorMessage(e),
+                action: TextButton(
+                  key: const Key('retry-invite'),
+                  onPressed: () =>
+                      ref.invalidate(invitePreviewProvider(widget.token)),
+                  child: const Text('Retry'),
+                ),
+              ),
+              data: (p) {
+                if (p.state != InviteState.valid) {
+                  return _Message(text: inviteStateMessage(p.state));
+                }
+                final f = _failure;
+                return f != null && _isTerminal(f.failure)
+                    ? _Message(text: inviteErrorMessage(f))
+                    : _offer(p);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _offer(InvitePreview p) {
+    final failure = _failure;
+    final inviter = p.inviterName.isEmpty
+        ? 'You have been invited to join'
+        : '${p.inviterName} invited you to join';
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(inviter, textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        Text(
+          p.workspaceName,
+          key: const Key('invite-workspace'),
+          style: Theme.of(context).textTheme.headlineMedium,
+          textAlign: TextAlign.center,
+        ),
+        if (failure != null) ...[
+          const SizedBox(height: 16),
+          Text(
+            inviteErrorMessage(failure),
+            key: const Key('invite-failure'),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+            textAlign: TextAlign.center,
+          ),
+        ],
+        const SizedBox(height: 24),
+        FilledButton(
+          key: const Key('join-workspace'),
+          onPressed: _busy ? null : _accept,
+          child: const Text('Join'),
+        ),
+        TextButton(
+          key: const Key('decline-invite'),
+          onPressed: _busy ? null : _decline,
+          child: const Text('Decline'),
+        ),
+      ],
+    );
+  }
+}
+
+bool _isTerminal(InviteFailure f) =>
+    f == InviteFailure.expired ||
+    f == InviteFailure.revoked ||
+    f == InviteFailure.usedUp ||
+    f == InviteFailure.notFound;
+
+class _Message extends StatelessWidget {
+  const _Message({required this.text, this.action});
+
+  final String text;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(text, key: const Key('invite-message'), textAlign: TextAlign.center),
+      action ??
+          TextButton(
+            key: const Key('invite-home'),
+            onPressed: () => context.go('/'),
+            child: const Text('Go to TaskForge'),
+          ),
+    ],
+  );
+}
