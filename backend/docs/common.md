@@ -1,0 +1,218 @@
+# Common
+
+The foundation every project built from this starter carries, and the only app
+besides [accounts](accounts.md) that is always installed. Nothing here is a
+feature; everything here is what the features stand on.
+
+| Piece | What it is |
+| --- | --- |
+| Health endpoints | The two questions a load balancer and an orchestrator ask |
+| [The response envelope](responses.md) | One shape for every JSON body, and the `ResponseTitle` enum a client translates |
+| `ApiError` | One exception for "the client did something the API must refuse" |
+| The API registry | The declarative list of versions and routers, and `startapi` |
+| Settings contracts | How an app states what it cannot work without, checked by `manage.py check` |
+| [The admin's chrome](admin.md) | Its navigation, its environment badge and its dashboard |
+| `authdocs` | The command that writes the reference half of these pages |
+
+## Routes
+
+<!-- generated:routes -->
+| Method | Path | Auth | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/api/v1/health/live` | None | Liveness check |
+| `GET` | `/api/v1/health/ready` | None | Readiness check |
+<!-- /generated:routes -->
+
+`live` answers "is this process running?" and never touches the database — a
+liveness probe that fails when the database is slow gets the process killed for
+somebody else's outage. `ready` answers "should traffic come here?" and does
+check, returning `503` when it cannot.
+
+## Models
+
+<!-- generated:models -->
+_This app defines no models of its own._
+<!-- /generated:models -->
+
+## Admin
+
+<!-- generated:admin -->
+_This app registers nothing in the admin._
+<!-- /generated:admin -->
+
+The app registers nothing itself, but two of its modules decide how every other
+app's admin looks and behaves:
+
+- `infrastructure/common/admin.py` — `ReadOnlyAdmin` for audit tables, which are
+  worthless as evidence if anybody can edit them, and `RevocableAdmin` for
+  credential tables, where there is nothing meaningful to change and one very
+  meaningful thing to *do*.
+- `infrastructure/common/adminui.py` — the sidebar, the environment badge and the
+  dashboard, all built per request from the apps that are actually installed.
+  [The admin page](admin.md) covers it.
+
+## Setup
+
+<!-- generated:settings -->
+_This app requires no settings of its own._
+<!-- /generated:settings -->
+
+## Using it
+
+### Adding a versioned API
+
+Feature APIs are registered declaratively, in `src/config/api_registry.json`, and
+scaffolded by a command that writes the entry for you:
+
+```bash
+python manage.py startapi orders --api-version v1
+```
+
+That creates `src/apps/orders/`, an endpoint with a test, and the registry entry
+that installs the app and mounts its router. `config/api.py` builds one
+`NinjaAPI` per registered version and attaches every registry router plus the
+routers each optional app publishes, so a new version is a key in one JSON file.
+
+### Naming a group in Swagger
+
+Every router is attached under a tag, and the tag is declared beside the router
+that owns it -- in `api_registry.json` for a feature app, in `settings/base.py`
+for the apps the starter ships:
+
+```json
+{
+  "prefix": "/orders",
+  "router": "apps.orders.rest.v1.router",
+  "tag": "Orders",
+  "description": "Place an order, read one back, and cancel one."
+}
+```
+
+`config/api.py` collects those into the document's own `tags` list, which is
+what makes Swagger's groups more than an alphabetical pile of accordions: the
+`description` is printed under the group heading, and the order the routers are
+attached in is the order the groups appear. A tag belonging to an app this
+deployment did not enable is not in the list at all, for the same reason its
+routes are not.
+
+### Rate limits
+
+Every endpoint on every registered API version is rate-limited, because
+`config/api.py` attaches the limits to the `NinjaAPI` rather than to the routes.
+An endpoint added next week is limited by having been added, which is the only
+arrangement that stays true -- a decorator per route is a decorator somebody
+forgets, on the endpoint nobody has load-tested.
+
+Which limit applies is decided per request, not per route, because Django Ninja
+resolves the caller before it checks a throttle:
+
+| Scope | Counts by | Applies to |
+| --- | --- | --- |
+| `anon` | IP address | requests that proved no account |
+| `auth` | credential | requests that did |
+| `login` | IP address | every login, signup, reset, token and OAuth route |
+| `upload` | credential | staging a support attachment |
+
+The two default scopes are disjoint on purpose. Counting a signed-in caller by
+IP would make an office behind one NAT throttle itself, and counting an
+anonymous one under both scopes would mean the anonymous dial could never be
+raised above the authenticated one.
+
+`login` is separate and much tighter because it guards a different attack from
+the one `AUTH_MAX_SENDS_PER_HOUR` and the password attempt cap guard. Those count
+guesses against *one* account; a credential-stuffing run makes one guess against
+each of fifty thousand, which no per-account counter can see.
+
+Each rate is `<count>/<period>` and is read from the settings **per request**, so
+`override_settings` works in a test and a deployment's change takes effect on the
+process it has. Setting one empty turns that scope off, which is what a project
+that already rate-limits at its CDN wants rather than counting everything twice.
+
+The counters live in Django's default cache. That default is per process, so a
+project running four workers hands out four times the limit; point `CACHES` at
+Redis or Memcached and the fleet shares one budget. Treat this as load-shedding
+rather than an authorisation control -- it is the cheap layer that keeps honest
+traffic honest, not the one that stops somebody determined.
+
+### Refusing a request
+
+```python
+from infrastructure.common.errors import ApiError
+from infrastructure.common.responses import ResponseTitle
+
+raise ApiError("That code has expired.", status=410, title=ResponseTitle.CODE_EXPIRED)
+```
+
+Raised anywhere, rendered in one place, and always in the envelope. `title` is
+the part a client keys its own translations off; the English sentence beside it
+is for whoever is reading the log. [The response contract](responses.md) lists
+every title.
+
+### Declaring what an app needs
+
+```python
+class AuthMagicLinkConfig(AppConfig):
+    settings_spec = AppSettings(
+        title="Magic-link login",
+        requirements=(
+            Requirement(
+                "AUTH_MAGIC_LINK_BASE_URL",
+                env="DJANGO_AUTH_MAGIC_LINK_BASE_URL",
+                purpose="the page that reads the token out of the URL",
+                required=True,
+            ),
+        ),
+    )
+```
+
+One system check reads every installed app's declaration, so a deployment is
+told what the apps *it turned on* still need and nagged about nothing else.
+Message ids are the app label plus the setting, so `SILENCED_SYSTEM_CHECKS` can
+turn off exactly one.
+
+A requirement can say more than "not empty". `minimum`/`maximum` bound a number,
+`choices` enumerates the acceptable values and `pattern` describes their shape
+where enumerating them is hopeless — a currency is any three capitals. Some
+settings only matter once another has a particular value, and `applies_when`
+gates them: a Redis URL is nothing to nag about until the broker is the Redis
+one. What no single requirement can see is a *relationship* — a default page
+size above the ceiling meant to clamp it is two reasonable numbers in the wrong
+order — so `AppSettings.rules` takes those, and reports them against the first
+setting named.
+
+Every optional app declares one, including its own `*_ENABLED` flag: that flag is
+what installs the app, so an installed app whose flag is off means somebody
+edited `INSTALLED_APPS` by hand, and the result migrates tables and publishes no
+routes. Saying so out loud is cheaper than discovering it.
+
+An app meant to be copied into other projects may instead declare `settings_docs`
+on its `AppConfig`: plain rows that document its settings without validating
+them. Nothing here uses it — all five feature apps already import from
+`infrastructure.common`, so the contract costs them nothing they had not already
+spent.
+
+### Refusing to serve
+
+`manage.py` runs the system checks before it runs a command, which is why a
+missing setting stops `runserver` and `migrate`. Nothing ran them when Gunicorn
+or Uvicorn imported `config/wsgi.py` or `config/asgi.py` — so in the one
+environment where a wrong setting matters most, the process started cleanly and
+failed later, one request at a time, in whichever worker took it.
+
+Both entry points now call `config.preflight.verify_configuration()` once the
+app registry is populated and before anything is served. Errors stop the boot;
+warnings do not, because refusing to start over an opinion would make the
+warning level useless, and `SILENCED_SYSTEM_CHECKS` means the same thing here as
+it does to `manage.py check`. `DJANGO_SKIP_PREFLIGHT=true` serves anyway, and is
+deliberately not the default.
+
+### Keeping these pages honest
+
+```bash
+DJANGO_SETTINGS_MODULE=config.settings.test python manage.py authdocs
+```
+
+Every **Routes**, **Models**, **Admin** and **Setup** section in this
+documentation is generated from the code between markers, and the test suite
+runs the same command with `--check`. Prose outside the markers is never
+touched. [The index](README.md#keeping-these-pages-honest) explains the split.

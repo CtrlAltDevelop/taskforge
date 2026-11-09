@@ -1,0 +1,106 @@
+from django.apps import AppConfig
+from django.conf import settings
+
+from infrastructure.common.appsettings import AppSettings, Requirement
+
+
+class NotificationsConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.notifications"
+    label = "notifications"
+    verbose_name = "Notifications"
+
+    settings_spec = AppSettings(
+        title="Notifications",
+        summary="Stored notifications, a read API, and a WebSocket that pushes new ones.",
+        requirements=(
+            Requirement(
+                "NOTIFICATIONS_ENABLED",
+                env="DJANGO_NOTIFICATIONS_ENABLED",
+                purpose=(
+                    "whether this deployment carries notifications at all -- their "
+                    "tables, their routes and their socket"
+                ),
+                required=True,
+                hint=(
+                    "The app is installed, so something put it in INSTALLED_APPS while "
+                    "DJANGO_NOTIFICATIONS_ENABLED was off. Set it to true, or drop the "
+                    "app: half enabled, it migrates its tables and publishes none of "
+                    "its routes."
+                ),
+            ),
+            Requirement(
+                "NOTIFICATIONS_WS_PATH",
+                env="DJANGO_NOTIFICATIONS_WS_PATH",
+                purpose="where the live feed is mounted, which a reverse proxy has to be told",
+                required=True,
+                pattern=r"/\S*",
+                pattern_description="be a path beginning with a slash, such as /ws/notifications",
+            ),
+            Requirement(
+                "NOTIFICATIONS_CHANNEL_PREFIX",
+                env="DJANGO_NOTIFICATIONS_CHANNEL_PREFIX",
+                purpose=(
+                    "what this deployment's broadcast channels are named, so two "
+                    "deployments sharing a Redis do not deliver each other's notifications"
+                ),
+                required=True,
+            ),
+            Requirement(
+                "NOTIFICATIONS_REDIS_URL",
+                env="DJANGO_NOTIFICATIONS_REDIS_URL",
+                purpose="the Redis the broker fans out through",
+                required=True,
+                applies_when=lambda: "Redis" in settings.NOTIFICATIONS_BROKER,
+                hint=(
+                    "The broker is the Redis one, and it has nothing to connect to. Set "
+                    "this, or DJANGO_AUTH_REDIS_URL, which it falls back to."
+                ),
+            ),
+            Requirement(
+                "NOTIFICATIONS_BROKER",
+                env="DJANGO_NOTIFICATIONS_BROKER",
+                purpose="how a notification created in one process reaches sockets held by another",
+                recommended=True,
+                unsafe_defaults=("apps.notifications.broadcast.MemoryBroker",),
+                hint=(
+                    "The in-memory broker only fans out inside a single process, so under "
+                    "more than one worker most connected clients never see the message. "
+                    "Use apps.notifications.broadcast.RedisBroker in production."
+                ),
+            ),
+            Requirement(
+                "NOTIFICATIONS_RETENTION_DAYS",
+                env="DJANGO_NOTIFICATIONS_RETENTION_DAYS",
+                purpose=(
+                    "how long notifications are kept before `manage.py notifications_prune` "
+                    "deletes them"
+                ),
+                minimum=0,
+                hint=(
+                    "Zero keeps everything, which is safe but grows without bound. Set a "
+                    "window and schedule `manage.py notifications_prune`; nothing deletes "
+                    "anything until you run it."
+                ),
+            ),
+            Requirement(
+                "NOTIFICATIONS_SOCKET_BACKLOG",
+                env="DJANGO_NOTIFICATIONS_SOCKET_BACKLOG",
+                purpose="how many unread notifications a client is caught up with on connect",
+                minimum=0,
+                maximum=500,
+            ),
+            Requirement(
+                "NOTIFICATIONS_SOCKET_COMMANDS_PER_MINUTE",
+                env="DJANGO_NOTIFICATIONS_SOCKET_COMMANDS_PER_MINUTE",
+                purpose="how many commands one socket may send a minute; zero turns it off",
+                minimum=0,
+            ),
+        ),
+    )
+
+    def ready(self) -> None:
+        """Connect the signal that broadcasts a notification the moment it is saved."""
+        from apps.notifications import events
+
+        events.connect()

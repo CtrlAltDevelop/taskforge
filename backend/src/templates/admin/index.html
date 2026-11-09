@@ -1,0 +1,114 @@
+{% extends 'admin/base.html' %}
+
+{% comment %}
+The admin's front page, replaced. Django's is a list of models, which answers
+"what exists" and never "what needs doing" -- so an editor lands on a menu and
+has to go looking for the page they were asked to change.
+
+**This template knows no app.** It used to carry a hard-coded block per feature
+-- content here, shop there, sign-ins below -- which meant that installing an app
+was only two thirds of installing it: the third part was remembering to edit this
+file, and an app that nobody remembered shipped with numbers nothing displayed.
+
+So it draws whatever `infrastructure.common.adminui.dashboard` hands it. Each
+app publishes its own section from its own `adminui.py`, checks its own
+permissions there, and is absent -- heading and all -- when it is not installed
+or has nothing to tell this particular reader. Adding a section to this page is
+a function in the app that owns the numbers, and nothing here.
+
+A section is a title, some cards (a number, a line about it, somewhere to go),
+and some panels (figures, bars, a short list, or any combination). That
+vocabulary is deliberately small: a dashboard whose every block is bespoke is a
+dashboard nobody can add to without a design conversation.
+{% endcomment %}
+
+{% load i18n unfold %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    {% for section in admin_sections %}
+        <section class="mb-8">
+            <h2 class="font-semibold mb-3 text-font-important-light text-sm uppercase tracking-wide dark:text-font-important-dark">
+                {{ section.title }}
+            </h2>
+
+            {% if section.cards %}
+                <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-4">
+                    {% for card in section.cards %}
+                        {% component "unfold/components/card.html" with href=card.link icon=card.icon %}
+                            <span class="text-font-subtle-light text-sm dark:text-font-subtle-dark">{{ card.label }}</span>
+                            <h1 class="font-semibold text-3xl {% if card.tone == 'bad' %}text-red-600 dark:text-red-400{% elif card.tone == 'warn' %}text-orange-600 dark:text-orange-400{% elif card.tone == 'good' %}text-green-600 dark:text-green-400{% else %}text-font-important-light dark:text-font-important-dark{% endif %}">
+                                {{ card.value }}
+                            </h1>
+                            <span class="text-font-subtle-light text-sm dark:text-font-subtle-dark">{{ card.hint }}</span>
+                        {% endcomponent %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if section.panels %}
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    {% for panel in section.panels %}
+                        <div class="{% if panel.wide %}lg:col-span-2{% endif %}">
+                            {% component "unfold/components/card.html" with title=panel.title %}
+                                <div class="flex flex-col gap-4">
+                                    {% if panel.figures %}
+                                        <div class="flex flex-row flex-wrap gap-8">
+                                            {% for figure in panel.figures %}
+                                                <div class="flex flex-col">
+                                                    <span class="text-font-subtle-light text-sm dark:text-font-subtle-dark">{{ figure.label }}</span>
+                                                    <h2 class="font-semibold text-2xl {% if figure.tone == 'bad' %}text-red-600 dark:text-red-400{% else %}text-font-important-light dark:text-font-important-dark{% endif %}">
+                                                        {{ figure.value }}
+                                                    </h2>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    {% for bar in panel.bars %}
+                                        {% component "unfold/components/progress.html" with title=bar.label description=bar.value value=bar.percent %}{% endcomponent %}
+                                    {% endfor %}
+
+                                    {% for row in panel.rows %}
+                                        <a href="{{ row.link }}" class="flex flex-row gap-4 items-baseline justify-between">
+                                            <span class="flex flex-col">
+                                                <span class="font-medium text-font-important-light dark:text-font-important-dark">{{ row.label }}</span>
+                                                <span class="text-font-subtle-light text-sm dark:text-font-subtle-dark">{{ row.hint }}</span>
+                                            </span>
+                                            <span class="text-sm whitespace-nowrap {% if row.tone == 'bad' %}text-red-600 dark:text-red-400{% else %}text-font-subtle-light dark:text-font-subtle-dark{% endif %}">
+                                                {{ row.right }}
+                                            </span>
+                                        </a>
+                                    {% endfor %}
+
+                                    {% if panel.note %}
+                                        <span class="text-font-subtle-light text-sm dark:text-font-subtle-dark">{{ panel.note }}</span>
+                                    {% endif %}
+
+                                    {% if panel.link and panel.link_label %}
+                                        <a href="{{ panel.link }}" class="text-font-subtle-light text-sm underline dark:text-font-subtle-dark">
+                                            {{ panel.link_label }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endcomponent %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    {% endfor %}
+
+    <div class="flex flex-col lg:flex-row lg:gap-8">
+        <div class="grow">
+            {% include "unfold/helpers/app_list_default.html" %}
+        </div>
+
+        {% include "unfold/helpers/history.html" %}
+    </div>
+{% endblock %}

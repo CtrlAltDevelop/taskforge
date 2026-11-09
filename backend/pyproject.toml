@@ -1,0 +1,126 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backend"
+version = "0.1.0"
+description = "A production-oriented Django Ninja API"
+readme = "README.md"
+requires-python = ">=3.12"
+
+# The base install runs the API and issues signed credentials. cryptography is
+# here rather than in an extra because any token mode installs oauth_core, whose
+# models encrypt at rest.
+#
+# The GraphQL and gRPC libraries are here for the same reason: every app in this
+# project publishes all three transports off one service, so they are not a
+# feature a project turns on -- they are how the project is put together. What a
+# deployment *serves* is still a switch (DJANGO_GRAPHQL_ENABLED, and whether it
+# runs the gRPC server at all).
+#
+# Everything a *feature* needs beyond that is an extra, so a project that only
+# wants password login does not ship an HTTP client and a Redis driver it never
+# opens. Each is imported only by the module its feature loads, so leaving an
+# extra out costs nothing until something actually reaches for it.
+dependencies = [
+  "cryptography>=45,<51",
+  "Django>=5.2,<7.0",
+  "django-cors-headers>=4.7,<5.0",
+  "django-ninja>=1.4,<2.0",
+  "django-socio-grpc>=0.25,<1.0",
+  "django-unfold>=0.104,<1.0",
+  "PyJWT>=2.10,<3.0",
+  "python-dotenv>=1.1,<2.0",
+  "strawberry-graphql-django>=0.88,<1.0",
+]
+
+[project.optional-dependencies]
+# Social sign-in, for talking to the providers.
+oauth = ["httpx>=0.28,<1.0"]
+# The challenge store that survives a restart and reaches every worker.
+redis = ["redis>=5.0,<9.0"]
+# Authenticator-app second factors.
+totp = ["pyotp>=2.9,<3.0"]
+# An ASGI server and a WebSocket protocol implementation, for the notification
+# socket. `runserver` is WSGI and will not serve it, and uvicorn on its own
+# speaks no WebSocket -- it needs one of these alongside it. `watchfiles` is what
+# lets `make serve --reload` notice a changed template: uvicorn's own reloader
+# watches Python files and refuses `--reload-include` without it.
+asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
+all = ["backend[oauth,redis,totp,asgi]"]
+dev = [
+  "backend[all]",
+  "fakeredis>=2.26,<3.0",
+  "mypy>=1.15",
+  # Type stubs for the generated protobuf messages, so a misspelled field is a
+  # type error rather than an AttributeError raised while answering a call.
+  "mypy-protobuf>=3.6",
+  "pytest>=8.3",
+  "pytest-cov>=6.0",
+  "pytest-django>=4.11",
+  "ruff>=0.11",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+pythonpath = ["src"]
+testpaths = ["src"]
+addopts = "--strict-markers --strict-config"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src"]
+# Written by protoc, byte for byte, every time `manage.py protos` runs. The
+# .proto file, not the stub, is the thing to review.
+extend-exclude = ["*_pb2.py", "*_pb2_grpc.py", "*_pb2.pyi", "*_pb2_grpc.pyi"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "DJ"]
+ignore = ["DJ001"]
+
+# Migrations are written by `makemigrations`, not by hand. Their long lines are
+# Django's own field help_text, reproduced verbatim; rewrapping them would only
+# be undone the next time the file is regenerated.
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config", "infrastructure"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = []
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+# protoc writes these, and its `.pyi` stubs are still read for every import --
+# they are just not held to this project's own strictness settings.
+exclude = "_pb2(_grpc)?\\.pyi?$"
+
+[[tool.mypy.overrides]]
+module = ["django_socio_grpc.*", "grpc_tools.*"]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = [
+  "src/**/grpc/*_pb2.py",
+  "src/**/grpc/*_pb2_grpc.py",
+  "src/config/asgi.py",
+  "src/config/wsgi.py",
+  "src/config/settings/development.py",
+  "src/config/settings/production.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 90

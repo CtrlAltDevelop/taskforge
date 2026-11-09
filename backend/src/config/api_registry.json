@@ -1,0 +1,13 @@
+{
+  "v1": {
+    "routes": [
+      {
+        "app_config": "infrastructure.common.apps.CommonConfig",
+        "prefix": "/health",
+        "router": "infrastructure.common.rest.api.router",
+        "tag": "Health",
+        "description": "Liveness and readiness probes, for a load balancer and an orchestrator. Public, so a probe needs no credential."
+      }
+    ]
+  }
+}
