@@ -52,6 +52,40 @@ taskforge/
    without checking membership. (Multi-tenancy bugs are the #1 risk.)
 8. Immutable state on the Flutter side (freezed + Riverpod). No mutation of models.
 
+## Backend skeleton: reuse `django-ninja-starter`
+
+The backend starts from the user's own `/Users/m.zarif/GitHub/django-ninja-starter`
+(generate with `django-ninja-starter backend`), not from an empty Django project.
+It already ships Ninja, gRPC via `django-socio-grpc`, a WebSocket/ASGI setup,
+env-based settings, JWT auth (password/email-code/magic-link, TOTP and other
+second factors, Google/Apple/Microsoft/GitHub OIDC), a notifications app with a
+socket, an Unfold admin, CI, and a response-envelope convention. Per phase:
+00 adopts it; 01 enables its `accounts` + `auth_password` + token mode instead of
+rewriting auth; 19 builds on its `notifications` app; 37 enables its
+`auth_twofactor` and `oauth_*` apps. Read its `docs/` before writing any
+backend code, and keep apps that TaskForge does not need (shop, wallet, club,
+cms, support) switched off. Gap to verify in phase 00: the starter has no
+Celery/Channels group layer by default — check how its socket publishes before
+phase 16.
+
+## Agents and skills (`.agents/`, symlinked from `.claude/`)
+
+| Name | Kind | Use for |
+|------|------|---------|
+| `start-phase` | skill | Implement a phase test-first from its doc |
+| `commit` | skill | Logical Conventional Commits, push only when asked |
+| `code-reviewer` | agent | Read-only diff review (tenant isolation first) |
+| `verifier` | agent | Run lint, types, migrations, proto drift, tests |
+| `test-writer` | agent | Write pytest-django / Flutter tests |
+| `proto-regen` | agent | Regenerate and check gRPC stubs |
+| `phase-auditor` | agent | Audit code against a phase's acceptance criteria |
+| `docs-sync` | agent | Keep docs true after changes |
+
+Ported and generalized from `broker_crm_app/.agents` (code-reviewer, flutter-verifier,
+test-writer, docs-sync, api-regen, commit). Not ported: its feature/page auditors
+and refactorer (they encode Broker CRM's theme-token and `AppLayout` rules),
+`clickup-task`, and `text-to-lottie`.
+
 ## Commands
 
 Filled in by phase 00 (`make dev`, `make test`, `make proto`). Until then: none.

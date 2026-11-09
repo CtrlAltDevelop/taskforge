@@ -46,6 +46,13 @@ shares models/ORM). Uses sync services wrapped with `sync_to_async` (thread-sens
 until ORM async coverage is enough. Auth via interceptor reading
 `authorization: Bearer <jwt>` metadata.
 
+> **Skeleton update:** the starter project `django-ninja-starter` already wires
+> gRPC through `django-socio-grpc` (not hand-rolled `grpcio` servicers) and has
+> its own `make protos` command that writes `.proto` files from service classes.
+> Where §3–§4 below say `manage.py run_grpc` / `make proto`, follow the starter's
+> mechanism instead; the rules (thin adapters, proto = contract, Envoy for
+> gRPC-Web) are unchanged. Phase 00 records the final commands.
+
 ### 4. Proto is the contract
 `proto/*.proto` is the single source of truth. `make proto` generates Python stubs
 into `backend/` and Dart stubs into `app/lib/gen/`. CI fails if generated code is

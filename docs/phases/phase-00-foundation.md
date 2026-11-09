@@ -10,6 +10,7 @@ Jira and ClickUp suffer from inconsistent platforms (web is strong, mobile is we
 You run `make dev`. Docker starts Postgres, Redis, Envoy. Django serves REST + WebSocket (ASGI) and a separate process serves gRPC. The Flutter app has one debug screen with three buttons: **REST ping**, **gRPC ping**, **WS ping**. Each shows the server reply. If all three are green on web, Android emulator and desktop, the foundation is done.
 
 ## Scope
+**First step — adopt the skeleton:** generate `backend/` from the user's `django-ninja-starter` (see `AGENTS.md`) rather than `django-admin startproject`. It already provides Ninja, `django-socio-grpc`, ASGI/WebSocket, settings, CI and JWT auth, which shrinks phases 01, 19 and 37. Check what it lacks (Channels group layer, Celery) and add only that.
 **In:** repo layout, `backend/` + `app/` + `proto/` + `deploy/`, docker-compose, Envoy gRPC-Web config, `buf` + codegen (`make proto`), lint/format/test tooling, GitHub Actions CI, health endpoint, env-based settings.
 **Out:** users, any business model, real UI design.
 

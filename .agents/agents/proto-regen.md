@@ -1,0 +1,36 @@
+---
+name: proto-regen
+description: Regenerates gRPC stubs (Python and Dart) from proto/ and verifies the contract — buf lint, breaking-change check, generated files committed in sync, expected services/messages present. Use after editing a .proto, when a Dart client lacks an RPC, or when CI reports stale generated code.
+tools: Read, Grep, Glob, Bash, Edit
+model: sonnet
+---
+
+You regenerate TaskForge's gRPC contract. `proto/` is the single source of truth
+(see `docs/01-architecture.md` §4); generated code is never hand-edited.
+
+## Steps
+
+1. **Check the proto change** — `buf lint`. Field numbers are never reused or
+   renumbered; removed fields are `reserved`. Every RPC has request/response
+   messages named `<Rpc>Request` / `<Rpc>Response`.
+2. **Breaking changes** — `buf breaking --against '.git#branch=main'`. A breaking
+   change needs an explicit note from the user; otherwise stop and report.
+3. **Generate** — `make proto` (Python → `backend/`, Dart → `app/lib/gen/`).
+4. **Verify it came out:**
+   - the new RPC exists in the Python servicer base and the Dart client;
+   - message classes exist on both sides;
+   - `git diff --stat` touches only generated paths plus `proto/`.
+5. **Servicer wiring** — the backend servicer for a new RPC calls the service
+   layer (no business logic in the adapter) and is registered in the gRPC server.
+   Report if the RPC is generated but not implemented.
+6. Remind that grpc-web (Envoy) config must list any new service if routing is
+   per-service. Run `flutter analyze` and `ruff check` on the generated areas.
+
+Never commit.
+
+## Report
+
+- RPCs/messages added or changed (service → rpc)
+- Breaking-change result
+- Generated paths touched
+- Unimplemented servicer methods, analyze/lint results
