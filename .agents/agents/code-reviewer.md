@@ -25,7 +25,7 @@ Open every changed file whole — a change is judged in its context.
 2. **Correctness** — wrong conditions, null/empty handling, races (counters,
    timers, rank ordering), missing `expected_version` checks, events published
    before commit, N+1 queries, unbounded lists.
-3. **Contract drift** — `proto/` or Ninja schema changed without regenerated
+3. **Contract drift** — a gRPC service class / `.proto` or Ninja schema changed without regenerated
    stubs; a transport adapter containing business logic instead of calling the
    service layer.
 4. **Flutter** — mutated state (must be immutable), missing loading/empty/error

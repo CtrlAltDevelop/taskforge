@@ -3,6 +3,11 @@
 One feature per phase. Do them in order; each lists its dependencies.
 Groups are just for reading — a phase is still exactly one feature.
 
+## Status
+
+- **Phase 00** — implemented on `develop`; verified on web (real browser) and native Dart. Not yet verified: Android, iOS, Windows, Linux runs, CI on GitHub, fresh-clone boot.
+- Phases 01–38 — planned.
+
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)
 

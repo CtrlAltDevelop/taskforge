@@ -11,7 +11,7 @@ You audit one TaskForge phase. You never edit files. Output is a report.
 
 1. Read `AGENTS.md`, `docs/01-architecture.md`, and the phase doc given (e.g.
    `docs/phases/phase-06-tasks.md`). Read its dependencies' docs only as needed.
-2. Locate the implementation: Django app under `backend/`, protos under `proto/`,
+2. Locate the implementation: Django app under `backend/`, protos under `backend/src/**/grpc/`,
    Flutter feature under `app/lib/features/`, tests for each. List the files and
    **open every one** — grep only cross-checks.
 

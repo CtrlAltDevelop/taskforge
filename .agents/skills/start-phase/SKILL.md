@@ -14,7 +14,7 @@ description: Implement one TaskForge phase from its doc in docs/phases/, test-fi
    backend skeleton rules there (reuse existing apps/helpers before writing new).
 3. **Plan** in ≤ 8 steps from the doc's Scope/API/UI sections; show it, then go.
    Do not add anything from **Out** — write a new phase doc instead.
-4. **Contracts first** — edit `proto/` / Ninja schemas, run `proto-regen`.
+4. **Contracts first** — edit the gRPC service class / Ninja schema, run `make proto` (`proto-regen` agent to verify).
 5. **TDD** — `test-writer` style: failing test, minimal code, pass. Services
    first, then adapters (Ninja / gRPC / WebSocket), then Flutter.
 6. **Verify** — `verifier` agent; then `code-reviewer` on the diff; fix CRITICAL

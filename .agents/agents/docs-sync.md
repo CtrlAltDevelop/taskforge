@@ -13,7 +13,7 @@ You keep TaskForge documentation true to the code.
    List every old identifier and its replacement (names, paths, commands,
    RPC/endpoint names, permission keys, event types).
 2. Search `README.md`, `AGENTS.md`, `docs/**` (including `docs/phases/**` and
-   `docs/02-roadmap.md`), `proto/**` comments and CI comments for each old
+   `docs/02-roadmap.md`), `*.proto` comments and CI comments for each old
    identifier, including wording variants.
 3. Classify each hit: **Current** (describes how things are now → update) or
    **Historical** (changelog, dated notes → leave, and say so).

@@ -13,4 +13,4 @@ fast, offline-capable, and consistent on web, mobile and desktop.
 3. [docs/02-roadmap.md](docs/02-roadmap.md) — ordered list of phases
 4. [docs/phases/](docs/phases/) — one document per phase, one feature each
 
-Status: **planning complete, implementation not started.**
+Status: **planning complete; phase 00 (foundation) implemented.** See [AGENTS.md](AGENTS.md#commands) to run it.

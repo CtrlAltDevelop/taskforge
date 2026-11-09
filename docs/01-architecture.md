@@ -24,6 +24,20 @@ server tells → WebSocket.*
    │  WebSocket ──────────────► Channels (ASGI)─┘                  └──► Celery workers (jobs)
 ```
 
+## Reality check (phase 00)
+
+What the backend starter actually provides, which refines the plan below:
+
+- **WebSocket is plain ASGI, not Django Channels.** The starter's sockets (and our
+  `/ws/ping/`) are written against the ASGI interface, with a Redis-backed broker for
+  fan-out across workers (`apps/notifications/broadcast.py`). Phase 16 builds on that
+  pattern; do not add Channels.
+- **No Celery yet.** Phases that need background jobs (19 email, 24 automations,
+  28 recurring) must add a worker then.
+- **gRPC is `django-socio-grpc`**, and `.proto` files live beside their service in
+  `backend/src/**/grpc/`; `make proto` also produces Dart stubs.
+- **Ports:** REST/WS 8010, gRPC 50051, Envoy (gRPC-Web) 8081, web dev 5173.
+
 ## Key decisions
 
 ### 1. One services layer, three thin adapters
@@ -54,7 +68,7 @@ until ORM async coverage is enough. Auth via interceptor reading
 > gRPC-Web) are unchanged. Phase 00 records the final commands.
 
 ### 4. Proto is the contract
-`proto/*.proto` is the single source of truth. `make proto` generates Python stubs
+The `.proto` files (`backend/src/**/grpc/*.proto`, written by `manage.py protos` from the gRPC service classes) are the single source of truth. `make proto` generates Python stubs
 into `backend/` and Dart stubs into `app/lib/gen/`. CI fails if generated code is
 stale. Use `buf` for lint + breaking-change detection.
 
