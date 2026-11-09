@@ -1,6 +1,6 @@
 # Phase 05 — Projects
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Create and manage **projects** inside a workspace, each with a short key (e.g. `WEB`), a description, and per-project switches for optional features.
@@ -31,6 +31,7 @@ Sidebar tree of projects (favorites on top), create dialog, settings page with F
 - Key immutable after the first task exists (tasks reference it in display ids).
 - Private projects are invisible (not even in search) to non-members; owners/admins can see them in an admin list but must join to open.
 - Turning a feature off hides UI but keeps data.
+- Creator manages their own project: the creator (still an active member with `project.create`) may update, archive and manage members of that project even if their role lacks those keys.
 
 ## Acceptance criteria
 - [ ] Create/rename/archive/restore
