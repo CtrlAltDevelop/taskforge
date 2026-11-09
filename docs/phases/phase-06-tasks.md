@@ -1,6 +1,6 @@
 # Phase 06 — Tasks
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Create, view, edit and delete **tasks** (title, description, assignee, priority, due date, status) with fast paginated listing over gRPC.
@@ -34,13 +34,26 @@ Quick-add bar, task detail pane, assignee picker (avatar chips), date pickers, p
 - Assignee must be a project-accessible member.
 
 ## Acceptance criteria
-- [ ] Create/edit/delete/restore through gRPC
-- [ ] 10,000-task project: first page rendered < 500 ms, memory stays flat while streaming
-- [ ] Conflict on same field returns `ABORTED` with current value; different fields merge
-- [ ] Display ids never duplicate under concurrent creates (test with 50 parallel)
+- [x] Create/edit/delete/restore through gRPC
+- [x] 10,000-task project: first page rendered < 500 ms, memory stays flat while streaming
+- [x] Conflict on same field returns `ABORTED` with current value; different fields merge
+- [x] Display ids never duplicate under concurrent creates (test with 50 parallel)
 
 ## Tests
 Counter race, field-mask merge, conflict path, permissions, rich text validation, Flutter optimistic update + rollback.
 
 ## Depends on
 Phases 04, 05.
+
+## As built (differs from the plan)
+- `Task.field_versions` (field -> version that last changed it) is added to the model: it is how "different fields merge, same field conflicts" is decided.
+- New permission keys `task.create`, `task.update`, `task.delete` (Owner, Admin, Member); reading needs only `workspace.view`.
+- Rank positions append in fixed width (6 letters) rather than growing; `rank.between` is there for reordering. A naive append grew past the column after ~10,000 tasks (found on Postgres).
+- Update sends `optional` fields (proto3 field presence) plus `set_assignees`, instead of a `FieldMask` message.
+- "First page < 500 ms": measured on the server (10,000-task project, SQLite and Postgres) and in the app's list controller (the first 100 of 10,000 streamed tasks are in the list in well under 500 ms in a Flutter test). Not measured in a real browser. Memory is flat on the server (keyset pages); the client keeps the list it shows.
+- The description is edited in the app as lightly marked-up text (`#` headings, `-` / `1.` lists, `- [ ]` checklists, `>` quotes, fenced code, `---`, `[text](url)` links) and stored as the shared rich-text document; the codec round-trips every block the server accepts, so a document made elsewhere is shown and re-saved without loss. It is a text box, not a WYSIWYG editor; that can come with Docs.
+- `ListTrash` was added so deleted tasks can be restored from a Trash screen (project page, for anyone with `task.delete`), not only from the Undo snackbar.
+- The assignee picker offers a private project's members only; an open project offers every workspace member.
+- Code review found and fixed: description flattening, overlapping optimistic edits (rollback now reverts only the failed fields; stale snapshots and out-of-order answers are handled), a made-up `expected_version`, mixed-case duplicate assignees, Undo after the screen is gone, a task created while the list is still streaming.
+- The WebSocket events are not consumed here: `signals.task_changed` is the hook for phase 16.
+- Tasks are numbered with `next_task_number` inside the project row lock after loading the project through `visible_to` (same guarantees as `number_task`).
