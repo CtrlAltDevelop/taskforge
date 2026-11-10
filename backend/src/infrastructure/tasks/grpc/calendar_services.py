@@ -1,12 +1,14 @@
-"""The calendar over gRPC (``CalendarController``): ListRange, ListUnscheduled.
+"""The calendar over gRPC (``CalendarController``): ListRange, ListWorkspaceRange,
+ListUnscheduled.
 
-Both need workspace membership and a project the caller can open (a hidden or foreign project is
-NOT_FOUND). ``ListRange`` streams the tasks that fall on any day from ``range_start`` to
-``range_end`` (inclusive ``YYYY-MM-DD`` dates, at most 62 days apart; INVALID_ARGUMENT otherwise),
-subtasks included, in chunks. Dates carry no time zone. ``ListUnscheduled`` pages the open tasks
-with no dates (the tray). A date is changed with ``TaskController.Update``. Rules and queries are
-in ``infrastructure.tasks.calendar``; the plumbing is shared with
-``infrastructure.tasks.grpc.services``.
+All need workspace membership; ``ListRange`` and ``ListUnscheduled`` also a project the caller can
+open (a hidden or foreign project is NOT_FOUND). ``ListRange`` streams the tasks that fall on any
+day from ``range_start`` to ``range_end`` (inclusive ``YYYY-MM-DD`` dates, at most 62 days apart;
+INVALID_ARGUMENT otherwise), subtasks included, in chunks. ``ListWorkspaceRange`` is the same across
+every non-archived project the caller can open, optionally narrowed by ``project_ids``. Dates carry
+no time zone. ``ListUnscheduled`` pages the open tasks with no dates (the tray). A date is changed
+with ``TaskController.Update``. Rules and queries are in ``infrastructure.tasks.calendar``; the
+plumbing is shared with ``infrastructure.tasks.grpc.services``.
 """
 
 from collections.abc import AsyncIterator
@@ -51,6 +53,34 @@ class CalendarService(generics.GenericService):
             request.range_start,
             request.range_end,
             include_done=request.include_done,
+        )
+        while (chunk := await sync_to_async(_next_chunk)(chunks)) is not None:
+            for message in chunk:
+                yield message
+
+    @grpc_action(
+        request=[
+            {"name": "workspace_id", "type": "string"},
+            {"name": "range_start", "type": "string"},
+            {"name": "range_end", "type": "string"},
+            {"name": "include_done", "type": "bool"},
+            {"name": "project_ids", "cardinality": "repeated", "type": "string"},
+        ],
+        request_name="CalendarWorkspaceRangeRequest",
+        response=Task,
+        response_name="Task",
+        response_stream=True,
+    )
+    @stream_action
+    async def ListWorkspaceRange(self, request: Any, context: Any) -> AsyncIterator[Any]:
+        user, workspace = await _scope(request, context)
+        chunks = calendar.iter_workspace_range(
+            user,
+            workspace,
+            request.range_start,
+            request.range_end,
+            include_done=request.include_done,
+            project_ids=list(request.project_ids),
         )
         while (chunk := await sync_to_async(_next_chunk)(chunks)) is not None:
             for message in chunk:

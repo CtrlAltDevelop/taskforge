@@ -202,6 +202,11 @@ class CalendarControllerStub:
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.FromString,
                 _registered_method=True)
+        self.ListWorkspaceRange = channel.unary_stream(
+                '/config.tasks.CalendarController/ListWorkspaceRange',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarWorkspaceRangeRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
 
 
 class CalendarControllerServicer:
@@ -219,6 +224,12 @@ class CalendarControllerServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListWorkspaceRange(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_CalendarControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -231,6 +242,11 @@ def add_CalendarControllerServicer_to_server(servicer, server):
                     servicer.ListUnscheduled,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.FromString,
                     response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.SerializeToString,
+            ),
+            'ListWorkspaceRange': grpc.unary_stream_rpc_method_handler(
+                    servicer.ListWorkspaceRange,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarWorkspaceRangeRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -287,6 +303,33 @@ class CalendarController:
             '/config.tasks.CalendarController/ListUnscheduled',
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.SerializeToString,
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListWorkspaceRange(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/config.tasks.CalendarController/ListWorkspaceRange',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarWorkspaceRangeRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
             options,
             channel_credentials,
             insecure,

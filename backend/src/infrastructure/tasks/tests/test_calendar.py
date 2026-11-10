@@ -182,3 +182,96 @@ def test_a_task_carries_the_due_dates_of_what_it_is_linked_to(team: Any, project
     assert tasks["blocked"].blocks_due == ""
     assert tasks["blocker"].blocks_due == "2026-11-15"
     assert tasks["blocker"].blockers_due == ""
+
+
+def _workspace(team: Any, **kw: Any) -> list[str]:
+    tasks = [
+        t
+        for chunk in calendar.iter_workspace_range(
+            team.member, team.ws, "2026-11-01", "2026-11-30", **kw
+        )
+        for t in chunk
+    ]
+    return sorted(t.title for t in tasks)
+
+
+def test_the_workspace_calendar_spans_every_visible_project(team: Any, project: Any) -> None:
+    other = team.create(team.owner, "API", name="Api")
+    _make(team, project, "web", due_date="2026-11-05")
+    services.create(team.owner, team.ws, str(other.pk), "api", due_date="2026-11-06")
+    _make(team, project, "later", due_date="2026-12-20")
+
+    assert _workspace(team) == ["api", "web"]
+
+
+def test_private_and_archived_projects_stay_out(team: Any, project: Any) -> None:
+    from infrastructure.projects import services as projects
+
+    hidden = team.create(team.owner, "SEC", visibility="private", name="Secret")
+    old = team.create(team.owner, "OLD", name="Old")
+    _make(team, project, "web", due_date="2026-11-05")
+    services.create(team.owner, team.ws, str(hidden.pk), "secret", due_date="2026-11-05")
+    services.create(team.owner, team.ws, str(old.pk), "old", due_date="2026-11-05")
+    projects.archive(team.owner, team.ws, str(old.pk), old.version)
+
+    assert _workspace(team) == ["web"]
+    seen_by_owner = [
+        t.title
+        for chunk in calendar.iter_workspace_range(team.owner, team.ws, "2026-11-01", "2026-11-30")
+        for t in chunk
+    ]
+    assert "secret" in seen_by_owner and "old" not in seen_by_owner
+
+
+def test_project_ids_narrow_it_and_foreign_ids_are_ignored(team: Any, project: Any) -> None:
+    other = team.create(team.owner, "API", name="Api")
+    hidden = team.create(team.owner, "SEC", visibility="private", name="Secret")
+    _make(team, project, "web", due_date="2026-11-05")
+    services.create(team.owner, team.ws, str(other.pk), "api", due_date="2026-11-05")
+    services.create(team.owner, team.ws, str(hidden.pk), "secret", due_date="2026-11-05")
+
+    assert _workspace(team, project_ids=[str(other.pk)]) == ["api"]
+    assert _workspace(team, project_ids=[str(hidden.pk)]) == []  # not the caller's to see
+    assert _workspace(team, project_ids=["nope"]) == []
+
+
+def test_the_workspace_range_pages_without_repeats_and_is_refused_to_strangers(
+    team: Any, project: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(calendar, "CHUNK", 3)
+    other = team.create(team.owner, "API", name="Api")
+    for n in range(4):
+        _make(team, project, f"w{n}", due_date="2026-11-05")
+        services.create(team.owner, team.ws, str(other.pk), f"a{n}", due_date="2026-11-05")
+
+    titles = _workspace(team)
+
+    assert titles == sorted([f"w{n}" for n in range(4)] + [f"a{n}" for n in range(4)])
+    with pytest.raises(ApiError):
+        list(calendar.iter_workspace_range(team.outsider, team.ws, "2026-11-01", "2026-11-30"))
+    with pytest.raises(ApiError):
+        list(calendar.iter_workspace_range(team.member, team.ws, "2026-11-30", "2026-11-01"))
+
+
+def test_another_workspace_never_leaks_in_even_for_a_member_of_both(
+    team: Any, project: Any
+) -> None:
+    from infrastructure.workspaces import services as workspace_services
+
+    _make(team, project, "here", due_date="2026-11-05")
+    there = workspace_services.create(team.member, "Elsewhere", "elsewhere")
+    theirs = team.create(team.member, "OTH", name="Other")  # a project of this workspace
+    away = workspace_services.create(team.owner, "Away", "away")
+    away_project = (
+        __import__("infrastructure.projects.services", fromlist=["create"])
+        .create(team.owner, away, "Away", "AWY")
+        .project
+    )
+    services.create(team.owner, away, str(away_project.pk), "away task", due_date="2026-11-05")
+
+    here_only = _workspace(team)
+    narrowed = _workspace(team, project_ids=[str(away_project.pk)])
+
+    assert here_only == ["here"]
+    assert narrowed == []
+    assert there and theirs

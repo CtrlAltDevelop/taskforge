@@ -504,6 +504,17 @@ ENDPOINTS += (
         ),
     ),
     Endpoint(
+        "CalendarController.ListWorkspaceRange",
+        "workspace.view",
+        _grpc(
+            CL,
+            "ListWorkspaceRange",
+            lambda w: tpb.CalendarWorkspaceRangeRequest(
+                workspace_id=w.ws, range_start="2026-11-01", range_end="2026-11-30"
+            ),
+        ),
+    ),
+    Endpoint(
         "CalendarController.ListUnscheduled",
         "workspace.view",
         _grpc(

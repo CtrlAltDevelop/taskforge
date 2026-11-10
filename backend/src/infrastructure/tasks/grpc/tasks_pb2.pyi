@@ -351,6 +351,38 @@ class CalendarTrayRequest(_message.Message):
 Global___CalendarTrayRequest: _TypeAlias = CalendarTrayRequest  # noqa: Y015
 
 @_typing.final
+class CalendarWorkspaceRangeRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    RANGE_START_FIELD_NUMBER: _builtins.int
+    RANGE_END_FIELD_NUMBER: _builtins.int
+    INCLUDE_DONE_FIELD_NUMBER: _builtins.int
+    PROJECT_IDS_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    range_start: _builtins.str
+    range_end: _builtins.str
+    include_done: _builtins.bool
+    @_builtins.property
+    def project_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        range_start: _builtins.str = ...,
+        range_end: _builtins.str = ...,
+        include_done: _builtins.bool = ...,
+        project_ids: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_done", b"include_done", "project_ids", b"project_ids", "range_end", b"range_end", "range_start", b"range_start", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarWorkspaceRangeRequest: _TypeAlias = CalendarWorkspaceRangeRequest  # noqa: Y015
+
+@_typing.final
 class GroupCount(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 

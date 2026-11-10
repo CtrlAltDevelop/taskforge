@@ -598,3 +598,18 @@ def test_the_tray_pages_and_a_bad_range_is_invalid_argument(team: Any, grpc_call
     assert _refused(grpc_call, CAL, "ListRange", bad, token=team["tokens"]["vic"]).code() is (
         grpc.StatusCode.INVALID_ARGUMENT
     )
+
+
+def test_the_workspace_calendar_streams_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
+    _create(grpc_call, team, title="web", due_date="2026-11-05")
+
+    tasks = grpc_call(
+        CAL,
+        "ListWorkspaceRange",
+        pb.CalendarWorkspaceRangeRequest(
+            workspace_id=team["ws"], range_start="2026-11-01", range_end="2026-11-30"
+        ),
+        token=team["tokens"]["vic"],
+    )
+
+    assert [t.title for t in tasks] == ["web"]

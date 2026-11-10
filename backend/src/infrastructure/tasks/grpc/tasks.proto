@@ -11,6 +11,7 @@ service BoardController {
 service CalendarController {
     rpc ListRange(CalendarRangeRequest) returns (stream Task) {}
     rpc ListUnscheduled(CalendarTrayRequest) returns (CalendarTray) {}
+    rpc ListWorkspaceRange(CalendarWorkspaceRangeRequest) returns (stream Task) {}
 }
 
 service LinkController {
@@ -116,6 +117,14 @@ message CalendarTrayRequest {
     string project_id = 2;
     string cursor = 3;
     int32 page_size = 4;
+}
+
+message CalendarWorkspaceRangeRequest {
+    string workspace_id = 1;
+    string range_start = 2;
+    string range_end = 3;
+    bool include_done = 4;
+    repeated string project_ids = 5;
 }
 
 message GroupCount {
