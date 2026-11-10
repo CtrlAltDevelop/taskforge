@@ -197,6 +197,63 @@ final $typed_data.Uint8List bulkResultDescriptor = $convert.base64Decode(
     'EoCVIEY29kZRIYCgdtZXNzYWdlGAQgASgJUgdtZXNzYWdlEhYKBmRldGFpbBgFIAEoCVIGZGV0'
     'YWlsEi4KBHRhc2sYBiABKAsyGi5jb25maWcudGFza3MuVGFza1Jlc3BvbnNlUgR0YXNr');
 
+@$core.Deprecated('Use calendarRangeRequestDescriptor instead')
+const CalendarRangeRequest$json = {
+  '1': 'CalendarRangeRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'range_start', '3': 3, '4': 1, '5': 9, '10': 'rangeStart'},
+    {'1': 'range_end', '3': 4, '4': 1, '5': 9, '10': 'rangeEnd'},
+    {'1': 'include_done', '3': 5, '4': 1, '5': 8, '10': 'includeDone'},
+  ],
+};
+
+/// Descriptor for `CalendarRangeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarRangeRequestDescriptor = $convert.base64Decode(
+    'ChRDYWxlbmRhclJhbmdlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
+    'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIfCgtyYW5nZV9zdGFydBgDIAEoCVIK'
+    'cmFuZ2VTdGFydBIbCglyYW5nZV9lbmQYBCABKAlSCHJhbmdlRW5kEiEKDGluY2x1ZGVfZG9uZR'
+    'gFIAEoCFILaW5jbHVkZURvbmU=');
+
+@$core.Deprecated('Use calendarTrayDescriptor instead')
+const CalendarTray$json = {
+  '1': 'CalendarTray',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+    {'1': 'cursor', '3': 2, '4': 1, '5': 9, '10': 'cursor'},
+  ],
+};
+
+/// Descriptor for `CalendarTray`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarTrayDescriptor = $convert.base64Decode(
+    'CgxDYWxlbmRhclRyYXkSKAoFdGFza3MYASADKAsyEi5jb25maWcudGFza3MuVGFza1IFdGFza3'
+    'MSFgoGY3Vyc29yGAIgASgJUgZjdXJzb3I=');
+
+@$core.Deprecated('Use calendarTrayRequestDescriptor instead')
+const CalendarTrayRequest$json = {
+  '1': 'CalendarTrayRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'cursor', '3': 3, '4': 1, '5': 9, '10': 'cursor'},
+    {'1': 'page_size', '3': 4, '4': 1, '5': 5, '10': 'pageSize'},
+  ],
+};
+
+/// Descriptor for `CalendarTrayRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarTrayRequestDescriptor = $convert.base64Decode(
+    'ChNDYWxlbmRhclRyYXlSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYWNlSW'
+    'QSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhYKBmN1cnNvchgDIAEoCVIGY3Vyc29y'
+    'EhsKCXBhZ2Vfc2l6ZRgEIAEoBVIIcGFnZVNpemU=');
+
 @$core.Deprecated('Use groupCountDescriptor instead')
 const GroupCount$json = {
   '1': 'GroupCount',
@@ -412,7 +469,7 @@ const Task$json = {
       '3': 27,
       '4': 3,
       '5': 11,
-      '6': '.config.tasks.TaskFieldValueResponse',
+      '6': '.config.tasks.TaskFieldValue',
       '10': 'fields'
     },
     {'1': 'group_key', '3': 28, '4': 1, '5': 9, '10': 'groupKey'},
@@ -435,8 +492,8 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'UgASgJUghwYXJlbnRJZBIUCgVkZXB0aBgWIAEoBVIFZGVwdGgSIwoNcHJvZ3Jlc3NfZG9uZRgX'
     'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
     'FsEh0KCmlzX2Jsb2NrZWQYGSABKAhSCWlzQmxvY2tlZBIdCgpibG9ja2VkX2J5GBogAygJUgli'
-    'bG9ja2VkQnkSPAoGZmllbGRzGBsgAygLMiQuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUm'
-    'VzcG9uc2VSBmZpZWxkcxIbCglncm91cF9rZXkYHCABKAlSCGdyb3VwS2V5');
+    'bG9ja2VkQnkSNAoGZmllbGRzGBsgAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUg'
+    'ZmaWVsZHMSGwoJZ3JvdXBfa2V5GBwgASgJUghncm91cEtleQ==');
 
 @$core.Deprecated('Use taskBulkUpdateRequestDescriptor instead')
 const TaskBulkUpdateRequest$json = {

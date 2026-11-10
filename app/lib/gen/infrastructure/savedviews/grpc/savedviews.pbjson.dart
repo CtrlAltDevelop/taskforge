@@ -92,6 +92,40 @@ final $typed_data.Uint8List boardLimitResponseDescriptor = $convert.base64Decode
     'ChJCb2FyZExpbWl0UmVzcG9uc2USFgoGY29sdW1uGAEgASgJUgZjb2x1bW4SFAoFbGltaXQYAi'
     'ABKAVSBWxpbWl0');
 
+@$core.Deprecated('Use calendarLayoutDescriptor instead')
+const CalendarLayout$json = {
+  '1': 'CalendarLayout',
+  '2': [
+    {'1': 'mode', '3': 1, '4': 1, '5': 9, '10': 'mode'},
+    {'1': 'color_by', '3': 2, '4': 1, '5': 9, '10': 'colorBy'},
+    {'1': 'week_start', '3': 3, '4': 1, '5': 5, '10': 'weekStart'},
+    {'1': 'hide_done', '3': 4, '4': 1, '5': 8, '10': 'hideDone'},
+  ],
+};
+
+/// Descriptor for `CalendarLayout`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarLayoutDescriptor = $convert.base64Decode(
+    'Cg5DYWxlbmRhckxheW91dBISCgRtb2RlGAEgASgJUgRtb2RlEhkKCGNvbG9yX2J5GAIgASgJUg'
+    'djb2xvckJ5Eh0KCndlZWtfc3RhcnQYAyABKAVSCXdlZWtTdGFydBIbCgloaWRlX2RvbmUYBCAB'
+    'KAhSCGhpZGVEb25l');
+
+@$core.Deprecated('Use calendarLayoutResponseDescriptor instead')
+const CalendarLayoutResponse$json = {
+  '1': 'CalendarLayoutResponse',
+  '2': [
+    {'1': 'mode', '3': 1, '4': 1, '5': 9, '10': 'mode'},
+    {'1': 'color_by', '3': 2, '4': 1, '5': 9, '10': 'colorBy'},
+    {'1': 'week_start', '3': 3, '4': 1, '5': 5, '10': 'weekStart'},
+    {'1': 'hide_done', '3': 4, '4': 1, '5': 8, '10': 'hideDone'},
+  ],
+};
+
+/// Descriptor for `CalendarLayoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarLayoutResponseDescriptor = $convert.base64Decode(
+    'ChZDYWxlbmRhckxheW91dFJlc3BvbnNlEhIKBG1vZGUYASABKAlSBG1vZGUSGQoIY29sb3JfYn'
+    'kYAiABKAlSB2NvbG9yQnkSHQoKd2Vla19zdGFydBgDIAEoBVIJd2Vla1N0YXJ0EhsKCWhpZGVf'
+    'ZG9uZRgEIAEoCFIIaGlkZURvbmU=');
+
 @$core.Deprecated('Use layoutDescriptor instead')
 const Layout$json = {
   '1': 'Layout',
@@ -239,6 +273,14 @@ const SavedView$json = {
       '6': '.config.savedviews.BoardLayoutResponse',
       '10': 'board'
     },
+    {
+      '1': 'calendar',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.CalendarLayoutResponse',
+      '10': 'calendar'
+    },
   ],
 };
 
@@ -249,7 +291,9 @@ final $typed_data.Uint8List savedViewDescriptor = $convert.base64Decode(
     'bmQYBSABKAlSBGtpbmQSGwoJaXNfc2hhcmVkGAYgASgIUghpc1NoYXJlZBI5CgZsYXlvdXQYBy'
     'ABKAsyIS5jb25maWcuc2F2ZWR2aWV3cy5MYXlvdXRSZXNwb25zZVIGbGF5b3V0EhgKB3ZlcnNp'
     'b24YCCABKAVSB3ZlcnNpb24SHQoKdXBkYXRlZF9hdBgJIAEoCVIJdXBkYXRlZEF0EjwKBWJvYX'
-    'JkGAogASgLMiYuY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMYXlvdXRSZXNwb25zZVIFYm9hcmQ=');
+    'JkGAogASgLMiYuY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMYXlvdXRSZXNwb25zZVIFYm9hcmQS'
+    'RQoIY2FsZW5kYXIYCyABKAsyKS5jb25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFJlc3'
+    'BvbnNlUghjYWxlbmRhcg==');
 
 @$core.Deprecated('Use viewDeleteRequestDescriptor instead')
 const ViewDeleteRequest$json = {
@@ -328,6 +372,14 @@ const ViewSaveRequest$json = {
       '6': '.config.savedviews.BoardLayout',
       '10': 'board'
     },
+    {
+      '1': 'calendar',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.CalendarLayout',
+      '10': 'calendar'
+    },
   ],
 };
 
@@ -338,4 +390,5 @@ final $typed_data.Uint8List viewSaveRequestDescriptor = $convert.base64Decode(
     'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhISCgRuYW1lGAUgASgJUgRuYW1lEhIKBG'
     'tpbmQYBiABKAlSBGtpbmQSMQoGbGF5b3V0GAcgASgLMhkuY29uZmlnLnNhdmVkdmlld3MuTGF5'
     'b3V0UgZsYXlvdXQSFgoGc2hhcmVkGAggASgIUgZzaGFyZWQSNAoFYm9hcmQYCSABKAsyHi5jb2'
-    '5maWcuc2F2ZWR2aWV3cy5Cb2FyZExheW91dFIFYm9hcmQ=');
+    '5maWcuc2F2ZWR2aWV3cy5Cb2FyZExheW91dFIFYm9hcmQSPQoIY2FsZW5kYXIYCiABKAsyIS5j'
+    'b25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFIIY2FsZW5kYXI=');

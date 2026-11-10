@@ -821,6 +821,270 @@ class BulkResult extends $pb.GeneratedMessage {
   TaskResponse ensureTask() => $_ensure(5);
 }
 
+class CalendarRangeRequest extends $pb.GeneratedMessage {
+  factory CalendarRangeRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? rangeStart,
+    $core.String? rangeEnd,
+    $core.bool? includeDone,
+  }) {
+    final result = CalendarRangeRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (rangeStart != null) result.rangeStart = rangeStart;
+    if (rangeEnd != null) result.rangeEnd = rangeEnd;
+    if (includeDone != null) result.includeDone = includeDone;
+    return result;
+  }
+
+  CalendarRangeRequest._();
+
+  factory CalendarRangeRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarRangeRequest()..mergeFromBuffer(data, registry);
+  factory CalendarRangeRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarRangeRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarRangeRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: CalendarRangeRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'rangeStart')
+    ..aOS(4, _omitFieldNames ? '' : 'rangeEnd')
+    ..aOB(5, _omitFieldNames ? '' : 'includeDone')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarRangeRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarRangeRequest copyWith(void Function(CalendarRangeRequest) updates) =>
+      super.copyWith((message) => updates(message as CalendarRangeRequest))
+          as CalendarRangeRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CalendarRangeRequest() / CalendarRangeRequest.new instead')
+  static CalendarRangeRequest create() => CalendarRangeRequest._();
+  static $pb.GeneratedMessage $_createMessage() => CalendarRangeRequest._();
+  @$core.override
+  CalendarRangeRequest createEmptyInstance() => CalendarRangeRequest._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarRangeRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CalendarRangeRequest>(
+          CalendarRangeRequest.$_createMessage);
+  static CalendarRangeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get rangeStart => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set rangeStart($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRangeStart() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRangeStart() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get rangeEnd => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set rangeEnd($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasRangeEnd() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRangeEnd() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get includeDone => $_getBF(4);
+  @$pb.TagNumber(5)
+  set includeDone($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasIncludeDone() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIncludeDone() => $_clearField(5);
+}
+
+class CalendarTray extends $pb.GeneratedMessage {
+  factory CalendarTray({
+    $core.Iterable<Task>? tasks,
+    $core.String? cursor,
+  }) {
+    final result = CalendarTray._();
+    if (tasks != null) result.tasks.addAll(tasks);
+    if (cursor != null) result.cursor = cursor;
+    return result;
+  }
+
+  CalendarTray._();
+
+  factory CalendarTray.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarTray()..mergeFromBuffer(data, registry);
+  factory CalendarTray.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarTray()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarTray',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: CalendarTray.$_createMessage)
+    ..pPM<Task>(1, _omitFieldNames ? '' : 'tasks',
+        subBuilder: Task.$_createMessage)
+    ..aOS(2, _omitFieldNames ? '' : 'cursor')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarTray clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarTray copyWith(void Function(CalendarTray) updates) =>
+      super.copyWith((message) => updates(message as CalendarTray))
+          as CalendarTray;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use CalendarTray() / CalendarTray.new instead')
+  static CalendarTray create() => CalendarTray._();
+  static $pb.GeneratedMessage $_createMessage() => CalendarTray._();
+  @$core.override
+  CalendarTray createEmptyInstance() => CalendarTray._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarTray getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CalendarTray>(
+          CalendarTray.$_createMessage);
+  static CalendarTray? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Task> get tasks => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.String get cursor => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set cursor($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCursor() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCursor() => $_clearField(2);
+}
+
+class CalendarTrayRequest extends $pb.GeneratedMessage {
+  factory CalendarTrayRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? cursor,
+    $core.int? pageSize,
+  }) {
+    final result = CalendarTrayRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (cursor != null) result.cursor = cursor;
+    if (pageSize != null) result.pageSize = pageSize;
+    return result;
+  }
+
+  CalendarTrayRequest._();
+
+  factory CalendarTrayRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarTrayRequest()..mergeFromBuffer(data, registry);
+  factory CalendarTrayRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarTrayRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarTrayRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: CalendarTrayRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'cursor')
+    ..aI(4, _omitFieldNames ? '' : 'pageSize')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarTrayRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarTrayRequest copyWith(void Function(CalendarTrayRequest) updates) =>
+      super.copyWith((message) => updates(message as CalendarTrayRequest))
+          as CalendarTrayRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core
+      .Deprecated('Use CalendarTrayRequest() / CalendarTrayRequest.new instead')
+  static CalendarTrayRequest create() => CalendarTrayRequest._();
+  static $pb.GeneratedMessage $_createMessage() => CalendarTrayRequest._();
+  @$core.override
+  CalendarTrayRequest createEmptyInstance() => CalendarTrayRequest._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarTrayRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CalendarTrayRequest>(
+          CalendarTrayRequest.$_createMessage);
+  static CalendarTrayRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get cursor => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set cursor($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCursor() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCursor() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get pageSize => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set pageSize($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPageSize() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPageSize() => $_clearField(4);
+}
+
 class GroupCount extends $pb.GeneratedMessage {
   factory GroupCount({
     $core.String? key,
@@ -1682,7 +1946,7 @@ class Task extends $pb.GeneratedMessage {
     $core.int? progressTotal,
     $core.bool? isBlocked,
     $core.Iterable<$core.String>? blockedBy,
-    $core.Iterable<TaskFieldValueResponse>? fields,
+    $core.Iterable<TaskFieldValue>? fields,
     $core.String? groupKey,
   }) {
     final result = Task._();
@@ -1756,8 +2020,8 @@ class Task extends $pb.GeneratedMessage {
     ..aI(24, _omitFieldNames ? '' : 'progressTotal')
     ..aOB(25, _omitFieldNames ? '' : 'isBlocked')
     ..pPS(26, _omitFieldNames ? '' : 'blockedBy')
-    ..pPM<TaskFieldValueResponse>(27, _omitFieldNames ? '' : 'fields',
-        subBuilder: TaskFieldValueResponse.$_createMessage)
+    ..pPM<TaskFieldValue>(27, _omitFieldNames ? '' : 'fields',
+        subBuilder: TaskFieldValue.$_createMessage)
     ..aOS(28, _omitFieldNames ? '' : 'groupKey')
     ..hasRequiredFields = false;
 
@@ -2004,7 +2268,7 @@ class Task extends $pb.GeneratedMessage {
   $pb.PbList<$core.String> get blockedBy => $_getList(25);
 
   @$pb.TagNumber(27)
-  $pb.PbList<TaskFieldValueResponse> get fields => $_getList(26);
+  $pb.PbList<TaskFieldValue> get fields => $_getList(26);
 
   @$pb.TagNumber(28)
   $core.String get groupKey => $_getSZ(27);

@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/calendar/domain/calendar_math.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_agenda.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_grid.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_toolbar.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_tray.dart';
+import 'package:taskforge/features/projects/domain/projects.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
+
+/// Below this width the calendar is an agenda: a month of dots and the tasks of
+/// the chosen day. From [trayBreakpoint] the unscheduled tasks sit beside it.
+const phoneBreakpoint = 700.0;
+const trayBreakpoint = 900.0;
+const trayWidth = 260.0;
+
+/// A project's tasks by their dates: month, week or day, with drag to move or
+/// resize and a tray of tasks that have no date yet.
+class CalendarView extends ConsumerStatefulWidget {
+  const CalendarView({
+    super.key,
+    required this.project,
+    required this.onOpen,
+    this.openTaskId,
+  });
+
+  final Project project;
+  final void Function(Task) onOpen;
+  final String? openTaskId;
+
+  @override
+  ConsumerState<CalendarView> createState() => _CalendarViewState();
+}
+
+class _CalendarViewState extends ConsumerState<CalendarView> {
+  Day? _picked; // the agenda's chosen day
+
+  String get _id => widget.project.id;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 0 is Sunday in the locale's own numbering; ISO weekdays have Sunday = 7.
+    final index = MaterialLocalizations.of(context).firstDayOfWeekIndex;
+    Future.microtask(() {
+      if (mounted) {
+        ref
+            .read(localeWeekStartProvider.notifier)
+            .set(index == 0 ? DateTime.sunday : index);
+      }
+    });
+  }
+
+  Color _colorOf(Task task, String colorBy) {
+    if (colorBy == 'priority') return priorityColor(task.priority);
+    return ref
+            .read(workflowProvider(_id))
+            .value
+            ?.statusById(task.statusId)
+            ?.swatch ??
+        Colors.blueGrey;
+  }
+
+  void _say(String text) => ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(text)));
+
+  /// Gives [task] new dates; a task that came from the tray leaves it (and
+  /// comes back if the server refuses). A blocked task is rescheduled with a
+  /// note about what blocks it.
+  Future<void> _apply(Task task, Dates dates, {bool fromTray = false}) async {
+    final current = Dates(
+      start: parseDay(task.startDate),
+      due: parseDay(task.dueDate),
+    );
+    if (dates == current) return;
+    final tray = ref.read(trayProvider(_id).notifier);
+    if (fromTray) tray.remove(task.id);
+    try {
+      await ref.read(calendarProvider(_id).notifier).reschedule(task, dates);
+      if (task.isBlocked && mounted) {
+        _say(
+          'Rescheduled. It is blocked by ${task.blockedBy.join(', ')}, which '
+          'may not be done by then.',
+        );
+      }
+    } on TaskException catch (e) {
+      if (fromTray) tray.restore(task);
+      if (mounted) _say(taskErrorMessage(e));
+    }
+  }
+
+  Future<void> _drop(CalDrag drag, Day target) async {
+    final task = drag.task;
+    await _apply(task, drag.datesOn(target), fromTray: drag.fromTray);
+  }
+
+  /// Asks for a day and gives [task] that day, keeping its length.
+  Future<void> _schedule(Task task, {bool fromTray = false}) async {
+    final today = ref.read(todayProvider);
+    final span = spanOf(task);
+    final initial = span?.first ?? today;
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: day(2000, 1, 1),
+      lastDate: day(2100, 12, 31),
+    );
+    if (picked == null) return;
+    await _apply(
+      task,
+      moveTask(task, dayOf(picked), grabbed: span?.first),
+      fromTray: fromTray,
+    );
+  }
+
+  Future<void> _more(Day d, List<Task> tasks, String colorBy) =>
+      showDialog<void>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(formatDay(d)),
+          content: SizedBox(
+            width: 360,
+            height: 360,
+            child: DayTasks(
+              day: d,
+              tasks: tasks,
+              colorOf: (t) => _colorOf(t, colorBy),
+              canMove: false,
+              onOpen: (t) {
+                Navigator.pop(context);
+                widget.onOpen(t);
+              },
+              onReschedule: (_) {},
+            ),
+          ),
+        ),
+      );
+
+  void _openTray(bool canMove) => showModalBottomSheet<void>(
+    context: context,
+    builder: (sheet) => SizedBox(
+      height: 420,
+      child: CalendarTray(
+        projectId: _id,
+        canMove: canMove,
+        draggable: false,
+        onOpen: (t) {
+          Navigator.pop(sheet);
+          widget.onOpen(t);
+        },
+        onSchedule: (t) {
+          Navigator.pop(sheet);
+          _schedule(t, fromTray: true);
+        },
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = ref.watch(calendarLayoutProvider(_id)).layout;
+    final state = ref.watch(calendarProvider(_id));
+    final anchor = ref.watch(calendarAnchorProvider(_id));
+    final weekStart = ref.watch(weekStartProvider(_id));
+    final today = ref.watch(todayProvider);
+    final permissions = ref.watch(permissionSetProvider);
+    final canMove =
+        !widget.project.isArchived && permissions.can(Perm.taskUpdate);
+    ref.listen(calendarAnchorProvider(_id), (_, _) {
+      if (_picked != null) setState(() => _picked = null);
+    });
+    return LayoutBuilder(
+      builder: (context, box) {
+        final phone = box.maxWidth < phoneBreakpoint;
+        Future.microtask(() {
+          if (mounted) {
+            ref.read(compactCalendarProvider.notifier).set(phone);
+          }
+        });
+        final sidebar = box.maxWidth >= trayBreakpoint;
+        final mode = phone ? CalendarMode.month : modeOf(layout);
+        final range = visibleRange(mode, anchor, weekStart);
+        final weeks = (daysBetween(range.first, range.last) + 1) ~/ 7;
+        Color colorOf(Task t) => _colorOf(t, layout.colorBy);
+        final Widget body;
+        if (phone) {
+          final selected = _picked ?? anchor;
+          body = Column(
+            children: [
+              MonthDots(
+                first: range.first,
+                weeks: weeks,
+                month: anchor.month,
+                tasks: state.tasks,
+                today: today,
+                selected: selected,
+                onSelect: (d) => setState(() => _picked = d),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: DayTasks(
+                  day: selected,
+                  tasks: state.tasks,
+                  colorOf: colorOf,
+                  canMove: canMove,
+                  onOpen: widget.onOpen,
+                  onReschedule: _schedule,
+                ),
+              ),
+            ],
+          );
+        } else if (mode == CalendarMode.day) {
+          body = DayTasks(
+            day: anchor,
+            tasks: state.tasks,
+            colorOf: colorOf,
+            canMove: canMove,
+            onOpen: widget.onOpen,
+            onReschedule: _schedule,
+          );
+        } else {
+          body = CalendarGrid(
+            first: range.first,
+            weeks: weeks,
+            weekStart: weekStart,
+            tasks: state.tasks,
+            today: today,
+            month: mode == CalendarMode.month ? anchor.month : null,
+            maxLanes: mode == CalendarMode.month ? 3 : 30,
+            canMove: canMove,
+            longPress: !sidebar,
+            openTaskId: widget.openTaskId,
+            colorOf: colorOf,
+            onOpen: widget.onOpen,
+            onDrop: _drop,
+            onMore: (d) => _more(d, state.tasks, layout.colorBy),
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CalendarToolbar(
+              projectId: _id,
+              compact: phone,
+              onTray: sidebar ? null : () => _openTray(canMove),
+            ),
+            if (state.loading)
+              const LinearProgressIndicator(key: Key('calendar-loading')),
+            if (state.error != null)
+              MaterialBanner(
+                key: const Key('calendar-error'),
+                content: Text(taskErrorMessage(state.error!)),
+                actions: [
+                  TextButton(
+                    key: const Key('retry-calendar'),
+                    onPressed: ref.read(calendarProvider(_id).notifier).refresh,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: body),
+                  if (sidebar) ...[
+                    const VerticalDivider(width: 1),
+                    SizedBox(
+                      width: trayWidth,
+                      child: CalendarTray(
+                        projectId: _id,
+                        canMove: canMove,
+                        draggable: true,
+                        onOpen: widget.onOpen,
+                        onSchedule: (t) => _schedule(t, fromTray: true),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

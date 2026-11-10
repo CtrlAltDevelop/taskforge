@@ -11,7 +11,7 @@ import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
-import 'package:taskforge/features/views/application/views_providers.dart';
+import 'package:taskforge/features/views/application/personal_layout.dart';
 import 'package:taskforge/features/views/data/views_client.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
@@ -27,31 +27,7 @@ final boardClientProvider = Provider<BoardClient>(
 
 // --------------------------------------------------------------------- layout
 
-@immutable
-class BoardLayoutState {
-  const BoardLayoutState({
-    this.layout = const BoardLayout(),
-    this.loaded = false,
-    this.saveFailed = false,
-  });
-
-  final BoardLayout layout;
-
-  /// False until the person's saved board has been read (or could not be): the
-  /// board is read once, laid out the way they chose.
-  final bool loaded;
-  final bool saveFailed;
-
-  BoardLayoutState copyWith({
-    BoardLayout? layout,
-    bool? loaded,
-    bool? saveFailed,
-  }) => BoardLayoutState(
-    layout: layout ?? this.layout,
-    loaded: loaded ?? this.loaded,
-    saveFailed: saveFailed ?? this.saveFailed,
-  );
-}
+typedef BoardLayoutState = PersonalLayoutState<BoardLayout>;
 
 /// The board layout of one project for this person: every change shows at once
 /// and is saved a moment later as their own board layout.
@@ -60,113 +36,40 @@ final boardLayoutProvider = NotifierProvider.autoDispose
       BoardLayoutNotifier.new,
     );
 
-class BoardLayoutNotifier extends Notifier<BoardLayoutState> {
-  BoardLayoutNotifier(this.projectId);
-
-  final String projectId;
-  Timer? _timer;
-  SavedBoard? _mine;
-  late ViewsClient _client;
-  String? _workspace;
-  BoardLayout? _latest;
+class BoardLayoutNotifier extends PersonalLayoutNotifier<BoardLayout> {
+  BoardLayoutNotifier(String projectId) : super(projectId, const BoardLayout());
 
   @override
-  BoardLayoutState build() {
-    _client = ref.watch(viewsClientProvider);
-    _workspace = ref.watch(workspaceScopeProvider);
-    ref.onDispose(() {
-      final pending = _timer?.isActive ?? false;
-      _timer?.cancel();
-      final layout = _latest;
-      if (pending && layout != null) unawaited(_write(layout));
-    });
-    Future.microtask(_load);
-    return const BoardLayoutState();
-  }
-
-  Future<SavedBoard?> _findMine(String workspace) async {
-    final all = await _client.listBoards(workspace, projectId);
-    return all
+  Future<StoredLayout<BoardLayout>?> findMine(
+    ViewsClient client,
+    String workspace,
+  ) async {
+    final all = await client.listBoards(workspace, projectId);
+    final mine = all
         .where((b) => !b.isShared && b.name == personalLayoutName)
         .firstOrNull;
+    return mine == null
+        ? null
+        : (id: mine.id, version: mine.version, layout: mine.layout);
   }
 
-  Future<void> _load() async {
-    final workspace = _workspace;
-    if (workspace == null) {
-      state = state.copyWith(loaded: true);
-      return;
-    }
-    try {
-      final mine = await _findMine(workspace);
-      if (!ref.mounted) return;
-      _mine = mine;
-      state = BoardLayoutState(
-        layout: mine?.layout ?? state.layout,
-        loaded: true,
-      );
-    } on ViewException {
-      // A convenience: the board works with the default layout.
-      if (ref.mounted) state = state.copyWith(loaded: true);
-    }
-  }
-
-  void set(BoardLayout layout) {
-    if (layout == state.layout) return;
-    _latest = layout;
-    state = state.copyWith(layout: layout);
-    _timer?.cancel();
-    _timer = Timer(layoutSaveDelay, () => unawaited(_save()));
-  }
-
-  void update(BoardLayout Function(BoardLayout current) change) =>
-      set(change(state.layout));
-
-  Future<void> _save() async {
-    final ok = await _write(state.layout);
-    if (ref.mounted) state = state.copyWith(saveFailed: !ok);
-  }
-
-  /// Saves [layout]; a conflict (another device) is retried against the
-  /// version the server names, and "name taken" (the first read failed) finds
-  /// the layout that exists and saves to it.
-  Future<bool> _write(BoardLayout layout) async {
-    final workspace = _workspace;
-    if (workspace == null) return false;
-    for (var attempt = 0; attempt < 3; attempt++) {
-      try {
-        final mine = _mine;
-        _mine = await _client.saveBoard(
-          workspace,
-          projectId,
-          name: personalLayoutName,
-          layout: layout,
-          id: mine?.id ?? '',
-          expectedVersion: mine?.version ?? 0,
-        );
-        return true;
-      } on ViewException catch (e) {
-        final mine = _mine;
-        if (e.failure == ViewFailure.nameTaken && mine == null) {
-          try {
-            _mine = await _findMine(workspace);
-          } on ViewException {
-            return false;
-          }
-          if (_mine == null) return false;
-          continue;
-        }
-        if (e.failure != ViewFailure.conflict || mine == null) return false;
-        _mine = SavedBoard(
-          id: mine.id,
-          name: mine.name,
-          layout: mine.layout,
-          isShared: false,
-          version: e.version,
-        );
-      }
-    }
-    return false;
+  @override
+  Future<StoredLayout<BoardLayout>> store(
+    ViewsClient client,
+    String workspace,
+    BoardLayout layout, {
+    required String id,
+    required int version,
+  }) async {
+    final saved = await client.saveBoard(
+      workspace,
+      projectId,
+      name: personalLayoutName,
+      layout: layout,
+      id: id,
+      expectedVersion: version,
+    );
+    return (id: saved.id, version: saved.version, layout: saved.layout);
   }
 }
 

@@ -321,6 +321,196 @@ class BoardLimitResponse extends $pb.GeneratedMessage {
   void clearLimit() => $_clearField(2);
 }
 
+class CalendarLayout extends $pb.GeneratedMessage {
+  factory CalendarLayout({
+    $core.String? mode,
+    $core.String? colorBy,
+    $core.int? weekStart,
+    $core.bool? hideDone,
+  }) {
+    final result = CalendarLayout._();
+    if (mode != null) result.mode = mode;
+    if (colorBy != null) result.colorBy = colorBy;
+    if (weekStart != null) result.weekStart = weekStart;
+    if (hideDone != null) result.hideDone = hideDone;
+    return result;
+  }
+
+  CalendarLayout._();
+
+  factory CalendarLayout.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarLayout()..mergeFromBuffer(data, registry);
+  factory CalendarLayout.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarLayout()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarLayout',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: CalendarLayout.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'mode')
+    ..aOS(2, _omitFieldNames ? '' : 'colorBy')
+    ..aI(3, _omitFieldNames ? '' : 'weekStart')
+    ..aOB(4, _omitFieldNames ? '' : 'hideDone')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarLayout clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarLayout copyWith(void Function(CalendarLayout) updates) =>
+      super.copyWith((message) => updates(message as CalendarLayout))
+          as CalendarLayout;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use CalendarLayout() / CalendarLayout.new instead')
+  static CalendarLayout create() => CalendarLayout._();
+  static $pb.GeneratedMessage $_createMessage() => CalendarLayout._();
+  @$core.override
+  CalendarLayout createEmptyInstance() => CalendarLayout._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarLayout getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CalendarLayout>(
+          CalendarLayout.$_createMessage);
+  static CalendarLayout? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get mode => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set mode($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMode() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get colorBy => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set colorBy($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasColorBy() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearColorBy() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get weekStart => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set weekStart($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasWeekStart() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWeekStart() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get hideDone => $_getBF(3);
+  @$pb.TagNumber(4)
+  set hideDone($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasHideDone() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearHideDone() => $_clearField(4);
+}
+
+class CalendarLayoutResponse extends $pb.GeneratedMessage {
+  factory CalendarLayoutResponse({
+    $core.String? mode,
+    $core.String? colorBy,
+    $core.int? weekStart,
+    $core.bool? hideDone,
+  }) {
+    final result = CalendarLayoutResponse._();
+    if (mode != null) result.mode = mode;
+    if (colorBy != null) result.colorBy = colorBy;
+    if (weekStart != null) result.weekStart = weekStart;
+    if (hideDone != null) result.hideDone = hideDone;
+    return result;
+  }
+
+  CalendarLayoutResponse._();
+
+  factory CalendarLayoutResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarLayoutResponse()..mergeFromBuffer(data, registry);
+  factory CalendarLayoutResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarLayoutResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarLayoutResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: CalendarLayoutResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'mode')
+    ..aOS(2, _omitFieldNames ? '' : 'colorBy')
+    ..aI(3, _omitFieldNames ? '' : 'weekStart')
+    ..aOB(4, _omitFieldNames ? '' : 'hideDone')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarLayoutResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarLayoutResponse copyWith(
+          void Function(CalendarLayoutResponse) updates) =>
+      super.copyWith((message) => updates(message as CalendarLayoutResponse))
+          as CalendarLayoutResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CalendarLayoutResponse() / CalendarLayoutResponse.new instead')
+  static CalendarLayoutResponse create() => CalendarLayoutResponse._();
+  static $pb.GeneratedMessage $_createMessage() => CalendarLayoutResponse._();
+  @$core.override
+  CalendarLayoutResponse createEmptyInstance() => CalendarLayoutResponse._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarLayoutResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CalendarLayoutResponse>(
+          CalendarLayoutResponse.$_createMessage);
+  static CalendarLayoutResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get mode => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set mode($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMode() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get colorBy => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set colorBy($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasColorBy() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearColorBy() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get weekStart => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set weekStart($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasWeekStart() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWeekStart() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get hideDone => $_getBF(3);
+  @$pb.TagNumber(4)
+  set hideDone($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasHideDone() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearHideDone() => $_clearField(4);
+}
+
 class Layout extends $pb.GeneratedMessage {
   factory Layout({
     $core.Iterable<$core.String>? columns,
@@ -766,6 +956,7 @@ class SavedView extends $pb.GeneratedMessage {
     $core.int? version,
     $core.String? updatedAt,
     BoardLayoutResponse? board,
+    CalendarLayoutResponse? calendar,
   }) {
     final result = SavedView._();
     if (id != null) result.id = id;
@@ -778,6 +969,7 @@ class SavedView extends $pb.GeneratedMessage {
     if (version != null) result.version = version;
     if (updatedAt != null) result.updatedAt = updatedAt;
     if (board != null) result.board = board;
+    if (calendar != null) result.calendar = calendar;
     return result;
   }
 
@@ -807,6 +999,8 @@ class SavedView extends $pb.GeneratedMessage {
     ..aOS(9, _omitFieldNames ? '' : 'updatedAt')
     ..aOM<BoardLayoutResponse>(10, _omitFieldNames ? '' : 'board',
         subBuilder: BoardLayoutResponse.$_createMessage)
+    ..aOM<CalendarLayoutResponse>(11, _omitFieldNames ? '' : 'calendar',
+        subBuilder: CalendarLayoutResponse.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -922,6 +1116,17 @@ class SavedView extends $pb.GeneratedMessage {
   void clearBoard() => $_clearField(10);
   @$pb.TagNumber(10)
   BoardLayoutResponse ensureBoard() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  CalendarLayoutResponse get calendar => $_getN(10);
+  @$pb.TagNumber(11)
+  set calendar(CalendarLayoutResponse value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasCalendar() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCalendar() => $_clearField(11);
+  @$pb.TagNumber(11)
+  CalendarLayoutResponse ensureCalendar() => $_ensure(10);
 }
 
 class ViewDeleteRequest extends $pb.GeneratedMessage {
@@ -1150,6 +1355,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     Layout? layout,
     $core.bool? shared,
     BoardLayout? board,
+    CalendarLayout? calendar,
   }) {
     final result = ViewSaveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1161,6 +1367,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     if (layout != null) result.layout = layout;
     if (shared != null) result.shared = shared;
     if (board != null) result.board = board;
+    if (calendar != null) result.calendar = calendar;
     return result;
   }
 
@@ -1189,6 +1396,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     ..aOB(8, _omitFieldNames ? '' : 'shared')
     ..aOM<BoardLayout>(9, _omitFieldNames ? '' : 'board',
         subBuilder: BoardLayout.$_createMessage)
+    ..aOM<CalendarLayout>(10, _omitFieldNames ? '' : 'calendar',
+        subBuilder: CalendarLayout.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1297,6 +1506,17 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
   void clearBoard() => $_clearField(9);
   @$pb.TagNumber(9)
   BoardLayout ensureBoard() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  CalendarLayout get calendar => $_getN(9);
+  @$pb.TagNumber(10)
+  set calendar(CalendarLayout value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasCalendar() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearCalendar() => $_clearField(10);
+  @$pb.TagNumber(10)
+  CalendarLayout ensureCalendar() => $_ensure(9);
 }
 
 const $core.bool _omitFieldNames =

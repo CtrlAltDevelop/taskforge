@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/presentation/board_view.dart';
+import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_view.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -48,7 +50,7 @@ class TaskSection extends ConsumerStatefulWidget {
 }
 
 /// The two ways to look at a project's tasks.
-enum _TaskView { list, board }
+enum _TaskView { list, board, calendar }
 
 class _TaskSectionState extends ConsumerState<TaskSection> {
   late String? _selected = widget.initialTask;
@@ -56,9 +58,14 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
 
   /// A card shows what the detail may have just changed: read the board again
   /// when the detail closes or another task opens.
-  void _refreshBoard() {
-    if (_view == _TaskView.board) {
-      ref.read(boardProvider(widget.project.id).notifier).refresh();
+  void _refreshView() {
+    switch (_view) {
+      case _TaskView.board:
+        ref.read(boardProvider(widget.project.id).notifier).refresh();
+      case _TaskView.calendar:
+        ref.read(calendarProvider(widget.project.id).notifier).refresh();
+      case _TaskView.list:
+        break;
     }
   }
 
@@ -68,7 +75,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
   Future<void> _open(Task task, bool wide) async {
     if (wide) {
       setState(() => _selected = task.id);
-      _refreshBoard();
+      _refreshView();
       return;
     }
     await Navigator.of(context).push<void>(
@@ -105,14 +112,22 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     builder: (context, box) {
       final wide = box.maxWidth >= wideBreakpoint;
       _openPending(wide);
+      Future<void> openFromView(Task t) async {
+        await _open(t, wide);
+        if (!wide) _refreshView();
+      }
+
       final body = _view == _TaskView.board
           ? BoardView(
               project: widget.project,
               openTaskId: wide ? _selected : null,
-              onOpen: (t) async {
-                await _open(t, wide);
-                if (!wide) _refreshBoard();
-              },
+              onOpen: openFromView,
+            )
+          : _view == _TaskView.calendar
+          ? CalendarView(
+              project: widget.project,
+              openTaskId: wide ? _selected : null,
+              onOpen: openFromView,
             )
           : _TaskList(
               project: widget.project,
@@ -137,6 +152,11 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                 value: _TaskView.board,
                 icon: Icon(Icons.view_kanban_outlined),
                 label: Text('Board'),
+              ),
+              ButtonSegment(
+                value: _TaskView.calendar,
+                icon: Icon(Icons.calendar_month_outlined),
+                label: Text('Calendar'),
               ),
             ],
             selected: {_view},
@@ -167,7 +187,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                             taskId: _selected!,
                             onClose: () {
                               setState(() => _selected = null);
-                              _refreshBoard();
+                              _refreshView();
                             },
                             onOpen: (t) => _open(t, true),
                           ),

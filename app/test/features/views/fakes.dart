@@ -1,5 +1,6 @@
 import 'package:taskforge/features/views/data/views_client.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
+import 'package:taskforge/features/views/domain/calendar_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 
 /// In-memory saved layouts: the person's own and the project's shared ones.
@@ -121,6 +122,43 @@ class FakeViewsClient implements ViewsClient {
       boards.add(saved);
     } else {
       boards[i] = saved;
+    }
+    return saved;
+  }
+
+  /// The saved calendars, and every save of one.
+  final calendars = <SavedCalendar>[];
+  final calendarSaves = <({String name, CalendarLayout layout, String id})>[];
+
+  @override
+  Future<List<SavedCalendar>> listCalendars(
+    String workspaceId,
+    String projectId,
+  ) async => [...calendars];
+
+  @override
+  Future<SavedCalendar> saveCalendar(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required CalendarLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  }) async {
+    calendarSaves.add((name: name, layout: layout, id: id));
+    final i = calendars.indexWhere((c) => c.id == id);
+    final saved = SavedCalendar(
+      id: id.isEmpty ? 'c${calendars.length + 1}' : id,
+      name: name,
+      layout: layout,
+      isShared: shared,
+      version: i < 0 ? 1 : calendars[i].version + 1,
+    );
+    if (i < 0) {
+      calendars.add(saved);
+    } else {
+      calendars[i] = saved;
     }
     return saved;
   }

@@ -6,6 +6,7 @@ import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
+import 'package:taskforge/features/views/domain/calendar_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
@@ -38,6 +39,22 @@ abstract interface class ViewsClient {
     String projectId, {
     required String name,
     required BoardLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  });
+
+  /// And for the calendar.
+  Future<List<SavedCalendar>> listCalendars(
+    String workspaceId,
+    String projectId,
+  );
+
+  Future<SavedCalendar> saveCalendar(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required CalendarLayout layout,
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
@@ -120,6 +137,28 @@ pb.BoardLayout boardToPb(BoardLayout b) => pb.BoardLayout(
   ],
 );
 
+CalendarLayout calendarFromPb(pb.CalendarLayoutResponse c) => CalendarLayout(
+  mode: c.mode.isEmpty ? 'month' : c.mode,
+  colorBy: c.colorBy.isEmpty ? 'status' : c.colorBy,
+  weekStart: c.weekStart,
+  hideDone: c.hideDone,
+);
+
+pb.CalendarLayout calendarToPb(CalendarLayout c) => pb.CalendarLayout(
+  mode: c.mode,
+  colorBy: c.colorBy,
+  weekStart: c.weekStart,
+  hideDone: c.hideDone,
+);
+
+SavedCalendar _calendar(pb.SavedView v) => SavedCalendar(
+  id: v.id,
+  name: v.name,
+  layout: calendarFromPb(v.calendar),
+  isShared: v.isShared,
+  version: v.version,
+);
+
 SavedBoard _board(pb.SavedView v) => SavedBoard(
   id: v.id,
   name: v.name,
@@ -195,6 +234,49 @@ class GrpcViewsClient implements ViewsClient {
         );
         return [for (final v in reply.views) _board(v)];
       }, isRead: true);
+
+  @override
+  Future<List<SavedCalendar>> listCalendars(
+    String workspaceId,
+    String projectId,
+  ) => _run(() async {
+    final reply = await _stub.list(
+      pb.ViewListRequest(
+        workspaceId: workspaceId,
+        projectId: projectId,
+        kind: 'calendar',
+      ),
+      options: _options,
+    );
+    return [for (final v in reply.views) _calendar(v)];
+  }, isRead: true);
+
+  @override
+  Future<SavedCalendar> saveCalendar(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required CalendarLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  }) => _run(
+    () async => _calendar(
+      await _stub.save(
+        pb.ViewSaveRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          id: id,
+          expectedVersion: expectedVersion,
+          name: name,
+          kind: 'calendar',
+          calendar: calendarToPb(layout),
+          shared: shared,
+        ),
+        options: _options,
+      ),
+    ),
+  );
 
   @override
   Future<SavedBoard> saveBoard(

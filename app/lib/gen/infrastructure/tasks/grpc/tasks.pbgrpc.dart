@@ -124,6 +124,88 @@ abstract class BoardControllerServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.BoardMoveRequest request);
 }
 
+@$pb.GrpcServiceName('config.tasks.CalendarController')
+class CalendarControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  CalendarControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseStream<$0.Task> listRange(
+    $0.CalendarRangeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(
+        _$listRange, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$0.CalendarTray> listUnscheduled(
+    $0.CalendarTrayRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listUnscheduled, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$listRange =
+      $grpc.ClientMethod<$0.CalendarRangeRequest, $0.Task>(
+          '/config.tasks.CalendarController/ListRange',
+          ($0.CalendarRangeRequest value) => value.writeToBuffer(),
+          $0.Task.fromBuffer);
+  static final _$listUnscheduled =
+      $grpc.ClientMethod<$0.CalendarTrayRequest, $0.CalendarTray>(
+          '/config.tasks.CalendarController/ListUnscheduled',
+          ($0.CalendarTrayRequest value) => value.writeToBuffer(),
+          $0.CalendarTray.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.tasks.CalendarController')
+abstract class CalendarControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.tasks.CalendarController';
+
+  CalendarControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.CalendarRangeRequest, $0.Task>(
+        'ListRange',
+        listRange_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.CalendarRangeRequest.fromBuffer(value),
+        ($0.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CalendarTrayRequest, $0.CalendarTray>(
+        'ListUnscheduled',
+        listUnscheduled_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CalendarTrayRequest.fromBuffer(value),
+        ($0.CalendarTray value) => value.writeToBuffer()));
+  }
+
+  $async.Stream<$0.Task> listRange_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.CalendarRangeRequest> $request) async* {
+    yield* listRange($call, await $request);
+  }
+
+  $async.Stream<$0.Task> listRange(
+      $grpc.ServiceCall call, $0.CalendarRangeRequest request);
+
+  $async.Future<$0.CalendarTray> listUnscheduled_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.CalendarTrayRequest> $request) async {
+    return listUnscheduled($call, await $request);
+  }
+
+  $async.Future<$0.CalendarTray> listUnscheduled(
+      $grpc.ServiceCall call, $0.CalendarTrayRequest request);
+}
+
 @$pb.GrpcServiceName('config.tasks.LinkController')
 class LinkControllerClient extends $grpc.Client {
   /// The hostname for this service.
