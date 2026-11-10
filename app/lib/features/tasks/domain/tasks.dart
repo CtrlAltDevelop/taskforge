@@ -56,6 +56,9 @@ class Task {
     this.isBlocked = false,
     this.blockedBy = const [],
     this.fieldValues = const {},
+    this.groupKey = '',
+    this.createdAt = '',
+    this.updatedAt = '',
   });
 
   final String id;
@@ -98,6 +101,14 @@ class Task {
   /// Custom field id -> value in its wire form (only fields that have one).
   final Map<String, String> fieldValues;
 
+  /// In a grouped list: the group the server listed this task under (a status
+  /// id, a priority, a user id, an option id; empty: the group without one).
+  final String groupKey;
+
+  /// ISO timestamps; empty when the server did not say.
+  final String createdAt;
+  final String updatedAt;
+
   bool get isDeleted => deletedAt.isNotEmpty;
 
   /// The task with [patch] applied (the optimistic view; version unchanged).
@@ -125,7 +136,40 @@ class Task {
     fieldValues: patch.fieldValues == null
         ? fieldValues
         : _withValues(fieldValues, patch.fieldValues!),
+    groupKey: groupKey,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
   );
+
+  /// The same task listed under [key] (see [groupKey]).
+  Task withGroupKey(String key) => key == groupKey
+      ? this
+      : Task(
+          id: id,
+          projectId: projectId,
+          number: number,
+          displayId: displayId,
+          title: title,
+          description: description,
+          statusId: statusId,
+          statusName: statusName,
+          statusCategory: statusCategory,
+          priority: priority,
+          startDate: startDate,
+          dueDate: dueDate,
+          assigneeIds: assigneeIds,
+          version: version,
+          position: position,
+          deletedAt: deletedAt,
+          parentId: parentId,
+          depth: depth,
+          isBlocked: isBlocked,
+          blockedBy: blockedBy,
+          fieldValues: fieldValues,
+          groupKey: key,
+          createdAt: createdAt,
+          updatedAt: updatedAt,
+        );
 
   /// The value of field [name] as the server names it, for conflict screens.
   String valueOf(String name) => switch (name) {

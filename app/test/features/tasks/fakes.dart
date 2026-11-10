@@ -1,8 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
+import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 /// The default workflow's statuses as the fakes know them.
@@ -47,6 +52,31 @@ Task task(
   isBlocked: isBlocked,
   blockedBy: blockedBy,
   fieldValues: fieldValues,
+);
+
+/// [t] listed under [group] in a grouped list.
+Task withGroup(Task t, String group) => Task(
+  id: t.id,
+  projectId: t.projectId,
+  number: t.number,
+  displayId: t.displayId,
+  title: t.title,
+  description: t.description,
+  statusId: t.statusId,
+  statusName: t.statusName,
+  statusCategory: t.statusCategory,
+  priority: t.priority,
+  startDate: t.startDate,
+  dueDate: t.dueDate,
+  assigneeIds: t.assigneeIds,
+  version: t.version,
+  position: t.position,
+  parentId: t.parentId,
+  depth: t.depth,
+  isBlocked: t.isBlocked,
+  blockedBy: t.blockedBy,
+  fieldValues: t.fieldValues,
+  groupKey: group,
 );
 
 /// [t] changed field by field: any argument left out keeps [t]'s value.
@@ -267,13 +297,164 @@ class FakeTasksClient implements TasksClient {
     tasks[i] = change(tasks[i]);
   }
 
+  /// The queries [list] was asked, in order.
+  final queries = <ListQuery>[];
+
+  /// How many times [list] was called.
+  int get listCalls => queries.length;
+
+  static const _statusOrder = ['todo', 'doing', 'done'];
+
+  /// The group a task falls under for [groupBy] (what the real server sends).
+  String _groupOf(Task t, String groupBy) => switch (groupBy) {
+    'status' => t.statusId,
+    'priority' => t.priority.wire,
+    'assignee' => t.assigneeIds.isEmpty ? '' : t.assigneeIds.first,
+    _ => '',
+  };
+
+  int _groupRank(Task t, String groupBy) => switch (groupBy) {
+    'status' => _statusOrder.indexOf(t.statusId),
+    'priority' => TaskPriority.values.indexOf(t.priority),
+    'assignee' => t.assigneeIds.isEmpty ? 1 << 20 : 0,
+    _ => 0,
+  };
+
+  /// Empty values last, like the server, whichever the direction.
+  int _compare(Task a, Task b, SortKey key) {
+    String text(Task t) => switch (key.key) {
+      'title' => t.title.toLowerCase(),
+      'due_date' => t.dueDate,
+      'start_date' => t.startDate,
+      _ => '',
+    };
+    if (key.key == 'priority') {
+      final c =
+          TaskPriority.values.indexOf(a.priority) -
+          TaskPriority.values.indexOf(b.priority);
+      return key.desc ? -c : c;
+    }
+    if (key.key == 'status') {
+      final c =
+          _statusOrder.indexOf(a.statusId) - _statusOrder.indexOf(b.statusId);
+      return key.desc ? -c : c;
+    }
+    final x = text(a);
+    final y = text(b);
+    if (x.isEmpty != y.isEmpty) return x.isEmpty ? 1 : -1;
+    final c = x.compareTo(y);
+    return key.desc ? -c : c;
+  }
+
   @override
-  Stream<Task> list(String workspaceId, String projectId) async* {
+  Stream<Task> list(
+    String workspaceId,
+    String projectId, {
+    ListQuery query = const ListQuery(),
+  }) async* {
+    queries.add(query);
     await gate?.future;
     final failure = failList;
     if (failure != null) throw failure;
-    for (final t in _treeOrder(projectId)) {
-      yield t;
+    var rows = _treeOrder(projectId);
+    if (!query.isDefault) {
+      rows = [...rows];
+      rows.sort((a, b) {
+        if (query.groupBy.isNotEmpty) {
+          final g = _groupRank(a, query.groupBy) - _groupRank(b, query.groupBy);
+          if (g != 0) return g;
+        }
+        for (final key in query.sort) {
+          final c = _compare(a, b, key);
+          if (c != 0) return c;
+        }
+        return a.number - b.number;
+      });
+    }
+    for (final t in rows) {
+      yield query.groupBy.isEmpty
+          ? t
+          : withGroup(t, _groupOf(t, query.groupBy));
+    }
+  }
+
+  @override
+  Future<Map<String, int>> groupCounts(
+    String workspaceId,
+    String projectId,
+    String groupBy,
+  ) async {
+    final counts = <String, int>{};
+    final rows = [..._treeOrder(projectId)]
+      ..sort((a, b) => _groupRank(a, groupBy) - _groupRank(b, groupBy));
+    for (final t in rows) {
+      counts.update(_groupOf(t, groupBy), (n) => n + 1, ifAbsent: () => 1);
+    }
+    return counts;
+  }
+
+  /// What the next bulk call answers per id instead of applying it (id ->
+  /// the refusal's code and sentence).
+  final bulkRefusals = <String, ({String code, String message})>{};
+  final bulkCalls = <({List<String> ids, BulkChange change})>[];
+
+  /// When set, a bulk call waits for it before answering each task.
+  Completer<void>? bulkGate;
+  TaskException? failBulk;
+
+  @override
+  Stream<BulkOutcome> bulkUpdate(
+    String workspaceId,
+    String projectId,
+    List<String> ids,
+    BulkChange change,
+  ) async* {
+    bulkCalls.add((ids: ids, change: change));
+    final failure = failBulk;
+    if (failure != null) {
+      failBulk = null;
+      throw failure;
+    }
+    for (final id in ids) {
+      await bulkGate?.future;
+      final refusal = bulkRefusals[id];
+      final index = tasks.indexWhere((t) => t.id == id);
+      if (refusal != null || index < 0) {
+        yield BulkOutcome(
+          id: id,
+          ok: false,
+          code: refusal?.code ?? 'NOT_FOUND',
+          message: refusal?.message ?? 'No such task.',
+        );
+        continue;
+      }
+      if (change.delete) {
+        for (final gone in _subtree(id)) {
+          trashed.add(gone);
+        }
+        yield BulkOutcome(id: id, ok: true, task: tasks[index]);
+        continue;
+      }
+      final next = tasks[index].apply(change.patch);
+      tasks[index] = Task(
+        id: next.id,
+        projectId: next.projectId,
+        number: next.number,
+        displayId: next.displayId,
+        title: next.title,
+        statusId: next.statusId,
+        statusName: next.statusName,
+        statusCategory: next.statusCategory,
+        priority: next.priority,
+        startDate: next.startDate,
+        dueDate: next.dueDate,
+        assigneeIds: next.assigneeIds,
+        version: tasks[index].version + 1,
+        parentId: next.parentId,
+        depth: next.depth,
+        fieldValues: next.fieldValues,
+      );
+      yield BulkOutcome(id: id, ok: true, task: tasks[index]);
     }
   }
 
@@ -473,3 +654,9 @@ class FakeTasksClient implements TasksClient {
     ];
   }
 }
+
+/// The status [name] shown in the list row of task [id].
+Finder statusCell(String id, String name) => find.descendant(
+  of: find.byKey(Key('cell-status-$id')),
+  matching: find.text(name),
+);

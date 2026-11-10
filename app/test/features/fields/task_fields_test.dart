@@ -260,8 +260,12 @@ void main() {
       ],
     );
 
-    expect(find.textContaining('Customer: Acme · Kind: Bug'), findsOneWidget);
-    expect(find.textContaining('Secret'), findsNothing);
+    expect(find.byKey(const Key('header-field:t')), findsOneWidget);
+    expect(find.byKey(const Key('header-field:k')), findsOneWidget);
+    expect(find.text('Acme'), findsOneWidget);
+    expect(find.text('Bug'), findsOneWidget);
+    expect(find.byKey(const Key('header-field:h')), findsNothing);
+    expect(find.text('Secret'), findsNothing);
   });
 
   testWidgets('a clash on a custom field names it and shows labels', (

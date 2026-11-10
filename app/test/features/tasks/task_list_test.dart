@@ -1,3 +1,5 @@
+import 'package:taskforge/features/views/application/views_providers.dart';
+
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,10 +9,12 @@ import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 import 'fakes.dart';
+import '../views/fakes.dart';
 
 ProviderContainer _container(FakeTasksClient server) {
   final container = ProviderContainer(
     overrides: [
+      viewsClientProvider.overrideWithValue(FakeViewsClient()),
       tasksClientProvider.overrideWithValue(server),
       workspaceScopeProvider.overrideWithValue('w1'),
     ],

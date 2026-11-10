@@ -7,8 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
+import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
@@ -19,7 +21,30 @@ abstract interface class TasksClient {
   /// Every task of the project in board order, as the server streams them.
   /// Every task of the project in tree order (a parent right before its own
   /// subtasks), as the server streams them.
-  Stream<Task> list(String workspaceId, String projectId);
+  /// With a [query], in that order and grouped, every task carrying its
+  /// [Task.groupKey].
+  Stream<Task> list(
+    String workspaceId,
+    String projectId, {
+    ListQuery query = const ListQuery(),
+  });
+
+  /// How many tasks each group of a grouped list holds, in list order (group
+  /// key -> count; the empty key is the group without a value).
+  Future<Map<String, int>> groupCounts(
+    String workspaceId,
+    String projectId,
+    String groupBy,
+  );
+
+  /// Applies [change] to every task of [ids], streaming one outcome per task
+  /// as it is done. A call the server refuses as a whole throws.
+  Stream<BulkOutcome> bulkUpdate(
+    String workspaceId,
+    String projectId,
+    List<String> ids,
+    BulkChange change,
+  );
   Future<Task> get(String workspaceId, String projectId, String id);
   Future<Task> create(
     String workspaceId,
@@ -193,6 +218,37 @@ Task _task(pb.Task t) => Task(
   isBlocked: t.isBlocked,
   blockedBy: List.unmodifiable(t.blockedBy),
   fieldValues: Map.unmodifiable({for (final v in t.fields) v.fieldId: v.value}),
+  groupKey: t.groupKey,
+  createdAt: t.createdAt,
+  updatedAt: t.updatedAt,
+);
+
+/// The same task as nested in a bulk result (a copy of the message).
+Task _nestedTask(pb.TaskResponse t) => Task(
+  id: t.id,
+  projectId: t.projectId,
+  number: t.number,
+  displayId: t.displayId,
+  title: t.title,
+  description: t.description,
+  statusId: t.status,
+  statusName: t.statusName,
+  statusCategory: StatusCategory.parse(t.statusCategory),
+  priority: TaskPriority.parse(t.priority),
+  startDate: t.startDate,
+  dueDate: t.dueDate,
+  assigneeIds: List.unmodifiable(t.assigneeIds),
+  version: t.version,
+  position: t.position,
+  deletedAt: t.deletedAt,
+  parentId: t.parentId,
+  depth: t.depth,
+  isBlocked: t.isBlocked,
+  blockedBy: List.unmodifiable(t.blockedBy),
+  fieldValues: Map.unmodifiable({for (final v in t.fields) v.fieldId: v.value}),
+  groupKey: t.groupKey,
+  createdAt: t.createdAt,
+  updatedAt: t.updatedAt,
 );
 
 TaskLink _link(pb.Link l) => TaskLink(
@@ -242,7 +298,11 @@ class GrpcTasksClient implements TasksClient {
   }
 
   @override
-  Stream<Task> list(String workspaceId, String projectId) async* {
+  Stream<Task> list(
+    String workspaceId,
+    String projectId, {
+    ListQuery query = const ListQuery(),
+  }) async* {
     try {
       yield* _stub
           .list(
@@ -250,10 +310,73 @@ class GrpcTasksClient implements TasksClient {
               workspaceId: workspaceId,
               projectId: projectId,
               includeSubtasks: true,
+              sort: [
+                for (final k in query.sort)
+                  pb.SortKey(key: k.key, desc: k.desc),
+              ],
+              groupBy: query.groupBy,
             ),
             options: _options,
           )
           .map(_task);
+    } on Object catch (e) {
+      throw mapTaskError(e);
+    }
+  }
+
+  @override
+  Future<Map<String, int>> groupCounts(
+    String workspaceId,
+    String projectId,
+    String groupBy,
+  ) async {
+    final reply = await _run(
+      () => _stub.groupCounts(
+        pb.TaskGroupCountsRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          groupBy: groupBy,
+          includeSubtasks: true,
+        ),
+        options: _options,
+      ),
+      isRead: true,
+    );
+    return {for (final g in reply.groups) g.key: g.count};
+  }
+
+  @override
+  Stream<BulkOutcome> bulkUpdate(
+    String workspaceId,
+    String projectId,
+    List<String> ids,
+    BulkChange change,
+  ) async* {
+    try {
+      yield* _stub
+          .bulkUpdate(
+            pb.TaskBulkUpdateRequest(
+              workspaceId: workspaceId,
+              projectId: projectId,
+              ids: ids,
+              status: change.status?.id,
+              priority: change.priority?.wire,
+              setAssignees: change.assigneeIds != null,
+              assigneeIds: change.assigneeIds,
+              delete: change.delete,
+              deleteMode: change.deleteMode?.wire,
+            ),
+            options: _options,
+          )
+          .map(
+            (r) => BulkOutcome(
+              id: r.id,
+              ok: r.ok,
+              task: r.ok ? _nestedTask(r.task) : null,
+              code: r.code,
+              message: r.message,
+            ),
+          );
     } on Object catch (e) {
       throw mapTaskError(e);
     }

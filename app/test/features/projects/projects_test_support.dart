@@ -1,3 +1,4 @@
+import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,7 @@ import '../members/fakes.dart';
 import '../roles/fakes.dart';
 import '../workspaces/fakes.dart';
 import 'fakes.dart';
+import '../views/fakes.dart';
 
 export '../workspaces/fakes.dart' show byKey;
 
@@ -45,6 +47,7 @@ Future<Pumped> pumpProjects(
   FakeTasksClient? tasks,
   FakeWorkflowsClient? workflows,
   FakeFieldsClient? fields,
+  FakeViewsClient? views,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -59,6 +62,7 @@ Future<Pumped> pumpProjects(
     projects: fake,
     overrides: [
       membersClientProvider.overrideWithValue(team()),
+      viewsClientProvider.overrideWithValue(views ?? FakeViewsClient()),
       tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
       workflowsClientProvider.overrideWithValue(
         workflows ?? FakeWorkflowsClient(),

@@ -9,13 +9,23 @@ import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/tasks/presentation/bulk_bar.dart';
+import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
+import 'package:taskforge/features/tasks/presentation/list_toolbar.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+
+export 'package:taskforge/features/tasks/presentation/task_actions.dart'
+    show TaskAction;
 import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_detail.dart';
 import 'package:taskforge/features/tasks/presentation/task_fields_panel.dart';
+import 'package:taskforge/features/tasks/presentation/task_table.dart';
+import 'package:taskforge/features/views/application/views_providers.dart';
+import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -86,22 +96,26 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
         selected: wide ? _selected : null,
         onOpen: (t) => _open(t, wide),
       );
-      if (!wide || _selected == null) return list;
+      if (!wide) return list;
+      // Always a Row on a wide screen, so opening or closing the detail keeps
+      // the list (its scroll position, focus and picked rows) where it is.
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(child: list),
-          const VerticalDivider(width: 1),
-          SizedBox(
-            width: 420,
-            child: TaskDetail(
-              key: ValueKey(_selected),
-              project: widget.project,
-              taskId: _selected!,
-              onClose: () => setState(() => _selected = null),
-              onOpen: (t) => _open(t, true),
+          if (_selected != null) ...[
+            const VerticalDivider(width: 1),
+            SizedBox(
+              width: 420,
+              child: TaskDetail(
+                key: ValueKey(_selected),
+                project: widget.project,
+                taskId: _selected!,
+                onClose: () => setState(() => _selected = null),
+                onOpen: (t) => _open(t, true),
+              ),
             ),
-          ),
+          ],
         ],
       );
     },
@@ -137,19 +151,38 @@ class _TaskListState extends ConsumerState<_TaskList> {
     final flow = ref.watch(workflowProvider(project.id)).value;
     final permissions = ref.watch(permissionSetProvider);
     final canCreate = !project.isArchived && permissions.can(Perm.taskCreate);
+    final lookups = _lookups(flow);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        ListToolbar(
+          projectId: project.id,
+          lookups: lookups,
+          canShare: !project.isArchived && permissions.can(Perm.projectUpdate),
+        ),
         if (canCreate) QuickAdd(projectId: project.id),
-        Expanded(child: _body(context, state, flow, permissions)),
+        Expanded(child: _body(context, state, lookups, permissions)),
+        BulkBar(
+          projectId: project.id,
+          lookups: lookups,
+          canUpdate: !project.isArchived && permissions.can(Perm.taskUpdate),
+          canDelete: !project.isArchived && permissions.can(Perm.taskDelete),
+        ),
       ],
     );
   }
 
+  ListLookups _lookups(Workflow? flow) => ListLookups(
+    flow: flow,
+    members: ref.watch(membersProvider).value ?? const <Member>[],
+    fields:
+        ref.watch(fieldsProvider(project.id)).value ?? const <CustomField>[],
+  );
+
   Widget _body(
     BuildContext context,
     TaskListState state,
-    Workflow? flow,
+    ListLookups lookups,
     Permissions permissions,
   ) {
     if (state.error != null && state.tasks.isEmpty) {
@@ -171,65 +204,198 @@ class _TaskListState extends ConsumerState<_TaskList> {
         ),
       );
     }
+    final layout = ref.watch(listLayoutProvider(project.id)).layout;
     final tree = ref.watch(taskTreeProvider(project.id));
-    final collapsed = ref.watch(collapsedTasksProvider(project.id));
-    final rows = tree.visibleRows(collapsed);
+    final entries = listEntries(
+      state.tasks,
+      layout.query,
+      collapsedTasks: ref.watch(collapsedTasksProvider(project.id)),
+      collapsedGroups: ref.watch(collapsedGroupsProvider(project.id)),
+      loading: state.loading,
+      serverCounts:
+          ref.watch(groupCountsProvider(project.id)).value ?? const {},
+    );
     final editable = !project.isArchived;
     final canUpdate = editable && permissions.can(Perm.taskUpdate);
     final canCreate = editable && permissions.can(Perm.taskCreate);
     final canDelete = editable && permissions.can(Perm.taskDelete);
-    final fields =
-        ref.watch(fieldsProvider(project.id)).value ?? const <CustomField>[];
-    final people = {
-      for (final m in ref.watch(membersProvider).value ?? const <Member>[])
-        m.userId: m.label,
-    };
+    List<TaskAction> actionsFor(Task task) => [
+      if (canCreate && task.depth + 1 < softDepthLimit) TaskAction.addSubtask,
+      if (canUpdate) TaskAction.moveUnder,
+      if (canUpdate && task.parentId.isNotEmpty) TaskAction.makeTopLevel,
+      if (canDelete) TaskAction.delete,
+    ];
+    if (widget.wide) {
+      return TaskTable(
+        projectId: project.id,
+        entries: entries,
+        layout: layout,
+        lookups: lookups,
+        loading: state.loading,
+        canUpdate: canUpdate,
+        openTaskId: widget.selected,
+        onOpen: widget.onOpen,
+        actionsFor: actionsFor,
+        onAction: (action, task) => _act(action, tree, task),
+        progressOf: tree.progressOf,
+        wrapRow: canUpdate && layout.query.isDefault
+            ? (task, row) => _dropTarget(tree, task, _draggable(task, row))
+            : null,
+      );
+    }
+    return _cards(context, state, entries, tree, lookups, layout, actionsFor, (
+      canUpdate: canUpdate,
+      canDelete: canDelete,
+    ));
+  }
+
+  /// The phone list: one card per task, long-press to start picking, swipe to
+  /// complete or delete, pull to refresh.
+  Widget _cards(
+    BuildContext context,
+    TaskListState state,
+    List<ListEntry> entries,
+    TaskTree tree,
+    ListLookups lookups,
+    ListLayout layout,
+    List<TaskAction> Function(Task) actionsFor,
+    ({bool canUpdate, bool canDelete}) can,
+  ) {
+    final picked = ref.watch(taskSelectionProvider(project.id));
+    final selection = ref.read(taskSelectionProvider(project.id).notifier);
+    final doneStatus = lookups.flow?.statuses
+        .where((s) => s.category == StatusCategory.done)
+        .firstOrNull;
     String summarize(Task t) =>
-        fieldSummary(t, fields, userLabel: (id) => people[id] ?? id);
+        fieldSummary(t, lookups.fields, userLabel: lookups.person);
     // Rows are built lazily (a list of thousands only builds what is on screen);
     // the inline add field counts as one more entry under its parent.
-    final entries = <Object>[
-      for (final row in rows) ...[
-        row,
-        if (_addingUnder == row.task.id) row.task.id,
+    final items = <Object>[
+      for (final entry in entries) ...[
+        entry,
+        if (entry is TaskEntry && _addingUnder == entry.task.id) entry.task.id,
       ],
     ];
-    return ListView.builder(
-      key: const Key('task-list'),
-      itemCount: entries.length + (state.loading ? 1 : 0),
-      itemBuilder: (context, i) {
-        if (i == entries.length) {
-          return const LinearProgressIndicator(key: Key('tasks-streaming'));
+    return RefreshIndicator(
+      onRefresh: () =>
+          ref.read(taskListProvider(project.id).notifier).refresh(),
+      child: ListView.builder(
+        key: const Key('task-list'),
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: items.length + (state.loading ? 1 : 0),
+        itemBuilder: (context, i) {
+          if (i == items.length) {
+            return const LinearProgressIndicator(key: Key('tasks-streaming'));
+          }
+          final item = items[i];
+          if (item is String) return _inlineAdd(tree, item);
+          if (item is GroupEntry) return _groupTile(lookups, layout, item);
+          final entry = item as TaskEntry;
+          final task = entry.task;
+          final actions = actionsFor(task);
+          final tile = TaskTile(
+            task: task,
+            statusColor: lookups.flow?.statusById(task.statusId)?.swatch,
+            selected: task.id == widget.selected,
+            onTap: () => picked.isEmpty
+                ? widget.onOpen(task)
+                : selection.toggle(task.id),
+            onLongPress: () => selection.toggle(task.id),
+            picked: picked.isEmpty ? null : picked.contains(task.id),
+            onPick: () => selection.toggle(task.id),
+            depth: entry.depth,
+            hasChildren: entry.hasChildren,
+            expanded: entry.expanded,
+            progress: tree.progressOf(task.id),
+            onToggle: () => ref
+                .read(collapsedTasksProvider(project.id).notifier)
+                .toggle(task.id),
+            actions: actions,
+            onAction: (action) => _act(action, tree, task),
+            fieldSummary: summarize(task),
+          );
+          return _swipeable(task, tile, doneStatus, tree, can);
+        },
+      ),
+    );
+  }
+
+  Widget _groupTile(ListLookups lookups, ListLayout layout, GroupEntry group) {
+    final color = lookups.groupColor(layout.groupBy, group.key);
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: InkWell(
+        key: Key('group-${group.key}'),
+        onTap: () => ref
+            .read(collapsedGroupsProvider(project.id).notifier)
+            .toggle(group.key),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: Row(
+            children: [
+              Icon(group.collapsed ? Icons.chevron_right : Icons.expand_more),
+              if (color != null) ...[
+                Icon(Icons.circle, size: 10, color: color),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                lookups.groupLabel(layout.groupBy, group.key),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${group.count}',
+                key: Key('group-count-${group.key}'),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Swipe right completes a task, swipe left deletes it (when allowed). The
+  /// row is never dismissed by the swipe itself: the list changes as the
+  /// server answers.
+  Widget _swipeable(
+    Task task,
+    Widget tile,
+    WorkflowStatus? doneStatus,
+    TaskTree tree,
+    ({bool canUpdate, bool canDelete}) can,
+  ) {
+    final complete =
+        can.canUpdate &&
+        doneStatus != null &&
+        task.statusCategory != StatusCategory.done;
+    if (!complete && !can.canDelete) return tile;
+    return Dismissible(
+      key: ValueKey('swipe-${task.id}'),
+      direction: complete && can.canDelete
+          ? DismissDirection.horizontal
+          : complete
+          ? DismissDirection.startToEnd
+          : DismissDirection.endToStart,
+      background: const _SwipeBackground(
+        icon: Icons.check,
+        label: 'Complete',
+        alignment: Alignment.centerLeft,
+      ),
+      secondaryBackground: const _SwipeBackground(
+        icon: Icons.delete_outline,
+        label: 'Delete',
+        alignment: Alignment.centerRight,
+      ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
+          await saveTask(context, ref, task, TaskPatch(status: doneStatus));
+        } else {
+          await _delete(tree, task);
         }
-        final entry = entries[i];
-        if (entry is String) return _inlineAdd(tree, entry);
-        final row = entry as TreeRow;
-        final task = row.task;
-        final tile = TaskTile(
-          task: task,
-          statusColor: flow?.statusById(task.statusId)?.swatch,
-          selected: task.id == widget.selected,
-          onTap: () => widget.onOpen(task),
-          depth: row.depth,
-          hasChildren: row.hasChildren,
-          expanded: row.expanded,
-          progress: tree.progressOf(task.id),
-          onToggle: () => ref
-              .read(collapsedTasksProvider(project.id).notifier)
-              .toggle(task.id),
-          actions: [
-            if (canCreate && task.depth + 1 < softDepthLimit)
-              TaskAction.addSubtask,
-            if (canUpdate) TaskAction.moveUnder,
-            if (canUpdate && task.parentId.isNotEmpty) TaskAction.makeTopLevel,
-            if (canDelete) TaskAction.delete,
-          ],
-          onAction: (action) => _act(action, tree, task),
-          fieldSummary: summarize(task),
-        );
-        if (!widget.wide || !canUpdate) return tile;
-        return _dropTarget(tree, task, _draggable(task, tile));
+        return false;
       },
+      child: tile,
     );
   }
 
@@ -298,7 +464,26 @@ class _TaskListState extends ConsumerState<_TaskList> {
     switch (action) {
       case TaskAction.addSubtask:
         ref.read(collapsedTasksProvider(project.id).notifier).expand(task.id);
-        setState(() => _addingUnder = task.id);
+        if (widget.wide) {
+          // Table rows have a fixed height: the field opens in a dialog.
+          await showDialog<void>(
+            context: context,
+            builder: (dialog) => AlertDialog(
+              title: Text('Add a subtask to ${task.displayId}'),
+              content: SizedBox(
+                width: 360,
+                child: AddSubtaskField(
+                  projectId: project.id,
+                  parentId: task.id,
+                  autofocus: true,
+                  onDone: () => Navigator.pop(dialog),
+                ),
+              ),
+            ),
+          );
+        } else {
+          setState(() => _addingUnder = task.id);
+        }
       case TaskAction.moveUnder:
         final parent = await pickParent(context, tree, task);
         if (parent != null) await _reparent(task, parent);
@@ -361,18 +546,6 @@ class _TaskListState extends ConsumerState<_TaskList> {
   }
 }
 
-/// What a row's menu can do.
-enum TaskAction {
-  addSubtask('Add subtask'),
-  moveUnder('Move under\u2026'),
-  makeTopLevel('Make top level'),
-  delete('Delete');
-
-  const TaskAction(this.label);
-
-  final String label;
-}
-
 class TaskTile extends StatelessWidget {
   const TaskTile({
     super.key,
@@ -388,6 +561,9 @@ class TaskTile extends StatelessWidget {
     this.actions = const [],
     this.onAction,
     this.fieldSummary = '',
+    this.onLongPress,
+    this.picked,
+    this.onPick,
   });
 
   final Task task;
@@ -412,15 +588,28 @@ class TaskTile extends StatelessWidget {
   final List<TaskAction> actions;
   final void Function(TaskAction)? onAction;
 
+  /// Long press starts picking tasks for a bulk edit; once any is picked
+  /// [picked] is non-null (whether this one is) and a checkbox shows.
+  final VoidCallback? onLongPress;
+  final bool? picked;
+  final VoidCallback? onPick;
+
   @override
   Widget build(BuildContext context) => ListTile(
     key: Key('task-${task.id}'),
-    selected: selected,
+    selected: selected || picked == true,
     onTap: onTap,
+    onLongPress: onLongPress,
     contentPadding: EdgeInsets.only(left: 8.0 + depth * 20, right: 8),
     leading: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (picked != null)
+          Checkbox(
+            key: Key('check-${task.id}'),
+            value: picked,
+            onChanged: (_) => onPick?.call(),
+          ),
         SizedBox(
           width: 32,
           child: hasChildren
@@ -502,6 +691,29 @@ class TaskTile extends StatelessWidget {
             ],
           ),
       ],
+    ),
+  );
+}
+
+class _SwipeBackground extends StatelessWidget {
+  const _SwipeBackground({
+    required this.icon,
+    required this.label,
+    required this.alignment,
+  });
+
+  final IconData icon;
+  final String label;
+  final Alignment alignment;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    color: Theme.of(context).colorScheme.secondaryContainer,
+    alignment: alignment,
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [Icon(icon), const SizedBox(width: 8), Text(label)],
     ),
   );
 }

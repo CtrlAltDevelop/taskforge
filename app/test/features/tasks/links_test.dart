@@ -306,7 +306,13 @@ void main() {
 
     expect(server.overridden, isEmpty);
     expect(server.tasks.first.statusName, 'To do');
-    expect(find.text('WEB-1 · To do'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const Key('cell-status-a')),
+        matching: find.text('To do'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('a member without manage rights cannot override', (tester) async {

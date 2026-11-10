@@ -1,3 +1,4 @@
+import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +10,7 @@ import 'package:taskforge/features/workspaces/application/workspace_providers.da
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
 import 'fakes.dart';
+import '../views/fakes.dart';
 
 Future<(Pumped, FakeTasksClient)> _open(
   WidgetTester tester, {
@@ -118,6 +120,7 @@ void main() {
     ]);
     final container = ProviderContainer(
       overrides: [
+        viewsClientProvider.overrideWithValue(FakeViewsClient()),
         tasksClientProvider.overrideWithValue(server),
         workspaceScopeProvider.overrideWithValue('w1'),
       ],

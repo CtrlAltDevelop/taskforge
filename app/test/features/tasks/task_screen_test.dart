@@ -48,7 +48,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('tasks-skeleton')), findsNothing);
     expect(find.text('First task'), findsOneWidget);
-    expect(find.text('WEB-1 · To do'), findsOneWidget);
+    expect(statusCell('a', 'To do'), findsOneWidget);
   });
 
   testWidgets('an empty project says so', (tester) async {
@@ -82,7 +82,7 @@ void main() {
 
     expect(server.tasks.single.title, 'Fix login');
     expect(find.text('Fix login'), findsOneWidget);
-    expect(find.text('WEB-1 · To do'), findsOneWidget);
+    expect(statusCell('t1', 'To do'), findsOneWidget);
     expect(
       tester
           .widget<TextField>(find.byKey(const Key('quick-add')))

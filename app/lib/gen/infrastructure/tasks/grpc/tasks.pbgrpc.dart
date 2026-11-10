@@ -165,6 +165,15 @@ class TaskControllerClient extends $grpc.Client {
 
   TaskControllerClient(super.channel, {super.options, super.interceptors});
 
+  $grpc.ResponseStream<$0.BulkResult> bulkUpdate(
+    $0.TaskBulkUpdateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(
+        _$bulkUpdate, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
   $grpc.ResponseFuture<$0.Task> create(
     $0.TaskCreateRequest request, {
     $grpc.CallOptions? options,
@@ -184,6 +193,13 @@ class TaskControllerClient extends $grpc.Client {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$get, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.TaskGroupCounts> groupCounts(
+    $0.TaskGroupCountsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$groupCounts, request, options: options);
   }
 
   $grpc.ResponseStream<$0.Task> list(
@@ -238,6 +254,11 @@ class TaskControllerClient extends $grpc.Client {
 
   // method descriptors
 
+  static final _$bulkUpdate =
+      $grpc.ClientMethod<$0.TaskBulkUpdateRequest, $0.BulkResult>(
+          '/config.tasks.TaskController/BulkUpdate',
+          ($0.TaskBulkUpdateRequest value) => value.writeToBuffer(),
+          $0.BulkResult.fromBuffer);
   static final _$create = $grpc.ClientMethod<$0.TaskCreateRequest, $0.Task>(
       '/config.tasks.TaskController/Create',
       ($0.TaskCreateRequest value) => value.writeToBuffer(),
@@ -250,6 +271,11 @@ class TaskControllerClient extends $grpc.Client {
       '/config.tasks.TaskController/Get',
       ($0.TaskGetRequest value) => value.writeToBuffer(),
       $0.Task.fromBuffer);
+  static final _$groupCounts =
+      $grpc.ClientMethod<$0.TaskGroupCountsRequest, $0.TaskGroupCounts>(
+          '/config.tasks.TaskController/GroupCounts',
+          ($0.TaskGroupCountsRequest value) => value.writeToBuffer(),
+          $0.TaskGroupCounts.fromBuffer);
   static final _$list = $grpc.ClientMethod<$0.TaskListRequest, $0.Task>(
       '/config.tasks.TaskController/List',
       ($0.TaskListRequest value) => value.writeToBuffer(),
@@ -288,6 +314,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
   $core.String get $name => 'config.tasks.TaskController';
 
   TaskControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.TaskBulkUpdateRequest, $0.BulkResult>(
+        'BulkUpdate',
+        bulkUpdate_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.TaskBulkUpdateRequest.fromBuffer(value),
+        ($0.BulkResult value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TaskCreateRequest, $0.Task>(
         'Create',
         create_Pre,
@@ -309,6 +343,15 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.TaskGetRequest.fromBuffer(value),
         ($0.Task value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.TaskGroupCountsRequest, $0.TaskGroupCounts>(
+            'GroupCounts',
+            groupCounts_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.TaskGroupCountsRequest.fromBuffer(value),
+            ($0.TaskGroupCounts value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TaskListRequest, $0.Task>(
         'List',
         list_Pre,
@@ -364,6 +407,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
         ($0.Task value) => value.writeToBuffer()));
   }
 
+  $async.Stream<$0.BulkResult> bulkUpdate_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TaskBulkUpdateRequest> $request) async* {
+    yield* bulkUpdate($call, await $request);
+  }
+
+  $async.Stream<$0.BulkResult> bulkUpdate(
+      $grpc.ServiceCall call, $0.TaskBulkUpdateRequest request);
+
   $async.Future<$0.Task> create_Pre($grpc.ServiceCall $call,
       $async.Future<$0.TaskCreateRequest> $request) async {
     return create($call, await $request);
@@ -386,6 +437,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
   }
 
   $async.Future<$0.Task> get($grpc.ServiceCall call, $0.TaskGetRequest request);
+
+  $async.Future<$0.TaskGroupCounts> groupCounts_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TaskGroupCountsRequest> $request) async {
+    return groupCounts($call, await $request);
+  }
+
+  $async.Future<$0.TaskGroupCounts> groupCounts(
+      $grpc.ServiceCall call, $0.TaskGroupCountsRequest request);
 
   $async.Stream<$0.Task> list_Pre($grpc.ServiceCall $call,
       $async.Future<$0.TaskListRequest> $request) async* {

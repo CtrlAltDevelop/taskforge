@@ -7,9 +7,13 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
+import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
+import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/views/application/views_providers.dart';
+import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
@@ -95,11 +99,20 @@ class TaskList extends Notifier<TaskListState> {
     return id;
   }
 
+  /// The sort and grouping asked of the server; a change of either reads the
+  /// list again (see [build]).
+  ListQuery get _query => ref.read(listQueryProvider(projectId));
+
   @override
   TaskListState build() {
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
-    Future.microtask(load);
+    ref.watch(listQueryProvider(projectId));
+    // The person's saved layout is read first, so the list is read once, in
+    // the order they chose, instead of twice.
+    if (ref.watch(listLayoutReadyProvider(projectId))) {
+      Future.microtask(load);
+    }
     return const TaskListState();
   }
 
@@ -116,7 +129,11 @@ class TaskList extends Notifier<TaskListState> {
     final seen = <Task>[];
     try {
       var pending = 0;
-      await for (final task in _client.list(workspace, projectId)) {
+      await for (final task in _client.list(
+        workspace,
+        projectId,
+        query: _query,
+      )) {
         if (generation != _generation) return;
         seen.add(task);
         if (++pending >= streamBatch) {
@@ -150,7 +167,11 @@ class TaskList extends Notifier<TaskListState> {
     final generation = ++_generation;
     final seen = <Task>[];
     try {
-      await for (final task in _client.list(workspace, projectId)) {
+      await for (final task in _client.list(
+        workspace,
+        projectId,
+        query: _query,
+      )) {
         seen.add(task);
       }
     } on Object {
@@ -168,7 +189,8 @@ class TaskList extends Notifier<TaskListState> {
 
   /// Swaps in [task]. A server answer older than what the list already holds
   /// (answers can overtake each other) is ignored.
-  void _replace(Task task, {bool ignoreOlder = false}) {
+  void _replace(Task answer, {bool ignoreOlder = false}) {
+    final task = answer.withGroupKey(groupKeyOf(answer, _query.groupBy));
     state = state.copyWith(
       tasks: [
         for (final t in state.tasks)
@@ -219,7 +241,8 @@ class TaskList extends Notifier<TaskListState> {
       parentId: parentId,
       fieldValues: fieldValues,
     );
-    state = state.copyWith(tasks: _insertInTreeOrder(created));
+    final keyed = created.withGroupKey(groupKeyOf(created, _query.groupBy));
+    state = state.copyWith(tasks: _insertInTreeOrder(keyed));
     if (state.loading) _createdDuringLoad.add(created);
     return created;
   }
@@ -360,6 +383,60 @@ class TaskList extends Notifier<TaskListState> {
     return moved;
   }
 
+  /// Applies [change] to every task of [ids] in one call. Each task that took
+  /// it is updated in the list as its result arrives ([onProgress] is told how
+  /// many of [ids] are done); the ones that did not are in the summary. A
+  /// delete reads the list again, as the server also took their subtasks.
+  Future<BulkSummary> bulk(
+    List<String> ids,
+    BulkChange change, {
+    void Function(int done, int total)? onProgress,
+  }) async {
+    final succeeded = <String>[];
+    final failed = <BulkOutcome>[];
+    // Read now: leaving the project disposes this notifier, but the edit
+    // still runs to the end (it only stops updating a list nobody sees).
+    final client = _client;
+    final workspace = _workspace;
+    try {
+      // The server takes [maxBulkTasks] at a time; more are sent in turn.
+      for (var from = 0; from < ids.length; from += maxBulkTasks) {
+        final chunk = ids.sublist(
+          from,
+          from + maxBulkTasks > ids.length ? ids.length : from + maxBulkTasks,
+        );
+        await for (final outcome in client.bulkUpdate(
+          workspace,
+          projectId,
+          chunk,
+          change,
+        )) {
+          final task = outcome.task;
+          if (outcome.ok) {
+            succeeded.add(outcome.id);
+            if (ref.mounted && task != null && !change.delete) {
+              _replace(task, ignoreOlder: true);
+            }
+          } else {
+            failed.add(outcome);
+          }
+          onProgress?.call(succeeded.length + failed.length, ids.length);
+        }
+      }
+    } on Object catch (e) {
+      throw mapTaskError(e);
+    }
+    if (change.delete && ref.mounted) {
+      ref.invalidate(taskTrashProvider(projectId));
+      await refresh();
+    }
+    return BulkSummary(
+      total: ids.length,
+      succeeded: List.unmodifiable(succeeded),
+      failed: List.unmodifiable(failed),
+    );
+  }
+
   /// Moves [task] to [status] and its open subtasks with it, all or nothing.
   Future<Task> moveWithSubtasks(
     Task task,
@@ -411,3 +488,63 @@ final taskTreeProvider = Provider.autoDispose.family<TaskTree, String>(
   (ref, projectId) =>
       TaskTree(ref.watch(taskListProvider(projectId).select((s) => s.tasks))),
 );
+
+/// The tasks picked in one project's list, by id: they stay picked while the
+/// list scrolls, regroups or reloads.
+final taskSelectionProvider = NotifierProvider.autoDispose
+    .family<TaskSelection, Set<String>, String>(TaskSelection.new);
+
+class TaskSelection extends Notifier<Set<String>> {
+  TaskSelection(this.projectId);
+
+  final String projectId;
+
+  @override
+  Set<String> build() => const {};
+
+  void toggle(String id) =>
+      state = state.contains(id) ? ({...state}..remove(id)) : {...state, id};
+
+  void addAll(Iterable<String> ids) => state = {...state, ...ids};
+
+  void removeAll(Iterable<String> ids) => state = state.difference({...ids});
+
+  void clear() {
+    if (state.isNotEmpty) state = const {};
+  }
+}
+
+/// The folded-shut groups of one project's grouped list (group keys).
+final collapsedGroupsProvider = NotifierProvider.autoDispose
+    .family<CollapsedGroups, Set<String>, String>(CollapsedGroups.new);
+
+class CollapsedGroups extends Notifier<Set<String>> {
+  CollapsedGroups(this.projectId);
+
+  final String projectId;
+
+  @override
+  Set<String> build() => const {};
+
+  void toggle(String key) =>
+      state = state.contains(key) ? ({...state}..remove(key)) : {...state, key};
+}
+
+/// How many tasks each group holds, as the server counts them: what a group
+/// header shows while the list is still streaming in.
+final groupCountsProvider = FutureProvider.autoDispose
+    .family<Map<String, int>, String>((ref, projectId) async {
+      ref.watch(refusalCountProvider);
+      final workspace = ref.watch(workspaceScopeProvider);
+      final groupBy = ref.watch(
+        listLayoutProvider(projectId).select((s) => s.layout.groupBy),
+      );
+      if (workspace == null || groupBy.isEmpty) return const {};
+      try {
+        return await ref
+            .watch(tasksClientProvider)
+            .groupCounts(workspace, projectId, groupBy);
+      } on Object catch (e) {
+        throw mapTaskError(e);
+      }
+    }, retry: (_, _) => null);

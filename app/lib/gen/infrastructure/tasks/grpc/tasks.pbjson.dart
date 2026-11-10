@@ -15,6 +15,45 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use bulkResultDescriptor instead')
+const BulkResult$json = {
+  '1': 'BulkResult',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'ok', '3': 2, '4': 1, '5': 8, '10': 'ok'},
+    {'1': 'code', '3': 3, '4': 1, '5': 9, '10': 'code'},
+    {'1': 'message', '3': 4, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'detail', '3': 5, '4': 1, '5': 9, '10': 'detail'},
+    {
+      '1': 'task',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.config.tasks.TaskResponse',
+      '10': 'task'
+    },
+  ],
+};
+
+/// Descriptor for `BulkResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List bulkResultDescriptor = $convert.base64Decode(
+    'CgpCdWxrUmVzdWx0Eg4KAmlkGAEgASgJUgJpZBIOCgJvaxgCIAEoCFICb2sSEgoEY29kZRgDIA'
+    'EoCVIEY29kZRIYCgdtZXNzYWdlGAQgASgJUgdtZXNzYWdlEhYKBmRldGFpbBgFIAEoCVIGZGV0'
+    'YWlsEi4KBHRhc2sYBiABKAsyGi5jb25maWcudGFza3MuVGFza1Jlc3BvbnNlUgR0YXNr');
+
+@$core.Deprecated('Use groupCountDescriptor instead')
+const GroupCount$json = {
+  '1': 'GroupCount',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'count', '3': 2, '4': 1, '5': 5, '10': 'count'},
+  ],
+};
+
+/// Descriptor for `GroupCount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List groupCountDescriptor = $convert.base64Decode(
+    'CgpHcm91cENvdW50EhAKA2tleRgBIAEoCVIDa2V5EhQKBWNvdW50GAIgASgFUgVjb3VudA==');
+
 @$core.Deprecated('Use linkDescriptor instead')
 const Link$json = {
   '1': 'Link',
@@ -169,6 +208,19 @@ final $typed_data.Uint8List linkSearchTasksRequestDescriptor =
         'ChZMaW5rU2VhcmNoVGFza3NSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
         'NlSWQSFAoFcXVlcnkYAiABKAlSBXF1ZXJ5');
 
+@$core.Deprecated('Use sortKeyDescriptor instead')
+const SortKey$json = {
+  '1': 'SortKey',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'desc', '3': 2, '4': 1, '5': 8, '10': 'desc'},
+  ],
+};
+
+/// Descriptor for `SortKey`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sortKeyDescriptor = $convert.base64Decode(
+    'CgdTb3J0S2V5EhAKA2tleRgBIAEoCVIDa2V5EhIKBGRlc2MYAiABKAhSBGRlc2M=');
+
 @$core.Deprecated('Use taskDescriptor instead')
 const Task$json = {
   '1': 'Task',
@@ -207,6 +259,7 @@ const Task$json = {
       '6': '.config.tasks.TaskFieldValueResponse',
       '10': 'fields'
     },
+    {'1': 'group_key', '3': 28, '4': 1, '5': 9, '10': 'groupKey'},
   ],
 };
 
@@ -227,7 +280,44 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
     'FsEh0KCmlzX2Jsb2NrZWQYGSABKAhSCWlzQmxvY2tlZBIdCgpibG9ja2VkX2J5GBogAygJUgli'
     'bG9ja2VkQnkSPAoGZmllbGRzGBsgAygLMiQuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUm'
-    'VzcG9uc2VSBmZpZWxkcw==');
+    'VzcG9uc2VSBmZpZWxkcxIbCglncm91cF9rZXkYHCABKAlSCGdyb3VwS2V5');
+
+@$core.Deprecated('Use taskBulkUpdateRequestDescriptor instead')
+const TaskBulkUpdateRequest$json = {
+  '1': 'TaskBulkUpdateRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'ids', '3': 3, '4': 3, '5': 9, '10': 'ids'},
+    {'1': 'status', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'status', '17': true},
+    {
+      '1': 'priority',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '9': 1,
+      '10': 'priority',
+      '17': true
+    },
+    {'1': 'set_assignees', '3': 6, '4': 1, '5': 8, '10': 'setAssignees'},
+    {'1': 'assignee_ids', '3': 7, '4': 3, '5': 9, '10': 'assigneeIds'},
+    {'1': 'delete', '3': 8, '4': 1, '5': 8, '10': 'delete'},
+    {'1': 'delete_mode', '3': 9, '4': 1, '5': 9, '10': 'deleteMode'},
+  ],
+  '8': [
+    {'1': '_status'},
+    {'1': '_priority'},
+  ],
+};
+
+/// Descriptor for `TaskBulkUpdateRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskBulkUpdateRequestDescriptor = $convert.base64Decode(
+    'ChVUYXNrQnVsa1VwZGF0ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2'
+    'VJZBIdCgpwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSEAoDaWRzGAMgAygJUgNpZHMSGwoG'
+    'c3RhdHVzGAQgASgJSABSBnN0YXR1c4gBARIfCghwcmlvcml0eRgFIAEoCUgBUghwcmlvcml0eY'
+    'gBARIjCg1zZXRfYXNzaWduZWVzGAYgASgIUgxzZXRBc3NpZ25lZXMSIQoMYXNzaWduZWVfaWRz'
+    'GAcgAygJUgthc3NpZ25lZUlkcxIWCgZkZWxldGUYCCABKAhSBmRlbGV0ZRIfCgtkZWxldGVfbW'
+    '9kZRgJIAEoCVIKZGVsZXRlTW9kZUIJCgdfc3RhdHVzQgsKCV9wcmlvcml0eQ==');
 
 @$core.Deprecated('Use taskChildrenDescriptor instead')
 const TaskChildren$json = {
@@ -345,6 +435,46 @@ final $typed_data.Uint8List taskGetRequestDescriptor = $convert.base64Decode(
     'Cg5UYXNrR2V0UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh0KCn'
     'Byb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQ=');
 
+@$core.Deprecated('Use taskGroupCountsDescriptor instead')
+const TaskGroupCounts$json = {
+  '1': 'TaskGroupCounts',
+  '2': [
+    {
+      '1': 'groups',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.GroupCount',
+      '10': 'groups'
+    },
+  ],
+};
+
+/// Descriptor for `TaskGroupCounts`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskGroupCountsDescriptor = $convert.base64Decode(
+    'Cg9UYXNrR3JvdXBDb3VudHMSMAoGZ3JvdXBzGAEgAygLMhguY29uZmlnLnRhc2tzLkdyb3VwQ2'
+    '91bnRSBmdyb3Vwcw==');
+
+@$core.Deprecated('Use taskGroupCountsRequestDescriptor instead')
+const TaskGroupCountsRequest$json = {
+  '1': 'TaskGroupCountsRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'group_by', '3': 3, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'status', '3': 4, '4': 1, '5': 9, '10': 'status'},
+    {'1': 'assignee_id', '3': 5, '4': 1, '5': 9, '10': 'assigneeId'},
+    {'1': 'include_subtasks', '3': 6, '4': 1, '5': 8, '10': 'includeSubtasks'},
+  ],
+};
+
+/// Descriptor for `TaskGroupCountsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskGroupCountsRequestDescriptor = $convert.base64Decode(
+    'ChZUYXNrR3JvdXBDb3VudHNSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
+    'NlSWQSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhkKCGdyb3VwX2J5GAMgASgJUgdn'
+    'cm91cEJ5EhYKBnN0YXR1cxgEIAEoCVIGc3RhdHVzEh8KC2Fzc2lnbmVlX2lkGAUgASgJUgphc3'
+    'NpZ25lZUlkEikKEGluY2x1ZGVfc3VidGFza3MYBiABKAhSD2luY2x1ZGVTdWJ0YXNrcw==');
+
 @$core.Deprecated('Use taskListChildrenRequestDescriptor instead')
 const TaskListChildrenRequest$json = {
   '1': 'TaskListChildrenRequest',
@@ -371,6 +501,15 @@ const TaskListRequest$json = {
     {'1': 'cursor', '3': 5, '4': 1, '5': 9, '10': 'cursor'},
     {'1': 'page_size', '3': 6, '4': 1, '5': 5, '10': 'pageSize'},
     {'1': 'include_subtasks', '3': 7, '4': 1, '5': 8, '10': 'includeSubtasks'},
+    {
+      '1': 'sort',
+      '3': 8,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.SortKey',
+      '10': 'sort'
+    },
+    {'1': 'group_by', '3': 9, '4': 1, '5': 9, '10': 'groupBy'},
   ],
 };
 
@@ -380,7 +519,8 @@ final $typed_data.Uint8List taskListRequestDescriptor = $convert.base64Decode(
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSFgoGc3RhdHVzGAMgASgJUgZzdGF0dXMSHwoL'
     'YXNzaWduZWVfaWQYBCABKAlSCmFzc2lnbmVlSWQSFgoGY3Vyc29yGAUgASgJUgZjdXJzb3ISGw'
     'oJcGFnZV9zaXplGAYgASgFUghwYWdlU2l6ZRIpChBpbmNsdWRlX3N1YnRhc2tzGAcgASgIUg9p'
-    'bmNsdWRlU3VidGFza3M=');
+    'bmNsdWRlU3VidGFza3MSKQoEc29ydBgIIAMoCzIVLmNvbmZpZy50YXNrcy5Tb3J0S2V5UgRzb3'
+    'J0EhkKCGdyb3VwX2J5GAkgASgJUgdncm91cEJ5');
 
 @$core.Deprecated('Use taskListTrashRequestDescriptor instead')
 const TaskListTrashRequest$json = {
@@ -417,6 +557,67 @@ final $typed_data.Uint8List taskMoveRequestDescriptor = $convert.base64Decode(
     'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhIWCgZzdGF0dXMYBSABKAlSBnN0YXR1cx'
     'IpChBpbmNsdWRlX3N1YnRhc2tzGAYgASgIUg9pbmNsdWRlU3VidGFza3MSKQoQb3ZlcnJpZGVf'
     'YmxvY2tlZBgHIAEoCFIPb3ZlcnJpZGVCbG9ja2Vk');
+
+@$core.Deprecated('Use taskResponseDescriptor instead')
+const TaskResponse$json = {
+  '1': 'TaskResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'workspace_id', '3': 2, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 3, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'number', '3': 4, '4': 1, '5': 5, '10': 'number'},
+    {'1': 'display_id', '3': 5, '4': 1, '5': 9, '10': 'displayId'},
+    {'1': 'title', '3': 6, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'description', '3': 7, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'status', '3': 8, '4': 1, '5': 9, '10': 'status'},
+    {'1': 'status_name', '3': 9, '4': 1, '5': 9, '10': 'statusName'},
+    {'1': 'status_category', '3': 10, '4': 1, '5': 9, '10': 'statusCategory'},
+    {'1': 'priority', '3': 11, '4': 1, '5': 9, '10': 'priority'},
+    {'1': 'start_date', '3': 12, '4': 1, '5': 9, '10': 'startDate'},
+    {'1': 'due_date', '3': 13, '4': 1, '5': 9, '10': 'dueDate'},
+    {'1': 'assignee_ids', '3': 14, '4': 3, '5': 9, '10': 'assigneeIds'},
+    {'1': 'parent_id', '3': 15, '4': 1, '5': 9, '10': 'parentId'},
+    {'1': 'depth', '3': 16, '4': 1, '5': 5, '10': 'depth'},
+    {'1': 'progress_done', '3': 17, '4': 1, '5': 5, '10': 'progressDone'},
+    {'1': 'progress_total', '3': 18, '4': 1, '5': 5, '10': 'progressTotal'},
+    {'1': 'created_by', '3': 19, '4': 1, '5': 9, '10': 'createdBy'},
+    {'1': 'version', '3': 20, '4': 1, '5': 5, '10': 'version'},
+    {'1': 'position', '3': 21, '4': 1, '5': 9, '10': 'position'},
+    {'1': 'created_at', '3': 22, '4': 1, '5': 9, '10': 'createdAt'},
+    {'1': 'updated_at', '3': 23, '4': 1, '5': 9, '10': 'updatedAt'},
+    {'1': 'deleted_at', '3': 24, '4': 1, '5': 9, '10': 'deletedAt'},
+    {'1': 'is_blocked', '3': 25, '4': 1, '5': 8, '10': 'isBlocked'},
+    {'1': 'blocked_by', '3': 26, '4': 3, '5': 9, '10': 'blockedBy'},
+    {
+      '1': 'fields',
+      '3': 27,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TaskFieldValueResponse',
+      '10': 'fields'
+    },
+    {'1': 'group_key', '3': 28, '4': 1, '5': 9, '10': 'groupKey'},
+  ],
+};
+
+/// Descriptor for `TaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskResponseDescriptor = $convert.base64Decode(
+    'CgxUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiEKDHdvcmtzcGFjZV9pZBgCIAEoCVILd2'
+    '9ya3NwYWNlSWQSHQoKcHJvamVjdF9pZBgDIAEoCVIJcHJvamVjdElkEhYKBm51bWJlchgEIAEo'
+    'BVIGbnVtYmVyEh0KCmRpc3BsYXlfaWQYBSABKAlSCWRpc3BsYXlJZBIUCgV0aXRsZRgGIAEoCV'
+    'IFdGl0bGUSIAoLZGVzY3JpcHRpb24YByABKAlSC2Rlc2NyaXB0aW9uEhYKBnN0YXR1cxgIIAEo'
+    'CVIGc3RhdHVzEh8KC3N0YXR1c19uYW1lGAkgASgJUgpzdGF0dXNOYW1lEicKD3N0YXR1c19jYX'
+    'RlZ29yeRgKIAEoCVIOc3RhdHVzQ2F0ZWdvcnkSGgoIcHJpb3JpdHkYCyABKAlSCHByaW9yaXR5'
+    'Eh0KCnN0YXJ0X2RhdGUYDCABKAlSCXN0YXJ0RGF0ZRIZCghkdWVfZGF0ZRgNIAEoCVIHZHVlRG'
+    'F0ZRIhCgxhc3NpZ25lZV9pZHMYDiADKAlSC2Fzc2lnbmVlSWRzEhsKCXBhcmVudF9pZBgPIAEo'
+    'CVIIcGFyZW50SWQSFAoFZGVwdGgYECABKAVSBWRlcHRoEiMKDXByb2dyZXNzX2RvbmUYESABKA'
+    'VSDHByb2dyZXNzRG9uZRIlCg5wcm9ncmVzc190b3RhbBgSIAEoBVINcHJvZ3Jlc3NUb3RhbBId'
+    'CgpjcmVhdGVkX2J5GBMgASgJUgljcmVhdGVkQnkSGAoHdmVyc2lvbhgUIAEoBVIHdmVyc2lvbh'
+    'IaCghwb3NpdGlvbhgVIAEoCVIIcG9zaXRpb24SHQoKY3JlYXRlZF9hdBgWIAEoCVIJY3JlYXRl'
+    'ZEF0Eh0KCnVwZGF0ZWRfYXQYFyABKAlSCXVwZGF0ZWRBdBIdCgpkZWxldGVkX2F0GBggASgJUg'
+    'lkZWxldGVkQXQSHQoKaXNfYmxvY2tlZBgZIAEoCFIJaXNCbG9ja2VkEh0KCmJsb2NrZWRfYnkY'
+    'GiADKAlSCWJsb2NrZWRCeRI8CgZmaWVsZHMYGyADKAsyJC5jb25maWcudGFza3MuVGFza0ZpZW'
+    'xkVmFsdWVSZXNwb25zZVIGZmllbGRzEhsKCWdyb3VwX2tleRgcIAEoCVIIZ3JvdXBLZXk=');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {

@@ -1,3 +1,5 @@
+import 'package:taskforge/features/views/application/views_providers.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:taskforge/features/workspaces/application/workspace_providers.da
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
 import 'fakes.dart';
+import '../views/fakes.dart';
 
 const _phone = Size(420, 1400);
 
@@ -786,6 +789,7 @@ void main() {
     ProviderContainer container(FakeTasksClient server) {
       final c = ProviderContainer(
         overrides: [
+          viewsClientProvider.overrideWithValue(FakeViewsClient()),
           tasksClientProvider.overrideWithValue(server),
           workspaceScopeProvider.overrideWithValue('w1'),
         ],

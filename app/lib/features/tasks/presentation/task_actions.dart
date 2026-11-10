@@ -6,6 +6,18 @@ import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
+/// What a row's menu can do.
+enum TaskAction {
+  addSubtask('Add subtask'),
+  moveUnder('Move under\u2026'),
+  makeTopLevel('Make top level'),
+  delete('Delete');
+
+  const TaskAction(this.label);
+
+  final String label;
+}
+
 IconData priorityIcon(TaskPriority priority) => switch (priority) {
   TaskPriority.urgent => Icons.priority_high,
   TaskPriority.high => Icons.keyboard_double_arrow_up,

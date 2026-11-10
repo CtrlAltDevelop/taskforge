@@ -110,7 +110,7 @@ void main() {
     expect(server.updates.single.patch.fields, ['status']);
     expect(server.updates.single.patch.status!.id, 'doing');
     expect(server.tasks.single.statusName, 'In progress');
-    expect(find.text('WEB-1 · In progress'), findsOneWidget);
+    expect(statusCell('a', 'In progress'), findsOneWidget);
   });
 
   testWidgets(
@@ -127,7 +127,13 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('To do → Done is not allowed.'), findsOneWidget);
-      expect(find.text('WEB-1 · To do'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('cell-status-a')),
+          matching: find.text('To do'),
+        ),
+        findsOneWidget,
+      );
       expect(
         tester
             .widget<DropdownButtonFormField<String>>(
@@ -158,8 +164,8 @@ void main() {
         ],
       );
 
-      expect(find.text('WEB-1 · To do'), findsOneWidget);
-      expect(find.text('WEB-2 · Done'), findsOneWidget);
+      expect(statusCell('a', 'To do'), findsOneWidget);
+      expect(statusCell('b', 'Done'), findsOneWidget);
       final struck = tester.widget<Text>(find.text('Finished one'));
       expect(struck.style?.decoration, TextDecoration.lineThrough);
     },
