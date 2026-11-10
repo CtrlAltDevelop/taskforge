@@ -123,6 +123,8 @@ class BoardGetRequest extends $pb.GeneratedMessage {
     $core.String? groupBy,
     $core.String? swimlane,
     $core.int? pageSize,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = BoardGetRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -130,6 +132,8 @@ class BoardGetRequest extends $pb.GeneratedMessage {
     if (groupBy != null) result.groupBy = groupBy;
     if (swimlane != null) result.swimlane = swimlane;
     if (pageSize != null) result.pageSize = pageSize;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -151,6 +155,8 @@ class BoardGetRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'groupBy')
     ..aOS(4, _omitFieldNames ? '' : 'swimlane')
     ..aI(5, _omitFieldNames ? '' : 'pageSize')
+    ..aOS(6, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(7, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -219,6 +225,24 @@ class BoardGetRequest extends $pb.GeneratedMessage {
   $core.bool hasPageSize() => $_has(4);
   @$pb.TagNumber(5)
   void clearPageSize() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get filterAst => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set filterAst($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasFilterAst() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFilterAst() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get today => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set today($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasToday() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearToday() => $_clearField(7);
 }
 
 class BoardLane extends $pb.GeneratedMessage {
@@ -293,6 +317,8 @@ class BoardListColumnRequest extends $pb.GeneratedMessage {
     $core.String? column,
     $core.String? lane,
     $core.String? cursor,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = BoardListColumnRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -303,6 +329,8 @@ class BoardListColumnRequest extends $pb.GeneratedMessage {
     if (column != null) result.column = column;
     if (lane != null) result.lane = lane;
     if (cursor != null) result.cursor = cursor;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -327,6 +355,8 @@ class BoardListColumnRequest extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'column')
     ..aOS(7, _omitFieldNames ? '' : 'lane')
     ..aOS(8, _omitFieldNames ? '' : 'cursor')
+    ..aOS(9, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(10, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -424,6 +454,24 @@ class BoardListColumnRequest extends $pb.GeneratedMessage {
   $core.bool hasCursor() => $_has(7);
   @$pb.TagNumber(8)
   void clearCursor() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get filterAst => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set filterAst($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasFilterAst() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearFilterAst() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get today => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set today($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasToday() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearToday() => $_clearField(10);
 }
 
 class BoardMoveRequest extends $pb.GeneratedMessage {
@@ -828,6 +876,8 @@ class CalendarRangeRequest extends $pb.GeneratedMessage {
     $core.String? rangeStart,
     $core.String? rangeEnd,
     $core.bool? includeDone,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = CalendarRangeRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -835,6 +885,8 @@ class CalendarRangeRequest extends $pb.GeneratedMessage {
     if (rangeStart != null) result.rangeStart = rangeStart;
     if (rangeEnd != null) result.rangeEnd = rangeEnd;
     if (includeDone != null) result.includeDone = includeDone;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -856,6 +908,8 @@ class CalendarRangeRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'rangeStart')
     ..aOS(4, _omitFieldNames ? '' : 'rangeEnd')
     ..aOB(5, _omitFieldNames ? '' : 'includeDone')
+    ..aOS(6, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(7, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -925,6 +979,24 @@ class CalendarRangeRequest extends $pb.GeneratedMessage {
   $core.bool hasIncludeDone() => $_has(4);
   @$pb.TagNumber(5)
   void clearIncludeDone() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get filterAst => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set filterAst($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasFilterAst() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFilterAst() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get today => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set today($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasToday() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearToday() => $_clearField(7);
 }
 
 class CalendarTray extends $pb.GeneratedMessage {
@@ -3168,6 +3240,8 @@ class TaskGroupCountsRequest extends $pb.GeneratedMessage {
     $core.String? status,
     $core.String? assigneeId,
     $core.bool? includeSubtasks,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = TaskGroupCountsRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -3176,6 +3250,8 @@ class TaskGroupCountsRequest extends $pb.GeneratedMessage {
     if (status != null) result.status = status;
     if (assigneeId != null) result.assigneeId = assigneeId;
     if (includeSubtasks != null) result.includeSubtasks = includeSubtasks;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -3198,6 +3274,8 @@ class TaskGroupCountsRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'status')
     ..aOS(5, _omitFieldNames ? '' : 'assigneeId')
     ..aOB(6, _omitFieldNames ? '' : 'includeSubtasks')
+    ..aOS(7, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(8, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3277,6 +3355,24 @@ class TaskGroupCountsRequest extends $pb.GeneratedMessage {
   $core.bool hasIncludeSubtasks() => $_has(5);
   @$pb.TagNumber(6)
   void clearIncludeSubtasks() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get filterAst => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set filterAst($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasFilterAst() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearFilterAst() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get today => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set today($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasToday() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearToday() => $_clearField(8);
 }
 
 class TaskListChildrenRequest extends $pb.GeneratedMessage {
@@ -3373,6 +3469,8 @@ class TaskListRequest extends $pb.GeneratedMessage {
     $core.bool? includeSubtasks,
     $core.Iterable<SortKey>? sort,
     $core.String? groupBy,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = TaskListRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -3384,6 +3482,8 @@ class TaskListRequest extends $pb.GeneratedMessage {
     if (includeSubtasks != null) result.includeSubtasks = includeSubtasks;
     if (sort != null) result.sort.addAll(sort);
     if (groupBy != null) result.groupBy = groupBy;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -3410,6 +3510,8 @@ class TaskListRequest extends $pb.GeneratedMessage {
     ..pPM<SortKey>(8, _omitFieldNames ? '' : 'sort',
         subBuilder: SortKey.$_createMessage)
     ..aOS(9, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(10, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(11, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3508,6 +3610,24 @@ class TaskListRequest extends $pb.GeneratedMessage {
   $core.bool hasGroupBy() => $_has(8);
   @$pb.TagNumber(9)
   void clearGroupBy() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get filterAst => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set filterAst($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasFilterAst() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearFilterAst() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get today => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set today($core.String value) => $_setString(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasToday() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearToday() => $_clearField(11);
 }
 
 class TaskListTrashRequest extends $pb.GeneratedMessage {

@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
+import 'package:taskforge/features/filters/domain/filter_query.dart'
+    show localToday;
 import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -34,8 +36,9 @@ abstract interface class TasksClient {
   Future<Map<String, int>> groupCounts(
     String workspaceId,
     String projectId,
-    String groupBy,
-  );
+    String groupBy, {
+    String filterAst = '',
+  });
 
   /// Applies [change] to every task of [ids], streaming one outcome per task
   /// as it is done. A call the server refuses as a whole throws.
@@ -329,6 +332,8 @@ class GrpcTasksClient implements TasksClient {
                   pb.SortKey(key: k.key, desc: k.desc),
               ],
               groupBy: query.groupBy,
+              filterAst: query.filterAst,
+              today: query.filterAst.isEmpty ? '' : localToday(),
             ),
             options: _options,
           )
@@ -342,8 +347,9 @@ class GrpcTasksClient implements TasksClient {
   Future<Map<String, int>> groupCounts(
     String workspaceId,
     String projectId,
-    String groupBy,
-  ) async {
+    String groupBy, {
+    String filterAst = '',
+  }) async {
     final reply = await _run(
       () => _stub.groupCounts(
         pb.TaskGroupCountsRequest(
@@ -351,6 +357,8 @@ class GrpcTasksClient implements TasksClient {
           projectId: projectId,
           groupBy: groupBy,
           includeSubtasks: true,
+          filterAst: filterAst,
+          today: filterAst.isEmpty ? '' : localToday(),
         ),
         options: _options,
       ),

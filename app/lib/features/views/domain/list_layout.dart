@@ -55,21 +55,34 @@ class SortKey {
 /// What the server needs to order a list: the sort keys and the grouping.
 @immutable
 class ListQuery {
-  const ListQuery({this.sort = const [], this.groupBy = ''});
+  const ListQuery({
+    this.sort = const [],
+    this.groupBy = '',
+    this.filterAst = '',
+  });
 
   final List<SortKey> sort;
   final String groupBy;
 
-  bool get isDefault => sort.isEmpty && groupBy.isEmpty;
+  /// A filter's AST as JSON ('' for none); the server keeps only what matches.
+  final String filterAst;
+
+  /// The tree order of every task: no sort, grouping or filter.
+  bool get isDefault => sort.isEmpty && groupBy.isEmpty && filterAst.isEmpty;
+
+  ListQuery withFilter(String ast) => ast == filterAst
+      ? this
+      : ListQuery(sort: sort, groupBy: groupBy, filterAst: ast);
 
   @override
   bool operator ==(Object other) =>
       other is ListQuery &&
       other.groupBy == groupBy &&
+      other.filterAst == filterAst &&
       listEquals(other.sort, sort);
 
   @override
-  int get hashCode => Object.hash(groupBy, Object.hashAll(sort));
+  int get hashCode => Object.hash(groupBy, filterAst, Object.hashAll(sort));
 }
 
 /// How a person likes a project's list: which columns, how wide, the sort and

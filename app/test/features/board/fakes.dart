@@ -14,6 +14,9 @@ class FakeBoardClient implements BoardClient {
   /// Top-level tasks in rank order.
   final List<Task> tasks;
   int pageSize = boardPageSize;
+
+  /// The filter (AST JSON) of every read.
+  final filters = <String>[];
   final getCalls = <({String groupBy, String swimlane})>[];
   final listColumnCalls = <({String column, String cursor, String lane})>[];
   final moves =
@@ -71,8 +74,10 @@ class FakeBoardClient implements BoardClient {
     String projectId, {
     required String groupBy,
     String swimlane = '',
+    String filterAst = '',
   }) async {
     getCalls.add((groupBy: groupBy, swimlane: swimlane));
+    filters.add(filterAst);
     await getGate?.future;
     final lanes = swimlane.isEmpty
         ? ['']
@@ -113,7 +118,9 @@ class FakeBoardClient implements BoardClient {
     String swimlane = '',
     String lane = '',
     String cursor = '',
+    String filterAst = '',
   }) async {
+    filters.add(filterAst);
     listColumnCalls.add((column: column, cursor: cursor, lane: lane));
     final cell = _cell(groupBy, column, swimlane, lane);
     final from = int.parse(cursor);

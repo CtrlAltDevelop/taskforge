@@ -7,6 +7,7 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/views/data/views_client.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
@@ -264,8 +265,9 @@ class ListLayoutNotifier extends Notifier<LayoutState> {
 /// What the task list asks the server for. Only a change of sort or grouping
 /// changes it (widths and columns do not make the list read again).
 final listQueryProvider = Provider.autoDispose.family<ListQuery, String>(
-  (ref, projectId) =>
-      ref.watch(listLayoutProvider(projectId).select((s) => s.layout.query)),
+  (ref, projectId) => ref
+      .watch(listLayoutProvider(projectId).select((s) => s.layout.query))
+      .withFilter(ref.watch(filterJsonProvider(projectId))),
 );
 
 final listLayoutReadyProvider = Provider.autoDispose.family<bool, String>(

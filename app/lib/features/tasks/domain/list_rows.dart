@@ -64,7 +64,7 @@ List<ListEntry> listEntries(
       serverCounts: serverCounts,
     );
   }
-  if (query.sort.isNotEmpty) {
+  if (query.sort.isNotEmpty || query.filterAst.isNotEmpty) {
     return [for (final t in tasks) TaskEntry(task: t)];
   }
   return [

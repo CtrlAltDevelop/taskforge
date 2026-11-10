@@ -382,8 +382,9 @@ class FakeTasksClient implements TasksClient {
   Future<Map<String, int>> groupCounts(
     String workspaceId,
     String projectId,
-    String groupBy,
-  ) async {
+    String groupBy, {
+    String filterAst = '',
+  }) async {
     final counts = <String, int>{};
     final rows = [..._treeOrder(projectId)]
       ..sort((a, b) => _groupRank(a, groupBy) - _groupRank(b, groupBy));

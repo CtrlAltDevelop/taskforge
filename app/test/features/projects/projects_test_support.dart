@@ -1,4 +1,5 @@
 import 'package:taskforge/features/board/application/board_providers.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
@@ -22,6 +23,7 @@ import '../workspaces/fakes.dart';
 import 'fakes.dart';
 import '../views/fakes.dart';
 import '../board/fakes.dart';
+import '../filters/fakes.dart';
 import '../calendar/fakes.dart';
 
 export '../workspaces/fakes.dart' show byKey;
@@ -55,6 +57,7 @@ Future<Pumped> pumpProjects(
   FakeViewsClient? views,
   FakeBoardClient? board,
   FakeCalendarClient? calendar,
+  FakeFiltersClient? filters,
   Day? today,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
@@ -72,6 +75,7 @@ Future<Pumped> pumpProjects(
       membersClientProvider.overrideWithValue(team()),
       viewsClientProvider.overrideWithValue(views ?? FakeViewsClient()),
       boardClientProvider.overrideWithValue(board ?? FakeBoardClient()),
+      filtersClientProvider.overrideWithValue(filters ?? FakeFiltersClient()),
       calendarClientProvider.overrideWithValue(
         calendar ?? FakeCalendarClient(tasks ?? FakeTasksClient()),
       ),

@@ -49,6 +49,8 @@ const BoardGetRequest$json = {
     {'1': 'group_by', '3': 3, '4': 1, '5': 9, '10': 'groupBy'},
     {'1': 'swimlane', '3': 4, '4': 1, '5': 9, '10': 'swimlane'},
     {'1': 'page_size', '3': 5, '4': 1, '5': 5, '10': 'pageSize'},
+    {'1': 'filter_ast', '3': 6, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 7, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -57,7 +59,7 @@ final $typed_data.Uint8List boardGetRequestDescriptor = $convert.base64Decode(
     'Cg9Cb2FyZEdldFJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSGQoIZ3JvdXBfYnkYAyABKAlSB2dyb3VwQnkS'
     'GgoIc3dpbWxhbmUYBCABKAlSCHN3aW1sYW5lEhsKCXBhZ2Vfc2l6ZRgFIAEoBVIIcGFnZVNpem'
-    'U=');
+    'USHQoKZmlsdGVyX2FzdBgGIAEoCVIJZmlsdGVyQXN0EhQKBXRvZGF5GAcgASgJUgV0b2RheQ==');
 
 @$core.Deprecated('Use boardLaneDescriptor instead')
 const BoardLane$json = {
@@ -92,6 +94,8 @@ const BoardListColumnRequest$json = {
     {'1': 'column', '3': 6, '4': 1, '5': 9, '10': 'column'},
     {'1': 'lane', '3': 7, '4': 1, '5': 9, '10': 'lane'},
     {'1': 'cursor', '3': 8, '4': 1, '5': 9, '10': 'cursor'},
+    {'1': 'filter_ast', '3': 9, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 10, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -101,7 +105,8 @@ final $typed_data.Uint8List boardListColumnRequestDescriptor = $convert.base64De
     'NlSWQSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhkKCGdyb3VwX2J5GAMgASgJUgdn'
     'cm91cEJ5EhoKCHN3aW1sYW5lGAQgASgJUghzd2ltbGFuZRIbCglwYWdlX3NpemUYBSABKAVSCH'
     'BhZ2VTaXplEhYKBmNvbHVtbhgGIAEoCVIGY29sdW1uEhIKBGxhbmUYByABKAlSBGxhbmUSFgoG'
-    'Y3Vyc29yGAggASgJUgZjdXJzb3I=');
+    'Y3Vyc29yGAggASgJUgZjdXJzb3ISHQoKZmlsdGVyX2FzdBgJIAEoCVIJZmlsdGVyQXN0EhQKBX'
+    'RvZGF5GAogASgJUgV0b2RheQ==');
 
 @$core.Deprecated('Use boardMoveRequestDescriptor instead')
 const BoardMoveRequest$json = {
@@ -206,6 +211,8 @@ const CalendarRangeRequest$json = {
     {'1': 'range_start', '3': 3, '4': 1, '5': 9, '10': 'rangeStart'},
     {'1': 'range_end', '3': 4, '4': 1, '5': 9, '10': 'rangeEnd'},
     {'1': 'include_done', '3': 5, '4': 1, '5': 8, '10': 'includeDone'},
+    {'1': 'filter_ast', '3': 6, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 7, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -214,7 +221,8 @@ final $typed_data.Uint8List calendarRangeRequestDescriptor = $convert.base64Deco
     'ChRDYWxlbmRhclJhbmdlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
     'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIfCgtyYW5nZV9zdGFydBgDIAEoCVIK'
     'cmFuZ2VTdGFydBIbCglyYW5nZV9lbmQYBCABKAlSCHJhbmdlRW5kEiEKDGluY2x1ZGVfZG9uZR'
-    'gFIAEoCFILaW5jbHVkZURvbmU=');
+    'gFIAEoCFILaW5jbHVkZURvbmUSHQoKZmlsdGVyX2FzdBgGIAEoCVIJZmlsdGVyQXN0EhQKBXRv'
+    'ZGF5GAcgASgJUgV0b2RheQ==');
 
 @$core.Deprecated('Use calendarTrayDescriptor instead')
 const CalendarTray$json = {
@@ -704,6 +712,8 @@ const TaskGroupCountsRequest$json = {
     {'1': 'status', '3': 4, '4': 1, '5': 9, '10': 'status'},
     {'1': 'assignee_id', '3': 5, '4': 1, '5': 9, '10': 'assigneeId'},
     {'1': 'include_subtasks', '3': 6, '4': 1, '5': 8, '10': 'includeSubtasks'},
+    {'1': 'filter_ast', '3': 7, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 8, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -712,7 +722,8 @@ final $typed_data.Uint8List taskGroupCountsRequestDescriptor = $convert.base64De
     'ChZUYXNrR3JvdXBDb3VudHNSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
     'NlSWQSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhkKCGdyb3VwX2J5GAMgASgJUgdn'
     'cm91cEJ5EhYKBnN0YXR1cxgEIAEoCVIGc3RhdHVzEh8KC2Fzc2lnbmVlX2lkGAUgASgJUgphc3'
-    'NpZ25lZUlkEikKEGluY2x1ZGVfc3VidGFza3MYBiABKAhSD2luY2x1ZGVTdWJ0YXNrcw==');
+    'NpZ25lZUlkEikKEGluY2x1ZGVfc3VidGFza3MYBiABKAhSD2luY2x1ZGVTdWJ0YXNrcxIdCgpm'
+    'aWx0ZXJfYXN0GAcgASgJUglmaWx0ZXJBc3QSFAoFdG9kYXkYCCABKAlSBXRvZGF5');
 
 @$core.Deprecated('Use taskListChildrenRequestDescriptor instead')
 const TaskListChildrenRequest$json = {
@@ -749,6 +760,8 @@ const TaskListRequest$json = {
       '10': 'sort'
     },
     {'1': 'group_by', '3': 9, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'filter_ast', '3': 10, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 11, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -759,7 +772,8 @@ final $typed_data.Uint8List taskListRequestDescriptor = $convert.base64Decode(
     'YXNzaWduZWVfaWQYBCABKAlSCmFzc2lnbmVlSWQSFgoGY3Vyc29yGAUgASgJUgZjdXJzb3ISGw'
     'oJcGFnZV9zaXplGAYgASgFUghwYWdlU2l6ZRIpChBpbmNsdWRlX3N1YnRhc2tzGAcgASgIUg9p'
     'bmNsdWRlU3VidGFza3MSKQoEc29ydBgIIAMoCzIVLmNvbmZpZy50YXNrcy5Tb3J0S2V5UgRzb3'
-    'J0EhkKCGdyb3VwX2J5GAkgASgJUgdncm91cEJ5');
+    'J0EhkKCGdyb3VwX2J5GAkgASgJUgdncm91cEJ5Eh0KCmZpbHRlcl9hc3QYCiABKAlSCWZpbHRl'
+    'ckFzdBIUCgV0b2RheRgLIAEoCVIFdG9kYXk=');
 
 @$core.Deprecated('Use taskListTrashRequestDescriptor instead')
 const TaskListTrashRequest$json = {

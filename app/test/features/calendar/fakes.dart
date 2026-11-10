@@ -17,6 +17,9 @@ class FakeCalendarClient implements CalendarClient {
   final ranges = <({String first, String last, bool includeDone})>[];
   final trayCursors = <String>[];
 
+  /// The filter (AST JSON) of every project range read.
+  final filters = <String>[];
+
   /// The cancel token of every range read, to see which were stopped.
   final tokens = <CancelToken?>[];
 
@@ -33,8 +36,10 @@ class FakeCalendarClient implements CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    String filterAst = '',
     CancelToken? cancel,
   }) async {
+    filters.add(filterAst);
     tokens.add(cancel);
     ranges.add((
       first: formatDay(first),

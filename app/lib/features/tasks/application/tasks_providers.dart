@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
@@ -543,7 +544,12 @@ final groupCountsProvider = FutureProvider.autoDispose
       try {
         return await ref
             .watch(tasksClientProvider)
-            .groupCounts(workspace, projectId, groupBy);
+            .groupCounts(
+              workspace,
+              projectId,
+              groupBy,
+              filterAst: ref.watch(filterJsonProvider(projectId)),
+            );
       } on Object catch (e) {
         throw mapTaskError(e);
       }

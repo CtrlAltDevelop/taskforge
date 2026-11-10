@@ -6,6 +6,8 @@ import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
+import 'package:taskforge/features/filters/domain/filter_query.dart'
+    show localToday;
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/gen/infrastructure/tasks/grpc/tasks.pbgrpc.dart'
@@ -32,6 +34,7 @@ abstract interface class CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    String filterAst = '',
     CancelToken? cancel,
   });
 
@@ -102,6 +105,7 @@ class GrpcCalendarClient implements CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    String filterAst = '',
     CancelToken? cancel,
   }) => _run(
     () => _read(
@@ -112,6 +116,8 @@ class GrpcCalendarClient implements CalendarClient {
           rangeStart: formatDay(first),
           rangeEnd: formatDay(last),
           includeDone: includeDone,
+          filterAst: filterAst,
+          today: filterAst.isEmpty ? '' : localToday(),
         ),
         options: _options,
       ),

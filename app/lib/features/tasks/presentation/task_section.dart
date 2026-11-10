@@ -6,6 +6,7 @@ import 'package:taskforge/features/board/presentation/board_view.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_view.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/filters/presentation/filter_bar.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -137,32 +138,42 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
               onOpen: (t) => _open(t, wide),
             );
       final switcher = Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: SegmentedButton<_TaskView>(
-            key: const Key('view-switch'),
-            showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(
-                value: _TaskView.list,
-                icon: Icon(Icons.table_rows_outlined),
-                label: Text('List'),
-              ),
-              ButtonSegment(
-                value: _TaskView.board,
-                icon: Icon(Icons.view_kanban_outlined),
-                label: Text('Board'),
-              ),
-              ButtonSegment(
-                value: _TaskView.calendar,
-                icon: Icon(Icons.calendar_month_outlined),
-                label: Text('Calendar'),
-              ),
-            ],
-            selected: {_view},
-            onSelectionChanged: (v) => setState(() => _view = v.first),
-          ),
+        padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+        child: Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            SegmentedButton<_TaskView>(
+              key: const Key('view-switch'),
+              showSelectedIcon: false,
+              segments: const [
+                ButtonSegment(
+                  value: _TaskView.list,
+                  icon: Icon(Icons.table_rows_outlined),
+                  label: Text('List'),
+                ),
+                ButtonSegment(
+                  value: _TaskView.board,
+                  icon: Icon(Icons.view_kanban_outlined),
+                  label: Text('Board'),
+                ),
+                ButtonSegment(
+                  value: _TaskView.calendar,
+                  icon: Icon(Icons.calendar_month_outlined),
+                  label: Text('Calendar'),
+                ),
+              ],
+              selected: {_view},
+              onSelectionChanged: (v) => setState(() => _view = v.first),
+            ),
+            FilterBar(
+              projectId: widget.project.id,
+              canShare:
+                  !widget.project.isArchived &&
+                  ref.watch(permissionSetProvider).can(Perm.projectUpdate),
+            ),
+          ],
         ),
       );
       // Always a Row on a wide screen, so opening or closing the detail keeps

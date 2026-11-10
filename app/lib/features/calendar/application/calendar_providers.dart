@@ -8,6 +8,7 @@ import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/calendar/data/calendar_client.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -224,6 +225,9 @@ class CalendarNotifier extends Notifier<CalendarState> {
           .select((s) => (s.loaded, s.layout.mode, s.layout.hideDone)),
     );
     final compact = ref.watch(compactCalendarProvider);
+    final filter = projectId.isEmpty
+        ? ''
+        : ref.watch(filterJsonProvider(projectId));
     final anchor = ref.watch(calendarAnchorProvider(projectId));
     final weekStart = ref.watch(weekStartProvider(projectId));
     if (loaded) {
@@ -232,13 +236,13 @@ class CalendarNotifier extends Notifier<CalendarState> {
         anchor,
         weekStart,
       );
-      Future.microtask(() => _load(range.first, range.last, hideDone));
+      Future.microtask(() => _load(range.first, range.last, hideDone, filter));
     }
     // The tasks on screen stay while the next range is read.
     return stateOrNull?.copyWith(loading: true) ?? const CalendarState();
   }
 
-  Future<void> _load(Day first, Day last, bool hideDone) async {
+  Future<void> _load(Day first, Day last, bool hideDone, String filter) async {
     final generation = ++_generation;
     if (!ref.mounted) return;
     _reading?.cancel(); // the range before this one is no longer wanted
@@ -260,6 +264,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
               first: first,
               last: last,
               includeDone: !hideDone,
+              filterAst: filter,
               cancel: token,
             );
       if (generation != _generation || !ref.mounted) return;
@@ -278,7 +283,14 @@ class CalendarNotifier extends Notifier<CalendarState> {
       ref.read(calendarAnchorProvider(projectId)),
       ref.read(weekStartProvider(projectId)),
     );
-    unawaited(_load(range.first, range.last, layout.hideDone));
+    unawaited(
+      _load(
+        range.first,
+        range.last,
+        layout.hideDone,
+        projectId.isEmpty ? '' : ref.read(filterJsonProvider(projectId)),
+      ),
+    );
   }
 
   /// Gives [task] [dates]. The calendar shows it at once; a refusal puts that

@@ -4,6 +4,8 @@ import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/board/domain/board.dart';
+import 'package:taskforge/features/filters/domain/filter_query.dart'
+    show localToday;
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/gen/infrastructure/tasks/grpc/tasks.pbgrpc.dart'
@@ -20,6 +22,7 @@ abstract interface class BoardClient {
     String projectId, {
     required String groupBy,
     String swimlane = '',
+    String filterAst = '',
   });
 
   /// The cards of [column] after [cursor] (of [lane]'s cell with swimlanes).
@@ -31,6 +34,7 @@ abstract interface class BoardClient {
     String swimlane = '',
     String lane = '',
     String cursor = '',
+    String filterAst = '',
   });
 
   /// Drops [task] in [column]: right before [beforeId], else right after
@@ -86,6 +90,7 @@ class GrpcBoardClient implements BoardClient {
     String projectId, {
     required String groupBy,
     String swimlane = '',
+    String filterAst = '',
   }) => _run(() async {
     final view = await _stub.get(
       pb.BoardGetRequest(
@@ -94,6 +99,8 @@ class GrpcBoardClient implements BoardClient {
         groupBy: groupBy,
         swimlane: swimlane,
         pageSize: boardPageSize,
+        filterAst: filterAst,
+        today: filterAst.isEmpty ? '' : localToday(),
       ),
       options: _options,
     );
@@ -124,6 +131,7 @@ class GrpcBoardClient implements BoardClient {
     String swimlane = '',
     String lane = '',
     String cursor = '',
+    String filterAst = '',
   }) => _run(() async {
     final page = await _stub.listColumn(
       pb.BoardListColumnRequest(
@@ -135,6 +143,8 @@ class GrpcBoardClient implements BoardClient {
         lane: lane,
         cursor: cursor,
         pageSize: boardPageSize,
+        filterAst: filterAst,
+        today: filterAst.isEmpty ? '' : localToday(),
       ),
       options: _options,
     );

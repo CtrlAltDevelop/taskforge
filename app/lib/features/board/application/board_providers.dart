@@ -8,6 +8,7 @@ import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/board/data/board_client.dart';
 import 'package:taskforge/features/board/domain/board.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -126,6 +127,9 @@ class BoardNotifier extends Notifier<BoardState> {
   BoardState build() {
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
+    ref.watch(
+      filterJsonProvider(projectId),
+    ); // a new filter reads the board again
     ref.watch(boardLayoutProvider(projectId).select((s) => s.layout.query));
     if (ref.watch(boardLayoutProvider(projectId).select((s) => s.loaded))) {
       Future.microtask(load);
@@ -144,6 +148,7 @@ class BoardNotifier extends Notifier<BoardState> {
         projectId,
         groupBy: query.groupBy,
         swimlane: query.swimlane,
+        filterAst: ref.read(filterJsonProvider(projectId)),
       );
       if (generation != _generation || !ref.mounted) return;
       if (_moving > 0) {
@@ -179,6 +184,7 @@ class BoardNotifier extends Notifier<BoardState> {
         swimlane: query.swimlane,
         lane: laneKey,
         cursor: column.cursor,
+        filterAst: ref.read(filterJsonProvider(projectId)),
       );
       if (generation != _generation || !ref.mounted) return;
       state = state.copyWith(
