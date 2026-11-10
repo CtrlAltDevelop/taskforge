@@ -66,6 +66,6 @@ A query is parsed into an **AST** that names fields and values by id (a custom f
 
 ### Saved filters
 
-A name (1–60 characters), the AST, and a visibility: `private` (the owner's), `project` (everyone who can open the project; needs `project.update` and an active project) or `workspace` (no project, so only the fields that need none; needs `workspace.update`). Names are unique per place, at most 100 per place, a stale save is `VERSION_CONFLICT`. A listed filter whose field was removed has empty text and is skipped by the app.
+A name (1–60 characters), the AST, and a visibility: `private` (the owner's), `project` (everyone who can open the project; needs `project.update` and an active project) or `workspace` (no project, so only the fields that need none; needs `workspace.update`). Names are unique per place, at most 100 per place, a stale save is `VERSION_CONFLICT`. A listed filter whose field was removed has empty text and is skipped by the app. A workspace-level filter (no project) is read with `Catalogue(None, workspace)`: only the fields that mean the same everywhere (not status, id, sprint or a custom field), people by username; it applies in a project too, and `Calendar.ListWorkspaceRange` takes it as `filter_ast`.
 
 Suggestions (`Suggest`) offer the next field, the operators the field takes, its values (statuses, options, people, `me`, relative dates) and `AND` / `OR` / `ORDER BY`, replacing the word being typed.
