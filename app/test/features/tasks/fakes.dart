@@ -28,6 +28,7 @@ Task task(
   int depth = 0,
   bool isBlocked = false,
   List<String> blockedBy = const [],
+  Map<String, String> fieldValues = const {},
 }) => Task(
   id: id,
   projectId: project,
@@ -45,6 +46,7 @@ Task task(
   depth: depth,
   isBlocked: isBlocked,
   blockedBy: blockedBy,
+  fieldValues: fieldValues,
 );
 
 /// [t] changed field by field: any argument left out keeps [t]'s value.
@@ -74,6 +76,7 @@ Task changed(
     position: t.position,
     parentId: parentId ?? t.parentId,
     depth: depth ?? t.depth,
+    fieldValues: t.fieldValues,
   );
 }
 
@@ -89,6 +92,9 @@ class FakeTasksClient implements TasksClient {
   final moves = <({String task, String status, bool withSubtasks})>[];
   final deleted = <String>[];
   final deleteModes = <DeleteMode?>[];
+
+  /// The field values each create was sent with.
+  final createdWith = <Map<String, String>>[];
   TaskException? failNext;
   TaskException? failList;
 
@@ -283,8 +289,10 @@ class FakeTasksClient implements TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    Map<String, String> fieldValues = const {},
   }) async {
     await createGate?.future;
+    createdWith.add(fieldValues);
     _maybeFail();
     final depth = parentId.isEmpty
         ? 0
@@ -298,6 +306,7 @@ class FakeTasksClient implements TasksClient {
       assignees: assigneeIds,
       parent: parentId,
       depth: depth,
+      fieldValues: fieldValues,
     );
     tasks.add(created);
     return created;
@@ -401,6 +410,7 @@ class FakeTasksClient implements TasksClient {
       version: tasks[index].version + 1,
       parentId: next.parentId,
       depth: next.depth,
+      fieldValues: next.fieldValues,
     );
     return tasks[index];
   }

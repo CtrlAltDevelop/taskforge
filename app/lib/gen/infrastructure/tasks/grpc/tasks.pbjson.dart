@@ -199,6 +199,14 @@ const Task$json = {
     {'1': 'progress_total', '3': 24, '4': 1, '5': 5, '10': 'progressTotal'},
     {'1': 'is_blocked', '3': 25, '4': 1, '5': 8, '10': 'isBlocked'},
     {'1': 'blocked_by', '3': 26, '4': 3, '5': 9, '10': 'blockedBy'},
+    {
+      '1': 'fields',
+      '3': 27,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TaskFieldValueResponse',
+      '10': 'fields'
+    },
   ],
 };
 
@@ -218,7 +226,8 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'UgASgJUghwYXJlbnRJZBIUCgVkZXB0aBgWIAEoBVIFZGVwdGgSIwoNcHJvZ3Jlc3NfZG9uZRgX'
     'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
     'FsEh0KCmlzX2Jsb2NrZWQYGSABKAhSCWlzQmxvY2tlZBIdCgpibG9ja2VkX2J5GBogAygJUgli'
-    'bG9ja2VkQnk=');
+    'bG9ja2VkQnkSPAoGZmllbGRzGBsgAygLMiQuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUm'
+    'VzcG9uc2VSBmZpZWxkcw==');
 
 @$core.Deprecated('Use taskChildrenDescriptor instead')
 const TaskChildren$json = {
@@ -254,6 +263,14 @@ const TaskCreateRequest$json = {
     {'1': 'due_date', '3': 8, '4': 1, '5': 9, '10': 'dueDate'},
     {'1': 'assignee_ids', '3': 9, '4': 3, '5': 9, '10': 'assigneeIds'},
     {'1': 'parent_id', '3': 10, '4': 1, '5': 9, '10': 'parentId'},
+    {
+      '1': 'field_values',
+      '3': 11,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TaskFieldValue',
+      '10': 'fieldValues'
+    },
   ],
 };
 
@@ -264,7 +281,8 @@ final $typed_data.Uint8List taskCreateRequestDescriptor = $convert.base64Decode(
     'ZGVzY3JpcHRpb24YBCABKAlSC2Rlc2NyaXB0aW9uEhYKBnN0YXR1cxgFIAEoCVIGc3RhdHVzEh'
     'oKCHByaW9yaXR5GAYgASgJUghwcmlvcml0eRIdCgpzdGFydF9kYXRlGAcgASgJUglzdGFydERh'
     'dGUSGQoIZHVlX2RhdGUYCCABKAlSB2R1ZURhdGUSIQoMYXNzaWduZWVfaWRzGAkgAygJUgthc3'
-    'NpZ25lZUlkcxIbCglwYXJlbnRfaWQYCiABKAlSCHBhcmVudElk');
+    'NpZ25lZUlkcxIbCglwYXJlbnRfaWQYCiABKAlSCHBhcmVudElkEj8KDGZpZWxkX3ZhbHVlcxgL'
+    'IAMoCzIcLmNvbmZpZy50YXNrcy5UYXNrRmllbGRWYWx1ZVILZmllbGRWYWx1ZXM=');
 
 @$core.Deprecated('Use taskDeleteRequestDescriptor instead')
 const TaskDeleteRequest$json = {
@@ -282,6 +300,35 @@ final $typed_data.Uint8List taskDeleteRequestDescriptor = $convert.base64Decode(
     'ChFUYXNrRGVsZXRlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh'
     '0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQSEgoEbW9kZRgE'
     'IAEoCVIEbW9kZQ==');
+
+@$core.Deprecated('Use taskFieldValueDescriptor instead')
+const TaskFieldValue$json = {
+  '1': 'TaskFieldValue',
+  '2': [
+    {'1': 'field_id', '3': 1, '4': 1, '5': 9, '10': 'fieldId'},
+    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+};
+
+/// Descriptor for `TaskFieldValue`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskFieldValueDescriptor = $convert.base64Decode(
+    'Cg5UYXNrRmllbGRWYWx1ZRIZCghmaWVsZF9pZBgBIAEoCVIHZmllbGRJZBIUCgV2YWx1ZRgCIA'
+    'EoCVIFdmFsdWU=');
+
+@$core.Deprecated('Use taskFieldValueResponseDescriptor instead')
+const TaskFieldValueResponse$json = {
+  '1': 'TaskFieldValueResponse',
+  '2': [
+    {'1': 'field_id', '3': 1, '4': 1, '5': 9, '10': 'fieldId'},
+    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+};
+
+/// Descriptor for `TaskFieldValueResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskFieldValueResponseDescriptor =
+    $convert.base64Decode(
+        'ChZUYXNrRmllbGRWYWx1ZVJlc3BvbnNlEhkKCGZpZWxkX2lkGAEgASgJUgdmaWVsZElkEhQKBX'
+        'ZhbHVlGAIgASgJUgV2YWx1ZQ==');
 
 @$core.Deprecated('Use taskGetRequestDescriptor instead')
 const TaskGetRequest$json = {
@@ -473,6 +520,14 @@ const TaskUpdateRequest$json = {
     {'1': 'set_assignees', '3': 11, '4': 1, '5': 8, '10': 'setAssignees'},
     {'1': 'assignee_ids', '3': 12, '4': 3, '5': 9, '10': 'assigneeIds'},
     {'1': 'override_blocked', '3': 13, '4': 1, '5': 8, '10': 'overrideBlocked'},
+    {
+      '1': 'field_values',
+      '3': 14,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TaskFieldValue',
+      '10': 'fieldValues'
+    },
   ],
   '8': [
     {'1': '_title'},
@@ -494,5 +549,6 @@ final $typed_data.Uint8List taskUpdateRequestDescriptor = $convert.base64Decode(
     'RhcnRfZGF0ZRgJIAEoCUgEUglzdGFydERhdGWIAQESHgoIZHVlX2RhdGUYCiABKAlIBVIHZHVl'
     'RGF0ZYgBARIjCg1zZXRfYXNzaWduZWVzGAsgASgIUgxzZXRBc3NpZ25lZXMSIQoMYXNzaWduZW'
     'VfaWRzGAwgAygJUgthc3NpZ25lZUlkcxIpChBvdmVycmlkZV9ibG9ja2VkGA0gASgIUg9vdmVy'
-    'cmlkZUJsb2NrZWRCCAoGX3RpdGxlQg4KDF9kZXNjcmlwdGlvbkIJCgdfc3RhdHVzQgsKCV9wcm'
-    'lvcml0eUINCgtfc3RhcnRfZGF0ZUILCglfZHVlX2RhdGU=');
+    'cmlkZUJsb2NrZWQSPwoMZmllbGRfdmFsdWVzGA4gAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaW'
+    'VsZFZhbHVlUgtmaWVsZFZhbHVlc0IICgZfdGl0bGVCDgoMX2Rlc2NyaXB0aW9uQgkKB19zdGF0'
+    'dXNCCwoJX3ByaW9yaXR5Qg0KC19zdGFydF9kYXRlQgsKCV9kdWVfZGF0ZQ==');

@@ -189,7 +189,17 @@ class TaskList extends Notifier<TaskListState> {
   void _revert(Task before, TaskPatch patch) {
     final current = _current(before.id);
     if (current == null) return;
-    _replace(current.apply(TaskPatch.of(before).only(patch.fields.toSet())));
+    final restore = TaskPatch.of(before).only(patch.fields.toSet());
+    final changed = patch.fieldValues?.keys;
+    _replace(
+      current.apply(
+        changed == null
+            ? restore
+            : restore.withFieldValues({
+                for (final id in changed) id: before.fieldValues[id] ?? '',
+              }),
+      ),
+    );
   }
 
   /// Adds a task at the end once the server has numbered it.
@@ -198,6 +208,7 @@ class TaskList extends Notifier<TaskListState> {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    Map<String, String> fieldValues = const {},
   }) async {
     final created = await _client.create(
       _workspace,
@@ -206,6 +217,7 @@ class TaskList extends Notifier<TaskListState> {
       priority: priority,
       assigneeIds: assigneeIds,
       parentId: parentId,
+      fieldValues: fieldValues,
     );
     state = state.copyWith(tasks: _insertInTreeOrder(created));
     if (state.loading) _createdDuringLoad.add(created);

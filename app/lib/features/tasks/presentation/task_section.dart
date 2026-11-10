@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/fields/domain/field.dart';
+import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
@@ -11,6 +15,7 @@ import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_detail.dart';
+import 'package:taskforge/features/tasks/presentation/task_fields_panel.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -173,6 +178,14 @@ class _TaskListState extends ConsumerState<_TaskList> {
     final canUpdate = editable && permissions.can(Perm.taskUpdate);
     final canCreate = editable && permissions.can(Perm.taskCreate);
     final canDelete = editable && permissions.can(Perm.taskDelete);
+    final fields =
+        ref.watch(fieldsProvider(project.id)).value ?? const <CustomField>[];
+    final people = {
+      for (final m in ref.watch(membersProvider).value ?? const <Member>[])
+        m.userId: m.label,
+    };
+    String summarize(Task t) =>
+        fieldSummary(t, fields, userLabel: (id) => people[id] ?? id);
     // Rows are built lazily (a list of thousands only builds what is on screen);
     // the inline add field counts as one more entry under its parent.
     final entries = <Object>[
@@ -212,6 +225,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
             if (canDelete) TaskAction.delete,
           ],
           onAction: (action) => _act(action, tree, task),
+          fieldSummary: summarize(task),
         );
         if (!widget.wide || !canUpdate) return tile;
         return _dropTarget(tree, task, _draggable(task, tile));
@@ -373,9 +387,13 @@ class TaskTile extends StatelessWidget {
     this.onToggle,
     this.actions = const [],
     this.onAction,
+    this.fieldSummary = '',
   });
 
   final Task task;
+
+  /// The task's custom field values for the List view (see [fieldSummary]).
+  final String fieldSummary;
 
   /// The colour of the task's status (grey until the workflow has loaded).
   final Color? statusColor;
@@ -449,6 +467,7 @@ class TaskTile extends StatelessWidget {
               task.displayId,
               task.statusName,
               if (task.dueDate.isNotEmpty) 'due ${task.dueDate}',
+              if (fieldSummary.isNotEmpty) fieldSummary,
             ].join(' \u00b7 '),
             overflow: TextOverflow.ellipsis,
           ),
@@ -534,17 +553,56 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _busy = true);
     try {
-      await ref.read(taskListProvider(widget.projectId).notifier).create(title);
+      final values = await _requiredValues(title);
+      if (values == null) return; // cancelled
+      await ref
+          .read(taskListProvider(widget.projectId).notifier)
+          .create(title, fieldValues: values);
       _controller.clear();
     } on TaskException catch (e) {
+      if (e.failure == TaskFailure.fieldRequired) {
+        // The field list we hold is stale: read it again and ask next time.
+        ref.invalidate(fieldsProvider(widget.projectId));
+      }
       messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
+  /// Values for the required fields that nothing fills in (none when there are
+  /// no such fields); null when the user cancelled the dialog.
+  Future<Map<String, String>?> _requiredValues(String title) async {
+    final List<CustomField> fields;
+    try {
+      fields = await ref.read(fieldsProvider(widget.projectId).future);
+    } on FieldException {
+      return const {}; // cannot tell: the server decides (FIELD_REQUIRED)
+    }
+    if (!mounted) return null;
+    final needed = [
+      for (final f in fields)
+        if (f.needsValueOnCreate) f,
+    ];
+    if (needed.isEmpty) return const {};
+    return showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => RequiredFieldsDialog(
+        title: title,
+        fields: needed,
+        members: ref.read(membersProvider).value ?? const <Member>[],
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    // Kept loaded, so submitting does not wait for the field list.
+    ref.watch(fieldsProvider(widget.projectId));
+    return _field();
+  }
+
+  Widget _field() => Padding(
     padding: const EdgeInsets.all(12),
     child: TextField(
       key: const Key('quick-add'),

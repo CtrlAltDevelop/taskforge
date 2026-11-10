@@ -81,6 +81,19 @@ class _Sections extends StatelessWidget {
                 onTap: () => context.go('/projects/${project.id}/workflow'),
               ),
             ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                key: const Key('open-fields'),
+                leading: const Icon(Icons.tune),
+                title: const Text('Fields'),
+                subtitle: const Text(
+                  'Custom fields such as Customer, Story points or Environment.',
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.go('/projects/${project.id}/fields'),
+              ),
+            ),
             const SizedBox(height: 24),
             FeaturesSection(project: project, info: featureInfo),
             if (project.isPrivate) ...[

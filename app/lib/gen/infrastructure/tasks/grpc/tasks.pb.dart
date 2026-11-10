@@ -743,6 +743,7 @@ class Task extends $pb.GeneratedMessage {
     $core.int? progressTotal,
     $core.bool? isBlocked,
     $core.Iterable<$core.String>? blockedBy,
+    $core.Iterable<TaskFieldValueResponse>? fields,
   }) {
     final result = Task._();
     if (id != null) result.id = id;
@@ -771,6 +772,7 @@ class Task extends $pb.GeneratedMessage {
     if (progressTotal != null) result.progressTotal = progressTotal;
     if (isBlocked != null) result.isBlocked = isBlocked;
     if (blockedBy != null) result.blockedBy.addAll(blockedBy);
+    if (fields != null) result.fields.addAll(fields);
     return result;
   }
 
@@ -813,6 +815,8 @@ class Task extends $pb.GeneratedMessage {
     ..aI(24, _omitFieldNames ? '' : 'progressTotal')
     ..aOB(25, _omitFieldNames ? '' : 'isBlocked')
     ..pPS(26, _omitFieldNames ? '' : 'blockedBy')
+    ..pPM<TaskFieldValueResponse>(27, _omitFieldNames ? '' : 'fields',
+        subBuilder: TaskFieldValueResponse.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1056,6 +1060,9 @@ class Task extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(26)
   $pb.PbList<$core.String> get blockedBy => $_getList(25);
+
+  @$pb.TagNumber(27)
+  $pb.PbList<TaskFieldValueResponse> get fields => $_getList(26);
 }
 
 class TaskChildren extends $pb.GeneratedMessage {
@@ -1122,6 +1129,7 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     $core.String? dueDate,
     $core.Iterable<$core.String>? assigneeIds,
     $core.String? parentId,
+    $core.Iterable<TaskFieldValue>? fieldValues,
   }) {
     final result = TaskCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1134,6 +1142,7 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     if (dueDate != null) result.dueDate = dueDate;
     if (assigneeIds != null) result.assigneeIds.addAll(assigneeIds);
     if (parentId != null) result.parentId = parentId;
+    if (fieldValues != null) result.fieldValues.addAll(fieldValues);
     return result;
   }
 
@@ -1160,6 +1169,8 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     ..aOS(8, _omitFieldNames ? '' : 'dueDate')
     ..pPS(9, _omitFieldNames ? '' : 'assigneeIds')
     ..aOS(10, _omitFieldNames ? '' : 'parentId')
+    ..pPM<TaskFieldValue>(11, _omitFieldNames ? '' : 'fieldValues',
+        subBuilder: TaskFieldValue.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1267,6 +1278,9 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasParentId() => $_has(9);
   @$pb.TagNumber(10)
   void clearParentId() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $pb.PbList<TaskFieldValue> get fieldValues => $_getList(10);
 }
 
 class TaskDeleteRequest extends $pb.GeneratedMessage {
@@ -1360,6 +1374,146 @@ class TaskDeleteRequest extends $pb.GeneratedMessage {
   $core.bool hasMode() => $_has(3);
   @$pb.TagNumber(4)
   void clearMode() => $_clearField(4);
+}
+
+class TaskFieldValue extends $pb.GeneratedMessage {
+  factory TaskFieldValue({
+    $core.String? fieldId,
+    $core.String? value,
+  }) {
+    final result = TaskFieldValue._();
+    if (fieldId != null) result.fieldId = fieldId;
+    if (value != null) result.value = value;
+    return result;
+  }
+
+  TaskFieldValue._();
+
+  factory TaskFieldValue.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskFieldValue()..mergeFromBuffer(data, registry);
+  factory TaskFieldValue.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskFieldValue()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TaskFieldValue',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TaskFieldValue.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'fieldId')
+    ..aOS(2, _omitFieldNames ? '' : 'value')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskFieldValue clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskFieldValue copyWith(void Function(TaskFieldValue) updates) =>
+      super.copyWith((message) => updates(message as TaskFieldValue))
+          as TaskFieldValue;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TaskFieldValue() / TaskFieldValue.new instead')
+  static TaskFieldValue create() => TaskFieldValue._();
+  static $pb.GeneratedMessage $_createMessage() => TaskFieldValue._();
+  @$core.override
+  TaskFieldValue createEmptyInstance() => TaskFieldValue._();
+  @$core.pragma('dart2js:noInline')
+  static TaskFieldValue getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TaskFieldValue>(
+          TaskFieldValue.$_createMessage);
+  static TaskFieldValue? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fieldId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fieldId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFieldId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFieldId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get value => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set value($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearValue() => $_clearField(2);
+}
+
+class TaskFieldValueResponse extends $pb.GeneratedMessage {
+  factory TaskFieldValueResponse({
+    $core.String? fieldId,
+    $core.String? value,
+  }) {
+    final result = TaskFieldValueResponse._();
+    if (fieldId != null) result.fieldId = fieldId;
+    if (value != null) result.value = value;
+    return result;
+  }
+
+  TaskFieldValueResponse._();
+
+  factory TaskFieldValueResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskFieldValueResponse()..mergeFromBuffer(data, registry);
+  factory TaskFieldValueResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TaskFieldValueResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TaskFieldValueResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TaskFieldValueResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'fieldId')
+    ..aOS(2, _omitFieldNames ? '' : 'value')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskFieldValueResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TaskFieldValueResponse copyWith(
+          void Function(TaskFieldValueResponse) updates) =>
+      super.copyWith((message) => updates(message as TaskFieldValueResponse))
+          as TaskFieldValueResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TaskFieldValueResponse() / TaskFieldValueResponse.new instead')
+  static TaskFieldValueResponse create() => TaskFieldValueResponse._();
+  static $pb.GeneratedMessage $_createMessage() => TaskFieldValueResponse._();
+  @$core.override
+  TaskFieldValueResponse createEmptyInstance() => TaskFieldValueResponse._();
+  @$core.pragma('dart2js:noInline')
+  static TaskFieldValueResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TaskFieldValueResponse>(
+          TaskFieldValueResponse.$_createMessage);
+  static TaskFieldValueResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fieldId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fieldId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFieldId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFieldId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get value => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set value($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearValue() => $_clearField(2);
 }
 
 class TaskGetRequest extends $pb.GeneratedMessage {
@@ -2106,6 +2260,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     $core.bool? setAssignees,
     $core.Iterable<$core.String>? assigneeIds,
     $core.bool? overrideBlocked,
+    $core.Iterable<TaskFieldValue>? fieldValues,
   }) {
     final result = TaskUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -2121,6 +2276,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     if (setAssignees != null) result.setAssignees = setAssignees;
     if (assigneeIds != null) result.assigneeIds.addAll(assigneeIds);
     if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
+    if (fieldValues != null) result.fieldValues.addAll(fieldValues);
     return result;
   }
 
@@ -2150,6 +2306,8 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     ..aOB(11, _omitFieldNames ? '' : 'setAssignees')
     ..pPS(12, _omitFieldNames ? '' : 'assigneeIds')
     ..aOB(13, _omitFieldNames ? '' : 'overrideBlocked')
+    ..pPM<TaskFieldValue>(14, _omitFieldNames ? '' : 'fieldValues',
+        subBuilder: TaskFieldValue.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2284,6 +2442,9 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
   $core.bool hasOverrideBlocked() => $_has(12);
   @$pb.TagNumber(13)
   void clearOverrideBlocked() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $pb.PbList<TaskFieldValue> get fieldValues => $_getList(13);
 }
 
 const $core.bool _omitFieldNames =

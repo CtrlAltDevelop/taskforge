@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:grpc/grpc.dart' show GrpcError, StatusCode;
 import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:http/http.dart' as http;
@@ -26,6 +28,7 @@ abstract interface class TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    Map<String, String> fieldValues = const {},
   });
 
   /// Makes [task] a subtask of [parentId] (empty: a top-level task), with
@@ -126,6 +129,12 @@ TaskException mapTaskError(Object error) {
         subtaskCount:
             int.tryParse(errorTrailer(error, 'x-error-count-bin')) ?? 0,
       ),
+      StatusCode.invalidArgument when title == 'FIELD_REQUIRED' =>
+        TaskException(
+          TaskFailure.fieldRequired,
+          detail: stripErrorTitle(message),
+          fieldIds: _fieldIds(errorTrailer(error, 'x-error-fields-bin')),
+        ),
       StatusCode.invalidArgument when title == 'SUBTASK_CYCLE' =>
         const TaskException(TaskFailure.cycle),
       StatusCode.invalidArgument => TaskException(
@@ -153,6 +162,15 @@ TaskException mapTaskError(Object error) {
   return const TaskException(TaskFailure.other);
 }
 
+List<String> _fieldIds(String json) {
+  try {
+    final decoded = jsonDecode(json);
+    return decoded is List ? [for (final e in decoded) '$e'] : const [];
+  } on FormatException {
+    return const [];
+  }
+}
+
 Task _task(pb.Task t) => Task(
   id: t.id,
   projectId: t.projectId,
@@ -174,6 +192,7 @@ Task _task(pb.Task t) => Task(
   depth: t.depth,
   isBlocked: t.isBlocked,
   blockedBy: List.unmodifiable(t.blockedBy),
+  fieldValues: Map.unmodifiable({for (final v in t.fields) v.fieldId: v.value}),
 );
 
 TaskLink _link(pb.Link l) => TaskLink(
@@ -264,6 +283,7 @@ class GrpcTasksClient implements TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    Map<String, String> fieldValues = const {},
   }) async => _task(
     await _run(
       () => _stub.create(
@@ -274,6 +294,10 @@ class GrpcTasksClient implements TasksClient {
           priority: priority.wire,
           assigneeIds: assigneeIds,
           parentId: parentId,
+          fieldValues: [
+            for (final e in fieldValues.entries)
+              pb.TaskFieldValue(fieldId: e.key, value: e.value),
+          ],
         ),
         options: _options,
       ),
@@ -304,6 +328,11 @@ class GrpcTasksClient implements TasksClient {
           setAssignees: patch.assigneeIds != null,
           assigneeIds: patch.assigneeIds,
           overrideBlocked: overrideBlocked,
+          fieldValues: [
+            for (final e
+                in (patch.fieldValues ?? const <String, String>{}).entries)
+              pb.TaskFieldValue(fieldId: e.key, value: e.value),
+          ],
         ),
         options: _options,
       ),

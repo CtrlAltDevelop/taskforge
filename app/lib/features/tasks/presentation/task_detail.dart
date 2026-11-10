@@ -16,6 +16,7 @@ import 'package:taskforge/features/tasks/presentation/links_panel.dart';
 import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/tasks/presentation/task_fields_panel.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -224,6 +225,13 @@ class TaskDetail extends ConsumerWidget {
               TaskPatch(description: markdownToDoc(v)),
             );
           },
+        ),
+        const SizedBox(height: 16),
+        TaskFieldsPanel(
+          projectId: project.id,
+          task: task,
+          canEdit: canEdit,
+          members: members,
         ),
         const SizedBox(height: 16),
         SubtasksPanel(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
@@ -155,12 +157,21 @@ Future<void> _resolveConflict(
       .tasks
       .where((t) => t.id == task.id)
       .firstOrNull;
+  // A custom field is named `field:<id>` and holds an id or code: show its
+  // name and its values as people read them.
+  final custom = ref
+      .read(fieldsProvider(task.projectId))
+      .value
+      ?.where((f) => conflict.field == '$fieldKeyPrefix${f.id}')
+      .firstOrNull;
+  String show(String wire) =>
+      custom == null ? wire : fieldDisplay(custom, wire);
   final keepMine = await showDialog<bool>(
     context: context,
     builder: (context) => ConflictDialog(
-      field: conflict.field,
-      mine: task.apply(patch).valueOf(conflict.field),
-      theirs: theirs?.valueOf(conflict.field) ?? conflict.current,
+      field: custom?.name ?? conflict.field,
+      mine: show(task.apply(patch).valueOf(conflict.field)),
+      theirs: show(theirs?.valueOf(conflict.field) ?? conflict.current),
     ),
   );
   if (keepMine != true || theirs == null) return;

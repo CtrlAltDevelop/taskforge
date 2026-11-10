@@ -5,6 +5,17 @@ import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 const maxTitleLength = 500;
 
+/// How a custom field is named in a conflict (`field:<id>`).
+const fieldKeyPrefix = 'field:';
+
+Map<String, String> _withValues(
+  Map<String, String> current,
+  Map<String, String> changes,
+) => Map.unmodifiable({
+  for (final e in {...current, ...changes}.entries)
+    if (e.value.isNotEmpty) e.key: e.value,
+});
+
 enum TaskPriority {
   urgent('urgent', 'Urgent'),
   high('high', 'High'),
@@ -44,6 +55,7 @@ class Task {
     this.depth = 0,
     this.isBlocked = false,
     this.blockedBy = const [],
+    this.fieldValues = const {},
   });
 
   final String id;
@@ -83,6 +95,9 @@ class Task {
   /// `Restricted task`.
   final List<String> blockedBy;
 
+  /// Custom field id -> value in its wire form (only fields that have one).
+  final Map<String, String> fieldValues;
+
   bool get isDeleted => deletedAt.isNotEmpty;
 
   /// The task with [patch] applied (the optimistic view; version unchanged).
@@ -107,6 +122,9 @@ class Task {
     depth: depth,
     isBlocked: isBlocked,
     blockedBy: blockedBy,
+    fieldValues: patch.fieldValues == null
+        ? fieldValues
+        : _withValues(fieldValues, patch.fieldValues!),
   );
 
   /// The value of field [name] as the server names it, for conflict screens.
@@ -118,6 +136,8 @@ class Task {
     'start_date' => startDate,
     'due_date' => dueDate,
     'assignee_ids' => assigneeIds.join(','),
+    _ when name.startsWith(fieldKeyPrefix) =>
+      fieldValues[name.substring(fieldKeyPrefix.length)] ?? '',
     _ => '',
   };
 }
@@ -134,6 +154,7 @@ class TaskPatch {
     this.startDate,
     this.dueDate,
     this.assigneeIds,
+    this.fieldValues,
   });
 
   final String? title;
@@ -145,6 +166,9 @@ class TaskPatch {
   final String? startDate;
   final String? dueDate;
   final List<String>? assigneeIds;
+
+  /// Custom field id -> new wire value; empty clears the field.
+  final Map<String, String>? fieldValues;
 
   /// Every field of [task], to put some of them back (see [only]).
   factory TaskPatch.of(Task task) => TaskPatch(
@@ -159,6 +183,9 @@ class TaskPatch {
     startDate: task.startDate,
     dueDate: task.dueDate,
     assigneeIds: task.assigneeIds,
+    fieldValues: Map.unmodifiable({
+      for (final k in task.fieldValues.keys) k: task.fieldValues[k]!,
+    }),
   );
 
   bool get isEmpty => fields.isEmpty;
@@ -172,7 +199,21 @@ class TaskPatch {
     if (startDate != null) 'start_date',
     if (dueDate != null) 'due_date',
     if (assigneeIds != null) 'assignee_ids',
+    for (final id in fieldValues?.keys ?? const <String>[])
+      '$fieldKeyPrefix$id',
   ];
+
+  /// This patch with its custom field values replaced by [values].
+  TaskPatch withFieldValues(Map<String, String>? values) => TaskPatch(
+    title: title,
+    description: description,
+    status: status,
+    priority: priority,
+    startDate: startDate,
+    dueDate: dueDate,
+    assigneeIds: assigneeIds,
+    fieldValues: values,
+  );
 
   /// Only the fields in [names]: what is left to retry after a partial merge.
   TaskPatch only(Set<String> names) => TaskPatch(
@@ -183,6 +224,12 @@ class TaskPatch {
     startDate: names.contains('start_date') ? startDate : null,
     dueDate: names.contains('due_date') ? dueDate : null,
     assigneeIds: names.contains('assignee_ids') ? assigneeIds : null,
+    fieldValues: fieldValues == null
+        ? null
+        : {
+            for (final e in fieldValues!.entries)
+              if (names.contains('$fieldKeyPrefix${e.key}')) e.key: e.value,
+          },
   );
 }
 
@@ -208,6 +255,7 @@ enum TaskFailure {
   blocked,
   linkCycle,
   linkExists,
+  fieldRequired,
   denied,
   forbidden,
   invalid,
@@ -224,6 +272,7 @@ class TaskException implements Exception {
     this.conflict,
     this.subtaskCount = 0,
     this.canOverride = false,
+    this.fieldIds = const [],
   });
 
   final TaskFailure failure;
@@ -236,6 +285,9 @@ class TaskException implements Exception {
   /// For [TaskFailure.blocked]: the server would accept completing it anyway
   /// from this person.
   final bool canOverride;
+
+  /// For [TaskFailure.fieldRequired]: the custom fields missing a value.
+  final List<String> fieldIds;
 
   @override
   String toString() => 'TaskException($failure, $detail)';
@@ -257,6 +309,8 @@ String taskErrorMessage(Object error) {
     TaskFailure.linkCycle =>
       'Those tasks would block each other in a loop: ${error.detail ?? ''}.',
     TaskFailure.linkExists => 'These tasks are already linked that way.',
+    TaskFailure.fieldRequired =>
+      error.detail ?? 'A required field has no value.',
     TaskFailure.denied => error.detail ?? 'You do not have permission.',
     TaskFailure.forbidden => 'You do not have permission to do that.',
     TaskFailure.invalid => error.detail ?? 'Check the values and try again.',

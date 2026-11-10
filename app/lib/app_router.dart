@@ -18,6 +18,7 @@ import 'package:taskforge/features/projects/presentation/archived_screen.dart';
 import 'package:taskforge/features/projects/presentation/private_projects_screen.dart';
 import 'package:taskforge/features/projects/presentation/project_screen.dart';
 import 'package:taskforge/features/projects/presentation/project_settings_screen.dart';
+import 'package:taskforge/features/fields/presentation/fields_screen.dart';
 import 'package:taskforge/features/workflows/presentation/workflow_screen.dart';
 import 'package:taskforge/features/roles/presentation/roles_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -142,6 +143,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/projects/:id/workflow',
         builder: (_, state) =>
             WorkflowScreen(projectId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/projects/:id/fields',
+        builder: (_, state) =>
+            FieldsScreen(projectId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(

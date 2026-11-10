@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/app_router.dart';
+import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 
+import '../fields/fakes.dart';
 import '../tasks/fakes.dart';
 import '../workflows/fakes.dart';
 
@@ -42,6 +44,7 @@ Future<Pumped> pumpProjects(
   FakeProjectsClient? server,
   FakeTasksClient? tasks,
   FakeWorkflowsClient? workflows,
+  FakeFieldsClient? fields,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -60,6 +63,7 @@ Future<Pumped> pumpProjects(
       workflowsClientProvider.overrideWithValue(
         workflows ?? FakeWorkflowsClient(),
       ),
+      fieldsClientProvider.overrideWithValue(fields ?? FakeFieldsClient()),
     ],
   );
   return Pumped(container, fake);
