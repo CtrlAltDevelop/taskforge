@@ -42,6 +42,8 @@ class Task {
     this.deletedAt = '',
     this.parentId = '',
     this.depth = 0,
+    this.isBlocked = false,
+    this.blockedBy = const [],
   });
 
   final String id;
@@ -74,6 +76,13 @@ class Task {
   final String parentId;
   final int depth;
 
+  /// Has a blocker that is not done yet: it cannot be completed until it is.
+  final bool isBlocked;
+
+  /// The open blockers as you may see them: `WEB-4 (In progress)`, or
+  /// `Restricted task`.
+  final List<String> blockedBy;
+
   bool get isDeleted => deletedAt.isNotEmpty;
 
   /// The task with [patch] applied (the optimistic view; version unchanged).
@@ -96,6 +105,8 @@ class Task {
     deletedAt: deletedAt,
     parentId: parentId,
     depth: depth,
+    isBlocked: isBlocked,
+    blockedBy: blockedBy,
   );
 
   /// The value of field [name] as the server names it, for conflict screens.
@@ -194,6 +205,9 @@ enum TaskFailure {
   transitionNotAllowed,
   hasSubtasks,
   cycle,
+  blocked,
+  linkCycle,
+  linkExists,
   denied,
   forbidden,
   invalid,
@@ -209,6 +223,7 @@ class TaskException implements Exception {
     this.detail,
     this.conflict,
     this.subtaskCount = 0,
+    this.canOverride = false,
   });
 
   final TaskFailure failure;
@@ -217,6 +232,10 @@ class TaskException implements Exception {
 
   /// For [TaskFailure.hasSubtasks]: how many subtasks the task has.
   final int subtaskCount;
+
+  /// For [TaskFailure.blocked]: the server would accept completing it anyway
+  /// from this person.
+  final bool canOverride;
 
   @override
   String toString() => 'TaskException($failure, $detail)';
@@ -233,6 +252,11 @@ String taskErrorMessage(Object error) {
       'This task has subtasks: choose what happens to them.',
     TaskFailure.cycle =>
       'A task cannot become a subtask of itself or of one of its own subtasks.',
+    TaskFailure.blocked =>
+      'Blocked by ${error.detail ?? 'open tasks'}: finish those first.',
+    TaskFailure.linkCycle =>
+      'Those tasks would block each other in a loop: ${error.detail ?? ''}.',
+    TaskFailure.linkExists => 'These tasks are already linked that way.',
     TaskFailure.denied => error.detail ?? 'You do not have permission.',
     TaskFailure.forbidden => 'You do not have permission to do that.',
     TaskFailure.invalid => error.detail ?? 'Check the values and try again.',

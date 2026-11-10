@@ -16,6 +16,705 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class Link extends $pb.GeneratedMessage {
+  factory Link({
+    $core.String? id,
+    $core.String? kind,
+    $core.bool? restricted,
+    $core.String? otherId,
+    $core.String? otherProjectId,
+    $core.String? otherDisplayId,
+    $core.String? otherTitle,
+    $core.String? otherStatusName,
+    $core.String? otherStatusCategory,
+  }) {
+    final result = Link._();
+    if (id != null) result.id = id;
+    if (kind != null) result.kind = kind;
+    if (restricted != null) result.restricted = restricted;
+    if (otherId != null) result.otherId = otherId;
+    if (otherProjectId != null) result.otherProjectId = otherProjectId;
+    if (otherDisplayId != null) result.otherDisplayId = otherDisplayId;
+    if (otherTitle != null) result.otherTitle = otherTitle;
+    if (otherStatusName != null) result.otherStatusName = otherStatusName;
+    if (otherStatusCategory != null)
+      result.otherStatusCategory = otherStatusCategory;
+    return result;
+  }
+
+  Link._();
+
+  factory Link.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Link()..mergeFromBuffer(data, registry);
+  factory Link.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      Link()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Link',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: Link.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'kind')
+    ..aOB(3, _omitFieldNames ? '' : 'restricted')
+    ..aOS(4, _omitFieldNames ? '' : 'otherId')
+    ..aOS(5, _omitFieldNames ? '' : 'otherProjectId')
+    ..aOS(6, _omitFieldNames ? '' : 'otherDisplayId')
+    ..aOS(7, _omitFieldNames ? '' : 'otherTitle')
+    ..aOS(8, _omitFieldNames ? '' : 'otherStatusName')
+    ..aOS(9, _omitFieldNames ? '' : 'otherStatusCategory')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Link clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Link copyWith(void Function(Link) updates) =>
+      super.copyWith((message) => updates(message as Link)) as Link;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use Link() / Link.new instead')
+  static Link create() => Link._();
+  static $pb.GeneratedMessage $_createMessage() => Link._();
+  @$core.override
+  Link createEmptyInstance() => Link._();
+  @$core.pragma('dart2js:noInline')
+  static Link getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Link>(Link.$_createMessage);
+  static Link? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get kind => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set kind($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasKind() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearKind() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get restricted => $_getBF(2);
+  @$pb.TagNumber(3)
+  set restricted($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRestricted() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRestricted() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get otherId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set otherId($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasOtherId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearOtherId() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get otherProjectId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set otherProjectId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasOtherProjectId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearOtherProjectId() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get otherDisplayId => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set otherDisplayId($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasOtherDisplayId() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearOtherDisplayId() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get otherTitle => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set otherTitle($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasOtherTitle() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearOtherTitle() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get otherStatusName => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set otherStatusName($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasOtherStatusName() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearOtherStatusName() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get otherStatusCategory => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set otherStatusCategory($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasOtherStatusCategory() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearOtherStatusCategory() => $_clearField(9);
+}
+
+class LinkAddRequest extends $pb.GeneratedMessage {
+  factory LinkAddRequest({
+    $core.String? workspaceId,
+    $core.String? taskId,
+    $core.String? otherTaskId,
+    $core.String? kind,
+    $core.bool? closeDuplicate,
+  }) {
+    final result = LinkAddRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (taskId != null) result.taskId = taskId;
+    if (otherTaskId != null) result.otherTaskId = otherTaskId;
+    if (kind != null) result.kind = kind;
+    if (closeDuplicate != null) result.closeDuplicate = closeDuplicate;
+    return result;
+  }
+
+  LinkAddRequest._();
+
+  factory LinkAddRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkAddRequest()..mergeFromBuffer(data, registry);
+  factory LinkAddRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkAddRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkAddRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkAddRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'taskId')
+    ..aOS(3, _omitFieldNames ? '' : 'otherTaskId')
+    ..aOS(4, _omitFieldNames ? '' : 'kind')
+    ..aOB(5, _omitFieldNames ? '' : 'closeDuplicate')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkAddRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkAddRequest copyWith(void Function(LinkAddRequest) updates) =>
+      super.copyWith((message) => updates(message as LinkAddRequest))
+          as LinkAddRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use LinkAddRequest() / LinkAddRequest.new instead')
+  static LinkAddRequest create() => LinkAddRequest._();
+  static $pb.GeneratedMessage $_createMessage() => LinkAddRequest._();
+  @$core.override
+  LinkAddRequest createEmptyInstance() => LinkAddRequest._();
+  @$core.pragma('dart2js:noInline')
+  static LinkAddRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LinkAddRequest>(
+          LinkAddRequest.$_createMessage);
+  static LinkAddRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTaskId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get otherTaskId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set otherTaskId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasOtherTaskId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOtherTaskId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get kind => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set kind($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasKind() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearKind() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get closeDuplicate => $_getBF(4);
+  @$pb.TagNumber(5)
+  set closeDuplicate($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCloseDuplicate() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCloseDuplicate() => $_clearField(5);
+}
+
+class LinkCandidate extends $pb.GeneratedMessage {
+  factory LinkCandidate({
+    $core.String? id,
+    $core.String? projectId,
+    $core.String? displayId,
+    $core.String? title,
+    $core.String? statusName,
+    $core.String? statusCategory,
+  }) {
+    final result = LinkCandidate._();
+    if (id != null) result.id = id;
+    if (projectId != null) result.projectId = projectId;
+    if (displayId != null) result.displayId = displayId;
+    if (title != null) result.title = title;
+    if (statusName != null) result.statusName = statusName;
+    if (statusCategory != null) result.statusCategory = statusCategory;
+    return result;
+  }
+
+  LinkCandidate._();
+
+  factory LinkCandidate.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkCandidate()..mergeFromBuffer(data, registry);
+  factory LinkCandidate.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkCandidate()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkCandidate',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkCandidate.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'displayId')
+    ..aOS(4, _omitFieldNames ? '' : 'title')
+    ..aOS(5, _omitFieldNames ? '' : 'statusName')
+    ..aOS(6, _omitFieldNames ? '' : 'statusCategory')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkCandidate clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkCandidate copyWith(void Function(LinkCandidate) updates) =>
+      super.copyWith((message) => updates(message as LinkCandidate))
+          as LinkCandidate;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use LinkCandidate() / LinkCandidate.new instead')
+  static LinkCandidate create() => LinkCandidate._();
+  static $pb.GeneratedMessage $_createMessage() => LinkCandidate._();
+  @$core.override
+  LinkCandidate createEmptyInstance() => LinkCandidate._();
+  @$core.pragma('dart2js:noInline')
+  static LinkCandidate getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LinkCandidate>(
+          LinkCandidate.$_createMessage);
+  static LinkCandidate? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get displayId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set displayId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasDisplayId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDisplayId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get title => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set title($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasTitle() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTitle() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get statusName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set statusName($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStatusName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStatusName() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get statusCategory => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set statusCategory($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasStatusCategory() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearStatusCategory() => $_clearField(6);
+}
+
+class LinkCandidates extends $pb.GeneratedMessage {
+  factory LinkCandidates({
+    $core.Iterable<LinkCandidate>? tasks,
+  }) {
+    final result = LinkCandidates._();
+    if (tasks != null) result.tasks.addAll(tasks);
+    return result;
+  }
+
+  LinkCandidates._();
+
+  factory LinkCandidates.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkCandidates()..mergeFromBuffer(data, registry);
+  factory LinkCandidates.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkCandidates()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkCandidates',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkCandidates.$_createMessage)
+    ..pPM<LinkCandidate>(1, _omitFieldNames ? '' : 'tasks',
+        subBuilder: LinkCandidate.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkCandidates clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkCandidates copyWith(void Function(LinkCandidates) updates) =>
+      super.copyWith((message) => updates(message as LinkCandidates))
+          as LinkCandidates;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use LinkCandidates() / LinkCandidates.new instead')
+  static LinkCandidates create() => LinkCandidates._();
+  static $pb.GeneratedMessage $_createMessage() => LinkCandidates._();
+  @$core.override
+  LinkCandidates createEmptyInstance() => LinkCandidates._();
+  @$core.pragma('dart2js:noInline')
+  static LinkCandidates getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LinkCandidates>(
+          LinkCandidates.$_createMessage);
+  static LinkCandidates? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<LinkCandidate> get tasks => $_getList(0);
+}
+
+class LinkList extends $pb.GeneratedMessage {
+  factory LinkList({
+    $core.Iterable<Link>? links,
+  }) {
+    final result = LinkList._();
+    if (links != null) result.links.addAll(links);
+    return result;
+  }
+
+  LinkList._();
+
+  factory LinkList.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkList()..mergeFromBuffer(data, registry);
+  factory LinkList.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkList()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkList',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkList.$_createMessage)
+    ..pPM<Link>(1, _omitFieldNames ? '' : 'links',
+        subBuilder: Link.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkList clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkList copyWith(void Function(LinkList) updates) =>
+      super.copyWith((message) => updates(message as LinkList)) as LinkList;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use LinkList() / LinkList.new instead')
+  static LinkList create() => LinkList._();
+  static $pb.GeneratedMessage $_createMessage() => LinkList._();
+  @$core.override
+  LinkList createEmptyInstance() => LinkList._();
+  @$core.pragma('dart2js:noInline')
+  static LinkList getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LinkList>(LinkList.$_createMessage);
+  static LinkList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Link> get links => $_getList(0);
+}
+
+class LinkListForTaskRequest extends $pb.GeneratedMessage {
+  factory LinkListForTaskRequest({
+    $core.String? workspaceId,
+    $core.String? taskId,
+  }) {
+    final result = LinkListForTaskRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (taskId != null) result.taskId = taskId;
+    return result;
+  }
+
+  LinkListForTaskRequest._();
+
+  factory LinkListForTaskRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkListForTaskRequest()..mergeFromBuffer(data, registry);
+  factory LinkListForTaskRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkListForTaskRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkListForTaskRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkListForTaskRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'taskId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkListForTaskRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkListForTaskRequest copyWith(
+          void Function(LinkListForTaskRequest) updates) =>
+      super.copyWith((message) => updates(message as LinkListForTaskRequest))
+          as LinkListForTaskRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use LinkListForTaskRequest() / LinkListForTaskRequest.new instead')
+  static LinkListForTaskRequest create() => LinkListForTaskRequest._();
+  static $pb.GeneratedMessage $_createMessage() => LinkListForTaskRequest._();
+  @$core.override
+  LinkListForTaskRequest createEmptyInstance() => LinkListForTaskRequest._();
+  @$core.pragma('dart2js:noInline')
+  static LinkListForTaskRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LinkListForTaskRequest>(
+          LinkListForTaskRequest.$_createMessage);
+  static LinkListForTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTaskId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskId() => $_clearField(2);
+}
+
+class LinkRemoveRequest extends $pb.GeneratedMessage {
+  factory LinkRemoveRequest({
+    $core.String? workspaceId,
+    $core.String? taskId,
+    $core.String? id,
+  }) {
+    final result = LinkRemoveRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (taskId != null) result.taskId = taskId;
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  LinkRemoveRequest._();
+
+  factory LinkRemoveRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkRemoveRequest()..mergeFromBuffer(data, registry);
+  factory LinkRemoveRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkRemoveRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkRemoveRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkRemoveRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'taskId')
+    ..aOS(3, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkRemoveRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkRemoveRequest copyWith(void Function(LinkRemoveRequest) updates) =>
+      super.copyWith((message) => updates(message as LinkRemoveRequest))
+          as LinkRemoveRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use LinkRemoveRequest() / LinkRemoveRequest.new instead')
+  static LinkRemoveRequest create() => LinkRemoveRequest._();
+  static $pb.GeneratedMessage $_createMessage() => LinkRemoveRequest._();
+  @$core.override
+  LinkRemoveRequest createEmptyInstance() => LinkRemoveRequest._();
+  @$core.pragma('dart2js:noInline')
+  static LinkRemoveRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LinkRemoveRequest>(
+          LinkRemoveRequest.$_createMessage);
+  static LinkRemoveRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTaskId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get id => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set id($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearId() => $_clearField(3);
+}
+
+class LinkSearchTasksRequest extends $pb.GeneratedMessage {
+  factory LinkSearchTasksRequest({
+    $core.String? workspaceId,
+    $core.String? query,
+  }) {
+    final result = LinkSearchTasksRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (query != null) result.query = query;
+    return result;
+  }
+
+  LinkSearchTasksRequest._();
+
+  factory LinkSearchTasksRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkSearchTasksRequest()..mergeFromBuffer(data, registry);
+  factory LinkSearchTasksRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      LinkSearchTasksRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LinkSearchTasksRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: LinkSearchTasksRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'query')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkSearchTasksRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LinkSearchTasksRequest copyWith(
+          void Function(LinkSearchTasksRequest) updates) =>
+      super.copyWith((message) => updates(message as LinkSearchTasksRequest))
+          as LinkSearchTasksRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use LinkSearchTasksRequest() / LinkSearchTasksRequest.new instead')
+  static LinkSearchTasksRequest create() => LinkSearchTasksRequest._();
+  static $pb.GeneratedMessage $_createMessage() => LinkSearchTasksRequest._();
+  @$core.override
+  LinkSearchTasksRequest createEmptyInstance() => LinkSearchTasksRequest._();
+  @$core.pragma('dart2js:noInline')
+  static LinkSearchTasksRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LinkSearchTasksRequest>(
+          LinkSearchTasksRequest.$_createMessage);
+  static LinkSearchTasksRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get query => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set query($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasQuery() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearQuery() => $_clearField(2);
+}
+
 class Task extends $pb.GeneratedMessage {
   factory Task({
     $core.String? id,
@@ -42,6 +741,8 @@ class Task extends $pb.GeneratedMessage {
     $core.int? depth,
     $core.int? progressDone,
     $core.int? progressTotal,
+    $core.bool? isBlocked,
+    $core.Iterable<$core.String>? blockedBy,
   }) {
     final result = Task._();
     if (id != null) result.id = id;
@@ -68,6 +769,8 @@ class Task extends $pb.GeneratedMessage {
     if (depth != null) result.depth = depth;
     if (progressDone != null) result.progressDone = progressDone;
     if (progressTotal != null) result.progressTotal = progressTotal;
+    if (isBlocked != null) result.isBlocked = isBlocked;
+    if (blockedBy != null) result.blockedBy.addAll(blockedBy);
     return result;
   }
 
@@ -108,6 +811,8 @@ class Task extends $pb.GeneratedMessage {
     ..aI(22, _omitFieldNames ? '' : 'depth')
     ..aI(23, _omitFieldNames ? '' : 'progressDone')
     ..aI(24, _omitFieldNames ? '' : 'progressTotal')
+    ..aOB(25, _omitFieldNames ? '' : 'isBlocked')
+    ..pPS(26, _omitFieldNames ? '' : 'blockedBy')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -339,6 +1044,18 @@ class Task extends $pb.GeneratedMessage {
   $core.bool hasProgressTotal() => $_has(23);
   @$pb.TagNumber(24)
   void clearProgressTotal() => $_clearField(24);
+
+  @$pb.TagNumber(25)
+  $core.bool get isBlocked => $_getBF(24);
+  @$pb.TagNumber(25)
+  set isBlocked($core.bool value) => $_setBool(24, value);
+  @$pb.TagNumber(25)
+  $core.bool hasIsBlocked() => $_has(24);
+  @$pb.TagNumber(25)
+  void clearIsBlocked() => $_clearField(25);
+
+  @$pb.TagNumber(26)
+  $pb.PbList<$core.String> get blockedBy => $_getList(25);
 }
 
 class TaskChildren extends $pb.GeneratedMessage {
@@ -1016,6 +1733,7 @@ class TaskMoveRequest extends $pb.GeneratedMessage {
     $core.int? expectedVersion,
     $core.String? status,
     $core.bool? includeSubtasks,
+    $core.bool? overrideBlocked,
   }) {
     final result = TaskMoveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1024,6 +1742,7 @@ class TaskMoveRequest extends $pb.GeneratedMessage {
     if (expectedVersion != null) result.expectedVersion = expectedVersion;
     if (status != null) result.status = status;
     if (includeSubtasks != null) result.includeSubtasks = includeSubtasks;
+    if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
     return result;
   }
 
@@ -1046,6 +1765,7 @@ class TaskMoveRequest extends $pb.GeneratedMessage {
     ..aI(4, _omitFieldNames ? '' : 'expectedVersion')
     ..aOS(5, _omitFieldNames ? '' : 'status')
     ..aOB(6, _omitFieldNames ? '' : 'includeSubtasks')
+    ..aOB(7, _omitFieldNames ? '' : 'overrideBlocked')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1123,6 +1843,15 @@ class TaskMoveRequest extends $pb.GeneratedMessage {
   $core.bool hasIncludeSubtasks() => $_has(5);
   @$pb.TagNumber(6)
   void clearIncludeSubtasks() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get overrideBlocked => $_getBF(6);
+  @$pb.TagNumber(7)
+  set overrideBlocked($core.bool value) => $_setBool(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasOverrideBlocked() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearOverrideBlocked() => $_clearField(7);
 }
 
 class TaskRestoreRequest extends $pb.GeneratedMessage {
@@ -1376,6 +2105,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     $core.String? dueDate,
     $core.bool? setAssignees,
     $core.Iterable<$core.String>? assigneeIds,
+    $core.bool? overrideBlocked,
   }) {
     final result = TaskUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1390,6 +2120,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     if (dueDate != null) result.dueDate = dueDate;
     if (setAssignees != null) result.setAssignees = setAssignees;
     if (assigneeIds != null) result.assigneeIds.addAll(assigneeIds);
+    if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
     return result;
   }
 
@@ -1418,6 +2149,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     ..aOS(10, _omitFieldNames ? '' : 'dueDate')
     ..aOB(11, _omitFieldNames ? '' : 'setAssignees')
     ..pPS(12, _omitFieldNames ? '' : 'assigneeIds')
+    ..aOB(13, _omitFieldNames ? '' : 'overrideBlocked')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1543,6 +2275,15 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   $pb.PbList<$core.String> get assigneeIds => $_getList(11);
+
+  @$pb.TagNumber(13)
+  $core.bool get overrideBlocked => $_getBF(12);
+  @$pb.TagNumber(13)
+  set overrideBlocked($core.bool value) => $_setBool(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasOverrideBlocked() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearOverrideBlocked() => $_clearField(13);
 }
 
 const $core.bool _omitFieldNames =

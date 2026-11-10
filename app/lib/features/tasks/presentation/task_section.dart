@@ -19,16 +19,22 @@ const wideBreakpoint = 900.0;
 
 /// A project's tasks: quick-add bar, the list, and the detail of the selected one.
 class TaskSection extends ConsumerStatefulWidget {
-  const TaskSection({super.key, required this.project});
+  const TaskSection({super.key, required this.project, this.initialTask});
 
   final Project project;
+
+  /// Open this task's detail beside the list (wide screens) from the start.
+  final String? initialTask;
 
   @override
   ConsumerState<TaskSection> createState() => _TaskSectionState();
 }
 
 class _TaskSectionState extends ConsumerState<TaskSection> {
-  String? _selected;
+  late String? _selected = widget.initialTask;
+
+  /// On a narrow screen the task to open as a page once the list has it.
+  late String? _pending = widget.initialTask;
 
   Future<void> _open(Task task, bool wide) async {
     if (wide) {
@@ -49,10 +55,26 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     );
   }
 
+  /// Opens [TaskSection.initialTask] as a page on a narrow screen as soon as the
+  /// list holds it (or gives up once the list has finished loading without it).
+  void _openPending(bool wide) {
+    final pending = _pending;
+    if (pending == null || wide) return;
+    final state = ref.watch(taskListProvider(widget.project.id));
+    final found = state.tasks.where((t) => t.id == pending).firstOrNull;
+    if (found == null && state.loading) return;
+    _pending = null;
+    if (found == null) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _open(found, false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, box) {
       final wide = box.maxWidth >= wideBreakpoint;
+      _openPending(wide);
       final list = _TaskList(
         project: widget.project,
         wide: wide,
@@ -395,6 +417,10 @@ class TaskTile extends StatelessWidget {
                 )
               : null,
         ),
+        if (task.isBlocked) ...[
+          BlockedBadge(blockedBy: task.blockedBy),
+          const SizedBox(width: 4),
+        ],
         Icon(
           priorityIcon(task.priority),
           color: priorityColor(task.priority),

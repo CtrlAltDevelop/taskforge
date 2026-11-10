@@ -7,6 +7,7 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
+import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
@@ -22,6 +23,22 @@ final tasksClientProvider = Provider<TasksClient>(
     onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
   ),
 );
+
+/// The links of one task, as that task sees them. Read again after the links
+/// change (`ref.invalidate`) or the user's permissions might have.
+final taskLinksProvider = FutureProvider.autoDispose
+    .family<List<TaskLink>, String>((ref, taskId) async {
+      ref.watch(refusalCountProvider);
+      final workspace = ref.watch(workspaceScopeProvider);
+      if (workspace == null) return const [];
+      try {
+        return await ref
+            .watch(tasksClientProvider)
+            .listLinks(workspace, taskId);
+      } on Object catch (e) {
+        throw mapTaskError(e);
+      }
+    });
 
 /// The deleted tasks of one project, newest deletion first. Only read by
 /// people who may restore them (`task.delete`).
@@ -122,6 +139,33 @@ class TaskList extends Notifier<TaskListState> {
     }
   }
 
+  /// Reads the list again without blanking it, e.g. after links changed which
+  /// tasks are blocked. While the first load is still running it is simply
+  /// restarted; a failed read leaves what is shown as it is. Per task the
+  /// newer version wins, so an edit that came back meanwhile is kept.
+  Future<void> refresh() async {
+    final workspace = ref.read(workspaceScopeProvider);
+    if (workspace == null) return;
+    if (state.loading) return load();
+    final generation = ++_generation;
+    final seen = <Task>[];
+    try {
+      await for (final task in _client.list(workspace, projectId)) {
+        seen.add(task);
+      }
+    } on Object {
+      return;
+    }
+    if (generation != _generation || !ref.mounted) return;
+    final now = {for (final t in state.tasks) t.id: t};
+    state = state.copyWith(
+      tasks: List.unmodifiable([
+        for (final t in seen)
+          if ((now[t.id]?.version ?? 0) > t.version) now[t.id]! else t,
+      ]),
+    );
+  }
+
   /// Swaps in [task]. A server answer older than what the list already holds
   /// (answers can overtake each other) is ignored.
   void _replace(Task task, {bool ignoreOlder = false}) {
@@ -188,6 +232,7 @@ class TaskList extends Notifier<TaskListState> {
     Task task,
     TaskPatch patch, {
     int? expectedVersion,
+    bool overrideBlocked = false,
   }) async {
     // Work from what the list holds now: [task] may be a stale snapshot taken
     // when the widget last built, before an earlier edit came back.
@@ -199,6 +244,7 @@ class TaskList extends Notifier<TaskListState> {
         current,
         patch,
         expectedVersion: expectedVersion,
+        overrideBlocked: overrideBlocked,
       );
       _replace(saved, ignoreOlder: true);
       return saved;
@@ -303,7 +349,11 @@ class TaskList extends Notifier<TaskListState> {
   }
 
   /// Moves [task] to [status] and its open subtasks with it, all or nothing.
-  Future<Task> moveWithSubtasks(Task task, WorkflowStatus status) async {
+  Future<Task> moveWithSubtasks(
+    Task task,
+    WorkflowStatus status, {
+    bool overrideBlocked = false,
+  }) async {
     final Task moved;
     try {
       moved = await _client.move(
@@ -311,6 +361,7 @@ class TaskList extends Notifier<TaskListState> {
         task,
         status.id,
         includeSubtasks: true,
+        overrideBlocked: overrideBlocked,
       );
     } on Object catch (e) {
       throw mapTaskError(e);

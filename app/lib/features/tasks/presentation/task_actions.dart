@@ -20,8 +20,33 @@ Color priorityColor(TaskPriority priority) => switch (priority) {
   TaskPriority.none => Colors.grey,
 };
 
+/// The lock shown on a task that still has an open blocker; its tooltip names
+/// them ("Blocked by WEB-4 (In progress)") when they are known.
+class BlockedBadge extends StatelessWidget {
+  const BlockedBadge({super.key, this.blockedBy = const []});
+
+  final List<String> blockedBy;
+
+  String get message => blockedBy.isEmpty
+      ? 'Blocked by tasks that are not done yet'
+      : 'Blocked by ${blockedBy.join(', ')}';
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: message,
+    child: const Icon(
+      Icons.lock,
+      key: Key('blocked-badge'),
+      size: 18,
+      color: Colors.red,
+      semanticLabel: 'Blocked',
+    ),
+  );
+}
+
 /// Saves [patch] on [task]. A refusal becomes a snackbar; a clash on a field
-/// someone else changed opens the keep-mine / take-theirs dialog.
+/// someone else changed opens the keep-mine / take-theirs dialog; completing a
+/// blocked task asks first (and lets a project manager do it anyway).
 Future<void> saveTask(
   BuildContext context,
   WidgetRef ref,
@@ -40,10 +65,81 @@ Future<void> saveTask(
       await _resolveConflict(context, ref, task, patch, conflict);
       return;
     }
+    if (e.failure == TaskFailure.blocked && context.mounted) {
+      await _confirmOverride(context, ref, task, patch, e);
+      return;
+    }
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
   }
+}
+
+Future<void> _confirmOverride(
+  BuildContext context,
+  WidgetRef ref,
+  Task task,
+  TaskPatch patch,
+  TaskException blocked,
+) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final list = ref.read(taskListProvider(task.projectId).notifier);
+  if (!await askOverride(context, blocked)) return;
+  try {
+    await list.update(task, patch, overrideBlocked: true);
+  } on TaskException catch (e) {
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+  }
+}
+
+/// Tells the user which tasks block this one. True when they chose "Complete
+/// anyway", which only the people the server allows to override are offered.
+Future<bool> askOverride(BuildContext context, TaskException blocked) async =>
+    await showDialog<bool>(
+      context: context,
+      builder: (_) => BlockedDialog(
+        blockers: blocked.detail ?? '',
+        canOverride: blocked.canOverride,
+      ),
+    ) ??
+    false;
+
+/// A blocked task cannot be completed: names the blockers and, for a project
+/// manager, offers to complete it anyway (recorded on the server).
+class BlockedDialog extends StatelessWidget {
+  const BlockedDialog({
+    super.key,
+    required this.blockers,
+    required this.canOverride,
+  });
+
+  final String blockers;
+  final bool canOverride;
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: const Text('This task is blocked'),
+    content: Text(
+      'It is blocked by $blockers, which ${blockers.contains(',') ? 'are' : 'is'} '
+      'not done yet.',
+      key: const Key('blocked-text'),
+    ),
+    actions: [
+      TextButton(
+        key: const Key('blocked-cancel'),
+        onPressed: () => Navigator.pop(context, false),
+        child: Text(canOverride ? 'Cancel' : 'OK'),
+      ),
+      if (canOverride)
+        FilledButton(
+          key: const Key('complete-anyway'),
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('Complete anyway'),
+        ),
+    ],
+  );
 }
 
 Future<void> _resolveConflict(

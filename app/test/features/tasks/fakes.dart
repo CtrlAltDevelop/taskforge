@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
+import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -25,6 +26,8 @@ Task task(
   int version = 1,
   String parent = '',
   int depth = 0,
+  bool isBlocked = false,
+  List<String> blockedBy = const [],
 }) => Task(
   id: id,
   projectId: project,
@@ -40,6 +43,8 @@ Task task(
   version: version,
   parentId: parent,
   depth: depth,
+  isBlocked: isBlocked,
+  blockedBy: blockedBy,
 );
 
 /// [t] changed field by field: any argument left out keeps [t]'s value.
@@ -98,6 +103,115 @@ class FakeTasksClient implements TasksClient {
 
   /// When set, the next update fails with this conflict after changing [theirs].
   ({String field, Task theirs})? conflictNext;
+
+  /// task id -> the blockers' display ids: completing it is refused unless the
+  /// call overrides.
+  final blockedBy = <String, String>{};
+
+  /// What the fake server says about the caller's right to override.
+  bool canOverride = true;
+
+  /// Ids the call was allowed through with `overrideBlocked`.
+  final overridden = <String>[];
+
+  /// task id -> its links, as that task sees them.
+  final links = <String, List<TaskLink>>{};
+  final addedLinks =
+      <({String task, String other, LinkKind kind, bool close})>[];
+  final removedLinks = <String>[];
+  TaskException? failLink;
+
+  void _guardBlocked(Task task, String statusId, bool overrideBlocked) {
+    final blockers = blockedBy[task.id];
+    final toDone = fakeStatuses[statusId]?.$2 == StatusCategory.done;
+    if (blockers == null || !toDone) return;
+    if (!overrideBlocked) {
+      throw TaskException(
+        TaskFailure.blocked,
+        detail: blockers,
+        canOverride: canOverride,
+      );
+    }
+    overridden.add(task.id);
+  }
+
+  /// Tasks the picker can offer, whatever their project (default: [tasks]).
+  List<LinkCandidate>? candidates;
+
+  @override
+  Future<List<LinkCandidate>> searchTasks(
+    String workspaceId,
+    String query,
+  ) async {
+    final q = query.trim().toLowerCase();
+    return candidates ??
+        [
+          for (final t in tasks)
+            if (q.isEmpty ||
+                t.title.toLowerCase().contains(q) ||
+                t.displayId.toLowerCase().contains(q))
+              LinkCandidate(
+                id: t.id,
+                projectId: t.projectId,
+                displayId: t.displayId,
+                title: t.title,
+                statusName: t.statusName,
+              ),
+        ];
+  }
+
+  @override
+  Future<List<TaskLink>> listLinks(String workspaceId, String taskId) async =>
+      List.of(links[taskId] ?? const []);
+
+  @override
+  Future<List<TaskLink>> addLink(
+    String workspaceId,
+    String taskId,
+    String otherId,
+    LinkKind kind, {
+    bool closeDuplicate = false,
+  }) async {
+    final failure = failLink;
+    if (failure != null) {
+      failLink = null;
+      throw failure;
+    }
+    addedLinks.add((
+      task: taskId,
+      other: otherId,
+      kind: kind,
+      close: closeDuplicate,
+    ));
+    final other = tasks.firstWhere((t) => t.id == otherId);
+    links[taskId] = [
+      ...?links[taskId],
+      TaskLink(
+        id: 'l${addedLinks.length}',
+        kind: kind,
+        otherId: other.id,
+        otherProjectId: other.projectId,
+        otherDisplayId: other.displayId,
+        otherTitle: other.title,
+        otherStatusName: other.statusName,
+      ),
+    ];
+    return List.of(links[taskId]!);
+  }
+
+  @override
+  Future<List<TaskLink>> removeLink(
+    String workspaceId,
+    String taskId,
+    String linkId,
+  ) async {
+    removedLinks.add(linkId);
+    links[taskId] = [
+      for (final l in links[taskId] ?? const <TaskLink>[])
+        if (l.id != linkId) l,
+    ];
+    return List.of(links[taskId]!);
+  }
 
   /// Ids the fake treats as deleted: [delete] adds, [restore] removes.
   final trashed = <String>[];
@@ -221,8 +335,10 @@ class FakeTasksClient implements TasksClient {
     Task task,
     String statusId, {
     bool includeSubtasks = false,
+    bool overrideBlocked = false,
   }) async {
     _maybeFail();
+    _guardBlocked(task, statusId, overrideBlocked);
     moves.add((task: task.id, status: statusId, withSubtasks: includeSubtasks));
     final toDone = fakeStatuses[statusId]!.$2 == StatusCategory.done;
     for (final id in includeSubtasks ? _subtree(task.id) : {task.id}) {
@@ -246,10 +362,13 @@ class FakeTasksClient implements TasksClient {
     Task task,
     TaskPatch patch, {
     int? expectedVersion,
+    bool overrideBlocked = false,
   }) async {
     updates.add((task: task, patch: patch, expectedVersion: expectedVersion));
     await updateGate?.future;
     _maybeFail();
+    final target = patch.status;
+    if (target != null) _guardBlocked(task, target.id, overrideBlocked);
     final clash = conflictNext;
     if (clash != null) {
       conflictNext = null;

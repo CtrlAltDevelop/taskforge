@@ -15,9 +15,12 @@ import 'package:taskforge/features/tasks/presentation/task_section.dart';
 
 /// A project's page: its header and its tasks.
 class ProjectScreen extends ConsumerWidget {
-  const ProjectScreen({super.key, required this.projectId});
+  const ProjectScreen({super.key, required this.projectId, this.taskId});
 
   final String projectId;
+
+  /// A task to open at once (a link to a task of another project).
+  final String? taskId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +66,7 @@ class ProjectScreen extends ConsumerWidget {
         ],
       ),
       body: switch (project) {
-        final p? => _Body(project: p),
+        final p? => _Body(project: p, taskId: taskId),
         null when catalog.hasError => Center(
           child: TextButton(
             key: const Key('retry-projects'),
@@ -81,7 +84,9 @@ class ProjectScreen extends ConsumerWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.project});
+  const _Body({required this.project, this.taskId});
+
+  final String? taskId;
 
   final Project project;
 
@@ -116,7 +121,9 @@ class _Body extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(child: TaskSection(project: project)),
+        Expanded(
+          child: TaskSection(project: project, initialTask: taskId),
+        ),
       ],
     );
   }

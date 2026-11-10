@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
+import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
@@ -37,6 +38,7 @@ abstract interface class TasksClient {
     Task task,
     String statusId, {
     bool includeSubtasks = false,
+    bool overrideBlocked = false,
   });
 
   /// Sends only the fields of [patch] (a field mask) and [expectedVersion].
@@ -45,7 +47,31 @@ abstract interface class TasksClient {
     Task task,
     TaskPatch patch, {
     int? expectedVersion,
+    bool overrideBlocked = false,
   });
+
+  /// Live tasks of every project the viewer can open whose title or `KEY-N`
+  /// matches [query] (the most recent ones when empty), to pick a link target.
+  Future<List<LinkCandidate>> searchTasks(String workspaceId, String query);
+
+  /// The links of [taskId], as that task sees them.
+  Future<List<TaskLink>> listLinks(String workspaceId, String taskId);
+
+  /// Links [taskId] to [otherId] as [kind] (from [taskId]'s side) and returns
+  /// the task's links. [closeDuplicate] also closes the duplicate.
+  Future<List<TaskLink>> addLink(
+    String workspaceId,
+    String taskId,
+    String otherId,
+    LinkKind kind, {
+    bool closeDuplicate = false,
+  });
+
+  Future<List<TaskLink>> removeLink(
+    String workspaceId,
+    String taskId,
+    String linkId,
+  );
 
   /// A task with subtasks needs a [mode]; without one it is a
   /// [TaskFailure.hasSubtasks].
@@ -77,6 +103,19 @@ TaskException mapTaskError(Object error) {
       StatusCode.permissionDenied => const TaskException(TaskFailure.forbidden),
       StatusCode.alreadyExists when title == 'PROJECT_ARCHIVED' =>
         const TaskException(TaskFailure.archived),
+      StatusCode.alreadyExists when title == 'LINK_CYCLE' => TaskException(
+        TaskFailure.linkCycle,
+        detail: errorTrailer(error, 'x-error-path-bin'),
+      ),
+      StatusCode.alreadyExists when title == 'LINK_EXISTS' =>
+        const TaskException(TaskFailure.linkExists),
+      StatusCode.failedPrecondition when title == 'TASK_BLOCKED' =>
+        TaskException(
+          TaskFailure.blocked,
+          detail: errorTrailer(error, 'x-error-blockers-bin'),
+          canOverride:
+              errorTrailer(error, 'x-error-can_override-bin') == 'true',
+        ),
       StatusCode.failedPrecondition when title == 'TRANSITION_NOT_ALLOWED' =>
         TaskException(
           TaskFailure.transitionNotAllowed,
@@ -133,13 +172,29 @@ Task _task(pb.Task t) => Task(
   deletedAt: t.deletedAt,
   parentId: t.parentId,
   depth: t.depth,
+  isBlocked: t.isBlocked,
+  blockedBy: List.unmodifiable(t.blockedBy),
+);
+
+TaskLink _link(pb.Link l) => TaskLink(
+  id: l.id,
+  kind: LinkKind.parse(l.kind),
+  restricted: l.restricted,
+  otherId: l.otherId,
+  otherProjectId: l.otherProjectId,
+  otherDisplayId: l.otherDisplayId,
+  otherTitle: l.otherTitle,
+  otherStatusName: l.otherStatusName,
+  otherDone: const {'done', 'cancelled'}.contains(l.otherStatusCategory),
 );
 
 class GrpcTasksClient implements TasksClient {
   GrpcTasksClient(ClientChannelBase channel, this._session, {this.onRefusal})
-    : _stub = pb.TaskControllerClient(channel);
+    : _stub = pb.TaskControllerClient(channel),
+      _links = pb.LinkControllerClient(channel);
 
   final pb.TaskControllerClient _stub;
+  final pb.LinkControllerClient _links;
   final AuthSession _session;
 
   /// Called when a mutating call is refused (permissions may be stale).
@@ -231,6 +286,7 @@ class GrpcTasksClient implements TasksClient {
     Task task,
     TaskPatch patch, {
     int? expectedVersion,
+    bool overrideBlocked = false,
   }) async => _task(
     await _run(
       () => _stub.update(
@@ -247,6 +303,7 @@ class GrpcTasksClient implements TasksClient {
           dueDate: patch.dueDate,
           setAssignees: patch.assigneeIds != null,
           assigneeIds: patch.assigneeIds,
+          overrideBlocked: overrideBlocked,
         ),
         options: _options,
       ),
@@ -299,6 +356,7 @@ class GrpcTasksClient implements TasksClient {
     Task task,
     String statusId, {
     bool includeSubtasks = false,
+    bool overrideBlocked = false,
   }) async => _task(
     await _run(
       () => _stub.move(
@@ -309,11 +367,90 @@ class GrpcTasksClient implements TasksClient {
           expectedVersion: task.version,
           status: statusId,
           includeSubtasks: includeSubtasks,
+          overrideBlocked: overrideBlocked,
         ),
         options: _options,
       ),
     ),
   );
+
+  @override
+  Future<List<LinkCandidate>> searchTasks(
+    String workspaceId,
+    String query,
+  ) async {
+    final reply = await _run(
+      () => _links.searchTasks(
+        pb.LinkSearchTasksRequest(workspaceId: workspaceId, query: query),
+        options: _options,
+      ),
+      isRead: true,
+    );
+    return [
+      for (final t in reply.tasks)
+        LinkCandidate(
+          id: t.id,
+          projectId: t.projectId,
+          displayId: t.displayId,
+          title: t.title,
+          statusName: t.statusName,
+        ),
+    ];
+  }
+
+  @override
+  Future<List<TaskLink>> listLinks(String workspaceId, String taskId) async {
+    final reply = await _run(
+      () => _links.listForTask(
+        pb.LinkListForTaskRequest(workspaceId: workspaceId, taskId: taskId),
+        options: _options,
+      ),
+      isRead: true,
+    );
+    return [for (final l in reply.links) _link(l)];
+  }
+
+  @override
+  Future<List<TaskLink>> addLink(
+    String workspaceId,
+    String taskId,
+    String otherId,
+    LinkKind kind, {
+    bool closeDuplicate = false,
+  }) async {
+    final reply = await _run(
+      () => _links.add(
+        pb.LinkAddRequest(
+          workspaceId: workspaceId,
+          taskId: taskId,
+          otherTaskId: otherId,
+          kind: kind.wire,
+          closeDuplicate: closeDuplicate,
+        ),
+        options: _options,
+      ),
+    );
+    return [for (final l in reply.links) _link(l)];
+  }
+
+  @override
+  Future<List<TaskLink>> removeLink(
+    String workspaceId,
+    String taskId,
+    String linkId,
+  ) async {
+    final reply = await _run(
+      () => _links.remove(
+        pb.LinkRemoveRequest(
+          workspaceId: workspaceId,
+          taskId: taskId,
+          id: linkId,
+        ),
+        options: _options,
+      ),
+    );
+    return [for (final l in reply.links) _link(l)];
+  }
 
   @override
   Future<List<Task>> listTrash(String workspaceId, String projectId) async {

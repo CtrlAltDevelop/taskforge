@@ -128,8 +128,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/projects/:id',
-        builder: (_, state) =>
-            ProjectScreen(projectId: state.pathParameters['id']!),
+        builder: (_, state) => ProjectScreen(
+          projectId: state.pathParameters['id']!,
+          taskId: state.uri.queryParameters['task'],
+        ),
       ),
       GoRoute(
         path: '/projects/:id/settings',

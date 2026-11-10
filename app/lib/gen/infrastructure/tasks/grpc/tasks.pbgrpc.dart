@@ -20,6 +20,139 @@ import 'tasks.pb.dart' as $0;
 
 export 'tasks.pb.dart';
 
+@$pb.GrpcServiceName('config.tasks.LinkController')
+class LinkControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  LinkControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.LinkList> add(
+    $0.LinkAddRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$add, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LinkList> listForTask(
+    $0.LinkListForTaskRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listForTask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LinkList> remove(
+    $0.LinkRemoveRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$remove, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LinkCandidates> searchTasks(
+    $0.LinkSearchTasksRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$searchTasks, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$add = $grpc.ClientMethod<$0.LinkAddRequest, $0.LinkList>(
+      '/config.tasks.LinkController/Add',
+      ($0.LinkAddRequest value) => value.writeToBuffer(),
+      $0.LinkList.fromBuffer);
+  static final _$listForTask =
+      $grpc.ClientMethod<$0.LinkListForTaskRequest, $0.LinkList>(
+          '/config.tasks.LinkController/ListForTask',
+          ($0.LinkListForTaskRequest value) => value.writeToBuffer(),
+          $0.LinkList.fromBuffer);
+  static final _$remove = $grpc.ClientMethod<$0.LinkRemoveRequest, $0.LinkList>(
+      '/config.tasks.LinkController/Remove',
+      ($0.LinkRemoveRequest value) => value.writeToBuffer(),
+      $0.LinkList.fromBuffer);
+  static final _$searchTasks =
+      $grpc.ClientMethod<$0.LinkSearchTasksRequest, $0.LinkCandidates>(
+          '/config.tasks.LinkController/SearchTasks',
+          ($0.LinkSearchTasksRequest value) => value.writeToBuffer(),
+          $0.LinkCandidates.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.tasks.LinkController')
+abstract class LinkControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.tasks.LinkController';
+
+  LinkControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.LinkAddRequest, $0.LinkList>(
+        'Add',
+        add_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.LinkAddRequest.fromBuffer(value),
+        ($0.LinkList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.LinkListForTaskRequest, $0.LinkList>(
+        'ListForTask',
+        listForTask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.LinkListForTaskRequest.fromBuffer(value),
+        ($0.LinkList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.LinkRemoveRequest, $0.LinkList>(
+        'Remove',
+        remove_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.LinkRemoveRequest.fromBuffer(value),
+        ($0.LinkList value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.LinkSearchTasksRequest, $0.LinkCandidates>(
+            'SearchTasks',
+            searchTasks_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.LinkSearchTasksRequest.fromBuffer(value),
+            ($0.LinkCandidates value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.LinkList> add_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.LinkAddRequest> $request) async {
+    return add($call, await $request);
+  }
+
+  $async.Future<$0.LinkList> add(
+      $grpc.ServiceCall call, $0.LinkAddRequest request);
+
+  $async.Future<$0.LinkList> listForTask_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.LinkListForTaskRequest> $request) async {
+    return listForTask($call, await $request);
+  }
+
+  $async.Future<$0.LinkList> listForTask(
+      $grpc.ServiceCall call, $0.LinkListForTaskRequest request);
+
+  $async.Future<$0.LinkList> remove_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.LinkRemoveRequest> $request) async {
+    return remove($call, await $request);
+  }
+
+  $async.Future<$0.LinkList> remove(
+      $grpc.ServiceCall call, $0.LinkRemoveRequest request);
+
+  $async.Future<$0.LinkCandidates> searchTasks_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.LinkSearchTasksRequest> $request) async {
+    return searchTasks($call, await $request);
+  }
+
+  $async.Future<$0.LinkCandidates> searchTasks(
+      $grpc.ServiceCall call, $0.LinkSearchTasksRequest request);
+}
+
 @$pb.GrpcServiceName('config.tasks.TaskController')
 class TaskControllerClient extends $grpc.Client {
   /// The hostname for this service.

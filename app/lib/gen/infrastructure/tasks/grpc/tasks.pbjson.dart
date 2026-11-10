@@ -15,6 +15,160 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use linkDescriptor instead')
+const Link$json = {
+  '1': 'Link',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'kind', '3': 2, '4': 1, '5': 9, '10': 'kind'},
+    {'1': 'restricted', '3': 3, '4': 1, '5': 8, '10': 'restricted'},
+    {'1': 'other_id', '3': 4, '4': 1, '5': 9, '10': 'otherId'},
+    {'1': 'other_project_id', '3': 5, '4': 1, '5': 9, '10': 'otherProjectId'},
+    {'1': 'other_display_id', '3': 6, '4': 1, '5': 9, '10': 'otherDisplayId'},
+    {'1': 'other_title', '3': 7, '4': 1, '5': 9, '10': 'otherTitle'},
+    {'1': 'other_status_name', '3': 8, '4': 1, '5': 9, '10': 'otherStatusName'},
+    {
+      '1': 'other_status_category',
+      '3': 9,
+      '4': 1,
+      '5': 9,
+      '10': 'otherStatusCategory'
+    },
+  ],
+};
+
+/// Descriptor for `Link`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkDescriptor = $convert.base64Decode(
+    'CgRMaW5rEg4KAmlkGAEgASgJUgJpZBISCgRraW5kGAIgASgJUgRraW5kEh4KCnJlc3RyaWN0ZW'
+    'QYAyABKAhSCnJlc3RyaWN0ZWQSGQoIb3RoZXJfaWQYBCABKAlSB290aGVySWQSKAoQb3RoZXJf'
+    'cHJvamVjdF9pZBgFIAEoCVIOb3RoZXJQcm9qZWN0SWQSKAoQb3RoZXJfZGlzcGxheV9pZBgGIA'
+    'EoCVIOb3RoZXJEaXNwbGF5SWQSHwoLb3RoZXJfdGl0bGUYByABKAlSCm90aGVyVGl0bGUSKgoR'
+    'b3RoZXJfc3RhdHVzX25hbWUYCCABKAlSD290aGVyU3RhdHVzTmFtZRIyChVvdGhlcl9zdGF0dX'
+    'NfY2F0ZWdvcnkYCSABKAlSE290aGVyU3RhdHVzQ2F0ZWdvcnk=');
+
+@$core.Deprecated('Use linkAddRequestDescriptor instead')
+const LinkAddRequest$json = {
+  '1': 'LinkAddRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'task_id', '3': 2, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'other_task_id', '3': 3, '4': 1, '5': 9, '10': 'otherTaskId'},
+    {'1': 'kind', '3': 4, '4': 1, '5': 9, '10': 'kind'},
+    {'1': 'close_duplicate', '3': 5, '4': 1, '5': 8, '10': 'closeDuplicate'},
+  ],
+};
+
+/// Descriptor for `LinkAddRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkAddRequestDescriptor = $convert.base64Decode(
+    'Cg5MaW5rQWRkUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEhcKB3'
+    'Rhc2tfaWQYAiABKAlSBnRhc2tJZBIiCg1vdGhlcl90YXNrX2lkGAMgASgJUgtvdGhlclRhc2tJ'
+    'ZBISCgRraW5kGAQgASgJUgRraW5kEicKD2Nsb3NlX2R1cGxpY2F0ZRgFIAEoCFIOY2xvc2VEdX'
+    'BsaWNhdGU=');
+
+@$core.Deprecated('Use linkCandidateDescriptor instead')
+const LinkCandidate$json = {
+  '1': 'LinkCandidate',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'display_id', '3': 3, '4': 1, '5': 9, '10': 'displayId'},
+    {'1': 'title', '3': 4, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'status_name', '3': 5, '4': 1, '5': 9, '10': 'statusName'},
+    {'1': 'status_category', '3': 6, '4': 1, '5': 9, '10': 'statusCategory'},
+  ],
+};
+
+/// Descriptor for `LinkCandidate`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkCandidateDescriptor = $convert.base64Decode(
+    'Cg1MaW5rQ2FuZGlkYXRlEg4KAmlkGAEgASgJUgJpZBIdCgpwcm9qZWN0X2lkGAIgASgJUglwcm'
+    '9qZWN0SWQSHQoKZGlzcGxheV9pZBgDIAEoCVIJZGlzcGxheUlkEhQKBXRpdGxlGAQgASgJUgV0'
+    'aXRsZRIfCgtzdGF0dXNfbmFtZRgFIAEoCVIKc3RhdHVzTmFtZRInCg9zdGF0dXNfY2F0ZWdvcn'
+    'kYBiABKAlSDnN0YXR1c0NhdGVnb3J5');
+
+@$core.Deprecated('Use linkCandidatesDescriptor instead')
+const LinkCandidates$json = {
+  '1': 'LinkCandidates',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.LinkCandidate',
+      '10': 'tasks'
+    },
+  ],
+};
+
+/// Descriptor for `LinkCandidates`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkCandidatesDescriptor = $convert.base64Decode(
+    'Cg5MaW5rQ2FuZGlkYXRlcxIxCgV0YXNrcxgBIAMoCzIbLmNvbmZpZy50YXNrcy5MaW5rQ2FuZG'
+    'lkYXRlUgV0YXNrcw==');
+
+@$core.Deprecated('Use linkListDescriptor instead')
+const LinkList$json = {
+  '1': 'LinkList',
+  '2': [
+    {
+      '1': 'links',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Link',
+      '10': 'links'
+    },
+  ],
+};
+
+/// Descriptor for `LinkList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkListDescriptor = $convert.base64Decode(
+    'CghMaW5rTGlzdBIoCgVsaW5rcxgBIAMoCzISLmNvbmZpZy50YXNrcy5MaW5rUgVsaW5rcw==');
+
+@$core.Deprecated('Use linkListForTaskRequestDescriptor instead')
+const LinkListForTaskRequest$json = {
+  '1': 'LinkListForTaskRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'task_id', '3': 2, '4': 1, '5': 9, '10': 'taskId'},
+  ],
+};
+
+/// Descriptor for `LinkListForTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkListForTaskRequestDescriptor =
+    $convert.base64Decode(
+        'ChZMaW5rTGlzdEZvclRhc2tSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
+        'NlSWQSFwoHdGFza19pZBgCIAEoCVIGdGFza0lk');
+
+@$core.Deprecated('Use linkRemoveRequestDescriptor instead')
+const LinkRemoveRequest$json = {
+  '1': 'LinkRemoveRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'task_id', '3': 2, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `LinkRemoveRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkRemoveRequestDescriptor = $convert.base64Decode(
+    'ChFMaW5rUmVtb3ZlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh'
+    'cKB3Rhc2tfaWQYAiABKAlSBnRhc2tJZBIOCgJpZBgDIAEoCVICaWQ=');
+
+@$core.Deprecated('Use linkSearchTasksRequestDescriptor instead')
+const LinkSearchTasksRequest$json = {
+  '1': 'LinkSearchTasksRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'query', '3': 2, '4': 1, '5': 9, '10': 'query'},
+  ],
+};
+
+/// Descriptor for `LinkSearchTasksRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkSearchTasksRequestDescriptor =
+    $convert.base64Decode(
+        'ChZMaW5rU2VhcmNoVGFza3NSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
+        'NlSWQSFAoFcXVlcnkYAiABKAlSBXF1ZXJ5');
+
 @$core.Deprecated('Use taskDescriptor instead')
 const Task$json = {
   '1': 'Task',
@@ -43,6 +197,8 @@ const Task$json = {
     {'1': 'depth', '3': 22, '4': 1, '5': 5, '10': 'depth'},
     {'1': 'progress_done', '3': 23, '4': 1, '5': 5, '10': 'progressDone'},
     {'1': 'progress_total', '3': 24, '4': 1, '5': 5, '10': 'progressTotal'},
+    {'1': 'is_blocked', '3': 25, '4': 1, '5': 8, '10': 'isBlocked'},
+    {'1': 'blocked_by', '3': 26, '4': 3, '5': 9, '10': 'blockedBy'},
   ],
 };
 
@@ -61,7 +217,8 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'EicKD3N0YXR1c19jYXRlZ29yeRgUIAEoCVIOc3RhdHVzQ2F0ZWdvcnkSGwoJcGFyZW50X2lkGB'
     'UgASgJUghwYXJlbnRJZBIUCgVkZXB0aBgWIAEoBVIFZGVwdGgSIwoNcHJvZ3Jlc3NfZG9uZRgX'
     'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
-    'Fs');
+    'FsEh0KCmlzX2Jsb2NrZWQYGSABKAhSCWlzQmxvY2tlZBIdCgpibG9ja2VkX2J5GBogAygJUgli'
+    'bG9ja2VkQnk=');
 
 @$core.Deprecated('Use taskChildrenDescriptor instead')
 const TaskChildren$json = {
@@ -202,6 +359,7 @@ const TaskMoveRequest$json = {
     {'1': 'expected_version', '3': 4, '4': 1, '5': 5, '10': 'expectedVersion'},
     {'1': 'status', '3': 5, '4': 1, '5': 9, '10': 'status'},
     {'1': 'include_subtasks', '3': 6, '4': 1, '5': 8, '10': 'includeSubtasks'},
+    {'1': 'override_blocked', '3': 7, '4': 1, '5': 8, '10': 'overrideBlocked'},
   ],
 };
 
@@ -210,7 +368,8 @@ final $typed_data.Uint8List taskMoveRequestDescriptor = $convert.base64Decode(
     'Cg9UYXNrTW92ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSDgoCaWQYAyABKAlSAmlkEikKEGV4cGVjdGVk'
     'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhIWCgZzdGF0dXMYBSABKAlSBnN0YXR1cx'
-    'IpChBpbmNsdWRlX3N1YnRhc2tzGAYgASgIUg9pbmNsdWRlU3VidGFza3M=');
+    'IpChBpbmNsdWRlX3N1YnRhc2tzGAYgASgIUg9pbmNsdWRlU3VidGFza3MSKQoQb3ZlcnJpZGVf'
+    'YmxvY2tlZBgHIAEoCFIPb3ZlcnJpZGVCbG9ja2Vk');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {
@@ -313,6 +472,7 @@ const TaskUpdateRequest$json = {
     },
     {'1': 'set_assignees', '3': 11, '4': 1, '5': 8, '10': 'setAssignees'},
     {'1': 'assignee_ids', '3': 12, '4': 3, '5': 9, '10': 'assigneeIds'},
+    {'1': 'override_blocked', '3': 13, '4': 1, '5': 8, '10': 'overrideBlocked'},
   ],
   '8': [
     {'1': '_title'},
@@ -333,5 +493,6 @@ final $typed_data.Uint8List taskUpdateRequestDescriptor = $convert.base64Decode(
     'IAEoCUgCUgZzdGF0dXOIAQESHwoIcHJpb3JpdHkYCCABKAlIA1IIcHJpb3JpdHmIAQESIgoKc3'
     'RhcnRfZGF0ZRgJIAEoCUgEUglzdGFydERhdGWIAQESHgoIZHVlX2RhdGUYCiABKAlIBVIHZHVl'
     'RGF0ZYgBARIjCg1zZXRfYXNzaWduZWVzGAsgASgIUgxzZXRBc3NpZ25lZXMSIQoMYXNzaWduZW'
-    'VfaWRzGAwgAygJUgthc3NpZ25lZUlkc0IICgZfdGl0bGVCDgoMX2Rlc2NyaXB0aW9uQgkKB19z'
-    'dGF0dXNCCwoJX3ByaW9yaXR5Qg0KC19zdGFydF9kYXRlQgsKCV9kdWVfZGF0ZQ==');
+    'VfaWRzGAwgAygJUgthc3NpZ25lZUlkcxIpChBvdmVycmlkZV9ibG9ja2VkGA0gASgIUg9vdmVy'
+    'cmlkZUJsb2NrZWRCCAoGX3RpdGxlQg4KDF9kZXNjcmlwdGlvbkIJCgdfc3RhdHVzQgsKCV9wcm'
+    'lvcml0eUINCgtfc3RhcnRfZGF0ZUILCglfZHVlX2RhdGU=');

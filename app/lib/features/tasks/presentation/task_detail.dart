@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -11,6 +12,7 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/tasks/presentation/links_panel.dart';
 import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
@@ -43,6 +45,9 @@ class TaskDetail extends ConsumerWidget {
         .where((t) => t.id == taskId)
         .firstOrNull;
     if (task == null) {
+      if (ref.watch(taskListProvider(project.id)).loading) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return const Center(child: Text('Task not found.', key: Key('no-task')));
     }
     final permissions = ref.watch(permissionSetProvider);
@@ -64,6 +69,7 @@ class TaskDetail extends ConsumerWidget {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
+            if (task.isBlocked) BlockedBadge(blockedBy: task.blockedBy),
             if (canDelete)
               IconButton(
                 key: const Key('delete-task'),
@@ -227,6 +233,26 @@ class TaskDetail extends ConsumerWidget {
           canCreate: canCreate,
           onOpen: (t) => onOpen?.call(t),
         ),
+        const SizedBox(height: 16),
+        LinksPanel(
+          project: project,
+          task: task,
+          canEdit: canEdit,
+          onOpen: (link) {
+            if (link.otherProjectId != project.id) {
+              context.go(
+                '/projects/${link.otherProjectId}?task=${link.otherId}',
+              );
+              return;
+            }
+            final other = ref
+                .read(taskListProvider(project.id))
+                .tasks
+                .where((t) => t.id == link.otherId)
+                .firstOrNull;
+            if (other != null) onOpen?.call(other);
+          },
+        ),
       ],
     );
   }
@@ -252,10 +278,15 @@ class TaskDetail extends ConsumerWidget {
       return;
     }
     final messenger = ScaffoldMessenger.of(context);
+    final list = ref.read(taskListProvider(project.id).notifier);
     try {
-      await ref
-          .read(taskListProvider(project.id).notifier)
-          .moveWithSubtasks(task, target);
+      try {
+        await list.moveWithSubtasks(task, target);
+      } on TaskException catch (e) {
+        if (e.failure != TaskFailure.blocked) rethrow;
+        if (!context.mounted || !await askOverride(context, e)) return;
+        await list.moveWithSubtasks(task, target, overrideBlocked: true);
+      }
     } on TaskException catch (e) {
       messenger
         ..hideCurrentSnackBar()
