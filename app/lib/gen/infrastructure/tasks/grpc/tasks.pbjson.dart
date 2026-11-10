@@ -15,6 +15,162 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use boardColumnDescriptor instead')
+const BoardColumn$json = {
+  '1': 'BoardColumn',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'count', '3': 3, '4': 1, '5': 5, '10': 'count'},
+    {
+      '1': 'tasks',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+    {'1': 'cursor', '3': 5, '4': 1, '5': 9, '10': 'cursor'},
+  ],
+};
+
+/// Descriptor for `BoardColumn`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardColumnDescriptor = $convert.base64Decode(
+    'CgtCb2FyZENvbHVtbhIQCgNrZXkYASABKAlSA2tleRISCgRuYW1lGAIgASgJUgRuYW1lEhQKBW'
+    'NvdW50GAMgASgFUgVjb3VudBIoCgV0YXNrcxgEIAMoCzISLmNvbmZpZy50YXNrcy5UYXNrUgV0'
+    'YXNrcxIWCgZjdXJzb3IYBSABKAlSBmN1cnNvcg==');
+
+@$core.Deprecated('Use boardGetRequestDescriptor instead')
+const BoardGetRequest$json = {
+  '1': 'BoardGetRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'group_by', '3': 3, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'swimlane', '3': 4, '4': 1, '5': 9, '10': 'swimlane'},
+    {'1': 'page_size', '3': 5, '4': 1, '5': 5, '10': 'pageSize'},
+  ],
+};
+
+/// Descriptor for `BoardGetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardGetRequestDescriptor = $convert.base64Decode(
+    'Cg9Cb2FyZEdldFJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
+    'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSGQoIZ3JvdXBfYnkYAyABKAlSB2dyb3VwQnkS'
+    'GgoIc3dpbWxhbmUYBCABKAlSCHN3aW1sYW5lEhsKCXBhZ2Vfc2l6ZRgFIAEoBVIIcGFnZVNpem'
+    'U=');
+
+@$core.Deprecated('Use boardLaneDescriptor instead')
+const BoardLane$json = {
+  '1': 'BoardLane',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {
+      '1': 'columns',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.BoardColumn',
+      '10': 'columns'
+    },
+  ],
+};
+
+/// Descriptor for `BoardLane`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardLaneDescriptor = $convert.base64Decode(
+    'CglCb2FyZExhbmUSEAoDa2V5GAEgASgJUgNrZXkSMwoHY29sdW1ucxgCIAMoCzIZLmNvbmZpZy'
+    '50YXNrcy5Cb2FyZENvbHVtblIHY29sdW1ucw==');
+
+@$core.Deprecated('Use boardListColumnRequestDescriptor instead')
+const BoardListColumnRequest$json = {
+  '1': 'BoardListColumnRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'group_by', '3': 3, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'swimlane', '3': 4, '4': 1, '5': 9, '10': 'swimlane'},
+    {'1': 'page_size', '3': 5, '4': 1, '5': 5, '10': 'pageSize'},
+    {'1': 'column', '3': 6, '4': 1, '5': 9, '10': 'column'},
+    {'1': 'lane', '3': 7, '4': 1, '5': 9, '10': 'lane'},
+    {'1': 'cursor', '3': 8, '4': 1, '5': 9, '10': 'cursor'},
+  ],
+};
+
+/// Descriptor for `BoardListColumnRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardListColumnRequestDescriptor = $convert.base64Decode(
+    'ChZCb2FyZExpc3RDb2x1bW5SZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
+    'NlSWQSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhkKCGdyb3VwX2J5GAMgASgJUgdn'
+    'cm91cEJ5EhoKCHN3aW1sYW5lGAQgASgJUghzd2ltbGFuZRIbCglwYWdlX3NpemUYBSABKAVSCH'
+    'BhZ2VTaXplEhYKBmNvbHVtbhgGIAEoCVIGY29sdW1uEhIKBGxhbmUYByABKAlSBGxhbmUSFgoG'
+    'Y3Vyc29yGAggASgJUgZjdXJzb3I=');
+
+@$core.Deprecated('Use boardMoveRequestDescriptor instead')
+const BoardMoveRequest$json = {
+  '1': 'BoardMoveRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'expected_version', '3': 4, '4': 1, '5': 5, '10': 'expectedVersion'},
+    {'1': 'group_by', '3': 5, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'column', '3': 6, '4': 1, '5': 9, '10': 'column'},
+    {'1': 'before_id', '3': 7, '4': 1, '5': 9, '10': 'beforeId'},
+    {'1': 'after_id', '3': 8, '4': 1, '5': 9, '10': 'afterId'},
+    {'1': 'include_subtasks', '3': 9, '4': 1, '5': 8, '10': 'includeSubtasks'},
+    {'1': 'override_blocked', '3': 10, '4': 1, '5': 8, '10': 'overrideBlocked'},
+  ],
+};
+
+/// Descriptor for `BoardMoveRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardMoveRequestDescriptor = $convert.base64Decode(
+    'ChBCb2FyZE1vdmVSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYWNlSWQSHQ'
+    'oKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEg4KAmlkGAMgASgJUgJpZBIpChBleHBlY3Rl'
+    'ZF92ZXJzaW9uGAQgASgFUg9leHBlY3RlZFZlcnNpb24SGQoIZ3JvdXBfYnkYBSABKAlSB2dyb3'
+    'VwQnkSFgoGY29sdW1uGAYgASgJUgZjb2x1bW4SGwoJYmVmb3JlX2lkGAcgASgJUghiZWZvcmVJ'
+    'ZBIZCghhZnRlcl9pZBgIIAEoCVIHYWZ0ZXJJZBIpChBpbmNsdWRlX3N1YnRhc2tzGAkgASgIUg'
+    '9pbmNsdWRlU3VidGFza3MSKQoQb3ZlcnJpZGVfYmxvY2tlZBgKIAEoCFIPb3ZlcnJpZGVCbG9j'
+    'a2Vk');
+
+@$core.Deprecated('Use boardPageDescriptor instead')
+const BoardPage$json = {
+  '1': 'BoardPage',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+    {'1': 'cursor', '3': 2, '4': 1, '5': 9, '10': 'cursor'},
+  ],
+};
+
+/// Descriptor for `BoardPage`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardPageDescriptor = $convert.base64Decode(
+    'CglCb2FyZFBhZ2USKAoFdGFza3MYASADKAsyEi5jb25maWcudGFza3MuVGFza1IFdGFza3MSFg'
+    'oGY3Vyc29yGAIgASgJUgZjdXJzb3I=');
+
+@$core.Deprecated('Use boardViewDescriptor instead')
+const BoardView$json = {
+  '1': 'BoardView',
+  '2': [
+    {
+      '1': 'lanes',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.BoardLane',
+      '10': 'lanes'
+    },
+  ],
+};
+
+/// Descriptor for `BoardView`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardViewDescriptor = $convert.base64Decode(
+    'CglCb2FyZFZpZXcSLQoFbGFuZXMYASADKAsyFy5jb25maWcudGFza3MuQm9hcmRMYW5lUgVsYW'
+    '5lcw==');
+
 @$core.Deprecated('Use bulkResultDescriptor instead')
 const BulkResult$json = {
   '1': 'BulkResult',

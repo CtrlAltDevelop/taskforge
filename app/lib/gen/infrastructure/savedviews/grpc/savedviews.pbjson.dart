@@ -15,6 +15,83 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use boardLayoutDescriptor instead')
+const BoardLayout$json = {
+  '1': 'BoardLayout',
+  '2': [
+    {'1': 'group_by', '3': 1, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'swimlane', '3': 2, '4': 1, '5': 9, '10': 'swimlane'},
+    {'1': 'card_fields', '3': 3, '4': 3, '5': 9, '10': 'cardFields'},
+    {
+      '1': 'limits',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.config.savedviews.BoardLimit',
+      '10': 'limits'
+    },
+  ],
+};
+
+/// Descriptor for `BoardLayout`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardLayoutDescriptor = $convert.base64Decode(
+    'CgtCb2FyZExheW91dBIZCghncm91cF9ieRgBIAEoCVIHZ3JvdXBCeRIaCghzd2ltbGFuZRgCIA'
+    'EoCVIIc3dpbWxhbmUSHwoLY2FyZF9maWVsZHMYAyADKAlSCmNhcmRGaWVsZHMSNQoGbGltaXRz'
+    'GAQgAygLMh0uY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMaW1pdFIGbGltaXRz');
+
+@$core.Deprecated('Use boardLayoutResponseDescriptor instead')
+const BoardLayoutResponse$json = {
+  '1': 'BoardLayoutResponse',
+  '2': [
+    {'1': 'group_by', '3': 1, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'swimlane', '3': 2, '4': 1, '5': 9, '10': 'swimlane'},
+    {'1': 'card_fields', '3': 3, '4': 3, '5': 9, '10': 'cardFields'},
+    {
+      '1': 'limits',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.config.savedviews.BoardLimitResponse',
+      '10': 'limits'
+    },
+  ],
+};
+
+/// Descriptor for `BoardLayoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardLayoutResponseDescriptor = $convert.base64Decode(
+    'ChNCb2FyZExheW91dFJlc3BvbnNlEhkKCGdyb3VwX2J5GAEgASgJUgdncm91cEJ5EhoKCHN3aW'
+    '1sYW5lGAIgASgJUghzd2ltbGFuZRIfCgtjYXJkX2ZpZWxkcxgDIAMoCVIKY2FyZEZpZWxkcxI9'
+    'CgZsaW1pdHMYBCADKAsyJS5jb25maWcuc2F2ZWR2aWV3cy5Cb2FyZExpbWl0UmVzcG9uc2VSBm'
+    'xpbWl0cw==');
+
+@$core.Deprecated('Use boardLimitDescriptor instead')
+const BoardLimit$json = {
+  '1': 'BoardLimit',
+  '2': [
+    {'1': 'column', '3': 1, '4': 1, '5': 9, '10': 'column'},
+    {'1': 'limit', '3': 2, '4': 1, '5': 5, '10': 'limit'},
+  ],
+};
+
+/// Descriptor for `BoardLimit`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardLimitDescriptor = $convert.base64Decode(
+    'CgpCb2FyZExpbWl0EhYKBmNvbHVtbhgBIAEoCVIGY29sdW1uEhQKBWxpbWl0GAIgASgFUgVsaW'
+    '1pdA==');
+
+@$core.Deprecated('Use boardLimitResponseDescriptor instead')
+const BoardLimitResponse$json = {
+  '1': 'BoardLimitResponse',
+  '2': [
+    {'1': 'column', '3': 1, '4': 1, '5': 9, '10': 'column'},
+    {'1': 'limit', '3': 2, '4': 1, '5': 5, '10': 'limit'},
+  ],
+};
+
+/// Descriptor for `BoardLimitResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List boardLimitResponseDescriptor = $convert.base64Decode(
+    'ChJCb2FyZExpbWl0UmVzcG9uc2USFgoGY29sdW1uGAEgASgJUgZjb2x1bW4SFAoFbGltaXQYAi'
+    'ABKAVSBWxpbWl0');
+
 @$core.Deprecated('Use layoutDescriptor instead')
 const Layout$json = {
   '1': 'Layout',
@@ -154,6 +231,14 @@ const SavedView$json = {
     },
     {'1': 'version', '3': 8, '4': 1, '5': 5, '10': 'version'},
     {'1': 'updated_at', '3': 9, '4': 1, '5': 9, '10': 'updatedAt'},
+    {
+      '1': 'board',
+      '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.BoardLayoutResponse',
+      '10': 'board'
+    },
   ],
 };
 
@@ -163,7 +248,8 @@ final $typed_data.Uint8List savedViewDescriptor = $convert.base64Decode(
     'RJZBIZCghvd25lcl9pZBgDIAEoCVIHb3duZXJJZBISCgRuYW1lGAQgASgJUgRuYW1lEhIKBGtp'
     'bmQYBSABKAlSBGtpbmQSGwoJaXNfc2hhcmVkGAYgASgIUghpc1NoYXJlZBI5CgZsYXlvdXQYBy'
     'ABKAsyIS5jb25maWcuc2F2ZWR2aWV3cy5MYXlvdXRSZXNwb25zZVIGbGF5b3V0EhgKB3ZlcnNp'
-    'b24YCCABKAVSB3ZlcnNpb24SHQoKdXBkYXRlZF9hdBgJIAEoCVIJdXBkYXRlZEF0');
+    'b24YCCABKAVSB3ZlcnNpb24SHQoKdXBkYXRlZF9hdBgJIAEoCVIJdXBkYXRlZEF0EjwKBWJvYX'
+    'JkGAogASgLMiYuY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMYXlvdXRSZXNwb25zZVIFYm9hcmQ=');
 
 @$core.Deprecated('Use viewDeleteRequestDescriptor instead')
 const ViewDeleteRequest$json = {
@@ -234,6 +320,14 @@ const ViewSaveRequest$json = {
       '10': 'layout'
     },
     {'1': 'shared', '3': 8, '4': 1, '5': 8, '10': 'shared'},
+    {
+      '1': 'board',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.BoardLayout',
+      '10': 'board'
+    },
   ],
 };
 
@@ -243,4 +337,5 @@ final $typed_data.Uint8List viewSaveRequestDescriptor = $convert.base64Decode(
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSDgoCaWQYAyABKAlSAmlkEikKEGV4cGVjdGVk'
     'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhISCgRuYW1lGAUgASgJUgRuYW1lEhIKBG'
     'tpbmQYBiABKAlSBGtpbmQSMQoGbGF5b3V0GAcgASgLMhkuY29uZmlnLnNhdmVkdmlld3MuTGF5'
-    'b3V0UgZsYXlvdXQSFgoGc2hhcmVkGAggASgIUgZzaGFyZWQ=');
+    'b3V0UgZsYXlvdXQSFgoGc2hhcmVkGAggASgIUgZzaGFyZWQSNAoFYm9hcmQYCSABKAsyHi5jb2'
+    '5maWcuc2F2ZWR2aWV3cy5Cb2FyZExheW91dFIFYm9hcmQ=');

@@ -1,3 +1,4 @@
+import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ import '../roles/fakes.dart';
 import '../workspaces/fakes.dart';
 import 'fakes.dart';
 import '../views/fakes.dart';
+import '../board/fakes.dart';
 
 export '../workspaces/fakes.dart' show byKey;
 
@@ -48,6 +50,7 @@ Future<Pumped> pumpProjects(
   FakeWorkflowsClient? workflows,
   FakeFieldsClient? fields,
   FakeViewsClient? views,
+  FakeBoardClient? board,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -63,6 +66,7 @@ Future<Pumped> pumpProjects(
     overrides: [
       membersClientProvider.overrideWithValue(team()),
       viewsClientProvider.overrideWithValue(views ?? FakeViewsClient()),
+      boardClientProvider.overrideWithValue(board ?? FakeBoardClient()),
       tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
       workflowsClientProvider.overrideWithValue(
         workflows ?? FakeWorkflowsClient(),

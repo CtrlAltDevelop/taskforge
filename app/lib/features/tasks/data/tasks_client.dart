@@ -53,6 +53,7 @@ abstract interface class TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    String statusId = '',
     Map<String, String> fieldValues = const {},
   });
 
@@ -219,9 +220,14 @@ Task _task(pb.Task t) => Task(
   blockedBy: List.unmodifiable(t.blockedBy),
   fieldValues: Map.unmodifiable({for (final v in t.fields) v.fieldId: v.value}),
   groupKey: t.groupKey,
+  progressDone: t.progressDone,
+  progressTotal: t.progressTotal,
   createdAt: t.createdAt,
   updatedAt: t.updatedAt,
 );
+
+/// A task as the server sent it (for the board, which has its own client).
+Task taskFromPb(pb.Task t) => _task(t);
 
 /// The same task as nested in a bulk result (a copy of the message).
 Task _nestedTask(pb.TaskResponse t) => Task(
@@ -247,6 +253,8 @@ Task _nestedTask(pb.TaskResponse t) => Task(
   blockedBy: List.unmodifiable(t.blockedBy),
   fieldValues: Map.unmodifiable({for (final v in t.fields) v.fieldId: v.value}),
   groupKey: t.groupKey,
+  progressDone: t.progressDone,
+  progressTotal: t.progressTotal,
   createdAt: t.createdAt,
   updatedAt: t.updatedAt,
 );
@@ -406,6 +414,7 @@ class GrpcTasksClient implements TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    String statusId = '',
     Map<String, String> fieldValues = const {},
   }) async => _task(
     await _run(
@@ -417,6 +426,7 @@ class GrpcTasksClient implements TasksClient {
           priority: priority.wire,
           assigneeIds: assigneeIds,
           parentId: parentId,
+          status: statusId,
           fieldValues: [
             for (final e in fieldValues.entries)
               pb.TaskFieldValue(fieldId: e.key, value: e.value),

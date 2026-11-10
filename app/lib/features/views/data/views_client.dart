@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
+import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
@@ -28,6 +29,19 @@ abstract interface class ViewsClient {
   });
 
   Future<void> delete(String workspaceId, String projectId, String id);
+
+  /// The same for the board: shared layouts, then the caller's own.
+  Future<List<SavedBoard>> listBoards(String workspaceId, String projectId);
+
+  Future<SavedBoard> saveBoard(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required BoardLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  });
 }
 
 ViewException mapViewError(Object error) {
@@ -89,6 +103,31 @@ pb.Layout layoutToPb(ListLayout l) => pb.Layout(
   groupBy: l.groupBy,
 );
 
+BoardLayout boardFromPb(pb.BoardLayoutResponse b) => BoardLayout(
+  groupBy: b.groupBy.isEmpty ? 'status' : b.groupBy,
+  swimlane: b.swimlane,
+  cardFields: List.unmodifiable(b.cardFields),
+  limits: Map.unmodifiable({for (final l in b.limits) l.column: l.limit}),
+);
+
+pb.BoardLayout boardToPb(BoardLayout b) => pb.BoardLayout(
+  groupBy: b.groupBy,
+  swimlane: b.swimlane,
+  cardFields: b.cardFields,
+  limits: [
+    for (final e in b.limits.entries)
+      pb.BoardLimit(column: e.key, limit: e.value),
+  ],
+);
+
+SavedBoard _board(pb.SavedView v) => SavedBoard(
+  id: v.id,
+  name: v.name,
+  layout: boardFromPb(v.board),
+  isShared: v.isShared,
+  version: v.version,
+);
+
 SavedView _view(pb.SavedView v) => SavedView(
   id: v.id,
   name: v.name,
@@ -133,11 +172,56 @@ class GrpcViewsClient implements ViewsClient {
   Future<List<SavedView>> list(String workspaceId, String projectId) =>
       _run(() async {
         final reply = await _stub.list(
-          pb.ViewListRequest(workspaceId: workspaceId, projectId: projectId),
+          pb.ViewListRequest(
+            workspaceId: workspaceId,
+            projectId: projectId,
+            kind: 'list',
+          ),
           options: _options,
         );
         return [for (final v in reply.views) _view(v)];
       }, isRead: true);
+
+  @override
+  Future<List<SavedBoard>> listBoards(String workspaceId, String projectId) =>
+      _run(() async {
+        final reply = await _stub.list(
+          pb.ViewListRequest(
+            workspaceId: workspaceId,
+            projectId: projectId,
+            kind: 'board',
+          ),
+          options: _options,
+        );
+        return [for (final v in reply.views) _board(v)];
+      }, isRead: true);
+
+  @override
+  Future<SavedBoard> saveBoard(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required BoardLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  }) => _run(
+    () async => _board(
+      await _stub.save(
+        pb.ViewSaveRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          id: id,
+          expectedVersion: expectedVersion,
+          name: name,
+          kind: 'board',
+          board: boardToPb(layout),
+          shared: shared,
+        ),
+        options: _options,
+      ),
+    ),
+  );
 
   @override
   Future<SavedView> save(

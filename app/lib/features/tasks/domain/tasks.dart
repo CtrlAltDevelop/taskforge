@@ -57,6 +57,8 @@ class Task {
     this.blockedBy = const [],
     this.fieldValues = const {},
     this.groupKey = '',
+    this.progressDone = 0,
+    this.progressTotal = 0,
     this.createdAt = '',
     this.updatedAt = '',
   });
@@ -105,6 +107,11 @@ class Task {
   /// id, a priority, a user id, an option id; empty: the group without one).
   final String groupKey;
 
+  /// How many of this task's subtasks (all levels) are done, and how many it
+  /// has, as the server counts them (the board has no tree to count in).
+  final int progressDone;
+  final int progressTotal;
+
   /// ISO timestamps; empty when the server did not say.
   final String createdAt;
   final String updatedAt;
@@ -137,6 +144,8 @@ class Task {
         ? fieldValues
         : _withValues(fieldValues, patch.fieldValues!),
     groupKey: groupKey,
+    progressDone: progressDone,
+    progressTotal: progressTotal,
     createdAt: createdAt,
     updatedAt: updatedAt,
   );
@@ -167,6 +176,8 @@ class Task {
           blockedBy: blockedBy,
           fieldValues: fieldValues,
           groupKey: key,
+          progressDone: progressDone,
+          progressTotal: progressTotal,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );

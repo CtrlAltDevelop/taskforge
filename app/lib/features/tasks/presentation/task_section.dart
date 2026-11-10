@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/board/application/board_providers.dart';
+import 'package:taskforge/features/board/presentation/board_view.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -45,8 +47,20 @@ class TaskSection extends ConsumerStatefulWidget {
   ConsumerState<TaskSection> createState() => _TaskSectionState();
 }
 
+/// The two ways to look at a project's tasks.
+enum _TaskView { list, board }
+
 class _TaskSectionState extends ConsumerState<TaskSection> {
   late String? _selected = widget.initialTask;
+  var _view = _TaskView.list;
+
+  /// A card shows what the detail may have just changed: read the board again
+  /// when the detail closes or another task opens.
+  void _refreshBoard() {
+    if (_view == _TaskView.board) {
+      ref.read(boardProvider(widget.project.id).notifier).refresh();
+    }
+  }
 
   /// On a narrow screen the task to open as a page once the list has it.
   late String? _pending = widget.initialTask;
@@ -54,6 +68,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
   Future<void> _open(Task task, bool wide) async {
     if (wide) {
       setState(() => _selected = task.id);
+      _refreshBoard();
       return;
     }
     await Navigator.of(context).push<void>(
@@ -90,32 +105,77 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     builder: (context, box) {
       final wide = box.maxWidth >= wideBreakpoint;
       _openPending(wide);
-      final list = _TaskList(
-        project: widget.project,
-        wide: wide,
-        selected: wide ? _selected : null,
-        onOpen: (t) => _open(t, wide),
-      );
-      if (!wide) return list;
-      // Always a Row on a wide screen, so opening or closing the detail keeps
-      // the list (its scroll position, focus and picked rows) where it is.
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: list),
-          if (_selected != null) ...[
-            const VerticalDivider(width: 1),
-            SizedBox(
-              width: 420,
-              child: TaskDetail(
-                key: ValueKey(_selected),
-                project: widget.project,
-                taskId: _selected!,
-                onClose: () => setState(() => _selected = null),
-                onOpen: (t) => _open(t, true),
+      final body = _view == _TaskView.board
+          ? BoardView(
+              project: widget.project,
+              openTaskId: wide ? _selected : null,
+              onOpen: (t) async {
+                await _open(t, wide);
+                if (!wide) _refreshBoard();
+              },
+            )
+          : _TaskList(
+              project: widget.project,
+              wide: wide,
+              selected: wide ? _selected : null,
+              onOpen: (t) => _open(t, wide),
+            );
+      final switcher = Padding(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: SegmentedButton<_TaskView>(
+            key: const Key('view-switch'),
+            showSelectedIcon: false,
+            segments: const [
+              ButtonSegment(
+                value: _TaskView.list,
+                icon: Icon(Icons.table_rows_outlined),
+                label: Text('List'),
               ),
-            ),
-          ],
+              ButtonSegment(
+                value: _TaskView.board,
+                icon: Icon(Icons.view_kanban_outlined),
+                label: Text('Board'),
+              ),
+            ],
+            selected: {_view},
+            onSelectionChanged: (v) => setState(() => _view = v.first),
+          ),
+        ),
+      );
+      // Always a Row on a wide screen, so opening or closing the detail keeps
+      // the view (its scroll position, focus and picked rows) where it is.
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          switcher,
+          Expanded(
+            child: !wide
+                ? body
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: body),
+                      if (_selected != null) ...[
+                        const VerticalDivider(width: 1),
+                        SizedBox(
+                          width: 420,
+                          child: TaskDetail(
+                            key: ValueKey(_selected),
+                            project: widget.project,
+                            taskId: _selected!,
+                            onClose: () {
+                              setState(() => _selected = null);
+                              _refreshBoard();
+                            },
+                            onOpen: (t) => _open(t, true),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+          ),
         ],
       );
     },

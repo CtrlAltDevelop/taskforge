@@ -20,6 +20,110 @@ import 'tasks.pb.dart' as $0;
 
 export 'tasks.pb.dart';
 
+@$pb.GrpcServiceName('config.tasks.BoardController')
+class BoardControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  BoardControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.BoardView> get(
+    $0.BoardGetRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$get, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.BoardPage> listColumn(
+    $0.BoardListColumnRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listColumn, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Task> move(
+    $0.BoardMoveRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$move, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$get = $grpc.ClientMethod<$0.BoardGetRequest, $0.BoardView>(
+      '/config.tasks.BoardController/Get',
+      ($0.BoardGetRequest value) => value.writeToBuffer(),
+      $0.BoardView.fromBuffer);
+  static final _$listColumn =
+      $grpc.ClientMethod<$0.BoardListColumnRequest, $0.BoardPage>(
+          '/config.tasks.BoardController/ListColumn',
+          ($0.BoardListColumnRequest value) => value.writeToBuffer(),
+          $0.BoardPage.fromBuffer);
+  static final _$move = $grpc.ClientMethod<$0.BoardMoveRequest, $0.Task>(
+      '/config.tasks.BoardController/Move',
+      ($0.BoardMoveRequest value) => value.writeToBuffer(),
+      $0.Task.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.tasks.BoardController')
+abstract class BoardControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.tasks.BoardController';
+
+  BoardControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.BoardGetRequest, $0.BoardView>(
+        'Get',
+        get_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.BoardGetRequest.fromBuffer(value),
+        ($0.BoardView value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.BoardListColumnRequest, $0.BoardPage>(
+        'ListColumn',
+        listColumn_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.BoardListColumnRequest.fromBuffer(value),
+        ($0.BoardPage value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.BoardMoveRequest, $0.Task>(
+        'Move',
+        move_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.BoardMoveRequest.fromBuffer(value),
+        ($0.Task value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.BoardView> get_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.BoardGetRequest> $request) async {
+    return get($call, await $request);
+  }
+
+  $async.Future<$0.BoardView> get(
+      $grpc.ServiceCall call, $0.BoardGetRequest request);
+
+  $async.Future<$0.BoardPage> listColumn_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.BoardListColumnRequest> $request) async {
+    return listColumn($call, await $request);
+  }
+
+  $async.Future<$0.BoardPage> listColumn(
+      $grpc.ServiceCall call, $0.BoardListColumnRequest request);
+
+  $async.Future<$0.Task> move_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.BoardMoveRequest> $request) async {
+    return move($call, await $request);
+  }
+
+  $async.Future<$0.Task> move(
+      $grpc.ServiceCall call, $0.BoardMoveRequest request);
+}
+
 @$pb.GrpcServiceName('config.tasks.LinkController')
 class LinkControllerClient extends $grpc.Client {
   /// The hostname for this service.

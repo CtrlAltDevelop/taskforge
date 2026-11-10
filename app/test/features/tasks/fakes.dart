@@ -470,6 +470,7 @@ class FakeTasksClient implements TasksClient {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
     String parentId = '',
+    String statusId = '',
     Map<String, String> fieldValues = const {},
   }) async {
     await createGate?.future;
@@ -488,6 +489,9 @@ class FakeTasksClient implements TasksClient {
       parent: parentId,
       depth: depth,
       fieldValues: fieldValues,
+      statusId: statusId.isEmpty ? 'todo' : statusId,
+      statusName: fakeStatuses[statusId.isEmpty ? 'todo' : statusId]!.$1,
+      category: fakeStatuses[statusId.isEmpty ? 'todo' : statusId]!.$2,
     );
     tasks.add(created);
     return created;

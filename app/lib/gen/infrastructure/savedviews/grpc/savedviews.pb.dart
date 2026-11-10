@@ -16,6 +16,311 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class BoardLayout extends $pb.GeneratedMessage {
+  factory BoardLayout({
+    $core.String? groupBy,
+    $core.String? swimlane,
+    $core.Iterable<$core.String>? cardFields,
+    $core.Iterable<BoardLimit>? limits,
+  }) {
+    final result = BoardLayout._();
+    if (groupBy != null) result.groupBy = groupBy;
+    if (swimlane != null) result.swimlane = swimlane;
+    if (cardFields != null) result.cardFields.addAll(cardFields);
+    if (limits != null) result.limits.addAll(limits);
+    return result;
+  }
+
+  BoardLayout._();
+
+  factory BoardLayout.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLayout()..mergeFromBuffer(data, registry);
+  factory BoardLayout.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLayout()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardLayout',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: BoardLayout.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(2, _omitFieldNames ? '' : 'swimlane')
+    ..pPS(3, _omitFieldNames ? '' : 'cardFields')
+    ..pPM<BoardLimit>(4, _omitFieldNames ? '' : 'limits',
+        subBuilder: BoardLimit.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLayout clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLayout copyWith(void Function(BoardLayout) updates) =>
+      super.copyWith((message) => updates(message as BoardLayout))
+          as BoardLayout;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardLayout() / BoardLayout.new instead')
+  static BoardLayout create() => BoardLayout._();
+  static $pb.GeneratedMessage $_createMessage() => BoardLayout._();
+  @$core.override
+  BoardLayout createEmptyInstance() => BoardLayout._();
+  @$core.pragma('dart2js:noInline')
+  static BoardLayout getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BoardLayout>(
+          BoardLayout.$_createMessage);
+  static BoardLayout? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get groupBy => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set groupBy($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasGroupBy() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGroupBy() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get swimlane => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set swimlane($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSwimlane() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSwimlane() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get cardFields => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<BoardLimit> get limits => $_getList(3);
+}
+
+class BoardLayoutResponse extends $pb.GeneratedMessage {
+  factory BoardLayoutResponse({
+    $core.String? groupBy,
+    $core.String? swimlane,
+    $core.Iterable<$core.String>? cardFields,
+    $core.Iterable<BoardLimitResponse>? limits,
+  }) {
+    final result = BoardLayoutResponse._();
+    if (groupBy != null) result.groupBy = groupBy;
+    if (swimlane != null) result.swimlane = swimlane;
+    if (cardFields != null) result.cardFields.addAll(cardFields);
+    if (limits != null) result.limits.addAll(limits);
+    return result;
+  }
+
+  BoardLayoutResponse._();
+
+  factory BoardLayoutResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLayoutResponse()..mergeFromBuffer(data, registry);
+  factory BoardLayoutResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLayoutResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardLayoutResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: BoardLayoutResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(2, _omitFieldNames ? '' : 'swimlane')
+    ..pPS(3, _omitFieldNames ? '' : 'cardFields')
+    ..pPM<BoardLimitResponse>(4, _omitFieldNames ? '' : 'limits',
+        subBuilder: BoardLimitResponse.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLayoutResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLayoutResponse copyWith(void Function(BoardLayoutResponse) updates) =>
+      super.copyWith((message) => updates(message as BoardLayoutResponse))
+          as BoardLayoutResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core
+      .Deprecated('Use BoardLayoutResponse() / BoardLayoutResponse.new instead')
+  static BoardLayoutResponse create() => BoardLayoutResponse._();
+  static $pb.GeneratedMessage $_createMessage() => BoardLayoutResponse._();
+  @$core.override
+  BoardLayoutResponse createEmptyInstance() => BoardLayoutResponse._();
+  @$core.pragma('dart2js:noInline')
+  static BoardLayoutResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardLayoutResponse>(
+          BoardLayoutResponse.$_createMessage);
+  static BoardLayoutResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get groupBy => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set groupBy($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasGroupBy() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGroupBy() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get swimlane => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set swimlane($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSwimlane() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSwimlane() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get cardFields => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<BoardLimitResponse> get limits => $_getList(3);
+}
+
+class BoardLimit extends $pb.GeneratedMessage {
+  factory BoardLimit({
+    $core.String? column,
+    $core.int? limit,
+  }) {
+    final result = BoardLimit._();
+    if (column != null) result.column = column;
+    if (limit != null) result.limit = limit;
+    return result;
+  }
+
+  BoardLimit._();
+
+  factory BoardLimit.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLimit()..mergeFromBuffer(data, registry);
+  factory BoardLimit.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLimit()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardLimit',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: BoardLimit.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'column')
+    ..aI(2, _omitFieldNames ? '' : 'limit')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLimit clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLimit copyWith(void Function(BoardLimit) updates) =>
+      super.copyWith((message) => updates(message as BoardLimit)) as BoardLimit;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardLimit() / BoardLimit.new instead')
+  static BoardLimit create() => BoardLimit._();
+  static $pb.GeneratedMessage $_createMessage() => BoardLimit._();
+  @$core.override
+  BoardLimit createEmptyInstance() => BoardLimit._();
+  @$core.pragma('dart2js:noInline')
+  static BoardLimit getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardLimit>(BoardLimit.$_createMessage);
+  static BoardLimit? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get column => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set column($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasColumn() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearColumn() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get limit => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set limit($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLimit() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLimit() => $_clearField(2);
+}
+
+class BoardLimitResponse extends $pb.GeneratedMessage {
+  factory BoardLimitResponse({
+    $core.String? column,
+    $core.int? limit,
+  }) {
+    final result = BoardLimitResponse._();
+    if (column != null) result.column = column;
+    if (limit != null) result.limit = limit;
+    return result;
+  }
+
+  BoardLimitResponse._();
+
+  factory BoardLimitResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLimitResponse()..mergeFromBuffer(data, registry);
+  factory BoardLimitResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLimitResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardLimitResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: BoardLimitResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'column')
+    ..aI(2, _omitFieldNames ? '' : 'limit')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLimitResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLimitResponse copyWith(void Function(BoardLimitResponse) updates) =>
+      super.copyWith((message) => updates(message as BoardLimitResponse))
+          as BoardLimitResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardLimitResponse() / BoardLimitResponse.new instead')
+  static BoardLimitResponse create() => BoardLimitResponse._();
+  static $pb.GeneratedMessage $_createMessage() => BoardLimitResponse._();
+  @$core.override
+  BoardLimitResponse createEmptyInstance() => BoardLimitResponse._();
+  @$core.pragma('dart2js:noInline')
+  static BoardLimitResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardLimitResponse>(
+          BoardLimitResponse.$_createMessage);
+  static BoardLimitResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get column => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set column($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasColumn() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearColumn() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get limit => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set limit($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLimit() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLimit() => $_clearField(2);
+}
+
 class Layout extends $pb.GeneratedMessage {
   factory Layout({
     $core.Iterable<$core.String>? columns,
@@ -460,6 +765,7 @@ class SavedView extends $pb.GeneratedMessage {
     LayoutResponse? layout,
     $core.int? version,
     $core.String? updatedAt,
+    BoardLayoutResponse? board,
   }) {
     final result = SavedView._();
     if (id != null) result.id = id;
@@ -471,6 +777,7 @@ class SavedView extends $pb.GeneratedMessage {
     if (layout != null) result.layout = layout;
     if (version != null) result.version = version;
     if (updatedAt != null) result.updatedAt = updatedAt;
+    if (board != null) result.board = board;
     return result;
   }
 
@@ -498,6 +805,8 @@ class SavedView extends $pb.GeneratedMessage {
         subBuilder: LayoutResponse.$_createMessage)
     ..aI(8, _omitFieldNames ? '' : 'version')
     ..aOS(9, _omitFieldNames ? '' : 'updatedAt')
+    ..aOM<BoardLayoutResponse>(10, _omitFieldNames ? '' : 'board',
+        subBuilder: BoardLayoutResponse.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -602,6 +911,17 @@ class SavedView extends $pb.GeneratedMessage {
   $core.bool hasUpdatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearUpdatedAt() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  BoardLayoutResponse get board => $_getN(9);
+  @$pb.TagNumber(10)
+  set board(BoardLayoutResponse value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasBoard() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearBoard() => $_clearField(10);
+  @$pb.TagNumber(10)
+  BoardLayoutResponse ensureBoard() => $_ensure(9);
 }
 
 class ViewDeleteRequest extends $pb.GeneratedMessage {
@@ -829,6 +1149,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     $core.String? kind,
     Layout? layout,
     $core.bool? shared,
+    BoardLayout? board,
   }) {
     final result = ViewSaveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -839,6 +1160,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     if (kind != null) result.kind = kind;
     if (layout != null) result.layout = layout;
     if (shared != null) result.shared = shared;
+    if (board != null) result.board = board;
     return result;
   }
 
@@ -865,6 +1187,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     ..aOM<Layout>(7, _omitFieldNames ? '' : 'layout',
         subBuilder: Layout.$_createMessage)
     ..aOB(8, _omitFieldNames ? '' : 'shared')
+    ..aOM<BoardLayout>(9, _omitFieldNames ? '' : 'board',
+        subBuilder: BoardLayout.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -962,6 +1286,17 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
   $core.bool hasShared() => $_has(7);
   @$pb.TagNumber(8)
   void clearShared() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  BoardLayout get board => $_getN(8);
+  @$pb.TagNumber(9)
+  set board(BoardLayout value) => $_setField(9, value);
+  @$pb.TagNumber(9)
+  $core.bool hasBoard() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearBoard() => $_clearField(9);
+  @$pb.TagNumber(9)
+  BoardLayout ensureBoard() => $_ensure(8);
 }
 
 const $core.bool _omitFieldNames =

@@ -16,6 +16,693 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class BoardColumn extends $pb.GeneratedMessage {
+  factory BoardColumn({
+    $core.String? key,
+    $core.String? name,
+    $core.int? count,
+    $core.Iterable<Task>? tasks,
+    $core.String? cursor,
+  }) {
+    final result = BoardColumn._();
+    if (key != null) result.key = key;
+    if (name != null) result.name = name;
+    if (count != null) result.count = count;
+    if (tasks != null) result.tasks.addAll(tasks);
+    if (cursor != null) result.cursor = cursor;
+    return result;
+  }
+
+  BoardColumn._();
+
+  factory BoardColumn.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardColumn()..mergeFromBuffer(data, registry);
+  factory BoardColumn.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardColumn()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardColumn',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardColumn.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aI(3, _omitFieldNames ? '' : 'count')
+    ..pPM<Task>(4, _omitFieldNames ? '' : 'tasks',
+        subBuilder: Task.$_createMessage)
+    ..aOS(5, _omitFieldNames ? '' : 'cursor')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardColumn clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardColumn copyWith(void Function(BoardColumn) updates) =>
+      super.copyWith((message) => updates(message as BoardColumn))
+          as BoardColumn;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardColumn() / BoardColumn.new instead')
+  static BoardColumn create() => BoardColumn._();
+  static $pb.GeneratedMessage $_createMessage() => BoardColumn._();
+  @$core.override
+  BoardColumn createEmptyInstance() => BoardColumn._();
+  @$core.pragma('dart2js:noInline')
+  static BoardColumn getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BoardColumn>(
+          BoardColumn.$_createMessage);
+  static BoardColumn? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get count => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set count($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCount() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<Task> get tasks => $_getList(3);
+
+  @$pb.TagNumber(5)
+  $core.String get cursor => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set cursor($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCursor() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCursor() => $_clearField(5);
+}
+
+class BoardGetRequest extends $pb.GeneratedMessage {
+  factory BoardGetRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? groupBy,
+    $core.String? swimlane,
+    $core.int? pageSize,
+  }) {
+    final result = BoardGetRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (groupBy != null) result.groupBy = groupBy;
+    if (swimlane != null) result.swimlane = swimlane;
+    if (pageSize != null) result.pageSize = pageSize;
+    return result;
+  }
+
+  BoardGetRequest._();
+
+  factory BoardGetRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardGetRequest()..mergeFromBuffer(data, registry);
+  factory BoardGetRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardGetRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardGetRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardGetRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(4, _omitFieldNames ? '' : 'swimlane')
+    ..aI(5, _omitFieldNames ? '' : 'pageSize')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardGetRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardGetRequest copyWith(void Function(BoardGetRequest) updates) =>
+      super.copyWith((message) => updates(message as BoardGetRequest))
+          as BoardGetRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardGetRequest() / BoardGetRequest.new instead')
+  static BoardGetRequest create() => BoardGetRequest._();
+  static $pb.GeneratedMessage $_createMessage() => BoardGetRequest._();
+  @$core.override
+  BoardGetRequest createEmptyInstance() => BoardGetRequest._();
+  @$core.pragma('dart2js:noInline')
+  static BoardGetRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BoardGetRequest>(
+          BoardGetRequest.$_createMessage);
+  static BoardGetRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get groupBy => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set groupBy($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasGroupBy() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGroupBy() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get swimlane => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set swimlane($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSwimlane() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSwimlane() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get pageSize => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set pageSize($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasPageSize() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPageSize() => $_clearField(5);
+}
+
+class BoardLane extends $pb.GeneratedMessage {
+  factory BoardLane({
+    $core.String? key,
+    $core.Iterable<BoardColumn>? columns,
+  }) {
+    final result = BoardLane._();
+    if (key != null) result.key = key;
+    if (columns != null) result.columns.addAll(columns);
+    return result;
+  }
+
+  BoardLane._();
+
+  factory BoardLane.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLane()..mergeFromBuffer(data, registry);
+  factory BoardLane.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardLane()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardLane',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardLane.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..pPM<BoardColumn>(2, _omitFieldNames ? '' : 'columns',
+        subBuilder: BoardColumn.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLane clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardLane copyWith(void Function(BoardLane) updates) =>
+      super.copyWith((message) => updates(message as BoardLane)) as BoardLane;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardLane() / BoardLane.new instead')
+  static BoardLane create() => BoardLane._();
+  static $pb.GeneratedMessage $_createMessage() => BoardLane._();
+  @$core.override
+  BoardLane createEmptyInstance() => BoardLane._();
+  @$core.pragma('dart2js:noInline')
+  static BoardLane getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardLane>(BoardLane.$_createMessage);
+  static BoardLane? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<BoardColumn> get columns => $_getList(1);
+}
+
+class BoardListColumnRequest extends $pb.GeneratedMessage {
+  factory BoardListColumnRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? groupBy,
+    $core.String? swimlane,
+    $core.int? pageSize,
+    $core.String? column,
+    $core.String? lane,
+    $core.String? cursor,
+  }) {
+    final result = BoardListColumnRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (groupBy != null) result.groupBy = groupBy;
+    if (swimlane != null) result.swimlane = swimlane;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (column != null) result.column = column;
+    if (lane != null) result.lane = lane;
+    if (cursor != null) result.cursor = cursor;
+    return result;
+  }
+
+  BoardListColumnRequest._();
+
+  factory BoardListColumnRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardListColumnRequest()..mergeFromBuffer(data, registry);
+  factory BoardListColumnRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardListColumnRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardListColumnRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardListColumnRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(4, _omitFieldNames ? '' : 'swimlane')
+    ..aI(5, _omitFieldNames ? '' : 'pageSize')
+    ..aOS(6, _omitFieldNames ? '' : 'column')
+    ..aOS(7, _omitFieldNames ? '' : 'lane')
+    ..aOS(8, _omitFieldNames ? '' : 'cursor')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardListColumnRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardListColumnRequest copyWith(
+          void Function(BoardListColumnRequest) updates) =>
+      super.copyWith((message) => updates(message as BoardListColumnRequest))
+          as BoardListColumnRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use BoardListColumnRequest() / BoardListColumnRequest.new instead')
+  static BoardListColumnRequest create() => BoardListColumnRequest._();
+  static $pb.GeneratedMessage $_createMessage() => BoardListColumnRequest._();
+  @$core.override
+  BoardListColumnRequest createEmptyInstance() => BoardListColumnRequest._();
+  @$core.pragma('dart2js:noInline')
+  static BoardListColumnRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardListColumnRequest>(
+          BoardListColumnRequest.$_createMessage);
+  static BoardListColumnRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get groupBy => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set groupBy($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasGroupBy() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGroupBy() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get swimlane => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set swimlane($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSwimlane() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSwimlane() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get pageSize => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set pageSize($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasPageSize() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPageSize() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get column => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set column($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasColumn() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearColumn() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get lane => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set lane($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasLane() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearLane() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get cursor => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set cursor($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCursor() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCursor() => $_clearField(8);
+}
+
+class BoardMoveRequest extends $pb.GeneratedMessage {
+  factory BoardMoveRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? id,
+    $core.int? expectedVersion,
+    $core.String? groupBy,
+    $core.String? column,
+    $core.String? beforeId,
+    $core.String? afterId,
+    $core.bool? includeSubtasks,
+    $core.bool? overrideBlocked,
+  }) {
+    final result = BoardMoveRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (id != null) result.id = id;
+    if (expectedVersion != null) result.expectedVersion = expectedVersion;
+    if (groupBy != null) result.groupBy = groupBy;
+    if (column != null) result.column = column;
+    if (beforeId != null) result.beforeId = beforeId;
+    if (afterId != null) result.afterId = afterId;
+    if (includeSubtasks != null) result.includeSubtasks = includeSubtasks;
+    if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
+    return result;
+  }
+
+  BoardMoveRequest._();
+
+  factory BoardMoveRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardMoveRequest()..mergeFromBuffer(data, registry);
+  factory BoardMoveRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardMoveRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardMoveRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardMoveRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'id')
+    ..aI(4, _omitFieldNames ? '' : 'expectedVersion')
+    ..aOS(5, _omitFieldNames ? '' : 'groupBy')
+    ..aOS(6, _omitFieldNames ? '' : 'column')
+    ..aOS(7, _omitFieldNames ? '' : 'beforeId')
+    ..aOS(8, _omitFieldNames ? '' : 'afterId')
+    ..aOB(9, _omitFieldNames ? '' : 'includeSubtasks')
+    ..aOB(10, _omitFieldNames ? '' : 'overrideBlocked')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardMoveRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardMoveRequest copyWith(void Function(BoardMoveRequest) updates) =>
+      super.copyWith((message) => updates(message as BoardMoveRequest))
+          as BoardMoveRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardMoveRequest() / BoardMoveRequest.new instead')
+  static BoardMoveRequest create() => BoardMoveRequest._();
+  static $pb.GeneratedMessage $_createMessage() => BoardMoveRequest._();
+  @$core.override
+  BoardMoveRequest createEmptyInstance() => BoardMoveRequest._();
+  @$core.pragma('dart2js:noInline')
+  static BoardMoveRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BoardMoveRequest>(
+          BoardMoveRequest.$_createMessage);
+  static BoardMoveRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get id => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set id($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get expectedVersion => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set expectedVersion($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasExpectedVersion() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearExpectedVersion() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get groupBy => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set groupBy($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasGroupBy() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearGroupBy() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get column => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set column($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasColumn() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearColumn() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get beforeId => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set beforeId($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasBeforeId() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearBeforeId() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get afterId => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set afterId($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasAfterId() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearAfterId() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get includeSubtasks => $_getBF(8);
+  @$pb.TagNumber(9)
+  set includeSubtasks($core.bool value) => $_setBool(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasIncludeSubtasks() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearIncludeSubtasks() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get overrideBlocked => $_getBF(9);
+  @$pb.TagNumber(10)
+  set overrideBlocked($core.bool value) => $_setBool(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasOverrideBlocked() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearOverrideBlocked() => $_clearField(10);
+}
+
+class BoardPage extends $pb.GeneratedMessage {
+  factory BoardPage({
+    $core.Iterable<Task>? tasks,
+    $core.String? cursor,
+  }) {
+    final result = BoardPage._();
+    if (tasks != null) result.tasks.addAll(tasks);
+    if (cursor != null) result.cursor = cursor;
+    return result;
+  }
+
+  BoardPage._();
+
+  factory BoardPage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardPage()..mergeFromBuffer(data, registry);
+  factory BoardPage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardPage()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardPage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardPage.$_createMessage)
+    ..pPM<Task>(1, _omitFieldNames ? '' : 'tasks',
+        subBuilder: Task.$_createMessage)
+    ..aOS(2, _omitFieldNames ? '' : 'cursor')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardPage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardPage copyWith(void Function(BoardPage) updates) =>
+      super.copyWith((message) => updates(message as BoardPage)) as BoardPage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardPage() / BoardPage.new instead')
+  static BoardPage create() => BoardPage._();
+  static $pb.GeneratedMessage $_createMessage() => BoardPage._();
+  @$core.override
+  BoardPage createEmptyInstance() => BoardPage._();
+  @$core.pragma('dart2js:noInline')
+  static BoardPage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardPage>(BoardPage.$_createMessage);
+  static BoardPage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Task> get tasks => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.String get cursor => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set cursor($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCursor() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCursor() => $_clearField(2);
+}
+
+class BoardView extends $pb.GeneratedMessage {
+  factory BoardView({
+    $core.Iterable<BoardLane>? lanes,
+  }) {
+    final result = BoardView._();
+    if (lanes != null) result.lanes.addAll(lanes);
+    return result;
+  }
+
+  BoardView._();
+
+  factory BoardView.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardView()..mergeFromBuffer(data, registry);
+  factory BoardView.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      BoardView()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BoardView',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: BoardView.$_createMessage)
+    ..pPM<BoardLane>(1, _omitFieldNames ? '' : 'lanes',
+        subBuilder: BoardLane.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardView clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BoardView copyWith(void Function(BoardView) updates) =>
+      super.copyWith((message) => updates(message as BoardView)) as BoardView;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use BoardView() / BoardView.new instead')
+  static BoardView create() => BoardView._();
+  static $pb.GeneratedMessage $_createMessage() => BoardView._();
+  @$core.override
+  BoardView createEmptyInstance() => BoardView._();
+  @$core.pragma('dart2js:noInline')
+  static BoardView getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BoardView>(BoardView.$_createMessage);
+  static BoardView? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<BoardLane> get lanes => $_getList(0);
+}
+
 class BulkResult extends $pb.GeneratedMessage {
   factory BulkResult({
     $core.String? id,
