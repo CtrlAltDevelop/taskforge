@@ -51,13 +51,27 @@ final calendarLayoutProvider = NotifierProvider.autoDispose
 
 class CalendarLayoutNotifier extends PersonalLayoutNotifier<CalendarLayout> {
   CalendarLayoutNotifier(String projectId)
-    : super(projectId, const CalendarLayout());
+    : super(
+        projectId,
+        // The calendar of every project starts by colouring per project.
+        projectId.isEmpty
+            ? const CalendarLayout(colorBy: 'project')
+            : const CalendarLayout(),
+      );
+
+  /// The workspace-wide calendar (no project) keeps its choices for the
+  /// session only: there is no project to store a layout under.
+  bool get _sessionOnly => projectId.isEmpty;
+
+  @override
+  bool get keepAlive => _sessionOnly;
 
   @override
   Future<StoredLayout<CalendarLayout>?> findMine(
     ViewsClient client,
     String workspace,
   ) async {
+    if (_sessionOnly) return null;
     final all = await client.listCalendars(workspace, projectId);
     final mine = all
         .where((c) => !c.isShared && c.name == personalLayoutName)
@@ -75,6 +89,7 @@ class CalendarLayoutNotifier extends PersonalLayoutNotifier<CalendarLayout> {
     required String id,
     required int version,
   }) async {
+    if (_sessionOnly) return (id: '', version: 0, layout: layout);
     final saved = await client.saveCalendar(
       workspace,
       projectId,
@@ -132,13 +147,30 @@ class CalendarAnchor extends Notifier<Day> {
   final String projectId;
 
   @override
-  Day build() => ref.read(todayProvider);
+  Day build() {
+    // The all-projects calendar remembers where it was.
+    if (projectId.isEmpty) ref.keepAlive();
+    return ref.read(todayProvider);
+  }
 
   void goTo(Day day) => state = day;
 
   void today() => state = ref.read(todayProvider);
 
   void shift(CalendarMode mode, int steps) => state = step(mode, state, steps);
+}
+
+/// The projects hidden from the workspace calendar (their ids).
+final hiddenProjectsProvider = NotifierProvider<HiddenProjects, Set<String>>(
+  HiddenProjects.new,
+);
+
+class HiddenProjects extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => const {};
+
+  void toggle(String id) =>
+      state = state.contains(id) ? ({...state}..remove(id)) : {...state, id};
 }
 
 // --------------------------------------------------------------------- tasks
@@ -162,7 +194,8 @@ class CalendarState {
   );
 }
 
-/// The tasks on the days the calendar shows. Only that range is asked for, and
+/// The tasks on the days the calendar shows (the project's, or every visible
+/// project's for the workspace calendar, whose scope is the empty string). Only that range is asked for, and
 /// an answer for a range that was flipped past is thrown away.
 final calendarProvider = NotifierProvider.autoDispose
     .family<CalendarNotifier, CalendarState, String>(CalendarNotifier.new);
@@ -212,16 +245,23 @@ class CalendarNotifier extends Notifier<CalendarState> {
     final token = _reading = CancelToken();
     state = state.copyWith(loading: true, error: () => null);
     try {
-      final tasks = await ref
-          .read(calendarClientProvider)
-          .listRange(
-            _workspace,
-            projectId,
-            first: first,
-            last: last,
-            includeDone: !hideDone,
-            cancel: token,
-          );
+      final client = ref.read(calendarClientProvider);
+      final tasks = projectId.isEmpty
+          ? await client.listWorkspaceRange(
+              _workspace,
+              first: first,
+              last: last,
+              includeDone: !hideDone,
+              cancel: token,
+            )
+          : await client.listRange(
+              _workspace,
+              projectId,
+              first: first,
+              last: last,
+              includeDone: !hideDone,
+              cancel: token,
+            );
       if (generation != _generation || !ref.mounted) return;
       state = CalendarState(tasks: List.unmodifiable(tasks), loading: false);
     } on TaskException catch (e) {

@@ -12,6 +12,7 @@ import 'package:taskforge/features/auth/reset_password_screen.dart';
 import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
+import 'package:taskforge/features/calendar/presentation/workspace_calendar_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
 import 'package:taskforge/features/projects/presentation/archived_screen.dart';
@@ -150,6 +151,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             FieldsScreen(projectId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
+      GoRoute(
+        path: '/calendar',
+        builder: (_, _) => const WorkspaceCalendarScreen(),
+      ),
       GoRoute(
         path: '/invite/:token',
         builder: (_, state) =>

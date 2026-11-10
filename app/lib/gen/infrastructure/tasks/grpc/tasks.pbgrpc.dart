@@ -152,6 +152,15 @@ class CalendarControllerClient extends $grpc.Client {
     return $createUnaryCall(_$listUnscheduled, request, options: options);
   }
 
+  $grpc.ResponseStream<$0.Task> listWorkspaceRange(
+    $0.CalendarWorkspaceRangeRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(
+        _$listWorkspaceRange, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
   // method descriptors
 
   static final _$listRange =
@@ -164,6 +173,11 @@ class CalendarControllerClient extends $grpc.Client {
           '/config.tasks.CalendarController/ListUnscheduled',
           ($0.CalendarTrayRequest value) => value.writeToBuffer(),
           $0.CalendarTray.fromBuffer);
+  static final _$listWorkspaceRange =
+      $grpc.ClientMethod<$0.CalendarWorkspaceRangeRequest, $0.Task>(
+          '/config.tasks.CalendarController/ListWorkspaceRange',
+          ($0.CalendarWorkspaceRangeRequest value) => value.writeToBuffer(),
+          $0.Task.fromBuffer);
 }
 
 @$pb.GrpcServiceName('config.tasks.CalendarController')
@@ -187,6 +201,14 @@ abstract class CalendarControllerServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.CalendarTrayRequest.fromBuffer(value),
         ($0.CalendarTray value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CalendarWorkspaceRangeRequest, $0.Task>(
+        'ListWorkspaceRange',
+        listWorkspaceRange_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.CalendarWorkspaceRangeRequest.fromBuffer(value),
+        ($0.Task value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.Task> listRange_Pre($grpc.ServiceCall $call,
@@ -204,6 +226,14 @@ abstract class CalendarControllerServiceBase extends $grpc.Service {
 
   $async.Future<$0.CalendarTray> listUnscheduled(
       $grpc.ServiceCall call, $0.CalendarTrayRequest request);
+
+  $async.Stream<$0.Task> listWorkspaceRange_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.CalendarWorkspaceRangeRequest> $request) async* {
+    yield* listWorkspaceRange($call, await $request);
+  }
+
+  $async.Stream<$0.Task> listWorkspaceRange(
+      $grpc.ServiceCall call, $0.CalendarWorkspaceRangeRequest request);
 }
 
 @$pb.GrpcServiceName('config.tasks.LinkController')

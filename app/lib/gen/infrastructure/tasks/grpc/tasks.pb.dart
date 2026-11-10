@@ -1085,6 +1085,111 @@ class CalendarTrayRequest extends $pb.GeneratedMessage {
   void clearPageSize() => $_clearField(4);
 }
 
+class CalendarWorkspaceRangeRequest extends $pb.GeneratedMessage {
+  factory CalendarWorkspaceRangeRequest({
+    $core.String? workspaceId,
+    $core.String? rangeStart,
+    $core.String? rangeEnd,
+    $core.bool? includeDone,
+    $core.Iterable<$core.String>? projectIds,
+  }) {
+    final result = CalendarWorkspaceRangeRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (rangeStart != null) result.rangeStart = rangeStart;
+    if (rangeEnd != null) result.rangeEnd = rangeEnd;
+    if (includeDone != null) result.includeDone = includeDone;
+    if (projectIds != null) result.projectIds.addAll(projectIds);
+    return result;
+  }
+
+  CalendarWorkspaceRangeRequest._();
+
+  factory CalendarWorkspaceRangeRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarWorkspaceRangeRequest()..mergeFromBuffer(data, registry);
+  factory CalendarWorkspaceRangeRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      CalendarWorkspaceRangeRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'CalendarWorkspaceRangeRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: CalendarWorkspaceRangeRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'rangeStart')
+    ..aOS(3, _omitFieldNames ? '' : 'rangeEnd')
+    ..aOB(4, _omitFieldNames ? '' : 'includeDone')
+    ..pPS(5, _omitFieldNames ? '' : 'projectIds')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarWorkspaceRangeRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  CalendarWorkspaceRangeRequest copyWith(
+          void Function(CalendarWorkspaceRangeRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as CalendarWorkspaceRangeRequest))
+          as CalendarWorkspaceRangeRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use CalendarWorkspaceRangeRequest() / CalendarWorkspaceRangeRequest.new instead')
+  static CalendarWorkspaceRangeRequest create() =>
+      CalendarWorkspaceRangeRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      CalendarWorkspaceRangeRequest._();
+  @$core.override
+  CalendarWorkspaceRangeRequest createEmptyInstance() =>
+      CalendarWorkspaceRangeRequest._();
+  @$core.pragma('dart2js:noInline')
+  static CalendarWorkspaceRangeRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CalendarWorkspaceRangeRequest>(
+          CalendarWorkspaceRangeRequest.$_createMessage);
+  static CalendarWorkspaceRangeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get rangeStart => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set rangeStart($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasRangeStart() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRangeStart() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get rangeEnd => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set rangeEnd($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRangeEnd() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRangeEnd() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get includeDone => $_getBF(3);
+  @$pb.TagNumber(4)
+  set includeDone($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasIncludeDone() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIncludeDone() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $pb.PbList<$core.String> get projectIds => $_getList(4);
+}
+
 class GroupCount extends $pb.GeneratedMessage {
   factory GroupCount({
     $core.String? key,

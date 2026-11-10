@@ -125,7 +125,8 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
             )
           : _view == _TaskView.calendar
           ? CalendarView(
-              project: widget.project,
+              scope: widget.project.id,
+              archived: widget.project.isArchived,
               openTaskId: wide ? _selected : null,
               onOpen: openFromView,
             )

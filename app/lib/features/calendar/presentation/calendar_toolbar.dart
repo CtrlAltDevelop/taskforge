@@ -41,12 +41,16 @@ class CalendarToolbar extends ConsumerWidget {
     required this.projectId,
     required this.compact,
     required this.onTray,
+    this.workspaceWide = false,
   });
 
   final String projectId;
 
   /// A phone: only the arrows, today and the tray.
   final bool compact;
+
+  /// The calendar of every project (it can also colour by project).
+  final bool workspaceWide;
 
   /// Opens the tray as a sheet (null when it is a sidebar already).
   final VoidCallback? onTray;
@@ -116,7 +120,11 @@ class CalendarToolbar extends ConsumerWidget {
               tooltip: 'Colour by',
               onSelected: (v) => notifier.update((l) => l.copyWith(colorBy: v)),
               itemBuilder: (_) => [
-                for (final c in const ['status', 'priority'])
+                for (final c in [
+                  if (workspaceWide) 'project',
+                  'status',
+                  'priority',
+                ])
                   CheckedPopupMenuItem(
                     key: Key('cal-color-$c'),
                     value: c,

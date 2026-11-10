@@ -66,6 +66,13 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           ListTile(
+            key: const Key('open-calendar'),
+            leading: const Icon(Icons.calendar_month_outlined),
+            title: const Text('Calendar'),
+            subtitle: const Text('Everything due, across your projects'),
+            onTap: () => context.go('/calendar'),
+          ),
+          ListTile(
             key: const Key('open-sessions'),
             leading: const Icon(Icons.devices),
             title: const Text('Sessions'),

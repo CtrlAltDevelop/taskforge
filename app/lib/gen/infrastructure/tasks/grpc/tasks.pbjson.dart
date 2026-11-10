@@ -254,6 +254,25 @@ final $typed_data.Uint8List calendarTrayRequestDescriptor = $convert.base64Decod
     'QSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhYKBmN1cnNvchgDIAEoCVIGY3Vyc29y'
     'EhsKCXBhZ2Vfc2l6ZRgEIAEoBVIIcGFnZVNpemU=');
 
+@$core.Deprecated('Use calendarWorkspaceRangeRequestDescriptor instead')
+const CalendarWorkspaceRangeRequest$json = {
+  '1': 'CalendarWorkspaceRangeRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'range_start', '3': 2, '4': 1, '5': 9, '10': 'rangeStart'},
+    {'1': 'range_end', '3': 3, '4': 1, '5': 9, '10': 'rangeEnd'},
+    {'1': 'include_done', '3': 4, '4': 1, '5': 8, '10': 'includeDone'},
+    {'1': 'project_ids', '3': 5, '4': 3, '5': 9, '10': 'projectIds'},
+  ],
+};
+
+/// Descriptor for `CalendarWorkspaceRangeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List calendarWorkspaceRangeRequestDescriptor = $convert.base64Decode(
+    'Ch1DYWxlbmRhcldvcmtzcGFjZVJhbmdlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3'
+    'dvcmtzcGFjZUlkEh8KC3JhbmdlX3N0YXJ0GAIgASgJUgpyYW5nZVN0YXJ0EhsKCXJhbmdlX2Vu'
+    'ZBgDIAEoCVIIcmFuZ2VFbmQSIQoMaW5jbHVkZV9kb25lGAQgASgIUgtpbmNsdWRlRG9uZRIfCg'
+    'twcm9qZWN0X2lkcxgFIAMoCVIKcHJvamVjdElkcw==');
+
 @$core.Deprecated('Use groupCountDescriptor instead')
 const GroupCount$json = {
   '1': 'GroupCount',

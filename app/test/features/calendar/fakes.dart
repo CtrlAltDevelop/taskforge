@@ -59,6 +59,31 @@ class FakeCalendarClient implements CalendarClient {
     return snapshot;
   }
 
+  /// The workspace reads, and the project ids they were narrowed to.
+  final workspaceReads = <List<String>>[];
+
+  @override
+  Future<List<Task>> listWorkspaceRange(
+    String workspaceId, {
+    required Day first,
+    required Day last,
+    bool includeDone = true,
+    List<String> projectIds = const [],
+    CancelToken? cancel,
+  }) async {
+    workspaceReads.add(projectIds);
+    tokens.add(cancel);
+    return [
+      for (final t in source.tasks)
+        if (spanOf(t) case final s?
+            when !s.last.isBefore(first) &&
+                !s.first.isAfter(last) &&
+                (includeDone || t.statusCategory != StatusCategory.done) &&
+                (projectIds.isEmpty || projectIds.contains(t.projectId)))
+          t,
+    ];
+  }
+
   @override
   Future<({List<Task> tasks, String cursor})> listUnscheduled(
     String workspaceId,

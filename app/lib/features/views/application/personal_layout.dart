@@ -65,8 +65,12 @@ abstract class PersonalLayoutNotifier<T>
     required int version,
   });
 
+  /// Keep the layout when nobody watches it (a choice that lives for the session).
+  bool get keepAlive => false;
+
   @override
   PersonalLayoutState<T> build() {
+    if (keepAlive) ref.keepAlive();
     _client = ref.watch(viewsClientProvider);
     _workspace = ref.watch(workspaceScopeProvider);
     ref.onDispose(() {

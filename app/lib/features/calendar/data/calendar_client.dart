@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:grpc/grpc.dart' show GrpcError, StatusCode;
+import 'package:grpc/grpc.dart' show GrpcError, ResponseStream, StatusCode;
 import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 
 import 'package:taskforge/core/auth/auth_session.dart';
@@ -35,6 +35,17 @@ abstract interface class CalendarClient {
     CancelToken? cancel,
   });
 
+  /// The same across every project the viewer can open (archived ones left
+  /// out), narrowed to [projectIds] when given.
+  Future<List<Task>> listWorkspaceRange(
+    String workspaceId, {
+    required Day first,
+    required Day last,
+    bool includeDone = true,
+    List<String> projectIds = const [],
+    CancelToken? cancel,
+  });
+
   /// A page of the open tasks that have no dates (the tray).
   Future<({List<Task> tasks, String cursor})> listUnscheduled(
     String workspaceId,
@@ -66,26 +77,11 @@ class GrpcCalendarClient implements CalendarClient {
     }
   }
 
-  @override
-  Future<List<Task>> listRange(
-    String workspaceId,
-    String projectId, {
-    required Day first,
-    required Day last,
-    bool includeDone = true,
+  Future<List<Task>> _read(
+    ResponseStream<pb.Task> call,
     CancelToken? cancel,
-  }) => _run(() async {
+  ) async {
     final seen = <String>{};
-    final call = _stub.listRange(
-      pb.CalendarRangeRequest(
-        workspaceId: workspaceId,
-        projectId: projectId,
-        rangeStart: formatDay(first),
-        rangeEnd: formatDay(last),
-        includeDone: includeDone,
-      ),
-      options: _options,
-    );
     unawaited(cancel?.whenCancelled.then((_) => call.cancel()));
     try {
       return [
@@ -97,7 +93,55 @@ class GrpcCalendarClient implements CalendarClient {
       if (cancel?.isCancelled ?? false) return const <Task>[]; // wanted no more
       rethrow;
     }
-  });
+  }
+
+  @override
+  Future<List<Task>> listRange(
+    String workspaceId,
+    String projectId, {
+    required Day first,
+    required Day last,
+    bool includeDone = true,
+    CancelToken? cancel,
+  }) => _run(
+    () => _read(
+      _stub.listRange(
+        pb.CalendarRangeRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          rangeStart: formatDay(first),
+          rangeEnd: formatDay(last),
+          includeDone: includeDone,
+        ),
+        options: _options,
+      ),
+      cancel,
+    ),
+  );
+
+  @override
+  Future<List<Task>> listWorkspaceRange(
+    String workspaceId, {
+    required Day first,
+    required Day last,
+    bool includeDone = true,
+    List<String> projectIds = const [],
+    CancelToken? cancel,
+  }) => _run(
+    () => _read(
+      _stub.listWorkspaceRange(
+        pb.CalendarWorkspaceRangeRequest(
+          workspaceId: workspaceId,
+          rangeStart: formatDay(first),
+          rangeEnd: formatDay(last),
+          includeDone: includeDone,
+          projectIds: projectIds,
+        ),
+        options: _options,
+      ),
+      cancel,
+    ),
+  );
 
   @override
   Future<({List<Task> tasks, String cursor})> listUnscheduled(

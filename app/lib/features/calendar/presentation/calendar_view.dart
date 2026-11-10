@@ -8,7 +8,6 @@ import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_grid.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_toolbar.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_tray.dart';
-import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -21,19 +20,36 @@ const phoneBreakpoint = 700.0;
 const trayBreakpoint = 900.0;
 const trayWidth = 260.0;
 
-/// A project's tasks by their dates: month, week or day, with drag to move or
-/// resize and a tray of tasks that have no date yet.
+/// Tasks by their dates: month, week or day, with drag to move or resize and
+/// (for one project) a tray of tasks that have no date yet. [scope] is the
+/// project id, or empty for the calendar of every project.
 class CalendarView extends ConsumerStatefulWidget {
   const CalendarView({
     super.key,
-    required this.project,
+    required this.scope,
     required this.onOpen,
+    this.archived = false,
     this.openTaskId,
+    this.projectColor,
+    this.visible,
+    this.legend,
   });
 
-  final Project project;
+  final String scope;
+  final bool archived;
   final void Function(Task) onOpen;
   final String? openTaskId;
+
+  /// The colour of a task's project (for colouring by project).
+  final Color Function(Task)? projectColor;
+
+  /// Which tasks to show (null: all of them).
+  final bool Function(Task)? visible;
+
+  /// Shown under the toolbar (the workspace calendar's project chips).
+  final Widget? legend;
+
+  bool get workspaceWide => scope.isEmpty;
 
   @override
   ConsumerState<CalendarView> createState() => _CalendarViewState();
@@ -42,7 +58,7 @@ class CalendarView extends ConsumerStatefulWidget {
 class _CalendarViewState extends ConsumerState<CalendarView> {
   Day? _picked; // the agenda's chosen day
 
-  String get _id => widget.project.id;
+  String get _id => widget.scope;
 
   @override
   void didChangeDependencies() {
@@ -60,8 +76,11 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
   Color _colorOf(Task task, String colorBy) {
     if (colorBy == 'priority') return priorityColor(task.priority);
+    if (colorBy == 'project' && widget.projectColor != null) {
+      return widget.projectColor!(task);
+    }
     return ref
-            .read(workflowProvider(_id))
+            .read(workflowProvider(task.projectId))
             .value
             ?.statusById(task.statusId)
             ?.swatch ??
@@ -81,8 +100,8 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       due: parseDay(task.dueDate),
     );
     if (dates == current) return;
-    final tray = ref.read(trayProvider(_id).notifier);
-    if (fromTray) tray.remove(task.id);
+    final tray = fromTray ? ref.read(trayProvider(_id).notifier) : null;
+    tray?.remove(task.id);
     try {
       await ref.read(calendarProvider(_id).notifier).reschedule(task, dates);
       final warning = linkWarning(task, dates);
@@ -93,7 +112,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         );
       }
     } on TaskException catch (e) {
-      if (fromTray) tray.restore(task);
+      tray?.restore(task);
       if (mounted) _say(taskErrorMessage(e));
     }
   }
@@ -168,13 +187,20 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   @override
   Widget build(BuildContext context) {
     final layout = ref.watch(calendarLayoutProvider(_id)).layout;
-    final state = ref.watch(calendarProvider(_id));
+    final read = ref.watch(calendarProvider(_id));
+    final state = widget.visible == null
+        ? read
+        : read.copyWith(tasks: read.tasks.where(widget.visible!).toList());
+    // Status colours come from each task's own project's workflow: watch those
+    // so the colours fill in as they load.
+    for (final id in {for (final t in read.tasks) t.projectId}) {
+      ref.watch(workflowProvider(id));
+    }
     final anchor = ref.watch(calendarAnchorProvider(_id));
     final weekStart = ref.watch(weekStartProvider(_id));
     final today = ref.watch(todayProvider);
     final permissions = ref.watch(permissionSetProvider);
-    final canMove =
-        !widget.project.isArchived && permissions.can(Perm.taskUpdate);
+    final canMove = !widget.archived && permissions.can(Perm.taskUpdate);
     ref.listen(calendarAnchorProvider(_id), (_, _) {
       if (_picked != null) setState(() => _picked = null);
     });
@@ -186,7 +212,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             ref.read(compactCalendarProvider.notifier).set(phone);
           }
         });
-        final sidebar = box.maxWidth >= trayBreakpoint;
+        final sidebar = !widget.workspaceWide && box.maxWidth >= trayBreakpoint;
         final mode = phone ? CalendarMode.month : modeOf(layout);
         final range = visibleRange(mode, anchor, weekStart);
         final weeks = (daysBetween(range.first, range.last) + 1) ~/ 7;
@@ -237,7 +263,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             month: mode == CalendarMode.month ? anchor.month : null,
             maxLanes: mode == CalendarMode.month ? 3 : 30,
             canMove: canMove,
-            longPress: !sidebar,
+            longPress: box.maxWidth < trayBreakpoint,
             openTaskId: widget.openTaskId,
             colorOf: colorOf,
             onOpen: widget.onOpen,
@@ -251,8 +277,12 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             CalendarToolbar(
               projectId: _id,
               compact: phone,
-              onTray: sidebar ? null : () => _openTray(canMove),
+              workspaceWide: widget.workspaceWide,
+              onTray: sidebar || widget.workspaceWide
+                  ? null
+                  : () => _openTray(canMove),
             ),
+            if (widget.legend != null) widget.legend!,
             if (state.loading)
               const LinearProgressIndicator(key: Key('calendar-loading')),
             if (state.error != null)
