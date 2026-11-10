@@ -221,3 +221,73 @@ def test_a_huge_relative_date_in_a_client_ast_is_refused(team: Any, project: Any
 
     with pytest.raises(ApiError):
         services.list_page(team.member, team.ws, str(project.pk), filter_ast=json.dumps(ast))
+
+
+def _workspace_titles(team: Any, text: str, who: Any = None) -> list[str]:
+    from infrastructure.filters import language as lang
+    from infrastructure.tasks import calendar as cal
+
+    ast = json.dumps(lang.parse_text(text, Catalogue(None, team.ws)))
+    return sorted(
+        t.title
+        for chunk in cal.iter_workspace_range(
+            who or team.member,
+            team.ws,
+            "2026-11-01",
+            "2026-11-30",
+            filter_ast=ast,
+            today="2026-11-10",
+        )
+        for t in chunk
+    )
+
+
+def test_the_workspace_calendar_takes_a_workspace_level_filter(team: Any, project: Any) -> None:
+    other = team.create(team.owner, "API", name="Api")
+    _make(team, project, "web high", priority="high", due_date="2026-11-05")
+    services.create(
+        team.owner, team.ws, str(other.pk), "api high mine", priority="high",
+        due_date="2026-11-06", assignee_ids=[str(team.member.pk)],
+    )  # fmt: skip
+    services.create(team.owner, team.ws, str(other.pk), "api low", due_date="2026-11-07")
+
+    assert _workspace_titles(team, "priority = high") == ["api high mine", "web high"]
+    assert _workspace_titles(team, "priority = high AND assignee = me") == ["api high mine"]
+    assert _workspace_titles(team, f"assignee = {team.member.username}") == ["api high mine"]
+    assert _workspace_titles(team, "due >= +0d AND due <= +2d") == []
+    assert _workspace_titles(team, "category = not_started AND title ~ \"api\"") == [
+        "api high mine", "api low"
+    ]  # fmt: skip
+
+
+def test_a_workspace_level_filter_has_no_project_fields(team: Any) -> None:
+    from infrastructure.filters import language as lang
+
+    for text in ("status = Done", "id = 3", "sprint = currentSprint()", '"Points" > 3'):
+        with pytest.raises(lang.QueryError) as caught:
+            lang.parse_text(text, Catalogue(None, team.ws))
+        assert caught.value.position == 0
+    assert "status" not in Catalogue(None, team.ws).field_names()
+
+
+def test_a_workspace_filter_never_widens_the_visible_projects(team: Any, project: Any) -> None:
+    hidden = team.create(team.owner, "SEC", visibility="private", name="Secret")
+    _make(team, project, "web", priority="high", due_date="2026-11-05")
+    services.create(
+        team.owner, team.ws, str(hidden.pk), "secret", priority="high", due_date="2026-11-05"
+    )
+
+    assert _workspace_titles(team, "priority = high") == ["web"]
+    assert _workspace_titles(team, "priority = high", who=team.owner) == ["secret", "web"]
+
+
+def test_a_workspace_level_filter_also_works_inside_a_project(team: Any, project: Any) -> None:
+    from infrastructure.filters import language as lang
+
+    _make(team, project, "hot", priority="high")
+    _make(team, project, "cold")
+    ast = json.dumps(lang.parse_text("priority = high", Catalogue(None, team.ws)))
+
+    page, _ = services.list_page(team.member, team.ws, str(project.pk), filter_ast=ast)
+
+    assert [t.title for t in page] == ["hot"]

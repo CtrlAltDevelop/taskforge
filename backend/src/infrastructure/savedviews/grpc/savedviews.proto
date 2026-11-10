@@ -46,6 +46,16 @@ message CalendarLayoutResponse {
     bool hide_done = 4;
 }
 
+message FilterLayout {
+    string ast_json = 1;
+    string saved_id = 2;
+}
+
+message FilterLayoutResponse {
+    string ast_json = 1;
+    string saved_id = 2;
+}
+
 message Layout {
     repeated string columns = 1;
     repeated LayoutWidth widths = 2;
@@ -92,6 +102,7 @@ message SavedView {
     string updated_at = 9;
     BoardLayoutResponse board = 10;
     CalendarLayoutResponse calendar = 11;
+    FilterLayoutResponse active_filter = 12;
 }
 
 message ViewDeleteRequest {
@@ -121,5 +132,6 @@ message ViewSaveRequest {
     bool shared = 8;
     BoardLayout board = 9;
     CalendarLayout calendar = 10;
+    FilterLayout active_filter = 11;
 }
 

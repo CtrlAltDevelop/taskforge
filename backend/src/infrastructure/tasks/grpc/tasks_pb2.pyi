@@ -377,10 +377,14 @@ class CalendarWorkspaceRangeRequest(_message.Message):
     RANGE_END_FIELD_NUMBER: _builtins.int
     INCLUDE_DONE_FIELD_NUMBER: _builtins.int
     PROJECT_IDS_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     range_start: _builtins.str
     range_end: _builtins.str
     include_done: _builtins.bool
+    filter_ast: _builtins.str
+    today: _builtins.str
     @_builtins.property
     def project_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
@@ -391,10 +395,12 @@ class CalendarWorkspaceRangeRequest(_message.Message):
         range_end: _builtins.str = ...,
         include_done: _builtins.bool = ...,
         project_ids: _abc.Iterable[_builtins.str] | None = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_done", b"include_done", "project_ids", b"project_ids", "range_end", b"range_end", "range_start", b"range_start", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["filter_ast", b"filter_ast", "include_done", b"include_done", "project_ids", b"project_ids", "range_end", b"range_end", "range_start", b"range_start", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

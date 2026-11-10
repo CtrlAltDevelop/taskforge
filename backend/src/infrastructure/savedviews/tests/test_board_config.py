@@ -87,3 +87,44 @@ def test_a_calendar_layout_round_trips_and_gets_defaults(team: Any, project: Any
 def test_a_calendar_layout_that_means_nothing_is_refused(bad: Any) -> None:
     with pytest.raises(ApiError):
         config.clean_calendar(bad)
+
+
+def test_a_filter_layout_defaults_and_refuses_what_means_nothing() -> None:
+    assert config.clean_filter({}) == {"ast": None, "saved_id": ""}
+    assert config.clean_filter({"ast": {}, "saved_id": "x"}) == {"ast": None, "saved_id": "x"}
+    bads: list[Any] = [{"ast": "x"}, {"saved_id": 3}, {"saved_id": "x" * 65}, {"zoom": 1}, []]
+    for bad in bads:
+        with pytest.raises(ApiError):
+            config.clean_filter(bad)
+
+
+def test_the_active_filter_is_kept_per_person_and_checked_against_the_project(
+    team: Any, project: Any
+) -> None:
+    from infrastructure.filters import language
+    from infrastructure.filters.language import Catalogue
+
+    ast = language.parse_text("priority = high ORDER BY due", Catalogue(project, team.ws))
+    saved = services.save(
+        team.member, team.ws, str(project.pk), name="Mine", config={"ast": ast, "saved_id": "f1"},
+        kind="filter",
+    )  # fmt: skip
+
+    [got] = services.list_views(team.member, team.ws, str(project.pk), "filter")
+
+    assert got.pk == saved.pk and got.config == {"ast": ast, "saved_id": "f1"}
+    assert services.list_views(team.admin, team.ws, str(project.pk), "filter") == []
+    bads: list[dict[str, Any]] = [
+        {"ast": {"where": {"op": "cmp", "field": "nope", "cmp": "eq", "values": []}, "order": []}},
+        {"ast": {"where": {"op": "boom"}}},
+    ]
+    for bad in bads:
+        with pytest.raises(ApiError):
+            services.save(
+                team.member, team.ws, str(project.pk), name="Other", config=bad, kind="filter"
+            )
+    cleared = services.save(
+        team.member, team.ws, str(project.pk), name="Mine", config={"ast": None},
+        kind="filter", view_id=str(saved.pk), expected_version=1,
+    )  # fmt: skip
+    assert cleared.config == {"ast": None, "saved_id": ""} and cleared.version == 2

@@ -10,18 +10,22 @@ VIEW_LIMIT at 50 layouts, ALREADY_EXISTS VIEW_NAME_TAKEN. Other refusals as in
 ``infrastructure.projects.grpc.services``.
 """
 
+import json
 from typing import Any
 
 from asgiref.sync import sync_to_async
 from django_socio_grpc import generics
 from django_socio_grpc.decorators import grpc_action
 
+from infrastructure.common.errors import ApiError
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
+from infrastructure.common.responses import ResponseTitle
 from infrastructure.savedviews import services
 from infrastructure.savedviews.grpc.serializers import (
     BoardLayout,
     CalendarLayout,
+    FilterLayout,
     Layout,
     SavedView,
 )
@@ -88,6 +92,21 @@ def _calendar_config(calendar: Any) -> dict[str, Any]:
     }
 
 
+def _filter(config: dict[str, Any]) -> Any:
+    return _pb().FilterLayoutResponse(
+        ast_json=json.dumps(config["ast"]) if config["ast"] else "",
+        saved_id=config["saved_id"],
+    )
+
+
+def _filter_config(active: Any) -> dict[str, Any]:
+    try:
+        ast = json.loads(active.ast_json) if active.ast_json else None
+    except (ValueError, RecursionError):
+        raise ApiError("The filter is not JSON.", title=ResponseTitle.VIEW_INVALID) from None
+    return {"ast": ast, "saved_id": active.saved_id}
+
+
 def _config(layout: Any) -> dict[str, Any]:
     return {
         "columns": list(layout.columns),
@@ -101,6 +120,7 @@ def _message(view: ViewRow) -> Any:
     shape = {
         "board": lambda: {"board": _board(view.config)},
         "calendar": lambda: {"calendar": _calendar(view.config)},
+        "filter": lambda: {"active_filter": _filter(view.config)},
     }.get(view.kind, lambda: {"layout": _layout(view.config)})()
     return _pb().SavedView(
         **shape,
@@ -120,6 +140,8 @@ def _requested_config(request: Any) -> dict[str, Any]:
         return _board_config(request.board)
     if request.kind == "calendar":
         return _calendar_config(request.calendar)
+    if request.kind == "filter":
+        return _filter_config(request.active_filter)
     return _config(request.layout)
 
 
@@ -158,6 +180,7 @@ class ViewService(generics.GenericService):
             {"name": "shared", "type": "bool"},
             {"name": "board", "type": BoardLayout},
             {"name": "calendar", "type": CalendarLayout},
+            {"name": "active_filter", "type": FilterLayout},
         ],
         request_name="ViewSaveRequest",
         response=SavedView,

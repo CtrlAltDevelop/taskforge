@@ -131,6 +131,8 @@ message CalendarWorkspaceRangeRequest {
     string range_end = 3;
     bool include_done = 4;
     repeated string project_ids = 5;
+    string filter_ast = 6;
+    string today = 7;
 }
 
 message GroupCount {

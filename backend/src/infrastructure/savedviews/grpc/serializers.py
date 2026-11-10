@@ -62,6 +62,14 @@ class CalendarLayout(serializers.Serializer[dict[str, object]]):
     hide_done = serializers.BooleanField()
 
 
+class FilterLayout(serializers.Serializer[dict[str, object]]):
+    """The filter a person has on a project's views: its AST as JSON (empty: none) and the id of
+    the saved filter it is, if it still is that one."""
+
+    ast_json = serializers.CharField()
+    saved_id = serializers.CharField()
+
+
 class SavedView(serializers.Serializer[dict[str, object]]):
     """A saved layout. ``owner_id`` is empty for a shared one (``is_shared``); ``version`` is the
     optimistic lock to send back when saving it again."""
@@ -75,5 +83,6 @@ class SavedView(serializers.Serializer[dict[str, object]]):
     layout = Layout()
     board = BoardLayout()  # set instead of ``layout`` for a ``board`` view
     calendar = CalendarLayout()  # set instead of ``layout`` for a ``calendar`` view
+    active_filter = FilterLayout()  # set instead of ``layout`` for a ``filter`` view
     version = serializers.IntegerField()
     updated_at = serializers.CharField()

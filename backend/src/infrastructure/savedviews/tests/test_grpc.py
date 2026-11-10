@@ -1,6 +1,7 @@
 """ViewController over a real gRPC server: the contract, status codes, titles and trailers.
 The rules are tested on the services."""
 
+import json
 from collections.abc import Callable
 from typing import Any
 
@@ -186,3 +187,20 @@ def test_a_calendar_layout_round_trips_over_the_wire(team: Any, grpc_call: GrpcC
     assert got.kind == "calendar"
     assert (got.calendar.mode, got.calendar.color_by) == ("day", "priority")
     assert (got.calendar.week_start, got.calendar.hide_done) == (7, True)
+
+
+def test_the_active_filter_round_trips_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
+    ast = {
+        "where": {
+            "op": "cmp", "field": "priority", "cmp": "eq", "values": [{"k": "id", "v": "high"}]
+        },
+        "order": [],
+    }  # fmt: skip
+    active = pb.FilterLayout(ast_json=json.dumps(ast), saved_id="f1")
+
+    _save(grpc_call, team, kind="filter", active_filter=active)
+    request = pb.ViewListRequest(workspace_id=team["ws"], project_id=team["project"], kind="filter")
+    [got] = grpc_call(V, "List", request, token=team["tokens"]["max"]).views
+
+    assert got.kind == "filter" and got.active_filter.saved_id == "f1"
+    assert json.loads(got.active_filter.ast_json) == ast

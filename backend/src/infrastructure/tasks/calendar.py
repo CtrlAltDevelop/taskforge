@@ -101,18 +101,24 @@ def iter_workspace_range(
     *,
     include_done: bool = True,
     project_ids: Sequence[str] = (),
+    filter_ast: str = "",
+    today: str = "",
 ) -> Iterator[list[Task]]:
     """The same across every project ``actor`` can open and that is not archived (``project_ids``
-    narrows it; an id the caller cannot open is ignored), in task-id order."""
+    narrows it; an id the caller cannot open is ignored), in task-id order. ``filter_ast`` is a
+    workspace-level filter (see ``filters.query.prepare_workspace``)."""
     start, end = _window(first, last)
     access.require(actor, services.VIEW, workspace)
     projects = Project.objects.visible_to(actor, workspace).filter(archived_at__isnull=True)
     if project_ids:
         projects = projects.filter(pk__in=services.valid_uuids(project_ids))
+    extra = filter_query.prepare_workspace(workspace, filter_ast, today, actor).where
     rows = Task.objects.filter(project__in=projects, deleted_at__isnull=True).select_related(
         "project", "status"
     )
-    yield from _stream(actor, workspace, _on_days(rows, start, end, include_done), "id")
+    if extra:
+        rows = rows.filter(extra)
+    yield from _stream(actor, workspace, _on_days(rows, start, end, include_done), "id", extra)
 
 
 def list_range(

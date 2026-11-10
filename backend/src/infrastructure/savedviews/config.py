@@ -172,7 +172,29 @@ def clean_calendar(raw: Any) -> dict[str, Any]:
     return {"mode": mode, "color_by": color_by, "week_start": week_start, "hide_done": hide_done}
 
 
+FILTER_KEYS: Final = ("ast", "saved_id")
+
+
+def clean_filter(raw: Any) -> dict[str, Any]:
+    """The filter a person has on a project's views: its AST (``None``: no filter; checked
+    against the project by the service) and the saved filter it is, if it still is that one."""
+    if not isinstance(raw, dict):
+        raise invalid("A layout is an object.")
+    unknown = set(raw) - set(FILTER_KEYS)
+    if unknown:
+        raise invalid(f"Unknown layout key: {sorted(unknown)[0]}.")
+    ast = raw.get("ast")
+    if ast is not None and not isinstance(ast, dict):
+        raise invalid("ast is a filter or null.")
+    saved_id = raw.get("saved_id", "")
+    if not isinstance(saved_id, str) or len(saved_id) > 64:
+        raise invalid("saved_id is a filter id or empty.")
+    return {"ast": ast or None, "saved_id": saved_id}
+
+
 def clean_for(kind: str, raw: Any) -> dict[str, Any]:
     if kind == "board":
         return clean_board(raw)
-    return clean_calendar(raw) if kind == "calendar" else clean(raw)
+    if kind == "calendar":
+        return clean_calendar(raw)
+    return clean_filter(raw) if kind == "filter" else clean(raw)

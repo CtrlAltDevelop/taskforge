@@ -47,7 +47,7 @@ def _catalogue(actor: Any, workspace: Workspace, project_id: str) -> Catalogue:
     if project_id:
         return Catalogue(task_services.project_for_view(actor, workspace, project_id))
     access.require(actor, VIEW, workspace)
-    return Catalogue(None)
+    return Catalogue(None, workspace)
 
 
 @dataclass(frozen=True, slots=True)
@@ -261,7 +261,7 @@ def list_filters(
     shared ones first, each with its text rendered with today's names. One that no longer holds
     up (a field was removed) is listed with an empty text."""
     project = _scope_project(actor, workspace, project_id)
-    cat = Catalogue(project)
+    cat = Catalogue(project, workspace)
     rows = sorted(
         _visible(workspace, project, actor),
         key=lambda f: (f.visibility == Visibility.PRIVATE, f.name.lower()),
@@ -334,7 +334,7 @@ def save(
     is ``text`` (TFQL) or, when that is empty, ``ast_json``. Returns it with its rendered text."""
     cleaned = _name(name)
     project = _scope_project(actor, workspace, project_id)
-    cat = Catalogue(project)
+    cat = Catalogue(project, workspace)
     checked = validate_catalogue(cat, text, ast_json)
     try:
         with transaction.atomic():

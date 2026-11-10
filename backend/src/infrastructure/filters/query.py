@@ -21,6 +21,7 @@ from infrastructure.filters import compile as compiler
 from infrastructure.filters import language
 from infrastructure.filters.language import Catalogue, QueryError
 from infrastructure.projects.models import Project
+from infrastructure.workspaces.models import Workspace
 
 STATEMENT_TIMEOUT_MS: Final = 5000
 
@@ -53,17 +54,16 @@ def _today(raw: str) -> date:
         ) from None
 
 
-def prepare(project: Project, filter_ast: str, today: str, actor: Any) -> Prepared:
-    """The condition and ordering of ``filter_ast`` (a JSON AST; empty: no filter) for
-    ``project``. ``today`` (``YYYY-MM-DD``, default the server's) is what relative dates count
-    from."""
+def _prepare(
+    make_catalogue: Callable[[], Catalogue], filter_ast: str, today: str, actor: Any
+) -> Prepared:
     if not filter_ast:
         return NOTHING
     try:
         raw = json.loads(filter_ast)
     except (ValueError, RecursionError):
         raise ApiError("The filter is not JSON.", title=ResponseTitle.FILTER_INVALID) from None
-    cat = Catalogue(project)
+    cat = make_catalogue()
     try:
         ast = language.canonical(raw, cat)
         return Prepared(compiler.where(ast, cat, _today(today), actor), compiler.order(ast, cat))
@@ -71,6 +71,19 @@ def prepare(project: Project, filter_ast: str, today: str, actor: Any) -> Prepar
         raise invalid(error) from None
     except RecursionError:
         raise ApiError("The filter nests too deeply.", title=ResponseTitle.FILTER_INVALID) from None
+
+
+def prepare(project: Project, filter_ast: str, today: str, actor: Any) -> Prepared:
+    """The condition and ordering of ``filter_ast`` (a JSON AST; empty: no filter) for
+    ``project``. ``today`` (``YYYY-MM-DD``, default the server's) is what relative dates count
+    from."""
+    return _prepare(lambda: Catalogue(project), filter_ast, today, actor)
+
+
+def prepare_workspace(workspace: Workspace, filter_ast: str, today: str, actor: Any) -> Prepared:
+    """The same for a filter over every project of ``workspace``: only the fields that mean the
+    same in every project (no status, id, sprint or custom field)."""
+    return _prepare(lambda: Catalogue(None, workspace), filter_ast, today, actor)
 
 
 @contextmanager

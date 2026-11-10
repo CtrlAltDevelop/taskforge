@@ -17,6 +17,7 @@ from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
+from infrastructure.filters import language as filter_language
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project
 from infrastructure.savedviews import config as layout
@@ -26,7 +27,7 @@ from infrastructure.workspaces.models import Workspace
 
 VIEW = "workspace.view"
 MANAGE = "project.update"
-KINDS: Final = ("list", "board", "calendar")
+KINDS: Final = ("list", "board", "calendar", "filter")
 MAX_PER_SCOPE: Final = 50
 MAX_NAME: Final = 60
 
@@ -135,6 +136,21 @@ def save(
         raise _name_taken() from None
 
 
+def _checked_filter(
+    project: Project, workspace: Workspace, config: dict[str, Any]
+) -> dict[str, Any]:
+    """The filter held in ``config`` read against ``project`` (it must still mean something)."""
+    if config["ast"] is None:
+        return config
+    try:
+        ast = filter_language.canonical(
+            config["ast"], filter_language.Catalogue(project, workspace)
+        )
+    except filter_language.QueryError as error:
+        raise ApiError(error.message, title=ResponseTitle.VIEW_INVALID) from None
+    return {**config, "ast": ast}
+
+
 def _write(
     actor: Any,
     workspace: Workspace,
@@ -148,6 +164,8 @@ def _write(
         _manage(actor, workspace, project_id) if shared else _open(actor, workspace, project_id)
     )
     kind = values["kind"]
+    if kind == "filter":
+        values["config"] = _checked_filter(project, workspace, values["config"])
     if view_id:
         view = _load(project, actor, view_id, lock=True)
         if view.is_shared and not shared:

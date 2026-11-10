@@ -31,7 +31,7 @@ from infrastructure.filters.tfql import QueryError
 from infrastructure.projects.models import Project
 from infrastructure.tasks.models import Priority
 from infrastructure.workflows.models import Category, Status
-from infrastructure.workspaces.models import MemberStatus, WorkspaceMember
+from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
 
 OPS_BY_SYMBOL: Final = {
     "=": "eq",
@@ -76,6 +76,7 @@ KIND_OPS: Final = {
     "sprint": ("eq", "ne"),
 }
 MAX_ORDER: Final = 3  # what a list can sort by (``tasks.listing.MAX_SORT``)
+PROJECT_ONLY: Final = frozenset({"status", "id", "sprint"})  # meaningless across projects
 RELATIVE_UNITS: Final = ("d", "w", "m", "y")
 MAX_RELATIVE: Final = {"d": 36500, "w": 5200, "m": 1200, "y": 100}  # about a century either way
 BARE: Final = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
@@ -123,9 +124,18 @@ _CUSTOM_KINDS: Final = {
 class Catalogue:
     """What a project's queries can name: its fields, statuses, options and people."""
 
-    def __init__(self, project: Project | None) -> None:
+    def __init__(self, project: Project | None, workspace: Workspace | None = None) -> None:
+        """With no ``project`` (a workspace-level filter, over every project) only the built-in
+        fields that mean the same everywhere are known: not status, id or sprint, and no custom
+        field."""
         self.project = project
-        self.builtin = {f.name: f for f in BUILTINS}
+        scope = (
+            project.workspace_id if project is not None else (workspace.pk if workspace else None)
+        )
+        self.workspace_id = scope
+        self.builtin = {
+            f.name: f for f in BUILTINS if project is not None or f.name not in PROJECT_ONLY
+        }
         self.custom: dict[str, Field] = {}
         self.definitions: dict[str, FieldDefinition] = {}
         self.statuses: list[Status] = []
@@ -155,6 +165,12 @@ class Catalogue:
             return self.builtin[name]
         if name in self.custom:
             return self.custom[name]
+        if self.project is None and name in PROJECT_ONLY:
+            raise QueryError(
+                f"{token.text} needs a project: use it in a project's filter.",
+                token.pos,
+                token.length,
+            )
         raise QueryError(f"Unknown field {token.text!r}.", token.pos, token.length)
 
     def by_ref(self, ref: str) -> Field:
@@ -173,11 +189,11 @@ class Catalogue:
     def users(self) -> dict[str, Any]:
         """username (lower case) -> user, for the active members of the project's workspace."""
         if self._users is None:
-            if self.project is None:
+            if self.workspace_id is None:
                 self._users = {}
             else:
                 active = WorkspaceMember.objects.filter(
-                    workspace_id=self.project.workspace_id, status=MemberStatus.ACTIVE
+                    workspace_id=self.workspace_id, status=MemberStatus.ACTIVE
                 ).values_list("user_id", flat=True)
                 found = get_user_model().objects.filter(pk__in=active)
                 self._users = {u.username.lower(): u for u in found}

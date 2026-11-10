@@ -68,6 +68,7 @@ class CalendarService(generics.GenericService):
             {"name": "range_end", "type": "string"},
             {"name": "include_done", "type": "bool"},
             {"name": "project_ids", "cardinality": "repeated", "type": "string"},
+            *FILTER,
         ],
         request_name="CalendarWorkspaceRangeRequest",
         response=Task,
@@ -84,6 +85,8 @@ class CalendarService(generics.GenericService):
             request.range_end,
             include_done=request.include_done,
             project_ids=list(request.project_ids),
+            filter_ast=request.filter_ast,
+            today=request.today,
         )
         while (chunk := await sync_to_async(_next_chunk)(chunks)) is not None:
             for message in chunk:
