@@ -67,7 +67,8 @@ socket, an Unfold admin, CI, and a response-envelope convention. Per phase:
 rewriting auth; 19 builds on its `notifications` app; 37 enables its
 `auth_twofactor` and `oauth_*` apps. Read its `docs/` before writing any
 backend code, and keep apps that TaskForge does not need (shop, wallet, club,
-cms, support) switched off. Gap to verify in phase 00: the starter has no
+cms, support) switched off. TaskForge's own apps live under `infrastructure/`
+(`tasks`, `customfields`, `savedviews` for saved view layouts, ...). Gap to verify in phase 00: the starter has no
 Celery/Channels group layer by default — check how its socket publishes before
 phase 16.
 

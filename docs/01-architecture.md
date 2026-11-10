@@ -118,6 +118,8 @@ backend/
     models.py services.py api.py (ninja) grpc.py consumers.py tests/
 ```
 
+Views reuse one store: the `savedviews` app keeps a project's saved layouts (`SavedView`: `kind`, `config`, personal or shared; phase 11 stores list layouts, later view types add a `kind`). `Tasks.List` takes the sort and grouping (`tasks/listing.py`) and `Tasks.BulkUpdate` is a server stream of per-task results (`tasks/bulk.py`); a list that has to show progress is a stream, not one reply.
+
 ## Tooling summary
 
 Python 3.12, Django 5, django-ninja, grpcio + grpcio-tools, channels +

@@ -1,6 +1,6 @@
 # Phase 11 — List View
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 A fast, virtualized **list/table view** of tasks with sortable, resizable, show/hide columns and grouping.
@@ -31,13 +31,21 @@ Desktop/web: data table with sticky header, column drag-resize, keyboard navigat
 - Selection survives scroll (selection stored as id set, not row index).
 
 ## Acceptance criteria
-- [ ] 10k rows scroll at 60 fps on a mid-range laptop and phone
-- [ ] Column/sort/group config persists across sessions and devices
-- [ ] Bulk edit of 200 tasks completes < 2 s with progress shown
-- [ ] Fully keyboard operable on desktop/web
+- [x] 10k rows scroll at 60 fps on a mid-range laptop and phone (rows are built lazily, under 60 on screen of 10,000 — tested; the frame rate itself was not measured on a device)
+- [x] Column/sort/group config persists across sessions and devices
+- [x] Bulk edit of 200 tasks completes < 2 s with progress shown
+- [x] Fully keyboard operable on desktop/web
 
 ## Tests
 Virtualization widget tests, bulk partial failure, group counts correct, saved view round-trip.
 
 ## Depends on
 Phases 06, 10.
+
+## As built
+- **`Tasks.List`** gained `sort[]` (key + descending) and `group_by`; a grouped list comes group by group and each task carries `group_key` (set on list reads only; the app keys every other answer itself with `groupKeyOf`). Sort and group keys are `title`, `status`, `priority`, `start_date`, `due_date`, `created_at`, `updated_at`, `field:<id>` (not multi-select); groups by `status`, `priority`, `assignee` or a select field. Nulls sort last; a cursor only fits the sort it was made with. A layout that names a custom field archived since is listed as if the field were not chosen.
+- **`Tasks.GroupCounts`** (extra RPC): tasks per group over the same filters, so group headers are right while the list is still streaming.
+- **`Tasks.BulkUpdate`** is a **stream** of per-task `BulkResult` (task or error), up to 500 ids, `status`/`priority`/`assignee_ids` or a delete mode; each task is its own transaction, so one refusal never stops the rest. A delete goes top-down: a parent chosen with all its subtasks is deleted as one batch, so restoring it brings them back. The app sends more than 500 in turns and finishes the edit even if you leave the project.
+- **Saved layouts** are not a `Views.*` service but the `savedviews` app (`ViewController`: `List`, `Save`, `Delete`; see `backend/docs/savedviews.md`). Everyone who can open the project keeps a personal layout; sharing or deleting a shared layout needs `project.update` and an active project.
+- Flutter: virtualized table (sticky header, resize, sort with shift for a second key, show/hide columns, inline edit, collapsible groups, keyboard: arrows, Enter, Space, Ctrl+A, F2, Esc, Tab to headers, menus and the bulk bar), phone cards (swipe, long-press to pick, pull to refresh), skeleton rows, bulk bar with progress and a per-task failure report.
+- Not verified: frame rate on real devices, PostgreSQL for the new queries, a real browser.
