@@ -3,6 +3,7 @@ import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/calendar_layout.dart';
 import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/features/views/domain/timeline_layout.dart';
 
 /// In-memory saved layouts: the person's own and the project's shared ones.
 class FakeViewsClient implements ViewsClient {
@@ -192,6 +193,43 @@ class FakeViewsClient implements ViewsClient {
       calendars.add(saved);
     } else {
       calendars[i] = saved;
+    }
+    return saved;
+  }
+
+  /// The saved timelines, and every save of one.
+  final timelines = <SavedTimeline>[];
+  final timelineSaves = <({String name, TimelineLayout layout, String id})>[];
+
+  @override
+  Future<List<SavedTimeline>> listTimelines(
+    String workspaceId,
+    String projectId,
+  ) async => [...timelines];
+
+  @override
+  Future<SavedTimeline> saveTimeline(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required TimelineLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  }) async {
+    timelineSaves.add((name: name, layout: layout, id: id));
+    final i = timelines.indexWhere((c) => c.id == id);
+    final saved = SavedTimeline(
+      id: id.isEmpty ? 't${timelines.length + 1}' : id,
+      name: name,
+      layout: layout,
+      isShared: shared,
+      version: i < 0 ? 1 : timelines[i].version + 1,
+    );
+    if (i < 0) {
+      timelines.add(saved);
+    } else {
+      timelines[i] = saved;
     }
     return saved;
   }

@@ -1025,3 +1025,243 @@ final $typed_data.Uint8List taskUpdateRequestDescriptor = $convert.base64Decode(
     'VsZFZhbHVlUgtmaWVsZFZhbHVlcxIeCghkdWVfdGltZRgPIAEoCUgGUgdkdWVUaW1liAEBQggK'
     'Bl90aXRsZUIOCgxfZGVzY3JpcHRpb25CCQoHX3N0YXR1c0ILCglfcHJpb3JpdHlCDQoLX3N0YX'
     'J0X2RhdGVCCwoJX2R1ZV9kYXRlQgsKCV9kdWVfdGltZQ==');
+
+@$core.Deprecated('Use timelineAppliedDescriptor instead')
+const TimelineApplied$json = {
+  '1': 'TimelineApplied',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+  ],
+};
+
+/// Descriptor for `TimelineApplied`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineAppliedDescriptor = $convert.base64Decode(
+    'Cg9UaW1lbGluZUFwcGxpZWQSKAoFdGFza3MYASADKAsyEi5jb25maWcudGFza3MuVGFza1IFdG'
+    'Fza3M=');
+
+@$core.Deprecated('Use timelineApplyRequestDescriptor instead')
+const TimelineApplyRequest$json = {
+  '1': 'TimelineApplyRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'task_id', '3': 3, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'start_date', '3': 4, '4': 1, '5': 9, '10': 'startDate'},
+    {'1': 'due_date', '3': 5, '4': 1, '5': 9, '10': 'dueDate'},
+    {'1': 'expected_version', '3': 6, '4': 1, '5': 5, '10': 'expectedVersion'},
+    {'1': 'affected_ids', '3': 7, '4': 3, '5': 9, '10': 'affectedIds'},
+  ],
+};
+
+/// Descriptor for `TimelineApplyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineApplyRequestDescriptor = $convert.base64Decode(
+    'ChRUaW1lbGluZUFwcGx5UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
+    'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIXCgd0YXNrX2lkGAMgASgJUgZ0YXNr'
+    'SWQSHQoKc3RhcnRfZGF0ZRgEIAEoCVIJc3RhcnREYXRlEhkKCGR1ZV9kYXRlGAUgASgJUgdkdW'
+    'VEYXRlEikKEGV4cGVjdGVkX3ZlcnNpb24YBiABKAVSD2V4cGVjdGVkVmVyc2lvbhIhCgxhZmZl'
+    'Y3RlZF9pZHMYByADKAlSC2FmZmVjdGVkSWRz');
+
+@$core.Deprecated('Use timelineChunkDescriptor instead')
+const TimelineChunk$json = {
+  '1': 'TimelineChunk',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+    {
+      '1': 'links',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TimelineLink',
+      '10': 'links'
+    },
+  ],
+};
+
+/// Descriptor for `TimelineChunk`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineChunkDescriptor = $convert.base64Decode(
+    'Cg1UaW1lbGluZUNodW5rEigKBXRhc2tzGAEgAygLMhIuY29uZmlnLnRhc2tzLlRhc2tSBXRhc2'
+    'tzEjAKBWxpbmtzGAIgAygLMhouY29uZmlnLnRhc2tzLlRpbWVsaW5lTGlua1IFbGlua3M=');
+
+@$core.Deprecated('Use timelineCriticalPathDescriptor instead')
+const TimelineCriticalPath$json = {
+  '1': 'TimelineCriticalPath',
+  '2': [
+    {'1': 'task_ids', '3': 1, '4': 3, '5': 9, '10': 'taskIds'},
+  ],
+};
+
+/// Descriptor for `TimelineCriticalPath`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineCriticalPathDescriptor =
+    $convert.base64Decode(
+        'ChRUaW1lbGluZUNyaXRpY2FsUGF0aBIZCgh0YXNrX2lkcxgBIAMoCVIHdGFza0lkcw==');
+
+@$core.Deprecated('Use timelineCriticalPathRequestDescriptor instead')
+const TimelineCriticalPathRequest$json = {
+  '1': 'TimelineCriticalPathRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+  ],
+};
+
+/// Descriptor for `TimelineCriticalPathRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineCriticalPathRequestDescriptor =
+    $convert.base64Decode(
+        'ChtUaW1lbGluZUNyaXRpY2FsUGF0aFJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3'
+        'Jrc3BhY2VJZBIdCgpwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQ=');
+
+@$core.Deprecated('Use timelineGetRequestDescriptor instead')
+const TimelineGetRequest$json = {
+  '1': 'TimelineGetRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'range_start', '3': 3, '4': 1, '5': 9, '10': 'rangeStart'},
+    {'1': 'range_end', '3': 4, '4': 1, '5': 9, '10': 'rangeEnd'},
+    {'1': 'include_done', '3': 5, '4': 1, '5': 8, '10': 'includeDone'},
+    {'1': 'filter_ast', '3': 6, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 7, '4': 1, '5': 9, '10': 'today'},
+  ],
+};
+
+/// Descriptor for `TimelineGetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineGetRequestDescriptor = $convert.base64Decode(
+    'ChJUaW1lbGluZUdldFJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZB'
+    'IdCgpwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSHwoLcmFuZ2Vfc3RhcnQYAyABKAlSCnJh'
+    'bmdlU3RhcnQSGwoJcmFuZ2VfZW5kGAQgASgJUghyYW5nZUVuZBIhCgxpbmNsdWRlX2RvbmUYBS'
+    'ABKAhSC2luY2x1ZGVEb25lEh0KCmZpbHRlcl9hc3QYBiABKAlSCWZpbHRlckFzdBIUCgV0b2Rh'
+    'eRgHIAEoCVIFdG9kYXk=');
+
+@$core.Deprecated('Use timelineLinkDescriptor instead')
+const TimelineLink$json = {
+  '1': 'TimelineLink',
+  '2': [
+    {'1': 'from_id', '3': 1, '4': 1, '5': 9, '10': 'fromId'},
+    {'1': 'to_id', '3': 2, '4': 1, '5': 9, '10': 'toId'},
+  ],
+};
+
+/// Descriptor for `TimelineLink`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineLinkDescriptor = $convert.base64Decode(
+    'CgxUaW1lbGluZUxpbmsSFwoHZnJvbV9pZBgBIAEoCVIGZnJvbUlkEhMKBXRvX2lkGAIgASgJUg'
+    'R0b0lk');
+
+@$core.Deprecated('Use timelinePreviewRequestDescriptor instead')
+const TimelinePreviewRequest$json = {
+  '1': 'TimelinePreviewRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'task_id', '3': 3, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'start_date', '3': 4, '4': 1, '5': 9, '10': 'startDate'},
+    {'1': 'due_date', '3': 5, '4': 1, '5': 9, '10': 'dueDate'},
+  ],
+};
+
+/// Descriptor for `TimelinePreviewRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelinePreviewRequestDescriptor = $convert.base64Decode(
+    'ChZUaW1lbGluZVByZXZpZXdSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYW'
+    'NlSWQSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhcKB3Rhc2tfaWQYAyABKAlSBnRh'
+    'c2tJZBIdCgpzdGFydF9kYXRlGAQgASgJUglzdGFydERhdGUSGQoIZHVlX2RhdGUYBSABKAlSB2'
+    'R1ZURhdGU=');
+
+@$core.Deprecated('Use timelineShiftDescriptor instead')
+const TimelineShift$json = {
+  '1': 'TimelineShift',
+  '2': [
+    {
+      '1': 'task',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'task'
+    },
+    {'1': 'new_start', '3': 2, '4': 1, '5': 9, '10': 'newStart'},
+    {'1': 'new_due', '3': 3, '4': 1, '5': 9, '10': 'newDue'},
+  ],
+};
+
+/// Descriptor for `TimelineShift`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineShiftDescriptor = $convert.base64Decode(
+    'Cg1UaW1lbGluZVNoaWZ0EiYKBHRhc2sYASABKAsyEi5jb25maWcudGFza3MuVGFza1IEdGFzax'
+    'IbCgluZXdfc3RhcnQYAiABKAlSCG5ld1N0YXJ0EhcKB25ld19kdWUYAyABKAlSBm5ld0R1ZQ==');
+
+@$core.Deprecated('Use timelineShiftsDescriptor instead')
+const TimelineShifts$json = {
+  '1': 'TimelineShifts',
+  '2': [
+    {
+      '1': 'shifts',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.TimelineShift',
+      '10': 'shifts'
+    },
+  ],
+};
+
+/// Descriptor for `TimelineShifts`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineShiftsDescriptor = $convert.base64Decode(
+    'Cg5UaW1lbGluZVNoaWZ0cxIzCgZzaGlmdHMYASADKAsyGy5jb25maWcudGFza3MuVGltZWxpbm'
+    'VTaGlmdFIGc2hpZnRz');
+
+@$core.Deprecated('Use timelineWorkingDaysDescriptor instead')
+const TimelineWorkingDays$json = {
+  '1': 'TimelineWorkingDays',
+  '2': [
+    {'1': 'days', '3': 1, '4': 3, '5': 5, '10': 'days'},
+    {'1': 'holidays', '3': 2, '4': 3, '5': 9, '10': 'holidays'},
+  ],
+};
+
+/// Descriptor for `TimelineWorkingDays`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineWorkingDaysDescriptor = $convert.base64Decode(
+    'ChNUaW1lbGluZVdvcmtpbmdEYXlzEhIKBGRheXMYASADKAVSBGRheXMSGgoIaG9saWRheXMYAi'
+    'ADKAlSCGhvbGlkYXlz');
+
+@$core.Deprecated('Use timelineWorkingDaysGetRequestDescriptor instead')
+const TimelineWorkingDaysGetRequest$json = {
+  '1': 'TimelineWorkingDaysGetRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+  ],
+};
+
+/// Descriptor for `TimelineWorkingDaysGetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineWorkingDaysGetRequestDescriptor =
+    $convert.base64Decode(
+        'Ch1UaW1lbGluZVdvcmtpbmdEYXlzR2V0UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3'
+        'dvcmtzcGFjZUlk');
+
+@$core.Deprecated('Use timelineWorkingDaysSetRequestDescriptor instead')
+const TimelineWorkingDaysSetRequest$json = {
+  '1': 'TimelineWorkingDaysSetRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'days', '3': 2, '4': 3, '5': 5, '10': 'days'},
+    {'1': 'holidays', '3': 3, '4': 3, '5': 9, '10': 'holidays'},
+  ],
+};
+
+/// Descriptor for `TimelineWorkingDaysSetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineWorkingDaysSetRequestDescriptor =
+    $convert.base64Decode(
+        'Ch1UaW1lbGluZVdvcmtpbmdEYXlzU2V0UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3'
+        'dvcmtzcGFjZUlkEhIKBGRheXMYAiADKAVSBGRheXMSGgoIaG9saWRheXMYAyADKAlSCGhvbGlk'
+        'YXlz');

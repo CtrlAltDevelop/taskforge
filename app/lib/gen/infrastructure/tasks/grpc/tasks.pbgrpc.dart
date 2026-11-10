@@ -718,3 +718,203 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
   $async.Future<$0.Task> update(
       $grpc.ServiceCall call, $0.TaskUpdateRequest request);
 }
+
+@$pb.GrpcServiceName('config.tasks.TimelineController')
+class TimelineControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  TimelineControllerClient(super.channel, {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.TimelineApplied> applyShift(
+    $0.TimelineApplyRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$applyShift, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.TimelineCriticalPath> criticalPath(
+    $0.TimelineCriticalPathRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$criticalPath, request, options: options);
+  }
+
+  $grpc.ResponseStream<$0.TimelineChunk> get(
+    $0.TimelineGetRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createStreamingCall(_$get, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+
+  $grpc.ResponseFuture<$0.TimelineWorkingDays> getWorkingDays(
+    $0.TimelineWorkingDaysGetRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getWorkingDays, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.TimelineShifts> previewShift(
+    $0.TimelinePreviewRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$previewShift, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.TimelineWorkingDays> setWorkingDays(
+    $0.TimelineWorkingDaysSetRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setWorkingDays, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$applyShift =
+      $grpc.ClientMethod<$0.TimelineApplyRequest, $0.TimelineApplied>(
+          '/config.tasks.TimelineController/ApplyShift',
+          ($0.TimelineApplyRequest value) => value.writeToBuffer(),
+          $0.TimelineApplied.fromBuffer);
+  static final _$criticalPath = $grpc.ClientMethod<
+          $0.TimelineCriticalPathRequest, $0.TimelineCriticalPath>(
+      '/config.tasks.TimelineController/CriticalPath',
+      ($0.TimelineCriticalPathRequest value) => value.writeToBuffer(),
+      $0.TimelineCriticalPath.fromBuffer);
+  static final _$get =
+      $grpc.ClientMethod<$0.TimelineGetRequest, $0.TimelineChunk>(
+          '/config.tasks.TimelineController/Get',
+          ($0.TimelineGetRequest value) => value.writeToBuffer(),
+          $0.TimelineChunk.fromBuffer);
+  static final _$getWorkingDays = $grpc.ClientMethod<
+          $0.TimelineWorkingDaysGetRequest, $0.TimelineWorkingDays>(
+      '/config.tasks.TimelineController/GetWorkingDays',
+      ($0.TimelineWorkingDaysGetRequest value) => value.writeToBuffer(),
+      $0.TimelineWorkingDays.fromBuffer);
+  static final _$previewShift =
+      $grpc.ClientMethod<$0.TimelinePreviewRequest, $0.TimelineShifts>(
+          '/config.tasks.TimelineController/PreviewShift',
+          ($0.TimelinePreviewRequest value) => value.writeToBuffer(),
+          $0.TimelineShifts.fromBuffer);
+  static final _$setWorkingDays = $grpc.ClientMethod<
+          $0.TimelineWorkingDaysSetRequest, $0.TimelineWorkingDays>(
+      '/config.tasks.TimelineController/SetWorkingDays',
+      ($0.TimelineWorkingDaysSetRequest value) => value.writeToBuffer(),
+      $0.TimelineWorkingDays.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.tasks.TimelineController')
+abstract class TimelineControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.tasks.TimelineController';
+
+  TimelineControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.TimelineApplyRequest, $0.TimelineApplied>(
+        'ApplyShift',
+        applyShift_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TimelineApplyRequest.fromBuffer(value),
+        ($0.TimelineApplied value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TimelineCriticalPathRequest,
+            $0.TimelineCriticalPath>(
+        'CriticalPath',
+        criticalPath_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TimelineCriticalPathRequest.fromBuffer(value),
+        ($0.TimelineCriticalPath value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TimelineGetRequest, $0.TimelineChunk>(
+        'Get',
+        get_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.TimelineGetRequest.fromBuffer(value),
+        ($0.TimelineChunk value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TimelineWorkingDaysGetRequest,
+            $0.TimelineWorkingDays>(
+        'GetWorkingDays',
+        getWorkingDays_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TimelineWorkingDaysGetRequest.fromBuffer(value),
+        ($0.TimelineWorkingDays value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.TimelinePreviewRequest, $0.TimelineShifts>(
+            'PreviewShift',
+            previewShift_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.TimelinePreviewRequest.fromBuffer(value),
+            ($0.TimelineShifts value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TimelineWorkingDaysSetRequest,
+            $0.TimelineWorkingDays>(
+        'SetWorkingDays',
+        setWorkingDays_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TimelineWorkingDaysSetRequest.fromBuffer(value),
+        ($0.TimelineWorkingDays value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.TimelineApplied> applyShift_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TimelineApplyRequest> $request) async {
+    return applyShift($call, await $request);
+  }
+
+  $async.Future<$0.TimelineApplied> applyShift(
+      $grpc.ServiceCall call, $0.TimelineApplyRequest request);
+
+  $async.Future<$0.TimelineCriticalPath> criticalPath_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.TimelineCriticalPathRequest> $request) async {
+    return criticalPath($call, await $request);
+  }
+
+  $async.Future<$0.TimelineCriticalPath> criticalPath(
+      $grpc.ServiceCall call, $0.TimelineCriticalPathRequest request);
+
+  $async.Stream<$0.TimelineChunk> get_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TimelineGetRequest> $request) async* {
+    yield* get($call, await $request);
+  }
+
+  $async.Stream<$0.TimelineChunk> get(
+      $grpc.ServiceCall call, $0.TimelineGetRequest request);
+
+  $async.Future<$0.TimelineWorkingDays> getWorkingDays_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.TimelineWorkingDaysGetRequest> $request) async {
+    return getWorkingDays($call, await $request);
+  }
+
+  $async.Future<$0.TimelineWorkingDays> getWorkingDays(
+      $grpc.ServiceCall call, $0.TimelineWorkingDaysGetRequest request);
+
+  $async.Future<$0.TimelineShifts> previewShift_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TimelinePreviewRequest> $request) async {
+    return previewShift($call, await $request);
+  }
+
+  $async.Future<$0.TimelineShifts> previewShift(
+      $grpc.ServiceCall call, $0.TimelinePreviewRequest request);
+
+  $async.Future<$0.TimelineWorkingDays> setWorkingDays_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.TimelineWorkingDaysSetRequest> $request) async {
+    return setWorkingDays($call, await $request);
+  }
+
+  $async.Future<$0.TimelineWorkingDays> setWorkingDays(
+      $grpc.ServiceCall call, $0.TimelineWorkingDaysSetRequest request);
+}

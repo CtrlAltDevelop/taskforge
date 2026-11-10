@@ -1,6 +1,7 @@
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ import '../views/fakes.dart';
 import '../board/fakes.dart';
 import '../filters/fakes.dart';
 import '../calendar/fakes.dart';
+import '../timeline/fakes.dart';
 
 export '../workspaces/fakes.dart' show byKey;
 
@@ -57,6 +59,7 @@ Future<Pumped> pumpProjects(
   FakeViewsClient? views,
   FakeBoardClient? board,
   FakeCalendarClient? calendar,
+  FakeTimelineClient? timeline,
   FakeFiltersClient? filters,
   Day? today,
   List<String> workspaces = const ['w1'],
@@ -78,6 +81,9 @@ Future<Pumped> pumpProjects(
       filtersClientProvider.overrideWithValue(filters ?? FakeFiltersClient()),
       calendarClientProvider.overrideWithValue(
         calendar ?? FakeCalendarClient(tasks ?? FakeTasksClient()),
+      ),
+      timelineClientProvider.overrideWithValue(
+        timeline ?? FakeTimelineClient(tasks ?? FakeTasksClient()),
       ),
       if (today != null) todayProvider.overrideWithValue(today),
       tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),

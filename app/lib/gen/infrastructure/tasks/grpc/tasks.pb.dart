@@ -4704,6 +4704,1005 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
   void clearDueTime() => $_clearField(15);
 }
 
+class TimelineApplied extends $pb.GeneratedMessage {
+  factory TimelineApplied({
+    $core.Iterable<Task>? tasks,
+  }) {
+    final result = TimelineApplied._();
+    if (tasks != null) result.tasks.addAll(tasks);
+    return result;
+  }
+
+  TimelineApplied._();
+
+  factory TimelineApplied.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineApplied()..mergeFromBuffer(data, registry);
+  factory TimelineApplied.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineApplied()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineApplied',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineApplied.$_createMessage)
+    ..pPM<Task>(1, _omitFieldNames ? '' : 'tasks',
+        subBuilder: Task.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineApplied clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineApplied copyWith(void Function(TimelineApplied) updates) =>
+      super.copyWith((message) => updates(message as TimelineApplied))
+          as TimelineApplied;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineApplied() / TimelineApplied.new instead')
+  static TimelineApplied create() => TimelineApplied._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineApplied._();
+  @$core.override
+  TimelineApplied createEmptyInstance() => TimelineApplied._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineApplied getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineApplied>(
+          TimelineApplied.$_createMessage);
+  static TimelineApplied? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Task> get tasks => $_getList(0);
+}
+
+class TimelineApplyRequest extends $pb.GeneratedMessage {
+  factory TimelineApplyRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? taskId,
+    $core.String? startDate,
+    $core.String? dueDate,
+    $core.int? expectedVersion,
+    $core.Iterable<$core.String>? affectedIds,
+  }) {
+    final result = TimelineApplyRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (taskId != null) result.taskId = taskId;
+    if (startDate != null) result.startDate = startDate;
+    if (dueDate != null) result.dueDate = dueDate;
+    if (expectedVersion != null) result.expectedVersion = expectedVersion;
+    if (affectedIds != null) result.affectedIds.addAll(affectedIds);
+    return result;
+  }
+
+  TimelineApplyRequest._();
+
+  factory TimelineApplyRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineApplyRequest()..mergeFromBuffer(data, registry);
+  factory TimelineApplyRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineApplyRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineApplyRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineApplyRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'taskId')
+    ..aOS(4, _omitFieldNames ? '' : 'startDate')
+    ..aOS(5, _omitFieldNames ? '' : 'dueDate')
+    ..aI(6, _omitFieldNames ? '' : 'expectedVersion')
+    ..pPS(7, _omitFieldNames ? '' : 'affectedIds')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineApplyRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineApplyRequest copyWith(void Function(TimelineApplyRequest) updates) =>
+      super.copyWith((message) => updates(message as TimelineApplyRequest))
+          as TimelineApplyRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineApplyRequest() / TimelineApplyRequest.new instead')
+  static TimelineApplyRequest create() => TimelineApplyRequest._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineApplyRequest._();
+  @$core.override
+  TimelineApplyRequest createEmptyInstance() => TimelineApplyRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineApplyRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineApplyRequest>(
+          TimelineApplyRequest.$_createMessage);
+  static TimelineApplyRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get taskId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set taskId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasTaskId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTaskId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get startDate => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set startDate($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasStartDate() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStartDate() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get dueDate => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set dueDate($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDueDate() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDueDate() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get expectedVersion => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set expectedVersion($core.int value) => $_setSignedInt32(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasExpectedVersion() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearExpectedVersion() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get affectedIds => $_getList(6);
+}
+
+class TimelineChunk extends $pb.GeneratedMessage {
+  factory TimelineChunk({
+    $core.Iterable<Task>? tasks,
+    $core.Iterable<TimelineLink>? links,
+  }) {
+    final result = TimelineChunk._();
+    if (tasks != null) result.tasks.addAll(tasks);
+    if (links != null) result.links.addAll(links);
+    return result;
+  }
+
+  TimelineChunk._();
+
+  factory TimelineChunk.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineChunk()..mergeFromBuffer(data, registry);
+  factory TimelineChunk.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineChunk()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineChunk',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineChunk.$_createMessage)
+    ..pPM<Task>(1, _omitFieldNames ? '' : 'tasks',
+        subBuilder: Task.$_createMessage)
+    ..pPM<TimelineLink>(2, _omitFieldNames ? '' : 'links',
+        subBuilder: TimelineLink.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineChunk clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineChunk copyWith(void Function(TimelineChunk) updates) =>
+      super.copyWith((message) => updates(message as TimelineChunk))
+          as TimelineChunk;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineChunk() / TimelineChunk.new instead')
+  static TimelineChunk create() => TimelineChunk._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineChunk._();
+  @$core.override
+  TimelineChunk createEmptyInstance() => TimelineChunk._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineChunk getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineChunk>(
+          TimelineChunk.$_createMessage);
+  static TimelineChunk? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Task> get tasks => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<TimelineLink> get links => $_getList(1);
+}
+
+class TimelineCriticalPath extends $pb.GeneratedMessage {
+  factory TimelineCriticalPath({
+    $core.Iterable<$core.String>? taskIds,
+  }) {
+    final result = TimelineCriticalPath._();
+    if (taskIds != null) result.taskIds.addAll(taskIds);
+    return result;
+  }
+
+  TimelineCriticalPath._();
+
+  factory TimelineCriticalPath.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineCriticalPath()..mergeFromBuffer(data, registry);
+  factory TimelineCriticalPath.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineCriticalPath()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineCriticalPath',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineCriticalPath.$_createMessage)
+    ..pPS(1, _omitFieldNames ? '' : 'taskIds')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineCriticalPath clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineCriticalPath copyWith(void Function(TimelineCriticalPath) updates) =>
+      super.copyWith((message) => updates(message as TimelineCriticalPath))
+          as TimelineCriticalPath;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineCriticalPath() / TimelineCriticalPath.new instead')
+  static TimelineCriticalPath create() => TimelineCriticalPath._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineCriticalPath._();
+  @$core.override
+  TimelineCriticalPath createEmptyInstance() => TimelineCriticalPath._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineCriticalPath getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineCriticalPath>(
+          TimelineCriticalPath.$_createMessage);
+  static TimelineCriticalPath? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get taskIds => $_getList(0);
+}
+
+class TimelineCriticalPathRequest extends $pb.GeneratedMessage {
+  factory TimelineCriticalPathRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+  }) {
+    final result = TimelineCriticalPathRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    return result;
+  }
+
+  TimelineCriticalPathRequest._();
+
+  factory TimelineCriticalPathRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineCriticalPathRequest()..mergeFromBuffer(data, registry);
+  factory TimelineCriticalPathRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineCriticalPathRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineCriticalPathRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineCriticalPathRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineCriticalPathRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineCriticalPathRequest copyWith(
+          void Function(TimelineCriticalPathRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as TimelineCriticalPathRequest))
+          as TimelineCriticalPathRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineCriticalPathRequest() / TimelineCriticalPathRequest.new instead')
+  static TimelineCriticalPathRequest create() =>
+      TimelineCriticalPathRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      TimelineCriticalPathRequest._();
+  @$core.override
+  TimelineCriticalPathRequest createEmptyInstance() =>
+      TimelineCriticalPathRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineCriticalPathRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineCriticalPathRequest>(
+          TimelineCriticalPathRequest.$_createMessage);
+  static TimelineCriticalPathRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+}
+
+class TimelineGetRequest extends $pb.GeneratedMessage {
+  factory TimelineGetRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? rangeStart,
+    $core.String? rangeEnd,
+    $core.bool? includeDone,
+    $core.String? filterAst,
+    $core.String? today,
+  }) {
+    final result = TimelineGetRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (rangeStart != null) result.rangeStart = rangeStart;
+    if (rangeEnd != null) result.rangeEnd = rangeEnd;
+    if (includeDone != null) result.includeDone = includeDone;
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
+    return result;
+  }
+
+  TimelineGetRequest._();
+
+  factory TimelineGetRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineGetRequest()..mergeFromBuffer(data, registry);
+  factory TimelineGetRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineGetRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineGetRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineGetRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'rangeStart')
+    ..aOS(4, _omitFieldNames ? '' : 'rangeEnd')
+    ..aOB(5, _omitFieldNames ? '' : 'includeDone')
+    ..aOS(6, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(7, _omitFieldNames ? '' : 'today')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineGetRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineGetRequest copyWith(void Function(TimelineGetRequest) updates) =>
+      super.copyWith((message) => updates(message as TimelineGetRequest))
+          as TimelineGetRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineGetRequest() / TimelineGetRequest.new instead')
+  static TimelineGetRequest create() => TimelineGetRequest._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineGetRequest._();
+  @$core.override
+  TimelineGetRequest createEmptyInstance() => TimelineGetRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineGetRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineGetRequest>(
+          TimelineGetRequest.$_createMessage);
+  static TimelineGetRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get rangeStart => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set rangeStart($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRangeStart() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRangeStart() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get rangeEnd => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set rangeEnd($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasRangeEnd() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRangeEnd() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get includeDone => $_getBF(4);
+  @$pb.TagNumber(5)
+  set includeDone($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasIncludeDone() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIncludeDone() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get filterAst => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set filterAst($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasFilterAst() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFilterAst() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get today => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set today($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasToday() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearToday() => $_clearField(7);
+}
+
+class TimelineLink extends $pb.GeneratedMessage {
+  factory TimelineLink({
+    $core.String? fromId,
+    $core.String? toId,
+  }) {
+    final result = TimelineLink._();
+    if (fromId != null) result.fromId = fromId;
+    if (toId != null) result.toId = toId;
+    return result;
+  }
+
+  TimelineLink._();
+
+  factory TimelineLink.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLink()..mergeFromBuffer(data, registry);
+  factory TimelineLink.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLink()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineLink',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineLink.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'fromId')
+    ..aOS(2, _omitFieldNames ? '' : 'toId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLink clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLink copyWith(void Function(TimelineLink) updates) =>
+      super.copyWith((message) => updates(message as TimelineLink))
+          as TimelineLink;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineLink() / TimelineLink.new instead')
+  static TimelineLink create() => TimelineLink._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineLink._();
+  @$core.override
+  TimelineLink createEmptyInstance() => TimelineLink._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineLink getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineLink>(
+          TimelineLink.$_createMessage);
+  static TimelineLink? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fromId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fromId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFromId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFromId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get toId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set toId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasToId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearToId() => $_clearField(2);
+}
+
+class TimelinePreviewRequest extends $pb.GeneratedMessage {
+  factory TimelinePreviewRequest({
+    $core.String? workspaceId,
+    $core.String? projectId,
+    $core.String? taskId,
+    $core.String? startDate,
+    $core.String? dueDate,
+  }) {
+    final result = TimelinePreviewRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (projectId != null) result.projectId = projectId;
+    if (taskId != null) result.taskId = taskId;
+    if (startDate != null) result.startDate = startDate;
+    if (dueDate != null) result.dueDate = dueDate;
+    return result;
+  }
+
+  TimelinePreviewRequest._();
+
+  factory TimelinePreviewRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelinePreviewRequest()..mergeFromBuffer(data, registry);
+  factory TimelinePreviewRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelinePreviewRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelinePreviewRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelinePreviewRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'projectId')
+    ..aOS(3, _omitFieldNames ? '' : 'taskId')
+    ..aOS(4, _omitFieldNames ? '' : 'startDate')
+    ..aOS(5, _omitFieldNames ? '' : 'dueDate')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelinePreviewRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelinePreviewRequest copyWith(
+          void Function(TimelinePreviewRequest) updates) =>
+      super.copyWith((message) => updates(message as TimelinePreviewRequest))
+          as TimelinePreviewRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelinePreviewRequest() / TimelinePreviewRequest.new instead')
+  static TimelinePreviewRequest create() => TimelinePreviewRequest._();
+  static $pb.GeneratedMessage $_createMessage() => TimelinePreviewRequest._();
+  @$core.override
+  TimelinePreviewRequest createEmptyInstance() => TimelinePreviewRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelinePreviewRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelinePreviewRequest>(
+          TimelinePreviewRequest.$_createMessage);
+  static TimelinePreviewRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get projectId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set projectId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProjectId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProjectId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get taskId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set taskId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasTaskId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTaskId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get startDate => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set startDate($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasStartDate() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStartDate() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get dueDate => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set dueDate($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDueDate() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDueDate() => $_clearField(5);
+}
+
+class TimelineShift extends $pb.GeneratedMessage {
+  factory TimelineShift({
+    Task? task,
+    $core.String? newStart,
+    $core.String? newDue,
+  }) {
+    final result = TimelineShift._();
+    if (task != null) result.task = task;
+    if (newStart != null) result.newStart = newStart;
+    if (newDue != null) result.newDue = newDue;
+    return result;
+  }
+
+  TimelineShift._();
+
+  factory TimelineShift.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineShift()..mergeFromBuffer(data, registry);
+  factory TimelineShift.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineShift()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineShift',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineShift.$_createMessage)
+    ..aOM<Task>(1, _omitFieldNames ? '' : 'task',
+        subBuilder: Task.$_createMessage)
+    ..aOS(2, _omitFieldNames ? '' : 'newStart')
+    ..aOS(3, _omitFieldNames ? '' : 'newDue')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineShift clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineShift copyWith(void Function(TimelineShift) updates) =>
+      super.copyWith((message) => updates(message as TimelineShift))
+          as TimelineShift;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineShift() / TimelineShift.new instead')
+  static TimelineShift create() => TimelineShift._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineShift._();
+  @$core.override
+  TimelineShift createEmptyInstance() => TimelineShift._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineShift getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineShift>(
+          TimelineShift.$_createMessage);
+  static TimelineShift? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Task get task => $_getN(0);
+  @$pb.TagNumber(1)
+  set task(Task value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTask() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTask() => $_clearField(1);
+  @$pb.TagNumber(1)
+  Task ensureTask() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get newStart => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set newStart($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasNewStart() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNewStart() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get newDue => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set newDue($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasNewDue() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNewDue() => $_clearField(3);
+}
+
+class TimelineShifts extends $pb.GeneratedMessage {
+  factory TimelineShifts({
+    $core.Iterable<TimelineShift>? shifts,
+  }) {
+    final result = TimelineShifts._();
+    if (shifts != null) result.shifts.addAll(shifts);
+    return result;
+  }
+
+  TimelineShifts._();
+
+  factory TimelineShifts.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineShifts()..mergeFromBuffer(data, registry);
+  factory TimelineShifts.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineShifts()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineShifts',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineShifts.$_createMessage)
+    ..pPM<TimelineShift>(1, _omitFieldNames ? '' : 'shifts',
+        subBuilder: TimelineShift.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineShifts clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineShifts copyWith(void Function(TimelineShifts) updates) =>
+      super.copyWith((message) => updates(message as TimelineShifts))
+          as TimelineShifts;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineShifts() / TimelineShifts.new instead')
+  static TimelineShifts create() => TimelineShifts._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineShifts._();
+  @$core.override
+  TimelineShifts createEmptyInstance() => TimelineShifts._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineShifts getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineShifts>(
+          TimelineShifts.$_createMessage);
+  static TimelineShifts? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<TimelineShift> get shifts => $_getList(0);
+}
+
+class TimelineWorkingDays extends $pb.GeneratedMessage {
+  factory TimelineWorkingDays({
+    $core.Iterable<$core.int>? days,
+    $core.Iterable<$core.String>? holidays,
+  }) {
+    final result = TimelineWorkingDays._();
+    if (days != null) result.days.addAll(days);
+    if (holidays != null) result.holidays.addAll(holidays);
+    return result;
+  }
+
+  TimelineWorkingDays._();
+
+  factory TimelineWorkingDays.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDays()..mergeFromBuffer(data, registry);
+  factory TimelineWorkingDays.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDays()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineWorkingDays',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineWorkingDays.$_createMessage)
+    ..p<$core.int>(1, _omitFieldNames ? '' : 'days', $pb.PbFieldType.K3)
+    ..pPS(2, _omitFieldNames ? '' : 'holidays')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDays clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDays copyWith(void Function(TimelineWorkingDays) updates) =>
+      super.copyWith((message) => updates(message as TimelineWorkingDays))
+          as TimelineWorkingDays;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core
+      .Deprecated('Use TimelineWorkingDays() / TimelineWorkingDays.new instead')
+  static TimelineWorkingDays create() => TimelineWorkingDays._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineWorkingDays._();
+  @$core.override
+  TimelineWorkingDays createEmptyInstance() => TimelineWorkingDays._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineWorkingDays getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineWorkingDays>(
+          TimelineWorkingDays.$_createMessage);
+  static TimelineWorkingDays? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.int> get days => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get holidays => $_getList(1);
+}
+
+class TimelineWorkingDaysGetRequest extends $pb.GeneratedMessage {
+  factory TimelineWorkingDaysGetRequest({
+    $core.String? workspaceId,
+  }) {
+    final result = TimelineWorkingDaysGetRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    return result;
+  }
+
+  TimelineWorkingDaysGetRequest._();
+
+  factory TimelineWorkingDaysGetRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDaysGetRequest()..mergeFromBuffer(data, registry);
+  factory TimelineWorkingDaysGetRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDaysGetRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineWorkingDaysGetRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineWorkingDaysGetRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDaysGetRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDaysGetRequest copyWith(
+          void Function(TimelineWorkingDaysGetRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as TimelineWorkingDaysGetRequest))
+          as TimelineWorkingDaysGetRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineWorkingDaysGetRequest() / TimelineWorkingDaysGetRequest.new instead')
+  static TimelineWorkingDaysGetRequest create() =>
+      TimelineWorkingDaysGetRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      TimelineWorkingDaysGetRequest._();
+  @$core.override
+  TimelineWorkingDaysGetRequest createEmptyInstance() =>
+      TimelineWorkingDaysGetRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineWorkingDaysGetRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineWorkingDaysGetRequest>(
+          TimelineWorkingDaysGetRequest.$_createMessage);
+  static TimelineWorkingDaysGetRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+}
+
+class TimelineWorkingDaysSetRequest extends $pb.GeneratedMessage {
+  factory TimelineWorkingDaysSetRequest({
+    $core.String? workspaceId,
+    $core.Iterable<$core.int>? days,
+    $core.Iterable<$core.String>? holidays,
+  }) {
+    final result = TimelineWorkingDaysSetRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (days != null) result.days.addAll(days);
+    if (holidays != null) result.holidays.addAll(holidays);
+    return result;
+  }
+
+  TimelineWorkingDaysSetRequest._();
+
+  factory TimelineWorkingDaysSetRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDaysSetRequest()..mergeFromBuffer(data, registry);
+  factory TimelineWorkingDaysSetRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineWorkingDaysSetRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineWorkingDaysSetRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.tasks'),
+      createEmptyInstance: TimelineWorkingDaysSetRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..p<$core.int>(2, _omitFieldNames ? '' : 'days', $pb.PbFieldType.K3)
+    ..pPS(3, _omitFieldNames ? '' : 'holidays')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDaysSetRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineWorkingDaysSetRequest copyWith(
+          void Function(TimelineWorkingDaysSetRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as TimelineWorkingDaysSetRequest))
+          as TimelineWorkingDaysSetRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineWorkingDaysSetRequest() / TimelineWorkingDaysSetRequest.new instead')
+  static TimelineWorkingDaysSetRequest create() =>
+      TimelineWorkingDaysSetRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      TimelineWorkingDaysSetRequest._();
+  @$core.override
+  TimelineWorkingDaysSetRequest createEmptyInstance() =>
+      TimelineWorkingDaysSetRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineWorkingDaysSetRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineWorkingDaysSetRequest>(
+          TimelineWorkingDaysSetRequest.$_createMessage);
+  static TimelineWorkingDaysSetRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.int> get days => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get holidays => $_getList(2);
+}
+
 const $core.bool _omitFieldNames =
     $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames =

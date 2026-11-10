@@ -1099,6 +1099,7 @@ class SavedView extends $pb.GeneratedMessage {
     BoardLayoutResponse? board,
     CalendarLayoutResponse? calendar,
     FilterLayoutResponse? activeFilter,
+    TimelineLayoutResponse? timeline,
   }) {
     final result = SavedView._();
     if (id != null) result.id = id;
@@ -1113,6 +1114,7 @@ class SavedView extends $pb.GeneratedMessage {
     if (board != null) result.board = board;
     if (calendar != null) result.calendar = calendar;
     if (activeFilter != null) result.activeFilter = activeFilter;
+    if (timeline != null) result.timeline = timeline;
     return result;
   }
 
@@ -1146,6 +1148,8 @@ class SavedView extends $pb.GeneratedMessage {
         subBuilder: CalendarLayoutResponse.$_createMessage)
     ..aOM<FilterLayoutResponse>(12, _omitFieldNames ? '' : 'activeFilter',
         subBuilder: FilterLayoutResponse.$_createMessage)
+    ..aOM<TimelineLayoutResponse>(13, _omitFieldNames ? '' : 'timeline',
+        subBuilder: TimelineLayoutResponse.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1283,6 +1287,207 @@ class SavedView extends $pb.GeneratedMessage {
   void clearActiveFilter() => $_clearField(12);
   @$pb.TagNumber(12)
   FilterLayoutResponse ensureActiveFilter() => $_ensure(11);
+
+  @$pb.TagNumber(13)
+  TimelineLayoutResponse get timeline => $_getN(12);
+  @$pb.TagNumber(13)
+  set timeline(TimelineLayoutResponse value) => $_setField(13, value);
+  @$pb.TagNumber(13)
+  $core.bool hasTimeline() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearTimeline() => $_clearField(13);
+  @$pb.TagNumber(13)
+  TimelineLayoutResponse ensureTimeline() => $_ensure(12);
+}
+
+class TimelineLayout extends $pb.GeneratedMessage {
+  factory TimelineLayout({
+    $core.String? zoom,
+    $core.String? groupBy,
+    $core.bool? hideDone,
+    $core.bool? criticalPath,
+  }) {
+    final result = TimelineLayout._();
+    if (zoom != null) result.zoom = zoom;
+    if (groupBy != null) result.groupBy = groupBy;
+    if (hideDone != null) result.hideDone = hideDone;
+    if (criticalPath != null) result.criticalPath = criticalPath;
+    return result;
+  }
+
+  TimelineLayout._();
+
+  factory TimelineLayout.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLayout()..mergeFromBuffer(data, registry);
+  factory TimelineLayout.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLayout()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineLayout',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: TimelineLayout.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'zoom')
+    ..aOS(2, _omitFieldNames ? '' : 'groupBy')
+    ..aOB(3, _omitFieldNames ? '' : 'hideDone')
+    ..aOB(4, _omitFieldNames ? '' : 'criticalPath')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLayout clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLayout copyWith(void Function(TimelineLayout) updates) =>
+      super.copyWith((message) => updates(message as TimelineLayout))
+          as TimelineLayout;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TimelineLayout() / TimelineLayout.new instead')
+  static TimelineLayout create() => TimelineLayout._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineLayout._();
+  @$core.override
+  TimelineLayout createEmptyInstance() => TimelineLayout._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineLayout getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimelineLayout>(
+          TimelineLayout.$_createMessage);
+  static TimelineLayout? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get zoom => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set zoom($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasZoom() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearZoom() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get groupBy => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set groupBy($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasGroupBy() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGroupBy() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get hideDone => $_getBF(2);
+  @$pb.TagNumber(3)
+  set hideDone($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasHideDone() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHideDone() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get criticalPath => $_getBF(3);
+  @$pb.TagNumber(4)
+  set criticalPath($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasCriticalPath() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCriticalPath() => $_clearField(4);
+}
+
+class TimelineLayoutResponse extends $pb.GeneratedMessage {
+  factory TimelineLayoutResponse({
+    $core.String? zoom,
+    $core.String? groupBy,
+    $core.bool? hideDone,
+    $core.bool? criticalPath,
+  }) {
+    final result = TimelineLayoutResponse._();
+    if (zoom != null) result.zoom = zoom;
+    if (groupBy != null) result.groupBy = groupBy;
+    if (hideDone != null) result.hideDone = hideDone;
+    if (criticalPath != null) result.criticalPath = criticalPath;
+    return result;
+  }
+
+  TimelineLayoutResponse._();
+
+  factory TimelineLayoutResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLayoutResponse()..mergeFromBuffer(data, registry);
+  factory TimelineLayoutResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TimelineLayoutResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TimelineLayoutResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: TimelineLayoutResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'zoom')
+    ..aOS(2, _omitFieldNames ? '' : 'groupBy')
+    ..aOB(3, _omitFieldNames ? '' : 'hideDone')
+    ..aOB(4, _omitFieldNames ? '' : 'criticalPath')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLayoutResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TimelineLayoutResponse copyWith(
+          void Function(TimelineLayoutResponse) updates) =>
+      super.copyWith((message) => updates(message as TimelineLayoutResponse))
+          as TimelineLayoutResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use TimelineLayoutResponse() / TimelineLayoutResponse.new instead')
+  static TimelineLayoutResponse create() => TimelineLayoutResponse._();
+  static $pb.GeneratedMessage $_createMessage() => TimelineLayoutResponse._();
+  @$core.override
+  TimelineLayoutResponse createEmptyInstance() => TimelineLayoutResponse._();
+  @$core.pragma('dart2js:noInline')
+  static TimelineLayoutResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TimelineLayoutResponse>(
+          TimelineLayoutResponse.$_createMessage);
+  static TimelineLayoutResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get zoom => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set zoom($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasZoom() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearZoom() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get groupBy => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set groupBy($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasGroupBy() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGroupBy() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get hideDone => $_getBF(2);
+  @$pb.TagNumber(3)
+  set hideDone($core.bool value) => $_setBool(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasHideDone() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHideDone() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get criticalPath => $_getBF(3);
+  @$pb.TagNumber(4)
+  set criticalPath($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasCriticalPath() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCriticalPath() => $_clearField(4);
 }
 
 class ViewDeleteRequest extends $pb.GeneratedMessage {
@@ -1513,6 +1718,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     BoardLayout? board,
     CalendarLayout? calendar,
     FilterLayout? activeFilter,
+    TimelineLayout? timeline,
   }) {
     final result = ViewSaveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1526,6 +1732,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     if (board != null) result.board = board;
     if (calendar != null) result.calendar = calendar;
     if (activeFilter != null) result.activeFilter = activeFilter;
+    if (timeline != null) result.timeline = timeline;
     return result;
   }
 
@@ -1558,6 +1765,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
         subBuilder: CalendarLayout.$_createMessage)
     ..aOM<FilterLayout>(11, _omitFieldNames ? '' : 'activeFilter',
         subBuilder: FilterLayout.$_createMessage)
+    ..aOM<TimelineLayout>(12, _omitFieldNames ? '' : 'timeline',
+        subBuilder: TimelineLayout.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1688,6 +1897,17 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
   void clearActiveFilter() => $_clearField(11);
   @$pb.TagNumber(11)
   FilterLayout ensureActiveFilter() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  TimelineLayout get timeline => $_getN(11);
+  @$pb.TagNumber(12)
+  set timeline(TimelineLayout value) => $_setField(12, value);
+  @$pb.TagNumber(12)
+  $core.bool hasTimeline() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearTimeline() => $_clearField(12);
+  @$pb.TagNumber(12)
+  TimelineLayout ensureTimeline() => $_ensure(11);
 }
 
 const $core.bool _omitFieldNames =

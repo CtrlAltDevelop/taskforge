@@ -17,6 +17,8 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/timeline/application/timeline_providers.dart';
+import 'package:taskforge/features/timeline/presentation/timeline_view.dart';
 import 'package:taskforge/features/tasks/presentation/bulk_bar.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/tasks/presentation/list_toolbar.dart';
@@ -51,7 +53,7 @@ class TaskSection extends ConsumerStatefulWidget {
 }
 
 /// The two ways to look at a project's tasks.
-enum _TaskView { list, board, calendar }
+enum _TaskView { list, board, calendar, timeline }
 
 class _TaskSectionState extends ConsumerState<TaskSection> {
   late String? _selected = widget.initialTask;
@@ -65,6 +67,8 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
         ref.read(boardProvider(widget.project.id).notifier).refresh();
       case _TaskView.calendar:
         ref.read(calendarProvider(widget.project.id).notifier).refresh();
+      case _TaskView.timeline:
+        ref.read(timelineProvider(widget.project.id).notifier).refresh();
       case _TaskView.list:
         break;
     }
@@ -124,6 +128,12 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
               openTaskId: wide ? _selected : null,
               onOpen: openFromView,
             )
+          : _view == _TaskView.timeline
+          ? TimelineView(
+              project: widget.project,
+              openTaskId: wide ? _selected : null,
+              onOpen: openFromView,
+            )
           : _view == _TaskView.calendar
           ? CalendarView(
               scope: widget.project.id,
@@ -162,6 +172,11 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                   value: _TaskView.calendar,
                   icon: Icon(Icons.calendar_month_outlined),
                   label: Text('Calendar'),
+                ),
+                ButtonSegment(
+                  value: _TaskView.timeline,
+                  icon: Icon(Icons.stacked_bar_chart),
+                  label: Text('Timeline'),
                 ),
               ],
               selected: {_view},

@@ -9,6 +9,7 @@ import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/calendar_layout.dart';
 import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/features/views/domain/timeline_layout.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
 import 'package:taskforge/gen/infrastructure/savedviews/grpc/savedviews.pbgrpc.dart'
@@ -71,6 +72,22 @@ abstract interface class ViewsClient {
     String projectId, {
     required String name,
     required CalendarLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  });
+
+  /// And for the timeline.
+  Future<List<SavedTimeline>> listTimelines(
+    String workspaceId,
+    String projectId,
+  );
+
+  Future<SavedTimeline> saveTimeline(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required TimelineLayout layout,
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
@@ -171,6 +188,28 @@ SavedCalendar _calendar(pb.SavedView v) => SavedCalendar(
   id: v.id,
   name: v.name,
   layout: calendarFromPb(v.calendar),
+  isShared: v.isShared,
+  version: v.version,
+);
+
+TimelineLayout timelineFromPb(pb.TimelineLayoutResponse t) => TimelineLayout(
+  zoom: t.zoom.isEmpty ? 'week' : t.zoom,
+  groupBy: t.groupBy,
+  hideDone: t.hideDone,
+  criticalPath: t.criticalPath,
+);
+
+pb.TimelineLayout timelineToPb(TimelineLayout t) => pb.TimelineLayout(
+  zoom: t.zoom,
+  groupBy: t.groupBy,
+  hideDone: t.hideDone,
+  criticalPath: t.criticalPath,
+);
+
+SavedTimeline _timeline(pb.SavedView v) => SavedTimeline(
+  id: v.id,
+  name: v.name,
+  layout: timelineFromPb(v.timeline),
   isShared: v.isShared,
   version: v.version,
 );
@@ -319,6 +358,49 @@ class GrpcViewsClient implements ViewsClient {
     );
     return [for (final v in reply.views) _calendar(v)];
   }, isRead: true);
+
+  @override
+  Future<List<SavedTimeline>> listTimelines(
+    String workspaceId,
+    String projectId,
+  ) => _run(() async {
+    final reply = await _stub.list(
+      pb.ViewListRequest(
+        workspaceId: workspaceId,
+        projectId: projectId,
+        kind: 'timeline',
+      ),
+      options: _options,
+    );
+    return [for (final v in reply.views) _timeline(v)];
+  }, isRead: true);
+
+  @override
+  Future<SavedTimeline> saveTimeline(
+    String workspaceId,
+    String projectId, {
+    required String name,
+    required TimelineLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+    bool shared = false,
+  }) => _run(
+    () async => _timeline(
+      await _stub.save(
+        pb.ViewSaveRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          id: id,
+          expectedVersion: expectedVersion,
+          name: name,
+          kind: 'timeline',
+          timeline: timelineToPb(layout),
+          shared: shared,
+        ),
+        options: _options,
+      ),
+    ),
+  );
 
   @override
   Future<SavedCalendar> saveCalendar(

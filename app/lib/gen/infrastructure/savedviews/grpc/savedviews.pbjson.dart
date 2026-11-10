@@ -317,6 +317,14 @@ const SavedView$json = {
       '6': '.config.savedviews.FilterLayoutResponse',
       '10': 'activeFilter'
     },
+    {
+      '1': 'timeline',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.TimelineLayoutResponse',
+      '10': 'timeline'
+    },
   ],
 };
 
@@ -330,7 +338,42 @@ final $typed_data.Uint8List savedViewDescriptor = $convert.base64Decode(
     'JkGAogASgLMiYuY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMYXlvdXRSZXNwb25zZVIFYm9hcmQS'
     'RQoIY2FsZW5kYXIYCyABKAsyKS5jb25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFJlc3'
     'BvbnNlUghjYWxlbmRhchJMCg1hY3RpdmVfZmlsdGVyGAwgASgLMicuY29uZmlnLnNhdmVkdmll'
-    'd3MuRmlsdGVyTGF5b3V0UmVzcG9uc2VSDGFjdGl2ZUZpbHRlcg==');
+    'd3MuRmlsdGVyTGF5b3V0UmVzcG9uc2VSDGFjdGl2ZUZpbHRlchJFCgh0aW1lbGluZRgNIAEoCz'
+    'IpLmNvbmZpZy5zYXZlZHZpZXdzLlRpbWVsaW5lTGF5b3V0UmVzcG9uc2VSCHRpbWVsaW5l');
+
+@$core.Deprecated('Use timelineLayoutDescriptor instead')
+const TimelineLayout$json = {
+  '1': 'TimelineLayout',
+  '2': [
+    {'1': 'zoom', '3': 1, '4': 1, '5': 9, '10': 'zoom'},
+    {'1': 'group_by', '3': 2, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'hide_done', '3': 3, '4': 1, '5': 8, '10': 'hideDone'},
+    {'1': 'critical_path', '3': 4, '4': 1, '5': 8, '10': 'criticalPath'},
+  ],
+};
+
+/// Descriptor for `TimelineLayout`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineLayoutDescriptor = $convert.base64Decode(
+    'Cg5UaW1lbGluZUxheW91dBISCgR6b29tGAEgASgJUgR6b29tEhkKCGdyb3VwX2J5GAIgASgJUg'
+    'dncm91cEJ5EhsKCWhpZGVfZG9uZRgDIAEoCFIIaGlkZURvbmUSIwoNY3JpdGljYWxfcGF0aBgE'
+    'IAEoCFIMY3JpdGljYWxQYXRo');
+
+@$core.Deprecated('Use timelineLayoutResponseDescriptor instead')
+const TimelineLayoutResponse$json = {
+  '1': 'TimelineLayoutResponse',
+  '2': [
+    {'1': 'zoom', '3': 1, '4': 1, '5': 9, '10': 'zoom'},
+    {'1': 'group_by', '3': 2, '4': 1, '5': 9, '10': 'groupBy'},
+    {'1': 'hide_done', '3': 3, '4': 1, '5': 8, '10': 'hideDone'},
+    {'1': 'critical_path', '3': 4, '4': 1, '5': 8, '10': 'criticalPath'},
+  ],
+};
+
+/// Descriptor for `TimelineLayoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List timelineLayoutResponseDescriptor = $convert.base64Decode(
+    'ChZUaW1lbGluZUxheW91dFJlc3BvbnNlEhIKBHpvb20YASABKAlSBHpvb20SGQoIZ3JvdXBfYn'
+    'kYAiABKAlSB2dyb3VwQnkSGwoJaGlkZV9kb25lGAMgASgIUghoaWRlRG9uZRIjCg1jcml0aWNh'
+    'bF9wYXRoGAQgASgIUgxjcml0aWNhbFBhdGg=');
 
 @$core.Deprecated('Use viewDeleteRequestDescriptor instead')
 const ViewDeleteRequest$json = {
@@ -425,6 +468,14 @@ const ViewSaveRequest$json = {
       '6': '.config.savedviews.FilterLayout',
       '10': 'activeFilter'
     },
+    {
+      '1': 'timeline',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.TimelineLayout',
+      '10': 'timeline'
+    },
   ],
 };
 
@@ -437,4 +488,6 @@ final $typed_data.Uint8List viewSaveRequestDescriptor = $convert.base64Decode(
     'b3V0UgZsYXlvdXQSFgoGc2hhcmVkGAggASgIUgZzaGFyZWQSNAoFYm9hcmQYCSABKAsyHi5jb2'
     '5maWcuc2F2ZWR2aWV3cy5Cb2FyZExheW91dFIFYm9hcmQSPQoIY2FsZW5kYXIYCiABKAsyIS5j'
     'b25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFIIY2FsZW5kYXISRAoNYWN0aXZlX2ZpbH'
-    'RlchgLIAEoCzIfLmNvbmZpZy5zYXZlZHZpZXdzLkZpbHRlckxheW91dFIMYWN0aXZlRmlsdGVy');
+    'RlchgLIAEoCzIfLmNvbmZpZy5zYXZlZHZpZXdzLkZpbHRlckxheW91dFIMYWN0aXZlRmlsdGVy'
+    'Ej0KCHRpbWVsaW5lGAwgASgLMiEuY29uZmlnLnNhdmVkdmlld3MuVGltZWxpbmVMYXlvdXRSCH'
+    'RpbWVsaW5l');
