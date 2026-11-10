@@ -1,6 +1,6 @@
 # Phase 10 — Custom Fields
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Admins define extra **typed fields** (text, number, select, multi-select, date, checkbox, URL, user, money) on a project; tasks store values for them.
@@ -33,13 +33,22 @@ Field editor (type picker, options list with color chips), generic `FieldInput` 
 - Max 50 active fields per project (keeps UI/queries healthy).
 
 ## Acceptance criteria
-- [ ] All types create/edit/validate
-- [ ] Required field blocks task creation with clear errors
-- [ ] Archive/restore keeps data
-- [ ] Filtering by a field value uses an index (explain plan checked)
+- [x] All types create/edit/validate
+- [x] Required field blocks task creation with clear errors
+- [x] Archive/restore keeps data
+- [x] Filtering by a field value uses an index (explain plan checked)
 
 ## Tests
 Per-type validation, option remap, concurrency on same field, serialization round-trip over proto, Flutter input widgets.
 
 ## Depends on
 Phase 06.
+
+## As built
+- `FieldController` (`List`, `Create`, `Update`, `Reorder`, `Archive`, `Restore`) in a new `customfields` app; `Reorder` is an extra call the editor needs. Definitions are managed with `project.update`, read with `workspace.view`. Each definition has a `version` (stale save: `VERSION_CONFLICT`) and `hidden_views` (the "show in" switches). Full rules: `backend/docs/customfields.md`.
+- Values travel as one string per field (money `12.50 USD`, multi-select ids joined by commas, never floats) in `Task.fields`, `TaskCreateRequest.field_values` and `TaskUpdateRequest.field_values`. An edit conflicts per field through `field_versions["field:<id>"]`, so different fields merge. Required fields without a default refuse the create (`FIELD_REQUIRED`, every missing field named); the app asks for them in a dialog and highlights gaps.
+- Text and URL values are capped (500 / 2000 ASCII characters) so they fit an index entry. Filtering is `queries.tasks_with_value` (eq, ranges, multi-select `has`); an `EXPLAIN` test on PostgreSQL checks each lookup uses an index (a GIN index serves multi-select).
+- Archive keeps values; `manage.py purge_fields` (daily) deletes fields archived more than 30 days.
+- Run on PostgreSQL (the whole backend suite, including index plans and a parallel same-field edit race); not run in a real browser or on a device.
+- Also fixed on the way: `Profile.fill_blanks` now clips provider values to their columns (PostgreSQL refused an over-long social name), and the status-migration test re-applies every app after rolling tasks back.
+- Left to later phases: real list columns and the column chooser (11), group-by and card fields on the board (12), filter UI and query language over fields (14), the `fields_changed` WebSocket event (16).
