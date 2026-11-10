@@ -64,6 +64,7 @@ def _update_request(team: dict[str, Any], flow: Any, **changes: Any) -> Any:
                 to_key=t.to_status,
                 required_role_id=t.required_role_id,
                 require_assignee=t.require_assignee,
+                require_subtasks_done=t.require_subtasks_done,
             )
             for t in flow.transitions
         ],
@@ -338,4 +339,70 @@ def test_the_creation_rule_round_trips_and_refuses_over_the_wire(
     assert refusal.details().startswith("TRANSITION_NOT_ALLOWED")
     assert (
         dict(refusal.trailing_metadata())["x-error-reason-bin"] == b"New tasks must start in To do."
+    )
+
+
+def test_the_subtasks_condition_round_trips_and_blocks_over_the_wire(
+    team: Any, grpc_call: GrpcCall
+) -> None:
+    flow = _get(grpc_call, team)
+    ids = {s.name: s.id for s in flow.statuses}
+    saved = grpc_call(
+        W,
+        "Update",
+        _update_request(
+            team,
+            flow,
+            restrict_transitions=True,
+            transitions=[
+                pb.TransitionInput(from_key=ids["To do"], to_key=ids["In progress"]),
+                pb.TransitionInput(
+                    from_key=ids["In progress"], to_key=ids["Done"], require_subtasks_done=True
+                ),
+                pb.TransitionInput(from_key=ids["In progress"], to_key=ids["To do"]),
+            ],
+        ),
+        token=team["tokens"]["zoe"],
+    )
+    token = team["tokens"]["max"]
+    parent = grpc_call(
+        T,
+        "Create",
+        tpb.TaskCreateRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            title="P",
+            status=ids["In progress"],
+        ),
+        token=token,
+    )
+    grpc_call(
+        T,
+        "Create",
+        tpb.TaskCreateRequest(
+            workspace_id=team["ws"], project_id=team["project"], title="K", parent_id=parent.id
+        ),
+        token=token,
+    )
+
+    refusal = _refused(
+        grpc_call,
+        T,
+        "Move",
+        tpb.TaskMoveRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            id=parent.id,
+            expected_version=1,
+            status=ids["Done"],
+        ),
+        token=token,
+    )
+
+    flagged = [t for t in saved.transitions if t.require_subtasks_done]
+    assert [(t.from_status, t.to_status) for t in flagged] == [(ids["In progress"], ids["Done"])]
+    assert refusal.code() == grpc.StatusCode.FAILED_PRECONDITION
+    assert (
+        "needs all subtasks done first"
+        in dict(refusal.trailing_metadata())["x-error-reason-bin"].decode()
     )

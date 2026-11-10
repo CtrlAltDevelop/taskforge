@@ -45,3 +45,35 @@ def test_fifty_parallel_creates_never_share_a_display_id() -> None:
     assert Task.objects.filter(project=project).count() == PARALLEL
     positions = list(Task.objects.filter(project=project).values_list("position", flat=True))
     assert len(set(positions)) == PARALLEL  # the rank is taken under the same lock
+
+
+def _finish(args: tuple[Any, Any, str, str, str]) -> None:
+    user, workspace, project_id, task_id, status_id = args
+    try:
+        task = Task.objects.get(pk=task_id)
+        services.move(user, workspace, project_id, task_id, task.version, status_id)
+    finally:
+        connections.close_all()
+
+
+def test_progress_stays_exact_while_many_children_finish_at_once() -> None:
+    from infrastructure.workflows.models import Status
+
+    owner = get_user_model().objects.create_user(
+        username="zoe", email="zoe@example.com", password="x-y-z-12345"
+    )
+    workspace = workspace_services.create(owner, "Acme", "acme")
+    project = projects.create(owner, workspace, "Web", "WEB").project
+    pid = str(project.pk)
+    parent = services.create(owner, workspace, pid, "P")
+    kids = [
+        services.create(owner, workspace, pid, f"k{i}", parent_id=str(parent.pk))
+        for i in range(PARALLEL)
+    ]
+    done = str(Status.objects.get(project=project, name="Done").pk)
+
+    with ThreadPoolExecutor(10) as pool:
+        list(pool.map(_finish, [(owner, workspace, pid, str(k.pk), done) for k in kids]))
+
+    parent.refresh_from_db()
+    assert (parent.progress_done, parent.progress_total) == (PARALLEL, PARALLEL)

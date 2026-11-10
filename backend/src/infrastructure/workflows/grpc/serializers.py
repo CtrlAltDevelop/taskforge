@@ -23,6 +23,7 @@ class Transition(serializers.Serializer[dict[str, object]]):
     to_status = serializers.CharField()
     required_role_id = serializers.CharField()
     require_assignee = serializers.BooleanField()
+    require_subtasks_done = serializers.BooleanField()
 
 
 class Workflow(serializers.Serializer[dict[str, object]]):
@@ -50,6 +51,7 @@ class TransitionInput(serializers.Serializer[dict[str, object]]):
     to_key = serializers.CharField()
     required_role_id = serializers.CharField()
     require_assignee = serializers.BooleanField()
+    require_subtasks_done = serializers.BooleanField()
 
 
 class MigrationInput(serializers.Serializer[dict[str, object]]):

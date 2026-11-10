@@ -35,9 +35,11 @@ class TaskControllerStub:
     Delete: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskDeleteRequest, _tasks_pb2.Task]
     Get: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]
     List: _grpc.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]
+    ListChildren: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskListChildrenRequest, _tasks_pb2.TaskChildren]
     ListTrash: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]
     Move: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskMoveRequest, _tasks_pb2.Task]
     Restore: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskRestoreRequest, _tasks_pb2.Task]
+    SetParent: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskSetParentRequest, _tasks_pb2.Task]
     Update: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskUpdateRequest, _tasks_pb2.Task]
 
 @_typing.type_check_only
@@ -47,9 +49,11 @@ class TaskControllerAsyncStub(TaskControllerStub):
     Delete: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskDeleteRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Get: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     List: _aio.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]  # type: ignore[assignment]
+    ListChildren: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskListChildrenRequest, _tasks_pb2.TaskChildren]  # type: ignore[assignment]
     ListTrash: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]  # type: ignore[assignment]
     Move: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskMoveRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Restore: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskRestoreRequest, _tasks_pb2.Task]  # type: ignore[assignment]
+    SetParent: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskSetParentRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Update: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskUpdateRequest, _tasks_pb2.Task]  # type: ignore[assignment]
 
 class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
@@ -82,6 +86,13 @@ class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
     ) -> _typing.Union[_abc.Iterator[_tasks_pb2.Task], _abc.AsyncIterator[_tasks_pb2.Task]]: ...
 
     @_abc_1.abstractmethod
+    def ListChildren(
+        self,
+        request: _tasks_pb2.TaskListChildrenRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TaskChildren, _abc.Awaitable[_tasks_pb2.TaskChildren]]: ...
+
+    @_abc_1.abstractmethod
     def ListTrash(
         self,
         request: _tasks_pb2.TaskListTrashRequest,
@@ -99,6 +110,13 @@ class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
     def Restore(
         self,
         request: _tasks_pb2.TaskRestoreRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
+
+    @_abc_1.abstractmethod
+    def SetParent(
+        self,
+        request: _tasks_pb2.TaskSetParentRequest,
         context: _ServicerContext,
     ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
 

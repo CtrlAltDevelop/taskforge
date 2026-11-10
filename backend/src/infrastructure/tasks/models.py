@@ -39,6 +39,18 @@ class Task(models.Model):
     version = models.PositiveIntegerField(default=1)
     field_versions = models.JSONField(default=dict, blank=True)
     position = models.CharField(max_length=64)
+    # Subtasks. ``path`` is the ids of every ancestor and the task itself, each followed by "/"
+    # (so a subtree is ``path__startswith``); ``tree_key`` is the same chain of ``position``s,
+    # each followed by "0", which sorts a parent immediately before its children in any collation;
+    # ``progress_*`` count the live descendants (and the done ones), kept by the service.
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children"
+    )
+    depth = models.PositiveSmallIntegerField(default=0)
+    path = models.CharField(max_length=2048, default="")
+    tree_key = models.CharField(max_length=2048, default="")
+    progress_done = models.PositiveIntegerField(default=0)
+    progress_total = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -51,6 +63,14 @@ class Task(models.Model):
             models.Index(fields=["project", "status"], name="task_project_status_idx"),
             models.Index(fields=["project", "position", "number"], name="task_project_order_idx"),
             models.Index(fields=["due_date"], name="task_due_date_idx"),
+            models.Index(fields=["project", "tree_key", "number"], name="task_project_tree_idx"),
+            # varchar_pattern_ops (PostgreSQL; ignored elsewhere) lets ``path LIKE 'x%'`` use
+            # the index whatever the database collation, which every subtree query relies on.
+            models.Index(
+                fields=["project", "path"],
+                name="task_project_path_idx",
+                opclasses=["uuid_ops", "varchar_pattern_ops"],
+            ),
         ]
 
     def __str__(self) -> str:

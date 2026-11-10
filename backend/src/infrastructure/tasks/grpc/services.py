@@ -3,8 +3,12 @@ what ``infrastructure.tasks`` decides.
 
 Permissions: Get/List need only workspace membership; Create ``task.create``; Update and Move
 ``task.update`` (a status change must also be allowed by the project's workflow:
-FAILED_PRECONDITION TRANSITION_NOT_ALLOWED with ``x-error-{from,to,reason}-bin``);
-Delete/Restore/ListTrash ``task.delete``. A task or project the caller may not see is NOT_FOUND.
+FAILED_PRECONDITION TRANSITION_NOT_ALLOWED with ``x-error-{from,to,reason}-bin``), and so does
+SetParent (a task under itself or its own subtask is INVALID_ARGUMENT); Delete/Restore/ListTrash
+``task.delete`` (a task with subtasks needs ``mode`` ``subtree`` or ``promote``, else
+INVALID_ARGUMENT HAS_SUBTASKS with ``x-error-count-bin``). A task or project the caller may not see
+is NOT_FOUND. ``List`` returns only top-level tasks unless ``include_subtasks``, then every task in
+tree order (a parent right before its own subtasks); ``ListChildren`` the direct subtasks.
 ``List`` is server-streamed in pages of up to 100 so a 10,000-task project starts rendering after
 the first page and never sits whole in memory. ``Update`` sends only the fields to change
 (``HasField``) plus ``expected_version``; a clash on the same field is ABORTED VERSION_CONFLICT
@@ -37,6 +41,7 @@ TEXT_FIELDS = ("title", "description", "status", "priority", "start_date", "due_
 CREATE_FIELDS = [
     *({"name": n, "type": "string"} for n in TEXT_FIELDS),
     {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
+    {"name": "parent_id", "type": "string"},
 ]
 
 
@@ -62,6 +67,10 @@ def _message(task: TaskRow) -> Any:
         start_date=task.start_date.isoformat() if task.start_date else "",
         due_date=task.due_date.isoformat() if task.due_date else "",
         assignee_ids=sorted(str(i) for i in task.assignee_ids()),
+        parent_id=str(task.parent_id or ""),
+        depth=task.depth,
+        progress_done=task.progress_done,
+        progress_total=task.progress_total,
         created_by=str(task.created_by_id),
         version=task.version,
         position=task.position,
@@ -91,6 +100,7 @@ def _page(user: Any, workspace: Any, request: Any, cursor: str) -> tuple[list[An
         assignee_id=request.assignee_id,
         cursor=cursor,
         limit=request.page_size or services.PAGE_DEFAULT,
+        include_subtasks=request.include_subtasks,
     )
     return [_message(t) for t in tasks], following
 
@@ -127,6 +137,7 @@ class TaskService(generics.GenericService):
                 start_date=request.start_date,
                 due_date=request.due_date,
                 assignee_ids=list(request.assignee_ids),
+                parent_id=request.parent_id,
             ),
         )
 
@@ -157,7 +168,13 @@ class TaskService(generics.GenericService):
         )
 
     @grpc_action(
-        request=[*IDS, ID, VERSION, {"name": "status", "type": "string"}],
+        request=[
+            *IDS,
+            ID,
+            VERSION,
+            {"name": "status", "type": "string"},
+            {"name": "include_subtasks", "type": "bool"},
+        ],
         request_name="TaskMoveRequest",
         response=Task,
         response_name="Task",
@@ -168,18 +185,62 @@ class TaskService(generics.GenericService):
             request,
             context,
             lambda u, w: services.move(
-                u, w, request.project_id, request.id, request.expected_version, request.status
+                u,
+                w,
+                request.project_id,
+                request.id,
+                request.expected_version,
+                request.status,
+                with_subtasks=request.include_subtasks,
             ),
         )
 
     @grpc_action(
-        request=[*IDS, ID], request_name="TaskDeleteRequest", response=Task, response_name="Task"
+        request=[*IDS, ID, {"name": "mode", "type": "string"}],
+        request_name="TaskDeleteRequest",
+        response=Task,
+        response_name="Task",
     )
     @action
     async def Delete(self, request: Any, context: Any) -> Any:
         return await _one(
-            request, context, lambda u, w: services.delete(u, w, request.project_id, request.id)
+            request,
+            context,
+            lambda u, w: services.delete(u, w, request.project_id, request.id, request.mode),
         )
+
+    @grpc_action(
+        request=[*IDS, ID, VERSION, {"name": "parent_id", "type": "string"}],
+        request_name="TaskSetParentRequest",
+        response=Task,
+        response_name="Task",
+    )
+    @action
+    async def SetParent(self, request: Any, context: Any) -> Any:
+        return await _one(
+            request,
+            context,
+            lambda u, w: services.set_parent(
+                u, w, request.project_id, request.id, request.expected_version, request.parent_id
+            ),
+        )
+
+    @grpc_action(
+        request=[*IDS, ID],
+        request_name="TaskListChildrenRequest",
+        response=[{"name": "tasks", "cardinality": "repeated", "type": Task}],
+        response_name="TaskChildren",
+    )
+    @action
+    async def ListChildren(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        rows = await sync_to_async(
+            lambda: [
+                _message(t)
+                for t in services.list_children(user, workspace, request.project_id, request.id)
+            ]
+        )()
+        return _pb().TaskChildren(tasks=rows)
 
     @grpc_action(
         request=[*IDS, ID], request_name="TaskRestoreRequest", response=Task, response_name="Task"
@@ -211,6 +272,7 @@ class TaskService(generics.GenericService):
             {"name": "assignee_id", "type": "string"},
             {"name": "cursor", "type": "string"},
             {"name": "page_size", "type": "int32"},
+            {"name": "include_subtasks", "type": "bool"},
         ],
         request_name="TaskListRequest",
         response=Task,

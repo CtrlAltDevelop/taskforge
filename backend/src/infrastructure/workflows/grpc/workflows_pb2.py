@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n-infrastructure/workflows/grpc/workflows.proto\x12\x10\x63onfig.workflows\"2\n\x0eMigrationInput\x12\x10\n\x08\x66rom_key\x18\x01 \x01(\t\x12\x0e\n\x06to_key\x18\x02 \x01(\t\"]\n\x0bStatusInput\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x63olor\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x04 \x01(\t\x12\x12\n\nis_default\x18\x05 \x01(\x08\"\x85\x01\n\x0eStatusResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x63olor\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x04 \x01(\t\x12\x10\n\x08position\x18\x05 \x01(\x05\x12\x12\n\nis_default\x18\x06 \x01(\x08\x12\x12\n\ntask_count\x18\x07 \x01(\x05\"g\n\x0fTransitionInput\x12\x10\n\x08\x66rom_key\x18\x01 \x01(\t\x12\x0e\n\x06to_key\x18\x02 \x01(\t\x12\x18\n\x10required_role_id\x18\x03 \x01(\t\x12\x18\n\x10require_assignee\x18\x04 \x01(\x08\"p\n\x12TransitionResponse\x12\x13\n\x0b\x66rom_status\x18\x01 \x01(\t\x12\x11\n\tto_status\x18\x02 \x01(\t\x12\x18\n\x10required_role_id\x18\x03 \x01(\t\x12\x18\n\x10require_assignee\x18\x04 \x01(\x08\"\xd7\x01\n\x08Workflow\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x1c\n\x14restrict_transitions\x18\x02 \x01(\x08\x12\x0f\n\x07version\x18\x03 \x01(\x05\x12\x32\n\x08statuses\x18\x04 \x03(\x0b\x32 .config.workflows.StatusResponse\x12\x39\n\x0btransitions\x18\x05 \x03(\x0b\x32$.config.workflows.TransitionResponse\x12\x19\n\x11restrict_creation\x18\x06 \x01(\x08\">\n\x12WorkflowGetRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\"D\n\x0fWorkflowProblem\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x12\n\nstatus_key\x18\x03 \x01(\t\"G\n\x10WorkflowProblems\x12\x33\n\x08problems\x18\x01 \x03(\x0b\x32!.config.workflows.WorkflowProblem\"\xb3\x02\n\x15WorkflowUpdateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x03 \x01(\x05\x12\x1c\n\x14restrict_transitions\x18\x04 \x01(\x08\x12/\n\x08statuses\x18\x05 \x03(\x0b\x32\x1d.config.workflows.StatusInput\x12\x36\n\x0btransitions\x18\x06 \x03(\x0b\x32!.config.workflows.TransitionInput\x12\x34\n\nmigrations\x18\x07 \x03(\x0b\x32 .config.workflows.MigrationInput\x12\x19\n\x11restrict_creation\x18\x08 \x01(\x08\"\x9b\x02\n\x17WorkflowValidateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x1c\n\x14restrict_transitions\x18\x03 \x01(\x08\x12/\n\x08statuses\x18\x04 \x03(\x0b\x32\x1d.config.workflows.StatusInput\x12\x36\n\x0btransitions\x18\x05 \x03(\x0b\x32!.config.workflows.TransitionInput\x12\x34\n\nmigrations\x18\x06 \x03(\x0b\x32 .config.workflows.MigrationInput\x12\x19\n\x11restrict_creation\x18\x07 \x01(\x08\x32\x8d\x02\n\x12WorkflowController\x12I\n\x03Get\x12$.config.workflows.WorkflowGetRequest\x1a\x1a.config.workflows.Workflow\"\x00\x12O\n\x06Update\x12\'.config.workflows.WorkflowUpdateRequest\x1a\x1a.config.workflows.Workflow\"\x00\x12[\n\x08Validate\x12).config.workflows.WorkflowValidateRequest\x1a\".config.workflows.WorkflowProblems\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n-infrastructure/workflows/grpc/workflows.proto\x12\x10\x63onfig.workflows\"2\n\x0eMigrationInput\x12\x10\n\x08\x66rom_key\x18\x01 \x01(\t\x12\x0e\n\x06to_key\x18\x02 \x01(\t\"]\n\x0bStatusInput\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x63olor\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x04 \x01(\t\x12\x12\n\nis_default\x18\x05 \x01(\x08\"\x85\x01\n\x0eStatusResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05\x63olor\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x04 \x01(\t\x12\x10\n\x08position\x18\x05 \x01(\x05\x12\x12\n\nis_default\x18\x06 \x01(\x08\x12\x12\n\ntask_count\x18\x07 \x01(\x05\"\x86\x01\n\x0fTransitionInput\x12\x10\n\x08\x66rom_key\x18\x01 \x01(\t\x12\x0e\n\x06to_key\x18\x02 \x01(\t\x12\x18\n\x10required_role_id\x18\x03 \x01(\t\x12\x18\n\x10require_assignee\x18\x04 \x01(\x08\x12\x1d\n\x15require_subtasks_done\x18\x05 \x01(\x08\"\x8f\x01\n\x12TransitionResponse\x12\x13\n\x0b\x66rom_status\x18\x01 \x01(\t\x12\x11\n\tto_status\x18\x02 \x01(\t\x12\x18\n\x10required_role_id\x18\x03 \x01(\t\x12\x18\n\x10require_assignee\x18\x04 \x01(\x08\x12\x1d\n\x15require_subtasks_done\x18\x05 \x01(\x08\"\xd7\x01\n\x08Workflow\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x1c\n\x14restrict_transitions\x18\x02 \x01(\x08\x12\x0f\n\x07version\x18\x03 \x01(\x05\x12\x32\n\x08statuses\x18\x04 \x03(\x0b\x32 .config.workflows.StatusResponse\x12\x39\n\x0btransitions\x18\x05 \x03(\x0b\x32$.config.workflows.TransitionResponse\x12\x19\n\x11restrict_creation\x18\x06 \x01(\x08\">\n\x12WorkflowGetRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\"D\n\x0fWorkflowProblem\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x12\n\nstatus_key\x18\x03 \x01(\t\"G\n\x10WorkflowProblems\x12\x33\n\x08problems\x18\x01 \x03(\x0b\x32!.config.workflows.WorkflowProblem\"\xb3\x02\n\x15WorkflowUpdateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x03 \x01(\x05\x12\x1c\n\x14restrict_transitions\x18\x04 \x01(\x08\x12/\n\x08statuses\x18\x05 \x03(\x0b\x32\x1d.config.workflows.StatusInput\x12\x36\n\x0btransitions\x18\x06 \x03(\x0b\x32!.config.workflows.TransitionInput\x12\x34\n\nmigrations\x18\x07 \x03(\x0b\x32 .config.workflows.MigrationInput\x12\x19\n\x11restrict_creation\x18\x08 \x01(\x08\"\x9b\x02\n\x17WorkflowValidateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x1c\n\x14restrict_transitions\x18\x03 \x01(\x08\x12/\n\x08statuses\x18\x04 \x03(\x0b\x32\x1d.config.workflows.StatusInput\x12\x36\n\x0btransitions\x18\x05 \x03(\x0b\x32!.config.workflows.TransitionInput\x12\x34\n\nmigrations\x18\x06 \x03(\x0b\x32 .config.workflows.MigrationInput\x12\x19\n\x11restrict_creation\x18\x07 \x01(\x08\x32\x8d\x02\n\x12WorkflowController\x12I\n\x03Get\x12$.config.workflows.WorkflowGetRequest\x1a\x1a.config.workflows.Workflow\"\x00\x12O\n\x06Update\x12\'.config.workflows.WorkflowUpdateRequest\x1a\x1a.config.workflows.Workflow\"\x00\x12[\n\x08Validate\x12).config.workflows.WorkflowValidateRequest\x1a\".config.workflows.WorkflowProblems\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,22 +37,22 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STATUSINPUT']._serialized_end=212
   _globals['_STATUSRESPONSE']._serialized_start=215
   _globals['_STATUSRESPONSE']._serialized_end=348
-  _globals['_TRANSITIONINPUT']._serialized_start=350
-  _globals['_TRANSITIONINPUT']._serialized_end=453
-  _globals['_TRANSITIONRESPONSE']._serialized_start=455
-  _globals['_TRANSITIONRESPONSE']._serialized_end=567
-  _globals['_WORKFLOW']._serialized_start=570
-  _globals['_WORKFLOW']._serialized_end=785
-  _globals['_WORKFLOWGETREQUEST']._serialized_start=787
-  _globals['_WORKFLOWGETREQUEST']._serialized_end=849
-  _globals['_WORKFLOWPROBLEM']._serialized_start=851
-  _globals['_WORKFLOWPROBLEM']._serialized_end=919
-  _globals['_WORKFLOWPROBLEMS']._serialized_start=921
-  _globals['_WORKFLOWPROBLEMS']._serialized_end=992
-  _globals['_WORKFLOWUPDATEREQUEST']._serialized_start=995
-  _globals['_WORKFLOWUPDATEREQUEST']._serialized_end=1302
-  _globals['_WORKFLOWVALIDATEREQUEST']._serialized_start=1305
-  _globals['_WORKFLOWVALIDATEREQUEST']._serialized_end=1588
-  _globals['_WORKFLOWCONTROLLER']._serialized_start=1591
-  _globals['_WORKFLOWCONTROLLER']._serialized_end=1860
+  _globals['_TRANSITIONINPUT']._serialized_start=351
+  _globals['_TRANSITIONINPUT']._serialized_end=485
+  _globals['_TRANSITIONRESPONSE']._serialized_start=488
+  _globals['_TRANSITIONRESPONSE']._serialized_end=631
+  _globals['_WORKFLOW']._serialized_start=634
+  _globals['_WORKFLOW']._serialized_end=849
+  _globals['_WORKFLOWGETREQUEST']._serialized_start=851
+  _globals['_WORKFLOWGETREQUEST']._serialized_end=913
+  _globals['_WORKFLOWPROBLEM']._serialized_start=915
+  _globals['_WORKFLOWPROBLEM']._serialized_end=983
+  _globals['_WORKFLOWPROBLEMS']._serialized_start=985
+  _globals['_WORKFLOWPROBLEMS']._serialized_end=1056
+  _globals['_WORKFLOWUPDATEREQUEST']._serialized_start=1059
+  _globals['_WORKFLOWUPDATEREQUEST']._serialized_end=1366
+  _globals['_WORKFLOWVALIDATEREQUEST']._serialized_start=1369
+  _globals['_WORKFLOWVALIDATEREQUEST']._serialized_end=1652
+  _globals['_WORKFLOWCONTROLLER']._serialized_start=1655
+  _globals['_WORKFLOWCONTROLLER']._serialized_end=1924
 # @@protoc_insertion_point(module_scope)

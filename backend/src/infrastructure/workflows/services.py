@@ -11,7 +11,7 @@ transaction, so no task is ever left without a status.
 """
 
 import json
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
@@ -215,6 +215,7 @@ def _apply(
             to_status=by_key[t.to_key],
             required_role_id=int(t.required_role_id) if t.required_role_id else None,
             require_assignee=t.require_assignee,
+            require_subtasks_done=t.require_subtasks_done,
         )
         for t in draft.transitions
     )
@@ -222,6 +223,14 @@ def _apply(
     workflow.restrict_creation = draft.restrict_creation
     workflow.version += 1
     workflow.save(update_fields=["restrict_transitions", "restrict_creation", "version"])
+
+
+def _recount_progress(project: Project) -> None:
+    """A status changing category, or tasks moving to another status, changes how many subtasks
+    are done: recount every parent of the project."""
+    from infrastructure.tasks import tree
+
+    tree.refresh_project(project.pk)
 
 
 def _write_status(
@@ -269,6 +278,7 @@ def update(
         if problems:
             raise _invalid(problems)
         _apply(project, workflow, draft, migrate, existing)
+        _recount_progress(project)
         announce(project, workflow.version)
     return _view(project)
 
@@ -308,6 +318,7 @@ def check_move(
     target: Status,
     *,
     assignee_count: int,
+    open_subtasks: Callable[[], int] = lambda: 0,
 ) -> None:
     """Raise ``TRANSITION_NOT_ALLOWED`` unless ``actor`` may move a task from ``source`` to
     ``target``. Staying put is never a move; without restriction every move is allowed."""
@@ -319,6 +330,14 @@ def check_move(
     rule = Transition.objects.filter(from_status=source, to_status=target).first()
     if rule is None:
         raise _not_allowed(source, target, f"{arrow} is not allowed.")
+    if rule.require_subtasks_done:
+        open_now = open_subtasks()
+        if open_now:
+            raise _not_allowed(
+                source,
+                target,
+                f"{arrow} needs all subtasks done first ({open_now} still open).",
+            )
     if rule.require_assignee and assignee_count == 0:
         raise _not_allowed(source, target, f"{arrow} needs an assignee first.")
     if rule.required_role_id is not None:

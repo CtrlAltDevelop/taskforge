@@ -116,10 +116,12 @@ class TransitionInput(_message.Message):
     TO_KEY_FIELD_NUMBER: _builtins.int
     REQUIRED_ROLE_ID_FIELD_NUMBER: _builtins.int
     REQUIRE_ASSIGNEE_FIELD_NUMBER: _builtins.int
+    REQUIRE_SUBTASKS_DONE_FIELD_NUMBER: _builtins.int
     from_key: _builtins.str
     to_key: _builtins.str
     required_role_id: _builtins.str
     require_assignee: _builtins.bool
+    require_subtasks_done: _builtins.bool
     def __init__(
         self,
         *,
@@ -127,10 +129,11 @@ class TransitionInput(_message.Message):
         to_key: _builtins.str = ...,
         required_role_id: _builtins.str = ...,
         require_assignee: _builtins.bool = ...,
+        require_subtasks_done: _builtins.bool = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["from_key", b"from_key", "require_assignee", b"require_assignee", "required_role_id", b"required_role_id", "to_key", b"to_key"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["from_key", b"from_key", "require_assignee", b"require_assignee", "require_subtasks_done", b"require_subtasks_done", "required_role_id", b"required_role_id", "to_key", b"to_key"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -144,10 +147,12 @@ class TransitionResponse(_message.Message):
     TO_STATUS_FIELD_NUMBER: _builtins.int
     REQUIRED_ROLE_ID_FIELD_NUMBER: _builtins.int
     REQUIRE_ASSIGNEE_FIELD_NUMBER: _builtins.int
+    REQUIRE_SUBTASKS_DONE_FIELD_NUMBER: _builtins.int
     from_status: _builtins.str
     to_status: _builtins.str
     required_role_id: _builtins.str
     require_assignee: _builtins.bool
+    require_subtasks_done: _builtins.bool
     def __init__(
         self,
         *,
@@ -155,10 +160,11 @@ class TransitionResponse(_message.Message):
         to_status: _builtins.str = ...,
         required_role_id: _builtins.str = ...,
         require_assignee: _builtins.bool = ...,
+        require_subtasks_done: _builtins.bool = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["from_status", b"from_status", "require_assignee", b"require_assignee", "required_role_id", b"required_role_id", "to_status", b"to_status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["from_status", b"from_status", "require_assignee", b"require_assignee", "require_subtasks_done", b"require_subtasks_done", "required_role_id", b"required_role_id", "to_status", b"to_status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

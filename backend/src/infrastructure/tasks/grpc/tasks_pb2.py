@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%infrastructure/tasks/grpc/tasks.proto\x12\x0c\x63onfig.tasks\"\x83\x03\n\x04Task\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cworkspace_id\x18\x02 \x01(\t\x12\x12\n\nproject_id\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x01(\x05\x12\x12\n\ndisplay_id\x18\x05 \x01(\t\x12\r\n\x05title\x18\x06 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x07 \x01(\t\x12\x0e\n\x06status\x18\x08 \x01(\t\x12\x10\n\x08priority\x18\t \x01(\t\x12\x12\n\nstart_date\x18\n \x01(\t\x12\x10\n\x08\x64ue_date\x18\x0b \x01(\t\x12\x14\n\x0c\x61ssignee_ids\x18\x0c \x03(\t\x12\x12\n\ncreated_by\x18\r \x01(\t\x12\x0f\n\x07version\x18\x0e \x01(\x05\x12\x10\n\x08position\x18\x0f \x01(\t\x12\x12\n\ncreated_at\x18\x10 \x01(\t\x12\x12\n\nupdated_at\x18\x11 \x01(\t\x12\x12\n\ndeleted_at\x18\x12 \x01(\t\x12\x13\n\x0bstatus_name\x18\x13 \x01(\t\x12\x17\n\x0fstatus_category\x18\x14 \x01(\t\"\xbf\x01\n\x11TaskCreateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\r\n\x05title\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12\x0e\n\x06status\x18\x05 \x01(\t\x12\x10\n\x08priority\x18\x06 \x01(\t\x12\x12\n\nstart_date\x18\x07 \x01(\t\x12\x10\n\x08\x64ue_date\x18\x08 \x01(\t\x12\x14\n\x0c\x61ssignee_ids\x18\t \x03(\t\"I\n\x11TaskDeleteRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"F\n\x0eTaskGetRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"\x83\x01\n\x0fTaskListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0e\n\x06status\x18\x03 \x01(\t\x12\x13\n\x0b\x61ssignee_id\x18\x04 \x01(\t\x12\x0e\n\x06\x63ursor\x18\x05 \x01(\t\x12\x11\n\tpage_size\x18\x06 \x01(\x05\"@\n\x14TaskListTrashRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\"q\n\x0fTaskMoveRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x0e\n\x06status\x18\x05 \x01(\t\"J\n\x12TaskRestoreRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\".\n\tTaskTrash\x12!\n\x05tasks\x18\x01 \x03(\x0b\x32\x12.config.tasks.Task\"\xe8\x02\n\x11TaskUpdateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x12\n\x05title\x18\x05 \x01(\tH\x00\x88\x01\x01\x12\x18\n\x0b\x64\x65scription\x18\x06 \x01(\tH\x01\x88\x01\x01\x12\x13\n\x06status\x18\x07 \x01(\tH\x02\x88\x01\x01\x12\x15\n\x08priority\x18\x08 \x01(\tH\x03\x88\x01\x01\x12\x17\n\nstart_date\x18\t \x01(\tH\x04\x88\x01\x01\x12\x15\n\x08\x64ue_date\x18\n \x01(\tH\x05\x88\x01\x01\x12\x15\n\rset_assignees\x18\x0b \x01(\x08\x12\x14\n\x0c\x61ssignee_ids\x18\x0c \x03(\tB\x08\n\x06_titleB\x0e\n\x0c_descriptionB\t\n\x07_statusB\x0b\n\t_priorityB\r\n\x0b_start_dateB\x0b\n\t_due_date2\x99\x04\n\x0eTaskController\x12?\n\x06\x43reate\x12\x1f.config.tasks.TaskCreateRequest\x1a\x12.config.tasks.Task\"\x00\x12?\n\x06\x44\x65lete\x12\x1f.config.tasks.TaskDeleteRequest\x1a\x12.config.tasks.Task\"\x00\x12\x39\n\x03Get\x12\x1c.config.tasks.TaskGetRequest\x1a\x12.config.tasks.Task\"\x00\x12=\n\x04List\x12\x1d.config.tasks.TaskListRequest\x1a\x12.config.tasks.Task\"\x00\x30\x01\x12J\n\tListTrash\x12\".config.tasks.TaskListTrashRequest\x1a\x17.config.tasks.TaskTrash\"\x00\x12;\n\x04Move\x12\x1d.config.tasks.TaskMoveRequest\x1a\x12.config.tasks.Task\"\x00\x12\x41\n\x07Restore\x12 .config.tasks.TaskRestoreRequest\x1a\x12.config.tasks.Task\"\x00\x12?\n\x06Update\x12\x1f.config.tasks.TaskUpdateRequest\x1a\x12.config.tasks.Task\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%infrastructure/tasks/grpc/tasks.proto\x12\x0c\x63onfig.tasks\"\xd4\x03\n\x04Task\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cworkspace_id\x18\x02 \x01(\t\x12\x12\n\nproject_id\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x01(\x05\x12\x12\n\ndisplay_id\x18\x05 \x01(\t\x12\r\n\x05title\x18\x06 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x07 \x01(\t\x12\x0e\n\x06status\x18\x08 \x01(\t\x12\x10\n\x08priority\x18\t \x01(\t\x12\x12\n\nstart_date\x18\n \x01(\t\x12\x10\n\x08\x64ue_date\x18\x0b \x01(\t\x12\x14\n\x0c\x61ssignee_ids\x18\x0c \x03(\t\x12\x12\n\ncreated_by\x18\r \x01(\t\x12\x0f\n\x07version\x18\x0e \x01(\x05\x12\x10\n\x08position\x18\x0f \x01(\t\x12\x12\n\ncreated_at\x18\x10 \x01(\t\x12\x12\n\nupdated_at\x18\x11 \x01(\t\x12\x12\n\ndeleted_at\x18\x12 \x01(\t\x12\x13\n\x0bstatus_name\x18\x13 \x01(\t\x12\x17\n\x0fstatus_category\x18\x14 \x01(\t\x12\x11\n\tparent_id\x18\x15 \x01(\t\x12\r\n\x05\x64\x65pth\x18\x16 \x01(\x05\x12\x15\n\rprogress_done\x18\x17 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x18 \x01(\x05\"1\n\x0cTaskChildren\x12!\n\x05tasks\x18\x01 \x03(\x0b\x32\x12.config.tasks.Task\"\xd2\x01\n\x11TaskCreateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\r\n\x05title\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12\x0e\n\x06status\x18\x05 \x01(\t\x12\x10\n\x08priority\x18\x06 \x01(\t\x12\x12\n\nstart_date\x18\x07 \x01(\t\x12\x10\n\x08\x64ue_date\x18\x08 \x01(\t\x12\x14\n\x0c\x61ssignee_ids\x18\t \x03(\t\x12\x11\n\tparent_id\x18\n \x01(\t\"W\n\x11TaskDeleteRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x0c\n\x04mode\x18\x04 \x01(\t\"F\n\x0eTaskGetRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"O\n\x17TaskListChildrenRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"\x9d\x01\n\x0fTaskListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0e\n\x06status\x18\x03 \x01(\t\x12\x13\n\x0b\x61ssignee_id\x18\x04 \x01(\t\x12\x0e\n\x06\x63ursor\x18\x05 \x01(\t\x12\x11\n\tpage_size\x18\x06 \x01(\x05\x12\x18\n\x10include_subtasks\x18\x07 \x01(\x08\"@\n\x14TaskListTrashRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\"\x8b\x01\n\x0fTaskMoveRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x0e\n\x06status\x18\x05 \x01(\t\x12\x18\n\x10include_subtasks\x18\x06 \x01(\x08\"J\n\x12TaskRestoreRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"y\n\x14TaskSetParentRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x11\n\tparent_id\x18\x05 \x01(\t\".\n\tTaskTrash\x12!\n\x05tasks\x18\x01 \x03(\x0b\x32\x12.config.tasks.Task\"\xe8\x02\n\x11TaskUpdateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x12\n\x05title\x18\x05 \x01(\tH\x00\x88\x01\x01\x12\x18\n\x0b\x64\x65scription\x18\x06 \x01(\tH\x01\x88\x01\x01\x12\x13\n\x06status\x18\x07 \x01(\tH\x02\x88\x01\x01\x12\x15\n\x08priority\x18\x08 \x01(\tH\x03\x88\x01\x01\x12\x17\n\nstart_date\x18\t \x01(\tH\x04\x88\x01\x01\x12\x15\n\x08\x64ue_date\x18\n \x01(\tH\x05\x88\x01\x01\x12\x15\n\rset_assignees\x18\x0b \x01(\x08\x12\x14\n\x0c\x61ssignee_ids\x18\x0c \x03(\tB\x08\n\x06_titleB\x0e\n\x0c_descriptionB\t\n\x07_statusB\x0b\n\t_priorityB\r\n\x0b_start_dateB\x0b\n\t_due_date2\xb5\x05\n\x0eTaskController\x12?\n\x06\x43reate\x12\x1f.config.tasks.TaskCreateRequest\x1a\x12.config.tasks.Task\"\x00\x12?\n\x06\x44\x65lete\x12\x1f.config.tasks.TaskDeleteRequest\x1a\x12.config.tasks.Task\"\x00\x12\x39\n\x03Get\x12\x1c.config.tasks.TaskGetRequest\x1a\x12.config.tasks.Task\"\x00\x12=\n\x04List\x12\x1d.config.tasks.TaskListRequest\x1a\x12.config.tasks.Task\"\x00\x30\x01\x12S\n\x0cListChildren\x12%.config.tasks.TaskListChildrenRequest\x1a\x1a.config.tasks.TaskChildren\"\x00\x12J\n\tListTrash\x12\".config.tasks.TaskListTrashRequest\x1a\x17.config.tasks.TaskTrash\"\x00\x12;\n\x04Move\x12\x1d.config.tasks.TaskMoveRequest\x1a\x12.config.tasks.Task\"\x00\x12\x41\n\x07Restore\x12 .config.tasks.TaskRestoreRequest\x1a\x12.config.tasks.Task\"\x00\x12\x45\n\tSetParent\x12\".config.tasks.TaskSetParentRequest\x1a\x12.config.tasks.Task\"\x00\x12?\n\x06Update\x12\x1f.config.tasks.TaskUpdateRequest\x1a\x12.config.tasks.Task\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,25 +32,31 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'infrastructure.tasks.grpc.t
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_TASK']._serialized_start=56
-  _globals['_TASK']._serialized_end=443
-  _globals['_TASKCREATEREQUEST']._serialized_start=446
-  _globals['_TASKCREATEREQUEST']._serialized_end=637
-  _globals['_TASKDELETEREQUEST']._serialized_start=639
-  _globals['_TASKDELETEREQUEST']._serialized_end=712
-  _globals['_TASKGETREQUEST']._serialized_start=714
-  _globals['_TASKGETREQUEST']._serialized_end=784
-  _globals['_TASKLISTREQUEST']._serialized_start=787
-  _globals['_TASKLISTREQUEST']._serialized_end=918
-  _globals['_TASKLISTTRASHREQUEST']._serialized_start=920
-  _globals['_TASKLISTTRASHREQUEST']._serialized_end=984
-  _globals['_TASKMOVEREQUEST']._serialized_start=986
-  _globals['_TASKMOVEREQUEST']._serialized_end=1099
-  _globals['_TASKRESTOREREQUEST']._serialized_start=1101
-  _globals['_TASKRESTOREREQUEST']._serialized_end=1175
-  _globals['_TASKTRASH']._serialized_start=1177
-  _globals['_TASKTRASH']._serialized_end=1223
-  _globals['_TASKUPDATEREQUEST']._serialized_start=1226
-  _globals['_TASKUPDATEREQUEST']._serialized_end=1586
-  _globals['_TASKCONTROLLER']._serialized_start=1589
-  _globals['_TASKCONTROLLER']._serialized_end=2126
+  _globals['_TASK']._serialized_end=524
+  _globals['_TASKCHILDREN']._serialized_start=526
+  _globals['_TASKCHILDREN']._serialized_end=575
+  _globals['_TASKCREATEREQUEST']._serialized_start=578
+  _globals['_TASKCREATEREQUEST']._serialized_end=788
+  _globals['_TASKDELETEREQUEST']._serialized_start=790
+  _globals['_TASKDELETEREQUEST']._serialized_end=877
+  _globals['_TASKGETREQUEST']._serialized_start=879
+  _globals['_TASKGETREQUEST']._serialized_end=949
+  _globals['_TASKLISTCHILDRENREQUEST']._serialized_start=951
+  _globals['_TASKLISTCHILDRENREQUEST']._serialized_end=1030
+  _globals['_TASKLISTREQUEST']._serialized_start=1033
+  _globals['_TASKLISTREQUEST']._serialized_end=1190
+  _globals['_TASKLISTTRASHREQUEST']._serialized_start=1192
+  _globals['_TASKLISTTRASHREQUEST']._serialized_end=1256
+  _globals['_TASKMOVEREQUEST']._serialized_start=1259
+  _globals['_TASKMOVEREQUEST']._serialized_end=1398
+  _globals['_TASKRESTOREREQUEST']._serialized_start=1400
+  _globals['_TASKRESTOREREQUEST']._serialized_end=1474
+  _globals['_TASKSETPARENTREQUEST']._serialized_start=1476
+  _globals['_TASKSETPARENTREQUEST']._serialized_end=1597
+  _globals['_TASKTRASH']._serialized_start=1599
+  _globals['_TASKTRASH']._serialized_end=1645
+  _globals['_TASKUPDATEREQUEST']._serialized_start=1648
+  _globals['_TASKUPDATEREQUEST']._serialized_end=2008
+  _globals['_TASKCONTROLLER']._serialized_start=2011
+  _globals['_TASKCONTROLLER']._serialized_end=2704
 # @@protoc_insertion_point(module_scope)

@@ -140,6 +140,10 @@ class ResponseTitle(StrEnum):
     WORKFLOW_INVALID = "WORKFLOW_INVALID"
     TRANSITION_NOT_ALLOWED = "TRANSITION_NOT_ALLOWED"
 
+    # Subtasks
+    HAS_SUBTASKS = "HAS_SUBTASKS"
+    SUBTASK_CYCLE = "SUBTASK_CYCLE"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -185,6 +189,8 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.LAST_MEMBER: "A private project needs at least one member.",
     ResponseTitle.WORKFLOW_INVALID: "The workflow has problems; see the list.",
     ResponseTitle.TRANSITION_NOT_ALLOWED: "The workflow does not allow that move.",
+    ResponseTitle.HAS_SUBTASKS: "The task has subtasks: delete them with it or promote them.",
+    ResponseTitle.SUBTASK_CYCLE: "A task cannot be put under itself or one of its own subtasks.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

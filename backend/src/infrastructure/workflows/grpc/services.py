@@ -73,6 +73,7 @@ def _message(view: services.WorkflowView) -> Any:
                 to_status=str(t.to_status_id),
                 required_role_id=str(t.required_role_id or ""),
                 require_assignee=t.require_assignee,
+                require_subtasks_done=t.require_subtasks_done,
             )
             for t in view.transitions
         ],
@@ -85,7 +86,13 @@ def _draft(request: Any) -> tuple[WorkflowDraft, dict[str, str]]:
             StatusDraft(s.key, s.name, s.color, s.category, s.is_default) for s in request.statuses
         ),
         transitions=tuple(
-            TransitionDraft(t.from_key, t.to_key, t.required_role_id, t.require_assignee)
+            TransitionDraft(
+                t.from_key,
+                t.to_key,
+                t.required_role_id,
+                t.require_assignee,
+                t.require_subtasks_done,
+            )
             for t in request.transitions
         ),
         restrict=request.restrict_transitions,

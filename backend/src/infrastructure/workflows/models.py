@@ -73,6 +73,7 @@ class Transition(models.Model):
         Role, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
     require_assignee = models.BooleanField(default=False)
+    require_subtasks_done = models.BooleanField(default=False)
 
     class Meta:
         constraints = [

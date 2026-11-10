@@ -367,6 +367,13 @@ _TASK_CALLS = (  # (rpc, permission, request builder, prepare)
     ("Delete", "task.delete", _task_request(tpb.TaskDeleteRequest), _make_task),
     ("Restore", "task.delete", _task_request(tpb.TaskRestoreRequest), _make_deleted_task),
     (
+        "SetParent",
+        "task.update",
+        _task_request(tpb.TaskSetParentRequest, expected_version=1, parent_id=""),
+        _make_task,
+    ),
+    ("ListChildren", "workspace.view", _task_request(tpb.TaskListChildrenRequest), _make_task),
+    (
         "ListTrash",
         "task.delete",
         lambda w: tpb.TaskListTrashRequest(workspace_id=w.ws, project_id=w.project_id),

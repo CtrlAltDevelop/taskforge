@@ -54,6 +54,11 @@ class TaskControllerStub:
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
                 _registered_method=True)
+        self.ListChildren = channel.unary_unary(
+                '/config.tasks.TaskController/ListChildren',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListChildrenRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskChildren.FromString,
+                _registered_method=True)
         self.ListTrash = channel.unary_unary(
                 '/config.tasks.TaskController/ListTrash',
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListTrashRequest.SerializeToString,
@@ -67,6 +72,11 @@ class TaskControllerStub:
         self.Restore = channel.unary_unary(
                 '/config.tasks.TaskController/Restore',
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskRestoreRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
+        self.SetParent = channel.unary_unary(
+                '/config.tasks.TaskController/SetParent',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskSetParentRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
                 _registered_method=True)
         self.Update = channel.unary_unary(
@@ -103,6 +113,12 @@ class TaskControllerServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListChildren(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def ListTrash(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -116,6 +132,12 @@ class TaskControllerServicer:
         raise NotImplementedError('Method not implemented!')
 
     def Restore(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetParent(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -150,6 +172,11 @@ def add_TaskControllerServicer_to_server(servicer, server):
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListRequest.FromString,
                     response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
             ),
+            'ListChildren': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListChildren,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListChildrenRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskChildren.SerializeToString,
+            ),
             'ListTrash': grpc.unary_unary_rpc_method_handler(
                     servicer.ListTrash,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListTrashRequest.FromString,
@@ -163,6 +190,11 @@ def add_TaskControllerServicer_to_server(servicer, server):
             'Restore': grpc.unary_unary_rpc_method_handler(
                     servicer.Restore,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskRestoreRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
+            ),
+            'SetParent': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetParent,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskSetParentRequest.FromString,
                     response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
             ),
             'Update': grpc.unary_unary_rpc_method_handler(
@@ -290,6 +322,33 @@ class TaskController:
             _registered_method=True)
 
     @staticmethod
+    def ListChildren(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TaskController/ListChildren',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskListChildrenRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskChildren.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def ListTrash(request,
             target,
             options=(),
@@ -359,6 +418,33 @@ class TaskController:
             target,
             '/config.tasks.TaskController/Restore',
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskRestoreRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetParent(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TaskController/SetParent',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskSetParentRequest.SerializeToString,
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
             options,
             channel_credentials,

@@ -7,9 +7,11 @@ service TaskController {
     rpc Delete(TaskDeleteRequest) returns (Task) {}
     rpc Get(TaskGetRequest) returns (Task) {}
     rpc List(TaskListRequest) returns (stream Task) {}
+    rpc ListChildren(TaskListChildrenRequest) returns (TaskChildren) {}
     rpc ListTrash(TaskListTrashRequest) returns (TaskTrash) {}
     rpc Move(TaskMoveRequest) returns (Task) {}
     rpc Restore(TaskRestoreRequest) returns (Task) {}
+    rpc SetParent(TaskSetParentRequest) returns (Task) {}
     rpc Update(TaskUpdateRequest) returns (Task) {}
 }
 
@@ -34,6 +36,14 @@ message Task {
     string deleted_at = 18;
     string status_name = 19;
     string status_category = 20;
+    string parent_id = 21;
+    int32 depth = 22;
+    int32 progress_done = 23;
+    int32 progress_total = 24;
+}
+
+message TaskChildren {
+    repeated Task tasks = 1;
 }
 
 message TaskCreateRequest {
@@ -46,15 +56,23 @@ message TaskCreateRequest {
     string start_date = 7;
     string due_date = 8;
     repeated string assignee_ids = 9;
+    string parent_id = 10;
 }
 
 message TaskDeleteRequest {
     string workspace_id = 1;
     string project_id = 2;
     string id = 3;
+    string mode = 4;
 }
 
 message TaskGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message TaskListChildrenRequest {
     string workspace_id = 1;
     string project_id = 2;
     string id = 3;
@@ -67,6 +85,7 @@ message TaskListRequest {
     string assignee_id = 4;
     string cursor = 5;
     int32 page_size = 6;
+    bool include_subtasks = 7;
 }
 
 message TaskListTrashRequest {
@@ -80,12 +99,21 @@ message TaskMoveRequest {
     string id = 3;
     int32 expected_version = 4;
     string status = 5;
+    bool include_subtasks = 6;
 }
 
 message TaskRestoreRequest {
     string workspace_id = 1;
     string project_id = 2;
     string id = 3;
+}
+
+message TaskSetParentRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string parent_id = 5;
 }
 
 message TaskTrash {

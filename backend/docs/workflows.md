@@ -35,6 +35,7 @@ An allowed move. Only consulted while the workflow restricts transitions.
 | `to_status` | ForeignKey | → `workflows.Status` |
 | `required_role` | ForeignKey | → `workspaces.Role`, nullable |
 | `require_assignee` | Boolean |  |
+| `require_subtasks_done` | Boolean |  |
 
 #### `Workflow`
 
@@ -74,7 +75,7 @@ _This app requires no settings of its own._
 - **Rules** (`validate.py`, mirrored in the app so the editor answers while typing): at least one *Not started* and one *Done*; exactly one default, which is not final; unique names; known categories; transitions name real, distinct statuses once each. A saved workflow that violates any of them is impossible: an invalid draft is rejected whole.
 - **Restrict transitions** (off by default): off means any status may move to any other, and the transition rows are ignored. On means only a move with a `Transition` row is allowed, and then the workflow must also be connected: every status reachable from the default, a *Done* status reachable, and no non-final status that leads nowhere (`STATUS_UNREACHABLE`, `NO_DONE_REACHABLE`, `STATUS_DEAD_END`).
 - **Restrict creation** (a second switch, off by default, set per project by whoever may edit the workflow): off means a new task can be created in any status; on means it can only start in the default status and reaches the others by being moved (so the transition rules apply to every step). It is independent of *Restrict transitions*. A refused creation is the same `TRANSITION_NOT_ALLOWED`, with an empty `from` and the reason "New tasks must start in To do.", and burns no task number.
-- **Conditions** on a transition: `required_role` (only people holding exactly that role may make the move; if the role is later deleted the condition is dropped with it, which relaxes the rule instead of blocking every move) and `require_assignee` (judged on the assignees *after* the same edit, so assigning and moving in one update works). A condition on the subtasks being done needs phase 08.
+- **Conditions** on a transition: `required_role` (only people holding exactly that role may make the move; if the role is later deleted the condition is dropped with it, which relaxes the rule instead of blocking every move) and `require_assignee` (judged on the assignees *after* the same edit, so assigning and moving in one update works). `require_subtasks_done`: every live subtask of the task (at any depth) must be done or cancelled first; the refusal says how many are still open, and `Move(include_subtasks)` satisfies it by finishing them in the same transaction.
 
 ### Saving
 
@@ -100,6 +101,6 @@ A status change is `Update` with `status` (the id of a status of the task's own 
 
 All requests carry `workspace_id` and `project_id`.
 
-`Workflow{project_id, restrict_transitions, restrict_creation, version, statuses[StatusResponse{id, name, color, category, position, is_default, task_count}], transitions[TransitionResponse{from_status, to_status, required_role_id, require_assignee}]}`; `task_count` counts every task in the status, which is how many a delete would move. `Update` and `Validate` take `statuses[StatusInput{key, name, color, category, is_default}]`, `transitions[TransitionInput{from_key, to_key, required_role_id, require_assignee}]` and `migrations[MigrationInput{from_key, to_key}]`.
+`Workflow{project_id, restrict_transitions, restrict_creation, version, statuses[StatusResponse{id, name, color, category, position, is_default, task_count}], transitions[TransitionResponse{from_status, to_status, required_role_id, require_assignee, require_subtasks_done}]}`; `task_count` counts every task in the status, which is how many a delete would move. `Update` and `Validate` take `statuses[StatusInput{key, name, color, category, is_default}]`, `transitions[TransitionInput{from_key, to_key, required_role_id, require_assignee, require_subtasks_done}]` and `migrations[MigrationInput{from_key, to_key}]`.
 
 Errors as in [projects](projects.md), plus `WORKFLOW_INVALID` and `TRANSITION_NOT_ALLOWED` above.

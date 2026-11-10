@@ -20,6 +20,7 @@ class TransitionDraft:
     to_key: str
     required_role_id: str = ""  # only people holding exactly this role may make the move
     require_assignee: bool = False  # the task must have an assignee
+    require_subtasks_done: bool = False  # every live subtask must be done (or cancelled)
 
 
 @dataclass(frozen=True, slots=True)

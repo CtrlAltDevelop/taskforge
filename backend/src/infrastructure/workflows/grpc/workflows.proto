@@ -36,6 +36,7 @@ message TransitionInput {
     string to_key = 2;
     string required_role_id = 3;
     bool require_assignee = 4;
+    bool require_subtasks_done = 5;
 }
 
 message TransitionResponse {
@@ -43,6 +44,7 @@ message TransitionResponse {
     string to_status = 2;
     string required_role_id = 3;
     bool require_assignee = 4;
+    bool require_subtasks_done = 5;
 }
 
 message Workflow {

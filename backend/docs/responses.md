@@ -162,6 +162,8 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `LAST_MEMBER` | A private project needs at least one member. |
 | `WORKFLOW_INVALID` | The workflow has problems; see the list. |
 | `TRANSITION_NOT_ALLOWED` | The workflow does not allow that move. |
+| `HAS_SUBTASKS` | The task has subtasks: delete them with it or promote them. |
+| `SUBTASK_CYCLE` | A task cannot be put under itself or one of its own subtasks. |
 
 ## Writing an endpoint
 

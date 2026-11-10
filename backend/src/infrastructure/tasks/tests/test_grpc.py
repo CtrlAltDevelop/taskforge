@@ -232,3 +232,129 @@ def test_list_trash_returns_deleted_tasks_and_needs_the_delete_permission(
     assert [t.id for t in trash.tasks] == [created.id]
     assert trash.tasks[0].deleted_at != ""
     assert refused.code() == grpc.StatusCode.PERMISSION_DENIED
+
+
+def _sub(
+    call: GrpcCall, team: dict[str, Any], title: str, parent: Any = None, who: str = "max"
+) -> Any:
+    return _create(call, team, who, title=title, parent_id=parent.id if parent else "")
+
+
+def _base(team: dict[str, Any], task: Any) -> dict[str, str]:
+    return {"workspace_id": team["ws"], "project_id": team["project"], "id": task.id}
+
+
+def test_subtasks_carry_parent_depth_and_progress_over_the_wire(
+    team: Any, grpc_call: GrpcCall
+) -> None:
+    parent = _sub(grpc_call, team, "P")
+    child = _sub(grpc_call, team, "C", parent)
+    _sub(grpc_call, team, "G", child)
+
+    got = grpc_call(T, "Get", pb.TaskGetRequest(**_base(team, parent)), token=team["tokens"]["vic"])
+    kid = grpc_call(T, "Get", pb.TaskGetRequest(**_base(team, child)), token=team["tokens"]["vic"])
+
+    assert (parent.parent_id, parent.depth) == ("", 0)
+    assert (child.parent_id, child.depth) == (parent.id, 1)
+    assert (got.progress_done, got.progress_total) == (0, 2)
+    assert (kid.progress_done, kid.progress_total) == (0, 1)
+
+
+def test_list_streams_the_tree_only_when_asked(team: Any, grpc_call: GrpcCall) -> None:
+    a = _sub(grpc_call, team, "A")
+    a1 = _sub(grpc_call, team, "A1", a)
+    b = _sub(grpc_call, team, "B")
+    request = dict(workspace_id=team["ws"], project_id=team["project"])
+
+    top = grpc_call(T, "List", pb.TaskListRequest(**request), token=team["tokens"]["vic"])
+    every = grpc_call(
+        T,
+        "List",
+        pb.TaskListRequest(**request, include_subtasks=True, page_size=2),
+        token=team["tokens"]["vic"],
+    )
+
+    assert [t.id for t in top] == [a.id, b.id]
+    assert [t.id for t in every] == [a.id, a1.id, b.id]
+
+
+def test_set_parent_and_list_children(team: Any, grpc_call: GrpcCall) -> None:
+    a, b = _sub(grpc_call, team, "A"), _sub(grpc_call, team, "B")
+
+    moved = grpc_call(
+        T,
+        "SetParent",
+        pb.TaskSetParentRequest(**_base(team, b), expected_version=1, parent_id=a.id),
+        token=team["tokens"]["max"],
+    )
+    kids = grpc_call(
+        T, "ListChildren", pb.TaskListChildrenRequest(**_base(team, a)), token=team["tokens"]["vic"]
+    )
+    cycle = _refused(
+        grpc_call,
+        T,
+        "SetParent",
+        pb.TaskSetParentRequest(**_base(team, a), expected_version=1, parent_id=b.id),
+        token=team["tokens"]["max"],
+    )
+    stale = _refused(
+        grpc_call,
+        T,
+        "SetParent",
+        pb.TaskSetParentRequest(**_base(team, b), expected_version=1, parent_id=""),
+        token=team["tokens"]["max"],
+    )
+    viewer = _refused(
+        grpc_call,
+        T,
+        "SetParent",
+        pb.TaskSetParentRequest(**_base(team, a), expected_version=1, parent_id=""),
+        token=team["tokens"]["vic"],
+    )
+
+    assert (moved.parent_id, moved.depth, moved.version) == (a.id, 1, 2)
+    assert [t.id for t in kids.tasks] == [b.id]
+    assert cycle.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert cycle.details().startswith("SUBTASK_CYCLE")
+    assert stale.code() == grpc.StatusCode.ABORTED
+    assert dict(stale.trailing_metadata())["x-error-field-bin"] == b"parent"
+    assert viewer.code() == grpc.StatusCode.PERMISSION_DENIED
+
+
+def test_deleting_a_parent_needs_a_mode(team: Any, grpc_call: GrpcCall) -> None:
+    parent = _sub(grpc_call, team, "P")
+    kid = _sub(grpc_call, team, "K", parent)
+    token = team["tokens"]["max"]
+
+    refused = _refused(
+        grpc_call, T, "Delete", pb.TaskDeleteRequest(**_base(team, parent)), token=token
+    )
+    promoted = grpc_call(
+        T, "Delete", pb.TaskDeleteRequest(**_base(team, parent), mode="promote"), token=token
+    )
+    after = grpc_call(T, "Get", pb.TaskGetRequest(**_base(team, kid)), token=token)
+
+    assert refused.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert refused.details().startswith("HAS_SUBTASKS")
+    assert dict(refused.trailing_metadata())["x-error-count-bin"] == b"1"
+    assert promoted.deleted_at != "" and (after.parent_id, after.depth) == ("", 0)
+
+
+def test_move_can_take_the_open_subtasks_along(team: Any, grpc_call: GrpcCall) -> None:
+    parent = _sub(grpc_call, team, "P")
+    kid = _sub(grpc_call, team, "K", parent)
+    done = str(Status.objects.get(project_id=team["project"], name="Done").pk)
+    token = team["tokens"]["max"]
+
+    moved = grpc_call(
+        T,
+        "Move",
+        pb.TaskMoveRequest(
+            **_base(team, parent), expected_version=1, status=done, include_subtasks=True
+        ),
+        token=token,
+    )
+    sub = grpc_call(T, "Get", pb.TaskGetRequest(**_base(team, kid)), token=token)
+
+    assert moved.status_name == "Done" and sub.status_name == "Done"
+    assert (moved.progress_done, moved.progress_total) == (1, 1)
