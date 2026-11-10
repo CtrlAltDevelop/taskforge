@@ -47,6 +47,7 @@ class Task {
     this.priority = TaskPriority.none,
     this.startDate = '',
     this.dueDate = '',
+    this.dueTime = '',
     this.assigneeIds = const [],
     this.version = 1,
     this.position = '',
@@ -57,6 +58,8 @@ class Task {
     this.blockedBy = const [],
     this.fieldValues = const {},
     this.groupKey = '',
+    this.blockersDue = '',
+    this.blocksDue = '',
     this.progressDone = 0,
     this.progressTotal = 0,
     this.createdAt = '',
@@ -84,6 +87,10 @@ class Task {
   /// `YYYY-MM-DD`, empty when unset.
   final String startDate;
   final String dueDate;
+
+  /// `HH:MM` in UTC (see [dueTimeLocal] for the viewer's clock); empty for none.
+  /// It never moves the due date.
+  final String dueTime;
   final List<String> assigneeIds;
   final int version;
   final String position;
@@ -109,6 +116,10 @@ class Task {
 
   /// How many of this task's subtasks (all levels) are done, and how many it
   /// has, as the server counts them (the board has no tree to count in).
+  /// Calendar reads: the latest due date (`YYYY-MM-DD`) among the open tasks
+  /// that block this one and the earliest among those it blocks; empty for none.
+  final String blockersDue;
+  final String blocksDue;
   final int progressDone;
   final int progressTotal;
 
@@ -132,6 +143,7 @@ class Task {
     priority: patch.priority ?? priority,
     startDate: patch.startDate ?? startDate,
     dueDate: patch.dueDate ?? dueDate,
+    dueTime: patch.dueDate == '' ? '' : patch.dueTime ?? dueTime,
     assigneeIds: patch.assigneeIds ?? assigneeIds,
     version: version,
     position: position,
@@ -144,6 +156,8 @@ class Task {
         ? fieldValues
         : _withValues(fieldValues, patch.fieldValues!),
     groupKey: groupKey,
+    blockersDue: blockersDue,
+    blocksDue: blocksDue,
     progressDone: progressDone,
     progressTotal: progressTotal,
     createdAt: createdAt,
@@ -166,6 +180,7 @@ class Task {
           priority: priority,
           startDate: startDate,
           dueDate: dueDate,
+          dueTime: dueTime,
           assigneeIds: assigneeIds,
           version: version,
           position: position,
@@ -176,6 +191,8 @@ class Task {
           blockedBy: blockedBy,
           fieldValues: fieldValues,
           groupKey: key,
+          blockersDue: blockersDue,
+          blocksDue: blocksDue,
           progressDone: progressDone,
           progressTotal: progressTotal,
           createdAt: createdAt,
@@ -190,6 +207,7 @@ class Task {
     'priority' => priority.label,
     'start_date' => startDate,
     'due_date' => dueDate,
+    'due_time' => dueTime,
     'assignee_ids' => assigneeIds.join(','),
     _ when name.startsWith(fieldKeyPrefix) =>
       fieldValues[name.substring(fieldKeyPrefix.length)] ?? '',
@@ -208,6 +226,7 @@ class TaskPatch {
     this.priority,
     this.startDate,
     this.dueDate,
+    this.dueTime,
     this.assigneeIds,
     this.fieldValues,
   });
@@ -220,6 +239,9 @@ class TaskPatch {
   final TaskPriority? priority;
   final String? startDate;
   final String? dueDate;
+
+  /// `HH:MM` in UTC; empty clears it.
+  final String? dueTime;
   final List<String>? assigneeIds;
 
   /// Custom field id -> new wire value; empty clears the field.
@@ -237,6 +259,7 @@ class TaskPatch {
     priority: task.priority,
     startDate: task.startDate,
     dueDate: task.dueDate,
+    dueTime: task.dueTime,
     assigneeIds: task.assigneeIds,
     fieldValues: Map.unmodifiable({
       for (final k in task.fieldValues.keys) k: task.fieldValues[k]!,
@@ -253,6 +276,7 @@ class TaskPatch {
     if (priority != null) 'priority',
     if (startDate != null) 'start_date',
     if (dueDate != null) 'due_date',
+    if (dueTime != null) 'due_time',
     if (assigneeIds != null) 'assignee_ids',
     for (final id in fieldValues?.keys ?? const <String>[])
       '$fieldKeyPrefix$id',
@@ -266,6 +290,7 @@ class TaskPatch {
     priority: priority,
     startDate: startDate,
     dueDate: dueDate,
+    dueTime: dueTime,
     assigneeIds: assigneeIds,
     fieldValues: values,
   );
@@ -278,6 +303,7 @@ class TaskPatch {
     priority: names.contains('priority') ? priority : null,
     startDate: names.contains('start_date') ? startDate : null,
     dueDate: names.contains('due_date') ? dueDate : null,
+    dueTime: names.contains('due_time') ? dueTime : null,
     assigneeIds: names.contains('assignee_ids') ? assigneeIds : null,
     fieldValues: fieldValues == null
         ? null
@@ -389,4 +415,32 @@ enum DeleteMode {
   const DeleteMode(this.wire);
 
   final String wire;
+}
+
+/// The clock time of [task]'s due time as the viewer's zone reads it
+/// (`HH:MM`), or empty. The due date itself is never shifted.
+String dueTimeLocal(Task task) => localClock(task.dueDate, task.dueTime);
+
+/// [utcTime] (`HH:MM` UTC) on [date] (`YYYY-MM-DD`) as local `HH:MM`.
+String localClock(String date, String utcTime) {
+  final d = DateTime.tryParse(date);
+  final t = RegExp(r'^(\d{2}):(\d{2})$').firstMatch(utcTime);
+  if (d == null || t == null) return '';
+  final local = DateTime.utc(
+    d.year,
+    d.month,
+    d.day,
+    int.parse(t[1]!),
+    int.parse(t[2]!),
+  ).toLocal();
+  return '${local.hour.toString().padLeft(2, '0')}:'
+      '${local.minute.toString().padLeft(2, '0')}';
+}
+
+/// The local `HH:MM` the viewer picked on [date] as `HH:MM` UTC.
+String utcClock(String date, int hour, int minute) {
+  final d = DateTime.parse(date);
+  final utc = DateTime(d.year, d.month, d.day, hour, minute).toUtc();
+  return '${utc.hour.toString().padLeft(2, '0')}:'
+      '${utc.minute.toString().padLeft(2, '0')}';
 }

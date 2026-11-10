@@ -30,6 +30,9 @@ Task _t(
   String statusId = 'todo',
   TaskPriority priority = TaskPriority.none,
   bool blocked = false,
+  String blockersDue = '',
+  String blocksDue = '',
+  String dueTime = '',
 }) {
   final base = task(
     id,
@@ -54,8 +57,11 @@ Task _t(
     priority: base.priority,
     startDate: start,
     dueDate: due,
+    dueTime: dueTime,
     isBlocked: base.isBlocked,
     blockedBy: base.blockedBy,
+    blockersDue: blockersDue,
+    blocksDue: blocksDue,
   );
 }
 
@@ -207,6 +213,9 @@ void main() {
       gate.complete();
       await tester.pumpAndSettle();
 
+      // The read for the month flipped past was told to stop.
+      expect(s.calendar.tokens.first!.isCancelled, isTrue);
+
       // Two months on is January: neither task is there, and no stale answer
       // for December or November was drawn.
       expect(find.text('December task'), findsNothing);
@@ -331,10 +340,36 @@ void main() {
       expect(_stored(s, 'a').dueDate, '2026-11-12');
     });
 
-    testWidgets('a blocked task moves with a warning', (tester) async {
+    testWidgets('moving a task before its blocker is due warns', (
+      tester,
+    ) async {
       await _open(
         tester,
-        tasks: [_t('a', 'Alpha', due: '2026-11-12', blocked: true)],
+        tasks: [
+          _t(
+            'a',
+            'Alpha',
+            due: '2026-11-12',
+            blocked: true,
+            blockersDue: '2026-11-18',
+          ),
+        ],
+      );
+
+      await _drag(
+        tester,
+        tester.getCenter(find.byKey(const Key('bar-a-2026-11-09'))),
+        _dayCenter(tester, '2026-11-14'),
+      );
+
+      expect(find.textContaining('due before 2026-11-18'), findsOneWidget);
+      expect(find.textContaining('Blocked by WEB-9'), findsOneWidget);
+    });
+
+    testWidgets('moving a task after one it blocks warns', (tester) async {
+      await _open(
+        tester,
+        tasks: [_t('a', 'Alpha', due: '2026-11-12', blocksDue: '2026-11-16')],
       );
 
       await _drag(
@@ -343,8 +378,47 @@ void main() {
         _dayCenter(tester, '2026-11-20'),
       );
 
-      expect(find.textContaining('blocked by WEB-9'), findsOneWidget);
+      expect(find.textContaining('due after 2026-11-16'), findsOneWidget);
     });
+
+    testWidgets('a move that keeps the order of its links says nothing', (
+      tester,
+    ) async {
+      await _open(
+        tester,
+        tasks: [
+          _t(
+            'a',
+            'Alpha',
+            due: '2026-11-12',
+            blocked: true,
+            blockersDue: '2026-11-10',
+          ),
+        ],
+      );
+
+      await _drag(
+        tester,
+        tester.getCenter(find.byKey(const Key('bar-a-2026-11-09'))),
+        _dayCenter(tester, '2026-11-14'),
+      );
+
+      expect(find.textContaining('Rescheduled'), findsNothing);
+    });
+
+    testWidgets(
+      'a due time shows on the bar and the day list, on the viewer clock',
+      (tester) async {
+        final t = _t('a', 'Alpha', due: '2026-11-12', dueTime: '14:30');
+        final local = dueTimeLocal(t);
+        await _open(tester, tasks: [t]);
+
+        expect(find.text('$local Alpha'), findsOneWidget);
+        expect(local, matches(RegExp(r'^\d{2}:\d{2}$')));
+        // The date is the due date whatever the zone: still on the 12th.
+        expect(find.byKey(const Key('bar-a-2026-11-09')), findsOneWidget);
+      },
+    );
 
     testWidgets('a viewer sees the calendar but cannot move or resize', (
       tester,

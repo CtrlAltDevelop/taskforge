@@ -473,6 +473,9 @@ const Task$json = {
       '10': 'fields'
     },
     {'1': 'group_key', '3': 28, '4': 1, '5': 9, '10': 'groupKey'},
+    {'1': 'due_time', '3': 29, '4': 1, '5': 9, '10': 'dueTime'},
+    {'1': 'blockers_due', '3': 30, '4': 1, '5': 9, '10': 'blockersDue'},
+    {'1': 'blocks_due', '3': 31, '4': 1, '5': 9, '10': 'blocksDue'},
   ],
 };
 
@@ -493,7 +496,9 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
     'FsEh0KCmlzX2Jsb2NrZWQYGSABKAhSCWlzQmxvY2tlZBIdCgpibG9ja2VkX2J5GBogAygJUgli'
     'bG9ja2VkQnkSNAoGZmllbGRzGBsgAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUg'
-    'ZmaWVsZHMSGwoJZ3JvdXBfa2V5GBwgASgJUghncm91cEtleQ==');
+    'ZmaWVsZHMSGwoJZ3JvdXBfa2V5GBwgASgJUghncm91cEtleRIZCghkdWVfdGltZRgdIAEoCVIH'
+    'ZHVlVGltZRIhCgxibG9ja2Vyc19kdWUYHiABKAlSC2Jsb2NrZXJzRHVlEh0KCmJsb2Nrc19kdW'
+    'UYHyABKAlSCWJsb2Nrc0R1ZQ==');
 
 @$core.Deprecated('Use taskBulkUpdateRequestDescriptor instead')
 const TaskBulkUpdateRequest$json = {
@@ -574,6 +579,7 @@ const TaskCreateRequest$json = {
       '6': '.config.tasks.TaskFieldValue',
       '10': 'fieldValues'
     },
+    {'1': 'due_time', '3': 12, '4': 1, '5': 9, '10': 'dueTime'},
   ],
 };
 
@@ -585,7 +591,8 @@ final $typed_data.Uint8List taskCreateRequestDescriptor = $convert.base64Decode(
     'oKCHByaW9yaXR5GAYgASgJUghwcmlvcml0eRIdCgpzdGFydF9kYXRlGAcgASgJUglzdGFydERh'
     'dGUSGQoIZHVlX2RhdGUYCCABKAlSB2R1ZURhdGUSIQoMYXNzaWduZWVfaWRzGAkgAygJUgthc3'
     'NpZ25lZUlkcxIbCglwYXJlbnRfaWQYCiABKAlSCHBhcmVudElkEj8KDGZpZWxkX3ZhbHVlcxgL'
-    'IAMoCzIcLmNvbmZpZy50YXNrcy5UYXNrRmllbGRWYWx1ZVILZmllbGRWYWx1ZXM=');
+    'IAMoCzIcLmNvbmZpZy50YXNrcy5UYXNrRmllbGRWYWx1ZVILZmllbGRWYWx1ZXMSGQoIZHVlX3'
+    'RpbWUYDCABKAlSB2R1ZVRpbWU=');
 
 @$core.Deprecated('Use taskDeleteRequestDescriptor instead')
 const TaskDeleteRequest$json = {
@@ -810,6 +817,9 @@ const TaskResponse$json = {
       '10': 'fields'
     },
     {'1': 'group_key', '3': 28, '4': 1, '5': 9, '10': 'groupKey'},
+    {'1': 'due_time', '3': 29, '4': 1, '5': 9, '10': 'dueTime'},
+    {'1': 'blockers_due', '3': 30, '4': 1, '5': 9, '10': 'blockersDue'},
+    {'1': 'blocks_due', '3': 31, '4': 1, '5': 9, '10': 'blocksDue'},
   ],
 };
 
@@ -830,7 +840,9 @@ final $typed_data.Uint8List taskResponseDescriptor = $convert.base64Decode(
     'ZEF0Eh0KCnVwZGF0ZWRfYXQYFyABKAlSCXVwZGF0ZWRBdBIdCgpkZWxldGVkX2F0GBggASgJUg'
     'lkZWxldGVkQXQSHQoKaXNfYmxvY2tlZBgZIAEoCFIJaXNCbG9ja2VkEh0KCmJsb2NrZWRfYnkY'
     'GiADKAlSCWJsb2NrZWRCeRI8CgZmaWVsZHMYGyADKAsyJC5jb25maWcudGFza3MuVGFza0ZpZW'
-    'xkVmFsdWVSZXNwb25zZVIGZmllbGRzEhsKCWdyb3VwX2tleRgcIAEoCVIIZ3JvdXBLZXk=');
+    'xkVmFsdWVSZXNwb25zZVIGZmllbGRzEhsKCWdyb3VwX2tleRgcIAEoCVIIZ3JvdXBLZXkSGQoI'
+    'ZHVlX3RpbWUYHSABKAlSB2R1ZVRpbWUSIQoMYmxvY2tlcnNfZHVlGB4gASgJUgtibG9ja2Vyc0'
+    'R1ZRIdCgpibG9ja3NfZHVlGB8gASgJUglibG9ja3NEdWU=');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {
@@ -942,6 +954,15 @@ const TaskUpdateRequest$json = {
       '6': '.config.tasks.TaskFieldValue',
       '10': 'fieldValues'
     },
+    {
+      '1': 'due_time',
+      '3': 15,
+      '4': 1,
+      '5': 9,
+      '9': 6,
+      '10': 'dueTime',
+      '17': true
+    },
   ],
   '8': [
     {'1': '_title'},
@@ -950,6 +971,7 @@ const TaskUpdateRequest$json = {
     {'1': '_priority'},
     {'1': '_start_date'},
     {'1': '_due_date'},
+    {'1': '_due_time'},
   ],
 };
 
@@ -964,5 +986,6 @@ final $typed_data.Uint8List taskUpdateRequestDescriptor = $convert.base64Decode(
     'RGF0ZYgBARIjCg1zZXRfYXNzaWduZWVzGAsgASgIUgxzZXRBc3NpZ25lZXMSIQoMYXNzaWduZW'
     'VfaWRzGAwgAygJUgthc3NpZ25lZUlkcxIpChBvdmVycmlkZV9ibG9ja2VkGA0gASgIUg9vdmVy'
     'cmlkZUJsb2NrZWQSPwoMZmllbGRfdmFsdWVzGA4gAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaW'
-    'VsZFZhbHVlUgtmaWVsZFZhbHVlc0IICgZfdGl0bGVCDgoMX2Rlc2NyaXB0aW9uQgkKB19zdGF0'
-    'dXNCCwoJX3ByaW9yaXR5Qg0KC19zdGFydF9kYXRlQgsKCV9kdWVfZGF0ZQ==');
+    'VsZFZhbHVlUgtmaWVsZFZhbHVlcxIeCghkdWVfdGltZRgPIAEoCUgGUgdkdWVUaW1liAEBQggK'
+    'Bl90aXRsZUIOCgxfZGVzY3JpcHRpb25CCQoHX3N0YXR1c0ILCglfcHJpb3JpdHlCDQoLX3N0YX'
+    'J0X2RhdGVCCwoJX2R1ZV9kYXRlQgsKCV9kdWVfdGltZQ==');

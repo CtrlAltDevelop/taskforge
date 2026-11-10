@@ -181,6 +181,24 @@ WeekRow layoutWeek(List<Task> tasks, Day weekFirst, {int maxLanes = 3}) {
   return WeekRow(segments: segments, hidden: hidden);
 }
 
+/// Why giving [task] [dates] may break a link, or null. A task is due the day
+/// it ends: that must not be before the latest due date of what blocks it, nor
+/// after the earliest due date of what it blocks.
+String? linkWarning(Task task, Dates dates) {
+  final end = dates.due ?? dates.start;
+  if (end == null) return null;
+  final blockers = parseDay(task.blockersDue);
+  if (blockers != null && end.isBefore(blockers)) {
+    return 'It is due before ${formatDay(blockers)}, when a task that blocks '
+        'it is due.';
+  }
+  final blocks = parseDay(task.blocksDue);
+  if (blocks != null && end.isAfter(blocks)) {
+    return 'It is due after ${formatDay(blocks)}, when a task it blocks is due.';
+  }
+  return null;
+}
+
 /// The tasks that fall on [d], by the day they begin and then number.
 List<Task> tasksOn(List<Task> tasks, Day d) {
   final found = <Task>[
@@ -191,7 +209,12 @@ List<Task> tasksOn(List<Task> tasks, Day d) {
   ];
   found.sort((a, b) {
     final byStart = spanOf(a)!.first.compareTo(spanOf(b)!.first);
-    return byStart != 0 ? byStart : a.number.compareTo(b.number);
+    if (byStart != 0) return byStart;
+    // Within a day, tasks with a due time come first, earliest first.
+    final byTime = (a.dueTime.isEmpty ? '99:99' : a.dueTime).compareTo(
+      b.dueTime.isEmpty ? '99:99' : b.dueTime,
+    );
+    return byTime != 0 ? byTime : a.number.compareTo(b.number);
   });
   return found;
 }

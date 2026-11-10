@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:grpc/grpc.dart' show GrpcError, StatusCode;
 import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 
@@ -9,6 +11,19 @@ import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/gen/infrastructure/tasks/grpc/tasks.pbgrpc.dart'
     as pb;
 
+/// Lets the caller stop a read that is no longer wanted (a month flipped past):
+/// the call is cancelled, so the server stops streaming.
+class CancelToken {
+  final _done = Completer<void>();
+
+  bool get isCancelled => _done.isCompleted;
+  Future<void> get whenCancelled => _done.future;
+
+  void cancel() {
+    if (!_done.isCompleted) _done.complete();
+  }
+}
+
 abstract interface class CalendarClient {
   /// The tasks that fall on any day from [first] to [last] (inclusive).
   Future<List<Task>> listRange(
@@ -17,6 +32,7 @@ abstract interface class CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    CancelToken? cancel,
   });
 
   /// A page of the open tasks that have no dates (the tray).
@@ -57,22 +73,30 @@ class GrpcCalendarClient implements CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    CancelToken? cancel,
   }) => _run(() async {
     final seen = <String>{};
-    return [
-      await for (final t in _stub.listRange(
-        pb.CalendarRangeRequest(
-          workspaceId: workspaceId,
-          projectId: projectId,
-          rangeStart: formatDay(first),
-          rangeEnd: formatDay(last),
-          includeDone: includeDone,
-        ),
-        options: _options,
-      ))
-        // A task edited between two chunks can come twice: show it once.
-        if (seen.add(t.id)) taskFromPb(t),
-    ];
+    final call = _stub.listRange(
+      pb.CalendarRangeRequest(
+        workspaceId: workspaceId,
+        projectId: projectId,
+        rangeStart: formatDay(first),
+        rangeEnd: formatDay(last),
+        includeDone: includeDone,
+      ),
+      options: _options,
+    );
+    unawaited(cancel?.whenCancelled.then((_) => call.cancel()));
+    try {
+      return [
+        await for (final t in call)
+          // A task edited between two chunks can come twice: show it once.
+          if (seen.add(t.id)) taskFromPb(t),
+      ];
+    } on GrpcError {
+      if (cancel?.isCancelled ?? false) return const <Task>[]; // wanted no more
+      rethrow;
+    }
   });
 
   @override

@@ -17,6 +17,9 @@ class FakeCalendarClient implements CalendarClient {
   final ranges = <({String first, String last, bool includeDone})>[];
   final trayCursors = <String>[];
 
+  /// The cancel token of every range read, to see which were stopped.
+  final tokens = <CancelToken?>[];
+
   /// The next range read is refused with this.
   TaskException? failRange;
 
@@ -30,7 +33,9 @@ class FakeCalendarClient implements CalendarClient {
     required Day first,
     required Day last,
     bool includeDone = true,
+    CancelToken? cancel,
   }) async {
+    tokens.add(cancel);
     ranges.add((
       first: formatDay(first),
       last: formatDay(last),

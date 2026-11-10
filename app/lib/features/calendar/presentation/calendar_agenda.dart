@@ -57,12 +57,17 @@ class DayTasks extends StatelessWidget {
     );
   }
 
+  static String _at(Task task) {
+    final time = dueTimeLocal(task);
+    return time.isEmpty ? '' : ' $time';
+  }
+
   static String _span(Task task) {
     final s = spanOf(task);
     if (s == null) return task.displayId;
     return s.first == s.last
-        ? '${task.displayId} · ${formatDay(s.first)}'
-        : '${task.displayId} · ${formatDay(s.first)} → ${formatDay(s.last)}';
+        ? '${task.displayId} · ${formatDay(s.first)}${_at(task)}'
+        : '${task.displayId} · ${formatDay(s.first)} → ${formatDay(s.last)}${_at(task)}';
   }
 }
 

@@ -164,6 +164,43 @@ void main() {
     expect(find.text('New title'), findsWidgets);
   });
 
+  testWidgets(
+    'a due time is picked on your clock and kept apart from the date',
+    (tester) async {
+      final (_, server) = await _open(
+        tester,
+        tasks: [task('a', 'T', dueDate: '2026-11-12')],
+      );
+      await tester.tap(find.byKey(const Key('task-a')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('detail-due-time')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('detail-due-time')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      final patch = server.updates.single.patch;
+      expect(patch.fields, ['due_time']);
+      expect(patch.dueTime, matches(RegExp(r'^\d{2}:\d{2}$')));
+      expect(server.tasks.single.dueDate, '2026-11-12');
+
+      await tester.tap(find.byKey(const Key('clear-due-time')));
+      await tester.pumpAndSettle();
+      expect(server.updates.last.patch.dueTime, '');
+    },
+  );
+
+  testWidgets('without a due date there is no due time to pick', (
+    tester,
+  ) async {
+    await _open(tester, tasks: [task('a', 'T')]);
+    await tester.tap(find.byKey(const Key('task-a')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('detail-due-time')), findsNothing);
+  });
+
   testWidgets('changing priority and status saves each field alone', (
     tester,
   ) async {

@@ -198,6 +198,81 @@ void main() {
     });
   });
 
+  group('links', () {
+    Task linked({String before = '', String after = ''}) => Task(
+      id: 't',
+      projectId: 'p1',
+      number: 1,
+      displayId: 'WEB-1',
+      title: 't',
+      statusId: 'todo',
+      dueDate: '2026-11-12',
+      blockersDue: before,
+      blocksDue: after,
+    );
+
+    test('a due date before the latest blocker is due is a warning', () {
+      final t = linked(before: '2026-11-15');
+
+      expect(
+        linkWarning(t, Dates(due: day(2026, 11, 14))),
+        contains('before 2026-11-15'),
+      );
+      expect(linkWarning(t, Dates(due: day(2026, 11, 15))), isNull);
+    });
+
+    test('a due date after the earliest task it blocks is a warning', () {
+      final t = linked(after: '2026-11-15');
+
+      expect(
+        linkWarning(t, Dates(due: day(2026, 11, 16))),
+        contains('after 2026-11-15'),
+      );
+      expect(linkWarning(t, Dates(due: day(2026, 11, 15))), isNull);
+    });
+
+    test('a task with no linked dates, or no end, never warns', () {
+      expect(linkWarning(linked(), Dates(due: day(2030, 1, 1))), isNull);
+      expect(linkWarning(linked(before: '2026-11-15'), const Dates()), isNull);
+    });
+
+    test('a bar that ends on the start date is judged by that date', () {
+      final t = linked(before: '2026-11-15');
+
+      expect(linkWarning(t, Dates(start: day(2026, 11, 10))), isNotNull);
+    });
+
+    test('within a day the tasks with a time come first, earliest first', () {
+      Task at(String id, String time, int n) => Task(
+        id: id,
+        projectId: 'p1',
+        number: n,
+        displayId: id,
+        title: id,
+        statusId: 'todo',
+        dueDate: '2026-11-12',
+        dueTime: time,
+      );
+
+      final order = tasksOn([
+        at('c', '', 1),
+        at('b', '15:00', 2),
+        at('a', '09:30', 3),
+      ], day(2026, 11, 12));
+
+      expect(order.map((t) => t.id), ['a', 'b', 'c']);
+    });
+
+    test('a due time keeps its date and shifts only the clock', () {
+      expect(utcClock('2026-11-12', 9, 30), matches(RegExp(r'^\d{2}:\d{2}$')));
+      final utc = utcClock('2026-11-12', 9, 30);
+      // Reading it back on the same date gives the clock that was picked.
+      expect(localClock('2026-11-12', utc), '09:30');
+      expect(localClock('', '09:30'), '');
+      expect(localClock('2026-11-12', 'nope'), '');
+    });
+  });
+
   group('rescheduling', () {
     test('a bar keeps its length when it moves', () {
       final t = _t('t', start: '2026-11-10', due: '2026-11-12');

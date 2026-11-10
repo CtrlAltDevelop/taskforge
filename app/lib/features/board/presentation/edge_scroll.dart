@@ -16,6 +16,7 @@ class EdgeScroller {
     required this.controller,
     required this.axis,
     required this.area,
+    required this.direction,
   });
 
   final ScrollController controller;
@@ -23,6 +24,10 @@ class EdgeScroller {
 
   /// A key on the widget whose edges count.
   final GlobalKey area;
+
+  /// The reading direction there: a sideways scroll starts at the right edge in
+  /// right-to-left, so the pointer near the left edge means "further".
+  final TextDirection Function() direction;
   Timer? _timer;
 
   /// [pointer] is global.
@@ -33,10 +38,11 @@ class EdgeScroller {
     final (at, length) = axis == Axis.vertical
         ? (local.dy, box.size.height)
         : (local.dx, box.size.width);
+    final flip = axis == Axis.horizontal && direction() == TextDirection.rtl;
     if (at < edgeZone) {
-      _start(-1);
+      _start(flip ? 1 : -1);
     } else if (at > length - edgeZone) {
-      _start(1);
+      _start(flip ? -1 : 1);
     } else {
       stop();
     }

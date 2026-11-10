@@ -85,10 +85,11 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     if (fromTray) tray.remove(task.id);
     try {
       await ref.read(calendarProvider(_id).notifier).reschedule(task, dates);
-      if (task.isBlocked && mounted) {
+      final warning = linkWarning(task, dates);
+      if (warning != null && mounted) {
         _say(
-          'Rescheduled. It is blocked by ${task.blockedBy.join(', ')}, which '
-          'may not be done by then.',
+          'Rescheduled. $warning'
+          '${task.blockedBy.isEmpty ? '' : ' (Blocked by ${task.blockedBy.join(', ')}.)'}',
         );
       }
     } on TaskException catch (e) {

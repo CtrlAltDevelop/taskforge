@@ -52,6 +52,7 @@ class _BoardViewState extends ConsumerState<BoardView> {
     controller: _horizontal,
     axis: Axis.horizontal,
     area: _area,
+    direction: () => Directionality.of(context),
   );
 
   String get _id => widget.project.id;
@@ -230,7 +231,12 @@ class _BoardViewState extends ConsumerState<BoardView> {
               children: [
                 for (final lane in lanes) ...[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      12,
+                      12,
+                      12,
+                      0,
+                    ),
                     child: Text(
                       lane.key.isEmpty
                           ? 'Unassigned'

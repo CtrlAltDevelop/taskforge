@@ -1948,6 +1948,9 @@ class Task extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? blockedBy,
     $core.Iterable<TaskFieldValue>? fields,
     $core.String? groupKey,
+    $core.String? dueTime,
+    $core.String? blockersDue,
+    $core.String? blocksDue,
   }) {
     final result = Task._();
     if (id != null) result.id = id;
@@ -1978,6 +1981,9 @@ class Task extends $pb.GeneratedMessage {
     if (blockedBy != null) result.blockedBy.addAll(blockedBy);
     if (fields != null) result.fields.addAll(fields);
     if (groupKey != null) result.groupKey = groupKey;
+    if (dueTime != null) result.dueTime = dueTime;
+    if (blockersDue != null) result.blockersDue = blockersDue;
+    if (blocksDue != null) result.blocksDue = blocksDue;
     return result;
   }
 
@@ -2023,6 +2029,9 @@ class Task extends $pb.GeneratedMessage {
     ..pPM<TaskFieldValue>(27, _omitFieldNames ? '' : 'fields',
         subBuilder: TaskFieldValue.$_createMessage)
     ..aOS(28, _omitFieldNames ? '' : 'groupKey')
+    ..aOS(29, _omitFieldNames ? '' : 'dueTime')
+    ..aOS(30, _omitFieldNames ? '' : 'blockersDue')
+    ..aOS(31, _omitFieldNames ? '' : 'blocksDue')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2278,6 +2287,33 @@ class Task extends $pb.GeneratedMessage {
   $core.bool hasGroupKey() => $_has(27);
   @$pb.TagNumber(28)
   void clearGroupKey() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $core.String get dueTime => $_getSZ(28);
+  @$pb.TagNumber(29)
+  set dueTime($core.String value) => $_setString(28, value);
+  @$pb.TagNumber(29)
+  $core.bool hasDueTime() => $_has(28);
+  @$pb.TagNumber(29)
+  void clearDueTime() => $_clearField(29);
+
+  @$pb.TagNumber(30)
+  $core.String get blockersDue => $_getSZ(29);
+  @$pb.TagNumber(30)
+  set blockersDue($core.String value) => $_setString(29, value);
+  @$pb.TagNumber(30)
+  $core.bool hasBlockersDue() => $_has(29);
+  @$pb.TagNumber(30)
+  void clearBlockersDue() => $_clearField(30);
+
+  @$pb.TagNumber(31)
+  $core.String get blocksDue => $_getSZ(30);
+  @$pb.TagNumber(31)
+  set blocksDue($core.String value) => $_setString(30, value);
+  @$pb.TagNumber(31)
+  $core.bool hasBlocksDue() => $_has(30);
+  @$pb.TagNumber(31)
+  void clearBlocksDue() => $_clearField(31);
 }
 
 class TaskBulkUpdateRequest extends $pb.GeneratedMessage {
@@ -2488,6 +2524,7 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? assigneeIds,
     $core.String? parentId,
     $core.Iterable<TaskFieldValue>? fieldValues,
+    $core.String? dueTime,
   }) {
     final result = TaskCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -2501,6 +2538,7 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     if (assigneeIds != null) result.assigneeIds.addAll(assigneeIds);
     if (parentId != null) result.parentId = parentId;
     if (fieldValues != null) result.fieldValues.addAll(fieldValues);
+    if (dueTime != null) result.dueTime = dueTime;
     return result;
   }
 
@@ -2529,6 +2567,7 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     ..aOS(10, _omitFieldNames ? '' : 'parentId')
     ..pPM<TaskFieldValue>(11, _omitFieldNames ? '' : 'fieldValues',
         subBuilder: TaskFieldValue.$_createMessage)
+    ..aOS(12, _omitFieldNames ? '' : 'dueTime')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2639,6 +2678,15 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(11)
   $pb.PbList<TaskFieldValue> get fieldValues => $_getList(10);
+
+  @$pb.TagNumber(12)
+  $core.String get dueTime => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set dueTime($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasDueTime() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearDueTime() => $_clearField(12);
 }
 
 class TaskDeleteRequest extends $pb.GeneratedMessage {
@@ -3586,6 +3634,9 @@ class TaskResponse extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? blockedBy,
     $core.Iterable<TaskFieldValueResponse>? fields,
     $core.String? groupKey,
+    $core.String? dueTime,
+    $core.String? blockersDue,
+    $core.String? blocksDue,
   }) {
     final result = TaskResponse._();
     if (id != null) result.id = id;
@@ -3616,6 +3667,9 @@ class TaskResponse extends $pb.GeneratedMessage {
     if (blockedBy != null) result.blockedBy.addAll(blockedBy);
     if (fields != null) result.fields.addAll(fields);
     if (groupKey != null) result.groupKey = groupKey;
+    if (dueTime != null) result.dueTime = dueTime;
+    if (blockersDue != null) result.blockersDue = blockersDue;
+    if (blocksDue != null) result.blocksDue = blocksDue;
     return result;
   }
 
@@ -3661,6 +3715,9 @@ class TaskResponse extends $pb.GeneratedMessage {
     ..pPM<TaskFieldValueResponse>(27, _omitFieldNames ? '' : 'fields',
         subBuilder: TaskFieldValueResponse.$_createMessage)
     ..aOS(28, _omitFieldNames ? '' : 'groupKey')
+    ..aOS(29, _omitFieldNames ? '' : 'dueTime')
+    ..aOS(30, _omitFieldNames ? '' : 'blockersDue')
+    ..aOS(31, _omitFieldNames ? '' : 'blocksDue')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3918,6 +3975,33 @@ class TaskResponse extends $pb.GeneratedMessage {
   $core.bool hasGroupKey() => $_has(27);
   @$pb.TagNumber(28)
   void clearGroupKey() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $core.String get dueTime => $_getSZ(28);
+  @$pb.TagNumber(29)
+  set dueTime($core.String value) => $_setString(28, value);
+  @$pb.TagNumber(29)
+  $core.bool hasDueTime() => $_has(28);
+  @$pb.TagNumber(29)
+  void clearDueTime() => $_clearField(29);
+
+  @$pb.TagNumber(30)
+  $core.String get blockersDue => $_getSZ(29);
+  @$pb.TagNumber(30)
+  set blockersDue($core.String value) => $_setString(29, value);
+  @$pb.TagNumber(30)
+  $core.bool hasBlockersDue() => $_has(29);
+  @$pb.TagNumber(30)
+  void clearBlockersDue() => $_clearField(30);
+
+  @$pb.TagNumber(31)
+  $core.String get blocksDue => $_getSZ(30);
+  @$pb.TagNumber(31)
+  set blocksDue($core.String value) => $_setString(30, value);
+  @$pb.TagNumber(31)
+  $core.bool hasBlocksDue() => $_has(30);
+  @$pb.TagNumber(31)
+  void clearBlocksDue() => $_clearField(31);
 }
 
 class TaskRestoreRequest extends $pb.GeneratedMessage {
@@ -4173,6 +4257,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? assigneeIds,
     $core.bool? overrideBlocked,
     $core.Iterable<TaskFieldValue>? fieldValues,
+    $core.String? dueTime,
   }) {
     final result = TaskUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -4189,6 +4274,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     if (assigneeIds != null) result.assigneeIds.addAll(assigneeIds);
     if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
     if (fieldValues != null) result.fieldValues.addAll(fieldValues);
+    if (dueTime != null) result.dueTime = dueTime;
     return result;
   }
 
@@ -4220,6 +4306,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     ..aOB(13, _omitFieldNames ? '' : 'overrideBlocked')
     ..pPM<TaskFieldValue>(14, _omitFieldNames ? '' : 'fieldValues',
         subBuilder: TaskFieldValue.$_createMessage)
+    ..aOS(15, _omitFieldNames ? '' : 'dueTime')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4357,6 +4444,15 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(14)
   $pb.PbList<TaskFieldValue> get fieldValues => $_getList(13);
+
+  @$pb.TagNumber(15)
+  $core.String get dueTime => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set dueTime($core.String value) => $_setString(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasDueTime() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearDueTime() => $_clearField(15);
 }
 
 const $core.bool _omitFieldNames =

@@ -172,6 +172,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
 
   final String projectId;
   var _generation = 0;
+  CancelToken? _reading;
 
   String get _workspace {
     final id = ref.read(workspaceScopeProvider);
@@ -181,6 +182,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
 
   @override
   CalendarState build() {
+    ref.onDispose(() => _reading?.cancel());
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
     // Only what changes the days asked for (not the colours, not a save).
@@ -206,6 +208,8 @@ class CalendarNotifier extends Notifier<CalendarState> {
   Future<void> _load(Day first, Day last, bool hideDone) async {
     final generation = ++_generation;
     if (!ref.mounted) return;
+    _reading?.cancel(); // the range before this one is no longer wanted
+    final token = _reading = CancelToken();
     state = state.copyWith(loading: true, error: () => null);
     try {
       final tasks = await ref
@@ -216,6 +220,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
             first: first,
             last: last,
             includeDone: !hideDone,
+            cancel: token,
           );
       if (generation != _generation || !ref.mounted) return;
       state = CalendarState(tasks: List.unmodifiable(tasks), loading: false);

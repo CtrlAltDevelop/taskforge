@@ -84,6 +84,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
     controller: _scroll,
     axis: Axis.vertical,
     area: _area,
+    direction: () => Directionality.of(context),
   );
 
   @override
@@ -212,7 +213,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
     return Container(
       key: _over ? Key('wip-over-$key') : null,
       color: _over ? scheme.errorContainer : null,
-      padding: const EdgeInsets.only(left: 4),
+      padding: const EdgeInsetsDirectional.only(start: 4),
       child: Row(
         children: [
           IconButton(
@@ -227,7 +228,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             Container(
               width: 10,
               height: 10,
-              margin: const EdgeInsets.only(right: 6),
+              margin: const EdgeInsetsDirectional.only(end: 6),
               decoration: BoxDecoration(
                 color: widget.color,
                 shape: BoxShape.circle,
@@ -508,7 +509,7 @@ class _AddFieldState extends State<_AddField> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+    padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 8),
     child: TextField(
       key: Key('add-${widget.columnKey}'),
       controller: _controller,

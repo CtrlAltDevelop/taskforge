@@ -189,6 +189,15 @@ class TaskDetail extends ConsumerWidget {
             ),
           ],
         ),
+        if (task.dueDate.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          _TimeField(
+            task: task,
+            enabled: canEdit,
+            onPicked: (utc) =>
+                saveTask(context, ref, task, TaskPatch(dueTime: utc)),
+          ),
+        ],
         const SizedBox(height: 16),
         Text('Assignees', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 8),
@@ -578,4 +587,58 @@ class _DateField extends StatelessWidget {
       child: Text(value.isEmpty ? '—' : value),
     ),
   );
+}
+
+/// The optional time of day a task is due, read and picked on the viewer's
+/// clock and stored in UTC (the due date never moves with it).
+class _TimeField extends StatelessWidget {
+  const _TimeField({
+    required this.task,
+    required this.enabled,
+    required this.onPicked,
+  });
+
+  final Task task;
+  final bool enabled;
+  final void Function(String utc) onPicked;
+
+  @override
+  Widget build(BuildContext context) {
+    final local = dueTimeLocal(task);
+    return InkWell(
+      key: const Key('detail-due-time'),
+      onTap: !enabled
+          ? null
+          : () async {
+              final now = TimeOfDay.now();
+              final initial = local.isEmpty
+                  ? now
+                  : TimeOfDay(
+                      hour: int.parse(local.substring(0, 2)),
+                      minute: int.parse(local.substring(3)),
+                    );
+              final picked = await showTimePicker(
+                context: context,
+                initialTime: initial,
+              );
+              if (picked == null) return;
+              onPicked(utcClock(task.dueDate, picked.hour, picked.minute));
+            },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'Due time (your clock)',
+          border: const OutlineInputBorder(),
+          suffixIcon: local.isEmpty || !enabled
+              ? const Icon(Icons.schedule, size: 18)
+              : IconButton(
+                  key: const Key('clear-due-time'),
+                  tooltip: 'Clear due time',
+                  icon: const Icon(Icons.clear, size: 18),
+                  onPressed: () => onPicked(''),
+                ),
+        ),
+        child: Text(local.isEmpty ? '—' : local),
+      ),
+    );
+  }
 }

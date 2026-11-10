@@ -54,7 +54,7 @@ class BoardCard extends StatelessWidget {
         key: Key('card-${task.id}'),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 4, 8),
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 4, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -78,7 +78,7 @@ class BoardCard extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 6, bottom: 4),
+                padding: const EdgeInsetsDirectional.only(end: 6, bottom: 4),
                 child: Text(
                   task.title,
                   key: Key('card-title-${task.id}'),
@@ -130,7 +130,7 @@ class BoardCard extends StatelessWidget {
           ),
         if (assignees)
           Padding(
-            padding: const EdgeInsets.only(left: 4, right: 4),
+            padding: const EdgeInsetsDirectional.only(start: 4, end: 4),
             child: _Avatars(
               key: Key('card-assignees-${task.id}'),
               names: [for (final id in task.assigneeIds) lookups.person(id)],
@@ -212,7 +212,7 @@ class _Avatars extends StatelessWidget {
       children: [
         for (final name in names.take(3))
           Padding(
-            padding: const EdgeInsets.only(left: 2),
+            padding: const EdgeInsetsDirectional.only(start: 2),
             child: CircleAvatar(
               radius: 11,
               child: Text(

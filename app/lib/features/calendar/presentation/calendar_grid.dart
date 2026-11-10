@@ -127,8 +127,8 @@ class _WeekRow extends StatelessWidget {
                 ],
               ),
               for (final s in row.segments)
-                Positioned(
-                  left: s.startCol * colWidth + 1,
+                PositionedDirectional(
+                  start: s.startCol * colWidth + 1,
                   top: _headerHeight + s.lane * _laneHeight,
                   width: (s.endCol - s.startCol + 1) * colWidth - 2,
                   height: _laneHeight - 2,
@@ -171,8 +171,8 @@ class _DayCell extends StatelessWidget {
               : isToday
               ? scheme.primaryContainer.withValues(alpha: 0.4)
               : null,
-          border: Border(
-            left: BorderSide(color: scheme.outlineVariant, width: 0.5),
+          border: BorderDirectional(
+            start: BorderSide(color: scheme.outlineVariant, width: 0.5),
             top: BorderSide(color: scheme.outlineVariant, width: 0.5),
           ),
         ),
@@ -180,7 +180,7 @@ class _DayCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(6, 2, 0, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(6, 2, 0, 0),
               child: isToday
                   ? CircleAvatar(
                       key: const Key('today-marker'),
@@ -221,6 +221,13 @@ class _DayCell extends StatelessWidget {
   }
 }
 
+/// A task's bar text: its due time (the viewer's clock) before the title, on
+/// the bar that ends the task.
+String _label(Task task) {
+  final time = dueTimeLocal(task);
+  return time.isEmpty ? task.title : '$time ${task.title}';
+}
+
 /// One task's bar in one week: dragged to move (the day it was picked up on
 /// is remembered), with a handle on each end that really is an end of it.
 class _Bar extends StatelessWidget {
@@ -242,10 +249,10 @@ class _Bar extends StatelessWidget {
     final task = segment.task;
     final color = grid.colorOf(task);
     final selected = task.id == grid.openTaskId;
-    final shape = BorderRadius.horizontal(
-      left: Radius.circular(segment.continuesBefore ? 0 : 6),
-      right: Radius.circular(segment.continuesAfter ? 0 : 6),
-    );
+    final shape = BorderRadiusDirectional.horizontal(
+      start: Radius.circular(segment.continuesBefore ? 0 : 6),
+      end: Radius.circular(segment.continuesAfter ? 0 : 6),
+    ).resolve(Directionality.of(context));
     final body = Material(
       color: color,
       borderRadius: shape,
@@ -258,9 +265,9 @@ class _Bar extends StatelessWidget {
               ? BoxDecoration(borderRadius: shape, border: Border.all(width: 2))
               : null,
           padding: const EdgeInsets.symmetric(horizontal: 6),
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: Text(
-            task.title,
+            _label(task),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -295,10 +302,15 @@ class _Bar extends StatelessWidget {
       children: [
         Listener(
           onPointerDown: (e) {
-            final col = (e.localPosition.dx / colWidth).floor().clamp(
+            final cols = segment.endCol - segment.startCol;
+            final visual = (e.localPosition.dx / colWidth).floor().clamp(
               0,
-              segment.endCol - segment.startCol,
+              cols,
             );
+            // Right to left, the bar's first day is at its right end.
+            final col = Directionality.of(context) == TextDirection.rtl
+                ? cols - visual
+                : visual;
             drag.grabbed = addDays(weekFirst, segment.startCol + col);
           },
           child: calDraggable(
@@ -317,9 +329,19 @@ class _Bar extends StatelessWidget {
           ),
         ),
         if (!segment.continuesBefore)
-          Positioned(left: 0, top: 0, bottom: 0, child: handle(BarEdge.start)),
+          PositionedDirectional(
+            start: 0,
+            top: 0,
+            bottom: 0,
+            child: handle(BarEdge.start),
+          ),
         if (!segment.continuesAfter)
-          Positioned(right: 0, top: 0, bottom: 0, child: handle(BarEdge.end)),
+          PositionedDirectional(
+            end: 0,
+            top: 0,
+            bottom: 0,
+            child: handle(BarEdge.end),
+          ),
       ],
     );
   }
