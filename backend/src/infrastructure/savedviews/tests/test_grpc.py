@@ -172,3 +172,17 @@ def test_delete_and_the_stranger(team: Any, grpc_call: GrpcCall) -> None:
     assert other.code() == grpc.StatusCode.NOT_FOUND
     assert stranger.code() in (grpc.StatusCode.NOT_FOUND, grpc.StatusCode.PERMISSION_DENIED)
     assert list(_list(grpc_call, team).views) == []
+
+
+def test_a_calendar_layout_round_trips_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
+    calendar = pb.CalendarLayout(mode="day", color_by="priority", week_start=7, hide_done=True)
+
+    _save(grpc_call, team, kind="calendar", calendar=calendar)
+    request = pb.ViewListRequest(
+        workspace_id=team["ws"], project_id=team["project"], kind="calendar"
+    )
+    [got] = grpc_call(V, "List", request, token=team["tokens"]["max"]).views
+
+    assert got.kind == "calendar"
+    assert (got.calendar.mode, got.calendar.color_by) == ("day", "priority")
+    assert (got.calendar.week_start, got.calendar.hide_done) == (7, True)

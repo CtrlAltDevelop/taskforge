@@ -68,6 +68,9 @@ class Task(models.Model):
             models.Index(fields=["project", "status"], name="task_project_status_idx"),
             models.Index(fields=["project", "position", "number"], name="task_project_order_idx"),
             models.Index(fields=["due_date"], name="task_due_date_idx"),
+            # The calendar's range query (see ``calendar``).
+            models.Index(fields=["project", "start_date"], name="task_project_start_idx"),
+            models.Index(fields=["project", "due_date"], name="task_project_due_idx"),
             models.Index(fields=["project", "tree_key", "number"], name="task_project_tree_idx"),
             # varchar_pattern_ops (PostgreSQL; ignored elsewhere) lets ``path LIKE 'x%'`` use
             # the index whatever the database collation, which every subtree query relies on.

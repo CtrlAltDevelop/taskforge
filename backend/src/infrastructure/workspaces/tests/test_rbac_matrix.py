@@ -487,6 +487,33 @@ ENDPOINTS += (
     ),
 )
 
+CL = tstubs.CalendarControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "CalendarController.ListRange",
+        "workspace.view",
+        _grpc(
+            CL,
+            "ListRange",
+            lambda w: tpb.CalendarRangeRequest(
+                workspace_id=w.ws,
+                project_id=w.project_id,
+                range_start="2026-11-01",
+                range_end="2026-11-30",
+            ),
+        ),
+    ),
+    Endpoint(
+        "CalendarController.ListUnscheduled",
+        "workspace.view",
+        _grpc(
+            CL,
+            "ListUnscheduled",
+            lambda w: tpb.CalendarTrayRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+)
+
 LK = tstubs.LinkControllerStub
 ENDPOINTS += (
     Endpoint(

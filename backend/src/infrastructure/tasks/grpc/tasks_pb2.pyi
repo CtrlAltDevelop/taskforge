@@ -269,6 +269,88 @@ class BulkResult(_message.Message):
 Global___BulkResult: _TypeAlias = BulkResult  # noqa: Y015
 
 @_typing.final
+class CalendarRangeRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    RANGE_START_FIELD_NUMBER: _builtins.int
+    RANGE_END_FIELD_NUMBER: _builtins.int
+    INCLUDE_DONE_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    range_start: _builtins.str
+    range_end: _builtins.str
+    include_done: _builtins.bool
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        range_start: _builtins.str = ...,
+        range_end: _builtins.str = ...,
+        include_done: _builtins.bool = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_done", b"include_done", "project_id", b"project_id", "range_end", b"range_end", "range_start", b"range_start", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarRangeRequest: _TypeAlias = CalendarRangeRequest  # noqa: Y015
+
+@_typing.final
+class CalendarTray(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASKS_FIELD_NUMBER: _builtins.int
+    CURSOR_FIELD_NUMBER: _builtins.int
+    cursor: _builtins.str
+    @_builtins.property
+    def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Task]: ...
+    def __init__(
+        self,
+        *,
+        tasks: _abc.Iterable[Global___Task] | None = ...,
+        cursor: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cursor", b"cursor", "tasks", b"tasks"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarTray: _TypeAlias = CalendarTray  # noqa: Y015
+
+@_typing.final
+class CalendarTrayRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    CURSOR_FIELD_NUMBER: _builtins.int
+    PAGE_SIZE_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    cursor: _builtins.str
+    page_size: _builtins.int
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        cursor: _builtins.str = ...,
+        page_size: _builtins.int = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cursor", b"cursor", "page_size", b"page_size", "project_id", b"project_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarTrayRequest: _TypeAlias = CalendarTrayRequest  # noqa: Y015
+
+@_typing.final
 class GroupCount(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -591,7 +673,7 @@ class Task(_message.Message):
     @_builtins.property
     def blocked_by(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
-    def fields(self) -> _containers.RepeatedCompositeFieldContainer[Global___TaskFieldValueResponse]: ...
+    def fields(self) -> _containers.RepeatedCompositeFieldContainer[Global___TaskFieldValue]: ...
     def __init__(
         self,
         *,
@@ -621,7 +703,7 @@ class Task(_message.Message):
         progress_total: _builtins.int = ...,
         is_blocked: _builtins.bool = ...,
         blocked_by: _abc.Iterable[_builtins.str] | None = ...,
-        fields: _abc.Iterable[Global___TaskFieldValueResponse] | None = ...,
+        fields: _abc.Iterable[Global___TaskFieldValue] | None = ...,
         group_key: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015

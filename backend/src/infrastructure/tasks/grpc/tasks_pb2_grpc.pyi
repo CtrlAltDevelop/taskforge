@@ -66,6 +66,37 @@ class BoardControllerServicer(metaclass=_abc_1.ABCMeta):
 
 def add_BoardControllerServicer_to_server(servicer: BoardControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
 
+class CalendarControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> CalendarControllerAsyncStub: ...
+    ListRange: _grpc.UnaryStreamMultiCallable[_tasks_pb2.CalendarRangeRequest, _tasks_pb2.Task]
+    ListUnscheduled: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.CalendarTrayRequest, _tasks_pb2.CalendarTray]
+
+@_typing.type_check_only
+class CalendarControllerAsyncStub(CalendarControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    ListRange: _aio.UnaryStreamMultiCallable[_tasks_pb2.CalendarRangeRequest, _tasks_pb2.Task]  # type: ignore[assignment]
+    ListUnscheduled: _aio.UnaryUnaryMultiCallable[_tasks_pb2.CalendarTrayRequest, _tasks_pb2.CalendarTray]  # type: ignore[assignment]
+
+class CalendarControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def ListRange(
+        self,
+        request: _tasks_pb2.CalendarRangeRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_abc.Iterator[_tasks_pb2.Task], _abc.AsyncIterator[_tasks_pb2.Task]]: ...
+
+    @_abc_1.abstractmethod
+    def ListUnscheduled(
+        self,
+        request: _tasks_pb2.CalendarTrayRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.CalendarTray, _abc.Awaitable[_tasks_pb2.CalendarTray]]: ...
+
+def add_CalendarControllerServicer_to_server(servicer: CalendarControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
 class LinkControllerStub:
     @_typing.overload
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...

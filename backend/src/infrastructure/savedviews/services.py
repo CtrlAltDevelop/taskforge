@@ -26,7 +26,7 @@ from infrastructure.workspaces.models import Workspace
 
 VIEW = "workspace.view"
 MANAGE = "project.update"
-KINDS: Final = ("list", "board")
+KINDS: Final = ("list", "board", "calendar")
 MAX_PER_SCOPE: Final = 50
 MAX_NAME: Final = 60
 

@@ -144,5 +144,35 @@ def clean_board(raw: Any) -> dict[str, Any]:
     }
 
 
+CALENDAR_KEYS: Final = ("mode", "color_by", "week_start", "hide_done")
+CALENDAR_MODES: Final = ("month", "week", "day")
+CALENDAR_COLORS: Final = ("status", "priority")
+
+
+def clean_calendar(raw: Any) -> dict[str, Any]:
+    """A calendar layout with every key present, or ``VIEW_INVALID``. ``week_start`` is the ISO
+    weekday the week begins on (1 Monday ... 7 Sunday; 0: the viewer's locale decides)."""
+    if not isinstance(raw, dict):
+        raise invalid("A layout is an object.")
+    unknown = set(raw) - set(CALENDAR_KEYS)
+    if unknown:
+        raise invalid(f"Unknown layout key: {sorted(unknown)[0]}.")
+    mode = raw.get("mode", "month")
+    if mode not in CALENDAR_MODES:
+        raise invalid(f"{mode!r} is not a calendar mode.")
+    color_by = raw.get("color_by", "status")
+    if color_by not in CALENDAR_COLORS:
+        raise invalid(f"Cannot colour a calendar by {color_by!r}.")
+    week_start = raw.get("week_start", 0)
+    if isinstance(week_start, bool) or not isinstance(week_start, int) or not 0 <= week_start <= 7:
+        raise invalid("week_start is a weekday from 1 (Monday) to 7 (Sunday), or 0.")
+    hide_done = raw.get("hide_done", False)
+    if not isinstance(hide_done, bool):
+        raise invalid("hide_done is true or false.")
+    return {"mode": mode, "color_by": color_by, "week_start": week_start, "hide_done": hide_done}
+
+
 def clean_for(kind: str, raw: Any) -> dict[str, Any]:
-    return clean_board(raw) if kind == "board" else clean(raw)
+    if kind == "board":
+        return clean_board(raw)
+    return clean_calendar(raw) if kind == "calendar" else clean(raw)

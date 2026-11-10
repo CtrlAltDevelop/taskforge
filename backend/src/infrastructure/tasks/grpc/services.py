@@ -65,6 +65,13 @@ def _pb() -> Any:
     return tasks_pb2
 
 
+def _field_value(kind: str, field_id: str, value: str) -> Any:
+    """A custom value as the message ``kind`` nests it (the generator names that message
+    ``TaskFieldValue`` or ``TaskFieldValueResponse`` depending on how the serializers are used)."""
+    nested = getattr(_pb(), kind).DESCRIPTOR.fields_by_name["fields"].message_type.name
+    return getattr(_pb(), nested)(field_id=field_id, value=value)
+
+
 def _message(task: TaskRow, kind: str = "Task") -> Any:
     """The task as ``Task`` (or as ``TaskResponse``, the same fields as nested in a result)."""
     return getattr(_pb(), kind)(
@@ -96,7 +103,7 @@ def _message(task: TaskRow, kind: str = "Task") -> Any:
         blocked_by=list(task.blockers),
         group_key=task.group_key,
         fields=[
-            _pb().TaskFieldValueResponse(field_id=field_id, value=value)
+            _field_value(kind, field_id, value)
             for field_id, value in sorted(task.custom_values.items())
         ],
     )
@@ -415,5 +422,6 @@ def _next_result(results: Any) -> Any:
 
 # Imported last: the board adapter reuses the helpers above.
 from infrastructure.tasks.grpc.board_services import BoardService  # noqa: E402
+from infrastructure.tasks.grpc.calendar_services import CalendarService  # noqa: E402
 
-GRPC_SERVICES = [TaskService, LinkService, BoardService]
+GRPC_SERVICES = [TaskService, LinkService, BoardService, CalendarService]

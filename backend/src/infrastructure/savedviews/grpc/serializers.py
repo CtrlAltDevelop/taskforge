@@ -50,6 +50,18 @@ class BoardLayout(serializers.Serializer[dict[str, object]]):
     limits = BoardLimit(many=True)
 
 
+class CalendarLayout(serializers.Serializer[dict[str, object]]):
+    """What a calendar shows: ``mode`` (``month``, ``week`` or ``day``), what its bars are coloured
+    by (``status`` or ``priority``), the ISO weekday a week begins on (1 Monday ... 7 Sunday, 0: the
+    viewer's locale decides) and
+    whether finished tasks are hidden."""
+
+    mode = serializers.CharField()
+    color_by = serializers.CharField()
+    week_start = serializers.IntegerField()
+    hide_done = serializers.BooleanField()
+
+
 class SavedView(serializers.Serializer[dict[str, object]]):
     """A saved layout. ``owner_id`` is empty for a shared one (``is_shared``); ``version`` is the
     optimistic lock to send back when saving it again."""
@@ -62,5 +74,6 @@ class SavedView(serializers.Serializer[dict[str, object]]):
     is_shared = serializers.BooleanField()
     layout = Layout()
     board = BoardLayout()  # set instead of ``layout`` for a ``board`` view
+    calendar = CalendarLayout()  # set instead of ``layout`` for a ``calendar`` view
     version = serializers.IntegerField()
     updated_at = serializers.CharField()

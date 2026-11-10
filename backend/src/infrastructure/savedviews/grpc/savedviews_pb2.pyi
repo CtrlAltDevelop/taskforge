@@ -123,6 +123,62 @@ class BoardLimitResponse(_message.Message):
 Global___BoardLimitResponse: _TypeAlias = BoardLimitResponse  # noqa: Y015
 
 @_typing.final
+class CalendarLayout(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MODE_FIELD_NUMBER: _builtins.int
+    COLOR_BY_FIELD_NUMBER: _builtins.int
+    WEEK_START_FIELD_NUMBER: _builtins.int
+    HIDE_DONE_FIELD_NUMBER: _builtins.int
+    mode: _builtins.str
+    color_by: _builtins.str
+    week_start: _builtins.int
+    hide_done: _builtins.bool
+    def __init__(
+        self,
+        *,
+        mode: _builtins.str = ...,
+        color_by: _builtins.str = ...,
+        week_start: _builtins.int = ...,
+        hide_done: _builtins.bool = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["color_by", b"color_by", "hide_done", b"hide_done", "mode", b"mode", "week_start", b"week_start"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarLayout: _TypeAlias = CalendarLayout  # noqa: Y015
+
+@_typing.final
+class CalendarLayoutResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MODE_FIELD_NUMBER: _builtins.int
+    COLOR_BY_FIELD_NUMBER: _builtins.int
+    WEEK_START_FIELD_NUMBER: _builtins.int
+    HIDE_DONE_FIELD_NUMBER: _builtins.int
+    mode: _builtins.str
+    color_by: _builtins.str
+    week_start: _builtins.int
+    hide_done: _builtins.bool
+    def __init__(
+        self,
+        *,
+        mode: _builtins.str = ...,
+        color_by: _builtins.str = ...,
+        week_start: _builtins.int = ...,
+        hide_done: _builtins.bool = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["color_by", b"color_by", "hide_done", b"hide_done", "mode", b"mode", "week_start", b"week_start"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___CalendarLayoutResponse: _TypeAlias = CalendarLayoutResponse  # noqa: Y015
+
+@_typing.final
 class Layout(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -286,6 +342,7 @@ class SavedView(_message.Message):
     VERSION_FIELD_NUMBER: _builtins.int
     UPDATED_AT_FIELD_NUMBER: _builtins.int
     BOARD_FIELD_NUMBER: _builtins.int
+    CALENDAR_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     project_id: _builtins.str
     owner_id: _builtins.str
@@ -298,6 +355,8 @@ class SavedView(_message.Message):
     def layout(self) -> Global___LayoutResponse: ...
     @_builtins.property
     def board(self) -> Global___BoardLayoutResponse: ...
+    @_builtins.property
+    def calendar(self) -> Global___CalendarLayoutResponse: ...
     def __init__(
         self,
         *,
@@ -311,10 +370,11 @@ class SavedView(_message.Message):
         version: _builtins.int = ...,
         updated_at: _builtins.str = ...,
         board: Global___BoardLayoutResponse | None = ...,
+        calendar: Global___CalendarLayoutResponse | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "layout", b"layout"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "calendar", b"calendar", "layout", b"layout"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "project_id", b"project_id", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "calendar", b"calendar", "id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "project_id", b"project_id", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -403,6 +463,7 @@ class ViewSaveRequest(_message.Message):
     LAYOUT_FIELD_NUMBER: _builtins.int
     SHARED_FIELD_NUMBER: _builtins.int
     BOARD_FIELD_NUMBER: _builtins.int
+    CALENDAR_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     id: _builtins.str
@@ -414,6 +475,8 @@ class ViewSaveRequest(_message.Message):
     def layout(self) -> Global___Layout: ...
     @_builtins.property
     def board(self) -> Global___BoardLayout: ...
+    @_builtins.property
+    def calendar(self) -> Global___CalendarLayout: ...
     def __init__(
         self,
         *,
@@ -426,10 +489,11 @@ class ViewSaveRequest(_message.Message):
         layout: Global___Layout | None = ...,
         shared: _builtins.bool = ...,
         board: Global___BoardLayout | None = ...,
+        calendar: Global___CalendarLayout | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "layout", b"layout"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "calendar", b"calendar", "layout", b"layout"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "project_id", b"project_id", "shared", b"shared", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "calendar", b"calendar", "expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "project_id", b"project_id", "shared", b"shared", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

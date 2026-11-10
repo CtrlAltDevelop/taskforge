@@ -183,6 +183,121 @@ class BoardController:
             _registered_method=True)
 
 
+class CalendarControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.ListRange = channel.unary_stream(
+                '/config.tasks.CalendarController/ListRange',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarRangeRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
+        self.ListUnscheduled = channel.unary_unary(
+                '/config.tasks.CalendarController/ListUnscheduled',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.FromString,
+                _registered_method=True)
+
+
+class CalendarControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def ListRange(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListUnscheduled(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_CalendarControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'ListRange': grpc.unary_stream_rpc_method_handler(
+                    servicer.ListRange,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarRangeRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
+            ),
+            'ListUnscheduled': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListUnscheduled,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.tasks.CalendarController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.tasks.CalendarController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class CalendarController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def ListRange(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/config.tasks.CalendarController/ListRange',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarRangeRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListUnscheduled(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.CalendarController/ListUnscheduled',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTrayRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.CalendarTray.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
 class LinkControllerStub:
     """Missing associated documentation comment in .proto file."""
 

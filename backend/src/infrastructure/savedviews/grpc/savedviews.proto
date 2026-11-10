@@ -32,6 +32,20 @@ message BoardLimitResponse {
     int32 limit = 2;
 }
 
+message CalendarLayout {
+    string mode = 1;
+    string color_by = 2;
+    int32 week_start = 3;
+    bool hide_done = 4;
+}
+
+message CalendarLayoutResponse {
+    string mode = 1;
+    string color_by = 2;
+    int32 week_start = 3;
+    bool hide_done = 4;
+}
+
 message Layout {
     repeated string columns = 1;
     repeated LayoutWidth widths = 2;
@@ -77,6 +91,7 @@ message SavedView {
     int32 version = 8;
     string updated_at = 9;
     BoardLayoutResponse board = 10;
+    CalendarLayoutResponse calendar = 11;
 }
 
 message ViewDeleteRequest {
@@ -105,5 +120,6 @@ message ViewSaveRequest {
     Layout layout = 7;
     bool shared = 8;
     BoardLayout board = 9;
+    CalendarLayout calendar = 10;
 }
 

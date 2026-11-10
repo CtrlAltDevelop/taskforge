@@ -8,6 +8,11 @@ service BoardController {
     rpc Move(BoardMoveRequest) returns (Task) {}
 }
 
+service CalendarController {
+    rpc ListRange(CalendarRangeRequest) returns (stream Task) {}
+    rpc ListUnscheduled(CalendarTrayRequest) returns (CalendarTray) {}
+}
+
 service LinkController {
     rpc Add(LinkAddRequest) returns (LinkList) {}
     rpc ListForTask(LinkListForTaskRequest) returns (LinkList) {}
@@ -91,6 +96,26 @@ message BulkResult {
     string message = 4;
     string detail = 5;
     TaskResponse task = 6;
+}
+
+message CalendarRangeRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string range_start = 3;
+    string range_end = 4;
+    bool include_done = 5;
+}
+
+message CalendarTray {
+    repeated Task tasks = 1;
+    string cursor = 2;
+}
+
+message CalendarTrayRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string cursor = 3;
+    int32 page_size = 4;
 }
 
 message GroupCount {
@@ -183,7 +208,7 @@ message Task {
     int32 progress_total = 24;
     bool is_blocked = 25;
     repeated string blocked_by = 26;
-    repeated TaskFieldValueResponse fields = 27;
+    repeated TaskFieldValue fields = 27;
     string group_key = 28;
 }
 

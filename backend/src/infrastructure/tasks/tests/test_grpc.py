@@ -554,3 +554,47 @@ def test_board_refusals_map_to_the_usual_statuses(team: Any, grpc_call: GrpcCall
         pb.BoardGetRequest(workspace_id=team["ws"], project_id=team["project"]),
         token=team["tokens"]["eve"],
     ).code() in (grpc.StatusCode.PERMISSION_DENIED, grpc.StatusCode.NOT_FOUND)
+
+
+CAL = stubs.CalendarControllerStub
+
+
+def test_the_calendar_streams_the_tasks_of_a_range(team: Any, grpc_call: GrpcCall) -> None:
+    _create(grpc_call, team, title="in", due_date="2026-11-05")
+    _create(grpc_call, team, title="out", due_date="2026-12-25")
+
+    tasks = grpc_call(
+        CAL,
+        "ListRange",
+        pb.CalendarRangeRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            range_start="2026-11-01",
+            range_end="2026-11-30",
+            include_done=True,
+        ),
+        token=team["tokens"]["vic"],
+    )
+
+    assert [(t.title, t.due_date) for t in tasks] == [("in", "2026-11-05")]
+
+
+def test_the_tray_pages_and_a_bad_range_is_invalid_argument(team: Any, grpc_call: GrpcCall) -> None:
+    for n in range(3):
+        _create(grpc_call, team, title=f"t{n}")
+    request = pb.CalendarTrayRequest(
+        workspace_id=team["ws"], project_id=team["project"], page_size=2
+    )
+
+    first = grpc_call(CAL, "ListUnscheduled", request, token=team["tokens"]["vic"])
+    request.cursor = first.cursor
+    second = grpc_call(CAL, "ListUnscheduled", request, token=team["tokens"]["vic"])
+
+    assert [t.title for t in first.tasks] == ["t0", "t1"] and first.cursor
+    assert [t.title for t in second.tasks] == ["t2"] and second.cursor == ""
+    bad = pb.CalendarRangeRequest(
+        workspace_id=team["ws"], project_id=team["project"], range_start="x", range_end="y"
+    )
+    assert _refused(grpc_call, CAL, "ListRange", bad, token=team["tokens"]["vic"]).code() is (
+        grpc.StatusCode.INVALID_ARGUMENT
+    )

@@ -223,3 +223,25 @@ def test_a_board_of_ten_thousand_tasks_opens_fast_and_a_drop_in_the_middle_is_ch
         )
     mover.refresh_from_db()
     assert middle[0].position < mover.position < middle[1].position
+
+
+def test_a_month_of_a_ten_thousand_task_project_is_a_cheap_range_query(
+    team: Any, project: Any, django_assert_max_num_queries: Any
+) -> None:
+    from datetime import date, timedelta
+
+    from infrastructure.tasks import calendar
+
+    _seed(team, project)
+    first = date(2026, 11, 1)
+    for number, task in enumerate(Task.objects.filter(project=project).order_by("number")[:1500]):
+        Task.objects.filter(pk=task.pk).update(due_date=first + timedelta(days=number % 120))
+
+    started = time.monotonic()
+    with django_assert_max_num_queries(25):
+        month = calendar.list_range(
+            team.viewer, team.ws, str(project.pk), "2026-11-01", "2026-11-30"
+        )
+    assert time.monotonic() - started < FIRST_PAGE_BUDGET_SECONDS * 4
+    assert 300 < len(month) < 500
+    assert all("2026-11-01" <= t.due_date.isoformat() <= "2026-11-30" for t in month)

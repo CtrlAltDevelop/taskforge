@@ -19,7 +19,12 @@ from django_socio_grpc.decorators import grpc_action
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
 from infrastructure.savedviews import services
-from infrastructure.savedviews.grpc.serializers import BoardLayout, Layout, SavedView
+from infrastructure.savedviews.grpc.serializers import (
+    BoardLayout,
+    CalendarLayout,
+    Layout,
+    SavedView,
+)
 from infrastructure.savedviews.models import SavedView as ViewRow
 from infrastructure.workspaces.scoping import require_workspace
 
@@ -65,6 +70,24 @@ def _board_config(board: Any) -> dict[str, Any]:
     }
 
 
+def _calendar(config: dict[str, Any]) -> Any:
+    return _pb().CalendarLayoutResponse(
+        mode=config["mode"],
+        color_by=config["color_by"],
+        week_start=config["week_start"],
+        hide_done=config["hide_done"],
+    )
+
+
+def _calendar_config(calendar: Any) -> dict[str, Any]:
+    return {
+        "mode": calendar.mode,
+        "color_by": calendar.color_by,
+        "week_start": calendar.week_start,
+        "hide_done": calendar.hide_done,
+    }
+
+
 def _config(layout: Any) -> dict[str, Any]:
     return {
         "columns": list(layout.columns),
@@ -75,9 +98,10 @@ def _config(layout: Any) -> dict[str, Any]:
 
 
 def _message(view: ViewRow) -> Any:
-    shape = (
-        {"board": _board(view.config)} if view.kind == "board" else {"layout": _layout(view.config)}
-    )
+    shape = {
+        "board": lambda: {"board": _board(view.config)},
+        "calendar": lambda: {"calendar": _calendar(view.config)},
+    }.get(view.kind, lambda: {"layout": _layout(view.config)})()
     return _pb().SavedView(
         **shape,
         id=str(view.pk),
@@ -89,6 +113,14 @@ def _message(view: ViewRow) -> Any:
         version=view.version,
         updated_at=view.updated_at.isoformat(),
     )
+
+
+def _requested_config(request: Any) -> dict[str, Any]:
+    if request.kind == "board":
+        return _board_config(request.board)
+    if request.kind == "calendar":
+        return _calendar_config(request.calendar)
+    return _config(request.layout)
 
 
 async def _scope(request: Any, context: Any) -> tuple[Any, Any]:
@@ -125,6 +157,7 @@ class ViewService(generics.GenericService):
             {"name": "layout", "type": Layout},
             {"name": "shared", "type": "bool"},
             {"name": "board", "type": BoardLayout},
+            {"name": "calendar", "type": CalendarLayout},
         ],
         request_name="ViewSaveRequest",
         response=SavedView,
@@ -140,11 +173,7 @@ class ViewService(generics.GenericService):
                     workspace,
                     request.project_id,
                     name=request.name,
-                    config=(
-                        _board_config(request.board)
-                        if request.kind == "board"
-                        else _config(request.layout)
-                    ),
+                    config=_requested_config(request),
                     kind=request.kind or "list",
                     view_id=request.id,
                     shared=request.shared,

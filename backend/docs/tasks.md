@@ -157,6 +157,14 @@ A task can have one parent task of the **same project**; a subtask can have subt
 - **Ranks**: only the dropped task changes (`tree.reposition` rewrites its subtree's `tree_key` prefix so the list's tree order follows). Two drops into one gap get different ranks (a taken rank is nudged), and when a rank grows past `board.REBALANCE_AT` characters the server respaces the project's top-level ranks in the same transaction (`tree.rebalance`, no versions change). Clients never compute global order.
 - Permissions: `Get`/`ListColumn` need workspace membership, `Move` `task.update` on a project that is not archived.
 
+### The calendar
+
+`CalendarController` (`calendar.py`, `grpc/calendar_services.py`; phase 13). Dates are date-only: a range is two calendar days compared as days, never shifted by a zone.
+
+- `ListRange(workspace_id, project_id, range_start, range_end, include_done)` streams the live tasks (subtasks too) that fall on any day from `range_start` to `range_end` inclusive (`YYYY-MM-DD`, at most 62 days apart, else `INVALID_ARGUMENT`): a task with both dates covers every day between them, with one date it sits on that day. Ordered by start, due, number, in chunks of 500, at most 5,000 in all (a longer answer is cut without a signal). Indexes `(project, start_date)` and `(project, due_date)`.
+- `ListUnscheduled(workspace_id, project_id, cursor, page_size)` pages the open tasks with no dates (the tray) by number.
+- Both need workspace membership. A date is changed with `TaskController.Update` (`start_date`, `due_date`), which refuses a start after the due date.
+
 ### gRPC contract (`config.tasks`)
 
 All requests carry `workspace_id` and `project_id`. Responses are `Task` (`List` streams them).
