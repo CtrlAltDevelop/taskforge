@@ -46,6 +46,7 @@ abstract interface class CalendarClient {
     required Day last,
     bool includeDone = true,
     List<String> projectIds = const [],
+    String filterAst = '',
     CancelToken? cancel,
   });
 
@@ -132,6 +133,7 @@ class GrpcCalendarClient implements CalendarClient {
     required Day last,
     bool includeDone = true,
     List<String> projectIds = const [],
+    String filterAst = '',
     CancelToken? cancel,
   }) => _run(
     () => _read(
@@ -142,6 +144,8 @@ class GrpcCalendarClient implements CalendarClient {
           rangeEnd: formatDay(last),
           includeDone: includeDone,
           projectIds: projectIds,
+          filterAst: filterAst,
+          today: filterAst.isEmpty ? '' : localToday(),
         ),
         options: _options,
       ),

@@ -126,6 +126,34 @@ final $typed_data.Uint8List calendarLayoutResponseDescriptor = $convert.base64De
     'kYAiABKAlSB2NvbG9yQnkSHQoKd2Vla19zdGFydBgDIAEoBVIJd2Vla1N0YXJ0EhsKCWhpZGVf'
     'ZG9uZRgEIAEoCFIIaGlkZURvbmU=');
 
+@$core.Deprecated('Use filterLayoutDescriptor instead')
+const FilterLayout$json = {
+  '1': 'FilterLayout',
+  '2': [
+    {'1': 'ast_json', '3': 1, '4': 1, '5': 9, '10': 'astJson'},
+    {'1': 'saved_id', '3': 2, '4': 1, '5': 9, '10': 'savedId'},
+  ],
+};
+
+/// Descriptor for `FilterLayout`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List filterLayoutDescriptor = $convert.base64Decode(
+    'CgxGaWx0ZXJMYXlvdXQSGQoIYXN0X2pzb24YASABKAlSB2FzdEpzb24SGQoIc2F2ZWRfaWQYAi'
+    'ABKAlSB3NhdmVkSWQ=');
+
+@$core.Deprecated('Use filterLayoutResponseDescriptor instead')
+const FilterLayoutResponse$json = {
+  '1': 'FilterLayoutResponse',
+  '2': [
+    {'1': 'ast_json', '3': 1, '4': 1, '5': 9, '10': 'astJson'},
+    {'1': 'saved_id', '3': 2, '4': 1, '5': 9, '10': 'savedId'},
+  ],
+};
+
+/// Descriptor for `FilterLayoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List filterLayoutResponseDescriptor = $convert.base64Decode(
+    'ChRGaWx0ZXJMYXlvdXRSZXNwb25zZRIZCghhc3RfanNvbhgBIAEoCVIHYXN0SnNvbhIZCghzYX'
+    'ZlZF9pZBgCIAEoCVIHc2F2ZWRJZA==');
+
 @$core.Deprecated('Use layoutDescriptor instead')
 const Layout$json = {
   '1': 'Layout',
@@ -281,6 +309,14 @@ const SavedView$json = {
       '6': '.config.savedviews.CalendarLayoutResponse',
       '10': 'calendar'
     },
+    {
+      '1': 'active_filter',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.FilterLayoutResponse',
+      '10': 'activeFilter'
+    },
   ],
 };
 
@@ -293,7 +329,8 @@ final $typed_data.Uint8List savedViewDescriptor = $convert.base64Decode(
     'b24YCCABKAVSB3ZlcnNpb24SHQoKdXBkYXRlZF9hdBgJIAEoCVIJdXBkYXRlZEF0EjwKBWJvYX'
     'JkGAogASgLMiYuY29uZmlnLnNhdmVkdmlld3MuQm9hcmRMYXlvdXRSZXNwb25zZVIFYm9hcmQS'
     'RQoIY2FsZW5kYXIYCyABKAsyKS5jb25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFJlc3'
-    'BvbnNlUghjYWxlbmRhcg==');
+    'BvbnNlUghjYWxlbmRhchJMCg1hY3RpdmVfZmlsdGVyGAwgASgLMicuY29uZmlnLnNhdmVkdmll'
+    'd3MuRmlsdGVyTGF5b3V0UmVzcG9uc2VSDGFjdGl2ZUZpbHRlcg==');
 
 @$core.Deprecated('Use viewDeleteRequestDescriptor instead')
 const ViewDeleteRequest$json = {
@@ -380,6 +417,14 @@ const ViewSaveRequest$json = {
       '6': '.config.savedviews.CalendarLayout',
       '10': 'calendar'
     },
+    {
+      '1': 'active_filter',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.config.savedviews.FilterLayout',
+      '10': 'activeFilter'
+    },
   ],
 };
 
@@ -391,4 +436,5 @@ final $typed_data.Uint8List viewSaveRequestDescriptor = $convert.base64Decode(
     'tpbmQYBiABKAlSBGtpbmQSMQoGbGF5b3V0GAcgASgLMhkuY29uZmlnLnNhdmVkdmlld3MuTGF5'
     'b3V0UgZsYXlvdXQSFgoGc2hhcmVkGAggASgIUgZzaGFyZWQSNAoFYm9hcmQYCSABKAsyHi5jb2'
     '5maWcuc2F2ZWR2aWV3cy5Cb2FyZExheW91dFIFYm9hcmQSPQoIY2FsZW5kYXIYCiABKAsyIS5j'
-    'b25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFIIY2FsZW5kYXI=');
+    'b25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFIIY2FsZW5kYXISRAoNYWN0aXZlX2ZpbH'
+    'RlchgLIAEoCzIfLmNvbmZpZy5zYXZlZHZpZXdzLkZpbHRlckxheW91dFIMYWN0aXZlRmlsdGVy');

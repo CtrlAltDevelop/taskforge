@@ -7,12 +7,15 @@ import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/filters/domain/filter_query.dart';
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/views/domain/filter_layout.dart';
+import 'package:taskforge/features/views/domain/list_layout.dart';
 
 import '../board/fakes.dart';
 import '../calendar/fakes.dart';
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
 import '../tasks/fakes.dart';
+import '../views/fakes.dart';
 import '../workflows/fakes.dart';
 import 'fakes.dart';
 
@@ -41,6 +44,7 @@ typedef Opened = ({
 Future<Opened> _open(
   WidgetTester tester, {
   FakeFiltersClient? filters,
+  FakeViewsClient? views,
   String role = 'Owner',
   Size size = _wide,
 }) async {
@@ -58,6 +62,7 @@ Future<Opened> _open(
     tasks: server,
     workflows: FakeWorkflowsClient(defaultWorkflow()),
     filters: fake,
+    views: views,
     board: board,
     calendar: calendar,
     today: day(2026, 11, 10),
@@ -75,6 +80,15 @@ Future<Opened> _open(
 
 Future<void> _tap(WidgetTester tester, String key) async {
   await tester.tap(find.byKey(Key(key)));
+  await tester.pumpAndSettle();
+  // The filter is saved a moment after a change: let that timer run.
+  await tester.pump(const Duration(milliseconds: 700));
+  await tester.pumpAndSettle();
+}
+
+/// Lets the save-a-moment-later timer of a changed filter run.
+Future<void> _flush(WidgetTester tester) async {
+  await tester.pump(const Duration(milliseconds: 700));
   await tester.pumpAndSettle();
 }
 
@@ -279,6 +293,7 @@ void main() {
       await tester.tap(find.byTooltip('Clear the filter'));
       await tester.pumpAndSettle();
       expect(s.board.filters.last, '');
+      await _flush(tester);
     });
 
     testWidgets('the calendar reads again with it, and without it', (
@@ -298,6 +313,7 @@ void main() {
       await tester.tap(find.byTooltip('Clear the filter'));
       await tester.pumpAndSettle();
       expect(s.calendar.filters.last, '');
+      await _flush(tester);
     });
 
     testWidgets(
@@ -319,8 +335,102 @@ void main() {
         expect(find.text('first'), findsNothing);
         expect(find.text('second'), findsOneWidget);
         expect(container.read(activeFilterProvider('p1')).savedId, 'f1');
+        await _flush(tester);
       },
     );
+  });
+
+  group('the filter is kept', () {
+    testWidgets('it is saved a moment after it is applied and when cleared', (
+      tester,
+    ) async {
+      final views = FakeViewsClient();
+      await _open(tester, views: views);
+
+      await _tap(tester, 'filter-button');
+      await _buildHigh(tester);
+      await _tap(tester, 'filter-apply');
+
+      expect(views.filterSaves, hasLength(1));
+      expect(
+        _sent(views.filterSaves.single.astJson)['where'],
+        isA<Map<dynamic, dynamic>>(),
+      );
+      await tester.tap(find.byTooltip('Clear the filter'));
+      await _flush(tester);
+      expect(views.filterSaves.last.astJson, '');
+      expect(views.filterSaves, hasLength(2));
+    });
+
+    testWidgets('it is there when the project opens, in every view, at once', (
+      tester,
+    ) async {
+      final views = FakeViewsClient()
+        ..filterLayout = (
+          id: 'flt',
+          version: 3,
+          layout: FilterLayout(astJson: _high.toJsonString(), savedId: 'f9'),
+        );
+      final s = await _open(tester, views: views);
+
+      expect(find.byKey(const Key('active-filter')), findsOneWidget);
+      // The first read was already filtered: nothing was read unfiltered first.
+      expect(s.tasks.queries.every((q) => q.filterAst.isNotEmpty), isTrue);
+      expect(s.tasks.queries, isNotEmpty);
+      await tester.tap(find.text('Board'));
+      await tester.pumpAndSettle();
+      expect(s.board.filters.every((f) => f.isNotEmpty), isTrue);
+      await tester.tap(find.text('Calendar'));
+      await tester.pumpAndSettle();
+      expect(s.calendar.filters.every((f) => f.isNotEmpty), isTrue);
+      expect(s.pumped.container.read(activeFilterProvider('p1')).savedId, 'f9');
+    });
+
+    testWidgets('a kept filter shows its text as the server writes it today', (
+      tester,
+    ) async {
+      final fake = FakeFiltersClient(texts: {'priority = high': _high});
+      final views = FakeViewsClient()
+        ..filterLayout = (
+          id: 'flt',
+          version: 1,
+          layout: FilterLayout(astJson: _high.toJsonString()),
+        );
+      await _open(tester, filters: fake, views: views);
+
+      expect(find.text('priority = high'), findsOneWidget);
+    });
+
+    testWidgets('a kept filter that no longer means anything is dropped', (
+      tester,
+    ) async {
+      final broken = FilterQuery(
+        root: const FilterGroup(
+          children: [FilterCondition(field: 'title', cmp: 'eq')],
+        ),
+      ); // the fake refuses a condition with no value, as the server would
+      final views = FakeViewsClient()
+        ..filterLayout = (
+          id: 'flt',
+          version: 1,
+          layout: FilterLayout(astJson: broken.toJsonString()),
+        );
+      final s = await _open(tester, views: views);
+
+      expect(find.byKey(const Key('active-filter')), findsNothing);
+      expect(s.tasks.queries.every((q) => q.filterAst.isEmpty), isTrue);
+    });
+
+    testWidgets('failing to read it still lets the project open', (
+      tester,
+    ) async {
+      final views = FakeViewsClient()
+        ..failFindFilter = const ViewException(ViewFailure.network);
+      final s = await _open(tester, views: views);
+
+      expect(s.tasks.queries, isNotEmpty);
+      expect(find.byKey(const Key('filter-button')), findsOneWidget);
+    });
   });
 
   group('advanced mode', () {

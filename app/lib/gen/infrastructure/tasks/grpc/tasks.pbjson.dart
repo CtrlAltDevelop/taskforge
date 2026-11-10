@@ -271,6 +271,8 @@ const CalendarWorkspaceRangeRequest$json = {
     {'1': 'range_end', '3': 3, '4': 1, '5': 9, '10': 'rangeEnd'},
     {'1': 'include_done', '3': 4, '4': 1, '5': 8, '10': 'includeDone'},
     {'1': 'project_ids', '3': 5, '4': 3, '5': 9, '10': 'projectIds'},
+    {'1': 'filter_ast', '3': 6, '4': 1, '5': 9, '10': 'filterAst'},
+    {'1': 'today', '3': 7, '4': 1, '5': 9, '10': 'today'},
   ],
 };
 
@@ -279,7 +281,8 @@ final $typed_data.Uint8List calendarWorkspaceRangeRequestDescriptor = $convert.b
     'Ch1DYWxlbmRhcldvcmtzcGFjZVJhbmdlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3'
     'dvcmtzcGFjZUlkEh8KC3JhbmdlX3N0YXJ0GAIgASgJUgpyYW5nZVN0YXJ0EhsKCXJhbmdlX2Vu'
     'ZBgDIAEoCVIIcmFuZ2VFbmQSIQoMaW5jbHVkZV9kb25lGAQgASgIUgtpbmNsdWRlRG9uZRIfCg'
-    'twcm9qZWN0X2lkcxgFIAMoCVIKcHJvamVjdElkcw==');
+    'twcm9qZWN0X2lkcxgFIAMoCVIKcHJvamVjdElkcxIdCgpmaWx0ZXJfYXN0GAYgASgJUglmaWx0'
+    'ZXJBc3QSFAoFdG9kYXkYByABKAlSBXRvZGF5');
 
 @$core.Deprecated('Use groupCountDescriptor instead')
 const GroupCount$json = {

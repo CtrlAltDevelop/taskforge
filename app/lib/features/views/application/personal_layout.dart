@@ -68,6 +68,9 @@ abstract class PersonalLayoutNotifier<T>
   /// Keep the layout when nobody watches it (a choice that lives for the session).
   bool get keepAlive => false;
 
+  /// False for a layout that lives for the session only (nothing to save).
+  bool get persists => true;
+
   @override
   PersonalLayoutState<T> build() {
     if (keepAlive) ref.keepAlive();
@@ -107,6 +110,7 @@ abstract class PersonalLayoutNotifier<T>
     if (layout == state.layout) return;
     _latest = layout;
     state = state.copyWith(layout: layout);
+    if (!persists) return;
     _timer?.cancel();
     _timer = Timer(layoutSaveDelay, () => unawaited(_save()));
   }

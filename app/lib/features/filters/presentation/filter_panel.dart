@@ -188,7 +188,13 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
     if (checked == null || !mounted) return;
     final choice = await showDialog<({String name, String visibility})>(
       context: context,
-      builder: (_) => _SaveDialog(canShare: widget.canShare),
+      builder: (_) => _SaveDialog(
+        canShare: widget.canShare,
+        sharedValue: _project.isEmpty ? 'workspace' : 'project',
+        sharedLabel: _project.isEmpty
+            ? 'Everyone in the workspace'
+            : 'Everyone in this project',
+      ),
     );
     final workspace = _workspace;
     if (choice == null || workspace == null || !mounted) return;
@@ -214,10 +220,14 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final wide = _project.isEmpty; // the calendar of every project
     final fields = filterFields(
-      flow: ref.watch(workflowProvider(_project)).value,
+      flow: wide ? null : ref.watch(workflowProvider(_project)).value,
       members: ref.watch(membersProvider).value ?? const [],
-      fields: ref.watch(fieldsProvider(_project)).value ?? const [],
+      fields: wide
+          ? const []
+          : ref.watch(fieldsProvider(_project)).value ?? const [],
+      workspaceWide: wide,
     );
     return AlertDialog(
       key: const Key('filter-panel'),
@@ -301,9 +311,17 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
 }
 
 class _SaveDialog extends StatefulWidget {
-  const _SaveDialog({required this.canShare});
+  const _SaveDialog({
+    required this.canShare,
+    required this.sharedValue,
+    required this.sharedLabel,
+  });
 
   final bool canShare;
+
+  /// The visibility "shared" means here, and how it reads.
+  final String sharedValue;
+  final String sharedLabel;
 
   @override
   State<_SaveDialog> createState() => _SaveDialogState();
@@ -344,11 +362,11 @@ class _SaveDialogState extends State<_SaveDialog> {
           DropdownButton<String>(
             key: const Key('filter-visibility'),
             value: _visibility,
-            items: const [
-              DropdownMenuItem(value: 'private', child: Text('Only me')),
+            items: [
+              const DropdownMenuItem(value: 'private', child: Text('Only me')),
               DropdownMenuItem(
-                value: 'project',
-                child: Text('Everyone in this project'),
+                value: widget.sharedValue,
+                child: Text(widget.sharedLabel),
               ),
             ],
             onChanged: (v) => setState(() => _visibility = v ?? 'private'),

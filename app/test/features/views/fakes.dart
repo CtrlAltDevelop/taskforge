@@ -1,6 +1,7 @@
 import 'package:taskforge/features/views/data/views_client.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/calendar_layout.dart';
+import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 
 /// In-memory saved layouts: the person's own and the project's shared ones.
@@ -123,6 +124,38 @@ class FakeViewsClient implements ViewsClient {
     } else {
       boards[i] = saved;
     }
+    return saved;
+  }
+
+  /// The person's saved active filter, and every save of it.
+  ({String id, int version, FilterLayout layout})? filterLayout;
+  final filterSaves = <FilterLayout>[];
+  ViewException? failFindFilter;
+
+  @override
+  Future<({String id, int version, FilterLayout layout})?> findFilter(
+    String workspaceId,
+    String projectId,
+  ) async {
+    final failure = failFindFilter;
+    if (failure != null) throw failure;
+    return filterLayout;
+  }
+
+  @override
+  Future<({String id, int version})> saveFilter(
+    String workspaceId,
+    String projectId, {
+    required FilterLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+  }) async {
+    filterSaves.add(layout);
+    final saved = (
+      id: id.isEmpty ? 'flt1' : id,
+      version: (filterLayout?.version ?? 0) + 1,
+    );
+    filterLayout = (id: saved.id, version: saved.version, layout: layout);
     return saved;
   }
 

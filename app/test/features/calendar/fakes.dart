@@ -67,6 +67,9 @@ class FakeCalendarClient implements CalendarClient {
   /// The workspace reads, and the project ids they were narrowed to.
   final workspaceReads = <List<String>>[];
 
+  /// The filter (AST JSON) of every workspace read.
+  final workspaceFilters = <String>[];
+
   @override
   Future<List<Task>> listWorkspaceRange(
     String workspaceId, {
@@ -74,8 +77,10 @@ class FakeCalendarClient implements CalendarClient {
     required Day last,
     bool includeDone = true,
     List<String> projectIds = const [],
+    String filterAst = '',
     CancelToken? cancel,
   }) async {
+    workspaceFilters.add(filterAst);
     workspaceReads.add(projectIds);
     tokens.add(cancel);
     return [

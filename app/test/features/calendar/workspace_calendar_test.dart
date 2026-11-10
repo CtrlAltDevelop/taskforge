@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
+import 'package:taskforge/features/filters/domain/filter_query.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
 import '../tasks/fakes.dart';
 import '../workflows/fakes.dart';
+import '../filters/fakes.dart';
 import 'fakes.dart';
 
 const _wide = Size(1400, 1000);
@@ -32,6 +37,7 @@ _open(
   Size size = _wide,
   String role = 'Owner',
   List<Task>? tasks,
+  FakeFiltersClient? filters,
 }) async {
   final server = FakeTasksClient(
     tasks ??
@@ -48,6 +54,7 @@ _open(
     tasks: server,
     workflows: FakeWorkflowsClient(defaultWorkflow()),
     calendar: calendar,
+    filters: filters,
     today: _today,
     size: size,
   );
@@ -230,6 +237,122 @@ void main() {
       );
     },
   );
+
+  group('a filter on every project at once', () {
+    testWidgets('only the fields that mean the same everywhere are offered', (
+      tester,
+    ) async {
+      await _open(tester);
+      await tester.tap(find.byKey(const Key('filter-button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('add-condition-root')));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('field-0')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Priority'), findsWidgets);
+      expect(find.text('Assignee'), findsWidgets);
+      expect(find.text('Due date'), findsWidgets);
+      expect(find.text('Status'), findsNothing);
+      expect(find.text('Task number'), findsNothing);
+    });
+
+    testWidgets('it narrows the calendar and is cleared again', (tester) async {
+      final s = await _open(tester);
+      expect(s.calendar.workspaceFilters.last, '');
+
+      await tester.tap(find.byKey(const Key('filter-button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('add-condition-root')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('field-0')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Priority').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('filter-apply')));
+      await tester.pumpAndSettle();
+
+      final ast =
+          jsonDecode(s.calendar.workspaceFilters.last) as Map<String, dynamic>;
+      expect((ast['where'] as Map)['field'], 'priority');
+      expect(find.byKey(const Key('active-filter')), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Clear the filter'));
+      await tester.pumpAndSettle();
+      expect(s.calendar.workspaceFilters.last, '');
+    });
+
+    testWidgets('a manager can keep it for the whole workspace', (
+      tester,
+    ) async {
+      final fake = FakeFiltersClient();
+      await _open(tester, filters: fake);
+      await tester.tap(find.byKey(const Key('filter-button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('add-condition-root')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('field-0')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Priority').last);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('filter-save')));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(const Key('filter-name')), 'Everyone');
+      await tester.tap(find.byKey(const Key('filter-visibility')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Everyone in the workspace').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('filter-save-confirm')));
+      await tester.pumpAndSettle();
+
+      expect(fake.filters.single.visibility, 'workspace');
+      expect(fake.filters.single.projectId, '');
+    });
+
+    testWidgets('a member can only keep it for themselves', (tester) async {
+      await _open(tester, role: 'Member');
+      await tester.tap(find.byKey(const Key('filter-button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('add-condition-root')));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('filter-save')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('filter-visibility')), findsNothing);
+    });
+
+    testWidgets('the filter stays while you go away and come back', (
+      tester,
+    ) async {
+      final s = await _open(tester);
+      s.pumped.container
+          .read(activeFilterProvider('').notifier)
+          .apply(
+            const FilterQuery(
+              root: FilterGroup(
+                children: [
+                  FilterCondition(
+                    field: 'priority',
+                    cmp: 'eq',
+                    values: [FilterValue.id('high')],
+                  ),
+                ],
+              ),
+            ),
+            text: 'priority = high',
+          );
+      await tester.pumpAndSettle();
+
+      await s.pumped.go(tester, '/');
+      await s.pumped.go(tester, '/calendar');
+
+      expect(find.byKey(const Key('active-filter')), findsOneWidget);
+      expect(s.calendar.workspaceFilters.last, isNotEmpty);
+    });
+  });
 
   testWidgets('the home screen opens it', (tester) async {
     final server = FakeTasksClient();

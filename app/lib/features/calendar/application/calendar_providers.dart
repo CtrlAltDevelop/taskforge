@@ -68,6 +68,9 @@ class CalendarLayoutNotifier extends PersonalLayoutNotifier<CalendarLayout> {
   bool get keepAlive => _sessionOnly;
 
   @override
+  bool get persists => !_sessionOnly;
+
+  @override
   Future<StoredLayout<CalendarLayout>?> findMine(
     ViewsClient client,
     String workspace,
@@ -225,12 +228,10 @@ class CalendarNotifier extends Notifier<CalendarState> {
           .select((s) => (s.loaded, s.layout.mode, s.layout.hideDone)),
     );
     final compact = ref.watch(compactCalendarProvider);
-    final filter = projectId.isEmpty
-        ? ''
-        : ref.watch(filterJsonProvider(projectId));
+    final filter = ref.watch(filterJsonProvider(projectId));
     final anchor = ref.watch(calendarAnchorProvider(projectId));
     final weekStart = ref.watch(weekStartProvider(projectId));
-    if (loaded) {
+    if (loaded && ref.watch(filterReadyProvider(projectId))) {
       final range = visibleRange(
         shownMode(CalendarLayout(mode: mode), compact: compact),
         anchor,
@@ -256,6 +257,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
               first: first,
               last: last,
               includeDone: !hideDone,
+              filterAst: filter,
               cancel: token,
             )
           : await client.listRange(
@@ -288,7 +290,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
         range.first,
         range.last,
         layout.hideDone,
-        projectId.isEmpty ? '' : ref.read(filterJsonProvider(projectId)),
+        ref.read(filterJsonProvider(projectId)),
       ),
     );
   }

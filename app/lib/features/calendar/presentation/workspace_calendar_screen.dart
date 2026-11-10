@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_view.dart';
+import 'package:taskforge/features/filters/presentation/filter_bar.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
@@ -51,7 +54,21 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
         scope: '',
         projectColor: (t) => colors[t.projectId] ?? Colors.blueGrey,
         visible: (t) => !hidden.contains(t.projectId),
-        legend: _Legend(projects: projects, colors: colors, hidden: hidden),
+        legend: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+              child: FilterBar(
+                projectId: '',
+                canShare: ref
+                    .watch(permissionSetProvider)
+                    .can(Perm.workspaceUpdate),
+              ),
+            ),
+            _Legend(projects: projects, colors: colors, hidden: hidden),
+          ],
+        ),
         onOpen: (Task t) =>
             context.push('/projects/${t.projectId}?task=${t.id}'),
       ),

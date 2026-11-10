@@ -131,7 +131,8 @@ class BoardNotifier extends Notifier<BoardState> {
       filterJsonProvider(projectId),
     ); // a new filter reads the board again
     ref.watch(boardLayoutProvider(projectId).select((s) => s.layout.query));
-    if (ref.watch(boardLayoutProvider(projectId).select((s) => s.loaded))) {
+    if (ref.watch(boardLayoutProvider(projectId).select((s) => s.loaded)) &&
+        ref.watch(filterReadyProvider(projectId))) {
       Future.microtask(load);
     }
     return const BoardState();

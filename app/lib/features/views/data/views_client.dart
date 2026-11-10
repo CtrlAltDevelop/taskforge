@@ -7,6 +7,7 @@ import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/calendar_layout.dart';
+import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
@@ -42,6 +43,21 @@ abstract interface class ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+  });
+
+  /// The filter the caller has on the project's views (null: none saved yet),
+  /// and its id, to replace it.
+  Future<({String id, int version, FilterLayout layout})?> findFilter(
+    String workspaceId,
+    String projectId,
+  );
+
+  Future<({String id, int version})> saveFilter(
+    String workspaceId,
+    String projectId, {
+    required FilterLayout layout,
+    String id = '',
+    int expectedVersion = 0,
   });
 
   /// And for the calendar.
@@ -234,6 +250,59 @@ class GrpcViewsClient implements ViewsClient {
         );
         return [for (final v in reply.views) _board(v)];
       }, isRead: true);
+
+  @override
+  Future<({String id, int version, FilterLayout layout})?> findFilter(
+    String workspaceId,
+    String projectId,
+  ) => _run(() async {
+    final reply = await _stub.list(
+      pb.ViewListRequest(
+        workspaceId: workspaceId,
+        projectId: projectId,
+        kind: 'filter',
+      ),
+      options: _options,
+    );
+    final mine = reply.views
+        .where((v) => !v.isShared && v.name == personalLayoutName)
+        .firstOrNull;
+    if (mine == null) return null;
+    return (
+      id: mine.id,
+      version: mine.version,
+      layout: FilterLayout(
+        astJson: mine.activeFilter.astJson,
+        savedId: mine.activeFilter.savedId,
+      ),
+    );
+  }, isRead: true);
+
+  @override
+  Future<({String id, int version})> saveFilter(
+    String workspaceId,
+    String projectId, {
+    required FilterLayout layout,
+    String id = '',
+    int expectedVersion = 0,
+  }) => _run(() async {
+    final saved = await _stub.save(
+      pb.ViewSaveRequest(
+        workspaceId: workspaceId,
+        projectId: projectId,
+        id: id,
+        expectedVersion: expectedVersion,
+        name: personalLayoutName,
+        kind: 'filter',
+        activeFilter: pb.FilterLayout(
+          astJson: layout.astJson,
+          savedId: layout.savedId,
+        ),
+      ),
+      options: _options,
+    );
+    return (id: saved.id, version: saved.version);
+  });
 
   @override
   Future<List<SavedCalendar>> listCalendars(

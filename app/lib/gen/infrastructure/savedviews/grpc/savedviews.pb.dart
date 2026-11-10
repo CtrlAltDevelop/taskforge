@@ -511,6 +511,147 @@ class CalendarLayoutResponse extends $pb.GeneratedMessage {
   void clearHideDone() => $_clearField(4);
 }
 
+class FilterLayout extends $pb.GeneratedMessage {
+  factory FilterLayout({
+    $core.String? astJson,
+    $core.String? savedId,
+  }) {
+    final result = FilterLayout._();
+    if (astJson != null) result.astJson = astJson;
+    if (savedId != null) result.savedId = savedId;
+    return result;
+  }
+
+  FilterLayout._();
+
+  factory FilterLayout.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FilterLayout()..mergeFromBuffer(data, registry);
+  factory FilterLayout.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FilterLayout()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FilterLayout',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: FilterLayout.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'astJson')
+    ..aOS(2, _omitFieldNames ? '' : 'savedId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterLayout clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterLayout copyWith(void Function(FilterLayout) updates) =>
+      super.copyWith((message) => updates(message as FilterLayout))
+          as FilterLayout;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use FilterLayout() / FilterLayout.new instead')
+  static FilterLayout create() => FilterLayout._();
+  static $pb.GeneratedMessage $_createMessage() => FilterLayout._();
+  @$core.override
+  FilterLayout createEmptyInstance() => FilterLayout._();
+  @$core.pragma('dart2js:noInline')
+  static FilterLayout getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FilterLayout>(
+          FilterLayout.$_createMessage);
+  static FilterLayout? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get astJson => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set astJson($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAstJson() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAstJson() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get savedId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set savedId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSavedId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSavedId() => $_clearField(2);
+}
+
+class FilterLayoutResponse extends $pb.GeneratedMessage {
+  factory FilterLayoutResponse({
+    $core.String? astJson,
+    $core.String? savedId,
+  }) {
+    final result = FilterLayoutResponse._();
+    if (astJson != null) result.astJson = astJson;
+    if (savedId != null) result.savedId = savedId;
+    return result;
+  }
+
+  FilterLayoutResponse._();
+
+  factory FilterLayoutResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FilterLayoutResponse()..mergeFromBuffer(data, registry);
+  factory FilterLayoutResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FilterLayoutResponse()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FilterLayoutResponse',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.savedviews'),
+      createEmptyInstance: FilterLayoutResponse.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'astJson')
+    ..aOS(2, _omitFieldNames ? '' : 'savedId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterLayoutResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FilterLayoutResponse copyWith(void Function(FilterLayoutResponse) updates) =>
+      super.copyWith((message) => updates(message as FilterLayoutResponse))
+          as FilterLayoutResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use FilterLayoutResponse() / FilterLayoutResponse.new instead')
+  static FilterLayoutResponse create() => FilterLayoutResponse._();
+  static $pb.GeneratedMessage $_createMessage() => FilterLayoutResponse._();
+  @$core.override
+  FilterLayoutResponse createEmptyInstance() => FilterLayoutResponse._();
+  @$core.pragma('dart2js:noInline')
+  static FilterLayoutResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<FilterLayoutResponse>(
+          FilterLayoutResponse.$_createMessage);
+  static FilterLayoutResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get astJson => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set astJson($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAstJson() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAstJson() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get savedId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set savedId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSavedId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSavedId() => $_clearField(2);
+}
+
 class Layout extends $pb.GeneratedMessage {
   factory Layout({
     $core.Iterable<$core.String>? columns,
@@ -957,6 +1098,7 @@ class SavedView extends $pb.GeneratedMessage {
     $core.String? updatedAt,
     BoardLayoutResponse? board,
     CalendarLayoutResponse? calendar,
+    FilterLayoutResponse? activeFilter,
   }) {
     final result = SavedView._();
     if (id != null) result.id = id;
@@ -970,6 +1112,7 @@ class SavedView extends $pb.GeneratedMessage {
     if (updatedAt != null) result.updatedAt = updatedAt;
     if (board != null) result.board = board;
     if (calendar != null) result.calendar = calendar;
+    if (activeFilter != null) result.activeFilter = activeFilter;
     return result;
   }
 
@@ -1001,6 +1144,8 @@ class SavedView extends $pb.GeneratedMessage {
         subBuilder: BoardLayoutResponse.$_createMessage)
     ..aOM<CalendarLayoutResponse>(11, _omitFieldNames ? '' : 'calendar',
         subBuilder: CalendarLayoutResponse.$_createMessage)
+    ..aOM<FilterLayoutResponse>(12, _omitFieldNames ? '' : 'activeFilter',
+        subBuilder: FilterLayoutResponse.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1127,6 +1272,17 @@ class SavedView extends $pb.GeneratedMessage {
   void clearCalendar() => $_clearField(11);
   @$pb.TagNumber(11)
   CalendarLayoutResponse ensureCalendar() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  FilterLayoutResponse get activeFilter => $_getN(11);
+  @$pb.TagNumber(12)
+  set activeFilter(FilterLayoutResponse value) => $_setField(12, value);
+  @$pb.TagNumber(12)
+  $core.bool hasActiveFilter() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearActiveFilter() => $_clearField(12);
+  @$pb.TagNumber(12)
+  FilterLayoutResponse ensureActiveFilter() => $_ensure(11);
 }
 
 class ViewDeleteRequest extends $pb.GeneratedMessage {
@@ -1356,6 +1512,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     $core.bool? shared,
     BoardLayout? board,
     CalendarLayout? calendar,
+    FilterLayout? activeFilter,
   }) {
     final result = ViewSaveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1368,6 +1525,7 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     if (shared != null) result.shared = shared;
     if (board != null) result.board = board;
     if (calendar != null) result.calendar = calendar;
+    if (activeFilter != null) result.activeFilter = activeFilter;
     return result;
   }
 
@@ -1398,6 +1556,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
         subBuilder: BoardLayout.$_createMessage)
     ..aOM<CalendarLayout>(10, _omitFieldNames ? '' : 'calendar',
         subBuilder: CalendarLayout.$_createMessage)
+    ..aOM<FilterLayout>(11, _omitFieldNames ? '' : 'activeFilter',
+        subBuilder: FilterLayout.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1517,6 +1677,17 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
   void clearCalendar() => $_clearField(10);
   @$pb.TagNumber(10)
   CalendarLayout ensureCalendar() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  FilterLayout get activeFilter => $_getN(10);
+  @$pb.TagNumber(11)
+  set activeFilter(FilterLayout value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasActiveFilter() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearActiveFilter() => $_clearField(11);
+  @$pb.TagNumber(11)
+  FilterLayout ensureActiveFilter() => $_ensure(10);
 }
 
 const $core.bool _omitFieldNames =

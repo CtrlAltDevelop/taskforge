@@ -127,9 +127,10 @@ List<FilterField> filterFields({
   Workflow? flow,
   List<Member> members = const [],
   List<CustomField> fields = const [],
+  bool workspaceWide = false,
 }) {
   final people = [for (final m in members) FilterChoice(m.userId, m.label)];
-  return [
+  final all = [
     const FilterField('title', 'Title', FilterKind.text, sortable: true),
     FilterField(
       'status',
@@ -184,6 +185,15 @@ List<FilterField> filterFields({
         ],
       ),
   ];
+  // Across projects only what means the same in each: no status, task number
+  // or custom field.
+  return workspaceWide
+      ? [
+          for (final f in all)
+            if (f.ref != 'status' && f.ref != 'id' && !f.ref.startsWith('cf:'))
+              f,
+        ]
+      : all;
 }
 
 FilterKind _kindOf(FieldType type) => switch (type) {

@@ -272,5 +272,6 @@ final listQueryProvider = Provider.autoDispose.family<ListQuery, String>(
 
 final listLayoutReadyProvider = Provider.autoDispose.family<bool, String>(
   (ref, projectId) =>
-      ref.watch(listLayoutProvider(projectId).select((s) => s.loaded)),
+      ref.watch(listLayoutProvider(projectId).select((s) => s.loaded)) &&
+      ref.watch(filterReadyProvider(projectId)),
 );

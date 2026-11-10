@@ -1164,6 +1164,8 @@ class CalendarWorkspaceRangeRequest extends $pb.GeneratedMessage {
     $core.String? rangeEnd,
     $core.bool? includeDone,
     $core.Iterable<$core.String>? projectIds,
+    $core.String? filterAst,
+    $core.String? today,
   }) {
     final result = CalendarWorkspaceRangeRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1171,6 +1173,8 @@ class CalendarWorkspaceRangeRequest extends $pb.GeneratedMessage {
     if (rangeEnd != null) result.rangeEnd = rangeEnd;
     if (includeDone != null) result.includeDone = includeDone;
     if (projectIds != null) result.projectIds.addAll(projectIds);
+    if (filterAst != null) result.filterAst = filterAst;
+    if (today != null) result.today = today;
     return result;
   }
 
@@ -1192,6 +1196,8 @@ class CalendarWorkspaceRangeRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'rangeEnd')
     ..aOB(4, _omitFieldNames ? '' : 'includeDone')
     ..pPS(5, _omitFieldNames ? '' : 'projectIds')
+    ..aOS(6, _omitFieldNames ? '' : 'filterAst')
+    ..aOS(7, _omitFieldNames ? '' : 'today')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1260,6 +1266,24 @@ class CalendarWorkspaceRangeRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $pb.PbList<$core.String> get projectIds => $_getList(4);
+
+  @$pb.TagNumber(6)
+  $core.String get filterAst => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set filterAst($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasFilterAst() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFilterAst() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get today => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set today($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasToday() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearToday() => $_clearField(7);
 }
 
 class GroupCount extends $pb.GeneratedMessage {

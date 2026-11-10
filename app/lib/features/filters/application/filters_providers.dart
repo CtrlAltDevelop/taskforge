@@ -6,6 +6,9 @@ import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/features/filters/data/filters_client.dart';
 import 'package:taskforge/features/filters/domain/filter_query.dart';
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
+import 'package:taskforge/features/views/application/personal_layout.dart';
+import 'package:taskforge/features/views/data/views_client.dart';
+import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 final filtersClientProvider = Provider<FiltersClient>(
@@ -40,8 +43,95 @@ class ActiveFilterState {
   int get hashCode => Object.hash(query, savedId, text);
 }
 
-/// The filter applied to a project's list, board and calendar at once. It lasts
-/// while the project is open (it is not saved: save a filter to keep one).
+/// The person's filter on a project, kept like a layout: it is read when the
+/// project opens (and checked: a filter whose field is gone is dropped) and
+/// saved a moment after every change, so it is there on the next visit and on
+/// another device. The calendar of every project (the empty project id) keeps
+/// its filter for the session only.
+final filterLayoutProvider = NotifierProvider.autoDispose
+    .family<FilterLayoutNotifier, PersonalLayoutState<FilterLayout>, String>(
+      FilterLayoutNotifier.new,
+    );
+
+class FilterLayoutNotifier extends PersonalLayoutNotifier<FilterLayout> {
+  FilterLayoutNotifier(String projectId)
+    : super(projectId, const FilterLayout());
+
+  bool get _sessionOnly => projectId.isEmpty;
+
+  @override
+  bool get keepAlive => _sessionOnly;
+
+  @override
+  bool get persists => !_sessionOnly;
+
+  @override
+  Future<StoredLayout<FilterLayout>?> findMine(
+    ViewsClient client,
+    String workspace,
+  ) async {
+    if (_sessionOnly) return null;
+    final found = await client.findFilter(workspace, projectId);
+    if (found == null || found.layout.isEmpty) return null;
+    // Read it again: the text follows today's names, and a filter that no longer
+    // means anything (a field was removed) is not applied.
+    try {
+      final checked = await ref
+          .read(filtersClientProvider)
+          .validate(workspace, projectId, astJson: found.layout.astJson);
+      if (!checked.ok) {
+        return (
+          id: found.id,
+          version: found.version,
+          layout: const FilterLayout(),
+        );
+      }
+      return (
+        id: found.id,
+        version: found.version,
+        layout: FilterLayout(
+          astJson: found.layout.astJson,
+          savedId: found.layout.savedId,
+          text: checked.tfql,
+        ),
+      );
+    } on FilterException {
+      return (
+        id: found.id,
+        version: found.version,
+        layout: const FilterLayout(),
+      );
+    }
+  }
+
+  @override
+  Future<StoredLayout<FilterLayout>> store(
+    ViewsClient client,
+    String workspace,
+    FilterLayout layout, {
+    required String id,
+    required int version,
+  }) async {
+    if (_sessionOnly) return (id: '', version: 0, layout: layout);
+    final saved = await client.saveFilter(
+      workspace,
+      projectId,
+      layout: layout,
+      id: id,
+      expectedVersion: version,
+    );
+    return (id: saved.id, version: saved.version, layout: layout);
+  }
+}
+
+/// Whether the person's filter has been read, so a view reads its data once,
+/// with it.
+final filterReadyProvider = Provider.autoDispose.family<bool, String>(
+  (ref, projectId) =>
+      ref.watch(filterLayoutProvider(projectId).select((s) => s.loaded)),
+);
+
+/// The filter applied to a project's list, board and calendar at once.
 final activeFilterProvider = NotifierProvider.autoDispose
     .family<ActiveFilter, ActiveFilterState, String>(ActiveFilter.new);
 
@@ -51,13 +141,30 @@ class ActiveFilter extends Notifier<ActiveFilterState> {
   final String projectId;
 
   @override
-  ActiveFilterState build() => const ActiveFilterState();
-
-  void apply(FilterQuery query, {String? saved, String text = ''}) {
-    state = ActiveFilterState(query: query, savedId: saved, text: text);
+  ActiveFilterState build() {
+    final layout = ref.watch(
+      filterLayoutProvider(projectId).select((s) => s.layout),
+    );
+    return ActiveFilterState(
+      query: FilterQuery.fromJsonString(layout.astJson),
+      savedId: layout.savedId.isEmpty ? null : layout.savedId,
+      text: layout.text,
+    );
   }
 
-  void clear() => state = const ActiveFilterState();
+  void apply(FilterQuery query, {String? saved, String text = ''}) => ref
+      .read(filterLayoutProvider(projectId).notifier)
+      .set(
+        FilterLayout(
+          astJson: query.toJsonString(),
+          savedId: saved ?? '',
+          text: text,
+        ),
+      );
+
+  void clear() => ref
+      .read(filterLayoutProvider(projectId).notifier)
+      .set(const FilterLayout());
 }
 
 /// The AST of a project's active filter as the JSON the reads take ('' for no
