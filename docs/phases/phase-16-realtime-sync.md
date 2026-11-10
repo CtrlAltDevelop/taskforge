@@ -45,3 +45,6 @@ Publish-after-commit (rollback sends nothing), catch-up correctness, permission 
 
 ## Depends on
 Phases 04, 06 (benefits all views 11–15).
+
+## Hand-off from earlier phases
+- Phase 09 already sends `task_changed` with action `linked` / `unlinked` (both tasks of a link, version unchanged) through `transaction.on_commit`; turn them into `task.updated` events so other clients refresh the links and the blocked lock (`Task.is_blocked`, `Task.blocked_by`).
