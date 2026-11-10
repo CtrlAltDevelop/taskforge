@@ -39,6 +39,10 @@ const Task$json = {
     {'1': 'deleted_at', '3': 18, '4': 1, '5': 9, '10': 'deletedAt'},
     {'1': 'status_name', '3': 19, '4': 1, '5': 9, '10': 'statusName'},
     {'1': 'status_category', '3': 20, '4': 1, '5': 9, '10': 'statusCategory'},
+    {'1': 'parent_id', '3': 21, '4': 1, '5': 9, '10': 'parentId'},
+    {'1': 'depth', '3': 22, '4': 1, '5': 5, '10': 'depth'},
+    {'1': 'progress_done', '3': 23, '4': 1, '5': 5, '10': 'progressDone'},
+    {'1': 'progress_total', '3': 24, '4': 1, '5': 5, '10': 'progressTotal'},
   ],
 };
 
@@ -54,7 +58,30 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'ABKAVSB3ZlcnNpb24SGgoIcG9zaXRpb24YDyABKAlSCHBvc2l0aW9uEh0KCmNyZWF0ZWRfYXQY'
     'ECABKAlSCWNyZWF0ZWRBdBIdCgp1cGRhdGVkX2F0GBEgASgJUgl1cGRhdGVkQXQSHQoKZGVsZX'
     'RlZF9hdBgSIAEoCVIJZGVsZXRlZEF0Eh8KC3N0YXR1c19uYW1lGBMgASgJUgpzdGF0dXNOYW1l'
-    'EicKD3N0YXR1c19jYXRlZ29yeRgUIAEoCVIOc3RhdHVzQ2F0ZWdvcnk=');
+    'EicKD3N0YXR1c19jYXRlZ29yeRgUIAEoCVIOc3RhdHVzQ2F0ZWdvcnkSGwoJcGFyZW50X2lkGB'
+    'UgASgJUghwYXJlbnRJZBIUCgVkZXB0aBgWIAEoBVIFZGVwdGgSIwoNcHJvZ3Jlc3NfZG9uZRgX'
+    'IAEoBVIMcHJvZ3Jlc3NEb25lEiUKDnByb2dyZXNzX3RvdGFsGBggASgFUg1wcm9ncmVzc1RvdG'
+    'Fs');
+
+@$core.Deprecated('Use taskChildrenDescriptor instead')
+const TaskChildren$json = {
+  '1': 'TaskChildren',
+  '2': [
+    {
+      '1': 'tasks',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.tasks.Task',
+      '10': 'tasks'
+    },
+  ],
+};
+
+/// Descriptor for `TaskChildren`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskChildrenDescriptor = $convert.base64Decode(
+    'CgxUYXNrQ2hpbGRyZW4SKAoFdGFza3MYASADKAsyEi5jb25maWcudGFza3MuVGFza1IFdGFza3'
+    'M=');
 
 @$core.Deprecated('Use taskCreateRequestDescriptor instead')
 const TaskCreateRequest$json = {
@@ -69,6 +96,7 @@ const TaskCreateRequest$json = {
     {'1': 'start_date', '3': 7, '4': 1, '5': 9, '10': 'startDate'},
     {'1': 'due_date', '3': 8, '4': 1, '5': 9, '10': 'dueDate'},
     {'1': 'assignee_ids', '3': 9, '4': 3, '5': 9, '10': 'assigneeIds'},
+    {'1': 'parent_id', '3': 10, '4': 1, '5': 9, '10': 'parentId'},
   ],
 };
 
@@ -79,7 +107,7 @@ final $typed_data.Uint8List taskCreateRequestDescriptor = $convert.base64Decode(
     'ZGVzY3JpcHRpb24YBCABKAlSC2Rlc2NyaXB0aW9uEhYKBnN0YXR1cxgFIAEoCVIGc3RhdHVzEh'
     'oKCHByaW9yaXR5GAYgASgJUghwcmlvcml0eRIdCgpzdGFydF9kYXRlGAcgASgJUglzdGFydERh'
     'dGUSGQoIZHVlX2RhdGUYCCABKAlSB2R1ZURhdGUSIQoMYXNzaWduZWVfaWRzGAkgAygJUgthc3'
-    'NpZ25lZUlkcw==');
+    'NpZ25lZUlkcxIbCglwYXJlbnRfaWQYCiABKAlSCHBhcmVudElk');
 
 @$core.Deprecated('Use taskDeleteRequestDescriptor instead')
 const TaskDeleteRequest$json = {
@@ -88,13 +116,15 @@ const TaskDeleteRequest$json = {
     {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
     {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
     {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'mode', '3': 4, '4': 1, '5': 9, '10': 'mode'},
   ],
 };
 
 /// Descriptor for `TaskDeleteRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List taskDeleteRequestDescriptor = $convert.base64Decode(
     'ChFUYXNrRGVsZXRlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh'
-    '0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQ=');
+    '0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQSEgoEbW9kZRgE'
+    'IAEoCVIEbW9kZQ==');
 
 @$core.Deprecated('Use taskGetRequestDescriptor instead')
 const TaskGetRequest$json = {
@@ -111,6 +141,21 @@ final $typed_data.Uint8List taskGetRequestDescriptor = $convert.base64Decode(
     'Cg5UYXNrR2V0UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh0KCn'
     'Byb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQ=');
 
+@$core.Deprecated('Use taskListChildrenRequestDescriptor instead')
+const TaskListChildrenRequest$json = {
+  '1': 'TaskListChildrenRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `TaskListChildrenRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskListChildrenRequestDescriptor = $convert.base64Decode(
+    'ChdUYXNrTGlzdENoaWxkcmVuUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcG'
+    'FjZUlkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQ=');
+
 @$core.Deprecated('Use taskListRequestDescriptor instead')
 const TaskListRequest$json = {
   '1': 'TaskListRequest',
@@ -121,6 +166,7 @@ const TaskListRequest$json = {
     {'1': 'assignee_id', '3': 4, '4': 1, '5': 9, '10': 'assigneeId'},
     {'1': 'cursor', '3': 5, '4': 1, '5': 9, '10': 'cursor'},
     {'1': 'page_size', '3': 6, '4': 1, '5': 5, '10': 'pageSize'},
+    {'1': 'include_subtasks', '3': 7, '4': 1, '5': 8, '10': 'includeSubtasks'},
   ],
 };
 
@@ -129,7 +175,8 @@ final $typed_data.Uint8List taskListRequestDescriptor = $convert.base64Decode(
     'Cg9UYXNrTGlzdFJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSFgoGc3RhdHVzGAMgASgJUgZzdGF0dXMSHwoL'
     'YXNzaWduZWVfaWQYBCABKAlSCmFzc2lnbmVlSWQSFgoGY3Vyc29yGAUgASgJUgZjdXJzb3ISGw'
-    'oJcGFnZV9zaXplGAYgASgFUghwYWdlU2l6ZQ==');
+    'oJcGFnZV9zaXplGAYgASgFUghwYWdlU2l6ZRIpChBpbmNsdWRlX3N1YnRhc2tzGAcgASgIUg9p'
+    'bmNsdWRlU3VidGFza3M=');
 
 @$core.Deprecated('Use taskListTrashRequestDescriptor instead')
 const TaskListTrashRequest$json = {
@@ -154,6 +201,7 @@ const TaskMoveRequest$json = {
     {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
     {'1': 'expected_version', '3': 4, '4': 1, '5': 5, '10': 'expectedVersion'},
     {'1': 'status', '3': 5, '4': 1, '5': 9, '10': 'status'},
+    {'1': 'include_subtasks', '3': 6, '4': 1, '5': 8, '10': 'includeSubtasks'},
   ],
 };
 
@@ -161,8 +209,8 @@ const TaskMoveRequest$json = {
 final $typed_data.Uint8List taskMoveRequestDescriptor = $convert.base64Decode(
     'Cg9UYXNrTW92ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZBIdCg'
     'pwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSDgoCaWQYAyABKAlSAmlkEikKEGV4cGVjdGVk'
-    'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhIWCgZzdGF0dXMYBSABKAlSBnN0YXR1cw'
-    '==');
+    'X3ZlcnNpb24YBCABKAVSD2V4cGVjdGVkVmVyc2lvbhIWCgZzdGF0dXMYBSABKAlSBnN0YXR1cx'
+    'IpChBpbmNsdWRlX3N1YnRhc2tzGAYgASgIUg9pbmNsdWRlU3VidGFza3M=');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {
@@ -178,6 +226,25 @@ const TaskRestoreRequest$json = {
 final $typed_data.Uint8List taskRestoreRequestDescriptor = $convert.base64Decode(
     'ChJUYXNrUmVzdG9yZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2VJZB'
     'IdCgpwcm9qZWN0X2lkGAIgASgJUglwcm9qZWN0SWQSDgoCaWQYAyABKAlSAmlk');
+
+@$core.Deprecated('Use taskSetParentRequestDescriptor instead')
+const TaskSetParentRequest$json = {
+  '1': 'TaskSetParentRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
+    {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'expected_version', '3': 4, '4': 1, '5': 5, '10': 'expectedVersion'},
+    {'1': 'parent_id', '3': 5, '4': 1, '5': 9, '10': 'parentId'},
+  ],
+};
+
+/// Descriptor for `TaskSetParentRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskSetParentRequestDescriptor = $convert.base64Decode(
+    'ChRUYXNrU2V0UGFyZW50UmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
+    'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQSKQoQZXhw'
+    'ZWN0ZWRfdmVyc2lvbhgEIAEoBVIPZXhwZWN0ZWRWZXJzaW9uEhsKCXBhcmVudF9pZBgFIAEoCV'
+    'IIcGFyZW50SWQ=');
 
 @$core.Deprecated('Use taskTrashDescriptor instead')
 const TaskTrash$json = {

@@ -40,6 +40,8 @@ class Task {
     this.version = 1,
     this.position = '',
     this.deletedAt = '',
+    this.parentId = '',
+    this.depth = 0,
   });
 
   final String id;
@@ -68,6 +70,10 @@ class Task {
   final String position;
   final String deletedAt;
 
+  /// The task this is a subtask of, empty at the top; [depth] is how far down.
+  final String parentId;
+  final int depth;
+
   bool get isDeleted => deletedAt.isNotEmpty;
 
   /// The task with [patch] applied (the optimistic view; version unchanged).
@@ -88,6 +94,8 @@ class Task {
     version: version,
     position: position,
     deletedAt: deletedAt,
+    parentId: parentId,
+    depth: depth,
   );
 
   /// The value of field [name] as the server names it, for conflict screens.
@@ -184,6 +192,8 @@ class TaskConflict {
 enum TaskFailure {
   conflict,
   transitionNotAllowed,
+  hasSubtasks,
+  cycle,
   denied,
   forbidden,
   invalid,
@@ -194,11 +204,19 @@ enum TaskFailure {
 }
 
 class TaskException implements Exception {
-  const TaskException(this.failure, {this.detail, this.conflict});
+  const TaskException(
+    this.failure, {
+    this.detail,
+    this.conflict,
+    this.subtaskCount = 0,
+  });
 
   final TaskFailure failure;
   final String? detail;
   final TaskConflict? conflict;
+
+  /// For [TaskFailure.hasSubtasks]: how many subtasks the task has.
+  final int subtaskCount;
 
   @override
   String toString() => 'TaskException($failure, $detail)';
@@ -211,6 +229,10 @@ String taskErrorMessage(Object error) {
     TaskFailure.conflict => 'Someone else changed this task first.',
     TaskFailure.transitionNotAllowed =>
       error.detail ?? 'The workflow does not allow that move.',
+    TaskFailure.hasSubtasks =>
+      'This task has subtasks: choose what happens to them.',
+    TaskFailure.cycle =>
+      'A task cannot become a subtask of itself or of one of its own subtasks.',
     TaskFailure.denied => error.detail ?? 'You do not have permission.',
     TaskFailure.forbidden => 'You do not have permission to do that.',
     TaskFailure.invalid => error.detail ?? 'Check the values and try again.',
@@ -221,4 +243,17 @@ String taskErrorMessage(Object error) {
       'Cannot reach the server. Check your connection and try again.',
     TaskFailure.other => 'Something went wrong. Try again.',
   };
+}
+
+/// What happens to the subtasks of a task that is deleted.
+enum DeleteMode {
+  /// Delete them with it.
+  subtree('subtree'),
+
+  /// Move them up to its own parent.
+  promote('promote');
+
+  const DeleteMode(this.wire);
+
+  final String wire;
 }

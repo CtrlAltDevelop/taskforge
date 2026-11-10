@@ -5,8 +5,11 @@ import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
+import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_detail.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
@@ -36,7 +39,11 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
       MaterialPageRoute(
         builder: (_) => Scaffold(
           appBar: AppBar(title: Text(task.displayId)),
-          body: TaskDetail(project: widget.project, taskId: task.id),
+          body: TaskDetail(
+            project: widget.project,
+            taskId: task.id,
+            onOpen: (t) => _open(t, false),
+          ),
         ),
       ),
     );
@@ -48,6 +55,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
       final wide = box.maxWidth >= wideBreakpoint;
       final list = _TaskList(
         project: widget.project,
+        wide: wide,
         selected: wide ? _selected : null,
         onOpen: (t) => _open(t, wide),
       );
@@ -64,6 +72,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
               project: widget.project,
               taskId: _selected!,
               onClose: () => setState(() => _selected = null),
+              onOpen: (t) => _open(t, true),
             ),
           ),
         ],
@@ -72,38 +81,49 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
   );
 }
 
-class _TaskList extends ConsumerWidget {
+class _TaskList extends ConsumerStatefulWidget {
   const _TaskList({
     required this.project,
+    required this.wide,
     required this.selected,
     required this.onOpen,
   });
 
   final Project project;
+  final bool wide;
   final String? selected;
   final void Function(Task) onOpen;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends ConsumerState<_TaskList> {
+  /// The task whose inline "add subtask" field is open.
+  String? _addingUnder;
+
+  Project get project => widget.project;
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(taskListProvider(project.id));
     final flow = ref.watch(workflowProvider(project.id)).value;
-    final canCreate =
-        !project.isArchived &&
-        ref.watch(permissionSetProvider).can(Perm.taskCreate);
+    final permissions = ref.watch(permissionSetProvider);
+    final canCreate = !project.isArchived && permissions.can(Perm.taskCreate);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (canCreate) QuickAdd(projectId: project.id),
-        Expanded(child: _body(context, ref, state, flow)),
+        Expanded(child: _body(context, state, flow, permissions)),
       ],
     );
   }
 
   Widget _body(
     BuildContext context,
-    WidgetRef ref,
     TaskListState state,
     Workflow? flow,
+    Permissions permissions,
   ) {
     if (state.error != null && state.tasks.isEmpty) {
       return Center(
@@ -124,23 +144,197 @@ class _TaskList extends ConsumerWidget {
         ),
       );
     }
+    final tree = ref.watch(taskTreeProvider(project.id));
+    final collapsed = ref.watch(collapsedTasksProvider(project.id));
+    final rows = tree.visibleRows(collapsed);
+    final editable = !project.isArchived;
+    final canUpdate = editable && permissions.can(Perm.taskUpdate);
+    final canCreate = editable && permissions.can(Perm.taskCreate);
+    final canDelete = editable && permissions.can(Perm.taskDelete);
+    // Rows are built lazily (a list of thousands only builds what is on screen);
+    // the inline add field counts as one more entry under its parent.
+    final entries = <Object>[
+      for (final row in rows) ...[
+        row,
+        if (_addingUnder == row.task.id) row.task.id,
+      ],
+    ];
     return ListView.builder(
       key: const Key('task-list'),
-      itemCount: state.tasks.length + (state.loading ? 1 : 0),
+      itemCount: entries.length + (state.loading ? 1 : 0),
       itemBuilder: (context, i) {
-        if (i == state.tasks.length) {
+        if (i == entries.length) {
           return const LinearProgressIndicator(key: Key('tasks-streaming'));
         }
-        final task = state.tasks[i];
-        return TaskTile(
+        final entry = entries[i];
+        if (entry is String) return _inlineAdd(tree, entry);
+        final row = entry as TreeRow;
+        final task = row.task;
+        final tile = TaskTile(
           task: task,
           statusColor: flow?.statusById(task.statusId)?.swatch,
-          selected: task.id == selected,
-          onTap: () => onOpen(task),
+          selected: task.id == widget.selected,
+          onTap: () => widget.onOpen(task),
+          depth: row.depth,
+          hasChildren: row.hasChildren,
+          expanded: row.expanded,
+          progress: tree.progressOf(task.id),
+          onToggle: () => ref
+              .read(collapsedTasksProvider(project.id).notifier)
+              .toggle(task.id),
+          actions: [
+            if (canCreate && task.depth + 1 < softDepthLimit)
+              TaskAction.addSubtask,
+            if (canUpdate) TaskAction.moveUnder,
+            if (canUpdate && task.parentId.isNotEmpty) TaskAction.makeTopLevel,
+            if (canDelete) TaskAction.delete,
+          ],
+          onAction: (action) => _act(action, tree, task),
         );
+        if (!widget.wide || !canUpdate) return tile;
+        return _dropTarget(tree, task, _draggable(task, tile));
       },
     );
   }
+
+  Widget _inlineAdd(TaskTree tree, String parentId) {
+    final parent = tree.task(parentId);
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        56.0 + ((parent?.depth ?? 0) + 1) * 20,
+        0,
+        12,
+        8,
+      ),
+      child: AddSubtaskField(
+        projectId: project.id,
+        parentId: parentId,
+        autofocus: true,
+        onDone: () => setState(() => _addingUnder = null),
+      ),
+    );
+  }
+
+  /// Wide screens: press and hold a row, then drag it onto another to nest it
+  /// there. (Holding first keeps an ordinary drag free to scroll the list.)
+  Widget _draggable(Task task, Widget tile) => LongPressDraggable<String>(
+    key: Key('drag-${task.id}'),
+    data: task.id,
+    feedback: Material(
+      elevation: 4,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: ListTile(
+          title: Text(task.title, overflow: TextOverflow.ellipsis),
+          subtitle: Text(task.displayId),
+        ),
+      ),
+    ),
+    childWhenDragging: Opacity(opacity: 0.4, child: tile),
+    child: tile,
+  );
+
+  Widget _dropTarget(TaskTree tree, Task target, Widget child) =>
+      DragTarget<String>(
+        key: Key('drop-${target.id}'),
+        onWillAcceptWithDetails: (d) {
+          final dragged = tree.task(d.data);
+          return dragged != null &&
+              dragged.parentId != target.id &&
+              !tree.wouldCycle(dragged.id, target.id) &&
+              target.depth + 1 + tree.levelsBelow(dragged.id) < softDepthLimit;
+        },
+        onAcceptWithDetails: (d) {
+          final dragged = tree.task(d.data);
+          if (dragged != null) _reparent(dragged, target.id);
+        },
+        builder: (context, candidates, _) => DecoratedBox(
+          decoration: BoxDecoration(
+            border: candidates.isEmpty
+                ? null
+                : Border.all(color: Theme.of(context).colorScheme.primary),
+          ),
+          child: child,
+        ),
+      );
+
+  Future<void> _act(TaskAction action, TaskTree tree, Task task) async {
+    switch (action) {
+      case TaskAction.addSubtask:
+        ref.read(collapsedTasksProvider(project.id).notifier).expand(task.id);
+        setState(() => _addingUnder = task.id);
+      case TaskAction.moveUnder:
+        final parent = await pickParent(context, tree, task);
+        if (parent != null) await _reparent(task, parent);
+      case TaskAction.makeTopLevel:
+        await _reparent(task, '');
+      case TaskAction.delete:
+        await _delete(tree, task);
+    }
+  }
+
+  Future<void> _reparent(Task task, String parentId) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await ref
+          .read(taskListProvider(project.id).notifier)
+          .setParent(task, parentId);
+      if (parentId.isNotEmpty) {
+        ref.read(collapsedTasksProvider(project.id).notifier).expand(parentId);
+      }
+    } on TaskException catch (e) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+    }
+  }
+
+  Future<void> _delete(TaskTree tree, Task task) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final list = ref.read(taskListProvider(project.id).notifier);
+    final below = tree.subtreeIds(task.id).length - 1;
+    DeleteMode? mode;
+    if (below > 0) {
+      mode = await askDeleteMode(context, task, below);
+      if (mode == null || !mounted) return;
+    }
+    try {
+      final moved = await list.delete(task, mode: mode);
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('${task.displayId} deleted'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () async {
+                try {
+                  await list.restore(task, adopt: moved);
+                } on TaskException catch (e) {
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(taskErrorMessage(e))),
+                  );
+                }
+              },
+            ),
+          ),
+        );
+    } on TaskException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+    }
+  }
+}
+
+/// What a row's menu can do.
+enum TaskAction {
+  addSubtask('Add subtask'),
+  moveUnder('Move under\u2026'),
+  makeTopLevel('Make top level'),
+  delete('Delete');
+
+  const TaskAction(this.label);
+
+  final String label;
 }
 
 class TaskTile extends StatelessWidget {
@@ -150,6 +344,13 @@ class TaskTile extends StatelessWidget {
     required this.onTap,
     this.selected = false,
     this.statusColor,
+    this.depth = 0,
+    this.hasChildren = false,
+    this.expanded = true,
+    this.progress = Progress.none,
+    this.onToggle,
+    this.actions = const [],
+    this.onAction,
   });
 
   final Task task;
@@ -159,15 +360,47 @@ class TaskTile extends StatelessWidget {
   final VoidCallback onTap;
   final bool selected;
 
+  /// How far the row is indented, whether it has a chevron, and the ring of
+  /// how much of its subtasks is done.
+  final int depth;
+  final bool hasChildren;
+  final bool expanded;
+  final Progress progress;
+  final VoidCallback? onToggle;
+
+  /// The row menu: shown when there is something in it.
+  final List<TaskAction> actions;
+  final void Function(TaskAction)? onAction;
+
   @override
   Widget build(BuildContext context) => ListTile(
     key: Key('task-${task.id}'),
     selected: selected,
     onTap: onTap,
-    leading: Icon(
-      priorityIcon(task.priority),
-      color: priorityColor(task.priority),
-      semanticLabel: task.priority.label,
+    contentPadding: EdgeInsets.only(left: 8.0 + depth * 20, right: 8),
+    leading: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 32,
+          child: hasChildren
+              ? IconButton(
+                  key: Key('toggle-${task.id}'),
+                  padding: EdgeInsets.zero,
+                  tooltip: expanded ? 'Collapse' : 'Expand',
+                  icon: Icon(
+                    expanded ? Icons.expand_more : Icons.chevron_right,
+                  ),
+                  onPressed: onToggle,
+                )
+              : null,
+        ),
+        Icon(
+          priorityIcon(task.priority),
+          color: priorityColor(task.priority),
+          semanticLabel: task.priority.label,
+        ),
+      ],
     ),
     title: Text(
       task.title,
@@ -190,15 +423,41 @@ class TaskTile extends StatelessWidget {
               task.displayId,
               task.statusName,
               if (task.dueDate.isNotEmpty) 'due ${task.dueDate}',
-            ].join(' · '),
+            ].join(' \u00b7 '),
             overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
     ),
-    trailing: task.assigneeIds.isEmpty
-        ? null
-        : Chip(label: Text('${task.assigneeIds.length}')),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (!progress.isEmpty)
+          KeyedSubtree(
+            key: Key('progress-${task.id}'),
+            child: ProgressRing(progress: progress),
+          ),
+        if (task.assigneeIds.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: Chip(label: Text('${task.assigneeIds.length}')),
+          ),
+        if (actions.isNotEmpty)
+          PopupMenuButton<TaskAction>(
+            key: Key('task-menu-${task.id}'),
+            tooltip: 'More',
+            onSelected: onAction,
+            itemBuilder: (_) => [
+              for (final a in actions)
+                PopupMenuItem(
+                  key: Key('${a.name}-${task.id}'),
+                  value: a,
+                  child: Text(a.label),
+                ),
+            ],
+          ),
+      ],
+    ),
   );
 }
 

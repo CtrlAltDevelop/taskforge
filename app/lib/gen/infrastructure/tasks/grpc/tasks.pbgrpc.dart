@@ -61,6 +61,13 @@ class TaskControllerClient extends $grpc.Client {
         options: options);
   }
 
+  $grpc.ResponseFuture<$0.TaskChildren> listChildren(
+    $0.TaskListChildrenRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listChildren, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.TaskTrash> listTrash(
     $0.TaskListTrashRequest request, {
     $grpc.CallOptions? options,
@@ -80,6 +87,13 @@ class TaskControllerClient extends $grpc.Client {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$restore, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Task> setParent(
+    $0.TaskSetParentRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setParent, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Task> update(
@@ -107,6 +121,11 @@ class TaskControllerClient extends $grpc.Client {
       '/config.tasks.TaskController/List',
       ($0.TaskListRequest value) => value.writeToBuffer(),
       $0.Task.fromBuffer);
+  static final _$listChildren =
+      $grpc.ClientMethod<$0.TaskListChildrenRequest, $0.TaskChildren>(
+          '/config.tasks.TaskController/ListChildren',
+          ($0.TaskListChildrenRequest value) => value.writeToBuffer(),
+          $0.TaskChildren.fromBuffer);
   static final _$listTrash =
       $grpc.ClientMethod<$0.TaskListTrashRequest, $0.TaskTrash>(
           '/config.tasks.TaskController/ListTrash',
@@ -120,6 +139,11 @@ class TaskControllerClient extends $grpc.Client {
       '/config.tasks.TaskController/Restore',
       ($0.TaskRestoreRequest value) => value.writeToBuffer(),
       $0.Task.fromBuffer);
+  static final _$setParent =
+      $grpc.ClientMethod<$0.TaskSetParentRequest, $0.Task>(
+          '/config.tasks.TaskController/SetParent',
+          ($0.TaskSetParentRequest value) => value.writeToBuffer(),
+          $0.Task.fromBuffer);
   static final _$update = $grpc.ClientMethod<$0.TaskUpdateRequest, $0.Task>(
       '/config.tasks.TaskController/Update',
       ($0.TaskUpdateRequest value) => value.writeToBuffer(),
@@ -159,6 +183,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.TaskListRequest.fromBuffer(value),
         ($0.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TaskListChildrenRequest, $0.TaskChildren>(
+        'ListChildren',
+        listChildren_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TaskListChildrenRequest.fromBuffer(value),
+        ($0.TaskChildren value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TaskListTrashRequest, $0.TaskTrash>(
         'ListTrash',
         listTrash_Pre,
@@ -181,6 +213,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) =>
             $0.TaskRestoreRequest.fromBuffer(value),
+        ($0.Task value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TaskSetParentRequest, $0.Task>(
+        'SetParent',
+        setParent_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.TaskSetParentRequest.fromBuffer(value),
         ($0.Task value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TaskUpdateRequest, $0.Task>(
         'Update',
@@ -222,6 +262,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
   $async.Stream<$0.Task> list(
       $grpc.ServiceCall call, $0.TaskListRequest request);
 
+  $async.Future<$0.TaskChildren> listChildren_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TaskListChildrenRequest> $request) async {
+    return listChildren($call, await $request);
+  }
+
+  $async.Future<$0.TaskChildren> listChildren(
+      $grpc.ServiceCall call, $0.TaskListChildrenRequest request);
+
   $async.Future<$0.TaskTrash> listTrash_Pre($grpc.ServiceCall $call,
       $async.Future<$0.TaskListTrashRequest> $request) async {
     return listTrash($call, await $request);
@@ -245,6 +293,14 @@ abstract class TaskControllerServiceBase extends $grpc.Service {
 
   $async.Future<$0.Task> restore(
       $grpc.ServiceCall call, $0.TaskRestoreRequest request);
+
+  $async.Future<$0.Task> setParent_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TaskSetParentRequest> $request) async {
+    return setParent($call, await $request);
+  }
+
+  $async.Future<$0.Task> setParent(
+      $grpc.ServiceCall call, $0.TaskSetParentRequest request);
 
   $async.Future<$0.Task> update_Pre($grpc.ServiceCall $call,
       $async.Future<$0.TaskUpdateRequest> $request) async {

@@ -42,6 +42,7 @@ class StatusCard extends StatelessWidget {
 
   String _summary(WorkflowTransition t) => [
     if (t.requireAssignee) 'needs an assignee',
+    if (t.requireSubtasksDone) 'needs all subtasks done',
     if (t.requiredRoleId.isNotEmpty)
       'only ${roles.where((r) => r.id == t.requiredRoleId).firstOrNull?.name ?? 'one role'}',
   ].join(', ');

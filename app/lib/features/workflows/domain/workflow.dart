@@ -76,6 +76,7 @@ class WorkflowTransition {
     required this.to,
     this.requiredRoleId = '',
     this.requireAssignee = false,
+    this.requireSubtasksDone = false,
   });
 
   final String from;
@@ -84,6 +85,9 @@ class WorkflowTransition {
   /// Only this role may make the move; empty means any role.
   final String requiredRoleId;
   final bool requireAssignee;
+
+  /// Every subtask (at any depth) must be done or cancelled first.
+  final bool requireSubtasksDone;
 }
 
 /// Why a move is refused, in words (also what the server says).

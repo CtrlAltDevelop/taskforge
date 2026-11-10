@@ -437,6 +437,37 @@ void main() {
       expect(both.notes.single, contains('Your change to the conditions'));
     });
 
+    test('the subtasks condition merges like the other conditions', () {
+      final base = defaultWorkflow(restrict: true, transitions: arrow);
+      Workflow withRule(bool subtasks) => Workflow(
+        projectId: 'p1',
+        version: 2,
+        statuses: base.statuses,
+        restrict: true,
+        transitions: [
+          arrow.first,
+          WorkflowTransition(
+            from: 'doing',
+            to: 'done',
+            requireSubtasksDone: subtasks,
+          ),
+        ],
+      );
+
+      final mineOnly = merge(
+        base: base,
+        theirs: withRule(false),
+        edit: (d) =>
+            d.setConditions('doing', 'done', requireSubtasksDone: true),
+      );
+      final theirsOnly = merge(base: base, theirs: withRule(true));
+
+      expect(mineOnly.draft.transitions.last.requireSubtasksDone, isTrue);
+      expect(mineOnly.notes, isEmpty);
+      expect(theirsOnly.draft.transitions.last.requireSubtasksDone, isTrue);
+      expect(theirsOnly.notes.single, contains('changed the conditions'));
+    });
+
     test('a move to a status that is gone is dropped and counted', () {
       final r = merge(
         theirs: theirs(statuses: [todo, done]),

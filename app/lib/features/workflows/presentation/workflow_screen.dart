@@ -305,6 +305,7 @@ Future<void> _conditions(
       to.key,
       requiredRoleId: result.requiredRoleId,
       requireAssignee: result.requireAssignee,
+      requireSubtasksDone: result.requireSubtasksDone,
     ),
   );
 }

@@ -126,6 +126,7 @@ class FakeWorkflowsClient implements WorkflowsClient {
             to: ids[t.to]!,
             requiredRoleId: t.requiredRoleId,
             requireAssignee: t.requireAssignee,
+            requireSubtasksDone: t.requireSubtasksDone,
           ),
       ],
     );

@@ -204,6 +204,7 @@ class WorkflowDraft {
     String to, {
     String? requiredRoleId,
     bool? requireAssignee,
+    bool? requireSubtasksDone,
   }) => _with(
     transitions: [
       for (final t in transitions)
@@ -213,6 +214,7 @@ class WorkflowDraft {
             to: to,
             requiredRoleId: requiredRoleId ?? t.requiredRoleId,
             requireAssignee: requireAssignee ?? t.requireAssignee,
+            requireSubtasksDone: requireSubtasksDone ?? t.requireSubtasksDone,
           )
         else
           t,
@@ -245,7 +247,8 @@ class WorkflowDraft {
             o.from == t.from &&
             o.to == t.to &&
             o.requiredRoleId == t.requiredRoleId &&
-            o.requireAssignee == t.requireAssignee,
+            o.requireAssignee == t.requireAssignee &&
+            o.requireSubtasksDone == t.requireSubtasksDone,
       ),
     );
   }

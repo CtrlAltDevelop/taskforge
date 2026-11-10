@@ -110,6 +110,7 @@ Workflow _workflow(pb.Workflow w) => Workflow(
         to: t.toStatus,
         requiredRoleId: t.requiredRoleId,
         requireAssignee: t.requireAssignee,
+        requireSubtasksDone: t.requireSubtasksDone,
       ),
   ],
 );
@@ -167,6 +168,7 @@ class GrpcWorkflowsClient implements WorkflowsClient {
         toKey: t.to,
         requiredRoleId: t.requiredRoleId,
         requireAssignee: t.requireAssignee,
+        requireSubtasksDone: t.requireSubtasksDone,
       ),
   ];
 

@@ -328,12 +328,15 @@ class TransitionInput extends $pb.GeneratedMessage {
     $core.String? toKey,
     $core.String? requiredRoleId,
     $core.bool? requireAssignee,
+    $core.bool? requireSubtasksDone,
   }) {
     final result = TransitionInput._();
     if (fromKey != null) result.fromKey = fromKey;
     if (toKey != null) result.toKey = toKey;
     if (requiredRoleId != null) result.requiredRoleId = requiredRoleId;
     if (requireAssignee != null) result.requireAssignee = requireAssignee;
+    if (requireSubtasksDone != null)
+      result.requireSubtasksDone = requireSubtasksDone;
     return result;
   }
 
@@ -355,6 +358,7 @@ class TransitionInput extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'toKey')
     ..aOS(3, _omitFieldNames ? '' : 'requiredRoleId')
     ..aOB(4, _omitFieldNames ? '' : 'requireAssignee')
+    ..aOB(5, _omitFieldNames ? '' : 'requireSubtasksDone')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -414,6 +418,15 @@ class TransitionInput extends $pb.GeneratedMessage {
   $core.bool hasRequireAssignee() => $_has(3);
   @$pb.TagNumber(4)
   void clearRequireAssignee() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get requireSubtasksDone => $_getBF(4);
+  @$pb.TagNumber(5)
+  set requireSubtasksDone($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasRequireSubtasksDone() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRequireSubtasksDone() => $_clearField(5);
 }
 
 class TransitionResponse extends $pb.GeneratedMessage {
@@ -422,12 +435,15 @@ class TransitionResponse extends $pb.GeneratedMessage {
     $core.String? toStatus,
     $core.String? requiredRoleId,
     $core.bool? requireAssignee,
+    $core.bool? requireSubtasksDone,
   }) {
     final result = TransitionResponse._();
     if (fromStatus != null) result.fromStatus = fromStatus;
     if (toStatus != null) result.toStatus = toStatus;
     if (requiredRoleId != null) result.requiredRoleId = requiredRoleId;
     if (requireAssignee != null) result.requireAssignee = requireAssignee;
+    if (requireSubtasksDone != null)
+      result.requireSubtasksDone = requireSubtasksDone;
     return result;
   }
 
@@ -449,6 +465,7 @@ class TransitionResponse extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'toStatus')
     ..aOS(3, _omitFieldNames ? '' : 'requiredRoleId')
     ..aOB(4, _omitFieldNames ? '' : 'requireAssignee')
+    ..aOB(5, _omitFieldNames ? '' : 'requireSubtasksDone')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -508,6 +525,15 @@ class TransitionResponse extends $pb.GeneratedMessage {
   $core.bool hasRequireAssignee() => $_has(3);
   @$pb.TagNumber(4)
   void clearRequireAssignee() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get requireSubtasksDone => $_getBF(4);
+  @$pb.TagNumber(5)
+  set requireSubtasksDone($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasRequireSubtasksDone() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRequireSubtasksDone() => $_clearField(5);
 }
 
 class Workflow extends $pb.GeneratedMessage {

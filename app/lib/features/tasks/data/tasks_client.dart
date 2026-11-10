@@ -14,6 +14,8 @@ import 'package:taskforge/gen/infrastructure/tasks/grpc/tasks.pbgrpc.dart'
 
 abstract interface class TasksClient {
   /// Every task of the project in board order, as the server streams them.
+  /// Every task of the project in tree order (a parent right before its own
+  /// subtasks), as the server streams them.
   Stream<Task> list(String workspaceId, String projectId);
   Future<Task> get(String workspaceId, String projectId, String id);
   Future<Task> create(
@@ -22,6 +24,19 @@ abstract interface class TasksClient {
     required String title,
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
+    String parentId = '',
+  });
+
+  /// Makes [task] a subtask of [parentId] (empty: a top-level task), with
+  /// everything under it.
+  Future<Task> setParent(String workspaceId, Task task, String parentId);
+
+  /// Changes the status only; [includeSubtasks] also moves the open subtasks.
+  Future<Task> move(
+    String workspaceId,
+    Task task,
+    String statusId, {
+    bool includeSubtasks = false,
   });
 
   /// Sends only the fields of [patch] (a field mask) and [expectedVersion].
@@ -31,7 +46,15 @@ abstract interface class TasksClient {
     TaskPatch patch, {
     int? expectedVersion,
   });
-  Future<Task> delete(String workspaceId, String projectId, String id);
+
+  /// A task with subtasks needs a [mode]; without one it is a
+  /// [TaskFailure.hasSubtasks].
+  Future<Task> delete(
+    String workspaceId,
+    String projectId,
+    String id, {
+    DeleteMode? mode,
+  });
   Future<Task> restore(String workspaceId, String projectId, String id);
 
   /// Deleted tasks, newest deletion first (needs `task.delete`).
@@ -59,6 +82,13 @@ TaskException mapTaskError(Object error) {
           TaskFailure.transitionNotAllowed,
           detail: errorTrailer(error, 'x-error-reason-bin'),
         ),
+      StatusCode.invalidArgument when title == 'HAS_SUBTASKS' => TaskException(
+        TaskFailure.hasSubtasks,
+        subtaskCount:
+            int.tryParse(errorTrailer(error, 'x-error-count-bin')) ?? 0,
+      ),
+      StatusCode.invalidArgument when title == 'SUBTASK_CYCLE' =>
+        const TaskException(TaskFailure.cycle),
       StatusCode.invalidArgument => TaskException(
         TaskFailure.invalid,
         detail: stripErrorTitle(message),
@@ -101,6 +131,8 @@ Task _task(pb.Task t) => Task(
   version: t.version,
   position: t.position,
   deletedAt: t.deletedAt,
+  parentId: t.parentId,
+  depth: t.depth,
 );
 
 class GrpcTasksClient implements TasksClient {
@@ -140,7 +172,11 @@ class GrpcTasksClient implements TasksClient {
     try {
       yield* _stub
           .list(
-            pb.TaskListRequest(workspaceId: workspaceId, projectId: projectId),
+            pb.TaskListRequest(
+              workspaceId: workspaceId,
+              projectId: projectId,
+              includeSubtasks: true,
+            ),
             options: _options,
           )
           .map(_task);
@@ -172,6 +208,7 @@ class GrpcTasksClient implements TasksClient {
     required String title,
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
+    String parentId = '',
   }) async => _task(
     await _run(
       () => _stub.create(
@@ -181,6 +218,7 @@ class GrpcTasksClient implements TasksClient {
           title: title,
           priority: priority.wire,
           assigneeIds: assigneeIds,
+          parentId: parentId,
         ),
         options: _options,
       ),
@@ -216,19 +254,66 @@ class GrpcTasksClient implements TasksClient {
   );
 
   @override
-  Future<Task> delete(String workspaceId, String projectId, String id) async =>
-      _task(
-        await _run(
-          () => _stub.delete(
-            pb.TaskDeleteRequest(
-              workspaceId: workspaceId,
-              projectId: projectId,
-              id: id,
-            ),
-            options: _options,
-          ),
+  Future<Task> delete(
+    String workspaceId,
+    String projectId,
+    String id, {
+    DeleteMode? mode,
+  }) async => _task(
+    await _run(
+      () => _stub.delete(
+        pb.TaskDeleteRequest(
+          workspaceId: workspaceId,
+          projectId: projectId,
+          id: id,
+          mode: mode?.wire,
         ),
-      );
+        options: _options,
+      ),
+    ),
+  );
+
+  @override
+  Future<Task> setParent(
+    String workspaceId,
+    Task task,
+    String parentId,
+  ) async => _task(
+    await _run(
+      () => _stub.setParent(
+        pb.TaskSetParentRequest(
+          workspaceId: workspaceId,
+          projectId: task.projectId,
+          id: task.id,
+          expectedVersion: task.version,
+          parentId: parentId,
+        ),
+        options: _options,
+      ),
+    ),
+  );
+
+  @override
+  Future<Task> move(
+    String workspaceId,
+    Task task,
+    String statusId, {
+    bool includeSubtasks = false,
+  }) async => _task(
+    await _run(
+      () => _stub.move(
+        pb.TaskMoveRequest(
+          workspaceId: workspaceId,
+          projectId: task.projectId,
+          id: task.id,
+          expectedVersion: task.version,
+          status: statusId,
+          includeSubtasks: includeSubtasks,
+        ),
+        options: _options,
+      ),
+    ),
+  );
 
   @override
   Future<List<Task>> listTrash(String workspaceId, String projectId) async {

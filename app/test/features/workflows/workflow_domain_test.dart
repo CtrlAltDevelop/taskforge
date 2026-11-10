@@ -211,6 +211,29 @@ void main() {
       expect(d.transitions, isEmpty);
     });
 
+    test('a move can require every subtask to be done', () {
+      final d = base
+          .toggleTransition('doing', 'done')
+          .setConditions('doing', 'done', requireSubtasksDone: true);
+
+      expect(d.transitions.single.requireSubtasksDone, isTrue);
+      expect(d.differsFrom(flow()), isTrue);
+      final saved = Workflow(
+        projectId: 'p1',
+        statuses: flow().statuses,
+        transitions: d.transitions,
+      );
+      expect(WorkflowDraft.of(saved).differsFrom(saved), isFalse);
+      expect(
+        d
+            .setConditions('doing', 'done', requireSubtasksDone: false)
+            .transitions
+            .single
+            .requireSubtasksDone,
+        isFalse,
+      );
+    });
+
     test('deleting a status with tasks needs a place for them', () {
       final d = base.remove('doing');
 

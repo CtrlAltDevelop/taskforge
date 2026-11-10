@@ -93,10 +93,12 @@ class TransitionConditions {
   const TransitionConditions({
     required this.requiredRoleId,
     required this.requireAssignee,
+    required this.requireSubtasksDone,
   });
 
   final String requiredRoleId;
   final bool requireAssignee;
+  final bool requireSubtasksDone;
 }
 
 /// Edits when a move [from] -> [to] is allowed: only some role, and/or only
@@ -133,6 +135,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
       ? widget.transition.requiredRoleId
       : '';
   late bool _assignee = widget.transition.requireAssignee;
+  late bool _subtasks = widget.transition.requireSubtasksDone;
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -161,6 +164,14 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
           value: _assignee,
           onChanged: (v) => setState(() => _assignee = v),
         ),
+        SwitchListTile(
+          key: const Key('condition-subtasks'),
+          contentPadding: EdgeInsets.zero,
+          title: const Text('All subtasks must be done'),
+          subtitle: const Text('Done or cancelled, at any depth.'),
+          value: _subtasks,
+          onChanged: (v) => setState(() => _subtasks = v),
+        ),
       ],
     ),
     actions: [
@@ -175,6 +186,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
           TransitionConditions(
             requiredRoleId: _role,
             requireAssignee: _assignee,
+            requireSubtasksDone: _subtasks,
           ),
         ),
         child: const Text('Done'),

@@ -447,6 +447,40 @@ void main() {
     });
   });
 
+  testWidgets('a move can require all subtasks to be done', (tester) async {
+    final server = await _open(
+      tester,
+      workflow: defaultWorkflow(
+        restrict: true,
+        transitions: const [
+          WorkflowTransition(from: 'todo', to: 'doing'),
+          WorkflowTransition(from: 'doing', to: 'done'),
+          WorkflowTransition(from: 'doing', to: 'todo'),
+        ],
+      ),
+    );
+
+    await tester.tap(find.byKey(const Key('conditions-doing-done')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('condition-subtasks')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('save-conditions')));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('needs all subtasks done'), findsOneWidget);
+    await _save(tester);
+    final rule = server.saved.single.transitions.firstWhere(
+      (t) => t.from == 'doing' && t.to == 'done',
+    );
+    expect(rule.requireSubtasksDone, isTrue);
+    expect(
+      server.saved.single.transitions
+          .where((t) => t.requireSubtasksDone)
+          .length,
+      1,
+    );
+  });
+
   testWidgets('a save the server rejects lists its problems', (tester) async {
     final server = await _open(tester);
     server.rejectWith = const [

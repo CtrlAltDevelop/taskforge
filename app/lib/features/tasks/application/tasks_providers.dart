@@ -7,7 +7,9 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
+import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 /// How many streamed tasks are gathered before the list is rebuilt.
@@ -151,6 +153,7 @@ class TaskList extends Notifier<TaskListState> {
     String title, {
     TaskPriority priority = TaskPriority.none,
     List<String> assigneeIds = const [],
+    String parentId = '',
   }) async {
     final created = await _client.create(
       _workspace,
@@ -158,10 +161,23 @@ class TaskList extends Notifier<TaskListState> {
       title: title,
       priority: priority,
       assigneeIds: assigneeIds,
+      parentId: parentId,
     );
-    state = state.copyWith(tasks: [...state.tasks, created]);
+    state = state.copyWith(tasks: _insertInTreeOrder(created));
     if (state.loading) _createdDuringLoad.add(created);
     return created;
+  }
+
+  /// [task] placed after the last task of its parent's subtree (at the end for a
+  /// top-level task), where the server's tree order would put a new last child.
+  List<Task> _insertInTreeOrder(Task task) {
+    final tasks = state.tasks;
+    if (task.parentId.isEmpty || !tasks.any((t) => t.id == task.parentId)) {
+      return [...tasks, task];
+    }
+    final inside = TaskTree(tasks).subtreeIds(task.parentId);
+    final last = tasks.lastIndexWhere((t) => inside.contains(t.id));
+    return [...tasks.sublist(0, last + 1), task, ...tasks.sublist(last + 1)];
   }
 
   /// Applies [patch] at once and sends it. On a refusal the task is put back;
@@ -202,41 +218,133 @@ class TaskList extends Notifier<TaskListState> {
     }
   }
 
-  /// Removes the task at once; it comes back if the server refuses.
-  Future<void> delete(Task task) async {
+  /// Removes the task at once; it comes back if the server refuses. A task with
+  /// subtasks needs a [mode]: [DeleteMode.subtree] removes them with it,
+  /// [DeleteMode.promote] moves them up (the list is then read again, as the
+  /// server renumbers the levels). Without a mode the server refuses with
+  /// [TaskFailure.hasSubtasks].
+  ///
+  /// Returns the ids of the subtasks that were moved up ([DeleteMode.promote]),
+  /// which [restore] needs to put them back under the task on Undo.
+  Future<List<String>> delete(Task task, {DeleteMode? mode}) async {
     final before = state.tasks;
+    if (mode == DeleteMode.promote) {
+      final kids = [
+        for (final t in before)
+          if (t.parentId == task.id) t.id,
+      ];
+      try {
+        await _client.delete(_workspace, projectId, task.id, mode: mode);
+      } on Object catch (e) {
+        throw mapTaskError(e);
+      }
+      if (!ref.mounted) return const [];
+      ref.invalidate(taskTrashProvider(projectId));
+      await load();
+      return kids;
+    }
+    final gone = mode == DeleteMode.subtree
+        ? TaskTree(before).subtreeIds(task.id)
+        : {task.id};
     state = state.copyWith(
       tasks: [
         for (final t in before)
-          if (t.id != task.id) t,
+          if (!gone.contains(t.id)) t,
       ],
     );
     try {
-      await _client.delete(_workspace, projectId, task.id);
+      await _client.delete(_workspace, projectId, task.id, mode: mode);
       if (ref.mounted) ref.invalidate(taskTrashProvider(projectId));
     } on Object catch (e) {
       state = state.copyWith(tasks: before);
       throw mapTaskError(e);
     }
+    return const [];
   }
 
-  /// Puts a deleted task back at the end of the list (its position is kept
-  /// by the server; the next load shows it in place).
-  Future<Task> restore(Task task) async {
+  /// Puts a deleted task back with the subtasks deleted alongside it; the list
+  /// is read again, because the server decides where it lands. [adopt] are the
+  /// subtasks a promote-delete moved up: they are put back under the task
+  /// (best effort: one that has since gone or moved elsewhere is left alone).
+  Future<Task> restore(Task task, {List<String> adopt = const []}) async {
     try {
       final back = await _client.restore(_workspace, projectId, task.id);
       if (!ref.mounted) return back;
       ref.invalidate(taskTrashProvider(projectId));
-      state = state.copyWith(
-        tasks: [
-          for (final t in state.tasks)
-            if (t.id != back.id) t,
-          back,
-        ],
-      );
+      await load();
+      for (final id in adopt) {
+        if (!ref.mounted) break;
+        final kid = state.tasks.where((t) => t.id == id).firstOrNull;
+        if (kid == null || kid.parentId != back.parentId) continue;
+        try {
+          await _client.setParent(_workspace, kid, back.id);
+        } on Object {
+          // Undo is a courtesy: a child that cannot be put back stays where it is.
+        }
+      }
+      if (adopt.isNotEmpty && ref.mounted) await load();
       return back;
     } on Object catch (e) {
       throw mapTaskError(e);
     }
   }
+
+  /// Makes [task] a subtask of [parentId] (empty: top level) with everything
+  /// under it. The server rewrites the whole subtree, so the list is read again.
+  Future<Task> setParent(Task task, String parentId) async {
+    final Task moved;
+    try {
+      moved = await _client.setParent(_workspace, task, parentId);
+    } on Object catch (e) {
+      throw mapTaskError(e);
+    }
+    if (ref.mounted) await load();
+    return moved;
+  }
+
+  /// Moves [task] to [status] and its open subtasks with it, all or nothing.
+  Future<Task> moveWithSubtasks(Task task, WorkflowStatus status) async {
+    final Task moved;
+    try {
+      moved = await _client.move(
+        _workspace,
+        task,
+        status.id,
+        includeSubtasks: true,
+      );
+    } on Object catch (e) {
+      throw mapTaskError(e);
+    }
+    if (ref.mounted) await load();
+    return moved;
+  }
 }
+
+/// The folded-shut parents of one project's task list (everything starts open).
+final collapsedTasksProvider = NotifierProvider.autoDispose
+    .family<CollapsedTasks, Set<String>, String>(CollapsedTasks.new);
+
+class CollapsedTasks extends Notifier<Set<String>> {
+  CollapsedTasks(this.projectId);
+
+  final String projectId;
+
+  @override
+  Set<String> build() => const {};
+
+  void toggle(String taskId) {
+    state = state.contains(taskId)
+        ? ({...state}..remove(taskId))
+        : {...state, taskId};
+  }
+
+  void expand(String taskId) {
+    if (state.contains(taskId)) state = ({...state}..remove(taskId));
+  }
+}
+
+/// The tasks of a project as a tree, rebuilt whenever the list changes.
+final taskTreeProvider = Provider.autoDispose.family<TaskTree, String>(
+  (ref, projectId) =>
+      TaskTree(ref.watch(taskListProvider(projectId).select((s) => s.tasks))),
+);

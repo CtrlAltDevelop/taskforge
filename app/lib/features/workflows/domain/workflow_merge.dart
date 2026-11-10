@@ -319,10 +319,15 @@ List<WorkflowTransition> _mergeTransitions(
       mine0.requireAssignee,
       theirs0.requireAssignee,
     );
-    if (role.adopted || assignee.adopted) {
+    final subtasks = _pick(
+      base0?.requireSubtasksDone ?? false,
+      mine0.requireSubtasksDone,
+      theirs0.requireSubtasksDone,
+    );
+    if (role.adopted || assignee.adopted || subtasks.adopted) {
       notes.add('Someone else changed the conditions of the move $arrow.');
     }
-    if (role.conflict || assignee.conflict) {
+    if (role.conflict || assignee.conflict || subtasks.conflict) {
       notes.add(
         'Your change to the conditions of the move $arrow was dropped: '
         'someone else changed them too.',
@@ -334,6 +339,7 @@ List<WorkflowTransition> _mergeTransitions(
         to: any.to,
         requiredRoleId: role.value,
         requireAssignee: assignee.value,
+        requireSubtasksDone: subtasks.value,
       ),
     );
   }

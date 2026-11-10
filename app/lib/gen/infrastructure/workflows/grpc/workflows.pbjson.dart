@@ -76,6 +76,13 @@ const TransitionInput$json = {
     {'1': 'to_key', '3': 2, '4': 1, '5': 9, '10': 'toKey'},
     {'1': 'required_role_id', '3': 3, '4': 1, '5': 9, '10': 'requiredRoleId'},
     {'1': 'require_assignee', '3': 4, '4': 1, '5': 8, '10': 'requireAssignee'},
+    {
+      '1': 'require_subtasks_done',
+      '3': 5,
+      '4': 1,
+      '5': 8,
+      '10': 'requireSubtasksDone'
+    },
   ],
 };
 
@@ -83,7 +90,8 @@ const TransitionInput$json = {
 final $typed_data.Uint8List transitionInputDescriptor = $convert.base64Decode(
     'Cg9UcmFuc2l0aW9uSW5wdXQSGQoIZnJvbV9rZXkYASABKAlSB2Zyb21LZXkSFQoGdG9fa2V5GA'
     'IgASgJUgV0b0tleRIoChByZXF1aXJlZF9yb2xlX2lkGAMgASgJUg5yZXF1aXJlZFJvbGVJZBIp'
-    'ChByZXF1aXJlX2Fzc2lnbmVlGAQgASgIUg9yZXF1aXJlQXNzaWduZWU=');
+    'ChByZXF1aXJlX2Fzc2lnbmVlGAQgASgIUg9yZXF1aXJlQXNzaWduZWUSMgoVcmVxdWlyZV9zdW'
+    'J0YXNrc19kb25lGAUgASgIUhNyZXF1aXJlU3VidGFza3NEb25l');
 
 @$core.Deprecated('Use transitionResponseDescriptor instead')
 const TransitionResponse$json = {
@@ -93,6 +101,13 @@ const TransitionResponse$json = {
     {'1': 'to_status', '3': 2, '4': 1, '5': 9, '10': 'toStatus'},
     {'1': 'required_role_id', '3': 3, '4': 1, '5': 9, '10': 'requiredRoleId'},
     {'1': 'require_assignee', '3': 4, '4': 1, '5': 8, '10': 'requireAssignee'},
+    {
+      '1': 'require_subtasks_done',
+      '3': 5,
+      '4': 1,
+      '5': 8,
+      '10': 'requireSubtasksDone'
+    },
   ],
 };
 
@@ -101,7 +116,7 @@ final $typed_data.Uint8List transitionResponseDescriptor = $convert.base64Decode
     'ChJUcmFuc2l0aW9uUmVzcG9uc2USHwoLZnJvbV9zdGF0dXMYASABKAlSCmZyb21TdGF0dXMSGw'
     'oJdG9fc3RhdHVzGAIgASgJUgh0b1N0YXR1cxIoChByZXF1aXJlZF9yb2xlX2lkGAMgASgJUg5y'
     'ZXF1aXJlZFJvbGVJZBIpChByZXF1aXJlX2Fzc2lnbmVlGAQgASgIUg9yZXF1aXJlQXNzaWduZW'
-    'U=');
+    'USMgoVcmVxdWlyZV9zdWJ0YXNrc19kb25lGAUgASgIUhNyZXF1aXJlU3VidGFza3NEb25l');
 
 @$core.Deprecated('Use workflowDescriptor instead')
 const Workflow$json = {
