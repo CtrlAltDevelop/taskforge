@@ -80,9 +80,11 @@ class TaskControllerStub:
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...
     @_typing.overload
     def __new__(cls, channel: _aio.Channel) -> TaskControllerAsyncStub: ...
+    BulkUpdate: _grpc.UnaryStreamMultiCallable[_tasks_pb2.TaskBulkUpdateRequest, _tasks_pb2.BulkResult]
     Create: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskCreateRequest, _tasks_pb2.Task]
     Delete: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskDeleteRequest, _tasks_pb2.Task]
     Get: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]
+    GroupCounts: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskGroupCountsRequest, _tasks_pb2.TaskGroupCounts]
     List: _grpc.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]
     ListChildren: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskListChildrenRequest, _tasks_pb2.TaskChildren]
     ListTrash: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]
@@ -94,9 +96,11 @@ class TaskControllerStub:
 @_typing.type_check_only
 class TaskControllerAsyncStub(TaskControllerStub):
     def __init__(self, channel: _aio.Channel) -> None: ...
+    BulkUpdate: _aio.UnaryStreamMultiCallable[_tasks_pb2.TaskBulkUpdateRequest, _tasks_pb2.BulkResult]  # type: ignore[assignment]
     Create: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskCreateRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Delete: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskDeleteRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     Get: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskGetRequest, _tasks_pb2.Task]  # type: ignore[assignment]
+    GroupCounts: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskGroupCountsRequest, _tasks_pb2.TaskGroupCounts]  # type: ignore[assignment]
     List: _aio.UnaryStreamMultiCallable[_tasks_pb2.TaskListRequest, _tasks_pb2.Task]  # type: ignore[assignment]
     ListChildren: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskListChildrenRequest, _tasks_pb2.TaskChildren]  # type: ignore[assignment]
     ListTrash: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskListTrashRequest, _tasks_pb2.TaskTrash]  # type: ignore[assignment]
@@ -106,6 +110,13 @@ class TaskControllerAsyncStub(TaskControllerStub):
     Update: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TaskUpdateRequest, _tasks_pb2.Task]  # type: ignore[assignment]
 
 class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def BulkUpdate(
+        self,
+        request: _tasks_pb2.TaskBulkUpdateRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_abc.Iterator[_tasks_pb2.BulkResult], _abc.AsyncIterator[_tasks_pb2.BulkResult]]: ...
+
     @_abc_1.abstractmethod
     def Create(
         self,
@@ -126,6 +137,13 @@ class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
         request: _tasks_pb2.TaskGetRequest,
         context: _ServicerContext,
     ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
+
+    @_abc_1.abstractmethod
+    def GroupCounts(
+        self,
+        request: _tasks_pb2.TaskGroupCountsRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TaskGroupCounts, _abc.Awaitable[_tasks_pb2.TaskGroupCounts]]: ...
 
     @_abc_1.abstractmethod
     def List(

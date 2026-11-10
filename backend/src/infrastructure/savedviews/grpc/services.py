@@ -1,0 +1,143 @@
+"""Saved list layouts over gRPC (``ViewController``): List, Save, Delete.
+
+Permissions: List and a personal Save need workspace membership and a project the caller can open
+(a hidden or foreign project, or another person's layout, is NOT_FOUND). A shared Save, or editing
+or deleting a shared layout, needs ``project.update`` (PERMISSION_DENIED) on a project that is not
+archived (ALREADY_EXISTS PROJECT_ARCHIVED). ``Save`` without ``id`` creates, with ``id`` replaces
+that layout and needs its ``expected_version`` (ABORTED VERSION_CONFLICT with
+``x-error-version-bin``). INVALID_ARGUMENT VIEW_INVALID for a layout that means nothing,
+VIEW_LIMIT at 50 layouts, ALREADY_EXISTS VIEW_NAME_TAKEN. Other refusals as in
+``infrastructure.projects.grpc.services``.
+"""
+
+from typing import Any
+
+from asgiref.sync import sync_to_async
+from django_socio_grpc import generics
+from django_socio_grpc.decorators import grpc_action
+
+from infrastructure.common.grpc.errors import action, require_caller
+from infrastructure.common.identity import grpc_caller
+from infrastructure.savedviews import services
+from infrastructure.savedviews.grpc.serializers import Layout, SavedView
+from infrastructure.savedviews.models import SavedView as ViewRow
+from infrastructure.workspaces.scoping import require_workspace
+
+IDS = [
+    {"name": "workspace_id", "type": "string"},
+    {"name": "project_id", "type": "string"},
+]
+LIST_RESPONSE = [{"name": "views", "cardinality": "repeated", "type": SavedView}]
+
+
+def _pb() -> Any:
+    from infrastructure.savedviews.grpc import savedviews_pb2
+
+    return savedviews_pb2
+
+
+def _layout(config: dict[str, Any]) -> Any:
+    pb = _pb()
+    return pb.LayoutResponse(
+        columns=config["columns"],
+        widths=[pb.LayoutWidthResponse(column=c, width=w) for c, w in config["widths"].items()],
+        sort=[pb.LayoutSortResponse(key=s["key"], desc=s["desc"]) for s in config["sort"]],
+        group_by=config["group_by"],
+    )
+
+
+def _config(layout: Any) -> dict[str, Any]:
+    return {
+        "columns": list(layout.columns),
+        "widths": {w.column: w.width for w in layout.widths},
+        "sort": [{"key": s.key, "desc": s.desc} for s in layout.sort],
+        "group_by": layout.group_by,
+    }
+
+
+def _message(view: ViewRow) -> Any:
+    return _pb().SavedView(
+        id=str(view.pk),
+        project_id=str(view.project_id),
+        owner_id=str(view.owner_id or ""),
+        name=view.name,
+        kind=view.kind,
+        is_shared=view.is_shared,
+        layout=_layout(view.config),
+        version=view.version,
+        updated_at=view.updated_at.isoformat(),
+    )
+
+
+async def _scope(request: Any, context: Any) -> tuple[Any, Any]:
+    user = require_caller(await grpc_caller(context))
+    return user, await sync_to_async(require_workspace)(user, request.workspace_id)
+
+
+class ViewService(generics.GenericService):
+    @grpc_action(
+        request=[*IDS, {"name": "kind", "type": "string"}],
+        request_name="ViewListRequest",
+        response=LIST_RESPONSE,
+        response_name="ViewList",
+    )
+    @action
+    async def List(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        return await sync_to_async(
+            lambda: _pb().ViewList(
+                views=[
+                    _message(v)
+                    for v in services.list_views(user, workspace, request.project_id, request.kind)
+                ]
+            )
+        )()
+
+    @grpc_action(
+        request=[
+            *IDS,
+            {"name": "id", "type": "string"},
+            {"name": "expected_version", "type": "int32"},
+            {"name": "name", "type": "string"},
+            {"name": "kind", "type": "string"},
+            {"name": "layout", "type": Layout},
+            {"name": "shared", "type": "bool"},
+        ],
+        request_name="ViewSaveRequest",
+        response=SavedView,
+        response_name="SavedView",
+    )
+    @action
+    async def Save(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        return await sync_to_async(
+            lambda: _message(
+                services.save(
+                    user,
+                    workspace,
+                    request.project_id,
+                    name=request.name,
+                    config=_config(request.layout),
+                    kind=request.kind or "list",
+                    view_id=request.id,
+                    shared=request.shared,
+                    expected_version=request.expected_version,
+                )
+            )
+        )()
+
+    @grpc_action(
+        request=[*IDS, {"name": "id", "type": "string"}],
+        request_name="ViewDeleteRequest",
+        response=SavedView,
+        response_name="SavedView",
+    )
+    @action
+    async def Delete(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        return await sync_to_async(
+            lambda: _message(services.delete(user, workspace, request.project_id, request.id))
+        )()
+
+
+GRPC_SERVICES = [ViewService]

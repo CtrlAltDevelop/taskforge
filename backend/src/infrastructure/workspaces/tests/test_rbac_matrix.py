@@ -24,6 +24,9 @@ from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
 from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
+from infrastructure.savedviews import services as view_services
+from infrastructure.savedviews.grpc import savedviews_pb2 as vpb
+from infrastructure.savedviews.grpc import savedviews_pb2_grpc as vstubs
 from infrastructure.tasks import links as task_links
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
@@ -60,6 +63,7 @@ class World:
     other_task_id: str = ""  # a second task, for the link endpoints
     link_id: str = ""  # a link from ``task_id`` to ``other_task_id``
     field_id: str = ""  # a custom field of the open project
+    view_id: str = ""  # a saved layout shared with the open project
 
     @property
     def ws(self) -> str:
@@ -133,6 +137,14 @@ def _make_field(w: World) -> None:
 def _make_archived_field(w: World) -> None:
     _make_field(w)
     field_services.archive(w.workspace.created_by, w.workspace, w.project_id, w.field_id, 1)
+
+
+def _make_shared_view(w: World) -> None:
+    w.view_id = str(
+        view_services.save(
+            w.workspace.created_by, w.workspace, w.project_id, name="Team", config={}, shared=True
+        ).pk
+    )
 
 
 def _make_deleted_task(w: World) -> None:
@@ -407,6 +419,22 @@ _TASK_CALLS = (  # (rpc, permission, request builder, prepare)
     ),
     ("ListChildren", "workspace.view", _task_request(tpb.TaskListChildrenRequest), _make_task),
     (
+        "GroupCounts",
+        "workspace.view",
+        lambda w: tpb.TaskGroupCountsRequest(
+            workspace_id=w.ws, project_id=w.project_id, group_by="status"
+        ),
+        None,
+    ),
+    (
+        "BulkUpdate",
+        "task.update",
+        lambda w: tpb.TaskBulkUpdateRequest(
+            workspace_id=w.ws, project_id=w.project_id, ids=[w.task_id], priority="low"
+        ),
+        _make_task,
+    ),
+    (
         "ListTrash",
         "task.delete",
         lambda w: tpb.TaskListTrashRequest(workspace_id=w.ws, project_id=w.project_id),
@@ -520,6 +548,44 @@ ENDPOINTS += (
         "WorkflowController.Validate", "project.update", _grpc(WF, "Validate", _workflow_validate)
     ),
     Endpoint("TaskController.Move", "task.update", _grpc(TK, "Move", _move_request), _make_task),
+)
+
+VC = vstubs.ViewControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "ViewController.List",
+        "workspace.view",
+        _grpc(
+            VC,
+            "List",
+            lambda w: vpb.ViewListRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    # Saving or deleting a layout shared with the project needs project.update (a personal one
+    # needs only workspace.view; see the savedviews tests).
+    Endpoint(
+        "ViewController.Save",
+        "project.update",
+        _grpc(
+            VC,
+            "Save",
+            lambda w: vpb.ViewSaveRequest(
+                workspace_id=w.ws, project_id=w.project_id, name="Shared", shared=True
+            ),
+        ),
+    ),
+    Endpoint(
+        "ViewController.Delete",
+        "project.update",
+        _grpc(
+            VC,
+            "Delete",
+            lambda w: vpb.ViewDeleteRequest(
+                workspace_id=w.ws, project_id=w.project_id, id=w.view_id
+            ),
+        ),
+        _make_shared_view,
+    ),
 )
 
 FC = fstubs.FieldControllerStub

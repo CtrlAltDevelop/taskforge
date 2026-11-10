@@ -235,6 +235,11 @@ class TaskControllerStub:
         Args:
             channel: A grpc.Channel.
         """
+        self.BulkUpdate = channel.unary_stream(
+                '/config.tasks.TaskController/BulkUpdate',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskBulkUpdateRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BulkResult.FromString,
+                _registered_method=True)
         self.Create = channel.unary_unary(
                 '/config.tasks.TaskController/Create',
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskCreateRequest.SerializeToString,
@@ -249,6 +254,11 @@ class TaskControllerStub:
                 '/config.tasks.TaskController/Get',
                 request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGetRequest.SerializeToString,
                 response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
+        self.GroupCounts = channel.unary_unary(
+                '/config.tasks.TaskController/GroupCounts',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCountsRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCounts.FromString,
                 _registered_method=True)
         self.List = channel.unary_stream(
                 '/config.tasks.TaskController/List',
@@ -290,6 +300,12 @@ class TaskControllerStub:
 class TaskControllerServicer:
     """Missing associated documentation comment in .proto file."""
 
+    def BulkUpdate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Create(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -303,6 +319,12 @@ class TaskControllerServicer:
         raise NotImplementedError('Method not implemented!')
 
     def Get(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GroupCounts(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -353,6 +375,11 @@ class TaskControllerServicer:
 
 def add_TaskControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'BulkUpdate': grpc.unary_stream_rpc_method_handler(
+                    servicer.BulkUpdate,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskBulkUpdateRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BulkResult.SerializeToString,
+            ),
             'Create': grpc.unary_unary_rpc_method_handler(
                     servicer.Create,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskCreateRequest.FromString,
@@ -367,6 +394,11 @@ def add_TaskControllerServicer_to_server(servicer, server):
                     servicer.Get,
                     request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGetRequest.FromString,
                     response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
+            ),
+            'GroupCounts': grpc.unary_unary_rpc_method_handler(
+                    servicer.GroupCounts,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCountsRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCounts.SerializeToString,
             ),
             'List': grpc.unary_stream_rpc_method_handler(
                     servicer.List,
@@ -413,6 +445,33 @@ def add_TaskControllerServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class TaskController:
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def BulkUpdate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/config.tasks.TaskController/BulkUpdate',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskBulkUpdateRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BulkResult.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
 
     @staticmethod
     def Create(request,
@@ -485,6 +544,33 @@ class TaskController:
             '/config.tasks.TaskController/Get',
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGetRequest.SerializeToString,
             infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GroupCounts(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TaskController/GroupCounts',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCountsRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TaskGroupCounts.FromString,
             options,
             channel_credentials,
             insecure,

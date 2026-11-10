@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package config.savedviews;
+
+service ViewController {
+    rpc Delete(ViewDeleteRequest) returns (SavedView) {}
+    rpc List(ViewListRequest) returns (ViewList) {}
+    rpc Save(ViewSaveRequest) returns (SavedView) {}
+}
+
+message Layout {
+    repeated string columns = 1;
+    repeated LayoutWidth widths = 2;
+    repeated LayoutSort sort = 3;
+    string group_by = 4;
+}
+
+message LayoutResponse {
+    repeated string columns = 1;
+    repeated LayoutWidthResponse widths = 2;
+    repeated LayoutSortResponse sort = 3;
+    string group_by = 4;
+}
+
+message LayoutSort {
+    string key = 1;
+    bool desc = 2;
+}
+
+message LayoutSortResponse {
+    string key = 1;
+    bool desc = 2;
+}
+
+message LayoutWidth {
+    string column = 1;
+    int32 width = 2;
+}
+
+message LayoutWidthResponse {
+    string column = 1;
+    int32 width = 2;
+}
+
+message SavedView {
+    string id = 1;
+    string project_id = 2;
+    string owner_id = 3;
+    string name = 4;
+    string kind = 5;
+    bool is_shared = 6;
+    LayoutResponse layout = 7;
+    int32 version = 8;
+    string updated_at = 9;
+}
+
+message ViewDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message ViewList {
+    repeated SavedView views = 1;
+}
+
+message ViewListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string kind = 3;
+}
+
+message ViewSaveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string kind = 6;
+    Layout layout = 7;
+    bool shared = 8;
+}
+

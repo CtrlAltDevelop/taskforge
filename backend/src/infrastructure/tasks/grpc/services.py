@@ -32,9 +32,15 @@ from django_socio_grpc.decorators import grpc_action
 
 from infrastructure.common.grpc.errors import action, require_caller, stream_action
 from infrastructure.common.identity import grpc_caller
-from infrastructure.tasks import services
+from infrastructure.tasks import bulk, services
 from infrastructure.tasks.grpc.link_services import LinkService
-from infrastructure.tasks.grpc.serializers import Task, TaskFieldValue
+from infrastructure.tasks.grpc.serializers import (
+    BulkResult,
+    GroupCount,
+    SortKey,
+    Task,
+    TaskFieldValue,
+)
 from infrastructure.tasks.models import Task as TaskRow
 from infrastructure.workspaces.scoping import require_workspace
 
@@ -59,8 +65,9 @@ def _pb() -> Any:
     return tasks_pb2
 
 
-def _message(task: TaskRow) -> Any:
-    return _pb().Task(
+def _message(task: TaskRow, kind: str = "Task") -> Any:
+    """The task as ``Task`` (or as ``TaskResponse``, the same fields as nested in a result)."""
+    return getattr(_pb(), kind)(
         id=str(task.pk),
         workspace_id=str(task.workspace_id),
         project_id=str(task.project_id),
@@ -87,6 +94,7 @@ def _message(task: TaskRow) -> Any:
         deleted_at=task.deleted_at.isoformat() if task.deleted_at else "",
         is_blocked=task.is_blocked,
         blocked_by=list(task.blockers),
+        group_key=task.group_key,
         fields=[
             _pb().TaskFieldValueResponse(field_id=field_id, value=value)
             for field_id, value in sorted(task.custom_values.items())
@@ -115,6 +123,8 @@ def _page(user: Any, workspace: Any, request: Any, cursor: str) -> tuple[list[An
         cursor=cursor,
         limit=request.page_size or services.PAGE_DEFAULT,
         include_subtasks=request.include_subtasks,
+        sort=[(k.key, k.desc) for k in request.sort],
+        group_by=request.group_by,
     )
     return [_message(t) for t in tasks], following
 
@@ -300,6 +310,8 @@ class TaskService(generics.GenericService):
             {"name": "cursor", "type": "string"},
             {"name": "page_size", "type": "int32"},
             {"name": "include_subtasks", "type": "bool"},
+            {"name": "sort", "cardinality": "repeated", "type": SortKey},
+            {"name": "group_by", "type": "string"},
         ],
         request_name="TaskListRequest",
         response=Task,
@@ -316,6 +328,89 @@ class TaskService(generics.GenericService):
                 yield message
             if not cursor:
                 return
+
+    @grpc_action(
+        request=[
+            *IDS,
+            {"name": "group_by", "type": "string"},
+            {"name": "status", "type": "string"},
+            {"name": "assignee_id", "type": "string"},
+            {"name": "include_subtasks", "type": "bool"},
+        ],
+        request_name="TaskGroupCountsRequest",
+        response=[{"name": "groups", "cardinality": "repeated", "type": GroupCount}],
+        response_name="TaskGroupCounts",
+    )
+    @action
+    async def GroupCounts(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+        counts = await sync_to_async(
+            lambda: services.group_counts(
+                user,
+                workspace,
+                request.project_id,
+                request.group_by,
+                status=request.status,
+                assignee_id=request.assignee_id,
+                include_subtasks=request.include_subtasks,
+            )
+        )()
+        return _pb().TaskGroupCounts(
+            groups=[_pb().GroupCount(key=key, count=n) for key, n in counts]
+        )
+
+    @grpc_action(
+        request=[
+            *IDS,
+            {"name": "ids", "cardinality": "repeated", "type": "string"},
+            *(
+                {"name": n, "type": "string", "cardinality": "optional"}
+                for n in ("status", "priority")
+            ),
+            {"name": "set_assignees", "type": "bool"},
+            {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
+            {"name": "delete", "type": "bool"},
+            {"name": "delete_mode", "type": "string"},
+        ],
+        request_name="TaskBulkUpdateRequest",
+        response=BulkResult,
+        response_name="BulkResult",
+        response_stream=True,
+    )
+    @stream_action
+    async def BulkUpdate(self, request: Any, context: Any) -> AsyncIterator[Any]:
+        user, workspace = await _scope(request, context)
+        changes: dict[str, Any] = {
+            n: getattr(request, n) for n in ("status", "priority") if request.HasField(n)
+        }
+        if request.set_assignees:
+            changes["assignee_ids"] = list(request.assignee_ids)
+        results = bulk.update_many(
+            user,
+            workspace,
+            request.project_id,
+            list(request.ids),
+            changes=changes or None,
+            delete=(request.delete_mode if request.delete else None),
+        )
+        while (message := await sync_to_async(_next_result)(results)) is not None:
+            yield message
+
+
+def _next_result(results: Any) -> Any:
+    """The next bulk result as a message (None at the end), built where the ORM may be used."""
+    result = next(results, None)
+    if result is None:
+        return None
+    if result.error is not None:
+        error = result.error
+        return _pb().BulkResult(
+            id=result.task_id,
+            code=str(error.title),
+            message=str(error),
+            detail=json.dumps(error.data, default=str) if error.data else "",
+        )
+    return _pb().BulkResult(id=result.task_id, ok=True, task=_message(result.task, "TaskResponse"))
 
 
 GRPC_SERVICES = [TaskService, LinkService]

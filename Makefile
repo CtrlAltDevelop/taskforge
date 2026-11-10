@@ -60,3 +60,4 @@ check:
 test:
 	cd backend && ../$(VENV)/python -m pytest --cov
 	cd app && flutter test --coverage
+	infrastructure/savedviews/grpc/savedviews.proto \

@@ -1042,6 +1042,7 @@ INSTALLED_APPS = [
     "infrastructure.workflows.apps.WorkflowsConfig",
     "infrastructure.tasks.apps.TasksConfig",
     "infrastructure.customfields.apps.CustomFieldsConfig",
+    "infrastructure.savedviews.apps.SavedViewsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

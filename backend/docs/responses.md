@@ -171,6 +171,9 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `FIELD_REQUIRED` | A required custom field has no value. |
 | `FIELD_NAME_TAKEN` | A field with that name already exists in this project. |
 | `FIELD_LIMIT` | A project can have at most 50 active custom fields. |
+| `VIEW_INVALID` | The saved layout is not valid. |
+| `VIEW_NAME_TAKEN` | You already have a layout with that name in this project. |
+| `VIEW_LIMIT` | That is the most layouts one list can hold. |
 | `OPTION_NEEDS_REMAP` | Removed options are in use: say what their values become. |
 
 ## Writing an endpoint

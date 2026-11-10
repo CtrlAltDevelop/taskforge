@@ -11,6 +11,15 @@ class TaskFieldValue(serializers.Serializer[dict[str, object]]):
     value = serializers.CharField()
 
 
+class SortKey(serializers.Serializer[dict[str, object]]):
+    """One key of a list's order: ``title``, ``status`` (workflow order), ``priority`` (urgent
+    first), ``start_date``, ``due_date``, ``created_at``, ``updated_at``, ``number`` or
+    ``field:<custom field id>``. Empty values come last in both directions."""
+
+    key = serializers.CharField()
+    desc = serializers.BooleanField()
+
+
 class Task(serializers.Serializer[dict[str, object]]):
     """A task. ``parent_id`` is the task it is a subtask of (``""`` at the top) and ``depth`` how
     far down it is; ``progress_done`` of ``progress_total`` count everything under it (live
@@ -21,7 +30,8 @@ class Task(serializers.Serializer[dict[str, object]]):
     dates are ``YYYY-MM-DD`` or ``""``; ``deleted_at`` is set only in the trash. ``is_blocked`` says
     a blocker is still open; ``blocked_by`` names them as the caller may see them
     (``WEB-4 (In progress)``, or ``Restricted task``). ``fields`` are the task's custom field
-    values."""
+    values. ``group_key`` is set only on a task of a grouped list: the group it falls under (see
+    ``GroupCount``)."""
 
     id = serializers.CharField()
     workspace_id = serializers.CharField()
@@ -50,6 +60,7 @@ class Task(serializers.Serializer[dict[str, object]]):
     is_blocked = serializers.BooleanField()
     blocked_by = serializers.ListField(child=serializers.CharField())
     fields = TaskFieldValue(many=True)
+    group_key = serializers.CharField()
 
 
 class Link(serializers.Serializer[dict[str, object]]):
@@ -77,3 +88,25 @@ class LinkCandidate(serializers.Serializer[dict[str, object]]):
     title = serializers.CharField()
     status_name = serializers.CharField()
     status_category = serializers.CharField()
+
+
+class GroupCount(serializers.Serializer[dict[str, object]]):
+    """How many tasks one group of a grouped list holds. ``key`` names the group: a status id, a
+    priority, a user id (the task's first assignee) or a select option id; empty is the group of
+    tasks that have none."""
+
+    key = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class BulkResult(serializers.Serializer[dict[str, object]]):
+    """What a bulk edit did to one task. ``ok`` with the task as it is now (a deleted task, for a
+    delete), or ``code`` (the refusal's title, ``NOT_FOUND`` for a task that is gone or not in the
+    project), ``message`` and ``detail`` (the refusal's JSON detail, ``""`` if none)."""
+
+    id = serializers.CharField()
+    ok = serializers.BooleanField()
+    code = serializers.CharField()
+    message = serializers.CharField()
+    detail = serializers.CharField()
+    task = Task()

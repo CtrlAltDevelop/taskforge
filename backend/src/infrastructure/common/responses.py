@@ -154,6 +154,11 @@ class ResponseTitle(StrEnum):
     FIELD_LIMIT = "FIELD_LIMIT"
     OPTION_NEEDS_REMAP = "OPTION_NEEDS_REMAP"
 
+    # Saved views
+    VIEW_INVALID = "VIEW_INVALID"
+    VIEW_NAME_TAKEN = "VIEW_NAME_TAKEN"
+    VIEW_LIMIT = "VIEW_LIMIT"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -209,6 +214,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.FIELD_NAME_TAKEN: "A field with that name already exists in this project.",
     ResponseTitle.FIELD_LIMIT: "A project can have at most 50 active custom fields.",
     ResponseTitle.OPTION_NEEDS_REMAP: "Removed options are in use: say what their values become.",
+    ResponseTitle.VIEW_INVALID: "The saved layout is not valid.",
+    ResponseTitle.VIEW_NAME_TAKEN: "You already have a layout with that name in this project.",
+    ResponseTitle.VIEW_LIMIT: "That is the most layouts one list can hold.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

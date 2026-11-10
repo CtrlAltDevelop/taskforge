@@ -11,16 +11,14 @@ A field conflicts only if it changed after that version (``Task.field_versions``
 editing different fields merge; the same field answers ``VERSION_CONFLICT`` with its current value.
 """
 
-import base64
-import binascii
 import json
 import uuid
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any, Final
 
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch
 from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
@@ -28,7 +26,7 @@ from infrastructure.common.responses import ResponseTitle
 from infrastructure.customfields import values as custom
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
-from infrastructure.tasks import fields, links, tree
+from infrastructure.tasks import fields, links, listing, tree
 from infrastructure.tasks.models import Task, TaskAssignee
 from infrastructure.tasks.signals import announce
 from infrastructure.workflows import services as workflows
@@ -85,6 +83,30 @@ def _writable_project(actor: Any, workspace: Workspace, project_id: str, key: st
     project = _project(actor, workspace, project_id, key, True)
     projects.writable(project)
     return project
+
+
+def valid_uuids(raw: Sequence[Any]) -> list[uuid.UUID]:
+    """The ids that parse; the rest name no task."""
+    found = []
+    for value in raw:
+        try:
+            found.append(uuid.UUID(str(value)))
+        except ValueError:
+            continue
+    return found
+
+
+def open_for_write(actor: Any, workspace: Workspace, project_id: str, key: str) -> Project:
+    """The project, if ``actor`` holds ``key`` there and it is not archived (no lock taken)."""
+    project = _project(actor, workspace, project_id, key, False)
+    projects.writable(project)
+    return project
+
+
+def check_changes(project: Project, changes: Mapping[str, Any]) -> None:
+    """Refuse ``changes`` (as ``update`` takes them) that are not valid for any task of the
+    project: a status of another project, a bad priority, an assignee who cannot open it."""
+    _clean(project, dict(changes))
 
 
 def _assignees(project: Project, raw_ids: Any) -> list[Any]:
@@ -159,6 +181,12 @@ def _reload(task: Task, actor: Any, workspace: Workspace) -> Task:
     links.mark_blocked([fresh], actor, workspace)
     custom.attach([fresh])
     return fresh
+
+
+def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task:
+    """The task as it is now, trashed or not (for reporting what a batch did to it)."""
+    project = _writable_project(actor, workspace, project_id, "task.delete")
+    return _reload(_load_task(project, task_id, trashed=True), actor, workspace)
 
 
 def create(
@@ -570,18 +598,15 @@ def list_trash(
     return custom.attach(links.mark_blocked(found, actor, workspace))
 
 
-def _decode(cursor: str) -> tuple[str, int] | None:
-    if not cursor:
-        return None
-    try:
-        key, number = json.loads(base64.urlsafe_b64decode(cursor.encode()))
-        return str(key), int(number)
-    except (ValueError, TypeError, binascii.Error):
-        raise ApiError("That cursor is not valid.") from None
-
-
-def _encode(task: Task) -> str:
-    return base64.urlsafe_b64encode(json.dumps([task.tree_key, task.number]).encode()).decode()
+def _live(project: Project, *, status: str, assignee_id: str, include_subtasks: bool) -> Any:
+    rows = _scoped(project).filter(deleted_at__isnull=True)
+    if not include_subtasks:
+        rows = rows.filter(parent__isnull=True)
+    if status:
+        rows = rows.filter(status=workflows.status_of(project, status))
+    if assignee_id:
+        rows = rows.filter(assignees__user_id__in=_valid_pks([assignee_id]) or [None])
+    return rows
 
 
 def list_page(
@@ -594,25 +619,44 @@ def list_page(
     cursor: str = "",
     limit: int = PAGE_DEFAULT,
     include_subtasks: bool = False,
+    sort: Sequence[tuple[str, bool]] = (),
+    group_by: str = "",
 ) -> tuple[list[Task], str]:
-    """One keyset page in tree order and the cursor of the next ('' at the end). Only top-level
-    tasks unless ``include_subtasks``, which returns every task with each parent right before its
-    own subtasks."""
+    """One keyset page and the cursor of the next ('' at the end). Only top-level tasks unless
+    ``include_subtasks``. Without ``sort`` and ``group_by`` the order is tree order (each parent
+    right before its own subtasks); ``sort`` is ``(key, descending)`` pairs (see ``listing``),
+    ``group_by`` makes the groups come one after another. A cursor belongs to the sort and
+    grouping it was made with."""
     project = _project(actor, workspace, project_id, VIEW, False)
-    rows = _scoped(project).filter(deleted_at__isnull=True)
-    if not include_subtasks:
-        rows = rows.filter(parent__isnull=True)
-    if status:
-        rows = rows.filter(status=workflows.status_of(project, status))
-    if assignee_id:
-        rows = rows.filter(assignees__user_id__in=_valid_pks([assignee_id]) or [None])
-    after = _decode(cursor)
-    if after:
-        key, number = after
-        rows = rows.filter(Q(tree_key__gt=key) | Q(tree_key=key, number__gt=number))
-    size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
-    found = list(
-        rows.order_by("tree_key", "number").prefetch_related(_with_assignees())[: size + 1]
+    plan = listing.plan(project, sort, group_by)
+    rows = plan.order(
+        _live(project, status=status, assignee_id=assignee_id, include_subtasks=include_subtasks)
     )
+    if cursor:
+        rows = plan.after(rows, cursor)
+    size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
+    found = list(rows.prefetch_related(_with_assignees())[: size + 1])
     page = custom.attach(links.mark_blocked(found[:size], actor, workspace))
-    return page, _encode(page[-1]) if len(found) > size else ""
+    if group_by:
+        for task in page:
+            task.group_key = plan.group_key_of(task)
+    return page, plan.cursor_of(page[-1]) if len(found) > size else ""
+
+
+def group_counts(
+    actor: Any,
+    workspace: Workspace,
+    project_id: str,
+    group_by: str,
+    *,
+    status: str = "",
+    assignee_id: str = "",
+    include_subtasks: bool = False,
+) -> list[tuple[str, int]]:
+    """How many live tasks each group of ``list_page(group_by=...)`` holds, in list order, over
+    the same filters; a group with none is ``""``."""
+    project = _project(actor, workspace, project_id, VIEW, False)
+    if listing.archived(project, group_by):  # the plan lists it ungrouped
+        return []
+    rows = _live(project, status=status, assignee_id=assignee_id, include_subtasks=include_subtasks)
+    return listing.counts(rows, project, group_by)

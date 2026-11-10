@@ -358,3 +358,113 @@ def test_move_can_take_the_open_subtasks_along(team: Any, grpc_call: GrpcCall) -
 
     assert moved.status_name == "Done" and sub.status_name == "Done"
     assert (moved.progress_done, moved.progress_total) == (1, 1)
+
+
+def test_list_sorts_groups_and_pages_by_the_request(team: Any, grpc_call: GrpcCall) -> None:
+    for title, due in (("c", "2026-03-03"), ("a", ""), ("b", "2026-03-01")):
+        _create(grpc_call, team, title=title, due_date=due)
+
+    def titles(**kw: Any) -> list[str]:
+        request = pb.TaskListRequest(
+            workspace_id=team["ws"], project_id=team["project"], page_size=1, **kw
+        )
+        return [t.title for t in grpc_call(T, "List", request, token=team["tokens"]["vic"])]
+
+    assert titles(sort=[pb.SortKey(key="due_date")]) == ["b", "c", "a"]
+    assert titles(sort=[pb.SortKey(key="title", desc=True)]) == ["c", "b", "a"]
+    assert titles(group_by="priority") == ["c", "a", "b"]
+
+
+def test_a_bad_sort_is_invalid_argument(team: Any, grpc_call: GrpcCall) -> None:
+    refused = _refused(
+        grpc_call,
+        T,
+        "List",
+        pb.TaskListRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            sort=[pb.SortKey(key="nope")],
+        ),
+        token=team["tokens"]["vic"],
+    )
+
+    assert refused.code() == grpc.StatusCode.INVALID_ARGUMENT
+
+
+def test_group_counts(team: Any, grpc_call: GrpcCall) -> None:
+    for priority in ("high", "high", "low"):
+        _create(grpc_call, team, priority=priority)
+
+    counts = grpc_call(
+        T,
+        "GroupCounts",
+        pb.TaskGroupCountsRequest(
+            workspace_id=team["ws"], project_id=team["project"], group_by="priority"
+        ),
+        token=team["tokens"]["vic"],
+    )
+
+    assert [(g.key, g.count) for g in counts.groups] == [("high", 2), ("low", 1)]
+
+
+def test_bulk_update_streams_one_result_per_task(team: Any, grpc_call: GrpcCall) -> None:
+    ids = [_create(grpc_call, team, title=f"t{i}").id for i in range(3)]
+
+    results = grpc_call(
+        T,
+        "BulkUpdate",
+        pb.TaskBulkUpdateRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            ids=[*ids, "not-a-task"],
+            priority="urgent",
+        ),
+        token=team["tokens"]["max"],
+    )
+
+    assert [r.id for r in results] == [*ids, "not-a-task"]
+    assert [r.ok for r in results] == [True, True, True, False]
+    assert results[0].task.priority == "urgent" and results[0].task.version == 2
+    assert results[3].code == "NOT_FOUND" and results[3].task.id == ""
+
+
+def test_bulk_update_can_clear_the_assignees_and_delete(team: Any, grpc_call: GrpcCall) -> None:
+    task = _create(grpc_call, team, assignee_ids=[str(team["users"]["max"].pk)])
+    base = {"workspace_id": team["ws"], "project_id": team["project"], "ids": [task.id]}
+
+    [cleared] = grpc_call(
+        T,
+        "BulkUpdate",
+        pb.TaskBulkUpdateRequest(**base, set_assignees=True),
+        token=team["tokens"]["max"],
+    )
+    [gone] = grpc_call(
+        T,
+        "BulkUpdate",
+        pb.TaskBulkUpdateRequest(**base, delete=True),
+        token=team["tokens"]["max"],
+    )
+
+    assert cleared.ok and list(cleared.task.assignee_ids) == []
+    assert gone.ok and gone.task.deleted_at != ""
+
+
+def test_a_bulk_call_is_refused_whole_when_it_is_malformed_or_not_allowed(
+    team: Any, grpc_call: GrpcCall
+) -> None:
+    task = _create(grpc_call, team)
+    base = {"workspace_id": team["ws"], "project_id": team["project"], "ids": [task.id]}
+
+    nothing = _refused(
+        grpc_call, T, "BulkUpdate", pb.TaskBulkUpdateRequest(**base), token=team["tokens"]["max"]
+    )
+    viewer = _refused(
+        grpc_call,
+        T,
+        "BulkUpdate",
+        pb.TaskBulkUpdateRequest(**base, priority="low"),
+        token=team["tokens"]["vic"],
+    )
+
+    assert nothing.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert viewer.code() == grpc.StatusCode.PERMISSION_DENIED

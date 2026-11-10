@@ -156,3 +156,36 @@ def test_a_top_level_list_of_the_tree_returns_only_the_roots(team: Any, project:
     top, _ = services.list_page(team.viewer, team.ws, str(project.pk), limit=services.PAGE_MAX)
 
     assert len(top) == ROOTS and all(t.depth == 0 for t in top)
+
+
+def test_a_sorted_and_grouped_page_of_ten_thousand_tasks_is_fast_and_walks_without_repeats(
+    team: Any, project: Any, django_assert_max_num_queries: Any
+) -> None:
+    _seed(team, project)
+    pid = str(project.pk)
+    sort = [("title", True)]
+
+    started = time.perf_counter()
+    with django_assert_max_num_queries(8):
+        first, cursor = services.list_page(
+            team.viewer, team.ws, pid, sort=sort, group_by="status", limit=services.PAGE_DEFAULT
+        )
+    elapsed = time.perf_counter() - started
+    assert len(first) == services.PAGE_DEFAULT and cursor
+    assert elapsed < FIRST_PAGE_BUDGET_SECONDS * 2
+
+    numbers = [t.number for t in first]
+    while cursor:
+        page, cursor = services.list_page(
+            team.viewer,
+            team.ws,
+            pid,
+            sort=sort,
+            group_by="status",
+            cursor=cursor,
+            limit=services.PAGE_MAX,
+        )
+        numbers += [t.number for t in page]
+    assert len(numbers) == len(set(numbers)) == TOTAL
+    counts = services.group_counts(team.viewer, team.ws, pid, "status")
+    assert [n for _, n in counts] == [TOTAL]

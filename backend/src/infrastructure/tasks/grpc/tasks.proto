@@ -10,9 +10,11 @@ service LinkController {
 }
 
 service TaskController {
+    rpc BulkUpdate(TaskBulkUpdateRequest) returns (stream BulkResult) {}
     rpc Create(TaskCreateRequest) returns (Task) {}
     rpc Delete(TaskDeleteRequest) returns (Task) {}
     rpc Get(TaskGetRequest) returns (Task) {}
+    rpc GroupCounts(TaskGroupCountsRequest) returns (TaskGroupCounts) {}
     rpc List(TaskListRequest) returns (stream Task) {}
     rpc ListChildren(TaskListChildrenRequest) returns (TaskChildren) {}
     rpc ListTrash(TaskListTrashRequest) returns (TaskTrash) {}
@@ -20,6 +22,20 @@ service TaskController {
     rpc Restore(TaskRestoreRequest) returns (Task) {}
     rpc SetParent(TaskSetParentRequest) returns (Task) {}
     rpc Update(TaskUpdateRequest) returns (Task) {}
+}
+
+message BulkResult {
+    string id = 1;
+    bool ok = 2;
+    string code = 3;
+    string message = 4;
+    string detail = 5;
+    TaskResponse task = 6;
+}
+
+message GroupCount {
+    string key = 1;
+    int32 count = 2;
 }
 
 message Link {
@@ -75,6 +91,11 @@ message LinkSearchTasksRequest {
     string query = 2;
 }
 
+message SortKey {
+    string key = 1;
+    bool desc = 2;
+}
+
 message Task {
     string id = 1;
     string workspace_id = 2;
@@ -103,6 +124,19 @@ message Task {
     bool is_blocked = 25;
     repeated string blocked_by = 26;
     repeated TaskFieldValueResponse fields = 27;
+    string group_key = 28;
+}
+
+message TaskBulkUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    repeated string ids = 3;
+    optional string status = 4;
+    optional string priority = 5;
+    bool set_assignees = 6;
+    repeated string assignee_ids = 7;
+    bool delete = 8;
+    string delete_mode = 9;
 }
 
 message TaskChildren {
@@ -146,6 +180,19 @@ message TaskGetRequest {
     string id = 3;
 }
 
+message TaskGroupCounts {
+    repeated GroupCount groups = 1;
+}
+
+message TaskGroupCountsRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string group_by = 3;
+    string status = 4;
+    string assignee_id = 5;
+    bool include_subtasks = 6;
+}
+
 message TaskListChildrenRequest {
     string workspace_id = 1;
     string project_id = 2;
@@ -160,6 +207,8 @@ message TaskListRequest {
     string cursor = 5;
     int32 page_size = 6;
     bool include_subtasks = 7;
+    repeated SortKey sort = 8;
+    string group_by = 9;
 }
 
 message TaskListTrashRequest {
@@ -175,6 +224,37 @@ message TaskMoveRequest {
     string status = 5;
     bool include_subtasks = 6;
     bool override_blocked = 7;
+}
+
+message TaskResponse {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    int32 number = 4;
+    string display_id = 5;
+    string title = 6;
+    string description = 7;
+    string status = 8;
+    string status_name = 9;
+    string status_category = 10;
+    string priority = 11;
+    string start_date = 12;
+    string due_date = 13;
+    repeated string assignee_ids = 14;
+    string parent_id = 15;
+    int32 depth = 16;
+    int32 progress_done = 17;
+    int32 progress_total = 18;
+    string created_by = 19;
+    int32 version = 20;
+    string position = 21;
+    string created_at = 22;
+    string updated_at = 23;
+    string deleted_at = 24;
+    bool is_blocked = 25;
+    repeated string blocked_by = 26;
+    repeated TaskFieldValueResponse fields = 27;
+    string group_key = 28;
 }
 
 message TaskRestoreRequest {

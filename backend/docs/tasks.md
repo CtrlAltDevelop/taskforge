@@ -137,6 +137,16 @@ A task can have one parent task of the **same project**; a subtask can have subt
 
 `List(workspace_id, project_id, status, assignee_id, cursor, page_size)` returns `stream Task` in board order (`position`, then `number`). The server reads keyset pages (default 100, at most 500) and yields them one by one, so the first messages arrive after one indexed query and memory stays flat for any project size. `cursor` resumes after a task (opaque; malformed is `INVALID_ARGUMENT`). Each page costs a constant number of queries (assignees are prefetched in one). Measured by `tests/test_scale.py` (10,000 tasks) on SQLite and PostgreSQL.
 
+### Sorting, grouping and counts
+
+`List` also takes `sort[]` (`key`, `desc`; at most 3 keys) and `group_by`. Keys: `title`, `status` (workflow order), `priority` (urgent first), `start_date`, `due_date`, `created_at`, `updated_at`, `field:<id>` (any field type but multi-select; typed columns, nulls last). `group_by`: `status`, `priority`, `assignee` (first assignee) or `field:<id>` of a select field. Groups come one after another; each task then carries `group_key` (set on list reads only; `""` is the group with no value). The order ends with `number`, so paging is stable; a cursor is only valid for the sort it was made with. A custom field archived after a layout chose it is dropped from the sort and grouping instead of failing the list. Code: `listing.py`.
+
+`GroupCounts(workspace_id, project_id, group_by, status, assignee_id, include_subtasks)` returns `{group_key, count}` per group in list order over the same filters, so headers are right before the stream ends.
+
+### Bulk update
+
+`BulkUpdate(workspace_id, project_id, ids[], status, priority, set_assignees + assignee_ids, or delete + delete_mode)` takes 1–500 ids and **streams** one `BulkResult{id, ok, task | error}` per task, in the order done. The call as a whole is checked first (permission, archived project, shape of the change) and a mistake refuses everything; after that each task is its own transaction, so a blocked task or a forbidden transition fails alone. An edit changes the task as it is now (a concurrent edit is retried) rather than answering a conflict. Deleting goes top-down: a parent chosen with all its live subtasks is deleted as one `subtree` batch (restoring it brings them back) and the subtasks are reported as deleted with it. Code: `bulk.py`.
+
 ### gRPC contract (`config.tasks`)
 
 All requests carry `workspace_id` and `project_id`. Responses are `Task` (`List` streams them).
