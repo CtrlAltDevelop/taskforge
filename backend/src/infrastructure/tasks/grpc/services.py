@@ -13,9 +13,11 @@ tree order (a parent right before its own subtasks); ``ListChildren`` the direct
 the first page and never sits whole in memory. A status change into Done is refused while the
 task has open blockers (FAILED_PRECONDITION TASK_BLOCKED, ``x-error-blockers-bin``) unless
 ``override_blocked`` is set by someone who manages the project; ``Task.is_blocked`` says whether
-it has any. Links are the ``LinkController`` beside this service. ``Update`` sends only the fields
-to change (``HasField``) plus ``expected_version``; a clash on the same field is ABORTED
-VERSION_CONFLICT
+it has any. ``field_values`` (field id, wire value; empty clears) on Create/Update set custom
+field values (``FIELD_REQUIRED`` / ``FIELD_INVALID``; an edit conflicts per field,
+``x-error-field-bin`` ``field:<id>``). Links are the ``LinkController`` beside this service.
+``Update`` sends only the fields to change (``HasField``) plus ``expected_version``; a clash on
+the same field is ABORTED VERSION_CONFLICT
 with ``x-error-{field,current,version}-bin`` trailers. Other refusals as in
 ``infrastructure.projects.grpc.services``.
 """
@@ -32,7 +34,7 @@ from infrastructure.common.grpc.errors import action, require_caller, stream_act
 from infrastructure.common.identity import grpc_caller
 from infrastructure.tasks import services
 from infrastructure.tasks.grpc.link_services import LinkService
-from infrastructure.tasks.grpc.serializers import Task
+from infrastructure.tasks.grpc.serializers import Task, TaskFieldValue
 from infrastructure.tasks.models import Task as TaskRow
 from infrastructure.workspaces.scoping import require_workspace
 
@@ -47,6 +49,7 @@ CREATE_FIELDS = [
     *({"name": n, "type": "string"} for n in TEXT_FIELDS),
     {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
     {"name": "parent_id", "type": "string"},
+    {"name": "field_values", "cardinality": "repeated", "type": TaskFieldValue},
 ]
 
 
@@ -84,6 +87,10 @@ def _message(task: TaskRow) -> Any:
         deleted_at=task.deleted_at.isoformat() if task.deleted_at else "",
         is_blocked=task.is_blocked,
         blocked_by=list(task.blockers),
+        fields=[
+            _pb().TaskFieldValueResponse(field_id=field_id, value=value)
+            for field_id, value in sorted(task.custom_values.items())
+        ],
     )
 
 
@@ -145,6 +152,7 @@ class TaskService(generics.GenericService):
                 due_date=request.due_date,
                 assignee_ids=list(request.assignee_ids),
                 parent_id=request.parent_id,
+                field_values={v.field_id: v.value for v in request.field_values},
             ),
         )
 
@@ -157,6 +165,7 @@ class TaskService(generics.GenericService):
             {"name": "set_assignees", "type": "bool"},
             {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
             {"name": "override_blocked", "type": "bool"},
+            {"name": "field_values", "cardinality": "repeated", "type": TaskFieldValue},
         ],
         request_name="TaskUpdateRequest",
         response=Task,
@@ -167,6 +176,8 @@ class TaskService(generics.GenericService):
         sent: dict[str, Any] = {n: getattr(request, n) for n in TEXT_FIELDS if request.HasField(n)}
         if request.set_assignees:
             sent["assignee_ids"] = list(request.assignee_ids)
+        if request.field_values:
+            sent["field_values"] = {v.field_id: v.value for v in request.field_values}
         return await _one(
             request,
             context,

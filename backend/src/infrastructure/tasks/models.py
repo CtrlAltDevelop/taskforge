@@ -57,6 +57,7 @@ class Task(models.Model):
     # Not stored: the services set it on the tasks they return (see ``links.blocked_ids``).
     is_blocked = False
     blockers: tuple[str, ...] = ()  # "WEB-4 (In progress)" or "Restricted task", for the caller
+    custom_values: dict[str, str] = {}  # custom field id -> wire value (see customfields.values)
 
     class Meta:
         constraints = [

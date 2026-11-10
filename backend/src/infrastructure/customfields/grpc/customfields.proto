@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package config.customfields;
+
+service FieldController {
+    rpc Archive(FieldArchiveRequest) returns (Field) {}
+    rpc Create(FieldCreateRequest) returns (Field) {}
+    rpc List(FieldListRequest) returns (FieldList) {}
+    rpc Reorder(FieldReorderRequest) returns (FieldList) {}
+    rpc Restore(FieldRestoreRequest) returns (Field) {}
+    rpc Update(FieldUpdateRequest) returns (Field) {}
+}
+
+message Field {
+    string id = 1;
+    string project_id = 2;
+    string name = 3;
+    string type = 4;
+    repeated FieldOptionResponse options = 5;
+    bool required = 6;
+    string default = 7;
+    repeated string hidden_views = 8;
+    int32 position = 9;
+    int32 version = 10;
+    string archived_at = 11;
+}
+
+message FieldArchiveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+}
+
+message FieldCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string name = 3;
+    string type = 4;
+    repeated FieldOption options = 5;
+    bool required = 6;
+    string default = 7;
+    repeated string hidden_views = 8;
+}
+
+message FieldList {
+    repeated Field fields = 1;
+}
+
+message FieldListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    bool include_archived = 3;
+}
+
+message FieldOption {
+    string id = 1;
+    string label = 2;
+    string color = 3;
+}
+
+message FieldOptionResponse {
+    string id = 1;
+    string label = 2;
+    string color = 3;
+}
+
+message FieldReorderRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    repeated string ids = 3;
+}
+
+message FieldRestoreRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+}
+
+message FieldUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    optional string name = 5;
+    optional string type = 6;
+    optional string default = 7;
+    optional bool required = 8;
+    bool set_options = 9;
+    repeated FieldOption options = 10;
+    bool set_hidden_views = 11;
+    repeated string hidden_views = 12;
+    repeated OptionRemap remaps = 13;
+}
+
+message OptionRemap {
+    string from_option = 1;
+    string to_option = 2;
+}
+

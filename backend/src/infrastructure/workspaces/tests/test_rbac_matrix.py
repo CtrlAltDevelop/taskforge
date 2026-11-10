@@ -17,6 +17,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from google.protobuf.empty_pb2 import Empty
 
+from infrastructure.customfields import services as field_services
+from infrastructure.customfields.grpc import customfields_pb2 as fpb
+from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
 from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
@@ -56,6 +59,7 @@ class World:
     task_id: str = ""  # set by the prepare of the task endpoints that need one
     other_task_id: str = ""  # a second task, for the link endpoints
     link_id: str = ""  # a link from ``task_id`` to ``other_task_id``
+    field_id: str = ""  # a custom field of the open project
 
     @property
     def ws(self) -> str:
@@ -116,6 +120,19 @@ def _make_link(w: World) -> None:
     owner = w.workspace.created_by
     link = task_links.add(owner, w.workspace, w.task_id, w.other_task_id, "relates")
     w.link_id = str(link.pk)
+
+
+def _make_field(w: World) -> None:
+    w.field_id = str(
+        field_services.create(
+            w.workspace.created_by, w.workspace, w.project_id, name="Env", type="text"
+        ).pk
+    )
+
+
+def _make_archived_field(w: World) -> None:
+    _make_field(w)
+    field_services.archive(w.workspace.created_by, w.workspace, w.project_id, w.field_id, 1)
 
 
 def _make_deleted_task(w: World) -> None:
@@ -503,6 +520,68 @@ ENDPOINTS += (
         "WorkflowController.Validate", "project.update", _grpc(WF, "Validate", _workflow_validate)
     ),
     Endpoint("TaskController.Move", "task.update", _grpc(TK, "Move", _move_request), _make_task),
+)
+
+FC = fstubs.FieldControllerStub
+
+
+def _field_request(message: Any, version: int = 1, **extra: Any) -> Callable[[World], Any]:
+    return lambda w: message(
+        workspace_id=w.ws, project_id=w.project_id, id=w.field_id, expected_version=version, **extra
+    )
+
+
+ENDPOINTS += (
+    Endpoint(
+        "FieldController.List",
+        "workspace.view",
+        _grpc(
+            FC,
+            "List",
+            lambda w: fpb.FieldListRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    Endpoint(
+        "FieldController.Create",
+        "project.update",
+        _grpc(
+            FC,
+            "Create",
+            lambda w: fpb.FieldCreateRequest(
+                workspace_id=w.ws, project_id=w.project_id, name="Env", type="text"
+            ),
+        ),
+    ),
+    Endpoint(
+        "FieldController.Update",
+        "project.update",
+        _grpc(FC, "Update", _field_request(fpb.FieldUpdateRequest, required=False)),
+        _make_field,
+    ),
+    Endpoint(
+        "FieldController.Reorder",
+        "project.update",
+        _grpc(
+            FC,
+            "Reorder",
+            lambda w: fpb.FieldReorderRequest(
+                workspace_id=w.ws, project_id=w.project_id, ids=[w.field_id]
+            ),
+        ),
+        _make_field,
+    ),
+    Endpoint(
+        "FieldController.Archive",
+        "project.update",
+        _grpc(FC, "Archive", _field_request(fpb.FieldArchiveRequest)),
+        _make_field,
+    ),
+    Endpoint(
+        "FieldController.Restore",
+        "project.update",
+        _grpc(FC, "Restore", _field_request(fpb.FieldRestoreRequest, version=2)),
+        _make_archived_field,
+    ),
 )
 
 # Handlers that need no workspace permission, and why.

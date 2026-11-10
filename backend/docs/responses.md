@@ -167,6 +167,11 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `LINK_CYCLE` | That link would make tasks block each other in a loop. |
 | `LINK_EXISTS` | These tasks are already linked that way. |
 | `TASK_BLOCKED` | The task is blocked by tasks that are not done yet. |
+| `FIELD_INVALID` | A custom field value or definition is not valid. |
+| `FIELD_REQUIRED` | A required custom field has no value. |
+| `FIELD_NAME_TAKEN` | A field with that name already exists in this project. |
+| `FIELD_LIMIT` | A project can have at most 50 active custom fields. |
+| `OPTION_NEEDS_REMAP` | Removed options are in use: say what their values become. |
 
 ## Writing an endpoint
 

@@ -15,7 +15,7 @@ import base64
 import binascii
 import json
 import uuid
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from typing import Any, Final
 
 from django.contrib.auth import get_user_model
@@ -25,6 +25,7 @@ from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
+from infrastructure.customfields import values as custom
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
 from infrastructure.tasks import fields, links, tree
@@ -156,6 +157,7 @@ def _set_assignees(task: Task, users: list[Any]) -> None:
 def _reload(task: Task, actor: Any, workspace: Workspace) -> Task:
     fresh = _scoped(task.project).prefetch_related(_with_assignees()).get(pk=task.pk)
     links.mark_blocked([fresh], actor, workspace)
+    custom.attach([fresh])
     return fresh
 
 
@@ -172,7 +174,10 @@ def create(
     due_date: str = "",
     assignee_ids: Any = (),
     parent_id: str = "",
+    field_values: Mapping[str, str] | None = None,
 ) -> Task:
+    """``field_values`` maps custom field ids to wire values; required fields without a value or
+    default refuse the whole create (``FIELD_REQUIRED``)."""
     with transaction.atomic():
         project = _writable_project(actor, workspace, project_id, "task.create")
         parent = _live_parent(project, parent_id) if parent_id else None
@@ -189,6 +194,7 @@ def create(
             },
         )
         users = cleaned.pop("assignee_ids")
+        custom_changes = custom.prepare(project, field_values or {}, creating=True)
         workflows.check_create(project, cleaned["status"])
         number = projects.next_task_number(project)
         task_id = uuid.uuid4()
@@ -209,6 +215,7 @@ def create(
             **cleaned,
         )
         _set_assignees(task, users)
+        custom.save(task, custom_changes)
         tree.refresh_above(task)
         announce(task, "created")
     return _reload(task, actor, workspace)
@@ -227,6 +234,8 @@ def _conflict(task: Task, name: str) -> ApiError:
         current = str(task.status_id)
     elif name == "parent":
         current = str(task.parent_id or "")
+    elif name.startswith(custom.KEY_PREFIX):
+        current = custom.current(task, name.removeprefix(custom.KEY_PREFIX))
     else:
         value = getattr(task, name)
         current = (
@@ -263,9 +272,12 @@ def update(
         task = _load_task(project, task_id, lock=True)
         if not 1 <= expected_version <= task.version:
             raise ApiError("expected_version must be between 1 and the task's current version.")
-        cleaned = _clean(project, changes, task)
+        scalar = {name: value for name, value in changes.items() if name != "field_values"}
+        cleaned = _clean(project, scalar, task)
+        custom_changes = custom.prepare(project, changes.get("field_values") or {})
+        keys = [*scalar, *(custom.KEY_PREFIX + str(c.field.pk) for c in custom_changes)]
         seen = task.field_versions
-        for name in changes:
+        for name in keys:
             if seen.get(name, 1) > expected_version:
                 raise _conflict(task, name)
         users = cleaned.pop("assignee_ids", None)
@@ -289,9 +301,10 @@ def update(
         task.version += 1
         for name, value in cleaned.items():
             setattr(task, name, value)
-        task.field_versions = {**seen, **{name: task.version for name in changes}}
+        task.field_versions = {**seen, **{name: task.version for name in keys}}
         task.updated_at = timezone.now()
         task.save()
+        custom.save(task, custom_changes)
         if users is not None:
             _set_assignees(task, users)
         if "status" in cleaned:
@@ -450,7 +463,7 @@ def list_children(actor: Any, workspace: Workspace, project_id: str, task_id: st
     task = _load_task(project, task_id)
     rows = _scoped(project).filter(parent=task, deleted_at__isnull=True)
     found = list(rows.order_by("position", "number").prefetch_related(_with_assignees()))
-    return links.mark_blocked(found, actor, workspace)
+    return custom.attach(links.mark_blocked(found, actor, workspace))
 
 
 def _soft(task: Task, deleted: bool, actor: Any, workspace: Workspace) -> Task:
@@ -554,7 +567,7 @@ def list_trash(
     project = _project(actor, workspace, project_id, "task.delete", False)
     rows = _scoped(project).filter(deleted_at__isnull=False).order_by("-deleted_at", "-number")
     found = list(rows.prefetch_related(_with_assignees())[: max(1, min(limit, TRASH_MAX))])
-    return links.mark_blocked(found, actor, workspace)
+    return custom.attach(links.mark_blocked(found, actor, workspace))
 
 
 def _decode(cursor: str) -> tuple[str, int] | None:
@@ -601,5 +614,5 @@ def list_page(
     found = list(
         rows.order_by("tree_key", "number").prefetch_related(_with_assignees())[: size + 1]
     )
-    page = links.mark_blocked(found[:size], actor, workspace)
+    page = custom.attach(links.mark_blocked(found[:size], actor, workspace))
     return page, _encode(page[-1]) if len(found) > size else ""

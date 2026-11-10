@@ -102,6 +102,7 @@ message Task {
     int32 progress_total = 24;
     bool is_blocked = 25;
     repeated string blocked_by = 26;
+    repeated TaskFieldValueResponse fields = 27;
 }
 
 message TaskChildren {
@@ -119,6 +120,7 @@ message TaskCreateRequest {
     string due_date = 8;
     repeated string assignee_ids = 9;
     string parent_id = 10;
+    repeated TaskFieldValue field_values = 11;
 }
 
 message TaskDeleteRequest {
@@ -126,6 +128,16 @@ message TaskDeleteRequest {
     string project_id = 2;
     string id = 3;
     string mode = 4;
+}
+
+message TaskFieldValue {
+    string field_id = 1;
+    string value = 2;
+}
+
+message TaskFieldValueResponse {
+    string field_id = 1;
+    string value = 2;
 }
 
 message TaskGetRequest {
@@ -197,5 +209,6 @@ message TaskUpdateRequest {
     bool set_assignees = 11;
     repeated string assignee_ids = 12;
     bool override_blocked = 13;
+    repeated TaskFieldValue field_values = 14;
 }
 

@@ -52,6 +52,7 @@ PROJECT_LABELS = frozenset(
         "projects",
         "tasks",
         "workflows",
+        "customfields",
         "shop",
         "support",
         "wallet",

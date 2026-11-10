@@ -22,7 +22,11 @@ from infrastructure.workspaces import services as workspaces
 pytestmark = pytest.mark.django_db(transaction=True)
 
 BEFORE = [("tasks", "0001_initial")]
-LATEST_TASKS = [("tasks", "0007_task_links")]
+
+
+def _migrate_to_latest() -> None:
+    """Every app back to its newest migration (apps that depend on tasks were unapplied with it)."""
+    _migrate(MigrationExecutor(connection).loader.graph.leaf_nodes())
 
 
 def _migrate(targets: list[tuple[str, str]]) -> None:
@@ -64,7 +68,7 @@ def test_status_words_round_trip_through_the_migration() -> None:
         _migrate(BEFORE)
         words = _words()
     finally:
-        _migrate(LATEST_TASKS)
+        _migrate_to_latest()
 
     assert words == {
         "WEB-todo": "todo",

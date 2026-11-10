@@ -3,6 +3,14 @@
 from rest_framework import serializers
 
 
+class TaskFieldValue(serializers.Serializer[dict[str, object]]):
+    """A custom field's value on a task, in its wire form (see ``infrastructure.customfields``);
+    only fields that have a value are listed. As input, ``value`` empty clears the field."""
+
+    field_id = serializers.CharField()
+    value = serializers.CharField()
+
+
 class Task(serializers.Serializer[dict[str, object]]):
     """A task. ``parent_id`` is the task it is a subtask of (``""`` at the top) and ``depth`` how
     far down it is; ``progress_done`` of ``progress_total`` count everything under it (live
@@ -12,7 +20,8 @@ class Task(serializers.Serializer[dict[str, object]]):
     ``description`` is the rich-text JSON document as a string (``""`` when empty);
     dates are ``YYYY-MM-DD`` or ``""``; ``deleted_at`` is set only in the trash. ``is_blocked`` says
     a blocker is still open; ``blocked_by`` names them as the caller may see them
-    (``WEB-4 (In progress)``, or ``Restricted task``)."""
+    (``WEB-4 (In progress)``, or ``Restricted task``). ``fields`` are the task's custom field
+    values."""
 
     id = serializers.CharField()
     workspace_id = serializers.CharField()
@@ -40,6 +49,7 @@ class Task(serializers.Serializer[dict[str, object]]):
     deleted_at = serializers.CharField()
     is_blocked = serializers.BooleanField()
     blocked_by = serializers.ListField(child=serializers.CharField())
+    fields = TaskFieldValue(many=True)
 
 
 class Link(serializers.Serializer[dict[str, object]]):

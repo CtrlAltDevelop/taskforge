@@ -146,3 +146,7 @@ All requests carry `workspace_id` and `project_id`. Responses are `Task` (`List`
 `Task{id, workspace_id, project_id, number, display_id, title, description, status, status_name, status_category, priority, parent_id, depth, progress_done, progress_total, start_date, due_date, assignee_ids[], created_by, version, position, created_at, updated_at, deleted_at}` (dates and timestamps are ISO strings, `""` when unset).
 
 Errors as in [projects](projects.md): `PERMISSION_DENIED` (with reason trailers), `NOT_FOUND`, `INVALID_ARGUMENT`, `ALREADY_EXISTS` `PROJECT_ARCHIVED`, `ABORTED` `VERSION_CONFLICT`. A refusal raised inside the `List` stream ends it with the same status.
+
+### Custom field values
+
+`Task.fields` lists the task's custom field values and `Create` / `Update` take `field_values`; the rules, the wire forms and the per-field conflict key (`field_versions["field:<id>"]`) are in [custom fields](customfields.md).

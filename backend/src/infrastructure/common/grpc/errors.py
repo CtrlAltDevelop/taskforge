@@ -36,7 +36,11 @@ async def abort(context: Any, error: ApiError) -> None:
         code = grpc.StatusCode.ABORTED
     # A workflow rule refusing a move is not a clash of names: the call is well formed but the
     # state of the workflow does not permit it.
-    if error.title in (ResponseTitle.TRANSITION_NOT_ALLOWED, ResponseTitle.TASK_BLOCKED):
+    if error.title in (
+        ResponseTitle.TRANSITION_NOT_ALLOWED,
+        ResponseTitle.TASK_BLOCKED,
+        ResponseTitle.OPTION_NEEDS_REMAP,
+    ):
         code = grpc.StatusCode.FAILED_PRECONDITION
     if error.data:
         # Structured detail beside the "TITLE: message" text: trailers x-error-<key>-bin
