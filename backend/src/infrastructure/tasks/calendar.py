@@ -13,6 +13,7 @@ from typing import Any, Final
 from django.db.models import Q
 
 from infrastructure.common.errors import ApiError
+from infrastructure.filters import query as filter_query
 from infrastructure.projects.models import Project
 from infrastructure.tasks import links, services
 from infrastructure.tasks.models import Task
@@ -52,14 +53,16 @@ def _on_days(rows: Any, start: date, end: date, include_done: bool) -> Any:
     return rows
 
 
-def _stream(actor: Any, workspace: Workspace, rows: Any, key: str) -> Iterator[list[Task]]:
+def _stream(
+    actor: Any, workspace: Workspace, rows: Any, key: str, where: Any = None
+) -> Iterator[list[Task]]:
     """``rows`` in chunks of ``CHUNK``, each following the last ``key`` value seen (never capped,
     and a task edited meanwhile is never listed twice)."""
     rows = rows.order_by(key)
     after: Any = None
     while True:
         page = rows if after is None else rows.filter(**{f"{key}__gt": after})
-        chunk, more = services.fetch_page(actor, workspace, page, CHUNK)
+        chunk, more = services.fetch_page(actor, workspace, page, CHUNK, where)
         links.mark_schedule(chunk, actor, workspace)
         if chunk:
             yield chunk
@@ -76,13 +79,18 @@ def iter_range(
     last: str,
     *,
     include_done: bool = True,
+    filter_ast: str = "",
+    today: str = "",
 ) -> Iterator[list[Task]]:
     """Live tasks (subtasks too) that fall on any day from ``first`` to ``last`` inclusive,
-    in task-number order, in chunks of ``CHUNK``."""
+    in task-number order, in chunks of ``CHUNK``; ``filter_ast`` narrows them (see ``filters``)."""
     start, end = _window(first, last)
     project = services.project_for_view(actor, workspace, project_id)
-    rows = _on_days(services.live_rows(project, include_subtasks=True), start, end, include_done)
-    yield from _stream(actor, workspace, rows, "number")
+    extra = filter_query.prepare(project, filter_ast, today, actor).where
+    rows = _on_days(
+        services.live_rows(project, include_subtasks=True, extra=extra), start, end, include_done
+    )
+    yield from _stream(actor, workspace, rows, "number", extra)
 
 
 def iter_workspace_range(

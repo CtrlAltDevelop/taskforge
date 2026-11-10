@@ -18,12 +18,13 @@ from typing import Any, Final
 
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.utils import timezone
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.customfields import values as custom
+from infrastructure.filters import query as filter_query
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
 from infrastructure.tasks import fields, links, listing, tree
@@ -621,8 +622,17 @@ def list_trash(
     return custom.attach(links.mark_blocked(found, actor, workspace))
 
 
-def _live(project: Project, *, status: str, assignee_id: str, include_subtasks: bool) -> Any:
+def _live(
+    project: Project,
+    *,
+    status: str,
+    assignee_id: str,
+    include_subtasks: bool,
+    extra: Q | None = None,
+) -> Any:
     rows = _scoped(project).filter(deleted_at__isnull=True)
+    if extra is not None:
+        rows = rows.filter(extra)
     if not include_subtasks:
         rows = rows.filter(parent__isnull=True)
     if status:
@@ -632,17 +642,23 @@ def _live(project: Project, *, status: str, assignee_id: str, include_subtasks: 
     return rows
 
 
-def fetch_page(actor: Any, workspace: Workspace, rows: Any, limit: int) -> tuple[list[Task], bool]:
+def fetch_page(
+    actor: Any, workspace: Workspace, rows: Any, limit: int, where: Q | None = None
+) -> tuple[list[Task], bool]:
     """Up to ``limit`` of the already ordered ``rows`` (at most ``PAGE_MAX``) with what a client
-    shows of a task, and whether there are more."""
+    shows of a task, and whether there are more. ``where`` is the filter the rows were narrowed
+    by (see ``filters.query``): such a query runs under a time limit."""
     size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
-    found = list(rows.prefetch_related(_with_assignees())[: size + 1])
+    found = filter_query.guarded(
+        lambda: list(rows.prefetch_related(_with_assignees())[: size + 1]), where or Q()
+    )
     return custom.attach(links.mark_blocked(found[:size], actor, workspace)), len(found) > size
 
 
-def live_rows(project: Project, *, include_subtasks: bool = False) -> Any:
-    """The project's tasks that are not deleted (top-level only unless ``include_subtasks``)."""
-    return _live(project, status="", assignee_id="", include_subtasks=include_subtasks)
+def live_rows(project: Project, *, include_subtasks: bool = False, extra: Q | None = None) -> Any:
+    """The project's tasks that are not deleted (top-level only unless ``include_subtasks``),
+    narrowed by ``extra`` (a filter's condition, see ``filters.query.prepare``)."""
+    return _live(project, status="", assignee_id="", include_subtasks=include_subtasks, extra=extra)
 
 
 def project_for_view(actor: Any, workspace: Workspace, project_id: str) -> Project:
@@ -661,20 +677,30 @@ def list_page(
     include_subtasks: bool = False,
     sort: Sequence[tuple[str, bool]] = (),
     group_by: str = "",
+    filter_ast: str = "",
+    today: str = "",
 ) -> tuple[list[Task], str]:
     """One keyset page and the cursor of the next ('' at the end). Only top-level tasks unless
     ``include_subtasks``. Without ``sort`` and ``group_by`` the order is tree order (each parent
     right before its own subtasks); ``sort`` is ``(key, descending)`` pairs (see ``listing``),
     ``group_by`` makes the groups come one after another. A cursor belongs to the sort and
-    grouping it was made with."""
+    grouping it was made with. ``filter_ast`` (a TFQL filter's AST as JSON, see ``filters``)
+    narrows the list; its ORDER BY applies when no ``sort`` is given."""
     project = _project(actor, workspace, project_id, VIEW, False)
-    plan = listing.plan(project, sort, group_by)
+    prepared = filter_query.prepare(project, filter_ast, today, actor)
+    plan = listing.plan(project, sort or prepared.order, group_by)
     rows = plan.order(
-        _live(project, status=status, assignee_id=assignee_id, include_subtasks=include_subtasks)
+        _live(
+            project,
+            status=status,
+            assignee_id=assignee_id,
+            include_subtasks=include_subtasks,
+            extra=prepared.where,
+        )
     )
     if cursor:
         rows = plan.after(rows, cursor)
-    page, more = fetch_page(actor, workspace, rows, limit)
+    page, more = fetch_page(actor, workspace, rows, limit, prepared.where)
     if group_by:
         for task in page:
             task.group_key = plan.group_key_of(task)
@@ -690,11 +716,20 @@ def group_counts(
     status: str = "",
     assignee_id: str = "",
     include_subtasks: bool = False,
+    filter_ast: str = "",
+    today: str = "",
 ) -> list[tuple[str, int]]:
     """How many live tasks each group of ``list_page(group_by=...)`` holds, in list order, over
     the same filters; a group with none is ``""``."""
     project = _project(actor, workspace, project_id, VIEW, False)
     if listing.archived(project, group_by):  # the plan lists it ungrouped
         return []
-    rows = _live(project, status=status, assignee_id=assignee_id, include_subtasks=include_subtasks)
-    return listing.counts(rows, project, group_by)
+    prepared = filter_query.prepare(project, filter_ast, today, actor)
+    rows = _live(
+        project,
+        status=status,
+        assignee_id=assignee_id,
+        include_subtasks=include_subtasks,
+        extra=prepared.where,
+    )
+    return filter_query.guarded(lambda: listing.counts(rows, project, group_by), prepared.where)

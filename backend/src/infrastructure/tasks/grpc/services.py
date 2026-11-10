@@ -49,6 +49,8 @@ IDS = [
     {"name": "project_id", "type": "string"},
 ]
 ID = {"name": "id", "type": "string"}
+# A filter (the AST of a TFQL query as JSON) and the viewer's today for its relative dates.
+FILTER = [{"name": "filter_ast", "type": "string"}, {"name": "today", "type": "string"}]
 VERSION = {"name": "expected_version", "type": "int32"}
 TEXT_FIELDS = (
     "title",
@@ -143,6 +145,8 @@ def _page(user: Any, workspace: Any, request: Any, cursor: str) -> tuple[list[An
         include_subtasks=request.include_subtasks,
         sort=[(k.key, k.desc) for k in request.sort],
         group_by=request.group_by,
+        filter_ast=request.filter_ast,
+        today=request.today,
     )
     return [_message(t) for t in tasks], following
 
@@ -331,6 +335,7 @@ class TaskService(generics.GenericService):
             {"name": "include_subtasks", "type": "bool"},
             {"name": "sort", "cardinality": "repeated", "type": SortKey},
             {"name": "group_by", "type": "string"},
+            *FILTER,
         ],
         request_name="TaskListRequest",
         response=Task,
@@ -355,6 +360,7 @@ class TaskService(generics.GenericService):
             {"name": "status", "type": "string"},
             {"name": "assignee_id", "type": "string"},
             {"name": "include_subtasks", "type": "bool"},
+            *FILTER,
         ],
         request_name="TaskGroupCountsRequest",
         response=[{"name": "groups", "cardinality": "repeated", "type": GroupCount}],
@@ -372,6 +378,8 @@ class TaskService(generics.GenericService):
                 status=request.status,
                 assignee_id=request.assignee_id,
                 include_subtasks=request.include_subtasks,
+                filter_ast=request.filter_ast,
+                today=request.today,
             )
         )()
         return _pb().TaskGroupCounts(

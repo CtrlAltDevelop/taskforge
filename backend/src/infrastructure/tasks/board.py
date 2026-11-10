@@ -18,6 +18,7 @@ from django.db import transaction
 from django.db.models import Count
 
 from infrastructure.common.errors import ApiError
+from infrastructure.filters import query as filter_query
 from infrastructure.projects.models import Project
 from infrastructure.tasks import listing, rank, services, tree
 from infrastructure.tasks.models import Priority, Task, TaskAssignee
@@ -114,8 +115,9 @@ def _cell(
     column: str,
     lane: tuple[listing.Group, str] | None,
     lane_key: str,
+    extra: Any = None,
 ) -> Any:
-    rows = _where(services.live_rows(project), "_c", col[0], col[1], column)
+    rows = _where(services.live_rows(project, extra=extra), "_c", col[0], col[1], column)
     if lane is not None:
         rows = _where(rows, "_l", lane[0], lane[1], lane_key)
     return listing.plan(project, (), "").order(rows)
@@ -135,13 +137,18 @@ def get(
     group_by: str = "status",
     swimlane: str = "",
     limit: int = PAGE,
+    filter_ast: str = "",
+    today: str = "",
 ) -> list[Lane]:
     """Every lane (one, with key ``""``, when there is no swimlane) with its columns, their
     counts and their first ``limit`` cards."""
     project = services.project_for_view(actor, workspace, project_id)
     col = _axis_of(project, group_by)
     lane = _lane(swimlane, project)
-    tally = _tally(services.live_rows(project), col, lane)
+    extra = filter_query.prepare(project, filter_ast, today, actor).where
+    tally = filter_query.guarded(
+        lambda: _tally(services.live_rows(project, extra=extra), col, lane), extra
+    )
     columns = _axis(project, group_by, {c for _, c in tally})
     lanes = _axis(project, "assignee", {k for k, _ in tally}) if lane else [("", "")]
     plan = listing.plan(project, (), "")
@@ -154,7 +161,7 @@ def get(
             cursor = ""
             if count:
                 cards, more = services.fetch_page(
-                    actor, workspace, _cell(project, col, key, lane, lane_key), limit
+                    actor, workspace, _cell(project, col, key, lane, lane_key, extra), limit, extra
                 )
                 cursor = plan.cursor_of(cards[-1]) if more else ""
             built.append(Column(key, name, count, cards, cursor))
@@ -173,6 +180,8 @@ def list_column(
     swimlane: str = "",
     cursor: str = "",
     limit: int = PAGE,
+    filter_ast: str = "",
+    today: str = "",
 ) -> tuple[list[Task], str]:
     """One page of a column (of one lane's cell, with ``swimlane``) after ``cursor``, and the
     cursor of the next page (``""`` at the end)."""
@@ -180,10 +189,11 @@ def list_column(
     col = _axis_of(project, group_by)
     lane_axis = _lane(swimlane, project)
     plan = listing.plan(project, (), "")
-    rows = _cell(project, col, column, lane_axis, lane)
+    extra = filter_query.prepare(project, filter_ast, today, actor).where
+    rows = _cell(project, col, column, lane_axis, lane, extra)
     if cursor:
         rows = plan.after(rows, cursor)
-    cards, more = services.fetch_page(actor, workspace, rows, limit)
+    cards, more = services.fetch_page(actor, workspace, rows, limit, extra)
     return cards, plan.cursor_of(cards[-1]) if more else ""
 
 

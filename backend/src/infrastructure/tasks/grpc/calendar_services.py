@@ -21,7 +21,7 @@ from django_socio_grpc.decorators import grpc_action
 from infrastructure.common.grpc.errors import action, stream_action
 from infrastructure.tasks import calendar
 from infrastructure.tasks.grpc.serializers import Task
-from infrastructure.tasks.grpc.services import IDS, _message, _pb, _scope
+from infrastructure.tasks.grpc.services import FILTER, IDS, _message, _pb, _scope
 
 
 def _next_chunk(chunks: Any) -> Any:
@@ -37,6 +37,7 @@ class CalendarService(generics.GenericService):
             {"name": "range_start", "type": "string"},
             {"name": "range_end", "type": "string"},
             {"name": "include_done", "type": "bool"},
+            *FILTER,
         ],
         request_name="CalendarRangeRequest",
         response=Task,
@@ -53,6 +54,8 @@ class CalendarService(generics.GenericService):
             request.range_start,
             request.range_end,
             include_done=request.include_done,
+            filter_ast=request.filter_ast,
+            today=request.today,
         )
         while (chunk := await sync_to_async(_next_chunk)(chunks)) is not None:
             for message in chunk:

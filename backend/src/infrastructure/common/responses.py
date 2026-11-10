@@ -159,6 +159,11 @@ class ResponseTitle(StrEnum):
     VIEW_NAME_TAKEN = "VIEW_NAME_TAKEN"
     VIEW_LIMIT = "VIEW_LIMIT"
 
+    # Filters
+    FILTER_INVALID = "FILTER_INVALID"
+    FILTER_NAME_TAKEN = "FILTER_NAME_TAKEN"
+    FILTER_LIMIT = "FILTER_LIMIT"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -217,6 +222,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.VIEW_INVALID: "The saved layout is not valid.",
     ResponseTitle.VIEW_NAME_TAKEN: "You already have a layout with that name in this project.",
     ResponseTitle.VIEW_LIMIT: "That is the most layouts one list can hold.",
+    ResponseTitle.FILTER_INVALID: "The filter is not valid (the detail says where).",
+    ResponseTitle.FILTER_NAME_TAKEN: "A filter with that name already exists here.",
+    ResponseTitle.FILTER_LIMIT: "That is the most saved filters one place can hold.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

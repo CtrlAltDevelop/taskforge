@@ -174,6 +174,9 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `VIEW_INVALID` | The saved layout is not valid. |
 | `VIEW_NAME_TAKEN` | You already have a layout with that name in this project. |
 | `VIEW_LIMIT` | That is the most layouts one list can hold. |
+| `FILTER_INVALID` | The filter is not valid (the detail says where). |
+| `FILTER_NAME_TAKEN` | A filter with that name already exists here. |
+| `FILTER_LIMIT` | That is the most saved filters one place can hold. |
 | `OPTION_NEEDS_REMAP` | Removed options are in use: say what their values become. |
 
 ## Writing an endpoint

@@ -9,7 +9,7 @@ themselves — see [keeping these pages honest](#keeping-these-pages-honest).
 
 | | |
 | --- | --- |
-| Always installed | [`common`](common.md), [`accounts`](accounts.md), [`workspaces`](workspaces.md), [`projects`](projects.md), [`tasks`](tasks.md), [`workflows`](workflows.md), [`customfields`](customfields.md), [`savedviews`](savedviews.md) |
+| Always installed | [`common`](common.md), [`accounts`](accounts.md), [`workspaces`](workspaces.md), [`projects`](projects.md), [`tasks`](tasks.md), [`workflows`](workflows.md), [`customfields`](customfields.md), [`savedviews`](savedviews.md), [`filters`](filters.md) |
 | Login methods | [`auth_password`](auth/password.md), [`auth_email_code`](auth/email-code.md), [`auth_sms_code`](auth/sms-code.md), [`auth_magic_link`](auth/magic-link.md) |
 | Second factors | [`auth_twofactor`](auth/twofactor.md) |
 | Social providers | [`oauth_google`](oauth/google.md), [`oauth_apple`](oauth/apple.md), [`oauth_microsoft`](oauth/microsoft.md), [`oauth_github`](oauth/github.md) |

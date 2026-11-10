@@ -1043,6 +1043,7 @@ INSTALLED_APPS = [
     "infrastructure.tasks.apps.TasksConfig",
     "infrastructure.customfields.apps.CustomFieldsConfig",
     "infrastructure.savedviews.apps.SavedViewsConfig",
+    "infrastructure.filters.apps.FiltersConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

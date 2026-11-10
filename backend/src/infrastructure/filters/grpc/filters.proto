@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package config.filters;
+
+service FilterController {
+    rpc Delete(FilterDeleteRequest) returns (Filter) {}
+    rpc List(FilterListRequest) returns (FilterList) {}
+    rpc Save(FilterSaveRequest) returns (Filter) {}
+}
+
+service QueryController {
+    rpc Suggest(QuerySuggestRequest) returns (QuerySuggestions) {}
+    rpc Validate(QueryValidateRequest) returns (QueryChecked) {}
+}
+
+message Filter {
+    string id = 1;
+    string project_id = 2;
+    string owner_id = 3;
+    string name = 4;
+    string visibility = 5;
+    string ast_json = 6;
+    string tfql = 7;
+    int32 version = 8;
+    string updated_at = 9;
+}
+
+message FilterDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message FilterList {
+    repeated Filter filters = 1;
+}
+
+message FilterListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message FilterSaveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string tfql = 6;
+    string ast_json = 7;
+    string visibility = 8;
+}
+
+message QueryChecked {
+    bool ok = 1;
+    string ast_json = 2;
+    string tfql = 3;
+    repeated QueryProblem errors = 4;
+}
+
+message QueryProblem {
+    int32 position = 1;
+    int32 length = 2;
+    string message = 3;
+}
+
+message QuerySuggestRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string partial = 3;
+    int32 cursor = 4;
+}
+
+message QuerySuggestion {
+    string text = 1;
+    string kind = 2;
+    int32 start = 3;
+    string label = 4;
+}
+
+message QuerySuggestions {
+    repeated QuerySuggestion items = 1;
+}
+
+message QueryValidateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string tfql = 3;
+    string ast_json = 4;
+}
+

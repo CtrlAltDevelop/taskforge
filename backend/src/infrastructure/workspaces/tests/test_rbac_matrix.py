@@ -20,6 +20,9 @@ from google.protobuf.empty_pb2 import Empty
 from infrastructure.customfields import services as field_services
 from infrastructure.customfields.grpc import customfields_pb2 as fpb
 from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
+from infrastructure.filters import services as filter_services
+from infrastructure.filters.grpc import filters_pb2 as flpb
+from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
 from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
@@ -64,6 +67,7 @@ class World:
     link_id: str = ""  # a link from ``task_id`` to ``other_task_id``
     field_id: str = ""  # a custom field of the open project
     view_id: str = ""  # a saved layout shared with the open project
+    filter_id: str = ""  # a filter shared with the open project
 
     @property
     def ws(self) -> str:
@@ -145,6 +149,18 @@ def _make_shared_view(w: World) -> None:
             w.workspace.created_by, w.workspace, w.project_id, name="Team", config={}, shared=True
         ).pk
     )
+
+
+def _make_shared_filter(w: World) -> None:
+    saved, _ = filter_services.save(
+        w.workspace.created_by,
+        w.workspace,
+        w.project_id,
+        name="Team",
+        text="priority = high",
+        visibility="project",
+    )
+    w.filter_id = str(saved.pk)
 
 
 def _make_deleted_task(w: World) -> None:
@@ -484,6 +500,71 @@ ENDPOINTS += (
             ),
         ),
         _make_task,
+    ),
+)
+
+QC = flstubs.QueryControllerStub
+FLC = flstubs.FilterControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "QueryController.Validate",
+        "workspace.view",
+        _grpc(
+            QC,
+            "Validate",
+            lambda w: flpb.QueryValidateRequest(
+                workspace_id=w.ws, project_id=w.project_id, tfql="priority = high"
+            ),
+        ),
+    ),
+    Endpoint(
+        "QueryController.Suggest",
+        "workspace.view",
+        _grpc(
+            QC,
+            "Suggest",
+            lambda w: flpb.QuerySuggestRequest(
+                workspace_id=w.ws, project_id=w.project_id, partial="pri", cursor=3
+            ),
+        ),
+    ),
+    Endpoint(
+        "FilterController.List",
+        "workspace.view",
+        _grpc(
+            FLC,
+            "List",
+            lambda w: flpb.FilterListRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    # A private filter needs only workspace.view; sharing one, or deleting a shared one, needs
+    # project.update (the filters tests cover the private paths).
+    Endpoint(
+        "FilterController.Save",
+        "project.update",
+        _grpc(
+            FLC,
+            "Save",
+            lambda w: flpb.FilterSaveRequest(
+                workspace_id=w.ws,
+                project_id=w.project_id,
+                name="Shared",
+                tfql="priority = high",
+                visibility="project",
+            ),
+        ),
+    ),
+    Endpoint(
+        "FilterController.Delete",
+        "project.update",
+        _grpc(
+            FLC,
+            "Delete",
+            lambda w: flpb.FilterDeleteRequest(
+                workspace_id=w.ws, project_id=w.project_id, id=w.filter_id
+            ),
+        ),
+        _make_shared_filter,
     ),
 )
 

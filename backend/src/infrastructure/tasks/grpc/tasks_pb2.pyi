@@ -59,11 +59,15 @@ class BoardGetRequest(_message.Message):
     GROUP_BY_FIELD_NUMBER: _builtins.int
     SWIMLANE_FIELD_NUMBER: _builtins.int
     PAGE_SIZE_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     group_by: _builtins.str
     swimlane: _builtins.str
     page_size: _builtins.int
+    filter_ast: _builtins.str
+    today: _builtins.str
     def __init__(
         self,
         *,
@@ -72,10 +76,12 @@ class BoardGetRequest(_message.Message):
         group_by: _builtins.str = ...,
         swimlane: _builtins.str = ...,
         page_size: _builtins.int = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["group_by", b"group_by", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["filter_ast", b"filter_ast", "group_by", b"group_by", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -116,6 +122,8 @@ class BoardListColumnRequest(_message.Message):
     COLUMN_FIELD_NUMBER: _builtins.int
     LANE_FIELD_NUMBER: _builtins.int
     CURSOR_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     group_by: _builtins.str
@@ -124,6 +132,8 @@ class BoardListColumnRequest(_message.Message):
     column: _builtins.str
     lane: _builtins.str
     cursor: _builtins.str
+    filter_ast: _builtins.str
+    today: _builtins.str
     def __init__(
         self,
         *,
@@ -135,10 +145,12 @@ class BoardListColumnRequest(_message.Message):
         column: _builtins.str = ...,
         lane: _builtins.str = ...,
         cursor: _builtins.str = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["column", b"column", "cursor", b"cursor", "group_by", b"group_by", "lane", b"lane", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["column", b"column", "cursor", b"cursor", "filter_ast", b"filter_ast", "group_by", b"group_by", "lane", b"lane", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -277,11 +289,15 @@ class CalendarRangeRequest(_message.Message):
     RANGE_START_FIELD_NUMBER: _builtins.int
     RANGE_END_FIELD_NUMBER: _builtins.int
     INCLUDE_DONE_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     range_start: _builtins.str
     range_end: _builtins.str
     include_done: _builtins.bool
+    filter_ast: _builtins.str
+    today: _builtins.str
     def __init__(
         self,
         *,
@@ -290,10 +306,12 @@ class CalendarRangeRequest(_message.Message):
         range_start: _builtins.str = ...,
         range_end: _builtins.str = ...,
         include_done: _builtins.bool = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_done", b"include_done", "project_id", b"project_id", "range_end", b"range_end", "range_start", b"range_start", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["filter_ast", b"filter_ast", "include_done", b"include_done", "project_id", b"project_id", "range_end", b"range_end", "range_start", b"range_start", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -1008,12 +1026,16 @@ class TaskGroupCountsRequest(_message.Message):
     STATUS_FIELD_NUMBER: _builtins.int
     ASSIGNEE_ID_FIELD_NUMBER: _builtins.int
     INCLUDE_SUBTASKS_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     group_by: _builtins.str
     status: _builtins.str
     assignee_id: _builtins.str
     include_subtasks: _builtins.bool
+    filter_ast: _builtins.str
+    today: _builtins.str
     def __init__(
         self,
         *,
@@ -1023,10 +1045,12 @@ class TaskGroupCountsRequest(_message.Message):
         status: _builtins.str = ...,
         assignee_id: _builtins.str = ...,
         include_subtasks: _builtins.bool = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_id", b"assignee_id", "group_by", b"group_by", "include_subtasks", b"include_subtasks", "project_id", b"project_id", "status", b"status", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_id", b"assignee_id", "filter_ast", b"filter_ast", "group_by", b"group_by", "include_subtasks", b"include_subtasks", "project_id", b"project_id", "status", b"status", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -1070,6 +1094,8 @@ class TaskListRequest(_message.Message):
     INCLUDE_SUBTASKS_FIELD_NUMBER: _builtins.int
     SORT_FIELD_NUMBER: _builtins.int
     GROUP_BY_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     status: _builtins.str
@@ -1078,6 +1104,8 @@ class TaskListRequest(_message.Message):
     page_size: _builtins.int
     include_subtasks: _builtins.bool
     group_by: _builtins.str
+    filter_ast: _builtins.str
+    today: _builtins.str
     @_builtins.property
     def sort(self) -> _containers.RepeatedCompositeFieldContainer[Global___SortKey]: ...
     def __init__(
@@ -1092,10 +1120,12 @@ class TaskListRequest(_message.Message):
         include_subtasks: _builtins.bool = ...,
         sort: _abc.Iterable[Global___SortKey] | None = ...,
         group_by: _builtins.str = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_id", b"assignee_id", "cursor", b"cursor", "group_by", b"group_by", "include_subtasks", b"include_subtasks", "page_size", b"page_size", "project_id", b"project_id", "sort", b"sort", "status", b"status", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_id", b"assignee_id", "cursor", b"cursor", "filter_ast", b"filter_ast", "group_by", b"group_by", "include_subtasks", b"include_subtasks", "page_size", b"page_size", "project_id", b"project_id", "sort", b"sort", "status", b"status", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

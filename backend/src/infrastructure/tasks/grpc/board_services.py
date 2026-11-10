@@ -18,12 +18,13 @@ from infrastructure.common.grpc.errors import action
 from infrastructure.tasks import board
 from infrastructure.tasks.grpc.serializers import BoardLane as BoardLaneSchema
 from infrastructure.tasks.grpc.serializers import Task
-from infrastructure.tasks.grpc.services import IDS, VERSION, _message, _one, _pb, _scope
+from infrastructure.tasks.grpc.services import FILTER, IDS, VERSION, _message, _one, _pb, _scope
 
 GROUPING = [
     {"name": "group_by", "type": "string"},
     {"name": "swimlane", "type": "string"},
     {"name": "page_size", "type": "int32"},
+    *FILTER,
 ]
 
 
@@ -58,6 +59,8 @@ class BoardService(generics.GenericService):
                         group_by=request.group_by or "status",
                         swimlane=request.swimlane,
                         limit=request.page_size or board.PAGE,
+                        filter_ast=request.filter_ast,
+                        today=request.today,
                     )
                 ]
             )
@@ -93,6 +96,8 @@ class BoardService(generics.GenericService):
                 swimlane=request.swimlane,
                 cursor=request.cursor,
                 limit=request.page_size or board.PAGE,
+                filter_ast=request.filter_ast,
+                today=request.today,
             )
             return _pb().BoardPage(tasks=[_message(t) for t in tasks], cursor=cursor)
 

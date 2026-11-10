@@ -50,6 +50,8 @@ message BoardGetRequest {
     string group_by = 3;
     string swimlane = 4;
     int32 page_size = 5;
+    string filter_ast = 6;
+    string today = 7;
 }
 
 message BoardLane {
@@ -66,6 +68,8 @@ message BoardListColumnRequest {
     string column = 6;
     string lane = 7;
     string cursor = 8;
+    string filter_ast = 9;
+    string today = 10;
 }
 
 message BoardMoveRequest {
@@ -105,6 +109,8 @@ message CalendarRangeRequest {
     string range_start = 3;
     string range_end = 4;
     bool include_done = 5;
+    string filter_ast = 6;
+    string today = 7;
 }
 
 message CalendarTray {
@@ -289,6 +295,8 @@ message TaskGroupCountsRequest {
     string status = 4;
     string assignee_id = 5;
     bool include_subtasks = 6;
+    string filter_ast = 7;
+    string today = 8;
 }
 
 message TaskListChildrenRequest {
@@ -307,6 +315,8 @@ message TaskListRequest {
     bool include_subtasks = 7;
     repeated SortKey sort = 8;
     string group_by = 9;
+    string filter_ast = 10;
+    string today = 11;
 }
 
 message TaskListTrashRequest {
