@@ -98,7 +98,7 @@ def _first_assignee() -> Subquery:
     )
 
 
-def _field(project: Project, raw: str) -> FieldDefinition:
+def field_of(project: Project, raw: str) -> FieldDefinition:
     try:
         pk = uuid.UUID(raw)
     except ValueError:
@@ -142,7 +142,7 @@ def _sort_key(project: Project, name: str, desc: bool) -> Key:
     elif name == "number":
         base = Key(name, "int")
     elif name.startswith(FIELD_PREFIX):
-        base = _field_key(_field(project, name.removeprefix(FIELD_PREFIX)))
+        base = _field_key(field_of(project, name.removeprefix(FIELD_PREFIX)))
     else:
         raise refused(f"Cannot sort by {name!r}.")
     return Key(base.expr, base.kind, desc)
@@ -157,7 +157,7 @@ def group_of(project: Project, name: str) -> Group:
     if name == "assignee":
         return Group(Key(_first_assignee()), _first_assignee())
     if name.startswith(FIELD_PREFIX):
-        field = _field(project, name.removeprefix(FIELD_PREFIX))
+        field = field_of(project, name.removeprefix(FIELD_PREFIX))
         if field.type != FieldType.SELECT:
             raise refused("Tasks can be grouped by a select field only.")
         return Group(_field_key(field), _value(field, F("value_text")))
@@ -195,7 +195,7 @@ class Plan:
 
     def group_key_of(self, task: Any) -> str:
         """The id of the group ``task`` is listed under (``""``: the one for tasks with none)."""
-        return _ident(getattr(task, "_gid", None), self.group_by == "assignee")
+        return ident(getattr(task, "_gid", None), self.group_by == "assignee")
 
     def cursor_of(self, task: Any) -> str:
         values = [_dump(getattr(task, _name(i, k))) for i, k in enumerate(self.keys)]
@@ -261,7 +261,7 @@ def plan(project: Project, sort: Sequence[tuple[str, bool]], group_by: str) -> P
     return Plan(tuple(keys), signature, group, group_by)
 
 
-def _ident(value: Any, is_uuid: bool) -> str:
+def ident(value: Any, is_uuid: bool) -> str:
     if value is None:
         return ""
     if is_uuid:  # SQLite hands a subquery's uuid back as bare hex
@@ -283,4 +283,4 @@ def counts(rows: QuerySet[Any], project: Project, group_by: str) -> list[tuple[s
         .values("_gid", "_gk")
         .annotate(_n=Count("pk"))
     )
-    return [(_ident(r["_gid"], group_by == "assignee"), r["_n"]) for r in found]
+    return [(ident(r["_gid"], group_by == "assignee"), r["_n"]) for r in found]

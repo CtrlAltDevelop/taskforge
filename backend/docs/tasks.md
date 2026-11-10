@@ -147,6 +147,16 @@ A task can have one parent task of the **same project**; a subtask can have subt
 
 `BulkUpdate(workspace_id, project_id, ids[], status, priority, set_assignees + assignee_ids, or delete + delete_mode)` takes 1–500 ids and **streams** one `BulkResult{id, ok, task | error}` per task, in the order done. The call as a whole is checked first (permission, archived project, shape of the change) and a mistake refuses everything; after that each task is its own transaction, so a blocked task or a forbidden transition fails alone. An edit changes the task as it is now (a concurrent edit is retried) rather than answering a conflict. Deleting goes top-down: a parent chosen with all its live subtasks is deleted as one `subtree` batch (restoring it brings them back) and the subtasks are reported as deleted with it. Code: `bulk.py`.
 
+### The board
+
+`BoardController` (`board.py`, `grpc/board_services.py`; phase 12) shows the project's **top-level** live tasks as cards (a parent's card carries its subtask progress; subtasks are not cards). Columns come from `group_by` (`status`, `priority`, `assignee`, or `field:<select field id>`), optionally split into rows by `swimlane` (`assignee`).
+
+- `Get(workspace_id, project_id, group_by, swimlane, page_size)` answers the whole board: lanes (one with key `""` without swimlanes), each with its columns, every column's `count` and its first `page_size` cards (default 30) plus a `cursor`. Columns: all statuses / all priorities / the options of the select field then `No value` / the people that hold a card then `Unassigned`. People are named by the client.
+- `ListColumn(..., column, lane, cursor, page_size)` pages one column (cell) further, in rank order.
+- `Move(id, expected_version, group_by, column, before_id, after_id, include_subtasks, override_blocked)` drops a card. A different column changes the task's field through `update` / `move` (so the workflow, blockers and `task.update` apply and a refusal changes nothing; `expected_version` is checked then); a drop inside the card's own column only changes its place and never conflicts. The card gets a rank right after `after_id` and right before `before_id` (one side is enough; neither: last); neighbours that no longer sort in that order fall back to "right after `after_id`", a neighbour of another project is `NOT_FOUND`.
+- **Ranks**: only the dropped task changes (`tree.reposition` rewrites its subtree's `tree_key` prefix so the list's tree order follows). Two drops into one gap get different ranks (a taken rank is nudged), and when a rank grows past `board.REBALANCE_AT` characters the server respaces the project's top-level ranks in the same transaction (`tree.rebalance`, no versions change). Clients never compute global order.
+- Permissions: `Get`/`ListColumn` need workspace membership, `Move` `task.update` on a project that is not archived.
+
 ### gRPC contract (`config.tasks`)
 
 All requests carry `workspace_id` and `project_id`. Responses are `Task` (`List` streams them).

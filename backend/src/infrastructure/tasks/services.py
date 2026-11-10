@@ -96,6 +96,17 @@ def valid_uuids(raw: Sequence[Any]) -> list[uuid.UUID]:
     return found
 
 
+def load_task(project: Project, task_id: str, *, lock: bool = False) -> Task:
+    """A live task of ``project`` (``NOT_FOUND`` for any other id), locked when asked."""
+    return _load_task(project, task_id, lock=lock)
+
+
+def lock_for_write(actor: Any, workspace: Workspace, project_id: str, key: str) -> Project:
+    """Like ``open_for_write`` but the project row is locked (first, before any task), as every
+    task write does, so writers of one project queue instead of racing or deadlocking."""
+    return _writable_project(actor, workspace, project_id, key)
+
+
 def open_for_write(actor: Any, workspace: Workspace, project_id: str, key: str) -> Project:
     """The project, if ``actor`` holds ``key`` there and it is not archived (no lock taken)."""
     project = _project(actor, workspace, project_id, key, False)
@@ -181,6 +192,11 @@ def _reload(task: Task, actor: Any, workspace: Workspace) -> Task:
     links.mark_blocked([fresh], actor, workspace)
     custom.attach([fresh])
     return fresh
+
+
+def present(task: Task, actor: Any, workspace: Workspace) -> Task:
+    """``task`` as a client shows it (assignees, blockers, custom values)."""
+    return _reload(task, actor, workspace)
 
 
 def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task:
@@ -609,6 +625,23 @@ def _live(project: Project, *, status: str, assignee_id: str, include_subtasks: 
     return rows
 
 
+def fetch_page(actor: Any, workspace: Workspace, rows: Any, limit: int) -> tuple[list[Task], bool]:
+    """Up to ``limit`` of the already ordered ``rows`` (at most ``PAGE_MAX``) with what a client
+    shows of a task, and whether there are more."""
+    size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
+    found = list(rows.prefetch_related(_with_assignees())[: size + 1])
+    return custom.attach(links.mark_blocked(found[:size], actor, workspace)), len(found) > size
+
+
+def live_rows(project: Project, *, include_subtasks: bool = False) -> Any:
+    """The project's tasks that are not deleted (top-level only unless ``include_subtasks``)."""
+    return _live(project, status="", assignee_id="", include_subtasks=include_subtasks)
+
+
+def project_for_view(actor: Any, workspace: Workspace, project_id: str) -> Project:
+    return _project(actor, workspace, project_id, VIEW, False)
+
+
 def list_page(
     actor: Any,
     workspace: Workspace,
@@ -634,13 +667,11 @@ def list_page(
     )
     if cursor:
         rows = plan.after(rows, cursor)
-    size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
-    found = list(rows.prefetch_related(_with_assignees())[: size + 1])
-    page = custom.attach(links.mark_blocked(found[:size], actor, workspace))
+    page, more = fetch_page(actor, workspace, rows, limit)
     if group_by:
         for task in page:
             task.group_key = plan.group_key_of(task)
-    return page, plan.cursor_of(page[-1]) if len(found) > size else ""
+    return page, plan.cursor_of(page[-1]) if more else ""
 
 
 def group_counts(

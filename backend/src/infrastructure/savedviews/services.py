@@ -26,7 +26,7 @@ from infrastructure.workspaces.models import Workspace
 
 VIEW = "workspace.view"
 MANAGE = "project.update"
-KINDS: Final = ("list",)
+KINDS: Final = ("list", "board")
 MAX_PER_SCOPE: Final = 50
 MAX_NAME: Final = 60
 
@@ -117,7 +117,7 @@ def save(
 ) -> SavedView:
     """Create a layout, or save ``view_id`` (``expected_version`` required then)."""
     cleaned_name, cleaned_kind = _name(name), _kind(kind)
-    cleaned = layout.clean(config)
+    cleaned = layout.clean_for(cleaned_kind, config)
     try:
         with transaction.atomic():
             return _write(

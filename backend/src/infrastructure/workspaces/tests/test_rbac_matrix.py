@@ -446,6 +446,47 @@ ENDPOINTS += tuple(
     for rpc, permission, build, prepare in _TASK_CALLS
 )
 
+BD = tstubs.BoardControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "BoardController.Get",
+        "workspace.view",
+        _grpc(
+            BD,
+            "Get",
+            lambda w: tpb.BoardGetRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    Endpoint(
+        "BoardController.ListColumn",
+        "workspace.view",
+        _grpc(
+            BD,
+            "ListColumn",
+            lambda w: tpb.BoardListColumnRequest(
+                workspace_id=w.ws, project_id=w.project_id, group_by="priority", column="none"
+            ),
+        ),
+    ),
+    Endpoint(
+        "BoardController.Move",
+        "task.update",
+        _grpc(
+            BD,
+            "Move",
+            lambda w: tpb.BoardMoveRequest(
+                workspace_id=w.ws,
+                project_id=w.project_id,
+                id=w.task_id,
+                expected_version=1,
+                group_by="priority",
+                column="high",
+            ),
+        ),
+        _make_task,
+    ),
+)
+
 LK = tstubs.LinkControllerStub
 ENDPOINTS += (
     Endpoint(

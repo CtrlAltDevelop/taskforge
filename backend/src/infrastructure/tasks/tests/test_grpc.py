@@ -468,3 +468,89 @@ def test_a_bulk_call_is_refused_whole_when_it_is_malformed_or_not_allowed(
 
     assert nothing.code() == grpc.StatusCode.INVALID_ARGUMENT
     assert viewer.code() == grpc.StatusCode.PERMISSION_DENIED
+
+
+B = stubs.BoardControllerStub
+
+
+def _board(call: GrpcCall, team: dict[str, Any], who: str = "vic", **fields: Any) -> Any:
+    request = pb.BoardGetRequest(workspace_id=team["ws"], project_id=team["project"], **fields)
+    return call(B, "Get", request, token=team["tokens"][who])
+
+
+def test_the_board_answers_columns_with_counts_and_cards(team: Any, grpc_call: GrpcCall) -> None:
+    _create(grpc_call, team, title="a")
+    _create(grpc_call, team, title="b", priority="high")
+
+    [lane] = _board(grpc_call, team).lanes
+
+    assert [(c.name, c.count) for c in lane.columns] == [
+        ("To do", 2),
+        ("In progress", 0),
+        ("Done", 0),
+    ]
+    assert [t.title for t in lane.columns[0].tasks] == ["a", "b"]
+
+
+def test_list_column_pages_and_move_places_the_card(team: Any, grpc_call: GrpcCall) -> None:
+    ids = [_create(grpc_call, team, title=f"t{i}").id for i in range(4)]
+    [lane] = _board(grpc_call, team, page_size=2).lanes
+    todo = lane.columns[0]
+    assert len(todo.tasks) == 2 and todo.cursor
+
+    rest = grpc_call(
+        B,
+        "ListColumn",
+        pb.BoardListColumnRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            column=todo.key,
+            cursor=todo.cursor,
+            page_size=5,
+        ),
+        token=team["tokens"]["vic"],
+    )
+    assert [t.title for t in rest.tasks] == ["t2", "t3"] and rest.cursor == ""
+
+    moved = grpc_call(
+        B,
+        "Move",
+        pb.BoardMoveRequest(
+            workspace_id=team["ws"],
+            project_id=team["project"],
+            id=ids[3],
+            expected_version=1,
+            column=todo.key,
+            before_id=ids[0],
+        ),
+        token=team["tokens"]["max"],
+    )
+
+    assert moved.id == ids[3] and moved.version == 2
+    [after] = _board(grpc_call, team).lanes
+    assert [t.title for t in after.columns[0].tasks] == ["t3", "t0", "t1", "t2"]
+
+
+def test_board_refusals_map_to_the_usual_statuses(team: Any, grpc_call: GrpcCall) -> None:
+    task = _create(grpc_call, team)
+    move = pb.BoardMoveRequest(
+        workspace_id=team["ws"], project_id=team["project"], id=task.id, expected_version=1
+    )
+
+    assert _refused(grpc_call, B, "Move", move, token=team["tokens"]["vic"]).code() is (
+        grpc.StatusCode.PERMISSION_DENIED
+    )
+    assert _refused(
+        grpc_call,
+        B,
+        "Get",
+        pb.BoardGetRequest(workspace_id=team["ws"], project_id=team["project"], group_by="title"),
+        token=team["tokens"]["vic"],
+    ).code() is (grpc.StatusCode.INVALID_ARGUMENT)
+    assert _refused(
+        grpc_call,
+        B,
+        "Get",
+        pb.BoardGetRequest(workspace_id=team["ws"], project_id=team["project"]),
+        token=team["tokens"]["eve"],
+    ).code() in (grpc.StatusCode.PERMISSION_DENIED, grpc.StatusCode.NOT_FOUND)

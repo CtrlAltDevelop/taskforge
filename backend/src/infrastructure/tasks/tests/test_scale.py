@@ -189,3 +189,37 @@ def test_a_sorted_and_grouped_page_of_ten_thousand_tasks_is_fast_and_walks_witho
     assert len(numbers) == len(set(numbers)) == TOTAL
     counts = services.group_counts(team.viewer, team.ws, pid, "status")
     assert [n for _, n in counts] == [TOTAL]
+
+
+def test_a_board_of_ten_thousand_tasks_opens_fast_and_a_drop_in_the_middle_is_cheap(
+    team: Any, project: Any, django_assert_max_num_queries: Any
+) -> None:
+    from infrastructure.tasks import board
+
+    _seed(team, project)
+    todo = str(workflows.default_status(project).pk)
+
+    started = time.monotonic()
+    with django_assert_max_num_queries(40):
+        [lane] = board.get(team.member, team.ws, str(project.pk))
+    assert time.monotonic() - started < FIRST_PAGE_BUDGET_SECONDS * 2
+    column = next(c for c in lane.columns if c.key == todo)
+    assert column.count == TOTAL and len(column.tasks) == board.PAGE and column.cursor
+
+    middle = list(Task.objects.filter(project=project).order_by("position"))[5_000:5_002]
+    mover = Task.objects.filter(project=project).order_by("position").last()
+    assert mover is not None
+    with django_assert_max_num_queries(40):
+        board.move_card(
+            team.member,
+            team.ws,
+            str(project.pk),
+            str(mover.pk),
+            group_by="status",
+            column=todo,
+            expected_version=mover.version,
+            after_id=str(middle[0].pk),
+            before_id=str(middle[1].pk),
+        )
+    mover.refresh_from_db()
+    assert middle[0].position < mover.position < middle[1].position

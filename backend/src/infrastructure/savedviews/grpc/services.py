@@ -19,7 +19,7 @@ from django_socio_grpc.decorators import grpc_action
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
 from infrastructure.savedviews import services
-from infrastructure.savedviews.grpc.serializers import Layout, SavedView
+from infrastructure.savedviews.grpc.serializers import BoardLayout, Layout, SavedView
 from infrastructure.savedviews.models import SavedView as ViewRow
 from infrastructure.workspaces.scoping import require_workspace
 
@@ -46,6 +46,25 @@ def _layout(config: dict[str, Any]) -> Any:
     )
 
 
+def _board(config: dict[str, Any]) -> Any:
+    pb = _pb()
+    return pb.BoardLayoutResponse(
+        group_by=config["group_by"],
+        swimlane=config["swimlane"],
+        card_fields=config["card_fields"],
+        limits=[pb.BoardLimitResponse(column=c, limit=n) for c, n in config["limits"].items()],
+    )
+
+
+def _board_config(board: Any) -> dict[str, Any]:
+    return {
+        "group_by": board.group_by,
+        "swimlane": board.swimlane,
+        "card_fields": list(board.card_fields),
+        "limits": {limit.column: limit.limit for limit in board.limits},
+    }
+
+
 def _config(layout: Any) -> dict[str, Any]:
     return {
         "columns": list(layout.columns),
@@ -56,14 +75,17 @@ def _config(layout: Any) -> dict[str, Any]:
 
 
 def _message(view: ViewRow) -> Any:
+    shape = (
+        {"board": _board(view.config)} if view.kind == "board" else {"layout": _layout(view.config)}
+    )
     return _pb().SavedView(
+        **shape,
         id=str(view.pk),
         project_id=str(view.project_id),
         owner_id=str(view.owner_id or ""),
         name=view.name,
         kind=view.kind,
         is_shared=view.is_shared,
-        layout=_layout(view.config),
         version=view.version,
         updated_at=view.updated_at.isoformat(),
     )
@@ -102,6 +124,7 @@ class ViewService(generics.GenericService):
             {"name": "kind", "type": "string"},
             {"name": "layout", "type": Layout},
             {"name": "shared", "type": "bool"},
+            {"name": "board", "type": BoardLayout},
         ],
         request_name="ViewSaveRequest",
         response=SavedView,
@@ -117,7 +140,11 @@ class ViewService(generics.GenericService):
                     workspace,
                     request.project_id,
                     name=request.name,
-                    config=_config(request.layout),
+                    config=(
+                        _board_config(request.board)
+                        if request.kind == "board"
+                        else _config(request.layout)
+                    ),
                     kind=request.kind or "list",
                     view_id=request.id,
                     shared=request.shared,

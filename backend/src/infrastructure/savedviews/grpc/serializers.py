@@ -29,6 +29,27 @@ class Layout(serializers.Serializer[dict[str, object]]):
     group_by = serializers.CharField()
 
 
+class BoardLimit(serializers.Serializer[dict[str, object]]):
+    """The work-in-progress limit of one column, named by its key (``""``: the column of tasks
+    with no value)."""
+
+    column = serializers.CharField()
+    limit = serializers.IntegerField()
+
+
+class BoardLayout(serializers.Serializer[dict[str, object]]):
+    """What a board shows: the field its columns come from (``group_by``: ``status``,
+    ``priority``, ``assignee`` or ``field:<select field id>``), an optional ``swimlane``
+    (``assignee`` or empty), the ``card_fields`` on a card besides its title and id
+    (``assignee``, ``due_date``, ``priority``, ``progress`` or ``field:<id>``) and the column
+    ``limits``."""
+
+    group_by = serializers.CharField()
+    swimlane = serializers.CharField()
+    card_fields = serializers.ListField(child=serializers.CharField())
+    limits = BoardLimit(many=True)
+
+
 class SavedView(serializers.Serializer[dict[str, object]]):
     """A saved layout. ``owner_id`` is empty for a shared one (``is_shared``); ``version`` is the
     optimistic lock to send back when saving it again."""
@@ -40,5 +61,6 @@ class SavedView(serializers.Serializer[dict[str, object]]):
     kind = serializers.CharField()
     is_shared = serializers.BooleanField()
     layout = Layout()
+    board = BoardLayout()  # set instead of ``layout`` for a ``board`` view
     version = serializers.IntegerField()
     updated_at = serializers.CharField()

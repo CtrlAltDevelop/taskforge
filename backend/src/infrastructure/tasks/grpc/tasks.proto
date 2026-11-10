@@ -2,6 +2,12 @@ syntax = "proto3";
 
 package config.tasks;
 
+service BoardController {
+    rpc Get(BoardGetRequest) returns (BoardView) {}
+    rpc ListColumn(BoardListColumnRequest) returns (BoardPage) {}
+    rpc Move(BoardMoveRequest) returns (Task) {}
+}
+
 service LinkController {
     rpc Add(LinkAddRequest) returns (LinkList) {}
     rpc ListForTask(LinkListForTaskRequest) returns (LinkList) {}
@@ -22,6 +28,60 @@ service TaskController {
     rpc Restore(TaskRestoreRequest) returns (Task) {}
     rpc SetParent(TaskSetParentRequest) returns (Task) {}
     rpc Update(TaskUpdateRequest) returns (Task) {}
+}
+
+message BoardColumn {
+    string key = 1;
+    string name = 2;
+    int32 count = 3;
+    repeated Task tasks = 4;
+    string cursor = 5;
+}
+
+message BoardGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string group_by = 3;
+    string swimlane = 4;
+    int32 page_size = 5;
+}
+
+message BoardLane {
+    string key = 1;
+    repeated BoardColumn columns = 2;
+}
+
+message BoardListColumnRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string group_by = 3;
+    string swimlane = 4;
+    int32 page_size = 5;
+    string column = 6;
+    string lane = 7;
+    string cursor = 8;
+}
+
+message BoardMoveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string group_by = 5;
+    string column = 6;
+    string before_id = 7;
+    string after_id = 8;
+    bool include_subtasks = 9;
+    bool override_blocked = 10;
+}
+
+message BoardPage {
+    repeated Task tasks = 1;
+    string cursor = 2;
+}
+
+message BoardView {
+    repeated BoardLane lanes = 1;
 }
 
 message BulkResult {

@@ -110,3 +110,23 @@ class BulkResult(serializers.Serializer[dict[str, object]]):
     message = serializers.CharField()
     detail = serializers.CharField()
     task = Task()
+
+
+class BoardColumn(serializers.Serializer[dict[str, object]]):
+    """One column of a board: ``key`` is what its cards hold (a status id, a priority, a user id,
+    an option id; empty: tasks with no value), ``name`` is empty for people (the client names
+    them), ``count`` all its cards, ``tasks`` the first of them and ``cursor`` where
+    ``ListColumn`` goes on (empty: that was all of them)."""
+
+    key = serializers.CharField()
+    name = serializers.CharField()
+    count = serializers.IntegerField()
+    tasks = Task(many=True)
+    cursor = serializers.CharField()
+
+
+class BoardLane(serializers.Serializer[dict[str, object]]):
+    """A row of the board (the assignee ``key`` with swimlanes, empty for the only row without)."""
+
+    key = serializers.CharField()
+    columns = BoardColumn(many=True)

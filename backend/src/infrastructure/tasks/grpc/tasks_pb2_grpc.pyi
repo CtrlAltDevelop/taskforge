@@ -26,6 +26,46 @@ class _ServicerContext(_grpc.ServicerContext, _aio.ServicerContext):  # type: ig
 GRPC_GENERATED_VERSION: str
 GRPC_VERSION: str
 
+class BoardControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> BoardControllerAsyncStub: ...
+    Get: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.BoardGetRequest, _tasks_pb2.BoardView]
+    ListColumn: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.BoardListColumnRequest, _tasks_pb2.BoardPage]
+    Move: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.BoardMoveRequest, _tasks_pb2.Task]
+
+@_typing.type_check_only
+class BoardControllerAsyncStub(BoardControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Get: _aio.UnaryUnaryMultiCallable[_tasks_pb2.BoardGetRequest, _tasks_pb2.BoardView]  # type: ignore[assignment]
+    ListColumn: _aio.UnaryUnaryMultiCallable[_tasks_pb2.BoardListColumnRequest, _tasks_pb2.BoardPage]  # type: ignore[assignment]
+    Move: _aio.UnaryUnaryMultiCallable[_tasks_pb2.BoardMoveRequest, _tasks_pb2.Task]  # type: ignore[assignment]
+
+class BoardControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Get(
+        self,
+        request: _tasks_pb2.BoardGetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.BoardView, _abc.Awaitable[_tasks_pb2.BoardView]]: ...
+
+    @_abc_1.abstractmethod
+    def ListColumn(
+        self,
+        request: _tasks_pb2.BoardListColumnRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.BoardPage, _abc.Awaitable[_tasks_pb2.BoardPage]]: ...
+
+    @_abc_1.abstractmethod
+    def Move(
+        self,
+        request: _tasks_pb2.BoardMoveRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
+
+def add_BoardControllerServicer_to_server(servicer: BoardControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
 class LinkControllerStub:
     @_typing.overload
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...

@@ -413,4 +413,7 @@ def _next_result(results: Any) -> Any:
     return _pb().BulkResult(id=result.task_id, ok=True, task=_message(result.task, "TaskResponse"))
 
 
-GRPC_SERVICES = [TaskService, LinkService]
+# Imported last: the board adapter reuses the helpers above.
+from infrastructure.tasks.grpc.board_services import BoardService  # noqa: E402
+
+GRPC_SERVICES = [TaskService, LinkService, BoardService]

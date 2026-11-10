@@ -19,6 +19,221 @@ else:
 DESCRIPTOR: _descriptor.FileDescriptor
 
 @_typing.final
+class BoardColumn(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    KEY_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    COUNT_FIELD_NUMBER: _builtins.int
+    TASKS_FIELD_NUMBER: _builtins.int
+    CURSOR_FIELD_NUMBER: _builtins.int
+    key: _builtins.str
+    name: _builtins.str
+    count: _builtins.int
+    cursor: _builtins.str
+    @_builtins.property
+    def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Task]: ...
+    def __init__(
+        self,
+        *,
+        key: _builtins.str = ...,
+        name: _builtins.str = ...,
+        count: _builtins.int = ...,
+        tasks: _abc.Iterable[Global___Task] | None = ...,
+        cursor: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["count", b"count", "cursor", b"cursor", "key", b"key", "name", b"name", "tasks", b"tasks"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardColumn: _TypeAlias = BoardColumn  # noqa: Y015
+
+@_typing.final
+class BoardGetRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    GROUP_BY_FIELD_NUMBER: _builtins.int
+    SWIMLANE_FIELD_NUMBER: _builtins.int
+    PAGE_SIZE_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    group_by: _builtins.str
+    swimlane: _builtins.str
+    page_size: _builtins.int
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        group_by: _builtins.str = ...,
+        swimlane: _builtins.str = ...,
+        page_size: _builtins.int = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["group_by", b"group_by", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardGetRequest: _TypeAlias = BoardGetRequest  # noqa: Y015
+
+@_typing.final
+class BoardLane(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    KEY_FIELD_NUMBER: _builtins.int
+    COLUMNS_FIELD_NUMBER: _builtins.int
+    key: _builtins.str
+    @_builtins.property
+    def columns(self) -> _containers.RepeatedCompositeFieldContainer[Global___BoardColumn]: ...
+    def __init__(
+        self,
+        *,
+        key: _builtins.str = ...,
+        columns: _abc.Iterable[Global___BoardColumn] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["columns", b"columns", "key", b"key"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardLane: _TypeAlias = BoardLane  # noqa: Y015
+
+@_typing.final
+class BoardListColumnRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    GROUP_BY_FIELD_NUMBER: _builtins.int
+    SWIMLANE_FIELD_NUMBER: _builtins.int
+    PAGE_SIZE_FIELD_NUMBER: _builtins.int
+    COLUMN_FIELD_NUMBER: _builtins.int
+    LANE_FIELD_NUMBER: _builtins.int
+    CURSOR_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    group_by: _builtins.str
+    swimlane: _builtins.str
+    page_size: _builtins.int
+    column: _builtins.str
+    lane: _builtins.str
+    cursor: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        group_by: _builtins.str = ...,
+        swimlane: _builtins.str = ...,
+        page_size: _builtins.int = ...,
+        column: _builtins.str = ...,
+        lane: _builtins.str = ...,
+        cursor: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["column", b"column", "cursor", b"cursor", "group_by", b"group_by", "lane", b"lane", "page_size", b"page_size", "project_id", b"project_id", "swimlane", b"swimlane", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardListColumnRequest: _TypeAlias = BoardListColumnRequest  # noqa: Y015
+
+@_typing.final
+class BoardMoveRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    ID_FIELD_NUMBER: _builtins.int
+    EXPECTED_VERSION_FIELD_NUMBER: _builtins.int
+    GROUP_BY_FIELD_NUMBER: _builtins.int
+    COLUMN_FIELD_NUMBER: _builtins.int
+    BEFORE_ID_FIELD_NUMBER: _builtins.int
+    AFTER_ID_FIELD_NUMBER: _builtins.int
+    INCLUDE_SUBTASKS_FIELD_NUMBER: _builtins.int
+    OVERRIDE_BLOCKED_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    id: _builtins.str
+    expected_version: _builtins.int
+    group_by: _builtins.str
+    column: _builtins.str
+    before_id: _builtins.str
+    after_id: _builtins.str
+    include_subtasks: _builtins.bool
+    override_blocked: _builtins.bool
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        id: _builtins.str = ...,
+        expected_version: _builtins.int = ...,
+        group_by: _builtins.str = ...,
+        column: _builtins.str = ...,
+        before_id: _builtins.str = ...,
+        after_id: _builtins.str = ...,
+        include_subtasks: _builtins.bool = ...,
+        override_blocked: _builtins.bool = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["after_id", b"after_id", "before_id", b"before_id", "column", b"column", "expected_version", b"expected_version", "group_by", b"group_by", "id", b"id", "include_subtasks", b"include_subtasks", "override_blocked", b"override_blocked", "project_id", b"project_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardMoveRequest: _TypeAlias = BoardMoveRequest  # noqa: Y015
+
+@_typing.final
+class BoardPage(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASKS_FIELD_NUMBER: _builtins.int
+    CURSOR_FIELD_NUMBER: _builtins.int
+    cursor: _builtins.str
+    @_builtins.property
+    def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Task]: ...
+    def __init__(
+        self,
+        *,
+        tasks: _abc.Iterable[Global___Task] | None = ...,
+        cursor: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cursor", b"cursor", "tasks", b"tasks"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardPage: _TypeAlias = BoardPage  # noqa: Y015
+
+@_typing.final
+class BoardView(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    LANES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def lanes(self) -> _containers.RepeatedCompositeFieldContainer[Global___BoardLane]: ...
+    def __init__(
+        self,
+        *,
+        lanes: _abc.Iterable[Global___BoardLane] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["lanes", b"lanes"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardView: _TypeAlias = BoardView  # noqa: Y015
+
+@_typing.final
 class BulkResult(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 

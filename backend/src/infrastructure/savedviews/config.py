@@ -22,6 +22,13 @@ MAX_COLUMNS: Final = 60
 MIN_WIDTH, MAX_WIDTH = 40, 1200
 KEYS: Final = ("columns", "widths", "sort", "group_by")
 
+BOARD_KEYS: Final = ("group_by", "swimlane", "card_fields", "limits")
+CARD_FIELDS: Final = ("assignee", "due_date", "priority", "progress")  # title and id always show
+DEFAULT_CARD_FIELDS: Final = list(CARD_FIELDS)
+SWIMLANES: Final = ("", "assignee")
+MAX_LIMITS: Final = 200
+MAX_LIMIT: Final = 9999
+
 
 def invalid(message: str) -> ApiError:
     return ApiError(message, title=ResponseTitle.VIEW_INVALID)
@@ -96,3 +103,46 @@ def clean(raw: Any) -> dict[str, Any]:
         "sort": cleaned_sort,
         "group_by": group_by,
     }
+
+
+def clean_board(raw: Any) -> dict[str, Any]:
+    """A board layout with every key present, or ``VIEW_INVALID``. ``limits`` maps a column's key
+    (a status id, a priority, a user id, an option id; ``""`` for the column of tasks with none)
+    to its work-in-progress limit."""
+    if not isinstance(raw, dict):
+        raise invalid("A layout is an object.")
+    unknown = set(raw) - set(BOARD_KEYS)
+    if unknown:
+        raise invalid(f"Unknown layout key: {sorted(unknown)[0]}.")
+    group_by = raw.get("group_by", "status")
+    if not (group_by in listing.GROUP_KEYS or _field_ref(group_by)):
+        raise invalid(f"Cannot group a board by {group_by!r}.")
+    swimlane = raw.get("swimlane", "")
+    if swimlane not in SWIMLANES:
+        raise invalid(f"Cannot split a board into lanes by {swimlane!r}.")
+    fields = raw.get("card_fields", DEFAULT_CARD_FIELDS)
+    if not isinstance(fields, list) or len(fields) > MAX_COLUMNS:
+        raise invalid("card_fields is a list of card fields.")
+    for name in fields:
+        if name not in CARD_FIELDS and not _field_ref(name):
+            raise invalid(f"{name!r} is not a card field.")
+    if len(set(fields)) != len(fields):
+        raise invalid("A card field is listed once.")
+    limits = raw.get("limits", {})
+    if not isinstance(limits, dict) or len(limits) > MAX_LIMITS:
+        raise invalid("limits maps column keys to limits.")
+    for key, limit in limits.items():
+        if not isinstance(key, str) or isinstance(limit, bool) or not isinstance(limit, int):
+            raise invalid("A limit is a whole number.")
+        if not 1 <= limit <= MAX_LIMIT:
+            raise invalid(f"A limit is between 1 and {MAX_LIMIT}.")
+    return {
+        "group_by": group_by,
+        "swimlane": swimlane,
+        "card_fields": list(fields),
+        "limits": dict(limits),
+    }
+
+
+def clean_for(kind: str, raw: Any) -> dict[str, Any]:
+    return clean_board(raw) if kind == "board" else clean(raw)

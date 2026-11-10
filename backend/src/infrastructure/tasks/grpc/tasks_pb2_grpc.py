@@ -25,6 +25,164 @@ if _version_not_supported:
     )
 
 
+class BoardControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Get = channel.unary_unary(
+                '/config.tasks.BoardController/Get',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardGetRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardView.FromString,
+                _registered_method=True)
+        self.ListColumn = channel.unary_unary(
+                '/config.tasks.BoardController/ListColumn',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardListColumnRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardPage.FromString,
+                _registered_method=True)
+        self.Move = channel.unary_unary(
+                '/config.tasks.BoardController/Move',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardMoveRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+                _registered_method=True)
+
+
+class BoardControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Get(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListColumn(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Move(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_BoardControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Get': grpc.unary_unary_rpc_method_handler(
+                    servicer.Get,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardGetRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardView.SerializeToString,
+            ),
+            'ListColumn': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListColumn,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardListColumnRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardPage.SerializeToString,
+            ),
+            'Move': grpc.unary_unary_rpc_method_handler(
+                    servicer.Move,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardMoveRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.tasks.BoardController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.tasks.BoardController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class BoardController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Get(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.BoardController/Get',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardGetRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardView.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListColumn(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.BoardController/ListColumn',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardListColumnRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardPage.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Move(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.BoardController/Move',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.BoardMoveRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.Task.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
 class LinkControllerStub:
     """Missing associated documentation comment in .proto file."""
 

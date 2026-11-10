@@ -162,3 +162,58 @@ def move_subtree(task: Task, new_parent: Task | None) -> list[uuid.UUID]:
     task.depth, task.path, task.tree_key = depth, path, key
     new_above = ancestor_ids(task)
     return [*old_above, *new_above]
+
+
+def reposition(task: Task, position: str) -> None:
+    """Give a top-level ``task`` another ``position`` among its siblings, with its whole subtree
+    (their ``tree_key`` all start with the task's own). Counts one edit on the task. The caller
+    holds the project lock and chooses a rank that sorts where the task should go."""
+    if task.parent_id is not None:
+        raise ValueError("only a top-level task is repositioned by rank")
+    old_key, new_key = task.tree_key, f"{position}{SEP}"
+    Task.objects.filter(project_id=task.project_id, path__startswith=task.path).update(
+        tree_key=Concat(
+            Value(new_key), Substr("tree_key", len(old_key) + 1), output_field=CharField()
+        )
+    )
+    task.position, task.tree_key = position, new_key
+    task.version += 1
+    task.field_versions = {**task.field_versions, "position": task.version}
+    task.updated_at = timezone.now()
+    task.save(update_fields=["position", "version", "field_versions", "updated_at"])
+
+
+def rebalance(project_id: uuid.UUID) -> None:
+    """Spread the project's top-level ranks evenly again, in the order they already sort in, so
+    ranks made by many drops into one gap are short once more. Versions are left alone: no task
+    changes place relative to another. Two bulk writes for every task, plus one prefix rewrite
+    per task that has subtasks (the caller holds the project lock)."""
+    top = list(
+        Task.objects.filter(project_id=project_id, parent__isnull=True).order_by(
+            "position", "number"
+        )
+    )
+    parents = set(
+        Task.objects.filter(project_id=project_id, parent__in=[t.pk for t in top]).values_list(
+            "parent_id", flat=True
+        )
+    )
+    last: str | None = None
+    moved: list[Task] = []
+    for task in top:
+        position = rank.after(last)
+        last = position
+        if task.position == position:
+            continue
+        old_key, new_key = task.tree_key, f"{position}{SEP}"
+        if task.pk in parents:
+            Task.objects.filter(
+                project_id=project_id, path__startswith=task.path, parent__isnull=False
+            ).update(
+                tree_key=Concat(
+                    Value(new_key), Substr("tree_key", len(old_key) + 1), output_field=CharField()
+                )
+            )
+        task.position, task.tree_key = position, new_key
+        moved.append(task)
+    Task.objects.bulk_update(moved, ["position", "tree_key"], batch_size=500)

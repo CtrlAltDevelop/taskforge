@@ -19,6 +19,110 @@ else:
 DESCRIPTOR: _descriptor.FileDescriptor
 
 @_typing.final
+class BoardLayout(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    GROUP_BY_FIELD_NUMBER: _builtins.int
+    SWIMLANE_FIELD_NUMBER: _builtins.int
+    CARD_FIELDS_FIELD_NUMBER: _builtins.int
+    LIMITS_FIELD_NUMBER: _builtins.int
+    group_by: _builtins.str
+    swimlane: _builtins.str
+    @_builtins.property
+    def card_fields(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def limits(self) -> _containers.RepeatedCompositeFieldContainer[Global___BoardLimit]: ...
+    def __init__(
+        self,
+        *,
+        group_by: _builtins.str = ...,
+        swimlane: _builtins.str = ...,
+        card_fields: _abc.Iterable[_builtins.str] | None = ...,
+        limits: _abc.Iterable[Global___BoardLimit] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["card_fields", b"card_fields", "group_by", b"group_by", "limits", b"limits", "swimlane", b"swimlane"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardLayout: _TypeAlias = BoardLayout  # noqa: Y015
+
+@_typing.final
+class BoardLayoutResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    GROUP_BY_FIELD_NUMBER: _builtins.int
+    SWIMLANE_FIELD_NUMBER: _builtins.int
+    CARD_FIELDS_FIELD_NUMBER: _builtins.int
+    LIMITS_FIELD_NUMBER: _builtins.int
+    group_by: _builtins.str
+    swimlane: _builtins.str
+    @_builtins.property
+    def card_fields(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def limits(self) -> _containers.RepeatedCompositeFieldContainer[Global___BoardLimitResponse]: ...
+    def __init__(
+        self,
+        *,
+        group_by: _builtins.str = ...,
+        swimlane: _builtins.str = ...,
+        card_fields: _abc.Iterable[_builtins.str] | None = ...,
+        limits: _abc.Iterable[Global___BoardLimitResponse] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["card_fields", b"card_fields", "group_by", b"group_by", "limits", b"limits", "swimlane", b"swimlane"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardLayoutResponse: _TypeAlias = BoardLayoutResponse  # noqa: Y015
+
+@_typing.final
+class BoardLimit(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    COLUMN_FIELD_NUMBER: _builtins.int
+    LIMIT_FIELD_NUMBER: _builtins.int
+    column: _builtins.str
+    limit: _builtins.int
+    def __init__(
+        self,
+        *,
+        column: _builtins.str = ...,
+        limit: _builtins.int = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["column", b"column", "limit", b"limit"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardLimit: _TypeAlias = BoardLimit  # noqa: Y015
+
+@_typing.final
+class BoardLimitResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    COLUMN_FIELD_NUMBER: _builtins.int
+    LIMIT_FIELD_NUMBER: _builtins.int
+    column: _builtins.str
+    limit: _builtins.int
+    def __init__(
+        self,
+        *,
+        column: _builtins.str = ...,
+        limit: _builtins.int = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["column", b"column", "limit", b"limit"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___BoardLimitResponse: _TypeAlias = BoardLimitResponse  # noqa: Y015
+
+@_typing.final
 class Layout(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -181,6 +285,7 @@ class SavedView(_message.Message):
     LAYOUT_FIELD_NUMBER: _builtins.int
     VERSION_FIELD_NUMBER: _builtins.int
     UPDATED_AT_FIELD_NUMBER: _builtins.int
+    BOARD_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     project_id: _builtins.str
     owner_id: _builtins.str
@@ -191,6 +296,8 @@ class SavedView(_message.Message):
     updated_at: _builtins.str
     @_builtins.property
     def layout(self) -> Global___LayoutResponse: ...
+    @_builtins.property
+    def board(self) -> Global___BoardLayoutResponse: ...
     def __init__(
         self,
         *,
@@ -203,10 +310,11 @@ class SavedView(_message.Message):
         layout: Global___LayoutResponse | None = ...,
         version: _builtins.int = ...,
         updated_at: _builtins.str = ...,
+        board: Global___BoardLayoutResponse | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["layout", b"layout"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "layout", b"layout"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "project_id", b"project_id", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "project_id", b"project_id", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -294,6 +402,7 @@ class ViewSaveRequest(_message.Message):
     KIND_FIELD_NUMBER: _builtins.int
     LAYOUT_FIELD_NUMBER: _builtins.int
     SHARED_FIELD_NUMBER: _builtins.int
+    BOARD_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     id: _builtins.str
@@ -303,6 +412,8 @@ class ViewSaveRequest(_message.Message):
     shared: _builtins.bool
     @_builtins.property
     def layout(self) -> Global___Layout: ...
+    @_builtins.property
+    def board(self) -> Global___BoardLayout: ...
     def __init__(
         self,
         *,
@@ -314,10 +425,11 @@ class ViewSaveRequest(_message.Message):
         kind: _builtins.str = ...,
         layout: Global___Layout | None = ...,
         shared: _builtins.bool = ...,
+        board: Global___BoardLayout | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["layout", b"layout"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "layout", b"layout"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "project_id", b"project_id", "shared", b"shared", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["board", b"board", "expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "project_id", b"project_id", "shared", b"shared", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

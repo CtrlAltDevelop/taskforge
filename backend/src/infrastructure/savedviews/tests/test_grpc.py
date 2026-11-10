@@ -70,6 +70,24 @@ def test_save_and_list_round_trip_the_whole_layout(team: Any, grpc_call: GrpcCal
     assert got.layout.group_by == "status"
 
 
+def test_a_board_layout_round_trips_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
+    board = pb.BoardLayout(
+        group_by="priority",
+        swimlane="assignee",
+        card_fields=["due_date"],
+        limits=[pb.BoardLimit(column="high", limit=3)],
+    )
+
+    saved = _save(grpc_call, team, kind="board", board=board)
+    request = pb.ViewListRequest(workspace_id=team["ws"], project_id=team["project"], kind="board")
+    [got] = grpc_call(V, "List", request, token=team["tokens"]["max"]).views
+
+    assert got.id == saved.id and got.kind == "board"
+    assert (got.board.group_by, got.board.swimlane) == ("priority", "assignee")
+    assert list(got.board.card_fields) == ["due_date"]
+    assert [(x.column, x.limit) for x in got.board.limits] == [("high", 3)]
+
+
 def test_a_second_save_needs_the_version_and_a_stale_one_aborts(
     team: Any, grpc_call: GrpcCall
 ) -> None:

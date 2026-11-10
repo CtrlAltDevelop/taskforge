@@ -8,6 +8,30 @@ service ViewController {
     rpc Save(ViewSaveRequest) returns (SavedView) {}
 }
 
+message BoardLayout {
+    string group_by = 1;
+    string swimlane = 2;
+    repeated string card_fields = 3;
+    repeated BoardLimit limits = 4;
+}
+
+message BoardLayoutResponse {
+    string group_by = 1;
+    string swimlane = 2;
+    repeated string card_fields = 3;
+    repeated BoardLimitResponse limits = 4;
+}
+
+message BoardLimit {
+    string column = 1;
+    int32 limit = 2;
+}
+
+message BoardLimitResponse {
+    string column = 1;
+    int32 limit = 2;
+}
+
 message Layout {
     repeated string columns = 1;
     repeated LayoutWidth widths = 2;
@@ -52,6 +76,7 @@ message SavedView {
     LayoutResponse layout = 7;
     int32 version = 8;
     string updated_at = 9;
+    BoardLayoutResponse board = 10;
 }
 
 message ViewDeleteRequest {
@@ -79,5 +104,6 @@ message ViewSaveRequest {
     string kind = 6;
     Layout layout = 7;
     bool shared = 8;
+    BoardLayout board = 9;
 }
 
