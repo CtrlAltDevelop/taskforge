@@ -189,6 +189,22 @@ def test_a_calendar_layout_round_trips_over_the_wire(team: Any, grpc_call: GrpcC
     assert (got.calendar.week_start, got.calendar.hide_done) == (7, True)
 
 
+def test_a_timeline_layout_round_trips_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
+    timeline = pb.TimelineLayout(
+        zoom="quarter", group_by="assignee", hide_done=True, critical_path=True
+    )
+
+    _save(grpc_call, team, kind="timeline", timeline=timeline)
+    request = pb.ViewListRequest(
+        workspace_id=team["ws"], project_id=team["project"], kind="timeline"
+    )
+    [got] = grpc_call(V, "List", request, token=team["tokens"]["max"]).views
+
+    assert got.kind == "timeline"
+    assert (got.timeline.zoom, got.timeline.group_by) == ("quarter", "assignee")
+    assert (got.timeline.hide_done, got.timeline.critical_path) == (True, True)
+
+
 def test_the_active_filter_round_trips_over_the_wire(team: Any, grpc_call: GrpcCall) -> None:
     ast = {
         "where": {

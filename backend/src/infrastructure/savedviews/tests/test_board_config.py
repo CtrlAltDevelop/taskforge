@@ -128,3 +128,36 @@ def test_the_active_filter_is_kept_per_person_and_checked_against_the_project(
         kind="filter", view_id=str(saved.pk), expected_version=1,
     )  # fmt: skip
     assert cleared.config == {"ast": None, "saved_id": ""} and cleared.version == 2
+
+
+def test_a_timeline_layout_round_trips_and_gets_defaults(team: Any, project: Any) -> None:
+    layout = {"zoom": "quarter", "group_by": "assignee", "hide_done": True, "critical_path": True}
+    services.save(
+        team.member, team.ws, str(project.pk), name="Mine", config=layout, kind="timeline"
+    )
+
+    [got] = services.list_views(team.member, team.ws, str(project.pk), "timeline")
+
+    assert got.config == layout
+    assert config.clean_timeline({}) == {
+        "zoom": "week",
+        "group_by": "",
+        "hide_done": False,
+        "critical_path": False,
+    }
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"zoom": "year"},
+        {"group_by": "priority"},
+        {"hide_done": "yes"},
+        {"critical_path": 1},
+        {"mode": "week"},
+        [],
+    ],
+)
+def test_a_timeline_layout_that_means_nothing_is_refused(bad: Any) -> None:
+    with pytest.raises(ApiError):
+        config.clean_timeline(bad)

@@ -172,6 +172,31 @@ def clean_calendar(raw: Any) -> dict[str, Any]:
     return {"mode": mode, "color_by": color_by, "week_start": week_start, "hide_done": hide_done}
 
 
+TIMELINE_KEYS: Final = ("zoom", "group_by", "hide_done", "critical_path")
+TIMELINE_ZOOMS: Final = ("day", "week", "month", "quarter")
+TIMELINE_GROUPS: Final = ("", "assignee", "status")
+
+
+def clean_timeline(raw: Any) -> dict[str, Any]:
+    """A timeline layout with every key present, or ``VIEW_INVALID``: the zoom, what rows are
+    grouped by, whether finished tasks are hidden and whether the critical path is lit."""
+    if not isinstance(raw, dict):
+        raise invalid("A layout is an object.")
+    unknown = set(raw) - set(TIMELINE_KEYS)
+    if unknown:
+        raise invalid(f"Unknown layout key: {sorted(unknown)[0]}.")
+    zoom = raw.get("zoom", "week")
+    if zoom not in TIMELINE_ZOOMS:
+        raise invalid(f"{zoom!r} is not a timeline zoom.")
+    group_by = raw.get("group_by", "")
+    if group_by not in TIMELINE_GROUPS:
+        raise invalid(f"Cannot group a timeline by {group_by!r}.")
+    flags = {k: raw.get(k, False) for k in ("hide_done", "critical_path")}
+    if any(not isinstance(v, bool) for v in flags.values()):
+        raise invalid("hide_done and critical_path are true or false.")
+    return {"zoom": zoom, "group_by": group_by, **flags}
+
+
 FILTER_KEYS: Final = ("ast", "saved_id")
 
 
@@ -197,4 +222,6 @@ def clean_for(kind: str, raw: Any) -> dict[str, Any]:
         return clean_board(raw)
     if kind == "calendar":
         return clean_calendar(raw)
+    if kind == "timeline":
+        return clean_timeline(raw)
     return clean_filter(raw) if kind == "filter" else clean(raw)

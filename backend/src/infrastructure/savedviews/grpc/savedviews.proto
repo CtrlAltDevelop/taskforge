@@ -103,6 +103,21 @@ message SavedView {
     BoardLayoutResponse board = 10;
     CalendarLayoutResponse calendar = 11;
     FilterLayoutResponse active_filter = 12;
+    TimelineLayoutResponse timeline = 13;
+}
+
+message TimelineLayout {
+    string zoom = 1;
+    string group_by = 2;
+    bool hide_done = 3;
+    bool critical_path = 4;
+}
+
+message TimelineLayoutResponse {
+    string zoom = 1;
+    string group_by = 2;
+    bool hide_done = 3;
+    bool critical_path = 4;
 }
 
 message ViewDeleteRequest {
@@ -133,5 +148,6 @@ message ViewSaveRequest {
     BoardLayout board = 9;
     CalendarLayout calendar = 10;
     FilterLayout active_filter = 11;
+    TimelineLayout timeline = 12;
 }
 

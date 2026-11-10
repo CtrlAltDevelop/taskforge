@@ -33,12 +33,12 @@ def _day(raw: str, name: str) -> date:
         raise ApiError(f"{name} is a date like 2026-11-05.") from None
 
 
-def _window(first: str, last: str) -> tuple[date, date]:
+def _window(first: str, last: str, max_days: int = MAX_DAYS) -> tuple[date, date]:
     start, end = _day(first, "from"), _day(last, "to")
     if end < start:
         raise ApiError("The range ends before it starts.")
-    if (end - start) > timedelta(days=MAX_DAYS):
-        raise ApiError(f"Ask for at most {MAX_DAYS} days at a time.")
+    if (end - start) > timedelta(days=max_days):
+        raise ApiError(f"Ask for at most {max_days} days at a time.")
     return start, end
 
 
@@ -81,10 +81,12 @@ def iter_range(
     include_done: bool = True,
     filter_ast: str = "",
     today: str = "",
+    max_days: int = MAX_DAYS,
 ) -> Iterator[list[Task]]:
     """Live tasks (subtasks too) that fall on any day from ``first`` to ``last`` inclusive,
-    in task-number order, in chunks of ``CHUNK``; ``filter_ast`` narrows them (see ``filters``)."""
-    start, end = _window(first, last)
+    in task-number order, in chunks of ``CHUNK``; ``filter_ast`` narrows them (see ``filters``).
+    ``max_days`` is the widest range allowed (the timeline asks for more than a month grid)."""
+    start, end = _window(first, last, max_days)
     project = services.project_for_view(actor, workspace, project_id)
     extra = filter_query.prepare(project, filter_ast, today, actor).where
     rows = _on_days(

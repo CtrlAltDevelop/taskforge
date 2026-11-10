@@ -28,6 +28,7 @@ from infrastructure.savedviews.grpc.serializers import (
     FilterLayout,
     Layout,
     SavedView,
+    TimelineLayout,
 )
 from infrastructure.savedviews.models import SavedView as ViewRow
 from infrastructure.workspaces.scoping import require_workspace
@@ -92,6 +93,24 @@ def _calendar_config(calendar: Any) -> dict[str, Any]:
     }
 
 
+def _timeline(config: dict[str, Any]) -> Any:
+    return _pb().TimelineLayoutResponse(
+        zoom=config["zoom"],
+        group_by=config["group_by"],
+        hide_done=config["hide_done"],
+        critical_path=config["critical_path"],
+    )
+
+
+def _timeline_config(timeline: Any) -> dict[str, Any]:
+    return {
+        "zoom": timeline.zoom,
+        "group_by": timeline.group_by,
+        "hide_done": timeline.hide_done,
+        "critical_path": timeline.critical_path,
+    }
+
+
 def _filter(config: dict[str, Any]) -> Any:
     return _pb().FilterLayoutResponse(
         ast_json=json.dumps(config["ast"]) if config["ast"] else "",
@@ -120,6 +139,7 @@ def _message(view: ViewRow) -> Any:
     shape = {
         "board": lambda: {"board": _board(view.config)},
         "calendar": lambda: {"calendar": _calendar(view.config)},
+        "timeline": lambda: {"timeline": _timeline(view.config)},
         "filter": lambda: {"active_filter": _filter(view.config)},
     }.get(view.kind, lambda: {"layout": _layout(view.config)})()
     return _pb().SavedView(
@@ -140,6 +160,8 @@ def _requested_config(request: Any) -> dict[str, Any]:
         return _board_config(request.board)
     if request.kind == "calendar":
         return _calendar_config(request.calendar)
+    if request.kind == "timeline":
+        return _timeline_config(request.timeline)
     if request.kind == "filter":
         return _filter_config(request.active_filter)
     return _config(request.layout)
@@ -180,6 +202,7 @@ class ViewService(generics.GenericService):
             {"name": "shared", "type": "bool"},
             {"name": "board", "type": BoardLayout},
             {"name": "calendar", "type": CalendarLayout},
+            {"name": "timeline", "type": TimelineLayout},
             {"name": "active_filter", "type": FilterLayout},
         ],
         request_name="ViewSaveRequest",

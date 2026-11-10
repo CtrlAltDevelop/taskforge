@@ -1473,3 +1473,333 @@ class TaskUpdateRequest(_message.Message):
     def WhichOneof(self, oneof_group: _WhichOneofArgType__title) -> _WhichOneofReturnType__title | None: ...
 
 Global___TaskUpdateRequest: _TypeAlias = TaskUpdateRequest  # noqa: Y015
+
+@_typing.final
+class TimelineApplied(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASKS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Task]: ...
+    def __init__(
+        self,
+        *,
+        tasks: _abc.Iterable[Global___Task] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["tasks", b"tasks"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineApplied: _TypeAlias = TimelineApplied  # noqa: Y015
+
+@_typing.final
+class TimelineApplyRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    TASK_ID_FIELD_NUMBER: _builtins.int
+    START_DATE_FIELD_NUMBER: _builtins.int
+    DUE_DATE_FIELD_NUMBER: _builtins.int
+    EXPECTED_VERSION_FIELD_NUMBER: _builtins.int
+    AFFECTED_IDS_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    task_id: _builtins.str
+    start_date: _builtins.str
+    due_date: _builtins.str
+    expected_version: _builtins.int
+    @_builtins.property
+    def affected_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        task_id: _builtins.str = ...,
+        start_date: _builtins.str = ...,
+        due_date: _builtins.str = ...,
+        expected_version: _builtins.int = ...,
+        affected_ids: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["affected_ids", b"affected_ids", "due_date", b"due_date", "expected_version", b"expected_version", "project_id", b"project_id", "start_date", b"start_date", "task_id", b"task_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineApplyRequest: _TypeAlias = TimelineApplyRequest  # noqa: Y015
+
+@_typing.final
+class TimelineChunk(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASKS_FIELD_NUMBER: _builtins.int
+    LINKS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Task]: ...
+    @_builtins.property
+    def links(self) -> _containers.RepeatedCompositeFieldContainer[Global___TimelineLink]: ...
+    def __init__(
+        self,
+        *,
+        tasks: _abc.Iterable[Global___Task] | None = ...,
+        links: _abc.Iterable[Global___TimelineLink] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["links", b"links", "tasks", b"tasks"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineChunk: _TypeAlias = TimelineChunk  # noqa: Y015
+
+@_typing.final
+class TimelineCriticalPath(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASK_IDS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def task_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        task_ids: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["task_ids", b"task_ids"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineCriticalPath: _TypeAlias = TimelineCriticalPath  # noqa: Y015
+
+@_typing.final
+class TimelineCriticalPathRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["project_id", b"project_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineCriticalPathRequest: _TypeAlias = TimelineCriticalPathRequest  # noqa: Y015
+
+@_typing.final
+class TimelineGetRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    RANGE_START_FIELD_NUMBER: _builtins.int
+    RANGE_END_FIELD_NUMBER: _builtins.int
+    INCLUDE_DONE_FIELD_NUMBER: _builtins.int
+    FILTER_AST_FIELD_NUMBER: _builtins.int
+    TODAY_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    range_start: _builtins.str
+    range_end: _builtins.str
+    include_done: _builtins.bool
+    filter_ast: _builtins.str
+    today: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        range_start: _builtins.str = ...,
+        range_end: _builtins.str = ...,
+        include_done: _builtins.bool = ...,
+        filter_ast: _builtins.str = ...,
+        today: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["filter_ast", b"filter_ast", "include_done", b"include_done", "project_id", b"project_id", "range_end", b"range_end", "range_start", b"range_start", "today", b"today", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineGetRequest: _TypeAlias = TimelineGetRequest  # noqa: Y015
+
+@_typing.final
+class TimelineLink(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    FROM_ID_FIELD_NUMBER: _builtins.int
+    TO_ID_FIELD_NUMBER: _builtins.int
+    from_id: _builtins.str
+    to_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        from_id: _builtins.str = ...,
+        to_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["from_id", b"from_id", "to_id", b"to_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineLink: _TypeAlias = TimelineLink  # noqa: Y015
+
+@_typing.final
+class TimelinePreviewRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    PROJECT_ID_FIELD_NUMBER: _builtins.int
+    TASK_ID_FIELD_NUMBER: _builtins.int
+    START_DATE_FIELD_NUMBER: _builtins.int
+    DUE_DATE_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    project_id: _builtins.str
+    task_id: _builtins.str
+    start_date: _builtins.str
+    due_date: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        project_id: _builtins.str = ...,
+        task_id: _builtins.str = ...,
+        start_date: _builtins.str = ...,
+        due_date: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["due_date", b"due_date", "project_id", b"project_id", "start_date", b"start_date", "task_id", b"task_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelinePreviewRequest: _TypeAlias = TimelinePreviewRequest  # noqa: Y015
+
+@_typing.final
+class TimelineShift(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TASK_FIELD_NUMBER: _builtins.int
+    NEW_START_FIELD_NUMBER: _builtins.int
+    NEW_DUE_FIELD_NUMBER: _builtins.int
+    new_start: _builtins.str
+    new_due: _builtins.str
+    @_builtins.property
+    def task(self) -> Global___Task: ...
+    def __init__(
+        self,
+        *,
+        task: Global___Task | None = ...,
+        new_start: _builtins.str = ...,
+        new_due: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["task", b"task"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["new_due", b"new_due", "new_start", b"new_start", "task", b"task"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineShift: _TypeAlias = TimelineShift  # noqa: Y015
+
+@_typing.final
+class TimelineShifts(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SHIFTS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def shifts(self) -> _containers.RepeatedCompositeFieldContainer[Global___TimelineShift]: ...
+    def __init__(
+        self,
+        *,
+        shifts: _abc.Iterable[Global___TimelineShift] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["shifts", b"shifts"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineShifts: _TypeAlias = TimelineShifts  # noqa: Y015
+
+@_typing.final
+class TimelineWorkingDays(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    DAYS_FIELD_NUMBER: _builtins.int
+    HOLIDAYS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def days(self) -> _containers.RepeatedScalarFieldContainer[_builtins.int]: ...
+    @_builtins.property
+    def holidays(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        days: _abc.Iterable[_builtins.int] | None = ...,
+        holidays: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["days", b"days", "holidays", b"holidays"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineWorkingDays: _TypeAlias = TimelineWorkingDays  # noqa: Y015
+
+@_typing.final
+class TimelineWorkingDaysGetRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineWorkingDaysGetRequest: _TypeAlias = TimelineWorkingDaysGetRequest  # noqa: Y015
+
+@_typing.final
+class TimelineWorkingDaysSetRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    DAYS_FIELD_NUMBER: _builtins.int
+    HOLIDAYS_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    @_builtins.property
+    def days(self) -> _containers.RepeatedScalarFieldContainer[_builtins.int]: ...
+    @_builtins.property
+    def holidays(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        days: _abc.Iterable[_builtins.int] | None = ...,
+        holidays: _abc.Iterable[_builtins.str] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["days", b"days", "holidays", b"holidays", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___TimelineWorkingDaysSetRequest: _TypeAlias = TimelineWorkingDaysSetRequest  # noqa: Y015

@@ -275,3 +275,70 @@ class TaskControllerServicer(metaclass=_abc_1.ABCMeta):
     ) -> _typing.Union[_tasks_pb2.Task, _abc.Awaitable[_tasks_pb2.Task]]: ...
 
 def add_TaskControllerServicer_to_server(servicer: TaskControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
+class TimelineControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> TimelineControllerAsyncStub: ...
+    ApplyShift: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TimelineApplyRequest, _tasks_pb2.TimelineApplied]
+    CriticalPath: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TimelineCriticalPathRequest, _tasks_pb2.TimelineCriticalPath]
+    Get: _grpc.UnaryStreamMultiCallable[_tasks_pb2.TimelineGetRequest, _tasks_pb2.TimelineChunk]
+    GetWorkingDays: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TimelineWorkingDaysGetRequest, _tasks_pb2.TimelineWorkingDays]
+    PreviewShift: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TimelinePreviewRequest, _tasks_pb2.TimelineShifts]
+    SetWorkingDays: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.TimelineWorkingDaysSetRequest, _tasks_pb2.TimelineWorkingDays]
+
+@_typing.type_check_only
+class TimelineControllerAsyncStub(TimelineControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    ApplyShift: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TimelineApplyRequest, _tasks_pb2.TimelineApplied]  # type: ignore[assignment]
+    CriticalPath: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TimelineCriticalPathRequest, _tasks_pb2.TimelineCriticalPath]  # type: ignore[assignment]
+    Get: _aio.UnaryStreamMultiCallable[_tasks_pb2.TimelineGetRequest, _tasks_pb2.TimelineChunk]  # type: ignore[assignment]
+    GetWorkingDays: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TimelineWorkingDaysGetRequest, _tasks_pb2.TimelineWorkingDays]  # type: ignore[assignment]
+    PreviewShift: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TimelinePreviewRequest, _tasks_pb2.TimelineShifts]  # type: ignore[assignment]
+    SetWorkingDays: _aio.UnaryUnaryMultiCallable[_tasks_pb2.TimelineWorkingDaysSetRequest, _tasks_pb2.TimelineWorkingDays]  # type: ignore[assignment]
+
+class TimelineControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def ApplyShift(
+        self,
+        request: _tasks_pb2.TimelineApplyRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TimelineApplied, _abc.Awaitable[_tasks_pb2.TimelineApplied]]: ...
+
+    @_abc_1.abstractmethod
+    def CriticalPath(
+        self,
+        request: _tasks_pb2.TimelineCriticalPathRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TimelineCriticalPath, _abc.Awaitable[_tasks_pb2.TimelineCriticalPath]]: ...
+
+    @_abc_1.abstractmethod
+    def Get(
+        self,
+        request: _tasks_pb2.TimelineGetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_abc.Iterator[_tasks_pb2.TimelineChunk], _abc.AsyncIterator[_tasks_pb2.TimelineChunk]]: ...
+
+    @_abc_1.abstractmethod
+    def GetWorkingDays(
+        self,
+        request: _tasks_pb2.TimelineWorkingDaysGetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TimelineWorkingDays, _abc.Awaitable[_tasks_pb2.TimelineWorkingDays]]: ...
+
+    @_abc_1.abstractmethod
+    def PreviewShift(
+        self,
+        request: _tasks_pb2.TimelinePreviewRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TimelineShifts, _abc.Awaitable[_tasks_pb2.TimelineShifts]]: ...
+
+    @_abc_1.abstractmethod
+    def SetWorkingDays(
+        self,
+        request: _tasks_pb2.TimelineWorkingDaysSetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.TimelineWorkingDays, _abc.Awaitable[_tasks_pb2.TimelineWorkingDays]]: ...
+
+def add_TimelineControllerServicer_to_server(servicer: TimelineControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...

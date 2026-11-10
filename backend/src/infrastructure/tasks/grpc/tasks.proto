@@ -36,6 +36,15 @@ service TaskController {
     rpc Update(TaskUpdateRequest) returns (Task) {}
 }
 
+service TimelineController {
+    rpc ApplyShift(TimelineApplyRequest) returns (TimelineApplied) {}
+    rpc CriticalPath(TimelineCriticalPathRequest) returns (TimelineCriticalPath) {}
+    rpc Get(TimelineGetRequest) returns (stream TimelineChunk) {}
+    rpc GetWorkingDays(TimelineWorkingDaysGetRequest) returns (TimelineWorkingDays) {}
+    rpc PreviewShift(TimelinePreviewRequest) returns (TimelineShifts) {}
+    rpc SetWorkingDays(TimelineWorkingDaysSetRequest) returns (TimelineWorkingDays) {}
+}
+
 message BoardColumn {
     string key = 1;
     string name = 2;
@@ -404,5 +413,81 @@ message TaskUpdateRequest {
     bool override_blocked = 13;
     repeated TaskFieldValue field_values = 14;
     optional string due_time = 15;
+}
+
+message TimelineApplied {
+    repeated Task tasks = 1;
+}
+
+message TimelineApplyRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string start_date = 4;
+    string due_date = 5;
+    int32 expected_version = 6;
+    repeated string affected_ids = 7;
+}
+
+message TimelineChunk {
+    repeated Task tasks = 1;
+    repeated TimelineLink links = 2;
+}
+
+message TimelineCriticalPath {
+    repeated string task_ids = 1;
+}
+
+message TimelineCriticalPathRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message TimelineGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string range_start = 3;
+    string range_end = 4;
+    bool include_done = 5;
+    string filter_ast = 6;
+    string today = 7;
+}
+
+message TimelineLink {
+    string from_id = 1;
+    string to_id = 2;
+}
+
+message TimelinePreviewRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string start_date = 4;
+    string due_date = 5;
+}
+
+message TimelineShift {
+    Task task = 1;
+    string new_start = 2;
+    string new_due = 3;
+}
+
+message TimelineShifts {
+    repeated TimelineShift shifts = 1;
+}
+
+message TimelineWorkingDays {
+    repeated int32 days = 1;
+    repeated string holidays = 2;
+}
+
+message TimelineWorkingDaysGetRequest {
+    string workspace_id = 1;
+}
+
+message TimelineWorkingDaysSetRequest {
+    string workspace_id = 1;
+    repeated int32 days = 2;
+    repeated string holidays = 3;
 }
 

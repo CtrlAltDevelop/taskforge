@@ -205,6 +205,18 @@ def present(task: Task, actor: Any, workspace: Workspace) -> Task:
     return _reload(task, actor, workspace)
 
 
+def present_many(tasks: Sequence[Task], actor: Any, workspace: Workspace) -> list[Task]:
+    """``tasks`` as a client shows them, in the same order, in a fixed number of queries."""
+    rows = (
+        Task.objects.filter(pk__in=[t.pk for t in tasks])
+        .select_related("project", "status")
+        .prefetch_related(_with_assignees())
+    )
+    by_id = {t.pk: t for t in rows}
+    found = [by_id[t.pk] for t in tasks if t.pk in by_id]
+    return custom.attach(links.mark_blocked(found, actor, workspace))
+
+
 def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task:
     """The task as it is now, trashed or not (for reporting what a batch did to it)."""
     project = _writable_project(actor, workspace, project_id, "task.delete")

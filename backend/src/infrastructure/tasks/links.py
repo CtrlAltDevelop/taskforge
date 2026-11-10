@@ -48,6 +48,7 @@ __all__ = [
     "LinkView",
     "add",
     "blocked_ids",
+    "blocking_pairs",
     "list_for_task",
     "remove",
     "search_tasks",
@@ -69,7 +70,7 @@ def _not_found() -> ApiError:
     return ApiError("No such task.", status=404)
 
 
-def _visible_projects(actor: Any, workspace: Workspace) -> set[Any]:
+def visible_projects(actor: Any, workspace: Workspace) -> set[Any]:
     return set(Project.objects.visible_to(actor, workspace).values_list("pk", flat=True))
 
 
@@ -122,7 +123,7 @@ def _cycle_path(actor: Any, workspace: Workspace, start: Task, end: Task) -> str
     ordered = [start.pk, *reversed(chain[1:])]  # start, end, ..., (last before start)
     ids = [*ordered, start.pk]
     tasks = {t.pk: t for t in Task.objects.filter(pk__in=ids).select_related("project")}
-    visible = _visible_projects(actor, workspace)
+    visible = visible_projects(actor, workspace)
     return " → ".join(_label(tasks[i], visible) for i in ids)
 
 
@@ -234,7 +235,7 @@ def remove(actor: Any, workspace: Workspace, link_id: str) -> None:
             .filter(pk=pk, workspace=workspace)
             .first()
         )
-        visible = _visible_projects(actor, workspace)
+        visible = visible_projects(actor, workspace)
         if link is None or not {link.from_task.project_id, link.to_task.project_id} & visible:
             raise _not_found()
         near = link.from_task if link.from_task.project_id in visible else link.to_task
@@ -248,7 +249,7 @@ def list_for_task(actor: Any, workspace: Workspace, task_id: str) -> list[LinkVi
     """Every link of the task, as the task sees it; far ends the caller cannot open are ``None``."""
     access.require(actor, VIEW, workspace)
     task = _task(actor, workspace, task_id)
-    visible = _visible_projects(actor, workspace)
+    visible = visible_projects(actor, workspace)
     rows = (
         TaskLink.objects.filter(Q(from_task=task) | Q(to_task=task), workspace=workspace)
         .select_related("from_task__project", "from_task__status")
@@ -290,7 +291,7 @@ def mark_blocked(tasks: list[Task], actor: Any, workspace: Workspace) -> list[Ta
     flagged = blocked_ids(tasks)
     names: dict[Any, list[str]] = {}
     if flagged:
-        visible = _visible_projects(actor, workspace)
+        visible = visible_projects(actor, workspace)
         rows = (
             _open_blockers(flagged)
             .select_related("from_task__project", "from_task__status")
@@ -318,7 +319,7 @@ def mark_schedule(tasks: list[Task], actor: Any, workspace: Workspace) -> list[T
     if not tasks:
         return tasks
     ids = [t.pk for t in tasks]
-    visible = _visible_projects(actor, workspace)
+    visible = visible_projects(actor, workspace)
     latest: dict[Any, str] = {}
     for to_id, due in (
         _open_blockers(ids)
@@ -342,6 +343,25 @@ def mark_schedule(tasks: list[Task], actor: Any, workspace: Workspace) -> list[T
     return tasks
 
 
+def blocking_pairs(
+    actor: Any, workspace: Workspace, tasks: Iterable[Task]
+) -> list[tuple[str, str]]:
+    """``(blocker id, dependent id)`` of every blocking link that touches one of ``tasks``, between
+    live tasks in projects ``actor`` can open, oldest link first (one query)."""
+    ids = [t.pk for t in tasks]
+    if not ids:
+        return []
+    visible = visible_projects(actor, workspace)
+    rows = (
+        TaskLink.objects.filter(type=LinkType.BLOCKS)
+        .filter(Q(from_task_id__in=ids) | Q(to_task_id__in=ids))
+        .filter(from_task__deleted_at__isnull=True, to_task__deleted_at__isnull=True)
+        .filter(from_task__project__in=visible, to_task__project__in=visible)
+        .order_by("created_at", "id")
+    )
+    return [(str(a), str(b)) for a, b in rows.values_list("from_task_id", "to_task_id")]
+
+
 def blockers_of(actor: Any, workspace: Workspace, task: Task, *, masked: bool = True) -> list[str]:
     """Display ids of the task's open blockers; with ``masked`` those ``actor`` cannot open read
     'Restricted task' (the answer to a person), without it the real ids (the audit record)."""
@@ -350,7 +370,7 @@ def blockers_of(actor: Any, workspace: Workspace, task: Task, *, masked: bool = 
         .select_related("from_task__project")
         .order_by("from_task__project__key", "from_task__number")
     )
-    visible = _visible_projects(actor, workspace)
+    visible = visible_projects(actor, workspace)
     return [
         _label(link.from_task, visible) if masked else link.from_task.display_id for link in found
     ]

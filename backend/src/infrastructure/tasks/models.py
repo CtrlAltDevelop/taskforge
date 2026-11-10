@@ -161,3 +161,17 @@ class BlockOverride(models.Model):
 
     def __str__(self) -> str:
         return f"{self.actor_id} overrode {self.blockers} on {self.task_id}"
+
+
+class WorkingCalendarSetting(models.Model):
+    """Which weekdays a workspace works (0 Monday ... 6 Sunday) and its holidays (ISO dates). No
+    row means every day works. The timeline uses it to shift and measure."""
+
+    workspace = models.OneToOneField(
+        Workspace, on_delete=models.CASCADE, related_name="+", primary_key=True
+    )
+    days = models.JSONField(default=list)
+    holidays = models.JSONField(default=list)
+
+    def __str__(self) -> str:
+        return f"working days of {self.workspace_id}"

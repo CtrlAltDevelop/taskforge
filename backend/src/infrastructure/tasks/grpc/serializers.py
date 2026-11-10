@@ -133,3 +133,19 @@ class BoardLane(serializers.Serializer[dict[str, object]]):
 
     key = serializers.CharField()
     columns = BoardColumn(many=True)
+
+
+class TimelineLink(serializers.Serializer[dict[str, object]]):
+    """A blocking link on the timeline: ``from_id`` must finish before ``to_id`` starts."""
+
+    from_id = serializers.CharField()
+    to_id = serializers.CharField()
+
+
+class TimelineShift(serializers.Serializer[dict[str, object]]):
+    """A dependent a move would push: the task as it is now and its new dates (``YYYY-MM-DD`` or
+    ``""`` for a date the task does not have)."""
+
+    task = Task()
+    new_start = serializers.CharField()
+    new_due = serializers.CharField()

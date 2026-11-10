@@ -44,13 +44,16 @@ from infrastructure.tasks.grpc.serializers import (
 from infrastructure.tasks.models import Task as TaskRow
 from infrastructure.workspaces.scoping import require_workspace
 
-IDS = [
+IDS: list[dict[str, str]] = [
     {"name": "workspace_id", "type": "string"},
     {"name": "project_id", "type": "string"},
 ]
 ID = {"name": "id", "type": "string"}
 # A filter (the AST of a TFQL query as JSON) and the viewer's today for its relative dates.
-FILTER = [{"name": "filter_ast", "type": "string"}, {"name": "today", "type": "string"}]
+FILTER: list[dict[str, str]] = [
+    {"name": "filter_ast", "type": "string"},
+    {"name": "today", "type": "string"},
+]
 VERSION = {"name": "expected_version", "type": "int32"}
 TEXT_FIELDS = (
     "title",
@@ -443,5 +446,6 @@ def _next_result(results: Any) -> Any:
 # Imported last: the board adapter reuses the helpers above.
 from infrastructure.tasks.grpc.board_services import BoardService  # noqa: E402
 from infrastructure.tasks.grpc.calendar_services import CalendarService  # noqa: E402
+from infrastructure.tasks.grpc.timeline_services import TimelineService  # noqa: E402
 
-GRPC_SERVICES = [TaskService, LinkService, BoardService, CalendarService]
+GRPC_SERVICES = [TaskService, LinkService, BoardService, CalendarService, TimelineService]

@@ -1085,3 +1085,290 @@ class TaskController:
             timeout,
             metadata,
             _registered_method=True)
+
+
+class TimelineControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.ApplyShift = channel.unary_unary(
+                '/config.tasks.TimelineController/ApplyShift',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplyRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplied.FromString,
+                _registered_method=True)
+        self.CriticalPath = channel.unary_unary(
+                '/config.tasks.TimelineController/CriticalPath',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPathRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPath.FromString,
+                _registered_method=True)
+        self.Get = channel.unary_stream(
+                '/config.tasks.TimelineController/Get',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineGetRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineChunk.FromString,
+                _registered_method=True)
+        self.GetWorkingDays = channel.unary_unary(
+                '/config.tasks.TimelineController/GetWorkingDays',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysGetRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.FromString,
+                _registered_method=True)
+        self.PreviewShift = channel.unary_unary(
+                '/config.tasks.TimelineController/PreviewShift',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelinePreviewRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineShifts.FromString,
+                _registered_method=True)
+        self.SetWorkingDays = channel.unary_unary(
+                '/config.tasks.TimelineController/SetWorkingDays',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysSetRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.FromString,
+                _registered_method=True)
+
+
+class TimelineControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def ApplyShift(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CriticalPath(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Get(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetWorkingDays(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PreviewShift(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetWorkingDays(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_TimelineControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'ApplyShift': grpc.unary_unary_rpc_method_handler(
+                    servicer.ApplyShift,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplyRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplied.SerializeToString,
+            ),
+            'CriticalPath': grpc.unary_unary_rpc_method_handler(
+                    servicer.CriticalPath,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPathRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPath.SerializeToString,
+            ),
+            'Get': grpc.unary_stream_rpc_method_handler(
+                    servicer.Get,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineGetRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineChunk.SerializeToString,
+            ),
+            'GetWorkingDays': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetWorkingDays,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysGetRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.SerializeToString,
+            ),
+            'PreviewShift': grpc.unary_unary_rpc_method_handler(
+                    servicer.PreviewShift,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelinePreviewRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineShifts.SerializeToString,
+            ),
+            'SetWorkingDays': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetWorkingDays,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysSetRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.tasks.TimelineController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.tasks.TimelineController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class TimelineController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def ApplyShift(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TimelineController/ApplyShift',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplyRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineApplied.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CriticalPath(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TimelineController/CriticalPath',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPathRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineCriticalPath.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Get(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/config.tasks.TimelineController/Get',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineGetRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineChunk.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetWorkingDays(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TimelineController/GetWorkingDays',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysGetRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PreviewShift(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TimelineController/PreviewShift',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelinePreviewRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineShifts.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetWorkingDays(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.TimelineController/SetWorkingDays',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDaysSetRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.TimelineWorkingDays.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)

@@ -62,6 +62,17 @@ class CalendarLayout(serializers.Serializer[dict[str, object]]):
     hide_done = serializers.BooleanField()
 
 
+class TimelineLayout(serializers.Serializer[dict[str, object]]):
+    """What a timeline shows: ``zoom`` (``day``, ``week``, ``month`` or ``quarter``), what rows are
+    grouped by (``""`` for the task tree, ``assignee`` or ``status``), whether finished tasks are
+    hidden and whether the critical path is highlighted."""
+
+    zoom = serializers.CharField()
+    group_by = serializers.CharField()
+    hide_done = serializers.BooleanField()
+    critical_path = serializers.BooleanField()
+
+
 class FilterLayout(serializers.Serializer[dict[str, object]]):
     """The filter a person has on a project's views: its AST as JSON (empty: none) and the id of
     the saved filter it is, if it still is that one."""
@@ -83,6 +94,7 @@ class SavedView(serializers.Serializer[dict[str, object]]):
     layout = Layout()
     board = BoardLayout()  # set instead of ``layout`` for a ``board`` view
     calendar = CalendarLayout()  # set instead of ``layout`` for a ``calendar`` view
+    timeline = TimelineLayout()  # set instead of ``layout`` for a ``timeline`` view
     active_filter = FilterLayout()  # set instead of ``layout`` for a ``filter`` view
     version = serializers.IntegerField()
     updated_at = serializers.CharField()

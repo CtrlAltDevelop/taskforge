@@ -606,6 +606,72 @@ ENDPOINTS += (
     ),
 )
 
+TL = tstubs.TimelineControllerStub
+
+
+def _move(w: Any, **extra: Any) -> dict[str, Any]:
+    return {
+        "workspace_id": w.ws,
+        "project_id": w.project_id,
+        "task_id": w.task_id,
+        "start_date": "2026-11-02",
+        "due_date": "2026-11-04",
+        **extra,
+    }
+
+
+ENDPOINTS += (
+    Endpoint(
+        "TimelineController.Get",
+        "workspace.view",
+        _grpc(
+            TL,
+            "Get",
+            lambda w: tpb.TimelineGetRequest(
+                workspace_id=w.ws,
+                project_id=w.project_id,
+                range_start="2026-11-01",
+                range_end="2026-11-30",
+            ),
+        ),
+    ),
+    Endpoint(
+        "TimelineController.CriticalPath",
+        "workspace.view",
+        _grpc(
+            TL,
+            "CriticalPath",
+            lambda w: tpb.TimelineCriticalPathRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    Endpoint(
+        "TimelineController.PreviewShift",
+        "workspace.view",
+        _grpc(TL, "PreviewShift", lambda w: tpb.TimelinePreviewRequest(**_move(w))),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "TimelineController.ApplyShift",
+        "task.update",
+        _grpc(TL, "ApplyShift", lambda w: tpb.TimelineApplyRequest(**_move(w, expected_version=1))),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "TimelineController.GetWorkingDays",
+        "workspace.view",
+        _grpc(TL, "GetWorkingDays", lambda w: tpb.TimelineWorkingDaysGetRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "TimelineController.SetWorkingDays",
+        "workspace.update",
+        _grpc(
+            TL,
+            "SetWorkingDays",
+            lambda w: tpb.TimelineWorkingDaysSetRequest(workspace_id=w.ws, days=[0, 1, 2, 3, 4]),
+        ),
+    ),
+)
+
 LK = tstubs.LinkControllerStub
 ENDPOINTS += (
     Endpoint(
