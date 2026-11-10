@@ -22,8 +22,9 @@ Groups are just for reading — a phase is still exactly one feature.
 - **Phase 13** — implemented on `develop`: the calendar (`CalendarController` `ListRange`/`ListUnscheduled`; date-only tasks by their start–due days; month, week and day, phone agenda; drag to move, drag an edge to resize, unscheduled tray, colour by status or priority, week-start choice; personal `calendar` layouts) and a List | Board | Calendar switch. Backend and Flutter suites pass on SQLite; the optional due time and the link-aware warning are built; PostgreSQL and a real browser/device were not run.
 - **Phase 13b** — implemented on `develop`: the workspace calendar (`ListWorkspaceRange` across every visible, non-archived project; `/calendar` from the home screen; colour by project with a hide/show legend, or by status/priority; drag, resize, link warnings and due times as in phase 13; no tray). Backend and Flutter suites pass on SQLite; PostgreSQL and a real browser/device were not run.
 - **Phase 14** — implemented on `develop`: TFQL and saved filters (hand-written parser with positions, id-based AST that renders back to text, ORM compiler, `QueryController` Validate/Suggest, `FilterController` List/Save/Delete, `filter_ast` on list, group counts, board and calendar; a filter bar with a visual builder and a highlighted text editor in the app). Backend and Flutter suites pass on SQLite; PostgreSQL (the statement timeout) and a real browser/device were not run.
-- **Next:** phase 15 (Timeline (Gantt) view).
-- Phases 15–40 — planned.
+- **Phase 15** — implemented on `develop`: the timeline (`TimelineController` `Get` / `CriticalPath` / `PreviewShift` / `ApplyShift` / working days; a pure scheduling engine with cascade through blocking links and a critical path; a per-workspace working-day calendar; a canvas chart with drag, resize, zoom, arrows, today line, grouping, PNG export, a list fallback; personal `timeline` layouts) and a List | Board | Calendar | Timeline switch. Backend and Flutter suites pass on SQLite; PostgreSQL, device frame rate and a real browser were not run.
+- **Next:** phase 16 (Realtime sync).
+- Phases 16–40 — planned.
 
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)

@@ -73,6 +73,16 @@ The record an override leaves: who completed a blocked task anyway, and the open
 | `type` | Char |  |
 | `created_by` | ForeignKey | → `accounts.User` |
 | `created_at` | DateTime |  |
+
+#### `WorkingCalendarSetting`
+
+Which weekdays a workspace works (0 Monday ... 6 Sunday) and its holidays (ISO dates). No
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `workspace` | OneToOne | primary key, → `workspaces.Workspace` |
+| `days` | JSON |  |
+| `holidays` | JSON |  |
 <!-- /generated:models -->
 
 ## Admin
@@ -167,6 +177,17 @@ A task can have one parent task of the **same project**; a subtask can have subt
 - `ListUnscheduled(workspace_id, project_id, cursor, page_size)` pages the open tasks with no dates (the tray) by number.
 - Both need workspace membership. A date is changed with `TaskController.Update` (`start_date`, `due_date`, `due_time`), which refuses a start after the due date.
 - **Due time**: `Task.due_time` is an optional `HH:MM` in UTC on the due date (empty clears it; it needs a due date and is cleared with it). It never moves the date; clients show it on the viewer's clock.
+
+### The timeline
+
+`TimelineController` (`timeline.py`, `schedule.py`, `grpc/timeline_services.py`; phase 15). Same date rules as the calendar. `schedule.py` is pure Python (no database): a task is a bar (both dates), a milestone (exactly one date) or unscheduled; a blocking link means the dependent starts after the blocker finishes.
+
+- `Get(workspace_id, project_id, range_start, range_end, include_done, filter_ast, today)` streams chunks of tasks (as the calendar's `ListRange`, but up to 1,100 days apart) each with the blocking links that touch them as `(from_id, to_id)`; a link is sent once, and links to tasks the caller cannot open or that are deleted are left out.
+- `CriticalPath(workspace_id, project_id)` names the longest chain of linked, open, dated tasks by working days (milestones weigh 0; a longer chain wins a tie, then the smaller id), first blocker first; empty when no two tasks are linked. Cycles in bad data are ignored.
+- `PreviewShift(.., task_id, start_date, due_date)` says which dependents would move if the task took those dates (the task's new start and/or due; at least one): through any chain, each dependent that would start on or before its blockers' finish goes to the first working day after, keeping its length in working days (a milestone moves its one date). Unscheduled, finished, deleted, archived-project and hidden-project dependents are left alone. Nothing is saved. At most 2,000 tasks are reached.
+- `ApplyShift(.., expected_version, affected_ids[])` needs `task.update`. In one transaction it locks the projects involved in a fixed order, works the cascade out again, refuses (`ABORTED`, `VERSION_CONFLICT`) when it is not exactly `affected_ids` (the preview), then updates the task and every dependent as ordinary edits (versions, events after commit, per-project permissions all apply). Any failure rolls everything back.
+- `GetWorkingDays` / `SetWorkingDays` (`workspace.update`): the workspace's working weekdays (0 Monday .. 6 Sunday; none chosen means every day) and up to 400 holidays, in `WorkingCalendarSetting`. The cascade and the critical path use them.
+- The person's zoom, grouping, hide-done and critical-path choices are a personal `timeline` `SavedView` (see savedviews).
 
 ### gRPC contract (`config.tasks`)
 
