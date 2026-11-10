@@ -1,7 +1,9 @@
 """``task_changed``: the hook phase 16 turns into the ``task.created|updated|deleted`` events.
 
 Sent through ``transaction.on_commit`` (never on rollback) with ``task_id``, ``project_id``,
-``workspace_id`` (str), ``version`` (int) and ``action``: ``created updated deleted restored``.
+``workspace_id`` (str), ``version`` (int) and ``action``: ``created updated deleted restored``
+(and ``reparented``), plus ``linked`` / ``unlinked`` for both ends of a link added or removed (the
+version is unchanged: the row did not change, its links and blocked state did).
 """
 
 from typing import Any

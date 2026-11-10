@@ -10,8 +10,12 @@ INVALID_ARGUMENT HAS_SUBTASKS with ``x-error-count-bin``). A task or project the
 is NOT_FOUND. ``List`` returns only top-level tasks unless ``include_subtasks``, then every task in
 tree order (a parent right before its own subtasks); ``ListChildren`` the direct subtasks.
 ``List`` is server-streamed in pages of up to 100 so a 10,000-task project starts rendering after
-the first page and never sits whole in memory. ``Update`` sends only the fields to change
-(``HasField``) plus ``expected_version``; a clash on the same field is ABORTED VERSION_CONFLICT
+the first page and never sits whole in memory. A status change into Done is refused while the
+task has open blockers (FAILED_PRECONDITION TASK_BLOCKED, ``x-error-blockers-bin``) unless
+``override_blocked`` is set by someone who manages the project; ``Task.is_blocked`` says whether
+it has any. Links are the ``LinkController`` beside this service. ``Update`` sends only the fields
+to change (``HasField``) plus ``expected_version``; a clash on the same field is ABORTED
+VERSION_CONFLICT
 with ``x-error-{field,current,version}-bin`` trailers. Other refusals as in
 ``infrastructure.projects.grpc.services``.
 """
@@ -27,6 +31,7 @@ from django_socio_grpc.decorators import grpc_action
 from infrastructure.common.grpc.errors import action, require_caller, stream_action
 from infrastructure.common.identity import grpc_caller
 from infrastructure.tasks import services
+from infrastructure.tasks.grpc.link_services import LinkService
 from infrastructure.tasks.grpc.serializers import Task
 from infrastructure.tasks.models import Task as TaskRow
 from infrastructure.workspaces.scoping import require_workspace
@@ -77,6 +82,8 @@ def _message(task: TaskRow) -> Any:
         created_at=task.created_at.isoformat(),
         updated_at=task.updated_at.isoformat(),
         deleted_at=task.deleted_at.isoformat() if task.deleted_at else "",
+        is_blocked=task.is_blocked,
+        blocked_by=list(task.blockers),
     )
 
 
@@ -149,6 +156,7 @@ class TaskService(generics.GenericService):
             *({"name": n, "type": "string", "cardinality": "optional"} for n in TEXT_FIELDS),
             {"name": "set_assignees", "type": "bool"},
             {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
+            {"name": "override_blocked", "type": "bool"},
         ],
         request_name="TaskUpdateRequest",
         response=Task,
@@ -163,7 +171,13 @@ class TaskService(generics.GenericService):
             request,
             context,
             lambda u, w: services.update(
-                u, w, request.project_id, request.id, request.expected_version, sent
+                u,
+                w,
+                request.project_id,
+                request.id,
+                request.expected_version,
+                sent,
+                override_blocked=request.override_blocked,
             ),
         )
 
@@ -174,6 +188,7 @@ class TaskService(generics.GenericService):
             VERSION,
             {"name": "status", "type": "string"},
             {"name": "include_subtasks", "type": "bool"},
+            {"name": "override_blocked", "type": "bool"},
         ],
         request_name="TaskMoveRequest",
         response=Task,
@@ -192,6 +207,7 @@ class TaskService(generics.GenericService):
                 request.expected_version,
                 request.status,
                 with_subtasks=request.include_subtasks,
+                override_blocked=request.override_blocked,
             ),
         )
 
@@ -291,4 +307,4 @@ class TaskService(generics.GenericService):
                 return
 
 
-GRPC_SERVICES = [TaskService]
+GRPC_SERVICES = [TaskService, LinkService]

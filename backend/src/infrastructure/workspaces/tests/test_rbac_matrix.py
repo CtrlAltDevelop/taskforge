@@ -21,6 +21,7 @@ from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
 from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
+from infrastructure.tasks import links as task_links
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
 from infrastructure.tasks.grpc import tasks_pb2_grpc as tstubs
@@ -53,6 +54,8 @@ class World:
     private_id: str  # a private project the Owner belongs to
     role_ids: dict[str, str] = field(default_factory=dict)
     task_id: str = ""  # set by the prepare of the task endpoints that need one
+    other_task_id: str = ""  # a second task, for the link endpoints
+    link_id: str = ""  # a link from ``task_id`` to ``other_task_id``
 
     @property
     def ws(self) -> str:
@@ -100,6 +103,19 @@ def _add_target_to_private(w: World) -> None:
 def _make_task(w: World) -> None:
     owner = w.workspace.created_by
     w.task_id = str(task_services.create(owner, w.workspace, w.project_id, "Seed").pk)
+
+
+def _make_two_tasks(w: World) -> None:
+    _make_task(w)
+    owner = w.workspace.created_by
+    w.other_task_id = str(task_services.create(owner, w.workspace, w.project_id, "Other").pk)
+
+
+def _make_link(w: World) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    link = task_links.add(owner, w.workspace, w.task_id, w.other_task_id, "relates")
+    w.link_id = str(link.pk)
 
 
 def _make_deleted_task(w: World) -> None:
@@ -383,6 +399,47 @@ _TASK_CALLS = (  # (rpc, permission, request builder, prepare)
 ENDPOINTS += tuple(
     Endpoint(f"TaskController.{rpc}", permission, _grpc(TK, rpc, build), prepare=prepare)
     for rpc, permission, build, prepare in _TASK_CALLS
+)
+
+LK = tstubs.LinkControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "LinkController.Add",
+        "task.update",
+        _grpc(
+            LK,
+            "Add",
+            lambda w: tpb.LinkAddRequest(
+                workspace_id=w.ws, task_id=w.task_id, other_task_id=w.other_task_id, kind="relates"
+            ),
+        ),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "LinkController.Remove",
+        "task.update",
+        _grpc(
+            LK,
+            "Remove",
+            lambda w: tpb.LinkRemoveRequest(workspace_id=w.ws, task_id=w.task_id, id=w.link_id),
+        ),
+        _make_link,
+    ),
+    Endpoint(
+        "LinkController.SearchTasks",
+        "workspace.view",
+        _grpc(LK, "SearchTasks", lambda w: tpb.LinkSearchTasksRequest(workspace_id=w.ws, query="")),
+    ),
+    Endpoint(
+        "LinkController.ListForTask",
+        "workspace.view",
+        _grpc(
+            LK,
+            "ListForTask",
+            lambda w: tpb.LinkListForTaskRequest(workspace_id=w.ws, task_id=w.task_id),
+        ),
+        _make_task,
+    ),
 )
 
 WF = wstubs.WorkflowControllerStub

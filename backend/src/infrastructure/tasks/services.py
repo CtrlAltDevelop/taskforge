@@ -27,7 +27,7 @@ from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
-from infrastructure.tasks import fields, tree
+from infrastructure.tasks import fields, links, tree
 from infrastructure.tasks.models import Task, TaskAssignee
 from infrastructure.tasks.signals import announce
 from infrastructure.workflows import services as workflows
@@ -153,8 +153,10 @@ def _set_assignees(task: Task, users: list[Any]) -> None:
     TaskAssignee.objects.bulk_create([TaskAssignee(task=task, user=u) for u in users])
 
 
-def _reload(task: Task) -> Task:
-    return _scoped(task.project).prefetch_related(_with_assignees()).get(pk=task.pk)
+def _reload(task: Task, actor: Any, workspace: Workspace) -> Task:
+    fresh = _scoped(task.project).prefetch_related(_with_assignees()).get(pk=task.pk)
+    links.mark_blocked([fresh], actor, workspace)
+    return fresh
 
 
 def create(
@@ -209,13 +211,13 @@ def create(
         _set_assignees(task, users)
         tree.refresh_above(task)
         announce(task, "created")
-    return _reload(task)
+    return _reload(task, actor, workspace)
 
 
 def get(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task:
     project = _project(actor, workspace, project_id, VIEW, False)
     task = _load_task(project, task_id)
-    return _reload(task)
+    return _reload(task, actor, workspace)
 
 
 def _conflict(task: Task, name: str) -> ApiError:
@@ -247,10 +249,13 @@ def update(
     changes: dict[str, Any],
     *,
     subtasks_taken: bool = False,
+    override_blocked: bool = False,
 ) -> Task:
-    """``subtasks_taken``: the caller moves the open subtasks along in the same transaction; when
-    the target is a done status that satisfies a "subtasks done" condition on this move (``move``
-    with subtasks), otherwise they would not be done and the condition is checked as usual."""
+    """``override_blocked``: let a project manager complete a task that still has open blockers
+    (recorded). ``subtasks_taken``: the caller moves the open subtasks along in the same
+    transaction; when the target is a done status that satisfies a "subtasks done" condition on
+    this move (``move`` with subtasks), otherwise they would not be done and the condition is
+    checked as usual."""
     if not changes:
         raise ApiError("Send at least one field to change.")
     with transaction.atomic():
@@ -278,6 +283,9 @@ def update(
                     else (lambda: tree.open_subtasks(task))
                 ),
             )
+            links.check_unblocked(
+                actor, workspace, project, task, cleaned["status"], override_blocked
+            )
         task.version += 1
         for name, value in cleaned.items():
             setattr(task, name, value)
@@ -289,7 +297,7 @@ def update(
         if "status" in cleaned:
             tree.refresh_above(task)
         announce(task, "updated")
-    return _reload(task)
+    return _reload(task, actor, workspace)
 
 
 def move(
@@ -301,6 +309,7 @@ def move(
     status_id: str,
     *,
     with_subtasks: bool = False,
+    override_blocked: bool = False,
 ) -> Task:
     """Change only the status of a task: ``update`` with the workflow's rules applied.
 
@@ -310,7 +319,13 @@ def move(
     """
     if not with_subtasks:
         return update(
-            actor, workspace, project_id, task_id, expected_version, {"status": status_id}
+            actor,
+            workspace,
+            project_id,
+            task_id,
+            expected_version,
+            {"status": status_id},
+            override_blocked=override_blocked,
         )
     with transaction.atomic():
         task = update(
@@ -321,13 +336,19 @@ def move(
             expected_version,
             {"status": status_id},
             subtasks_taken=True,
+            override_blocked=override_blocked,
         )
-        _move_open_subtasks(actor, workspace, task.project, task, task.status)
-    return _reload(task)
+        _move_open_subtasks(actor, workspace, task.project, task, task.status, override_blocked)
+    return _reload(task, actor, workspace)
 
 
 def _move_open_subtasks(
-    actor: Any, workspace: Workspace, project: Project, task: Task, target: Status
+    actor: Any,
+    workspace: Workspace,
+    project: Project,
+    task: Task,
+    target: Status,
+    override_blocked: bool,
 ) -> None:
     now = timezone.now()
     moved: list[Task] = []
@@ -343,6 +364,7 @@ def _move_open_subtasks(
         workflows.check_move(
             actor, workspace, project, sub.status, target, assignee_count=sub.assignees.count()
         )
+        links.check_unblocked(actor, workspace, project, sub, target, override_blocked)
         sub.status = target
         sub.version += 1
         sub.field_versions = {**sub.field_versions, "status": sub.version}
@@ -405,7 +427,7 @@ def set_parent(
             raise _conflict(task, "parent")
         new_parent = _live_parent(project, parent_id) if parent_id else None
         if (new_parent.pk if new_parent else None) == task.parent_id:
-            return _reload(task)
+            return _reload(task, actor, workspace)
         if new_parent is not None and new_parent.path.startswith(task.path):
             raise ApiError(
                 "A task cannot become a subtask of itself or of one of its own subtasks.",
@@ -419,7 +441,7 @@ def set_parent(
         task.save(update_fields=["version", "field_versions"])
         tree.refresh_progress(touched)
         announce(task, "reparented")
-    return _reload(task)
+    return _reload(task, actor, workspace)
 
 
 def list_children(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> list[Task]:
@@ -427,16 +449,17 @@ def list_children(actor: Any, workspace: Workspace, project_id: str, task_id: st
     project = _project(actor, workspace, project_id, VIEW, False)
     task = _load_task(project, task_id)
     rows = _scoped(project).filter(parent=task, deleted_at__isnull=True)
-    return list(rows.order_by("position", "number").prefetch_related(_with_assignees()))
+    found = list(rows.order_by("position", "number").prefetch_related(_with_assignees()))
+    return links.mark_blocked(found, actor, workspace)
 
 
-def _soft(task: Task, deleted: bool) -> Task:
+def _soft(task: Task, deleted: bool, actor: Any, workspace: Workspace) -> Task:
     task.deleted_at = timezone.now() if deleted else None
     task.version += 1
     task.updated_at = timezone.now()
     task.save(update_fields=["deleted_at", "version", "updated_at"])
     announce(task, "deleted" if deleted else "restored")
-    return _reload(task)
+    return _reload(task, actor, workspace)
 
 
 DELETE_MODES: Final = ("", "subtree", "promote")
@@ -460,7 +483,7 @@ def delete(actor: Any, workspace: Workspace, project_id: str, task_id: str, mode
             )
         if below and mode == "promote":
             _promote_children(task)
-            result = _soft(task, True)
+            result = _soft(task, True, actor, workspace)
         elif below:
             stamp = timezone.now()
             subs = list(tree.descendants(task).select_for_update(of=("self",)))
@@ -472,9 +495,9 @@ def delete(actor: Any, workspace: Workspace, project_id: str, task_id: str, mode
             for sub in subs:
                 announce(sub, "deleted")
             announce(task, "deleted")
-            result = _reload(task)
+            result = _reload(task, actor, workspace)
         else:
-            result = _soft(task, True)
+            result = _soft(task, True, actor, workspace)
         tree.refresh_above(task)
     return result
 
@@ -513,7 +536,7 @@ def restore(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> 
             task.parent_id is not None
             and Task.objects.filter(pk=task.parent_id, deleted_at__isnull=False).exists()
         )
-        restored = _soft(task, False)
+        restored = _soft(task, False, actor, workspace)
         if parent_gone:
             tree.move_subtree(task, None)
             task.field_versions = {**task.field_versions, "parent": task.version}
@@ -521,7 +544,7 @@ def restore(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> 
             announce(task, "reparented")
         inner = tree.descendants(task).filter(progress_total__gt=0).values_list("pk", flat=True)
         tree.refresh_progress([task.pk, *inner, *tree.ancestor_ids(task)])
-    return _reload(restored)
+    return _reload(restored, actor, workspace)
 
 
 def list_trash(
@@ -530,7 +553,8 @@ def list_trash(
     """The project's deleted tasks, newest deletion first (for whoever may restore them)."""
     project = _project(actor, workspace, project_id, "task.delete", False)
     rows = _scoped(project).filter(deleted_at__isnull=False).order_by("-deleted_at", "-number")
-    return list(rows.prefetch_related(_with_assignees())[: max(1, min(limit, TRASH_MAX))])
+    found = list(rows.prefetch_related(_with_assignees())[: max(1, min(limit, TRASH_MAX))])
+    return links.mark_blocked(found, actor, workspace)
 
 
 def _decode(cursor: str) -> tuple[str, int] | None:
@@ -577,5 +601,5 @@ def list_page(
     found = list(
         rows.order_by("tree_key", "number").prefetch_related(_with_assignees())[: size + 1]
     )
-    page = found[:size]
+    page = links.mark_blocked(found[:size], actor, workspace)
     return page, _encode(page[-1]) if len(found) > size else ""

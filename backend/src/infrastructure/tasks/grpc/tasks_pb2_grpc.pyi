@@ -26,6 +26,55 @@ class _ServicerContext(_grpc.ServicerContext, _aio.ServicerContext):  # type: ig
 GRPC_GENERATED_VERSION: str
 GRPC_VERSION: str
 
+class LinkControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> LinkControllerAsyncStub: ...
+    Add: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.LinkAddRequest, _tasks_pb2.LinkList]
+    ListForTask: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.LinkListForTaskRequest, _tasks_pb2.LinkList]
+    Remove: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.LinkRemoveRequest, _tasks_pb2.LinkList]
+    SearchTasks: _grpc.UnaryUnaryMultiCallable[_tasks_pb2.LinkSearchTasksRequest, _tasks_pb2.LinkCandidates]
+
+@_typing.type_check_only
+class LinkControllerAsyncStub(LinkControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Add: _aio.UnaryUnaryMultiCallable[_tasks_pb2.LinkAddRequest, _tasks_pb2.LinkList]  # type: ignore[assignment]
+    ListForTask: _aio.UnaryUnaryMultiCallable[_tasks_pb2.LinkListForTaskRequest, _tasks_pb2.LinkList]  # type: ignore[assignment]
+    Remove: _aio.UnaryUnaryMultiCallable[_tasks_pb2.LinkRemoveRequest, _tasks_pb2.LinkList]  # type: ignore[assignment]
+    SearchTasks: _aio.UnaryUnaryMultiCallable[_tasks_pb2.LinkSearchTasksRequest, _tasks_pb2.LinkCandidates]  # type: ignore[assignment]
+
+class LinkControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Add(
+        self,
+        request: _tasks_pb2.LinkAddRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.LinkList, _abc.Awaitable[_tasks_pb2.LinkList]]: ...
+
+    @_abc_1.abstractmethod
+    def ListForTask(
+        self,
+        request: _tasks_pb2.LinkListForTaskRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.LinkList, _abc.Awaitable[_tasks_pb2.LinkList]]: ...
+
+    @_abc_1.abstractmethod
+    def Remove(
+        self,
+        request: _tasks_pb2.LinkRemoveRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.LinkList, _abc.Awaitable[_tasks_pb2.LinkList]]: ...
+
+    @_abc_1.abstractmethod
+    def SearchTasks(
+        self,
+        request: _tasks_pb2.LinkSearchTasksRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_tasks_pb2.LinkCandidates, _abc.Awaitable[_tasks_pb2.LinkCandidates]]: ...
+
+def add_LinkControllerServicer_to_server(servicer: LinkControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
 class TaskControllerStub:
     @_typing.overload
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...

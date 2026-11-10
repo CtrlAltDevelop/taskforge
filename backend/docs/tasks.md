@@ -11,6 +11,18 @@ _This app publishes no routes of its own._
 ## Models
 
 <!-- generated:models -->
+#### `BlockOverride`
+
+The record an override leaves: who completed a blocked task anyway, and the open blockers.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | BigAuto | primary key |
+| `task` | ForeignKey | → `tasks.Task` |
+| `actor` | ForeignKey | → `accounts.User` |
+| `blockers` | Text |  |
+| `created_at` | DateTime |  |
+
 #### `Task`
 
 ``version`` is the whole-row counter; ``field_versions`` maps each field to the version
@@ -48,6 +60,18 @@ _This app publishes no routes of its own._
 | `id` | BigAuto | primary key |
 | `task` | ForeignKey | → `tasks.Task` |
 | `user` | ForeignKey | → `accounts.User` |
+
+#### `TaskLink`
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | UUID | primary key, not editable |
+| `workspace` | ForeignKey | → `workspaces.Workspace` |
+| `from_task` | ForeignKey | → `tasks.Task` |
+| `to_task` | ForeignKey | → `tasks.Task` |
+| `type` | Char |  |
+| `created_by` | ForeignKey | → `accounts.User` |
+| `created_at` | DateTime |  |
 <!-- /generated:models -->
 
 ## Admin
@@ -96,6 +120,18 @@ A task can have one parent task of the **same project**; a subtask can have subt
 - **Complete with subtasks**: `Move(include_subtasks)` also moves every open live subtask to the same status in one transaction (one already done is left alone when the target is a done status). Each must be allowed to make that move under the workflow, or nothing at all is moved.
 - **Workflow condition** "all subtasks done" (`Transition.require_subtasks_done`, see [workflows](workflows.md)): the move is refused with `TRANSITION_NOT_ALLOWED` and "needs all subtasks done first (N still open)" while any live subtask is not done or cancelled; deleted subtasks do not count. It is satisfied by `Move(include_subtasks)`, which finishes them in the same step.
 - **Signal**: `task_changed` also announces `reparented` (and a `deleted` for every task of a deleted subtree); no WebSocket code exists yet (phase 16).
+
+### Links
+
+`links.py`, over gRPC as `LinkController` (`Add`, `Remove`, `ListForTask`, `SearchTasks`; `task.update` to change, workspace membership to read and to search). A link is stored once (`TaskLink`, `from_task` → `to_task`) and read from both ends as a `kind`: `blocks` / `blocked_by`, `relates`, `duplicates` / `duplicated_by`. `relates` is stored in id order, so it has no mirror image.
+
+- A task cannot link to itself or repeat a link (`LINK_EXISTS`); a chain of `blocks` may not loop (`LINK_CYCLE`, `x-error-path-bin` names the loop, iterative walk, one query per hop).
+- Both ends must be tasks the caller can open (else 404). A far end the caller cannot open reads back as `restricted` with no id, title or status, and as "Restricted task" in a cycle path or blocker list.
+- A blocking link takes the workspace lock before the loop check (two opposite links added at once cannot both be stored); the loop check skips soft-deleted tasks.
+- A task with an open blocker (alive, not done or cancelled) is `is_blocked` (`Task.blocked_by` names the blockers as the caller may see them) and cannot move into a Done status (`TASK_BLOCKED`, `x-error-blockers-bin`, `x-error-can_override-bin`). `override_blocked` on `Update` / `Move` lets someone who holds `project.update` for the project (or created it) do it anyway; each use is stored as a `BlockOverride` with the real blocker ids. Subtasks moved along with a parent are checked the same way.
+- `close_duplicate` on a `duplicates` link moves the duplicate to the project's Cancelled status, or Done if it has none.
+- Adding or removing a link announces `linked` / `unlinked` for both tasks (`task_changed`, for phase 16).
+- A soft-deleted task keeps its links but stops blocking and is hidden from `ListForTask`; a purge removes them.
 
 ### The streamed list
 

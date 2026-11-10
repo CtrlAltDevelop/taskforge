@@ -143,6 +143,9 @@ class ResponseTitle(StrEnum):
     # Subtasks
     HAS_SUBTASKS = "HAS_SUBTASKS"
     SUBTASK_CYCLE = "SUBTASK_CYCLE"
+    LINK_CYCLE = "LINK_CYCLE"
+    LINK_EXISTS = "LINK_EXISTS"
+    TASK_BLOCKED = "TASK_BLOCKED"
 
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
@@ -191,6 +194,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.TRANSITION_NOT_ALLOWED: "The workflow does not allow that move.",
     ResponseTitle.HAS_SUBTASKS: "The task has subtasks: delete them with it or promote them.",
     ResponseTitle.SUBTASK_CYCLE: "A task cannot be put under itself or one of its own subtasks.",
+    ResponseTitle.LINK_CYCLE: "That link would make tasks block each other in a loop.",
+    ResponseTitle.LINK_EXISTS: "These tasks are already linked that way.",
+    ResponseTitle.TASK_BLOCKED: "The task is blocked by tasks that are not done yet.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

@@ -10,7 +10,9 @@ class Task(serializers.Serializer[dict[str, object]]):
     project's statuses (see the workflow);
     ``status_name`` and ``status_category`` are copies for display and reports.
     ``description`` is the rich-text JSON document as a string (``""`` when empty);
-    dates are ``YYYY-MM-DD`` or ``""``; ``deleted_at`` is set only in the trash."""
+    dates are ``YYYY-MM-DD`` or ``""``; ``deleted_at`` is set only in the trash. ``is_blocked`` says
+    a blocker is still open; ``blocked_by`` names them as the caller may see them
+    (``WEB-4 (In progress)``, or ``Restricted task``)."""
 
     id = serializers.CharField()
     workspace_id = serializers.CharField()
@@ -36,3 +38,32 @@ class Task(serializers.Serializer[dict[str, object]]):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     deleted_at = serializers.CharField()
+    is_blocked = serializers.BooleanField()
+    blocked_by = serializers.ListField(child=serializers.CharField())
+
+
+class Link(serializers.Serializer[dict[str, object]]):
+    """One link of a task, seen from that task. ``kind`` is ``blocks``, ``blocked_by``,
+    ``relates``, ``duplicates`` or ``duplicated_by``. When the caller cannot open the other task
+    ``restricted`` is true and every ``other_*`` field is empty (a title or id never leaks)."""
+
+    id = serializers.CharField()
+    kind = serializers.CharField()
+    restricted = serializers.BooleanField()
+    other_id = serializers.CharField()
+    other_project_id = serializers.CharField()
+    other_display_id = serializers.CharField()
+    other_title = serializers.CharField()
+    other_status_name = serializers.CharField()
+    other_status_category = serializers.CharField()
+
+
+class LinkCandidate(serializers.Serializer[dict[str, object]]):
+    """A task the caller may link to: enough to recognise it in a picker."""
+
+    id = serializers.CharField()
+    project_id = serializers.CharField()
+    display_id = serializers.CharField()
+    title = serializers.CharField()
+    status_name = serializers.CharField()
+    status_category = serializers.CharField()

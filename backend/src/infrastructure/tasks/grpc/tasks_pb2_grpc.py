@@ -25,6 +25,207 @@ if _version_not_supported:
     )
 
 
+class LinkControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Add = channel.unary_unary(
+                '/config.tasks.LinkController/Add',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkAddRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+                _registered_method=True)
+        self.ListForTask = channel.unary_unary(
+                '/config.tasks.LinkController/ListForTask',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkListForTaskRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+                _registered_method=True)
+        self.Remove = channel.unary_unary(
+                '/config.tasks.LinkController/Remove',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkRemoveRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+                _registered_method=True)
+        self.SearchTasks = channel.unary_unary(
+                '/config.tasks.LinkController/SearchTasks',
+                request_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkSearchTasksRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkCandidates.FromString,
+                _registered_method=True)
+
+
+class LinkControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Add(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListForTask(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Remove(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SearchTasks(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_LinkControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Add': grpc.unary_unary_rpc_method_handler(
+                    servicer.Add,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkAddRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.SerializeToString,
+            ),
+            'ListForTask': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListForTask,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkListForTaskRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.SerializeToString,
+            ),
+            'Remove': grpc.unary_unary_rpc_method_handler(
+                    servicer.Remove,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkRemoveRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.SerializeToString,
+            ),
+            'SearchTasks': grpc.unary_unary_rpc_method_handler(
+                    servicer.SearchTasks,
+                    request_deserializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkSearchTasksRequest.FromString,
+                    response_serializer=infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkCandidates.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.tasks.LinkController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.tasks.LinkController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class LinkController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Add(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.LinkController/Add',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkAddRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListForTask(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.LinkController/ListForTask',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkListForTaskRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Remove(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.LinkController/Remove',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkRemoveRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SearchTasks(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.tasks.LinkController/SearchTasks',
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkSearchTasksRequest.SerializeToString,
+            infrastructure_dot_tasks_dot_grpc_dot_tasks__pb2.LinkCandidates.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
 class TaskControllerStub:
     """Missing associated documentation comment in .proto file."""
 

@@ -54,6 +54,9 @@ class Task(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    # Not stored: the services set it on the tasks they return (see ``links.blocked_ids``).
+    is_blocked = False
+    blockers: tuple[str, ...] = ()  # "WEB-4 (In progress)" or "Restricted task", for the caller
 
     class Meta:
         constraints = [
@@ -97,3 +100,52 @@ class TaskAssignee(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user_id} on {self.task_id}"
+
+
+class LinkType(models.TextChoices):
+    """Stored once, ``from_task`` -> ``to_task``: "blocks", "duplicates" (``from_task`` is the
+    duplicate) or "relates" (the pair is stored in id order so it has no mirror image)."""
+
+    BLOCKS = "blocks"
+    RELATES = "relates"
+    DUPLICATES = "duplicates"
+
+
+class TaskLink(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
+    from_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="links_out")
+    to_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="links_in")
+    type = models.CharField(max_length=10, choices=LinkType.choices)
+    created_by = models.ForeignKey(
+        django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["from_task", "to_task", "type"], name="task_link_unique"
+            ),
+            models.CheckConstraint(
+                condition=~models.Q(from_task=models.F("to_task")), name="task_link_not_self"
+            ),
+        ]
+        indexes = [models.Index(fields=["to_task", "type"], name="task_link_to_idx")]
+
+    def __str__(self) -> str:
+        return f"{self.from_task_id} {self.type} {self.to_task_id}"
+
+
+class BlockOverride(models.Model):
+    """The record an override leaves: who completed a blocked task anyway, and the open blockers."""
+
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="+")
+    actor = models.ForeignKey(
+        django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
+    )
+    blockers = models.TextField()  # display ids, as they were, whoever could see them
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self) -> str:
+        return f"{self.actor_id} overrode {self.blockers} on {self.task_id}"

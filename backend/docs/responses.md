@@ -164,6 +164,9 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `TRANSITION_NOT_ALLOWED` | The workflow does not allow that move. |
 | `HAS_SUBTASKS` | The task has subtasks: delete them with it or promote them. |
 | `SUBTASK_CYCLE` | A task cannot be put under itself or one of its own subtasks. |
+| `LINK_CYCLE` | That link would make tasks block each other in a loop. |
+| `LINK_EXISTS` | These tasks are already linked that way. |
+| `TASK_BLOCKED` | The task is blocked by tasks that are not done yet. |
 
 ## Writing an endpoint
 

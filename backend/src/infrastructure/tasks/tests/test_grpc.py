@@ -240,7 +240,7 @@ def _sub(
     return _create(call, team, who, title=title, parent_id=parent.id if parent else "")
 
 
-def _base(team: dict[str, Any], task: Any) -> dict[str, str]:
+def _base(team: dict[str, Any], task: Any) -> dict[str, Any]:
     return {"workspace_id": team["ws"], "project_id": team["project"], "id": task.id}
 
 

@@ -77,3 +77,49 @@ def test_progress_stays_exact_while_many_children_finish_at_once() -> None:
 
     parent.refresh_from_db()
     assert (parent.progress_done, parent.progress_total) == (PARALLEL, PARALLEL)
+
+
+def _link(args: tuple[Any, Any, str, str, Any]) -> str:
+    """Add ``a blocks b``; returns 'ok' or the refusal's title."""
+    from infrastructure.common.errors import ApiError
+    from infrastructure.tasks import links
+
+    user, workspace, a, b, barrier = args
+    try:
+        barrier.wait()
+        links.add(user, workspace, a, b, "blocks")
+        return "ok"
+    except ApiError as refusal:
+        return str(refusal.title)
+    finally:
+        connections.close_all()
+
+
+def test_opposite_blocking_links_added_together_never_make_a_loop() -> None:
+    import threading
+
+    from infrastructure.tasks.models import LinkType, TaskLink
+
+    owner = get_user_model().objects.create_user(
+        username="zoe", email="zoe@example.com", password="x-y-z-12345"
+    )
+    workspace = workspace_services.create(owner, "Acme", "acme")
+    project = projects.create(owner, workspace, "Web", "WEB").project
+    pairs = [
+        (
+            str(services.create(owner, workspace, str(project.pk), f"a{i}").pk),
+            str(services.create(owner, workspace, str(project.pk), f"b{i}").pk),
+        )
+        for i in range(10)
+    ]
+    jobs = []
+    for a, b in pairs:
+        barrier = threading.Barrier(2)
+        jobs += [(owner, workspace, a, b, barrier), (owner, workspace, b, a, barrier)]
+
+    with ThreadPoolExecutor(len(jobs)) as pool:
+        outcomes = list(pool.map(_link, jobs))
+
+    for n in range(len(pairs)):
+        assert sorted(outcomes[2 * n : 2 * n + 2]) == ["LINK_CYCLE", "ok"], outcomes
+    assert TaskLink.objects.filter(type=LinkType.BLOCKS).count() == len(pairs)

@@ -2,6 +2,13 @@ syntax = "proto3";
 
 package config.tasks;
 
+service LinkController {
+    rpc Add(LinkAddRequest) returns (LinkList) {}
+    rpc ListForTask(LinkListForTaskRequest) returns (LinkList) {}
+    rpc Remove(LinkRemoveRequest) returns (LinkList) {}
+    rpc SearchTasks(LinkSearchTasksRequest) returns (LinkCandidates) {}
+}
+
 service TaskController {
     rpc Create(TaskCreateRequest) returns (Task) {}
     rpc Delete(TaskDeleteRequest) returns (Task) {}
@@ -13,6 +20,59 @@ service TaskController {
     rpc Restore(TaskRestoreRequest) returns (Task) {}
     rpc SetParent(TaskSetParentRequest) returns (Task) {}
     rpc Update(TaskUpdateRequest) returns (Task) {}
+}
+
+message Link {
+    string id = 1;
+    string kind = 2;
+    bool restricted = 3;
+    string other_id = 4;
+    string other_project_id = 5;
+    string other_display_id = 6;
+    string other_title = 7;
+    string other_status_name = 8;
+    string other_status_category = 9;
+}
+
+message LinkAddRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+    string other_task_id = 3;
+    string kind = 4;
+    bool close_duplicate = 5;
+}
+
+message LinkCandidate {
+    string id = 1;
+    string project_id = 2;
+    string display_id = 3;
+    string title = 4;
+    string status_name = 5;
+    string status_category = 6;
+}
+
+message LinkCandidates {
+    repeated LinkCandidate tasks = 1;
+}
+
+message LinkList {
+    repeated Link links = 1;
+}
+
+message LinkListForTaskRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+}
+
+message LinkRemoveRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+    string id = 3;
+}
+
+message LinkSearchTasksRequest {
+    string workspace_id = 1;
+    string query = 2;
 }
 
 message Task {
@@ -40,6 +100,8 @@ message Task {
     int32 depth = 22;
     int32 progress_done = 23;
     int32 progress_total = 24;
+    bool is_blocked = 25;
+    repeated string blocked_by = 26;
 }
 
 message TaskChildren {
@@ -100,6 +162,7 @@ message TaskMoveRequest {
     int32 expected_version = 4;
     string status = 5;
     bool include_subtasks = 6;
+    bool override_blocked = 7;
 }
 
 message TaskRestoreRequest {
@@ -133,5 +196,6 @@ message TaskUpdateRequest {
     optional string due_date = 10;
     bool set_assignees = 11;
     repeated string assignee_ids = 12;
+    bool override_blocked = 13;
 }
 

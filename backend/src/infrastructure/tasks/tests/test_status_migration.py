@@ -22,7 +22,7 @@ from infrastructure.workspaces import services as workspaces
 pytestmark = pytest.mark.django_db(transaction=True)
 
 BEFORE = [("tasks", "0001_initial")]
-LATEST_TASKS = [("tasks", "0006_subtasks_data")]
+LATEST_TASKS = [("tasks", "0007_task_links")]
 
 
 def _migrate(targets: list[tuple[str, str]]) -> None:
