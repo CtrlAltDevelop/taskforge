@@ -141,7 +141,9 @@ class Profile(models.Model):
         changed = []
         for field, value in values.items():
             if value and not getattr(self, field, None):
-                setattr(self, field, value)
+                # Clipped to the column: PostgreSQL refuses an over-long value outright.
+                width = self._meta.get_field(field).max_length
+                setattr(self, field, value[:width] if width else value)
                 changed.append(field)
         if changed:
             self.save(update_fields=[*changed, "updated_at"])
