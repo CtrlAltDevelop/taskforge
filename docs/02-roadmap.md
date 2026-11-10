@@ -20,6 +20,7 @@ Groups are just for reading — a phase is still exactly one feature.
 - **Phase 11** — implemented on `develop`: the list is a virtualized table (sort, group with server counts, resize, show/hide columns, inline edit, keyboard operation, phone cards) over `Tasks.List` with `sort`/`group_by`, a streaming `BulkUpdate` with per-task results, and personal/shared layouts in the new `savedviews` app. Backend and Flutter suites pass on SQLite; PostgreSQL, device frame rate and a real browser were not checked.
 - **Phase 12** — implemented on `develop`: the Kanban board (`BoardController` `Get`/`ListColumn`/`Move`; columns by status, priority, assignee or a select field; lazy columns of 30 cards; fractional ranks changed one card at a time with server-side respacing; drag, Move-to menu, WIP limits, swimlanes, card fields, per-column quick-add) and a List | Board switch in the app. Backend and Flutter suites pass on SQLite; PostgreSQL, device frame rate and a real browser were not checked.
 - **Phase 13** — implemented on `develop`: the calendar (`CalendarController` `ListRange`/`ListUnscheduled`; date-only tasks by their start–due days; month, week and day, phone agenda; drag to move, drag an edge to resize, unscheduled tray, colour by status or priority, week-start choice; personal `calendar` layouts) and a List | Board | Calendar switch. Backend and Flutter suites pass on SQLite; the optional due time and the link-aware warning are built; PostgreSQL and a real browser/device were not run.
+- **Phase 13b** — implemented on `develop`: the workspace calendar (`ListWorkspaceRange` across every visible, non-archived project; `/calendar` from the home screen; colour by project with a hide/show legend, or by status/priority; drag, resize, link warnings and due times as in phase 13; no tray). Backend and Flutter suites pass on SQLite; PostgreSQL and a real browser/device were not run.
 - **Next:** phase 14 (Saved filters and query language).
 - Phases 14–40 — planned.
 
@@ -44,6 +45,7 @@ Groups are just for reading — a phase is still exactly one feature.
 - [11 List view](phases/phase-11-list-view.md)
 - [12 Board (Kanban) view](phases/phase-12-board-view.md)
 - [13 Calendar view](phases/phase-13-calendar-view.md)
+- [13b Workspace calendar](phases/phase-13b-workspace-calendar.md)
 - [14 Saved filters and query language](phases/phase-14-filters-query.md)
 - [15 Timeline (Gantt) view](phases/phase-15-timeline-view.md)
 

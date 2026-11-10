@@ -12,7 +12,7 @@ Planning by date is natural for many teams. Jira's calendar is a paid add-on in 
 Tasks with a due date appear on that day; tasks with start and due dates span as bars across days. Drag a task to another day to change its due date (keeping the duration if it has both dates). Drag a bar's edge to resize. A sidebar lists **unscheduled** tasks — drag them on the calendar to give them a date. Only the visible date range is requested from the server.
 
 ## Scope
-**In:** month/week/day modes, range query, drag to move/resize, unscheduled tray, color by status/priority (a calendar shows one project, so not by project), today marker, week-start preference, time zones.
+**In:** month/week/day modes, range query, drag to move/resize, unscheduled tray, color by status/priority (by project: see [phase 13b](phase-13b-workspace-calendar.md)), today marker, week-start preference, time zones.
 **Out:** external calendar sync (iCal/Google — later), recurring display (28 will plug in).
 
 ## Data model
@@ -49,4 +49,4 @@ Phase 11.
 - **Links**: calendar reads carry `blockers_due` / `blocks_due`; rescheduling a task whose new end falls before the latest due date of what blocks it, or after the earliest due date of what it blocks, shows a warning naming the date.
 - **Reads**: `ListRange` is uncapped (keyset by task number, so no duplicates between chunks). The app cancels the gRPC call of a range that was flipped past, as well as ignoring its answer.
 - **Right-to-left**: bars, handles, grabbed day, paddings and the board's edge auto-scroll follow the reading direction.
-- Not done / not verified: colouring by project (one project per calendar; a workspace-wide calendar would be its own phase); PostgreSQL and a real browser/device were not run.
+- Not done / not verified: PostgreSQL and a real browser/device were not run.
