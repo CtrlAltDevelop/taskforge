@@ -46,6 +46,7 @@ class Task(serializers.Serializer[dict[str, object]]):
     priority = serializers.CharField()
     start_date = serializers.CharField()
     due_date = serializers.CharField()
+    due_time = serializers.CharField()  # HH:MM in UTC, empty for none; never shifts the date
     assignee_ids = serializers.ListField(child=serializers.CharField())
     parent_id = serializers.CharField()
     depth = serializers.IntegerField()
@@ -61,6 +62,8 @@ class Task(serializers.Serializer[dict[str, object]]):
     blocked_by = serializers.ListField(child=serializers.CharField())
     fields = TaskFieldValue(many=True)
     group_key = serializers.CharField()
+    blockers_due = serializers.CharField()  # calendar reads: latest due date of open blockers
+    blocks_due = serializers.CharField()  # ... and earliest due date of what this blocks
 
 
 class Link(serializers.Serializer[dict[str, object]]):

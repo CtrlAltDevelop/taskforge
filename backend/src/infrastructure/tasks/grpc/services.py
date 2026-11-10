@@ -50,7 +50,15 @@ IDS = [
 ]
 ID = {"name": "id", "type": "string"}
 VERSION = {"name": "expected_version", "type": "int32"}
-TEXT_FIELDS = ("title", "description", "status", "priority", "start_date", "due_date")
+TEXT_FIELDS = (
+    "title",
+    "description",
+    "status",
+    "priority",
+    "start_date",
+    "due_date",
+    "due_time",
+)
 CREATE_FIELDS = [
     *({"name": n, "type": "string"} for n in TEXT_FIELDS),
     {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
@@ -88,6 +96,7 @@ def _message(task: TaskRow, kind: str = "Task") -> Any:
         priority=task.priority,
         start_date=task.start_date.isoformat() if task.start_date else "",
         due_date=task.due_date.isoformat() if task.due_date else "",
+        due_time=task.due_time.strftime("%H:%M") if task.due_time else "",
         assignee_ids=sorted(str(i) for i in task.assignee_ids()),
         parent_id=str(task.parent_id or ""),
         depth=task.depth,
@@ -101,6 +110,8 @@ def _message(task: TaskRow, kind: str = "Task") -> Any:
         deleted_at=task.deleted_at.isoformat() if task.deleted_at else "",
         is_blocked=task.is_blocked,
         blocked_by=list(task.blockers),
+        blockers_due=task.blockers_due,
+        blocks_due=task.blocks_due,
         group_key=task.group_key,
         fields=[
             _field_value(kind, field_id, value)
@@ -167,6 +178,7 @@ class TaskService(generics.GenericService):
                 priority=request.priority or "none",
                 start_date=request.start_date,
                 due_date=request.due_date,
+                due_time=request.due_time,
                 assignee_ids=list(request.assignee_ids),
                 parent_id=request.parent_id,
                 field_values={v.field_id: v.value for v in request.field_values},

@@ -643,6 +643,9 @@ class Task(_message.Message):
     BLOCKED_BY_FIELD_NUMBER: _builtins.int
     FIELDS_FIELD_NUMBER: _builtins.int
     GROUP_KEY_FIELD_NUMBER: _builtins.int
+    DUE_TIME_FIELD_NUMBER: _builtins.int
+    BLOCKERS_DUE_FIELD_NUMBER: _builtins.int
+    BLOCKS_DUE_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     workspace_id: _builtins.str
     project_id: _builtins.str
@@ -668,6 +671,9 @@ class Task(_message.Message):
     progress_total: _builtins.int
     is_blocked: _builtins.bool
     group_key: _builtins.str
+    due_time: _builtins.str
+    blockers_due: _builtins.str
+    blocks_due: _builtins.str
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
@@ -705,10 +711,13 @@ class Task(_message.Message):
         blocked_by: _abc.Iterable[_builtins.str] | None = ...,
         fields: _abc.Iterable[Global___TaskFieldValue] | None = ...,
         group_key: _builtins.str = ...,
+        due_time: _builtins.str = ...,
+        blockers_due: _builtins.str = ...,
+        blocks_due: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "blocked_by", b"blocked_by", "created_at", b"created_at", "created_by", b"created_by", "deleted_at", b"deleted_at", "depth", b"depth", "description", b"description", "display_id", b"display_id", "due_date", b"due_date", "fields", b"fields", "group_key", b"group_key", "id", b"id", "is_blocked", b"is_blocked", "number", b"number", "parent_id", b"parent_id", "position", b"position", "priority", b"priority", "progress_done", b"progress_done", "progress_total", b"progress_total", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "status_category", b"status_category", "status_name", b"status_name", "title", b"title", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "blocked_by", b"blocked_by", "blockers_due", b"blockers_due", "blocks_due", b"blocks_due", "created_at", b"created_at", "created_by", b"created_by", "deleted_at", b"deleted_at", "depth", b"depth", "description", b"description", "display_id", b"display_id", "due_date", b"due_date", "due_time", b"due_time", "fields", b"fields", "group_key", b"group_key", "id", b"id", "is_blocked", b"is_blocked", "number", b"number", "parent_id", b"parent_id", "position", b"position", "priority", b"priority", "progress_done", b"progress_done", "progress_total", b"progress_total", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "status_category", b"status_category", "status_name", b"status_name", "title", b"title", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -801,6 +810,7 @@ class TaskCreateRequest(_message.Message):
     ASSIGNEE_IDS_FIELD_NUMBER: _builtins.int
     PARENT_ID_FIELD_NUMBER: _builtins.int
     FIELD_VALUES_FIELD_NUMBER: _builtins.int
+    DUE_TIME_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     title: _builtins.str
@@ -810,6 +820,7 @@ class TaskCreateRequest(_message.Message):
     start_date: _builtins.str
     due_date: _builtins.str
     parent_id: _builtins.str
+    due_time: _builtins.str
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
@@ -828,10 +839,11 @@ class TaskCreateRequest(_message.Message):
         assignee_ids: _abc.Iterable[_builtins.str] | None = ...,
         parent_id: _builtins.str = ...,
         field_values: _abc.Iterable[Global___TaskFieldValue] | None = ...,
+        due_time: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "description", b"description", "due_date", b"due_date", "field_values", b"field_values", "parent_id", b"parent_id", "priority", b"priority", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "title", b"title", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "description", b"description", "due_date", b"due_date", "due_time", b"due_time", "field_values", b"field_values", "parent_id", b"parent_id", "priority", b"priority", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "title", b"title", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -1148,6 +1160,9 @@ class TaskResponse(_message.Message):
     BLOCKED_BY_FIELD_NUMBER: _builtins.int
     FIELDS_FIELD_NUMBER: _builtins.int
     GROUP_KEY_FIELD_NUMBER: _builtins.int
+    DUE_TIME_FIELD_NUMBER: _builtins.int
+    BLOCKERS_DUE_FIELD_NUMBER: _builtins.int
+    BLOCKS_DUE_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     workspace_id: _builtins.str
     project_id: _builtins.str
@@ -1173,6 +1188,9 @@ class TaskResponse(_message.Message):
     deleted_at: _builtins.str
     is_blocked: _builtins.bool
     group_key: _builtins.str
+    due_time: _builtins.str
+    blockers_due: _builtins.str
+    blocks_due: _builtins.str
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
@@ -1210,10 +1228,13 @@ class TaskResponse(_message.Message):
         blocked_by: _abc.Iterable[_builtins.str] | None = ...,
         fields: _abc.Iterable[Global___TaskFieldValueResponse] | None = ...,
         group_key: _builtins.str = ...,
+        due_time: _builtins.str = ...,
+        blockers_due: _builtins.str = ...,
+        blocks_due: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "blocked_by", b"blocked_by", "created_at", b"created_at", "created_by", b"created_by", "deleted_at", b"deleted_at", "depth", b"depth", "description", b"description", "display_id", b"display_id", "due_date", b"due_date", "fields", b"fields", "group_key", b"group_key", "id", b"id", "is_blocked", b"is_blocked", "number", b"number", "parent_id", b"parent_id", "position", b"position", "priority", b"priority", "progress_done", b"progress_done", "progress_total", b"progress_total", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "status_category", b"status_category", "status_name", b"status_name", "title", b"title", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "blocked_by", b"blocked_by", "blockers_due", b"blockers_due", "blocks_due", b"blocks_due", "created_at", b"created_at", "created_by", b"created_by", "deleted_at", b"deleted_at", "depth", b"depth", "description", b"description", "display_id", b"display_id", "due_date", b"due_date", "due_time", b"due_time", "fields", b"fields", "group_key", b"group_key", "id", b"id", "is_blocked", b"is_blocked", "number", b"number", "parent_id", b"parent_id", "position", b"position", "priority", b"priority", "progress_done", b"progress_done", "progress_total", b"progress_total", "project_id", b"project_id", "start_date", b"start_date", "status", b"status", "status_category", b"status_category", "status_name", b"status_name", "title", b"title", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -1313,6 +1334,7 @@ class TaskUpdateRequest(_message.Message):
     ASSIGNEE_IDS_FIELD_NUMBER: _builtins.int
     OVERRIDE_BLOCKED_FIELD_NUMBER: _builtins.int
     FIELD_VALUES_FIELD_NUMBER: _builtins.int
+    DUE_TIME_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     id: _builtins.str
@@ -1325,6 +1347,7 @@ class TaskUpdateRequest(_message.Message):
     due_date: _builtins.str
     set_assignees: _builtins.bool
     override_blocked: _builtins.bool
+    due_time: _builtins.str
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
@@ -1346,15 +1369,18 @@ class TaskUpdateRequest(_message.Message):
         assignee_ids: _abc.Iterable[_builtins.str] | None = ...,
         override_blocked: _builtins.bool = ...,
         field_values: _abc.Iterable[Global___TaskFieldValue] | None = ...,
+        due_time: _builtins.str | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "_due_date", b"_due_date", "_priority", b"_priority", "_start_date", b"_start_date", "_status", b"_status", "_title", b"_title", "description", b"description", "due_date", b"due_date", "priority", b"priority", "start_date", b"start_date", "status", b"status", "title", b"title"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "_due_date", b"_due_date", "_due_time", b"_due_time", "_priority", b"_priority", "_start_date", b"_start_date", "_status", b"_status", "_title", b"_title", "description", b"description", "due_date", b"due_date", "due_time", b"due_time", "priority", b"priority", "start_date", b"start_date", "status", b"status", "title", b"title"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "_due_date", b"_due_date", "_priority", b"_priority", "_start_date", b"_start_date", "_status", b"_status", "_title", b"_title", "assignee_ids", b"assignee_ids", "description", b"description", "due_date", b"due_date", "expected_version", b"expected_version", "field_values", b"field_values", "id", b"id", "override_blocked", b"override_blocked", "priority", b"priority", "project_id", b"project_id", "set_assignees", b"set_assignees", "start_date", b"start_date", "status", b"status", "title", b"title", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "_due_date", b"_due_date", "_due_time", b"_due_time", "_priority", b"_priority", "_start_date", b"_start_date", "_status", b"_status", "_title", b"_title", "assignee_ids", b"assignee_ids", "description", b"description", "due_date", b"due_date", "due_time", b"due_time", "expected_version", b"expected_version", "field_values", b"field_values", "id", b"id", "override_blocked", b"override_blocked", "priority", b"priority", "project_id", b"project_id", "set_assignees", b"set_assignees", "start_date", b"start_date", "status", b"status", "title", b"title", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     _WhichOneofReturnType__description: _TypeAlias = _typing.Literal["description"]  # noqa: Y015
     _WhichOneofArgType__description: _TypeAlias = _typing.Literal["_description", b"_description"]  # noqa: Y015
     _WhichOneofReturnType__due_date: _TypeAlias = _typing.Literal["due_date"]  # noqa: Y015
     _WhichOneofArgType__due_date: _TypeAlias = _typing.Literal["_due_date", b"_due_date"]  # noqa: Y015
+    _WhichOneofReturnType__due_time: _TypeAlias = _typing.Literal["due_time"]  # noqa: Y015
+    _WhichOneofArgType__due_time: _TypeAlias = _typing.Literal["_due_time", b"_due_time"]  # noqa: Y015
     _WhichOneofReturnType__priority: _TypeAlias = _typing.Literal["priority"]  # noqa: Y015
     _WhichOneofArgType__priority: _TypeAlias = _typing.Literal["_priority", b"_priority"]  # noqa: Y015
     _WhichOneofReturnType__start_date: _TypeAlias = _typing.Literal["start_date"]  # noqa: Y015
@@ -1367,6 +1393,8 @@ class TaskUpdateRequest(_message.Message):
     def WhichOneof(self, oneof_group: _WhichOneofArgType__description) -> _WhichOneofReturnType__description | None: ...
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__due_date) -> _WhichOneofReturnType__due_date | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__due_time) -> _WhichOneofReturnType__due_time | None: ...
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__priority) -> _WhichOneofReturnType__priority | None: ...
     @_typing.overload

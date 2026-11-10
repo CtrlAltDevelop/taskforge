@@ -13,13 +13,13 @@ from typing import Any, Final
 from django.db.models import Q
 
 from infrastructure.common.errors import ApiError
-from infrastructure.tasks import services
+from infrastructure.tasks import links, services
 from infrastructure.tasks.models import Task
 from infrastructure.workflows.models import Category
 from infrastructure.workspaces.models import Workspace
 
 MAX_DAYS: Final = 62  # a month grid is 42 days; two months of slack for an agenda
-MAX_TASKS: Final = 5000
+CHUNK: Final = 500
 TRAY_PAGE: Final = 50
 
 
@@ -40,7 +40,8 @@ def iter_range(
     include_done: bool = True,
 ) -> Iterator[list[Task]]:
     """Live tasks (subtasks too) that fall on any day from ``first`` to ``last`` inclusive,
-    ordered by the day they begin on, then number, in chunks (at most ``MAX_TASKS`` in all)."""
+    in task-number order, in chunks of ``CHUNK`` (all of them: no cap, each chunk follows the last
+    number seen, so a task edited meanwhile is never listed twice)."""
     start, end = _day(first, "from"), _day(last, "to")
     if end < start:
         raise ApiError("The range ends before it starts.")
@@ -54,15 +55,16 @@ def iter_range(
     )
     if not include_done:
         rows = rows.exclude(status__category__in=(Category.DONE, Category.CANCELLED))
-    rows = rows.order_by("start_date", "due_date", "number")
-    for offset in range(0, MAX_TASKS, services.PAGE_MAX):
-        chunk, more = services.fetch_page(
-            actor, workspace, rows[offset : offset + services.PAGE_MAX], services.PAGE_MAX
-        )
+    rows = rows.order_by("number")
+    after = 0
+    while True:
+        chunk, more = services.fetch_page(actor, workspace, rows.filter(number__gt=after), CHUNK)
+        links.mark_schedule(chunk, actor, workspace)
         if chunk:
             yield chunk
-        if not more and len(chunk) < services.PAGE_MAX:
+        if not more:
             return
+        after = chunk[-1].number
 
 
 def list_range(

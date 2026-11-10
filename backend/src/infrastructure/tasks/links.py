@@ -310,6 +310,38 @@ def mark_blocked(tasks: list[Task], actor: Any, workspace: Workspace) -> list[Ta
     return tasks
 
 
+def mark_schedule(tasks: list[Task], actor: Any, workspace: Workspace) -> list[Task]:
+    """Set ``blockers_due`` (the latest due date among a task's open blockers) and ``blocks_due``
+    (the earliest due date among the open tasks it blocks) on each task, counting only tasks in
+    projects ``actor`` can open, so a client can tell whether a new date would break a link. Two
+    queries."""
+    if not tasks:
+        return tasks
+    ids = [t.pk for t in tasks]
+    visible = _visible_projects(actor, workspace)
+    latest: dict[Any, str] = {}
+    for to_id, due in (
+        _open_blockers(ids)
+        .filter(from_task__due_date__isnull=False, from_task__project__in=visible)
+        .values_list("to_task_id", "from_task__due_date")
+    ):
+        latest[to_id] = max(latest.get(to_id, ""), due.isoformat())
+    earliest: dict[Any, str] = {}
+    blocked = (
+        TaskLink.objects.filter(type=LinkType.BLOCKS, from_task_id__in=ids)
+        .filter(to_task__deleted_at__isnull=True, to_task__due_date__isnull=False)
+        .filter(to_task__project__in=visible)
+        .exclude(to_task__status__category__in=FINAL)
+        .values_list("from_task_id", "to_task__due_date")
+    )
+    for from_id, due in blocked:
+        earliest[from_id] = min(earliest.get(from_id, "9999-12-31"), due.isoformat())
+    for task in tasks:
+        task.blockers_due = latest.get(task.pk, "")
+        task.blocks_due = earliest.get(task.pk, "")
+    return tasks
+
+
 def blockers_of(actor: Any, workspace: Workspace, task: Task, *, masked: bool = True) -> list[str]:
     """Display ids of the task's open blockers; with ``masked`` those ``actor`` cannot open read
     'Restricted task' (the answer to a person), without it the real ids (the audit record)."""

@@ -33,6 +33,9 @@ class Task(models.Model):
     priority = models.CharField(max_length=8, choices=Priority.choices, default=Priority.NONE)
     start_date = models.DateField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
+    # Optional time of day the task is due, in UTC; the due *date* is never shifted by it (a due
+    # date of 5 Nov is 5 Nov everywhere), only the clock time is shown in the viewer's zone.
+    due_time = models.TimeField(null=True, blank=True)
     created_by = models.ForeignKey(
         django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
     )
@@ -57,6 +60,10 @@ class Task(models.Model):
     # Not stored: the services set it on the tasks they return (see ``links.blocked_ids``).
     is_blocked = False
     blockers: tuple[str, ...] = ()  # "WEB-4 (In progress)" or "Restricted task", for the caller
+    # Not stored: set by ``links.mark_schedule`` (the calendar): the latest due date among the
+    # open tasks that block this one, and the earliest among the open tasks it blocks (ISO, or "").
+    blockers_due = ""
+    blocks_due = ""
     group_key = ""  # in a grouped list: the group this task is listed under (see ``listing``)
     custom_values: dict[str, str] = {}  # custom field id -> wire value (see customfields.values)
 

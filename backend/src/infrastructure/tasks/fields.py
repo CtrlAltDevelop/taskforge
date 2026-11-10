@@ -1,7 +1,7 @@
 """Validation of the editable task fields. Each cleaner returns the stored form or raises."""
 
 import json
-from datetime import date
+from datetime import date, time
 from typing import Any, Final
 
 from infrastructure.common.errors import ApiError
@@ -47,6 +47,18 @@ def clean_date(value: str) -> date | None:
         return date.fromisoformat(value)
     except ValueError:
         raise ApiError("Dates must be YYYY-MM-DD.") from None
+
+
+def clean_time(value: str) -> time | None:
+    """``HH:MM`` (UTC), or empty for none."""
+    if not value:
+        return None
+    try:
+        if len(value) != 5 or value[2] != ":":
+            raise ValueError(value)
+        return time(int(value[:2]), int(value[3:]))
+    except ValueError:
+        raise ApiError("Times must be HH:MM.") from None
 
 
 def check_range(start: date | None, due: date | None) -> None:

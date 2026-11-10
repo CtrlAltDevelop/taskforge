@@ -145,3 +145,40 @@ def test_strangers_and_foreign_projects_see_nothing(team: Any, project: Any) -> 
     assert (
         calendar.list_range(team.viewer, team.ws, str(other.pk), "2026-11-01", "2026-11-30") == []
     )
+
+
+def test_a_range_is_never_cut_and_never_repeats_across_chunks(
+    team: Any, project: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(calendar, "CHUNK", 3)
+    for n in range(10):
+        _make(team, project, f"t{n}", due_date="2026-11-05")
+
+    chunks = list(
+        calendar.iter_range(team.viewer, team.ws, str(project.pk), "2026-11-01", "2026-11-30")
+    )
+
+    assert [len(c) for c in chunks] == [3, 3, 3, 1]
+    assert [t.title for c in chunks for t in c] == [f"t{n}" for n in range(10)]
+
+
+def test_a_task_carries_the_due_dates_of_what_it_is_linked_to(team: Any, project: Any) -> None:
+    from infrastructure.tasks import links
+
+    blocker = _make(team, project, "blocker", due_date="2026-11-10")
+    other = _make(team, project, "other blocker", due_date="2026-11-20")
+    blocked = _make(team, project, "blocked", due_date="2026-11-15")
+    for first in (blocker, other):
+        links.add(team.owner, team.ws, str(first.pk), str(blocked.pk), "blocks")
+
+    tasks = {
+        t.title: t
+        for t in calendar.list_range(
+            team.viewer, team.ws, str(project.pk), "2026-11-01", "2026-11-30"
+        )
+    }
+
+    assert tasks["blocked"].blockers_due == "2026-11-20"
+    assert tasks["blocked"].blocks_due == ""
+    assert tasks["blocker"].blocks_due == "2026-11-15"
+    assert tasks["blocker"].blockers_due == ""

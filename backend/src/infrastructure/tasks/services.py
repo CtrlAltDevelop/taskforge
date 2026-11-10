@@ -44,6 +44,7 @@ SCALAR_FIELDS: Final[dict[str, Callable[[str], Any]]] = {
     "priority": fields.clean_priority,
     "start_date": fields.clean_date,
     "due_date": fields.clean_date,
+    "due_time": fields.clean_time,
 }
 EDITABLE: Final = (*SCALAR_FIELDS, "status", "assignee_ids")
 
@@ -179,6 +180,10 @@ def _clean(
     )
     due = cleaned["due_date"] if "due_date" in cleaned else getattr(current, "due_date", None)
     fields.check_range(start, due)
+    if cleaned.get("due_time") is not None and due is None:
+        raise ApiError("A due time needs a due date.")
+    if "due_date" in cleaned and due is None:
+        cleaned["due_time"] = None  # no due date, no time on it
     return cleaned
 
 
@@ -216,6 +221,7 @@ def create(
     priority: str = "none",
     start_date: str = "",
     due_date: str = "",
+    due_time: str = "",
     assignee_ids: Any = (),
     parent_id: str = "",
     field_values: Mapping[str, str] | None = None,
@@ -234,6 +240,7 @@ def create(
                 "priority": priority,
                 "start_date": start_date,
                 "due_date": due_date,
+                "due_time": due_time,
                 "assignee_ids": list(assignee_ids),
             },
         )

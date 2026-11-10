@@ -210,6 +210,9 @@ message Task {
     repeated string blocked_by = 26;
     repeated TaskFieldValue fields = 27;
     string group_key = 28;
+    string due_time = 29;
+    string blockers_due = 30;
+    string blocks_due = 31;
 }
 
 message TaskBulkUpdateRequest {
@@ -240,6 +243,7 @@ message TaskCreateRequest {
     repeated string assignee_ids = 9;
     string parent_id = 10;
     repeated TaskFieldValue field_values = 11;
+    string due_time = 12;
 }
 
 message TaskDeleteRequest {
@@ -340,6 +344,9 @@ message TaskResponse {
     repeated string blocked_by = 26;
     repeated TaskFieldValueResponse fields = 27;
     string group_key = 28;
+    string due_time = 29;
+    string blockers_due = 30;
+    string blocks_due = 31;
 }
 
 message TaskRestoreRequest {
@@ -375,5 +382,6 @@ message TaskUpdateRequest {
     repeated string assignee_ids = 12;
     bool override_blocked = 13;
     repeated TaskFieldValue field_values = 14;
+    optional string due_time = 15;
 }
 
