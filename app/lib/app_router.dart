@@ -139,6 +139,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => ProjectScreen(
           projectId: state.pathParameters['id']!,
           taskId: state.uri.queryParameters['task'],
+          view: state.uri.queryParameters['view'],
         ),
       ),
       GoRoute(

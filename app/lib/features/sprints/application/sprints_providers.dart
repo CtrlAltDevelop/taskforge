@@ -55,6 +55,24 @@ final burndownProvider = FutureProvider.autoDispose.family<Burndown, SprintKey>(
   },
 );
 
+/// Whether a project's board shows only the cards of its active sprint. It
+/// lasts for the session (not saved with the layout: a sprint ends).
+final boardCurrentSprintProvider =
+    NotifierProvider.family<BoardCurrentSprint, bool, String>(
+      BoardCurrentSprint.new,
+    );
+
+class BoardCurrentSprint extends Notifier<bool> {
+  BoardCurrentSprint(this.projectId);
+
+  final String projectId;
+
+  @override
+  bool build() => false;
+
+  void set({required bool on}) => state = on;
+}
+
 /// Everything that shows sprints reads again.
 void readSprintsAgain(Ref ref) {
   ref.invalidate(sprintsProvider);
@@ -62,6 +80,8 @@ void readSprintsAgain(Ref ref) {
   ref.invalidate(sprintTasksProvider);
   ref.invalidate(burndownProvider);
 }
+
+String _pointsText(double? points) => points == null ? '' : decimalText(points);
 
 /// What the buttons do. Each call acts on the server, then reads again, even
 /// when it failed: a call that timed out may still have happened.
@@ -87,6 +107,8 @@ class SprintActions {
     String goal = '',
     required DateTime start,
     required DateTime end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) => _then(
     _client.create(
       _ws,
@@ -95,6 +117,8 @@ class SprintActions {
       goal: goal,
       start: start,
       end: end,
+      capacityPoints: capacityPoints,
+      capacitySec: capacitySec,
     ),
   );
 
@@ -104,6 +128,8 @@ class SprintActions {
     required String goal,
     required DateTime start,
     required DateTime end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) => _then(
     _client.update(
       _ws,
@@ -114,14 +140,39 @@ class SprintActions {
         if (goal != sprint.goal) 'goal',
         if (start != sprint.startDate) 'start_date',
         if (end != sprint.endDate) 'end_date',
+        if (capacityPoints != _pointsText(sprint.capacityPoints))
+          'capacity_points',
+        if (capacitySec != (sprint.capacitySec ?? 0)) 'capacity_sec',
       ],
       expectedVersion: sprint.version,
       name: name,
       goal: goal,
       start: start,
       end: end,
+      capacityPoints: capacityPoints,
+      capacitySec: capacitySec,
     ),
   );
+
+  /// Sets (an empty [text] clears) the capacity in points, or in hours.
+  Future<SprintAnswer> setCapacity(
+    Sprint sprint, {
+    required bool hours,
+    required String text,
+  }) {
+    final value = double.tryParse(text.trim());
+    return _then(
+      _client.update(
+        _ws,
+        sprint.projectId,
+        sprint.id,
+        fields: [hours ? 'capacity_sec' : 'capacity_points'],
+        expectedVersion: sprint.version,
+        capacityPoints: hours || value == null ? '' : decimalText(value),
+        capacitySec: hours && value != null ? (value * 3600).round() : 0,
+      ),
+    );
+  }
 
   Future<SprintAnswer> start(Sprint sprint) =>
       _then(_client.start(_ws, sprint.projectId, sprint.id));

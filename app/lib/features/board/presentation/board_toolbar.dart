@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/board/application/board_providers.dart';
+import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
@@ -12,10 +13,14 @@ class BoardToolbar extends ConsumerWidget {
     super.key,
     required this.projectId,
     required this.lookups,
+    this.sprintFilter = false,
   });
 
   final String projectId;
   final ListLookups lookups;
+
+  /// Offer "Current sprint": the project has Sprints on and one is active.
+  final bool sprintFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,6 +99,19 @@ class BoardToolbar extends ConsumerWidget {
             ],
             child: const _Chip(icon: Icons.tune, label: 'Card fields'),
           ),
+          if (sprintFilter)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+              child: FilterChip(
+                key: const Key('board-sprint-filter'),
+                avatar: const Icon(Icons.timelapse, size: 18),
+                label: const Text('Current sprint'),
+                selected: ref.watch(boardCurrentSprintProvider(projectId)),
+                onSelected: (on) => ref
+                    .read(boardCurrentSprintProvider(projectId).notifier)
+                    .set(on: on),
+              ),
+            ),
           IconButton(
             key: const Key('board-refresh'),
             tooltip: 'Refresh',

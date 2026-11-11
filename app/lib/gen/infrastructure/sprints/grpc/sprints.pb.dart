@@ -747,6 +747,10 @@ class Sprint extends $pb.GeneratedMessage {
     $core.int? doneTasks,
     $core.double? donePoints,
     $core.int? estimateSecTotal,
+    $core.double? capacityPoints,
+    $core.bool? hasCapacityPoints_25,
+    $core.int? capacitySec,
+    $core.bool? hasCapacitySec_27,
   }) {
     final result = Sprint._();
     if (id != null) result.id = id;
@@ -772,6 +776,11 @@ class Sprint extends $pb.GeneratedMessage {
     if (doneTasks != null) result.doneTasks = doneTasks;
     if (donePoints != null) result.donePoints = donePoints;
     if (estimateSecTotal != null) result.estimateSecTotal = estimateSecTotal;
+    if (capacityPoints != null) result.capacityPoints = capacityPoints;
+    if (hasCapacityPoints_25 != null)
+      result.hasCapacityPoints_25 = hasCapacityPoints_25;
+    if (capacitySec != null) result.capacitySec = capacitySec;
+    if (hasCapacitySec_27 != null) result.hasCapacitySec_27 = hasCapacitySec_27;
     return result;
   }
 
@@ -811,6 +820,10 @@ class Sprint extends $pb.GeneratedMessage {
     ..aI(21, _omitFieldNames ? '' : 'doneTasks')
     ..aD(22, _omitFieldNames ? '' : 'donePoints')
     ..aI(23, _omitFieldNames ? '' : 'estimateSecTotal')
+    ..aD(24, _omitFieldNames ? '' : 'capacityPoints')
+    ..aOB(25, _omitFieldNames ? '' : 'hasCapacityPoints')
+    ..aI(26, _omitFieldNames ? '' : 'capacitySec')
+    ..aOB(27, _omitFieldNames ? '' : 'hasCapacitySec')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1039,6 +1052,42 @@ class Sprint extends $pb.GeneratedMessage {
   $core.bool hasEstimateSecTotal() => $_has(22);
   @$pb.TagNumber(23)
   void clearEstimateSecTotal() => $_clearField(23);
+
+  @$pb.TagNumber(24)
+  $core.double get capacityPoints => $_getN(23);
+  @$pb.TagNumber(24)
+  set capacityPoints($core.double value) => $_setDouble(23, value);
+  @$pb.TagNumber(24)
+  $core.bool hasCapacityPoints() => $_has(23);
+  @$pb.TagNumber(24)
+  void clearCapacityPoints() => $_clearField(24);
+
+  @$pb.TagNumber(25)
+  $core.bool get hasCapacityPoints_25 => $_getBF(24);
+  @$pb.TagNumber(25)
+  set hasCapacityPoints_25($core.bool value) => $_setBool(24, value);
+  @$pb.TagNumber(25)
+  $core.bool hasHasCapacityPoints_25() => $_has(24);
+  @$pb.TagNumber(25)
+  void clearHasCapacityPoints_25() => $_clearField(25);
+
+  @$pb.TagNumber(26)
+  $core.int get capacitySec => $_getIZ(25);
+  @$pb.TagNumber(26)
+  set capacitySec($core.int value) => $_setSignedInt32(25, value);
+  @$pb.TagNumber(26)
+  $core.bool hasCapacitySec() => $_has(25);
+  @$pb.TagNumber(26)
+  void clearCapacitySec() => $_clearField(26);
+
+  @$pb.TagNumber(27)
+  $core.bool get hasCapacitySec_27 => $_getBF(26);
+  @$pb.TagNumber(27)
+  set hasCapacitySec_27($core.bool value) => $_setBool(26, value);
+  @$pb.TagNumber(27)
+  $core.bool hasHasCapacitySec_27() => $_has(26);
+  @$pb.TagNumber(27)
+  void clearHasCapacitySec_27() => $_clearField(27);
 }
 
 class SprintAnswer extends $pb.GeneratedMessage {
@@ -1222,6 +1271,8 @@ class SprintCreateRequest extends $pb.GeneratedMessage {
     $core.String? goal,
     $core.String? startDate,
     $core.String? endDate,
+    $core.String? capacityPoints,
+    $core.int? capacitySec,
   }) {
     final result = SprintCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1230,6 +1281,8 @@ class SprintCreateRequest extends $pb.GeneratedMessage {
     if (goal != null) result.goal = goal;
     if (startDate != null) result.startDate = startDate;
     if (endDate != null) result.endDate = endDate;
+    if (capacityPoints != null) result.capacityPoints = capacityPoints;
+    if (capacitySec != null) result.capacitySec = capacitySec;
     return result;
   }
 
@@ -1252,6 +1305,8 @@ class SprintCreateRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'goal')
     ..aOS(5, _omitFieldNames ? '' : 'startDate')
     ..aOS(6, _omitFieldNames ? '' : 'endDate')
+    ..aOS(7, _omitFieldNames ? '' : 'capacityPoints')
+    ..aI(8, _omitFieldNames ? '' : 'capacitySec')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1330,6 +1385,24 @@ class SprintCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasEndDate() => $_has(5);
   @$pb.TagNumber(6)
   void clearEndDate() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get capacityPoints => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set capacityPoints($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasCapacityPoints() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCapacityPoints() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.int get capacitySec => $_getIZ(7);
+  @$pb.TagNumber(8)
+  set capacitySec($core.int value) => $_setSignedInt32(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCapacitySec() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCapacitySec() => $_clearField(8);
 }
 
 class SprintList extends $pb.GeneratedMessage {
@@ -2079,6 +2152,8 @@ class SprintUpdateRequest extends $pb.GeneratedMessage {
     $core.String? goal,
     $core.String? startDate,
     $core.String? endDate,
+    $core.String? capacityPoints,
+    $core.int? capacitySec,
   }) {
     final result = SprintUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -2090,6 +2165,8 @@ class SprintUpdateRequest extends $pb.GeneratedMessage {
     if (goal != null) result.goal = goal;
     if (startDate != null) result.startDate = startDate;
     if (endDate != null) result.endDate = endDate;
+    if (capacityPoints != null) result.capacityPoints = capacityPoints;
+    if (capacitySec != null) result.capacitySec = capacitySec;
     return result;
   }
 
@@ -2115,6 +2192,8 @@ class SprintUpdateRequest extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'goal')
     ..aOS(8, _omitFieldNames ? '' : 'startDate')
     ..aOS(9, _omitFieldNames ? '' : 'endDate')
+    ..aOS(10, _omitFieldNames ? '' : 'capacityPoints')
+    ..aI(11, _omitFieldNames ? '' : 'capacitySec')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2214,6 +2293,24 @@ class SprintUpdateRequest extends $pb.GeneratedMessage {
   $core.bool hasEndDate() => $_has(8);
   @$pb.TagNumber(9)
   void clearEndDate() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get capacityPoints => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set capacityPoints($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasCapacityPoints() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearCapacityPoints() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.int get capacitySec => $_getIZ(10);
+  @$pb.TagNumber(11)
+  set capacitySec($core.int value) => $_setSignedInt32(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasCapacitySec() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCapacitySec() => $_clearField(11);
 }
 
 class VelocityItem extends $pb.GeneratedMessage {

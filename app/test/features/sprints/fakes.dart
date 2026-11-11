@@ -28,6 +28,8 @@ Sprint mkSprint(
   DateTime? end,
   String goal = '',
   int version = 1,
+  double? capacityPoints,
+  int? capacitySec,
 }) => Sprint(
   id: id,
   projectId: 'p1',
@@ -37,6 +39,8 @@ Sprint mkSprint(
   version: version,
   startDate: start ?? DateTime(2026, 11, 9),
   endDate: end ?? DateTime(2026, 11, 22),
+  capacityPoints: capacityPoints,
+  capacitySec: capacitySec,
 );
 
 /// An in-memory sprint server for one project.
@@ -96,6 +100,8 @@ class FakeSprintsClient implements SprintsClient {
       openPoints: sum(open),
       doneTasks: mine.length - open.length,
       donePoints: sum(mine) - sum(open),
+      capacityPoints: s.capacityPoints,
+      capacitySec: s.capacitySec,
     );
   }
 
@@ -125,10 +131,20 @@ class FakeSprintsClient implements SprintsClient {
     String goal = '',
     required DateTime start,
     required DateTime end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) async {
     calls.add('create');
     _maybeFail();
-    final s = mkSprint('n${++_n}', name, goal: goal, start: start, end: end);
+    final s = mkSprint(
+      'n${++_n}',
+      name,
+      goal: goal,
+      start: start,
+      end: end,
+      capacityPoints: double.tryParse(capacityPoints),
+      capacitySec: capacitySec == 0 ? null : capacitySec,
+    );
     _put(s);
     return SprintAnswer(s, warnNext);
   }
@@ -144,6 +160,8 @@ class FakeSprintsClient implements SprintsClient {
     String goal = '',
     DateTime? start,
     DateTime? end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) async {
     calls.add('update');
     updates.add(fields);
@@ -163,6 +181,12 @@ class FakeSprintsClient implements SprintsClient {
       start: fields.contains('start_date') ? start : cur.startDate,
       end: fields.contains('end_date') ? end : cur.endDate,
       version: cur.version + 1,
+      capacityPoints: fields.contains('capacity_points')
+          ? double.tryParse(capacityPoints)
+          : cur.capacityPoints,
+      capacitySec: fields.contains('capacity_sec')
+          ? (capacitySec == 0 ? null : capacitySec)
+          : cur.capacitySec,
     );
     _put(s);
     return SprintAnswer(s, warnNext);

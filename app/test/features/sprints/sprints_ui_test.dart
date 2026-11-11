@@ -138,6 +138,210 @@ void main() {
     },
   );
 
+  testWidgets(
+    'capacity is saved on the sprint and is there on the next visit',
+    (tester) async {
+      final s = planning();
+      await open(tester, s);
+
+      await tester.tap(key('capacity-edit'));
+      await tester.pumpAndSettle();
+      await tester.enterText(key('capacity-field'), '12.25');
+      await tester.tap(key('capacity-save'));
+      await tester.pumpAndSettle();
+
+      expect(s.updates.last, ['capacity_points']);
+      expect(s.sprints.single.capacityPoints, 12.25);
+      expect(find.text('Load 8 pts of 12.25 pts'), findsOneWidget);
+
+      await tester.tap(find.text('Hours'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('no capacity set'),
+        findsOneWidget,
+      ); // per unit
+      await tester.tap(key('capacity-edit'));
+      await tester.pumpAndSettle();
+      await tester.enterText(key('capacity-field'), '10');
+      await tester.tap(key('capacity-save'));
+      await tester.pumpAndSettle();
+
+      expect(s.updates.last, ['capacity_sec']);
+      expect(s.sprints.single.capacitySec, 36000);
+      expect(s.sprints.single.capacityPoints, 12.25); // the other is untouched
+      expect(find.text('Load 0h of 10h'), findsOneWidget);
+    },
+  );
+
+  testWidgets('an empty capacity clears it', (tester) async {
+    final s = FakeSprintsClient(
+      sprints: [mkSprint('s1', 'Sprint 1', capacityPoints: 6)],
+      tasks: [sTask('d', sprint: 's1', points: 8)],
+    );
+    await open(tester, s);
+    expect(find.text('Load 8 pts of 6 pts'), findsOneWidget);
+
+    await tester.tap(key('capacity-edit'));
+    await tester.pumpAndSettle();
+    await tester.enterText(key('capacity-field'), '');
+    await tester.tap(key('capacity-save'));
+    await tester.pumpAndSettle();
+
+    expect(s.sprints.single.capacityPoints, isNull);
+    expect(find.text('Load 8 pts (no capacity set)'), findsOneWidget);
+  });
+
+  testWidgets('with no capacity set, the average velocity is the guide', (
+    tester,
+  ) async {
+    final s = FakeSprintsClient(
+      sprints: [mkSprint('s1', 'Sprint 1', state: SprintState.active)],
+      tasks: [sTask('d', sprint: 's1', points: 8)],
+    )..burndownAnswer = sampleBurndown(); // average velocity 9
+    await open(tester, s);
+
+    expect(find.text('Load 8 pts of 9 pts'), findsOneWidget);
+  });
+
+  testWidgets('a set capacity wins over the velocity guide', (tester) async {
+    final s = FakeSprintsClient(
+      sprints: [
+        mkSprint(
+          's1',
+          'Sprint 1',
+          state: SprintState.active,
+          capacityPoints: 20,
+        ),
+      ],
+      tasks: [sTask('d', sprint: 's1', points: 8)],
+    )..burndownAnswer = sampleBurndown();
+    await open(tester, s);
+
+    expect(find.text('Load 8 pts of 20 pts'), findsOneWidget);
+  });
+
+  testWidgets('the sprint form sets the capacity', (tester) async {
+    final s = planning();
+    await open(tester, s);
+
+    await tester.tap(key('new-sprint'));
+    await tester.pumpAndSettle();
+    await tester.enterText(key('sprint-name'), 'Sprint 2');
+    await tester.enterText(key('sprint-start'), '2027-01-04');
+    await tester.enterText(key('sprint-end'), '2027-01-15');
+    await tester.enterText(key('sprint-capacity-points'), '30');
+    await tester.enterText(key('sprint-capacity-hours'), '80');
+    await tester.tap(key('sprint-save'));
+    await tester.pumpAndSettle();
+    final made = s.sprints.firstWhere((x) => x.name == 'Sprint 2');
+
+    expect((made.capacityPoints, made.capacitySec), (30, 288000));
+  });
+
+  testWidgets('the edit form shows the capacity and saves a change', (
+    tester,
+  ) async {
+    final s = FakeSprintsClient(
+      sprints: [
+        mkSprint('s1', 'Sprint 1', capacityPoints: 12.5, capacitySec: 36000),
+      ],
+    );
+    await open(tester, s);
+
+    await tester.tap(key('edit-sprint'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(key('sprint-capacity-points')).controller!.text,
+      '12.5',
+    );
+    expect(
+      tester.widget<TextField>(key('sprint-capacity-hours')).controller!.text,
+      '10',
+    );
+    await tester.enterText(key('sprint-capacity-points'), '');
+    await tester.tap(key('sprint-save'));
+    await tester.pumpAndSettle();
+
+    expect(s.updates.single, ['capacity_points']); // hours untouched
+    expect(s.sprints.single.capacityPoints, isNull);
+    expect(s.sprints.single.capacitySec, 36000);
+  });
+
+  testWidgets('the form refuses a capacity that is not a number', (
+    tester,
+  ) async {
+    final s = planning();
+    await open(tester, s);
+
+    await tester.tap(key('edit-sprint'));
+    await tester.pumpAndSettle();
+    await tester.enterText(key('sprint-capacity-hours'), 'lots');
+    await tester.tap(key('sprint-save'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Capacity is a number'), findsOneWidget);
+    expect(s.calls, isNot(contains('update')));
+  });
+
+  testWidgets('back-filled days are ringed on the burndown and named', (
+    tester,
+  ) async {
+    final b = sampleBurndown();
+    final late = Burndown(
+      sprint: b.sprint,
+      baselinePoints: b.baselinePoints,
+      baselineTasks: b.baselineTasks,
+      averageVelocity: b.averageVelocity,
+      velocity: b.velocity,
+      scopeChanges: b.scopeChanges,
+      days: [
+        b.days.first,
+        BurndownDay(
+          date: DateTime(2026, 11, 10),
+          idealPoints: 5,
+          idealTasks: 2,
+          hasActual: true,
+          backfilled: true,
+          remainingPoints: 6,
+          remainingTasks: 2,
+        ),
+      ],
+    );
+    final s = FakeSprintsClient(
+      sprints: [mkSprint('s1', 'Sprint 1', state: SprintState.active)],
+    )..burndownAnswer = late;
+    await open(tester, s);
+
+    await tester.tap(find.text('Reports'));
+    await tester.pumpAndSettle();
+
+    expect(key('legend-backfilled'), findsOneWidget);
+    expect(
+      tester.renderObject(key('burndown-chart')),
+      paints
+        ..circle(style: PaintingStyle.fill) // the last point
+        ..circle(style: PaintingStyle.stroke), // the ring of a late day
+    );
+  });
+
+  testWidgets('with no back-filled day there is no such legend or ring', (
+    tester,
+  ) async {
+    final s = FakeSprintsClient(
+      sprints: [mkSprint('s1', 'Sprint 1', state: SprintState.active)],
+    )..burndownAnswer = sampleBurndown();
+    await open(tester, s);
+
+    await tester.tap(find.text('Reports'));
+    await tester.pumpAndSettle();
+
+    expect(key('legend-backfilled'), findsNothing);
+    expect(
+      tester.renderObject(key('burndown-chart')),
+      isNot(paints..circle(style: PaintingStyle.stroke)),
+    );
+  });
+
   testWidgets('selecting backlog tasks and Add to sprint moves them', (
     tester,
   ) async {

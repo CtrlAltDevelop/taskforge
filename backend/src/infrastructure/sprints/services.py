@@ -45,7 +45,8 @@ SPRINT_TASKS_MAX: Final = 1000
 CARRY_NEXT: Final = "next"
 CARRY_BACKLOG: Final = "backlog"
 LIVE = (State.PLANNED, State.ACTIVE)
-EDITABLE: Final = ("name", "goal", "start_date", "end_date")
+CAPACITY_SEC_MAX: Final = 100_000 * 3600
+EDITABLE: Final = ("name", "goal", "start_date", "end_date", "capacity_points", "capacity_sec")
 
 
 def _bad(message: str) -> ApiError:
@@ -130,6 +131,24 @@ def _goal(value: str) -> str:
     if len(goal) > GOAL_MAX:
         raise _bad(f"A sprint goal is at most {GOAL_MAX} characters.")
     return goal
+
+
+def _capacity_points(value: str) -> Decimal | None:
+    return fields.clean_points(value.strip())
+
+
+def _capacity_sec(value: str | int) -> int | None:
+    """Seconds of work the team can take on; empty (or 0) means none was set."""
+    text = str(value).strip()
+    if text in ("", "0"):
+        return None
+    try:
+        seconds = int(text)
+    except ValueError:
+        raise _bad("The capacity in hours must be a number.") from None
+    if not 0 < seconds <= CAPACITY_SEC_MAX:
+        raise _bad("The capacity in hours must be between 0 and 100000 hours.")
+    return seconds
 
 
 def _day(value: str, label: str) -> date:
@@ -247,10 +266,13 @@ def create(
     goal: str,
     start_date: str,
     end_date: str,
+    capacity_points: str = "",
+    capacity_sec: str | int = "",
 ) -> Outcome:
     start, end = _day(start_date, "start date"), _day(end_date, "end date")
     _check_range(start, end)
     clean_name, clean_goal = _name(name), _goal(goal)
+    points_capacity, sec_capacity = _capacity_points(capacity_points), _capacity_sec(capacity_sec)
     with transaction.atomic():
         project = _project(actor, workspace, project_id, MANAGE, lock=True)
         now = timezone.now()
@@ -261,6 +283,8 @@ def create(
             goal=clean_goal,
             start_date=start,
             end_date=end,
+            capacity_points=points_capacity,
+            capacity_sec=sec_capacity,
             created_at=now,
             updated_at=now,
         )
@@ -277,9 +301,9 @@ def update(
     changes: dict[str, str],
     expected_version: int = 0,
 ) -> Outcome:
-    """Change name, goal, dates. A planned sprint takes all; an active one cannot move its start
-    (its baseline is fixed) but may be renamed and extended; a completed one is history. With
-    ``expected_version`` the change is refused (409) if the sprint changed since."""
+    """Change name, goal, dates, capacity. A planned sprint takes all; an active one cannot move
+    its start (its baseline is fixed) but may be renamed and extended; a completed one is history.
+    With ``expected_version`` the change is refused (409) if the sprint changed since."""
     unknown = set(changes) - set(EDITABLE)
     if unknown:
         raise _bad(f"Cannot change {sorted(unknown)[0]}.")
@@ -307,6 +331,10 @@ def update(
                 raise _bad("An active sprint's start date is fixed.")
         if "end_date" in changes:
             values["end_date"] = _day(changes["end_date"], "end date")
+        if "capacity_points" in changes:
+            values["capacity_points"] = _capacity_points(changes["capacity_points"])
+        if "capacity_sec" in changes:
+            values["capacity_sec"] = _capacity_sec(changes["capacity_sec"])
         start = values.get("start_date", sprint.start_date)
         end = values.get("end_date", sprint.end_date)
         _check_range(start, end)

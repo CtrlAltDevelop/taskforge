@@ -157,3 +157,44 @@ def test_viewer_reads_but_cannot_change_and_outsider_sees_nothing(
     assert len(seen.sprints) == 1
     assert start.code() == grpc.StatusCode.PERMISSION_DENIED
     assert stranger.code() in (grpc.StatusCode.NOT_FOUND, grpc.StatusCode.PERMISSION_DENIED)
+
+
+def test_capacity_round_trips_and_an_empty_one_clears(team: Any, grpc_call: GrpcCall) -> None:
+    token = team["tokens"]["max"]
+    made = grpc_call(
+        S,
+        "Create",
+        pb.SprintCreateRequest(
+            **_ref(team),
+            name="Cap",
+            start_date="2026-11-02",
+            end_date="2026-11-06",
+            capacity_points="25.5",
+            capacity_sec=72000,
+        ),
+        token=token,
+    ).sprint
+    bare = _plan(grpc_call, team, "Bare", start="2026-11-09", end="2026-11-13").sprint
+
+    cleared = grpc_call(
+        S,
+        "Update",
+        pb.SprintUpdateRequest(
+            **_ref(team), sprint_id=made.id, fields=["capacity_points", "capacity_sec"]
+        ),
+        token=token,
+    ).sprint
+    set_later = grpc_call(
+        S,
+        "Update",
+        pb.SprintUpdateRequest(
+            **_ref(team), sprint_id=bare.id, fields=["capacity_points"], capacity_points="8"
+        ),
+        token=token,
+    ).sprint
+
+    assert (made.capacity_points, made.has_capacity_points) == (25.5, True)
+    assert (made.capacity_sec, made.has_capacity_sec) == (72000, True)
+    assert (bare.has_capacity_points, bare.has_capacity_sec) == (False, False)
+    assert (cleared.has_capacity_points, cleared.has_capacity_sec) == (False, False)
+    assert (set_later.capacity_points, set_later.has_capacity_points) == (8.0, True)

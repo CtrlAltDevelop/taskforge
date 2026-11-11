@@ -57,6 +57,8 @@ The sprint at the end of local day ``date`` (taken at the workspace's midnight).
 | `state` | Char |  |
 | `started_at` | DateTime | nullable |
 | `completed_at` | DateTime | nullable |
+| `capacity_points` | Decimal | nullable |
+| `capacity_sec` | PositiveInteger | nullable |
 | `baseline_points` | Decimal |  |
 | `baseline_tasks` | PositiveInteger |  |
 | `completed_points` | Decimal |  |

@@ -98,6 +98,10 @@ message Sprint {
     int32 done_tasks = 21;
     double done_points = 22;
     int32 estimate_sec_total = 23;
+    double capacity_points = 24;
+    bool has_capacity_points = 25;
+    int32 capacity_sec = 26;
+    bool has_capacity_sec = 27;
 }
 
 message SprintAnswer {
@@ -120,6 +124,8 @@ message SprintCreateRequest {
     string goal = 4;
     string start_date = 5;
     string end_date = 6;
+    string capacity_points = 7;
+    int32 capacity_sec = 8;
 }
 
 message SprintList {
@@ -189,6 +195,8 @@ message SprintUpdateRequest {
     string goal = 7;
     string start_date = 8;
     string end_date = 9;
+    string capacity_points = 10;
+    int32 capacity_sec = 11;
 }
 
 message VelocityItem {

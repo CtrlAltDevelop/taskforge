@@ -20,9 +20,13 @@ abstract interface class SprintsClient {
     String goal = '',
     required DateTime start,
     required DateTime end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   });
 
-  /// Only the named [fields] change (`name`, `goal`, `start_date`, `end_date`).
+  /// Only the named [fields] change (`name`, `goal`, `start_date`, `end_date`,
+  /// `capacity_points`, `capacity_sec`). An empty [capacityPoints] or a zero
+  /// [capacitySec] named in [fields] clears that capacity.
   Future<SprintAnswer> update(
     String workspaceId,
     String projectId,
@@ -33,6 +37,8 @@ abstract interface class SprintsClient {
     String goal = '',
     DateTime? start,
     DateTime? end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   });
   Future<SprintAnswer> start(
     String workspaceId,
@@ -137,6 +143,8 @@ Sprint sprintFromPb(pb.Sprint s) => Sprint(
   doneTasks: s.doneTasks,
   donePoints: s.donePoints,
   estimateSecTotal: s.estimateSecTotal,
+  capacityPoints: s.hasCapacityPoints_25 ? s.capacityPoints : null,
+  capacitySec: s.hasCapacitySec_27 ? s.capacitySec : null,
 );
 
 SprintTask taskFromPb(pb.SprintTask t) => SprintTask(
@@ -249,6 +257,8 @@ class GrpcSprintsClient implements SprintsClient {
     String goal = '',
     required DateTime start,
     required DateTime end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) => _run(
     () async => _answer(
       await _client.create(
@@ -259,6 +269,8 @@ class GrpcSprintsClient implements SprintsClient {
           goal: goal,
           startDate: dayText(start),
           endDate: dayText(end),
+          capacityPoints: capacityPoints,
+          capacitySec: capacitySec,
         ),
         options: _options,
       ),
@@ -276,6 +288,8 @@ class GrpcSprintsClient implements SprintsClient {
     String goal = '',
     DateTime? start,
     DateTime? end,
+    String capacityPoints = '',
+    int capacitySec = 0,
   }) => _run(
     () async => _answer(
       await _client.update(
@@ -289,6 +303,8 @@ class GrpcSprintsClient implements SprintsClient {
           goal: goal,
           startDate: start == null ? '' : dayText(start),
           endDate: end == null ? '' : dayText(end),
+          capacityPoints: capacityPoints,
+          capacitySec: capacitySec,
         ),
         options: _options,
       ),

@@ -4,6 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
+const _badCapacity = -1.0;
+
+/// A capacity typed in a box: null when empty, [_badCapacity] when it is not
+/// a non-negative number.
+double? _capacity(String raw) {
+  final text = raw.trim();
+  if (text.isEmpty) return null;
+  final value = double.tryParse(text);
+  return value == null || value < 0 ? _badCapacity : value;
+}
+
 /// Create ([sprint] null) or edit a sprint. Overlap with other sprints is
 /// shown while typing and again from the server's warnings after saving.
 class SprintFormDialog extends ConsumerStatefulWidget {
@@ -35,6 +46,16 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
       widget.sprint?.endDate ?? _today.add(const Duration(days: 13)),
     ),
   );
+  late final _capacityPoints = TextEditingController(
+    text: widget.sprint?.capacityPoints == null
+        ? ''
+        : decimalText(widget.sprint!.capacityPoints!),
+  );
+  late final _capacityHours = TextEditingController(
+    text: widget.sprint?.capacitySec == null
+        ? ''
+        : decimalText(widget.sprint!.capacitySec! / 3600),
+  );
   var _busy = false;
   String? _error;
   List<String>? _saved; // warnings after a save that went through
@@ -47,6 +68,8 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
     _goal.dispose();
     _start.dispose();
     _end.dispose();
+    _capacityPoints.dispose();
+    _capacityHours.dispose();
     super.dispose();
   }
 
@@ -76,6 +99,14 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
       setState(() => _error = 'The sprint cannot end before it starts.');
       return;
     }
+    final points = _capacity(_capacityPoints.text);
+    final hours = _capacity(_capacityHours.text);
+    if (points == _badCapacity || hours == _badCapacity) {
+      setState(() => _error = 'Capacity is a number, or empty for none.');
+      return;
+    }
+    final capacityPoints = points == null ? '' : decimalText(points);
+    final capacitySec = hours == null ? 0 : (hours * 3600).round();
     setState(() {
       _busy = true;
       _error = null;
@@ -90,6 +121,8 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
               goal: _goal.text.trim(),
               start: start,
               end: end,
+              capacityPoints: capacityPoints,
+              capacitySec: capacitySec,
             )
           : await actions.edit(
               existing,
@@ -97,6 +130,8 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
               goal: _goal.text.trim(),
               start: start,
               end: end,
+              capacityPoints: capacityPoints,
+              capacitySec: capacitySec,
             );
       if (!mounted) return;
       if (answer.warnings.isEmpty) {
@@ -191,6 +226,26 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                     icon: const Icon(Icons.calendar_today),
                     onPressed: () => _pick(_end),
                   ),
+                ),
+              ),
+              TextField(
+                key: const Key('sprint-capacity-points'),
+                controller: _capacityPoints,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Capacity in points (optional)',
+                ),
+              ),
+              TextField(
+                key: const Key('sprint-capacity-hours'),
+                controller: _capacityHours,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Capacity in hours (optional)',
                 ),
               ),
               if (clash.isNotEmpty)
@@ -400,7 +455,7 @@ class CapacityDialog extends StatefulWidget {
 
 class _CapacityState extends State<CapacityDialog> {
   late final _c = TextEditingController(
-    text: widget.value == null ? '' : pointsText(widget.value!),
+    text: widget.value == null ? '' : decimalText(widget.value!),
   );
 
   @override

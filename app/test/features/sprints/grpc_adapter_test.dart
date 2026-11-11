@@ -28,6 +28,8 @@ pb.Sprint _sprint(String id, {String state = 'active'}) => pb.Sprint(
   openTasks: 2,
   doneTasks: 2,
   estimateSecTotal: 7200,
+  capacityPoints: 20,
+  hasCapacityPoints_25: true,
 );
 
 pb.SprintTask _task(String id, {bool points = true}) => pb.SprintTask(
@@ -231,6 +233,7 @@ void main() {
       (3, 'ship', 12.5, 2),
     );
     expect(s.estimateSecTotal, 7200);
+    expect((s.capacityPoints, s.capacitySec), (20, null)); // hours not set
   });
 
   test('create sends days and returns the overlap warnings', () async {
@@ -246,6 +249,31 @@ void main() {
     final r = sprints.seen['create']! as pb.SprintCreateRequest;
     expect((r.startDate, r.endDate, r.goal), ('2026-11-09', '2026-11-22', 'g'));
     expect(a.warnings, ['Overlaps "S1".']);
+  });
+
+  test('create and update carry the capacity; zero and empty clear', () async {
+    await client.create(
+      'w1',
+      'p1',
+      name: 'S',
+      start: DateTime(2026, 11, 9),
+      end: DateTime(2026, 11, 22),
+      capacityPoints: '12.5',
+      capacitySec: 36000,
+    );
+    final created = sprints.seen['create']! as pb.SprintCreateRequest;
+    await client.update(
+      'w1',
+      'p1',
+      's1',
+      fields: ['capacity_points', 'capacity_sec'],
+      expectedVersion: 3,
+    );
+    final updated = sprints.seen['update']! as pb.SprintUpdateRequest;
+
+    expect((created.capacityPoints, created.capacitySec), ('12.5', 36000));
+    expect(updated.fields.toList(), ['capacity_points', 'capacity_sec']);
+    expect((updated.capacityPoints, updated.capacitySec), ('', 0));
   });
 
   test('an update names only the fields it changes and the version', () async {

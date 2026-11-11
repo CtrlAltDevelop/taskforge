@@ -1,6 +1,7 @@
 """Sprint rules on the services."""
 
 from datetime import date, timedelta
+from decimal import Decimal
 from typing import Any
 
 import pytest
@@ -535,3 +536,36 @@ def test_baseline_leaves_out_tasks_already_done_at_the_start(team: Any, web: Any
     started = start(team, web, sprint)
 
     assert (float(refresh(started).baseline_points), refresh(started).baseline_tasks) == (5, 1)
+
+
+def test_capacity_is_kept_changed_and_cleared(team: Any, web: Any) -> None:
+    pid = str(web.pk)
+    made = services.create(
+        team.owner, team.ws, pid, "S", "", "2026-11-02", "2026-11-06", "30.5", 144000
+    ).sprint
+    assert (made.capacity_points, made.capacity_sec) == (Decimal("30.50"), 144000)
+    bare = new_sprint(team, web, "B", "2026-11-09", "2026-11-13")
+    assert (bare.capacity_points, bare.capacity_sec) == (None, None)
+
+    start(team, web, made)  # an active sprint may still change its capacity
+    changed = services.update(
+        team.owner, team.ws, pid, str(made.pk), {"capacity_points": "12", "capacity_sec": "7200"}
+    ).sprint
+    assert (changed.capacity_points, changed.capacity_sec) == (Decimal("12.00"), 7200)
+    cleared = services.update(
+        team.owner, team.ws, pid, str(made.pk), {"capacity_points": "", "capacity_sec": "0"}
+    ).sprint
+    assert (cleared.capacity_points, cleared.capacity_sec) == (None, None)
+    assert refresh(made).capacity_points is None
+
+
+def test_capacity_is_validated(team: Any, web: Any) -> None:
+    sprint = new_sprint(team, web)
+    for bad in ({"capacity_points": "-1"}, {"capacity_points": "x"}, {"capacity_sec": "-5"}):
+        with pytest.raises(ApiError):
+            services.update(team.owner, team.ws, str(web.pk), str(sprint.pk), bad)
+    with pytest.raises(ApiError):
+        services.create(
+            team.owner, team.ws, str(web.pk), "S", "", "2026-11-02", "2026-11-06", "", 10**9
+        )
+    assert refresh(sprint).capacity_sec is None

@@ -14,6 +14,8 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/sprints/application/sprints_providers.dart';
+import 'package:taskforge/features/sprints/domain/sprints.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
@@ -123,6 +125,15 @@ class _BoardViewState extends ConsumerState<BoardView> {
     }
   }
 
+  /// "Current sprint" is offered when the project has Sprints on and one is
+  /// active (it stays while the filter is on, so it can be switched off).
+  bool _sprintFilterOffered() {
+    if (!widget.project.enabledFeatures.contains(sprintsFeature)) return false;
+    final sprints = ref.watch(sprintsProvider(_id)).value;
+    return ref.watch(boardCurrentSprintProvider(_id)) ||
+        (sprints?.any((s) => s.isActive) ?? false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final layout = ref.watch(boardLayoutProvider(_id)).layout;
@@ -135,7 +146,11 @@ class _BoardViewState extends ConsumerState<BoardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        BoardToolbar(projectId: _id, lookups: lookups),
+        BoardToolbar(
+          projectId: _id,
+          lookups: lookups,
+          sprintFilter: _sprintFilterOffered(),
+        ),
         Expanded(
           child: state.error != null && state.lanes.isEmpty
               ? Center(

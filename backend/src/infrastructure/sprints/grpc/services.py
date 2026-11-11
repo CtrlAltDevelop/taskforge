@@ -47,6 +47,8 @@ FIELDS = [
     {"name": "goal", "type": "string"},
     {"name": "start_date", "type": "string"},
     {"name": "end_date", "type": "string"},
+    {"name": "capacity_points", "type": "string"},
+    {"name": "capacity_sec", "type": "int32"},
 ]
 
 
@@ -90,6 +92,10 @@ def sprint_message(sprint: Any, counts: tally.Tally | None = None) -> Any:
         done_tasks=c.done_tasks,
         done_points=num(c.done_points),
         estimate_sec_total=c.estimate_sec,
+        capacity_points=num(sprint.capacity_points or 0),
+        has_capacity_points=sprint.capacity_points is not None,
+        capacity_sec=sprint.capacity_sec or 0,
+        has_capacity_sec=sprint.capacity_sec is not None,
     )
 
 
@@ -208,6 +214,8 @@ class SprintService(generics.GenericService):
                     request.goal,
                     request.start_date,
                     request.end_date,
+                    request.capacity_points,
+                    request.capacity_sec,
                 )
             )
 
@@ -226,7 +234,8 @@ class SprintService(generics.GenericService):
     )
     @action
     async def Update(self, request: Any, context: Any) -> Any:
-        """``fields`` names what to change (any of name, goal, start_date, end_date)."""
+        """``fields`` names what to change (any of name, goal, start_date, end_date,
+        capacity_points, capacity_sec; an empty capacity clears it)."""
         user, workspace = await _scope(request, context)
 
         def run() -> Any:
@@ -234,7 +243,8 @@ class SprintService(generics.GenericService):
             for name in request.fields:
                 if name not in services.EDITABLE:
                     raise ApiError(f"Cannot change {name}.", status=400)
-                changes[name] = getattr(request, name)
+                value = getattr(request, name)
+                changes[name] = (str(value) if value else "") if name == "capacity_sec" else value
             return _answer(
                 services.update(
                     user,

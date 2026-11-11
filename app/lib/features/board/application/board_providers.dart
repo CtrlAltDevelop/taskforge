@@ -8,7 +8,9 @@ import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/board/data/board_client.dart';
 import 'package:taskforge/features/board/domain/board.dart';
+import 'package:taskforge/features/board/domain/board_sprint_filter.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
+import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -74,6 +76,23 @@ class BoardLayoutNotifier extends PersonalLayoutNotifier<BoardLayout> {
   }
 }
 
+// -------------------------------------------------------------- sprint filter
+
+/// The filter the board reads with: the person's filter, narrowed to the
+/// active sprint when that is switched on. With no active sprint (it was
+/// completed meanwhile) the narrowing is dropped, so the board is not empty
+/// for no visible reason.
+final boardFilterJsonProvider = Provider.autoDispose.family<String, String>((
+  ref,
+  projectId,
+) {
+  final base = ref.watch(filterJsonProvider(projectId));
+  if (!ref.watch(boardCurrentSprintProvider(projectId))) return base;
+  final sprints = ref.watch(sprintsProvider(projectId)).value;
+  final active = sprints == null || sprints.any((s) => s.isActive);
+  return active ? withCurrentSprint(base) : base;
+});
+
 // ---------------------------------------------------------------------- cards
 
 @immutable
@@ -128,7 +147,7 @@ class BoardNotifier extends Notifier<BoardState> {
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
     ref.watch(
-      filterJsonProvider(projectId),
+      boardFilterJsonProvider(projectId),
     ); // a new filter reads the board again
     ref.watch(boardLayoutProvider(projectId).select((s) => s.layout.query));
     if (ref.watch(boardLayoutProvider(projectId).select((s) => s.loaded)) &&
@@ -149,7 +168,7 @@ class BoardNotifier extends Notifier<BoardState> {
         projectId,
         groupBy: query.groupBy,
         swimlane: query.swimlane,
-        filterAst: ref.read(filterJsonProvider(projectId)),
+        filterAst: ref.read(boardFilterJsonProvider(projectId)),
       );
       if (generation != _generation || !ref.mounted) return;
       if (_moving > 0) {
@@ -185,7 +204,7 @@ class BoardNotifier extends Notifier<BoardState> {
         swimlane: query.swimlane,
         lane: laneKey,
         cursor: column.cursor,
-        filterAst: ref.read(filterJsonProvider(projectId)),
+        filterAst: ref.read(boardFilterJsonProvider(projectId)),
       );
       if (generation != _generation || !ref.mounted) return;
       state = state.copyWith(

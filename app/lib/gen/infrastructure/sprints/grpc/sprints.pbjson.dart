@@ -215,6 +215,16 @@ const Sprint$json = {
       '5': 5,
       '10': 'estimateSecTotal'
     },
+    {'1': 'capacity_points', '3': 24, '4': 1, '5': 1, '10': 'capacityPoints'},
+    {
+      '1': 'has_capacity_points',
+      '3': 25,
+      '4': 1,
+      '5': 8,
+      '10': 'hasCapacityPoints'
+    },
+    {'1': 'capacity_sec', '3': 26, '4': 1, '5': 5, '10': 'capacitySec'},
+    {'1': 'has_capacity_sec', '3': 27, '4': 1, '5': 8, '10': 'hasCapacitySec'},
   ],
 };
 
@@ -233,7 +243,10 @@ final $typed_data.Uint8List sprintDescriptor = $convert.base64Decode(
     'bBgSIAEoAVILcG9pbnRzVG90YWwSHQoKb3Blbl90YXNrcxgTIAEoBVIJb3BlblRhc2tzEh8KC2'
     '9wZW5fcG9pbnRzGBQgASgBUgpvcGVuUG9pbnRzEh0KCmRvbmVfdGFza3MYFSABKAVSCWRvbmVU'
     'YXNrcxIfCgtkb25lX3BvaW50cxgWIAEoAVIKZG9uZVBvaW50cxIsChJlc3RpbWF0ZV9zZWNfdG'
-    '90YWwYFyABKAVSEGVzdGltYXRlU2VjVG90YWw=');
+    '90YWwYFyABKAVSEGVzdGltYXRlU2VjVG90YWwSJwoPY2FwYWNpdHlfcG9pbnRzGBggASgBUg5j'
+    'YXBhY2l0eVBvaW50cxIuChNoYXNfY2FwYWNpdHlfcG9pbnRzGBkgASgIUhFoYXNDYXBhY2l0eV'
+    'BvaW50cxIhCgxjYXBhY2l0eV9zZWMYGiABKAVSC2NhcGFjaXR5U2VjEigKEGhhc19jYXBhY2l0'
+    'eV9zZWMYGyABKAhSDmhhc0NhcGFjaXR5U2Vj');
 
 @$core.Deprecated('Use sprintAnswerDescriptor instead')
 const SprintAnswer$json = {
@@ -285,6 +298,8 @@ const SprintCreateRequest$json = {
     {'1': 'goal', '3': 4, '4': 1, '5': 9, '10': 'goal'},
     {'1': 'start_date', '3': 5, '4': 1, '5': 9, '10': 'startDate'},
     {'1': 'end_date', '3': 6, '4': 1, '5': 9, '10': 'endDate'},
+    {'1': 'capacity_points', '3': 7, '4': 1, '5': 9, '10': 'capacityPoints'},
+    {'1': 'capacity_sec', '3': 8, '4': 1, '5': 5, '10': 'capacitySec'},
   ],
 };
 
@@ -293,7 +308,8 @@ final $typed_data.Uint8List sprintCreateRequestDescriptor = $convert.base64Decod
     'ChNTcHJpbnRDcmVhdGVSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYWNlSW'
     'QSHQoKcHJvamVjdF9pZBgCIAEoCVIJcHJvamVjdElkEhIKBG5hbWUYAyABKAlSBG5hbWUSEgoE'
     'Z29hbBgEIAEoCVIEZ29hbBIdCgpzdGFydF9kYXRlGAUgASgJUglzdGFydERhdGUSGQoIZW5kX2'
-    'RhdGUYBiABKAlSB2VuZERhdGU=');
+    'RhdGUYBiABKAlSB2VuZERhdGUSJwoPY2FwYWNpdHlfcG9pbnRzGAcgASgJUg5jYXBhY2l0eVBv'
+    'aW50cxIhCgxjYXBhY2l0eV9zZWMYCCABKAVSC2NhcGFjaXR5U2Vj');
 
 @$core.Deprecated('Use sprintListDescriptor instead')
 const SprintList$json = {
@@ -468,6 +484,8 @@ const SprintUpdateRequest$json = {
     {'1': 'goal', '3': 7, '4': 1, '5': 9, '10': 'goal'},
     {'1': 'start_date', '3': 8, '4': 1, '5': 9, '10': 'startDate'},
     {'1': 'end_date', '3': 9, '4': 1, '5': 9, '10': 'endDate'},
+    {'1': 'capacity_points', '3': 10, '4': 1, '5': 9, '10': 'capacityPoints'},
+    {'1': 'capacity_sec', '3': 11, '4': 1, '5': 5, '10': 'capacitySec'},
   ],
 };
 
@@ -478,7 +496,8 @@ final $typed_data.Uint8List sprintUpdateRequestDescriptor = $convert.base64Decod
     'aW50SWQSFgoGZmllbGRzGAQgAygJUgZmaWVsZHMSKQoQZXhwZWN0ZWRfdmVyc2lvbhgFIAEoBV'
     'IPZXhwZWN0ZWRWZXJzaW9uEhIKBG5hbWUYBiABKAlSBG5hbWUSEgoEZ29hbBgHIAEoCVIEZ29h'
     'bBIdCgpzdGFydF9kYXRlGAggASgJUglzdGFydERhdGUSGQoIZW5kX2RhdGUYCSABKAlSB2VuZE'
-    'RhdGU=');
+    'RhdGUSJwoPY2FwYWNpdHlfcG9pbnRzGAogASgJUg5jYXBhY2l0eVBvaW50cxIhCgxjYXBhY2l0'
+    'eV9zZWMYCyABKAVSC2NhcGFjaXR5U2Vj');
 
 @$core.Deprecated('Use velocityItemDescriptor instead')
 const VelocityItem$json = {

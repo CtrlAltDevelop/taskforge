@@ -264,6 +264,10 @@ class Sprint(_message.Message):
     DONE_TASKS_FIELD_NUMBER: _builtins.int
     DONE_POINTS_FIELD_NUMBER: _builtins.int
     ESTIMATE_SEC_TOTAL_FIELD_NUMBER: _builtins.int
+    CAPACITY_POINTS_FIELD_NUMBER: _builtins.int
+    HAS_CAPACITY_POINTS_FIELD_NUMBER: _builtins.int
+    CAPACITY_SEC_FIELD_NUMBER: _builtins.int
+    HAS_CAPACITY_SEC_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     workspace_id: _builtins.str
     project_id: _builtins.str
@@ -287,6 +291,10 @@ class Sprint(_message.Message):
     done_tasks: _builtins.int
     done_points: _builtins.float
     estimate_sec_total: _builtins.int
+    capacity_points: _builtins.float
+    has_capacity_points: _builtins.bool
+    capacity_sec: _builtins.int
+    has_capacity_sec: _builtins.bool
     def __init__(
         self,
         *,
@@ -313,10 +321,14 @@ class Sprint(_message.Message):
         done_tasks: _builtins.int = ...,
         done_points: _builtins.float = ...,
         estimate_sec_total: _builtins.int = ...,
+        capacity_points: _builtins.float = ...,
+        has_capacity_points: _builtins.bool = ...,
+        capacity_sec: _builtins.int = ...,
+        has_capacity_sec: _builtins.bool = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["baseline_points", b"baseline_points", "baseline_tasks", b"baseline_tasks", "completed_at", b"completed_at", "completed_points", b"completed_points", "completed_tasks", b"completed_tasks", "done_points", b"done_points", "done_tasks", b"done_tasks", "end_date", b"end_date", "estimate_sec_total", b"estimate_sec_total", "goal", b"goal", "id", b"id", "name", b"name", "open_points", b"open_points", "open_tasks", b"open_tasks", "points_total", b"points_total", "project_id", b"project_id", "start_date", b"start_date", "started_at", b"started_at", "state", b"state", "task_count", b"task_count", "unfinished_tasks", b"unfinished_tasks", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["baseline_points", b"baseline_points", "baseline_tasks", b"baseline_tasks", "capacity_points", b"capacity_points", "capacity_sec", b"capacity_sec", "completed_at", b"completed_at", "completed_points", b"completed_points", "completed_tasks", b"completed_tasks", "done_points", b"done_points", "done_tasks", b"done_tasks", "end_date", b"end_date", "estimate_sec_total", b"estimate_sec_total", "goal", b"goal", "has_capacity_points", b"has_capacity_points", "has_capacity_sec", b"has_capacity_sec", "id", b"id", "name", b"name", "open_points", b"open_points", "open_tasks", b"open_tasks", "points_total", b"points_total", "project_id", b"project_id", "start_date", b"start_date", "started_at", b"started_at", "state", b"state", "task_count", b"task_count", "unfinished_tasks", b"unfinished_tasks", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -387,12 +399,16 @@ class SprintCreateRequest(_message.Message):
     GOAL_FIELD_NUMBER: _builtins.int
     START_DATE_FIELD_NUMBER: _builtins.int
     END_DATE_FIELD_NUMBER: _builtins.int
+    CAPACITY_POINTS_FIELD_NUMBER: _builtins.int
+    CAPACITY_SEC_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     name: _builtins.str
     goal: _builtins.str
     start_date: _builtins.str
     end_date: _builtins.str
+    capacity_points: _builtins.str
+    capacity_sec: _builtins.int
     def __init__(
         self,
         *,
@@ -402,10 +418,12 @@ class SprintCreateRequest(_message.Message):
         goal: _builtins.str = ...,
         start_date: _builtins.str = ...,
         end_date: _builtins.str = ...,
+        capacity_points: _builtins.str = ...,
+        capacity_sec: _builtins.int = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["end_date", b"end_date", "goal", b"goal", "name", b"name", "project_id", b"project_id", "start_date", b"start_date", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["capacity_points", b"capacity_points", "capacity_sec", b"capacity_sec", "end_date", b"end_date", "goal", b"goal", "name", b"name", "project_id", b"project_id", "start_date", b"start_date", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -656,6 +674,8 @@ class SprintUpdateRequest(_message.Message):
     GOAL_FIELD_NUMBER: _builtins.int
     START_DATE_FIELD_NUMBER: _builtins.int
     END_DATE_FIELD_NUMBER: _builtins.int
+    CAPACITY_POINTS_FIELD_NUMBER: _builtins.int
+    CAPACITY_SEC_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     sprint_id: _builtins.str
@@ -664,6 +684,8 @@ class SprintUpdateRequest(_message.Message):
     goal: _builtins.str
     start_date: _builtins.str
     end_date: _builtins.str
+    capacity_points: _builtins.str
+    capacity_sec: _builtins.int
     @_builtins.property
     def fields(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
@@ -678,10 +700,12 @@ class SprintUpdateRequest(_message.Message):
         goal: _builtins.str = ...,
         start_date: _builtins.str = ...,
         end_date: _builtins.str = ...,
+        capacity_points: _builtins.str = ...,
+        capacity_sec: _builtins.int = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["end_date", b"end_date", "expected_version", b"expected_version", "fields", b"fields", "goal", b"goal", "name", b"name", "project_id", b"project_id", "sprint_id", b"sprint_id", "start_date", b"start_date", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["capacity_points", b"capacity_points", "capacity_sec", b"capacity_sec", "end_date", b"end_date", "expected_version", b"expected_version", "fields", b"fields", "goal", b"goal", "name", b"name", "project_id", b"project_id", "sprint_id", b"sprint_id", "start_date", b"start_date", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

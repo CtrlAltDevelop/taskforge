@@ -78,7 +78,53 @@ void main() {
     });
   });
 
+  group('back-filled days', () {
+    final b = Burndown(
+      sprint: mkSprint('s1', 'S1', state: SprintState.active),
+      baselinePoints: 10,
+      baselineTasks: 4,
+      days: [
+        day(9, ideal: 10, remaining: 10, tasks: 4),
+        BurndownDay(
+          date: DateTime(2026, 11, 10),
+          idealPoints: 5,
+          hasActual: true,
+          backfilled: true,
+          remainingPoints: 7,
+          remainingTasks: 3,
+        ),
+        BurndownDay(
+          date: DateTime(2026, 11, 11),
+          idealPoints: 0,
+          backfilled: true, // nothing measured: nothing to mark
+        ),
+      ],
+    );
+
+    test('the chart marks the days that were written late', () {
+      final c = buildBurndownChart(b, BurndownMetric.points);
+
+      expect(c.points.map((p) => p.backfilled), [false, true, true]);
+      expect(c.backfilledDays, 1);
+    });
+  });
+
   group('capacity', () {
+    test('a sprint reads its capacity in points or in hours', () {
+      final s = mkSprint('s', 'S', capacityPoints: 12.5, capacitySec: 36000);
+
+      expect(s.capacityIn(hours: false), 12.5);
+      expect(s.capacityIn(hours: true), 10);
+      expect(mkSprint('s', 'S').capacityIn(hours: true), isNull);
+    });
+
+    test('decimals are kept to two places without trailing zeros', () {
+      expect(
+        [decimalText(8), decimalText(12.25), decimalText(0.5)],
+        ['8', '12.25', '0.5'],
+      );
+    });
+
     test('under capacity fills part of the bar', () {
       const c = Capacity(load: 8, capacity: 20);
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/charts/chart_paint.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
@@ -102,7 +103,8 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
             child: Semantics(
               label:
                   'Burndown chart, ${chart.points.length} days, '
-                  '${chart.steps.length} scope changes',
+                  '${chart.steps.length} scope changes'
+                  '${chart.backfilledDays == 0 ? '' : ', ${chart.backfilledDays} back-filled days'}',
               child: CustomPaint(
                 key: const Key('burndown-chart'),
                 size: Size.infinite,
@@ -123,6 +125,20 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
             _Legend(color: theme.colorScheme.primary, label: 'Remaining'),
             _Legend(color: theme.colorScheme.outline, label: 'Ideal'),
             _Legend(color: theme.colorScheme.error, label: 'Scope change'),
+            if (chart.backfilledDays > 0)
+              Row(
+                key: const Key('legend-backfilled'),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.circle_outlined,
+                    size: 12,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text('Back-filled day', style: theme.textTheme.bodySmall),
+                ],
+              ),
           ],
         ),
       ],
@@ -176,18 +192,10 @@ class BurndownPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final axis = Paint()
-      ..color = text.withValues(alpha: 0.3)
-      ..strokeWidth = 1;
-    canvas.drawLine(
-      Offset(_left, 8),
-      Offset(_left, size.height - _bottom),
-      axis,
-    );
-    canvas.drawLine(
-      Offset(_left, size.height - _bottom),
-      Offset(size.width - 8, size.height - _bottom),
-      axis,
+    paintChartAxes(
+      canvas,
+      Rect.fromLTRB(_left, 8, size.width - 8, size.height - _bottom),
+      text,
     );
     _label(canvas, pointsText(data.maxY), const Offset(0, 2));
     _label(canvas, '0', Offset(14, size.height - _bottom - 12));
@@ -256,20 +264,25 @@ class BurndownPainter extends CustomPainter {
     if (last != null) {
       canvas.drawCircle(last, 4, Paint()..color = actual);
     }
+
+    // A day written late (its remaining count is as of the late run): a ring.
+    final ring = Paint()
+      ..color = actual
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    for (var i = 0; i < n; i++) {
+      final p = data.points[i];
+      final v = p.actual;
+      if (p.backfilled && v != null) {
+        canvas.drawCircle(_at(size, i, v), 4, ring);
+      }
+    }
   }
 
   String _short(DateTime d) => '${d.month}/${d.day}';
 
-  void _label(Canvas canvas, String s, Offset at) {
-    final tp = TextPainter(
-      text: TextSpan(
-        text: s,
-        style: TextStyle(color: text.withValues(alpha: 0.7), fontSize: 10),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-    tp.paint(canvas, at);
-  }
+  void _label(Canvas canvas, String s, Offset at) =>
+      paintChartLabel(canvas, s, at, text);
 
   @override
   bool shouldRepaint(BurndownPainter old) =>
@@ -377,6 +390,7 @@ class VelocityPainter extends CustomPainter {
     }
     final slot = size.width / items.length;
     final h = size.height - 18;
+    paintChartAxes(canvas, Rect.fromLTRB(0, 0, size.width, h), text);
     for (var i = 0; i < items.length; i++) {
       final v = items[i];
       final bar = slot * 0.3;
@@ -399,16 +413,13 @@ class VelocityPainter extends CustomPainter {
         ),
         Paint()..color = completed,
       );
-      final tp = TextPainter(
-        text: TextSpan(
-          text: v.name,
-          style: TextStyle(color: text.withValues(alpha: 0.7), fontSize: 10),
-        ),
-        maxLines: 1,
-        ellipsis: '…',
-        textDirection: TextDirection.ltr,
-      )..layout(maxWidth: slot - 4);
-      tp.paint(canvas, Offset(slot * i + 2, size.height - 14));
+      paintChartLabel(
+        canvas,
+        v.name,
+        Offset(slot * i + 2, size.height - 14),
+        text,
+        maxWidth: slot - 4,
+      );
     }
   }
 

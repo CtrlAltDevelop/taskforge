@@ -43,12 +43,21 @@ const wideBreakpoint = 900.0;
 
 /// A project's tasks: quick-add bar, the list, and the detail of the selected one.
 class TaskSection extends ConsumerStatefulWidget {
-  const TaskSection({super.key, required this.project, this.initialTask});
+  const TaskSection({
+    super.key,
+    required this.project,
+    this.initialTask,
+    this.initialView,
+  });
 
   final Project project;
 
   /// Open this task's detail beside the list (wide screens) from the start.
   final String? initialTask;
+
+  /// The view to start in (`list`, `board`, `calendar`, `timeline`); the list
+  /// when it is null or unknown.
+  final String? initialView;
 
   @override
   ConsumerState<TaskSection> createState() => _TaskSectionState();
@@ -59,7 +68,9 @@ enum _TaskView { list, board, calendar, timeline }
 
 class _TaskSectionState extends ConsumerState<TaskSection> {
   late String? _selected = widget.initialTask;
-  var _view = _TaskView.list;
+  late var _view =
+      _TaskView.values.where((v) => v.name == widget.initialView).firstOrNull ??
+      _TaskView.list;
 
   /// A card shows what the detail may have just changed: read the board again
   /// when the detail closes or another task opens.

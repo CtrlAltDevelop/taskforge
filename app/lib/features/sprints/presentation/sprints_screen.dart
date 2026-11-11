@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -65,7 +66,6 @@ class _SprintsState extends ConsumerState<_Sprints> {
   String? _picked;
   var _reports = false;
   var _hours = false;
-  double? _capacity;
   final _selected = <String>{};
 
   String get _pid => widget.project.id;
@@ -197,14 +197,20 @@ class _SprintsState extends ConsumerState<_Sprints> {
     );
   }
 
-  Future<void> _editCapacity() async {
+  Future<void> _editCapacity(Sprint sprint) async {
     final text = await showDialog<String>(
       context: context,
-      builder: (_) =>
-          CapacityDialog(unit: _hours ? 'hours' : 'points', value: _capacity),
+      builder: (_) => CapacityDialog(
+        unit: _hours ? 'hours' : 'points',
+        value: sprint.capacityIn(hours: _hours),
+      ),
     );
     if (text == null || !mounted) return;
-    setState(() => _capacity = double.tryParse(text));
+    await _try(
+      () => ref
+          .read(sprintActionsProvider)
+          .setCapacity(sprint, hours: _hours, text: text),
+    );
   }
 
   @override
@@ -401,14 +407,11 @@ class _SprintsState extends ConsumerState<_Sprints> {
     return CapacityBar(
       capacity: Capacity(
         load: sprintLoad(sprint, hours: _hours),
-        capacity: _capacity ?? guide,
+        capacity: sprint.capacityIn(hours: _hours) ?? guide,
       ),
       hours: _hours,
-      onHours: (v) => setState(() {
-        _hours = v;
-        _capacity = null;
-      }),
-      onEdit: canManage ? _editCapacity : null,
+      onHours: (v) => setState(() => _hours = v),
+      onEdit: canManage ? () => _editCapacity(sprint) : null,
     );
   }
 }
@@ -471,6 +474,18 @@ class _Header extends ConsumerWidget {
               ],
             ),
           ),
+          if (sprint.isActive)
+            TextButton.icon(
+              key: const Key('sprint-on-board'),
+              icon: const Icon(Icons.view_kanban_outlined),
+              label: const Text('Show on board'),
+              onPressed: () {
+                ref
+                    .read(boardCurrentSprintProvider(sprint.projectId).notifier)
+                    .set(on: true);
+                context.go('/projects/${sprint.projectId}?view=board');
+              },
+            ),
           if (canManage) ...[
             IconButton(
               key: const Key('edit-sprint'),

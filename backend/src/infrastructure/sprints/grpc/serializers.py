@@ -7,7 +7,9 @@ from rest_framework import serializers
 class Sprint(serializers.Serializer[dict[str, object]]):
     """``state``: planned | active | completed. ``baseline_*`` is the scope when it started;
     ``completed_*`` / ``unfinished_tasks`` its outcome (zero until completed); the rest are live
-    counts of the tasks in it now (``open_*``: not done and not cancelled)."""
+    counts of the tasks in it now (``open_*``: not done and not cancelled). ``capacity_*`` is what
+    the team said it can take on (points, seconds of work), meaningful only when
+    ``has_capacity_*``."""
 
     id = serializers.CharField()
     workspace_id = serializers.CharField()
@@ -32,6 +34,10 @@ class Sprint(serializers.Serializer[dict[str, object]]):
     done_tasks = serializers.IntegerField()
     done_points = serializers.DecimalField(max_digits=12, decimal_places=2)
     estimate_sec_total = serializers.IntegerField()
+    capacity_points = serializers.DecimalField(max_digits=12, decimal_places=2)
+    has_capacity_points = serializers.BooleanField()
+    capacity_sec = serializers.IntegerField()
+    has_capacity_sec = serializers.BooleanField()
 
 
 class SprintTask(serializers.Serializer[dict[str, object]]):

@@ -38,6 +38,8 @@ class Sprint {
     this.doneTasks = 0,
     this.donePoints = 0,
     this.estimateSecTotal = 0,
+    this.capacityPoints,
+    this.capacitySec,
   });
 
   final String id;
@@ -62,6 +64,16 @@ class Sprint {
   final int doneTasks;
   final double donePoints;
   final int estimateSecTotal;
+
+  /// What the team said it can take on, in points and in seconds of work;
+  /// null when nobody said.
+  final double? capacityPoints;
+  final int? capacitySec;
+
+  /// The capacity in the chosen unit (points, or hours), null when unset.
+  double? capacityIn({required bool hours}) => hours
+      ? (capacitySec == null ? null : capacitySec! / 3600)
+      : capacityPoints;
 
   bool get isPlanned => state == SprintState.planned;
   bool get isActive => state == SprintState.active;
@@ -211,11 +223,19 @@ enum BurndownMetric { points, tasks }
 /// future), so the line stops there.
 @immutable
 class ChartPoint {
-  const ChartPoint({required this.date, required this.ideal, this.actual});
+  const ChartPoint({
+    required this.date,
+    required this.ideal,
+    this.actual,
+    this.backfilled = false,
+  });
 
   final DateTime date;
   final double ideal;
   final double? actual;
+
+  /// The day was written late: its count is as of the late run.
+  final bool backfilled;
 }
 
 /// A step where scope grew (or shrank) after the start: [index] is the day.
@@ -240,6 +260,10 @@ class ChartData {
   final double maxY;
 
   bool get isEmpty => points.isEmpty;
+
+  /// Days with a measurement that was written late.
+  int get backfilledDays =>
+      points.where((p) => p.backfilled && p.actual != null).length;
 }
 
 DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
@@ -256,6 +280,7 @@ ChartData buildBurndownChart(Burndown b, BurndownMetric metric) {
         actual: d.hasActual
             ? (byPoints ? d.remainingPoints : d.remainingTasks.toDouble())
             : null,
+        backfilled: d.backfilled,
       ),
   ];
   final steps = <ScopeStep>[];
@@ -327,6 +352,12 @@ List<Sprint> overlapping(
 /// Formats a number of points without a pointless `.0`.
 String pointsText(double v) =>
     v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
+
+/// A number with up to two decimals and no trailing zeros (`12.5`, `8`).
+String decimalText(double v) => v
+    .toStringAsFixed(2)
+    .replaceFirst(RegExp(r'0+$'), '')
+    .replaceFirst(RegExp(r'\.$'), '');
 
 String _two(int n) => n.toString().padLeft(2, '0');
 

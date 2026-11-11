@@ -157,7 +157,7 @@ class CapacityBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   capacity.known
-                      ? 'Load $load$unit of ${pointsText(cap!)}$unit'
+                      ? 'Load $load$unit of ${decimalText(cap!)}$unit'
                       : 'Load $load$unit (no capacity set)',
                   key: const Key('capacity-text'),
                   style: theme.textTheme.bodyMedium?.copyWith(

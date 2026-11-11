@@ -19,8 +19,9 @@ class State(models.TextChoices):
 class Sprint(models.Model):
     """``planned`` -> ``active`` (Start) -> ``completed`` (Complete), never back. A project has at
     most one active sprint (a database rule). Start fixes the ``baseline_*`` scope; Complete fixes
-    the ``completed_*`` / ``unfinished_tasks`` outcome that velocity is read from. ``version`` is
-    bumped on every change, for the live-sync event."""
+    the ``completed_*`` / ``unfinished_tasks`` outcome that velocity is read from. ``capacity_*``
+    (points, and seconds of work) is what the team says it can take on, unset when nobody said.
+    ``version`` is bumped on every change, for the live-sync event."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
@@ -32,6 +33,8 @@ class Sprint(models.Model):
     state = models.CharField(max_length=9, choices=State.choices, default=State.PLANNED)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+    capacity_points = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    capacity_sec = models.PositiveIntegerField(null=True, blank=True)
     baseline_points = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     baseline_tasks = models.PositiveIntegerField(default=0)
     completed_points = models.DecimalField(max_digits=10, decimal_places=2, default=0)
