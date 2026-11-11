@@ -164,6 +164,11 @@ class ResponseTitle(StrEnum):
     FILTER_NAME_TAKEN = "FILTER_NAME_TAKEN"
     FILTER_LIMIT = "FILTER_LIMIT"
 
+    # Comments
+    COMMENT_INVALID = "COMMENT_INVALID"
+    COMMENT_LOCKED = "COMMENT_LOCKED"
+    MENTION_NO_ACCESS = "MENTION_NO_ACCESS"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -225,6 +230,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.FILTER_INVALID: "The filter is not valid (the detail says where).",
     ResponseTitle.FILTER_NAME_TAKEN: "A filter with that name already exists here.",
     ResponseTitle.FILTER_LIMIT: "That is the most saved filters one place can hold.",
+    ResponseTitle.COMMENT_INVALID: "The comment is not valid (the detail says why).",
+    ResponseTitle.COMMENT_LOCKED: "That comment can no longer be edited.",
+    ResponseTitle.MENTION_NO_ACCESS: "Somebody mentioned cannot see this task.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

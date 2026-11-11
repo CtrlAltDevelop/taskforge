@@ -52,12 +52,13 @@ class ChangeLog(models.Model):
 
 def event_type(entity_type: str, action: str) -> str:
     """``task.created`` / ``task.updated`` / ``task.deleted`` (every other task action is an
-    update), ``project.created`` / ``project.updated``, ``workflow.updated``, ``fields.updated``
-    and ``access.changed``."""
+    update), ``project.created`` / ``project.updated``, ``comment.created`` / ``comment.updated`` /
+    ``comment.deleted`` (whose ``entity_id`` is the *task* the comments belong to),
+    ``workflow.updated``, ``fields.updated`` and ``access.changed``."""
     if entity_type == "access":
         return "access.changed"
-    if entity_type == "task" and action in ("created", "deleted"):
-        return f"task.{action}"
+    if entity_type in ("task", "comment") and action in ("created", "deleted"):
+        return f"{entity_type}.{action}"
     if entity_type == "project" and action == "created":
         return "project.created"
     return f"{entity_type}.updated"

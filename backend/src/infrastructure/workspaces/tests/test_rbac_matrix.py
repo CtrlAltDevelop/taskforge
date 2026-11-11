@@ -17,6 +17,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from google.protobuf.empty_pb2 import Empty
 
+from infrastructure.comments import services as comment_services
+from infrastructure.comments.grpc import comments_pb2 as cpb
+from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
 from infrastructure.customfields import services as field_services
 from infrastructure.customfields.grpc import customfields_pb2 as fpb
 from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
@@ -70,6 +73,7 @@ class World:
     field_id: str = ""  # a custom field of the open project
     view_id: str = ""  # a saved layout shared with the open project
     filter_id: str = ""  # a filter shared with the open project
+    comment_id: str = ""  # a comment by the Owner on ``task_id``
 
     @property
     def ws(self) -> str:
@@ -123,6 +127,13 @@ def _make_two_tasks(w: World) -> None:
     _make_task(w)
     owner = w.workspace.created_by
     w.other_task_id = str(task_services.create(owner, w.workspace, w.project_id, "Other").pk)
+
+
+def _make_comment(w: World) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    made = comment_services.create(owner, w.workspace, w.project_id, w.task_id, _body())
+    w.comment_id = str(made.pk)
 
 
 def _make_link(w: World) -> None:
@@ -688,6 +699,89 @@ ENDPOINTS += (
     ),
 )
 
+CM = cstubs.CommentControllerStub
+
+
+def _body() -> str:
+    import json
+
+    text = {"type": "text", "text": "hi"}
+    return json.dumps({"type": "doc", "content": [{"type": "paragraph", "content": [text]}]})
+
+
+def _one(w: World, **kw: Any) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "project_id": w.project_id, "id": w.comment_id, **kw}
+
+
+ENDPOINTS += (
+    Endpoint(
+        "CommentController.Delete",
+        "comment.moderate",  # an author may delete their own; anyone else needs to moderate
+        _grpc(CM, "Delete", lambda w: cpb.CommentDeleteRequest(**_one(w))),
+        _make_comment,
+    ),
+    Endpoint(
+        "CommentController.React",
+        "comment.create",
+        _grpc(CM, "React", lambda w: cpb.CommentReactRequest(**_one(w, emoji="👍", on=True))),
+        _make_comment,
+    ),
+    Endpoint(
+        "CommentController.Pin",
+        "task.update",  # or comment.moderate
+        _grpc(CM, "Pin", lambda w: cpb.CommentPinRequest(**_one(w, pinned=True))),
+        _make_comment,
+    ),
+    Endpoint(
+        "CommentController.History",
+        "workspace.view",
+        _grpc(CM, "History", lambda w: cpb.CommentHistoryRequest(**_one(w))),
+        _make_comment,
+    ),
+    Endpoint(
+        "CommentController.ToSubtask",
+        "task.create",
+        _grpc(CM, "ToSubtask", lambda w: cpb.CommentToSubtaskRequest(**_one(w))),
+        _make_comment,
+    ),
+    Endpoint(
+        "CommentController.List",
+        "workspace.view",
+        _grpc(
+            CM,
+            "List",
+            lambda w: cpb.CommentListRequest(
+                workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id
+            ),
+        ),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "CommentController.Mentionable",
+        "workspace.view",
+        _grpc(
+            CM,
+            "Mentionable",
+            lambda w: cpb.CommentMentionableRequest(
+                workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id
+            ),
+        ),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "CommentController.Create",
+        "comment.create",
+        _grpc(
+            CM,
+            "Create",
+            lambda w: cpb.CommentCreateRequest(
+                workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id, body=_body()
+            ),
+        ),
+        _make_two_tasks,
+    ),
+)
+
 LK = tstubs.LinkControllerStub
 ENDPOINTS += (
     Endpoint(
@@ -894,6 +988,7 @@ ENDPOINTS += (
 
 # Handlers that need no workspace permission, and why.
 EXEMPT = {
+    "CommentController.Edit": "the author only: ownership, not the matrix (service tests)",
     "WorkspaceController.List": "account-level: the caller's own workspaces",
     "WorkspaceController.Create": "account-level: anyone signed in may start a workspace",
     "MemberController.Leave": "self-service (last-owner protection still applies)",

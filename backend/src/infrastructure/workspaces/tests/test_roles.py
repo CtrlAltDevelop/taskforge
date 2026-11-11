@@ -23,6 +23,7 @@ RECRUITER = [
     "task.create",
     "task.update",
     "task.delete",
+    "comment.create",  # a Member holds it; removing one needs every permission it has
 ]
 
 

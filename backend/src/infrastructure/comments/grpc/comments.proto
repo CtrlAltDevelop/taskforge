@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package config.comments;
+
+service CommentController {
+    rpc Create(CommentCreateRequest) returns (Comment) {}
+    rpc Delete(CommentDeleteRequest) returns (Comment) {}
+    rpc Edit(CommentEditRequest) returns (Comment) {}
+    rpc History(CommentHistoryRequest) returns (CommentHistory) {}
+    rpc List(CommentListRequest) returns (CommentPage) {}
+    rpc Mentionable(CommentMentionableRequest) returns (CommentMentionable) {}
+    rpc Pin(CommentPinRequest) returns (Comment) {}
+    rpc React(CommentReactRequest) returns (Comment) {}
+    rpc ToSubtask(CommentToSubtaskRequest) returns (CommentSubtask) {}
+}
+
+message Comment {
+    string id = 1;
+    string task_id = 2;
+    string author_id = 3;
+    string parent_id = 4;
+    string body = 5;
+    string created_at = 6;
+    string edited_at = 7;
+    bool deleted = 8;
+    bool pinned = 9;
+    int32 version = 10;
+    repeated string mention_ids = 11;
+    repeated ReactionResponse reactions = 12;
+    int32 edit_count = 13;
+}
+
+message CommentCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string body = 4;
+    string parent_id = 5;
+    bool grant_access = 6;
+}
+
+message CommentDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message CommentEditRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string body = 5;
+    bool grant_access = 6;
+}
+
+message CommentHistory {
+    repeated CommentRevision revisions = 1;
+}
+
+message CommentHistoryRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message CommentListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string before = 4;
+    int32 page_size = 5;
+}
+
+message CommentMentionable {
+    repeated Mentionable people = 1;
+}
+
+message CommentMentionableRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string query = 4;
+}
+
+message CommentPage {
+    repeated Comment comments = 1;
+    string cursor = 2;
+}
+
+message CommentPinRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    bool pinned = 4;
+}
+
+message CommentReactRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+    string emoji = 4;
+    bool on = 5;
+}
+
+message CommentRevision {
+    string body = 1;
+    string at = 2;
+    bool current = 3;
+}
+
+message CommentSubtask {
+    string task_id = 1;
+}
+
+message CommentToSubtaskRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message Mentionable {
+    string user_id = 1;
+    string display_name = 2;
+}
+
+message Reaction {
+    string emoji = 1;
+    repeated string user_ids = 2;
+}
+
+message ReactionResponse {
+    string emoji = 1;
+    repeated string user_ids = 2;
+}
+

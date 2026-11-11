@@ -1045,6 +1045,7 @@ INSTALLED_APPS = [
     "infrastructure.savedviews.apps.SavedViewsConfig",
     "infrastructure.filters.apps.FiltersConfig",
     "infrastructure.sync.apps.SyncConfig",
+    "infrastructure.comments.apps.CommentsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1147,6 +1148,9 @@ CORS_ALLOWED_ORIGINS = [
     for origin in os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+# Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
+COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
+
 CORS_ALLOW_HEADERS = (*default_cors_headers, "x-workspace", "x-refresh-transport", "x-client-id")
 # Web clients send the refresh cookie cross-origin; origins stay an explicit allowlist.
 CORS_ALLOW_CREDENTIALS = True

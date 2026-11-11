@@ -48,6 +48,8 @@ PERMISSIONS: Final = (
     Permission("task.create", "Create tasks"),
     Permission("task.update", "Edit tasks and their assignees"),
     Permission("task.delete", "Delete and restore tasks"),
+    Permission("comment.create", "Write comments and react to them"),
+    Permission("comment.moderate", "Delete anyone's comments and pin them"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -57,7 +59,12 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
     OWNER: ALL_KEYS,
     ADMIN: ALL_KEYS - {"workspace.delete"},
     MEMBER: _VIEWER_KEYS
-    | {"member.invite", "project.create", *TASK_KEYS},  # 03: any member may invite
+    | {
+        "member.invite",
+        "project.create",
+        "comment.create",
+        *TASK_KEYS,
+    },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,
 }
 

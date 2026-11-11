@@ -56,6 +56,7 @@ PROJECT_LABELS = frozenset(
         "savedviews",
         "filters",
         "sync",
+        "comments",
         "shop",
         "support",
         "wallet",

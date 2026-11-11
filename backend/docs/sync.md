@@ -57,7 +57,7 @@ _This app requires no settings of its own._
 2. `receivers.py` appends a **`ChangeLog`** row (workspace, project, entity type and id, version, action, actor) and publishes an **event** to the rooms below on the broker the notifications app already runs (Redis whenever the WebSocket and gRPC servers are separate processes, as `make serve` and `make grpc` are: the Makefile sets it; memory only inside one process).
 3. Every connected `/ws/sync` socket that joined a room hears it; the client reads the affected screen again, or ignores the event when its own `origin` is its own client id.
 
-An event is a hint, never content: `{"type", "workspace", "project", "entity_id", "version", "actor", "origin", "ts", "cursor"}`. Clients trust `version`, not arrival order. Types: `task.created` / `task.updated` / `task.deleted` (every other task action, links included, is an update), `project.created` / `project.updated`, `workflow.updated`, `fields.updated`, `access.changed`.
+An event is a hint, never content: `{"type", "workspace", "project", "entity_id", "version", "actor", "origin", "ts", "cursor"}`. Clients trust `version`, not arrival order. Types: `task.created` / `task.updated` / `task.deleted` (every other task action, links included, is an update), `project.created` / `project.updated`, `comment.created` / `comment.updated` / `comment.deleted` (the `entity_id` is the task whose comments changed), `workflow.updated`, `fields.updated`, `access.changed`.
 
 ### Rooms
 

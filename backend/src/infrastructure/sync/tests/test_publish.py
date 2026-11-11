@@ -185,3 +185,27 @@ def test_an_event_carries_the_tag_not_the_clients_own_id(
         actor.set_actor(None, "")
 
     assert broker.events()[0]["origin"] == origin_tag(str(team.member.pk), "phone-1")
+
+
+def test_a_comment_is_announced_as_a_change_to_its_tasks_comments(
+    team: Any, project: Any, broker: Any
+) -> None:
+    from infrastructure.comments import services as comments
+    from infrastructure.comments.tests.conftest import say
+
+    task = _make(team, project)
+    broker.sent.clear()
+
+    made = comments.create(team.member, team.ws, str(project.pk), str(task.pk), say("hi"))
+    comments.react(team.member, team.ws, str(project.pk), str(made.pk), "👍", True)
+    comments.delete(team.member, team.ws, str(project.pk), str(made.pk))
+
+    types = [
+        (e["type"], e["entity_id"]) for e in {e["cursor"]: e for e in broker.events()}.values()
+    ]
+    assert types == [
+        ("comment.created", str(task.pk)),
+        ("comment.updated", str(task.pk)),
+        ("comment.deleted", str(task.pk)),
+    ]
+    assert f"proj:{project.pk}" in broker.rooms()

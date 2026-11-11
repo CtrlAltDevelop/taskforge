@@ -51,6 +51,17 @@ def list_members(actor: Any, workspace: Workspace, project_id: str) -> list[Proj
     return list(_active(project).select_related("user__profile").order_by("added_at", "pk"))
 
 
+def grant(workspace: Workspace, project: Any, user_id: Any) -> bool:
+    """Add a workspace member to a private ``project`` (the caller has checked the right to). Locks
+    the project row, tells the sockets, announces ``member_added``; False if already a member."""
+    Project.objects.filter(pk=project.pk).select_for_update().first()
+    _, created = ProjectMember.objects.get_or_create(project=project, user_id=user_id)
+    if created:
+        announce_access(workspace, user_id)  # first: the sockets re-check, then hear of it
+        announce(project, "member_added")
+    return created
+
+
 def add_member(actor: Any, workspace: Workspace, project_id: str, user_id: str) -> ProjectMember:
     """Add ``user_id`` (empty: the caller) to a private project."""
     with transaction.atomic():
@@ -61,10 +72,8 @@ def add_member(actor: Any, workspace: Workspace, project_id: str, user_id: str) 
         if project.visibility != Visibility.PRIVATE:
             raise ApiError("Only private projects have members; this one is open.")
         user = _workspace_member(workspace, user_id or str(actor.pk))
-        row, created = ProjectMember.objects.get_or_create(project=project, user=user)
-        if created:
-            announce_access(workspace, row.user_id)  # first: the sockets re-check, then hear of it
-            announce(project, "member_added")
+        grant(workspace, project, user.pk)
+        row = ProjectMember.objects.get(project=project, user=user)
     return ProjectMember.objects.select_related("user__profile").get(pk=row.pk)
 
 
