@@ -118,6 +118,8 @@ Quality:
 | `make proto` | Regenerate Python `.proto` + stubs and Dart stubs. Add new protos to `DART_PROTOS` in the Makefile |
 | `make proto-lint` | `buf lint` |
 
+Live sync (phase 16): changes are made in the gRPC process and sockets are held in the REST process, so the two share events through Redis; `make run`, `make serve` and `make grpc` set `DJANGO_NOTIFICATIONS_BROKER` to the Redis broker (run `make dev` first).
+
 Notes: ports 8010/8081 (not 8000/8080) because those are commonly taken. Android emulators
 reach the host at `10.0.2.2` (handled in `app/lib/core/config.dart`); real phones need
 `--dart-define=REST_URL=http://<lan-ip>:8010` etc. The backend uses **SQLite** by default;
