@@ -20,6 +20,7 @@ from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Role, RolePermission, Workspace
 from infrastructure.workspaces.registry import ALL_KEYS, BUILTIN_ROLES
+from infrastructure.workspaces.signals import announce_access
 
 NAME_MAX_LENGTH: Final = 60
 
@@ -182,6 +183,7 @@ def update_role(
                     _write_keys(role, new_keys)
         except IntegrityError:
             raise _name_taken() from None
+        announce_access(workspace)
         return view_of(workspace, Role.objects.get(pk=role.pk))
 
 
@@ -201,3 +203,4 @@ def delete_role(workspace: Workspace, actor: Any, role_id: str, reassign_to: str
             access.require_holds(grant, access.role_keys(role) | access.role_keys(target))
             holders.update(role=target)
         role.delete()
+        announce_access(workspace)

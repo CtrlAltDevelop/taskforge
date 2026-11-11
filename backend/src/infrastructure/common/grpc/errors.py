@@ -59,6 +59,9 @@ def require_caller(user: Any | None) -> Any:
             status=401,
             title=ResponseTitle.AUTHENTICATION_REQUIRED,
         )
+    from infrastructure.sync.actor import set_actor
+
+    set_actor(user)  # so the change log can say who made the change
     return user
 
 

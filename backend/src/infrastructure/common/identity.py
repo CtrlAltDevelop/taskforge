@@ -66,6 +66,9 @@ def caller(request: HttpRequest) -> Any | None:
     return resolve(request)
 
 
+CLIENT_ID_META_KEY = "x-client-id"  # a client's own id, so it can recognise its own writes
+
+
 def _grpc_caller(context: Any) -> Any | None:
     request = getattr(context, "http_request", None)
     if request is None:
@@ -74,7 +77,11 @@ def _grpc_caller(context: Any) -> Any | None:
         header = request.META.get(AUTHORIZATION_METADATA_KEY)
         if header:
             request.META[AUTHORIZATION_META_KEY] = header
-    return caller(request)
+    user = caller(request)
+    from infrastructure.sync.actor import set_actor
+
+    set_actor(user, str(request.META.get(CLIENT_ID_META_KEY, "")))
+    return user
 
 
 async def grpc_caller(context: Any) -> Any | None:

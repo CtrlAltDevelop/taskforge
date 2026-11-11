@@ -183,3 +183,41 @@ def test_the_redis_clients_are_opened_once_from_the_configured_url() -> None:
 
     sync.assert_called_once_with("redis://example.test:6379/3")
     asynchronous.assert_called_once_with("redis://example.test:6379/3")
+
+
+def test_a_redis_subscription_can_settle_and_leave_a_channel() -> None:
+    server = fakeredis.FakeServer()
+
+    async def scenario() -> tuple[bool, bool]:
+        broker = RedisBroker(
+            client=fakeredis.FakeStrictRedis(server=server),
+            async_client=fakeredis.aioredis.FakeRedis(server=server),
+        )
+        subscription = broker.subscribe()
+        await subscription.add("one")
+        reader = asyncio.ensure_future(subscription.get())
+        await subscription.settle()  # returns once the reader has really subscribed
+        joined = "one" in subscription._joined
+        broker.publish("one", {"n": 1})
+        assert await asyncio.wait_for(reader, timeout=5) == {"n": 1}
+
+        await subscription.leave("one")
+        reader = asyncio.ensure_future(subscription.get())
+        await asyncio.sleep(0.4)
+        left = "one" not in subscription._joined
+        reader.cancel()
+        await subscription.close()
+        return joined, left
+
+    assert asyncio.run(scenario()) == (True, True)
+
+
+def test_a_memory_subscription_can_leave_a_channel() -> None:
+    async def scenario() -> set[str]:
+        subscription = MemoryBroker().subscribe()
+        await subscription.add("a")
+        await subscription.add("b")
+        await subscription.leave("a")
+        return subscription.channels
+
+    assert asyncio.run(scenario()) == {"b"}

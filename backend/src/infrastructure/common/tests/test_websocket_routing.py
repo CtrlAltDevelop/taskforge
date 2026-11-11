@@ -42,6 +42,8 @@ def test_an_unrouted_path_is_refused_rather_than_left_hanging() -> None:
 
 # Phase 00's credential-free ping socket is always mounted.
 PING_ROUTE = ("/ws/ping", "infrastructure.common.ping_socket.ping_socket")
+# Phase 16's live-sync socket is mounted with it: it needs a token, so it is safe to leave on.
+SYNC_ROUTE = ("/ws/sync", "infrastructure.sync.sockets.sync_socket")
 
 
 def test_a_socket_is_mounted_for_each_app_that_publishes_one() -> None:
@@ -49,6 +51,7 @@ def test_a_socket_is_mounted_for_each_app_that_publishes_one() -> None:
     assert settings.SUPPORT_ENABLED
     assert websocket_routes() == [
         PING_ROUTE,
+        SYNC_ROUTE,
         (settings.NOTIFICATIONS_WS_PATH, "apps.notifications.sockets.notifications_socket"),
         (settings.SUPPORT_WS_PATH, "apps.support.sockets.support_socket"),
     ]
@@ -59,6 +62,7 @@ def test_an_app_that_is_turned_off_takes_its_socket_with_it() -> None:
     with override_settings(NOTIFICATIONS_ENABLED=False):
         assert websocket_routes() == [
             PING_ROUTE,
+            SYNC_ROUTE,
             (settings.SUPPORT_WS_PATH, "apps.support.sockets.support_socket"),
         ]
         assert asyncio.run(_handshake(settings.NOTIFICATIONS_WS_PATH)) == [
@@ -66,9 +70,9 @@ def test_an_app_that_is_turned_off_takes_its_socket_with_it() -> None:
         ]
 
 
-def test_a_project_with_neither_app_serves_only_the_ping_socket() -> None:
+def test_a_project_with_neither_app_serves_only_the_ping_and_sync_sockets() -> None:
     with override_settings(NOTIFICATIONS_ENABLED=False, SUPPORT_ENABLED=False):
-        assert websocket_routes() == [PING_ROUTE]
+        assert websocket_routes() == [PING_ROUTE, SYNC_ROUTE]
         assert asyncio.run(_handshake(settings.SUPPORT_WS_PATH)) == [
             {"type": "websocket.close", "code": NO_SUCH_ROUTE}
         ]

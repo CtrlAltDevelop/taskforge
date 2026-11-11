@@ -30,6 +30,8 @@ from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
 from infrastructure.savedviews import services as view_services
 from infrastructure.savedviews.grpc import savedviews_pb2 as vpb
 from infrastructure.savedviews.grpc import savedviews_pb2_grpc as vstubs
+from infrastructure.sync.grpc import sync_pb2 as spb
+from infrastructure.sync.grpc import sync_pb2_grpc as sstubs
 from infrastructure.tasks import links as task_links
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
@@ -669,6 +671,20 @@ ENDPOINTS += (
             "SetWorkingDays",
             lambda w: tpb.TimelineWorkingDaysSetRequest(workspace_id=w.ws, days=[0, 1, 2, 3, 4]),
         ),
+    ),
+)
+
+SY = sstubs.SyncControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "SyncController.Since",
+        "workspace.view",
+        _grpc(SY, "Since", lambda w: spb.SyncSinceRequest(workspace_id=w.ws, cursor="0")),
+    ),
+    Endpoint(
+        "SyncController.Head",
+        "workspace.view",
+        _grpc(SY, "Head", lambda w: spb.SyncHeadRequest(workspace_id=w.ws)),
     ),
 )
 

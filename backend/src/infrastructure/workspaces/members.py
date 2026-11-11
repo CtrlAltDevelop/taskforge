@@ -25,6 +25,7 @@ from infrastructure.workspaces.models import (
     WorkspaceMember,
 )
 from infrastructure.workspaces.registry import OWNER
+from infrastructure.workspaces.signals import announce_access
 
 
 def _owner_protected() -> ApiError:
@@ -81,6 +82,7 @@ def remove(workspace: Workspace, actor: Any, user_id: str) -> None:
         access.require_holds(grant, access.role_keys(target.role))
         _guard_last_owner(workspace, target)
         _deactivate(workspace, target)
+        announce_access(workspace, target.user_id)
 
 
 def leave(workspace: Workspace, actor: Any) -> None:
@@ -92,6 +94,7 @@ def leave(workspace: Workspace, actor: Any) -> None:
             raise access.forbidden()
         _guard_last_owner(workspace, member)
         _deactivate(workspace, member)
+        announce_access(workspace, member.user_id)
 
 
 def set_role(workspace: Workspace, actor: Any, user_id: str, role_id: str) -> WorkspaceMember:
@@ -107,4 +110,5 @@ def set_role(workspace: Workspace, actor: Any, user_id: str, role_id: str) -> Wo
         if not access.is_owner_role(role):
             _guard_last_owner(workspace, target)
         WorkspaceMember.objects.filter(pk=target.pk).update(role=role)
+        announce_access(workspace, target.user_id)
     return _target(workspace, user_id)

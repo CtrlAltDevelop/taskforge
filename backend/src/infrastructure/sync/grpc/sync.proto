@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package config.sync;
+
+service SyncController {
+    rpc Head(SyncHeadRequest) returns (SyncHead) {}
+    rpc Since(SyncSinceRequest) returns (stream SyncEntry) {}
+}
+
+message SyncEntry {
+    string cursor = 1;
+    string type = 2;
+    string project_id = 3;
+    string entity_id = 4;
+    int32 version = 5;
+    string actor = 6;
+    string at = 7;
+}
+
+message SyncHead {
+    string cursor = 1;
+}
+
+message SyncHeadRequest {
+    string workspace_id = 1;
+}
+
+message SyncSinceRequest {
+    string workspace_id = 1;
+    string cursor = 2;
+    int32 limit = 3;
+    int32 overlap = 4;
+}
+

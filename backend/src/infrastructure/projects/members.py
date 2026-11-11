@@ -19,6 +19,7 @@ from infrastructure.projects.models import Project, ProjectMember, Visibility
 from infrastructure.projects.signals import announce
 from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
+from infrastructure.workspaces.signals import announce_access
 
 
 def _active(project: Project) -> Any:
@@ -62,6 +63,7 @@ def add_member(actor: Any, workspace: Workspace, project_id: str, user_id: str) 
         user = _workspace_member(workspace, user_id or str(actor.pk))
         row, created = ProjectMember.objects.get_or_create(project=project, user=user)
         if created:
+            announce_access(workspace, row.user_id)  # first: the sockets re-check, then hear of it
             announce(project, "member_added")
     return ProjectMember.objects.select_related("user__profile").get(pk=row.pk)
 
@@ -87,6 +89,7 @@ def remove_member(actor: Any, workspace: Workspace, project_id: str, user_id: st
                 title=ResponseTitle.LAST_MEMBER,
             )
         row.delete()
+        announce_access(workspace, user_id)  # first: the sockets re-check, then hear of it
         announce(project, "member_removed")
 
 

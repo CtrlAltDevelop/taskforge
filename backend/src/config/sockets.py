@@ -36,7 +36,10 @@ BAD_ORIGIN = 4403
 
 def websocket_routes() -> list[tuple[str, str]]:
     """``(path, dotted path to an ASGI application)`` for each mounted socket."""
-    routes = [("/ws/ping", "infrastructure.common.ping_socket.ping_socket")]
+    routes = [
+        ("/ws/ping", "infrastructure.common.ping_socket.ping_socket"),
+        ("/ws/sync", "infrastructure.sync.sockets.sync_socket"),
+    ]
     if settings.NOTIFICATIONS_ENABLED and "ws" in settings.NOTIFICATIONS_TRANSPORTS:
         routes.append(
             (settings.NOTIFICATIONS_WS_PATH, "apps.notifications.sockets.notifications_socket")

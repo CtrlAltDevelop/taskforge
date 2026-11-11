@@ -92,6 +92,9 @@ class MemorySubscription:
     async def add(self, channel: str) -> None:
         self.channels.add(channel)
 
+    async def leave(self, channel: str) -> None:
+        self.channels.discard(channel)
+
     async def get(self) -> Payload:
         return await self._queue.get()
 
@@ -152,20 +155,43 @@ class RedisSubscription:
         self._broker = broker
         self._pubsub: Any | None = None
         self._pending: list[str] = []
+        self._leaving: list[str] = []
         self._joined: set[str] = set()
 
     async def add(self, channel: str) -> None:
+        if channel in self._leaving:
+            self._leaving.remove(channel)
         if channel not in self._joined and channel not in self._pending:
             self._pending.append(channel)
 
+    async def leave(self, channel: str) -> None:
+        """Stop listening to ``channel`` (done by the reader, like joining)."""
+        if channel in self._pending:
+            self._pending.remove(channel)
+        elif channel in self._joined and channel not in self._leaving:
+            self._leaving.append(channel)
+
+    async def settle(self, timeout: float = 2.0) -> None:
+        """Return once every channel asked for is really subscribed, so a caller can tell its
+        client "joined" without a change slipping in before Redis knows about the join."""
+        waited = 0.0
+        while self._pending and waited < timeout:
+            await asyncio.sleep(0.02)
+            waited += 0.02
+
     async def _join_pending(self) -> None:
-        if not self._pending:
+        if not self._pending and not self._leaving:
             return
         if self._pubsub is None:
             self._pubsub = self._broker.async_client().pubsub()
         joining, self._pending = self._pending, []
-        await self._pubsub.subscribe(*joining)
-        self._joined.update(joining)
+        leaving, self._leaving = self._leaving, []
+        if joining:
+            await self._pubsub.subscribe(*joining)
+            self._joined.update(joining)
+        if leaving:
+            await self._pubsub.unsubscribe(*leaving)
+            self._joined.difference_update(leaving)
 
     async def get(self) -> Payload:
         while True:

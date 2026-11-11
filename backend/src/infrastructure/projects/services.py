@@ -38,6 +38,7 @@ from infrastructure.projects.models import (
 from infrastructure.projects.signals import announce
 from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace
+from infrastructure.workspaces.signals import announce_access
 
 VIEW = "workspace.view"
 
@@ -252,6 +253,8 @@ def update(
         updated = _bump(project, expected_version, **cleaned)
         if updated.visibility == Visibility.PRIVATE:
             ProjectMember.objects.get_or_create(project=updated, user=actor)
+        if "visibility" in cleaned:
+            announce_access(workspace)  # first: the sockets re-check, then hear of it
         announce(updated, "updated")
     return view_of(actor, workspace, updated)
 
