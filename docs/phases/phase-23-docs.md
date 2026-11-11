@@ -1,6 +1,6 @@
 # Phase 23 — Docs (Wiki)
 
-**Status:** TODO
+**Status:** Backend done; Flutter implemented (see Editor decision)
 
 ## Feature
 A built-in **docs** space: nested pages with a rich-text block editor, links to tasks, and page history.
@@ -26,6 +26,15 @@ Each workspace (or project) has a doc tree: pages with child pages. A page is ma
 
 ## Flutter UI
 Left page tree with drag reorder, editor with floating toolbar & slash menu (works with touch and hardware keyboards), revision drawer, breadcrumb, share/restrict dialog. Uses a Flutter rich-text editor package (e.g. `appflowy_editor` or `super_editor`) — selection spike is the first task of the phase.
+
+## Editor decision
+Chosen: a **small in-house block editor** (`app/lib/features/docs/presentation/`). Nothing is converted: the server's blocks JSON is the model (`DocBlock` wraps the JSON object; edits make changed copies).
+
+Spike (Flutter 3.47.9 / Dart 3.13.7, checked with `flutter pub add --dry-run`):
+- `appflowy_editor` resolves but changes 30 dependencies (downgrades `xml`, adds `rich_clipboard_*` native plugins to every platform registrant). Its document tree needs a two-way converter to our schema; callout, task card and unknown blocks would be custom node builders, and unknown blocks only survive if the converter stores them.
+- `super_editor` resolves only as the pre-release `0.3.0-dev.52` and pulls 46 changes including the `test` package. Same converter and custom-component work; touch toolbars and handles are still in flux.
+- In-house: no new dependency or plugin. All block types, the `/` menu, the `[[` page picker, the floating toolbar, Markdown shortcuts and hardware shortcuts are plain Flutter text fields, so touch and keyboard both work. Unknown blocks, unknown inline nodes and unknown marks are kept as they came (only edited blocks are re-serialised). Merge and conflict work on block ids with no converter in between.
+- Accepted trade-offs: no selection across blocks; marks apply to a selection inside one block. Real co-editing (CRDT) stays a later phase.
 
 ## Rules and edge cases
 - Autosave debounced (1–2 s); version conflict opens a merge dialog.
