@@ -40,7 +40,9 @@ def channel_of(room: str) -> str:
     return f"{channel_prefix()}:sync:{room}"
 
 
-def _rooms(row: ChangeLog, user_id: str = "") -> list[str]:
+def _rooms(row: ChangeLog, user_id: str = "", users: tuple[str, ...] | None = None) -> list[str]:
+    if users is not None:
+        return [user_room(u) for u in users]
     if user_id:
         return [user_room(user_id)]
     if row.project is None:
@@ -61,9 +63,11 @@ def record(
     version: int = 0,
     action: str = "updated",
     user_id: str = "",
+    users: tuple[str, ...] | None = None,
 ) -> ChangeLog:
     """Append the row and publish its event. ``user_id`` aims an event at one person's room (an
-    access change); without it the event goes to the project's or the workspace's rooms."""
+    access change); ``users`` aims it at exactly those people (a restricted page); without either
+    the event goes to the project's or the workspace's rooms."""
     row = ChangeLog.objects.create(
         workspace_id=workspace_id,
         project=UUID(str(project_id)) if project_id else None,
@@ -76,7 +80,7 @@ def record(
     event = {**row.as_event(), "origin": origin_tag(row.actor, current_origin())}
     try:
         broker = get_broker()
-        for room in _rooms(row, user_id):
+        for room in _rooms(row, user_id, users):
             broker.publish(channel_of(room), {"room": room, "event": event})
     except Exception:
         # The change is committed and logged: a client that missed the event catches up from the

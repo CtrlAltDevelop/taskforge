@@ -135,3 +135,25 @@ def subtree_ids(doc: Doc) -> list[uuid.UUID]:
         frontier = list(Doc.objects.filter(parent_id__in=frontier).values_list("pk", flat=True))
         found.extend(frontier)
     return found
+
+
+def audience(doc: Doc) -> tuple[str, ...] | None:
+    """Who may be told about ``doc`` live: ``None`` when no page on its path is restricted (the
+    whole room may), else the people allowed by every restricted page on the path (creator or
+    listed). Holders of ``doc.manage`` are not listed here; they read the page again when they
+    open it."""
+    allowed: set[str] | None = None
+    cursor: Doc | None = doc
+    for _ in range(MAX_DEPTH + 2):
+        if cursor is None:
+            break
+        if cursor.restricted:
+            here = {
+                str(u)
+                for u in DocAccess.objects.filter(doc=cursor).values_list("user_id", flat=True)
+            }
+            if cursor.created_by_id:
+                here.add(str(cursor.created_by_id))
+            allowed = here if allowed is None else allowed & here
+        cursor = Doc.objects.filter(pk=cursor.parent_id).first() if cursor.parent_id else None
+    return None if allowed is None else tuple(sorted(allowed))

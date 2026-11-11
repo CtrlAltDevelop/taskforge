@@ -625,16 +625,26 @@ def _publish_presence(doc: Doc, roster: list[dict[str, Any]]) -> None:
     from apps.notifications.broadcast import get_broker
     from infrastructure.sync import publish
 
-    room = (
-        publish.project_room(doc.project_id)
-        if doc.project_id
-        else publish.workspace_room(doc.workspace_id)
+    audience = reach.audience(doc)
+    rooms = (
+        [publish.user_room(u) for u in audience]
+        if audience is not None
+        else [
+            publish.project_room(doc.project_id)
+            if doc.project_id
+            else publish.workspace_room(doc.workspace_id)
+        ]
     )
-    message = {
-        "room": room,
-        "presence": {"project": str(doc.project_id or ""), "doc": str(doc.pk), "users": roster},
-    }
     try:
-        get_broker().publish(publish.channel_of(room), message)
+        for room in rooms:
+            message = {
+                "room": room,
+                "presence": {
+                    "project": str(doc.project_id or ""),
+                    "doc": str(doc.pk),
+                    "users": roster,
+                },
+            }
+            get_broker().publish(publish.channel_of(room), message)
     except Exception:  # the roster is a hint; a broker that is away must not fail the call
         publish.log.exception("Could not publish doc presence")

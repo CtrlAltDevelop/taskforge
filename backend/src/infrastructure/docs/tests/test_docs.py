@@ -566,3 +566,37 @@ def test_archived_subpages_drop_out_of_search_and_reindex_rebuilds(team: Any) ->
     assert hits(team, team.owner, "kiwi") == ["Child kiwi"]
     index.put_doc(pk(parent))
     index.put_doc("00000000-0000-0000-0000-000000000000")
+
+
+def test_restricted_pages_are_announced_only_to_people_who_may_open_them(
+    team: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from infrastructure.docs import reach
+    from infrastructure.sync import publish
+
+    secret = page(team, "Secret")
+    child = page(team, "Child", parent=secret)
+    assert reach.audience(secret) is None
+
+    services.set_access(team.owner, team.ws, pk(secret), True, [str(team.member.pk)])
+    secret.refresh_from_db()
+    child.refresh_from_db()
+    allowed = tuple(sorted({str(team.owner.pk), str(team.member.pk)}))
+    assert reach.audience(secret) == allowed
+    assert reach.audience(child) == allowed  # restriction runs down the tree
+
+    sent: list[str] = []
+
+    class Broker:
+        def publish(self, channel: str, message: dict[str, Any]) -> None:
+            sent.append(message["room"])
+
+    monkeypatch.setattr(publish, "get_broker", lambda: Broker())
+    publish.record(
+        entity_type="doc",
+        entity_id=secret.pk,
+        workspace_id=team.ws.pk,
+        users=reach.audience(secret),
+    )
+    assert sorted(sent) == sorted(publish.user_room(u) for u in allowed)
+    assert publish.workspace_room(team.ws.pk) not in sent

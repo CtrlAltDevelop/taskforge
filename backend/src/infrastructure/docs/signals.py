@@ -3,6 +3,7 @@
 ``doc_changed`` (kwargs ``doc_id``, ``workspace_id``, ``project_id``, ``action``) feeds the search
 index; ``announce`` writes the live-sync row: ``doc.created`` / ``doc.updated`` / ``doc.moved``.
 Both are sent after the commit, and carry ids and a version only, never the page.
+A page under a restriction is announced only to the people who may open it.
 """
 
 from typing import Any
@@ -30,9 +31,10 @@ def announce(doc: Any, action: str, version: int) -> None:
     }
 
     def send() -> None:
+        from infrastructure.docs import reach
         from infrastructure.sync import publish
 
-        publish.record(**payload)
+        publish.record(**payload, users=reach.audience(doc))
         doc_changed.send(sender=None, **signal)
 
     transaction.on_commit(send)
