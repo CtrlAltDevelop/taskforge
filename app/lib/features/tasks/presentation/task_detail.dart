@@ -6,6 +6,7 @@ import 'package:taskforge/features/tasks/presentation/presence_strip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/features/inbox/presentation/watch_button.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
@@ -75,6 +76,7 @@ class TaskDetail extends ConsumerWidget {
               ),
             ),
             PresenceStrip(projectId: project.id, taskId: task.id),
+            WatchButton(projectId: project.id, taskId: task.id),
             if (task.isBlocked) BlockedBadge(blockedBy: task.blockedBy),
             if (canDelete)
               IconButton(

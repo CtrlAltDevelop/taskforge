@@ -13,6 +13,8 @@ import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/calendar/presentation/workspace_calendar_screen.dart';
+import 'package:taskforge/features/inbox/presentation/inbox_screen.dart';
+import 'package:taskforge/features/inbox/presentation/prefs_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
 import 'package:taskforge/features/projects/presentation/archived_screen.dart';
@@ -149,6 +151,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/projects/:id/fields',
         builder: (_, state) =>
             FieldsScreen(projectId: state.pathParameters['id']!),
+      ),
+      GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
+      GoRoute(
+        path: '/inbox/preferences',
+        builder: (_, _) => const NotificationPrefsScreen(),
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(

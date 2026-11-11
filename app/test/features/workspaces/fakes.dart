@@ -12,6 +12,8 @@ import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/inbox/application/inbox_providers.dart';
+import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -19,6 +21,7 @@ import 'package:taskforge/features/workspaces/data/workspace_client.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
 
+import '../inbox/fakes.dart';
 import '../projects/fakes.dart';
 import '../roles/fakes.dart';
 
@@ -144,6 +147,8 @@ Future<ProviderContainer> pumpSignedIn(
   List<Override> overrides = const [],
   FakeRolesClient? roles,
   FakeProjectsClient? projects,
+  FakeInboxClient? inbox,
+  FakeLocalNotifier? localNotifier,
 
   /// The live connection: none unless a test brings its own.
   Override? sync,
@@ -174,6 +179,11 @@ Future<ProviderContainer> pumpSignedIn(
       ),
       logoPickerProvider.overrideWithValue(() async => null),
       sync ?? syncClientProvider.overrideWithValue(null),
+      // Nobody is notified for real: an empty inbox and a notifier that notes.
+      inboxClientProvider.overrideWithValue(inbox ?? FakeInboxClient()),
+      localNotifierProvider.overrideWithValue(
+        localNotifier ?? FakeLocalNotifier(),
+      ),
       ...overrides,
     ],
   );

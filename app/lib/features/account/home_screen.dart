@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
@@ -33,6 +34,12 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const WorkspaceSwitcher(),
         actions: [
+          IconButton(
+            key: const Key('open-inbox-bell'),
+            tooltip: 'Inbox',
+            icon: const InboxBadge(child: Icon(Icons.notifications_outlined)),
+            onPressed: () => context.go('/inbox'),
+          ),
           IconButton(
             key: const Key('open-workspace-settings'),
             tooltip: 'Workspace settings',
@@ -71,6 +78,13 @@ class HomeScreen extends ConsumerWidget {
             title: const Text('Calendar'),
             subtitle: const Text('Everything due, across your projects'),
             onTap: () => context.go('/calendar'),
+          ),
+          ListTile(
+            key: const Key('open-notification-settings'),
+            leading: const Icon(Icons.tune),
+            title: const Text('Notification settings'),
+            subtitle: const Text('What pings you, quiet hours and the digest'),
+            onTap: () => context.push('/inbox/preferences'),
           ),
           ListTile(
             key: const Key('open-sessions'),

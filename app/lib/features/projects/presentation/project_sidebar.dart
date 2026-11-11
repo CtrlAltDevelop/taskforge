@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/create_project_dialog.dart';
@@ -60,6 +61,15 @@ class ProjectSidebar extends ConsumerWidget {
 
     return Column(
       children: [
+        ListTile(
+          key: const Key('open-inbox'),
+          dense: true,
+          selected: current.startsWith('/inbox'),
+          leading: const InboxBadge(child: Icon(Icons.inbox_outlined)),
+          title: const Text('Inbox'),
+          onTap: () => _go(context, '/inbox'),
+        ),
+        const Divider(height: 1),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),
           child: Row(

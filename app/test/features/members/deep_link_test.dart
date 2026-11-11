@@ -1,3 +1,7 @@
+import 'package:taskforge/features/inbox/application/inbox_providers.dart';
+
+import '../inbox/fakes.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
@@ -41,6 +45,7 @@ Future<ProviderContainer> _pumpSignedOut(
       accountClientProvider.overrideWithValue(FakeAccounts()),
       workspaceClientProvider.overrideWithValue(workspaces),
       membersClientProvider.overrideWithValue(members),
+      inboxClientProvider.overrideWithValue(FakeInboxClient()),
     ],
   );
   addTearDown(container.dispose);

@@ -14,6 +14,8 @@ import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/inbox/application/inbox_providers.dart';
+import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -41,6 +43,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
   final commentTasks = <TaskRef>{}; // tasks whose comments to read again
   final fileTasks = <TaskRef>{}; // tasks whose attachments to read again
   var everything = false;
+  var inboxDirty = false; // the inbox and its badges to read again
   Timer? timer;
 
   void flush() {
@@ -67,6 +70,10 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     }
     if (fileTasks.isNotEmpty) ref.invalidate(storageUsageProvider);
     fileTasks.clear();
+    if (inboxDirty) {
+      inboxDirty = false;
+      _readInboxAgain(ref);
+    }
     for (final project in projects) {
       _readAgain(ref, project);
     }
@@ -86,7 +93,14 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     }
     if (event.isGap) {
       everything = true;
+      inboxDirty = true;
       _everythingElse(ref);
+      soon();
+      return;
+    }
+    if (event.type.startsWith('notification.')) {
+      // The entity is this person: the badges and the open inbox read again.
+      inboxDirty = true;
       soon();
       return;
     }
@@ -173,4 +187,15 @@ void _everythingElse(Ref ref) {
   // Every open list of files reads again, and what the workspace uses.
   ref.read(attachmentsResyncProvider.notifier).bump();
   ref.invalidate(storageUsageProvider);
+}
+
+/// The badges and whichever inbox list is open read again.
+void _readInboxAgain(Ref ref) {
+  ref.invalidate(unreadCountProvider);
+  ref.invalidate(unreadTotalProvider);
+  for (final filter in InboxFilter.values) {
+    if (ref.exists(inboxProvider(filter))) {
+      unawaited(ref.read(inboxProvider(filter).notifier).refresh());
+    }
+  }
 }

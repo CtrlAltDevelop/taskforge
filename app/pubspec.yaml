@@ -51,6 +51,8 @@ dependencies:
   video_player: ^2.14.1
   url_launcher: ^6.3.3
   fixnum: ^1.1.1
+  flutter_local_notifications: ^23.0.1
+  app_badge_plus: ^1.4.0
 
 dev_dependencies:
   flutter_test:

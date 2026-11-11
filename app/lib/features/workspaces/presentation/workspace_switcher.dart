@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
@@ -17,11 +18,20 @@ class WorkspaceSwitcher extends ConsumerWidget {
     final current = ref.watch(currentWorkspaceProvider);
     final all = ref.watch(workspacesProvider).value ?? const <Workspace>[];
     if (current == null) return const Text('TaskForge');
+    // Unread somewhere else: a dot on the switcher says there is more to see.
+    final elsewhere =
+        (ref.watch(unreadTotalProvider).value ?? 0) -
+        (ref.watch(unreadCountProvider).value ?? 0);
     final label = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(child: Text(current.name, overflow: TextOverflow.ellipsis)),
-        const Icon(Icons.arrow_drop_down),
+        Badge(
+          key: const Key('switcher-badge'),
+          isLabelVisible: elsewhere > 0,
+          label: Text('$elsewhere'),
+          child: const Icon(Icons.arrow_drop_down),
+        ),
       ],
     );
     void select(String id) =>

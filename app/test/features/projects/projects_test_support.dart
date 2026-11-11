@@ -30,6 +30,7 @@ import '../board/fakes.dart';
 import '../filters/fakes.dart';
 import '../calendar/fakes.dart';
 import '../attachments/fakes.dart';
+import '../inbox/fakes.dart';
 import '../comments/fakes.dart';
 import '../timeline/fakes.dart';
 
@@ -67,6 +68,8 @@ Future<Pumped> pumpProjects(
   FakeTimelineClient? timeline,
   FakeCommentsClient? comments,
   FakeAttachments? attachments,
+  FakeInboxClient? inbox,
+  FakeLocalNotifier? localNotifier,
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
@@ -84,6 +87,8 @@ Future<Pumped> pumpProjects(
     FakeWorkspaceClient([for (final id in workspaces) ws(id, 'WS $id')]),
     roles: FakeRolesClient(callerRole: (_) => role),
     projects: fake,
+    inbox: inbox,
+    localNotifier: localNotifier,
     sync: sync,
     overrides: [
       membersClientProvider.overrideWithValue(team()),
