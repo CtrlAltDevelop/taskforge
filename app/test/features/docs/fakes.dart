@@ -79,6 +79,7 @@ class FakeDocsClient implements DocsClient {
           List<String> fields,
           List<DocBlock> blocks,
           String title,
+          String icon,
         })
       >[];
   final presenceCalls = <String>[];
@@ -118,6 +119,7 @@ class FakeDocsClient implements DocsClient {
   DocNode _copy(
     DocNode n, {
     String? title,
+    String? icon,
     String? parent,
     bool? restricted,
     bool? archived,
@@ -126,7 +128,7 @@ class FakeDocsClient implements DocsClient {
     title: title ?? n.title,
     projectId: n.projectId,
     parentId: parent ?? n.parentId,
-    icon: n.icon,
+    icon: icon ?? n.icon,
     position: n.position,
     restricted: restricted ?? n.restricted,
     archived: archived ?? n.archived,
@@ -224,6 +226,7 @@ class FakeDocsClient implements DocsClient {
       fields: fields,
       blocks: blocks,
       title: title,
+      icon: icon,
     ));
     final n = _node(docId);
     if (n.archived) {
@@ -241,6 +244,7 @@ class FakeDocsClient implements DocsClient {
       );
     }
     if (fields.contains('title')) _put(_copy(n, title: title));
+    if (fields.contains('icon')) _put(_copy(_node(docId), icon: icon));
     if (fields.contains('blocks')) {
       bodies[docId] = [...blocks];
       revisionList.putIfAbsent(docId, () => []).insert(0, (

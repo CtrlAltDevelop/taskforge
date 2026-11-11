@@ -33,6 +33,23 @@ Future<String?> askLink(BuildContext context, String current) =>
       ),
     );
 
+/// Asks for a page icon (one emoji or a few characters). An empty answer
+/// clears it; null cancels.
+Future<String?> askIcon(BuildContext context, String current) =>
+    showDialog<String>(
+      context: context,
+      builder: (_) => _TextDialog(
+        title: 'Page icon',
+        label: 'Emoji or short text (empty for none)',
+        fieldKey: 'icon-field',
+        okKey: 'icon-ok',
+        initial: current,
+        allowEmpty: true,
+        valid: (v) => v.characters.length <= 4,
+        invalid: 'Use at most four characters.',
+      ),
+    );
+
 /// Asks for an image address and a description (`src`, `alt`).
 Future<Map<String, Object?>?> editImage(
   BuildContext context,

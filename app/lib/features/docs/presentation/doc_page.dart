@@ -303,6 +303,20 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                         icon: const Icon(Icons.account_tree_outlined),
                         onPressed: widget.onOpenTree,
                       ),
+                    IconButton(
+                      key: const Key('doc-icon'),
+                      tooltip: 'Change icon',
+                      icon: Text(
+                        s.icon.isEmpty ? '📄' : s.icon,
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      onPressed: canEdit
+                          ? () async {
+                              final v = await askIcon(context, s.icon);
+                              if (v != null) notifier.edit(icon: v);
+                            }
+                          : null,
+                    ),
                     Expanded(
                       child: TextField(
                         key: const Key('doc-title'),

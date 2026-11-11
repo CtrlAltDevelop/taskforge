@@ -15,11 +15,10 @@ from django.utils import timezone
 from infrastructure.docs.models import Doc, DocContent, DocRevision
 
 REVISION_WINDOW: Final = timedelta(minutes=5)
-DEFAULT_KEEP: Final = 50
 
 
 def keep() -> int:
-    return max(int(getattr(settings, "DOCS_REVISION_KEEP", DEFAULT_KEEP)), 1)
+    return max(int(settings.DOCS_REVISION_KEEP), 1)
 
 
 def record(doc: Doc, content: DocContent, actor: Any, *, new: bool = False) -> DocRevision:

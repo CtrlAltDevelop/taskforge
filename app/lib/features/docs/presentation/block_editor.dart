@@ -132,6 +132,19 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
     }
   }
 
+  /// A task link was pasted into [block]: the block becomes the task's card.
+  void _pasteTask(DocBlock block, String taskId) {
+    final card = block.withRich(Rich.empty).turnInto(BlockType.taskCard);
+    var list = replaceBlock(_blocks, card.withAttrs({'task_id': taskId}));
+    if (list.last.id == block.id) {
+      final tail = DocBlock.create(BlockType.paragraph);
+      list = [...list, tail];
+      _emit(list, focus: tail.id);
+    } else {
+      _emit(list);
+    }
+  }
+
   void _menu(DocBlock b, String action) {
     final i = _blocks.indexWhere((x) => x.id == b.id);
     switch (action) {
@@ -246,6 +259,7 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
           onMoveFocus: (d) => _moveFocus(b.id, d),
           onOpenDoc: (id) => context.go('/docs/$id'),
           askLink: askLink,
+          onPasteTask: (taskId) => _pasteTask(b, taskId),
         );
       default:
         return UnknownBlockView(block: b);

@@ -1,6 +1,6 @@
 # Phase 23 — Docs (Wiki)
 
-**Status:** Backend done; Flutter implemented (see Editor decision)
+**Status:** DONE
 
 ## Feature
 A built-in **docs** space: nested pages with a rich-text block editor, links to tasks, and page history.

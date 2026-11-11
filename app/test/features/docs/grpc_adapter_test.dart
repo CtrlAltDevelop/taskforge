@@ -28,40 +28,50 @@ class _Server extends pb.DocControllerServiceBase {
     return answer;
   }
 
-  Never _no() => throw GrpcError.unimplemented();
-
   @override
   Future<pb.DocAnswer> archive(ServiceCall c, pb.DocArchiveRequest r) async =>
-      _no();
+      _a('archive', r, pb.DocAnswer(doc: _node(r.docId)));
   @override
   Future<pb.DocTree> backlinks(ServiceCall c, pb.DocBacklinksRequest r) async =>
-      _no();
+      _a('backlinks', r, pb.DocTree(docs: [_node('b1')]));
   @override
   Future<pb.DocAnswer> create(ServiceCall c, pb.DocCreateRequest r) async =>
-      _no();
+      _a('create', r, pb.DocAnswer(doc: _node('new'), version: 1));
   @override
   Future<pb.DocMarkdown> exportMarkdown(
     ServiceCall c,
     pb.DocExportRequest r,
-  ) async => _no();
+  ) async => _a('export', r, pb.DocMarkdown(title: 'T', markdown: '# T'));
   @override
   Future<pb.RelatedDocs> linkTask(
     ServiceCall c,
     pb.DocLinkTaskRequest r,
-  ) async => _no();
+  ) async => _a(
+    'link',
+    r,
+    pb.RelatedDocs(
+      docs: [pb.RelatedDoc(doc: _node('a'), kind: 'link')],
+    ),
+  );
   @override
   Future<pb.DocAnswer> restore(ServiceCall c, pb.DocRestoreRequest r) async =>
-      _no();
+      _a('restore', r, pb.DocAnswer(doc: _node(r.docId)));
   @override
   Future<pb.DocRevisionList> revisionList(
     ServiceCall c,
     pb.DocRevisionListRequest r,
-  ) async => _no();
+  ) async => _a(
+    'revList',
+    r,
+    pb.DocRevisionList(
+      revisions: [pb.RevisionInfo(id: 3, version: 2, title: 'Old')],
+    ),
+  );
   @override
   Future<pb.RelatedDocs> unlinkTask(
     ServiceCall c,
     pb.DocLinkTaskRequest r,
-  ) async => _no();
+  ) async => _a('unlink', r, pb.RelatedDocs());
 
   @override
   Future<pb.DocTree> tree(ServiceCall call, pb.DocTreeRequest r) async =>
@@ -309,5 +319,60 @@ void main() {
     expect(roster.single.userId, 'u9');
     expect((cards.single.key, cards.single.statusName), ('W-1', 'Done'));
     expect((rel.single.kind, rel.single.doc.id), ('link', 'a'));
+  });
+
+  test('create, archive, restore, revisions, backlinks and export', () async {
+    final made = await client.create(
+      'w1',
+      projectId: 'p1',
+      parentId: 'a',
+      title: 'New',
+      icon: 'x',
+      blocks: [DocBlock.create('divider', id: 'd')],
+    );
+    await client.create('w1');
+    await client.archive('w1', 'a');
+    await client.restore('w1', 'a');
+    final revs = await client.revisions('w1', 'a');
+    final back = await client.backlinks('w1', 'a');
+    final md = await client.exportMarkdown('w1', 'a');
+
+    expect(made.node.id, 'new');
+    final c = docs.seen['create']! as pb.DocCreateRequest;
+    expect((c.title, c.blocksJson), ('', ''));
+    expect(docs.seen['archive'], isA<pb.DocArchiveRequest>());
+    expect(docs.seen['restore'], isA<pb.DocRestoreRequest>());
+    expect((revs.single.id, revs.single.version), (3, 2));
+    expect(back.single.id, 'b1');
+    expect(md.markdown, '# T');
+  });
+
+  test('linking and unlinking a task answer the related docs', () async {
+    final linked = await client.linkTask('w1', 'p1', 't1', 'a');
+    final none = await client.unlinkTask('w1', 'p1', 't1', 'a');
+
+    expect(linked.single.doc.id, 'a');
+    expect(none, isEmpty);
+    final l = docs.seen['link']! as pb.DocLinkTaskRequest;
+    expect((l.projectId, l.taskId, l.docId), ('p1', 't1', 'a'));
+  });
+
+  test('denied, other statuses and non-grpc errors are mapped', () async {
+    Future<DocFailure> failWith(GrpcError e) async {
+      docs.fail = e;
+      try {
+        await client.archive('w1', 'a');
+      } on DocException catch (x) {
+        return x.failure;
+      }
+      throw StateError('no failure');
+    }
+
+    expect(await failWith(GrpcError.permissionDenied('x')), DocFailure.denied);
+    expect(await failWith(GrpcError.internal('x')), DocFailure.other);
+    expect(await failWith(GrpcError.deadlineExceeded('x')), DocFailure.network);
+    expect(mapDocError(StateError('socket')).failure, DocFailure.network);
+    const own = DocException(DocFailure.cycle);
+    expect(identical(mapDocError(own), own), isTrue);
   });
 }

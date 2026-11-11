@@ -255,6 +255,7 @@ void main() {
             as ValueKey<String>;
     await tester.enterText(find.byKey(last), '/quo');
     await tester.pump();
+    await tester.pump();
     expect(key('slash-menu'), findsOneWidget);
     await tester.tap(key('slash-quote'));
     await tester.pump();
@@ -275,6 +276,7 @@ void main() {
       baseOffset: 0,
       extentOffset: 5,
     );
+    await tester.pump();
     await tester.pump();
     expect(key('floating-toolbar'), findsOneWidget);
 
@@ -326,6 +328,7 @@ void main() {
             as ValueKey<String>;
     await tester.enterText(find.byKey(last), '/task');
     await tester.pump();
+    await tester.pump();
     await tester.tap(key('slash-task'));
     await tester.pumpAndSettle();
     await tester.enterText(key('task-picker-field'), 'login');
@@ -370,6 +373,7 @@ void main() {
     await tester.tap(key('field-p1'));
     await tester.pump();
     await tester.enterText(key('field-p1'), 'See [[No');
+    await tester.pump();
     await tester.pump();
     expect(key('page-picker'), findsOneWidget);
     await tester.tap(key('pick-page-b'));

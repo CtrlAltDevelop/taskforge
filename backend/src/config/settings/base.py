@@ -451,6 +451,9 @@ CMS_MAX_UPLOAD_BYTES = CMS_MAX_UPLOAD_MB * 1024 * 1024
 # The notification app. Optional the same way the CMS is: naming it installs its
 # tables, its routes and its socket, and a project that does not name it never
 # imports the package.
+# Docs: how many revisions of a page are kept (oldest are pruned after each save).
+DOCS_REVISION_KEEP = int(os.getenv("DJANGO_DOCS_REVISION_KEEP", "50"))
+
 NOTIFICATIONS_ENABLED = os.getenv("DJANGO_NOTIFICATIONS_ENABLED", "false").lower() == "true"
 NOTIFICATIONS_APP = "apps.notifications.apps.NotificationsConfig"
 NOTIFICATIONS_INSTALLED_APPS = [NOTIFICATIONS_APP] if NOTIFICATIONS_ENABLED else []

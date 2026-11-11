@@ -30,6 +30,7 @@ class TextBlockView extends StatefulWidget {
     required this.onMoveFocus,
     required this.onOpenDoc,
     required this.askLink,
+    this.onPasteTask,
     this.number = 1,
     this.focusOffset,
   });
@@ -51,12 +52,17 @@ class TextBlockView extends StatefulWidget {
   final void Function(String docId) onOpenDoc;
   final LinkAsker askLink;
 
+  /// A task link was pasted as the whole text of this block: make it a card.
+  final void Function(String taskId)? onPasteTask;
+
   @override
   State<TextBlockView> createState() => _TextBlockViewState();
 }
 
 class _TextBlockViewState extends State<TextBlockView> {
   late final MarkedTextController _c;
+  final _anchor = LayerLink();
+  final _overlay = OverlayPortalController();
 
   DocBlock get _block => widget.block;
 
@@ -138,7 +144,7 @@ class _TextBlockViewState extends State<TextBlockView> {
     if (newline != null) {
       final slash = _slashQuery;
       if (slash != null) {
-        final items = SlashMenu.filter(slash);
+        final items = SlashMenu.filter(slash.replaceAll('\n', ''));
         // Take the break back out, then do what the menu would.
         _c.rich = rich.replaceRange(newline, newline + 1, '');
         if (items.isNotEmpty) {
@@ -152,6 +158,7 @@ class _TextBlockViewState extends State<TextBlockView> {
       );
       return;
     }
+    if (_block.type == BlockType.paragraph && _pastedTask(rich.text)) return;
     if (_block.type == BlockType.paragraph) {
       final s = markdownShortcut(rich.text);
       if (s != null) {
@@ -160,6 +167,21 @@ class _TextBlockViewState extends State<TextBlockView> {
       }
     }
     widget.onChanged(_block.withRich(rich));
+  }
+
+  /// Many characters arrived at once and they are one task link: a paste.
+  bool _pastedTask(String text) {
+    final handler = widget.onPasteTask;
+    if (handler == null || text.length - _block.plain.length < 8) return false;
+    final id = taskIdFromText(text);
+    if (id == null || text.trim().length > 300) return false;
+    final rest = text.replaceFirst(
+      RegExp(r'https?://\S+|' + id, caseSensitive: false),
+      '',
+    );
+    if (rest.trim().isNotEmpty) return false;
+    handler(id);
+    return true;
   }
 
   void _toggle(String mark) {
@@ -409,13 +431,55 @@ class _TextBlockViewState extends State<TextBlockView> {
         ],
       );
     }
+    final pages = [
+      for (final p in widget.pages)
+        if (p.id != widget.currentDocId) p,
+    ];
+    final floating = showBar || slash != null || mention != null;
+    if (floating != _overlay.isShowing) {
+      // Shown or hidden once this frame is built.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || floating == _overlay.isShowing) return;
+        floating ? _overlay.show() : _overlay.hide();
+      });
+    }
     return Padding(
       padding: EdgeInsets.only(left: _block.indent * 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showBar) _toolbar(),
-          row,
+          OverlayPortal(
+            controller: _overlay,
+            overlayChildBuilder: (_) => Stack(
+              children: [
+                if (showBar)
+                  CompositedTransformFollower(
+                    link: _anchor,
+                    showWhenUnlinked: false,
+                    targetAnchor: Alignment.topLeft,
+                    followerAnchor: Alignment.bottomLeft,
+                    child: _toolbar(),
+                  ),
+                if (slash != null || mention != null)
+                  CompositedTransformFollower(
+                    link: _anchor,
+                    showWhenUnlinked: false,
+                    targetAnchor: Alignment.bottomLeft,
+                    child: slash != null
+                        ? SlashMenu(
+                            query: slash,
+                            onPick: (i) => widget.onTurn(i.type, i.attrs),
+                          )
+                        : PagePicker(
+                            query: mention!.query,
+                            pages: pages,
+                            onPick: (p) => _pickMention(p, mention.start),
+                          ),
+                  ),
+              ],
+            ),
+            child: CompositedTransformTarget(link: _anchor, child: row),
+          ),
           if (mentions.isNotEmpty)
             Wrap(
               spacing: 6,
@@ -429,20 +493,6 @@ class _TextBlockViewState extends State<TextBlockView> {
                     onPressed: () => widget.onOpenDoc(e.key),
                   ),
               ],
-            ),
-          if (slash != null)
-            SlashMenu(
-              query: slash,
-              onPick: (i) => widget.onTurn(i.type, i.attrs),
-            ),
-          if (mention != null)
-            PagePicker(
-              query: mention.query,
-              pages: [
-                for (final p in widget.pages)
-                  if (p.id != widget.currentDocId) p,
-              ],
-              onPick: (p) => _pickMention(p, mention.start),
             ),
         ],
       ),

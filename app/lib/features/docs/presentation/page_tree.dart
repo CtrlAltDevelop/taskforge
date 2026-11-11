@@ -124,6 +124,10 @@ class _PageTreeState extends ConsumerState<PageTree> {
         );
       case 'move':
         await _moveTo(tree, doc);
+      case 'restore':
+        await _run(() async {
+          await ref.read(docsActionsProvider).restore(doc.id);
+        });
       case 'archive':
         await _run(() async {
           await ref.read(docsActionsProvider).archive(doc.id);
@@ -175,6 +179,10 @@ class _PageTreeState extends ConsumerState<PageTree> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: selected ? FontWeight.w600 : null,
+                    fontStyle: doc.archived ? FontStyle.italic : null,
+                    color: doc.archived
+                        ? Theme.of(context).colorScheme.outline
+                        : null,
                   ),
                 ),
               ),
@@ -192,13 +200,32 @@ class _PageTreeState extends ConsumerState<PageTree> {
                   iconSize: 18,
                   padding: EdgeInsets.zero,
                   onSelected: (a) => _menu(tree, doc, a),
-                  itemBuilder: (_) => const [
-                    PopupMenuItem(value: 'child', child: Text('New subpage')),
-                    PopupMenuItem(value: 'up', child: Text('Move up')),
-                    PopupMenuItem(value: 'down', child: Text('Move down')),
-                    PopupMenuItem(value: 'move', child: Text('Move to...')),
-                    PopupMenuItem(value: 'archive', child: Text('Archive')),
-                  ],
+                  itemBuilder: (_) => doc.archived
+                      ? const [
+                          PopupMenuItem(
+                            value: 'restore',
+                            child: Text('Restore'),
+                          ),
+                        ]
+                      : const [
+                          PopupMenuItem(
+                            value: 'child',
+                            child: Text('New subpage'),
+                          ),
+                          PopupMenuItem(value: 'up', child: Text('Move up')),
+                          PopupMenuItem(
+                            value: 'down',
+                            child: Text('Move down'),
+                          ),
+                          PopupMenuItem(
+                            value: 'move',
+                            child: Text('Move to...'),
+                          ),
+                          PopupMenuItem(
+                            value: 'archive',
+                            child: Text('Archive'),
+                          ),
+                        ],
                 ),
             ],
           ),
@@ -270,6 +297,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
   @override
   Widget build(BuildContext context) {
     final tree = ref.watch(docTreeProvider(widget.project));
+    final showArchived = ref.watch(docShowArchivedProvider);
     return Column(
       key: const Key('page-tree'),
       children: [
@@ -282,6 +310,16 @@ class _PageTreeState extends ConsumerState<PageTree> {
                   'Pages',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
+              ),
+              IconButton(
+                key: const Key('show-archived'),
+                tooltip: showArchived ? 'Hide archived' : 'Show archived',
+                isSelected: showArchived,
+                icon: const Icon(Icons.inventory_2_outlined),
+                selectedIcon: const Icon(Icons.inventory_2),
+                onPressed: () => ref
+                    .read(docShowArchivedProvider.notifier)
+                    .set(!showArchived),
               ),
               if (widget.canEdit)
                 IconButton(

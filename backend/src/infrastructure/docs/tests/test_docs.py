@@ -182,6 +182,11 @@ def test_revisions_are_pruned_to_the_limit(team: Any, settings: Any) -> None:
     assert revisions.keep() == 3
 
 
+def test_revision_limit_is_declared_in_settings_with_default_50(settings: Any) -> None:
+    assert settings.DOCS_REVISION_KEEP == 50
+    assert revisions.keep() == 50
+
+
 def test_restore_an_older_revision_as_a_new_save(team: Any) -> None:
     doc = page(team, "One", blocks=body(para("first")))
     first = DocRevision.objects.get(doc=doc)

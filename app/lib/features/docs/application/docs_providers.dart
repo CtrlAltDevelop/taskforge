@@ -28,12 +28,27 @@ const docPresenceEvery = Duration(seconds: 20);
 
 String get _none => '';
 
+/// Whether the tree lists archived pages too (the "Show archived" toggle).
+class ShowArchivedNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void set(bool value) => state = value;
+}
+
+final docShowArchivedProvider = NotifierProvider<ShowArchivedNotifier, bool>(
+  ShowArchivedNotifier.new,
+);
+
 /// The pages of the workspace (project '') or of one project, in tree order.
 final docTreeProvider = FutureProvider.autoDispose
     .family<List<DocNode>, String>((ref, project) async {
       final ws = ref.watch(workspaceScopeProvider);
       if (ws == null) return const [];
-      return ref.watch(docsClientProvider).tree(ws, projectId: project);
+      final archived = ref.watch(docShowArchivedProvider);
+      return ref
+          .watch(docsClientProvider)
+          .tree(ws, projectId: project, includeArchived: archived);
     });
 
 /// Where the cards of a page's tasks stand (the ids joined with commas).
@@ -99,6 +114,7 @@ class DocEditState {
     this.error,
     this.page,
     this.title = '',
+    this.icon = '',
     this.blocks = const [],
     this.base = const [],
     this.version = 0,
@@ -115,6 +131,7 @@ class DocEditState {
   final DocException? error;
   final DocPage? page;
   final String title;
+  final String icon;
   final List<DocBlock> blocks;
 
   /// The body the server last gave or accepted (what a merge starts from).
@@ -138,6 +155,7 @@ class DocEditState {
     Object? error = _keep,
     DocPage? page,
     String? title,
+    String? icon,
     List<DocBlock>? blocks,
     List<DocBlock>? base,
     int? version,
@@ -151,6 +169,7 @@ class DocEditState {
     error: identical(error, _keep) ? this.error : error as DocException?,
     page: page ?? this.page,
     title: title ?? this.title,
+    icon: icon ?? this.icon,
     blocks: blocks ?? this.blocks,
     base: base ?? this.base,
     version: version ?? this.version,
@@ -222,6 +241,7 @@ class DocSession extends Notifier<DocEditState> {
         loading: false,
         page: page,
         title: page.node.title,
+        icon: page.node.icon,
         blocks: page.blocks,
         base: page.blocks,
         version: page.version,
@@ -236,11 +256,12 @@ class DocSession extends Notifier<DocEditState> {
   }
 
   /// Takes new text. Saves after the autosave delay.
-  void edit({String? title, List<DocBlock>? blocks}) {
+  void edit({String? title, String? icon, List<DocBlock>? blocks}) {
     if (!state.canEdit) return;
     _edits++;
     state = state.copyWith(
       title: title,
+      icon: icon,
       blocks: blocks,
       save: state.conflict != null ? SaveState.conflict : SaveState.dirty,
     );
@@ -256,6 +277,7 @@ class DocSession extends Notifier<DocEditState> {
   Future<DocPage> _sendTo(DocsClient client, String ws, DocEditState s) {
     final fields = [
       if (s.title != (s.page?.node.title ?? '')) 'title',
+      if (s.icon != (s.page?.node.icon ?? '')) 'icon',
       if (!sameBlocks(s.blocks, s.base)) 'blocks',
     ];
     return client.update(
@@ -264,6 +286,7 @@ class DocSession extends Notifier<DocEditState> {
       expectedVersion: s.version,
       fields: fields,
       title: s.title,
+      icon: s.icon,
       blocks: s.blocks,
     );
   }
@@ -294,8 +317,12 @@ class DocSession extends Notifier<DocEditState> {
             : answer.blocks,
         blocks: untouched && answer.blocks.isNotEmpty ? answer.blocks : null,
         title: untouched ? answer.node.title : null,
+        icon: untouched ? answer.node.icon : null,
         save: untouched ? SaveState.saved : SaveState.dirty,
       );
+      if (s.title != s.page?.node.title || s.icon != s.page?.node.icon) {
+        ref.invalidate(docTreeProvider); // the tree shows the new name and icon
+      }
       if (!untouched) {
         _timer = Timer(ref.read(docAutosaveDelayProvider), () {
           unawaited(saveNow());
@@ -399,6 +426,7 @@ class DocSession extends Notifier<DocEditState> {
     state = state.copyWith(
       page: answer,
       title: answer.node.title,
+      icon: answer.node.icon,
       blocks: answer.blocks,
       base: answer.blocks,
       version: answer.version,
