@@ -20,6 +20,10 @@ from google.protobuf.empty_pb2 import Empty
 from infrastructure.attachments import services as attachment_services
 from infrastructure.attachments.grpc import attachments_pb2 as apb
 from infrastructure.attachments.grpc import attachments_pb2_grpc as astubs
+from infrastructure.automations import services as automation_services
+from infrastructure.automations.grpc import automations_pb2 as aupb
+from infrastructure.automations.grpc import automations_pb2_grpc as austubs
+from infrastructure.automations.models import AutomationRun
 from infrastructure.comments import services as comment_services
 from infrastructure.comments.grpc import comments_pb2 as cpb
 from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
@@ -94,6 +98,8 @@ class World:
     sprint_id: str = ""  # a sprint of the open project (made by the sprint prepares)
     doc_id: str = ""  # a workspace page made by the Owner (the doc prepares)
     doc_revision: int = 0  # its first revision
+    automation_id: str = ""  # a rule of the open project, made by the Owner
+    automation_run_id: str = ""  # a run of it (the task was made after the rule)
 
     @property
     def ws(self) -> str:
@@ -1468,6 +1474,105 @@ ENDPOINTS += (
         "Presence",
         "workspace.view",
         lambda w: dpb.DocPresenceRequest(**_doc_ref(w), state="viewing"),
+    ),
+)
+
+
+def _automation_on(w: World) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    made = automation_services.create(
+        owner,
+        w.workspace,
+        w.project_id,
+        "Rule",
+        {"type": "task_created"},
+        [{"type": "add_comment", "text": "hi"}],
+    ).automation
+    w.automation_id = str(made.pk)
+    task_services.create(owner, w.workspace, w.project_id, "Fresh")
+    run = AutomationRun.objects.filter(automation=made).first()
+    w.automation_run_id = str(run.pk) if run else ""
+
+
+def _automation_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "project_id": w.project_id, "automation_id": w.automation_id}
+
+
+AC = austubs.AutomationControllerStub
+AR = austubs.AutomationRunControllerStub
+
+
+def _automation_endpoint(
+    stub: Any, name: str, method: str, permission: str, request: Callable[[World], Any]
+) -> Endpoint:
+    return Endpoint(f"{name}.{method}", permission, _grpc(stub, method, request), _automation_on)
+
+
+ENDPOINTS += (
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "List",
+        "workspace.view",
+        lambda w: aupb.AutomationListRequest(**_project_ref(w)),
+    ),
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "Create",
+        "automation.manage",
+        lambda w: aupb.AutomationCreateRequest(
+            **_project_ref(w),
+            name="New",
+            trigger_json='{"type": "task_created"}',
+            actions_json='[{"type": "add_comment", "text": "x"}]',
+            enabled=True,
+        ),
+    ),
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "Update",
+        "automation.manage",
+        lambda w: aupb.AutomationUpdateRequest(
+            **_automation_ref(w), fields=["name"], expected_version=1, name="N"
+        ),
+    ),
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "Delete",
+        "automation.manage",
+        lambda w: aupb.AutomationDeleteRequest(**_automation_ref(w)),
+    ),
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "Toggle",
+        "automation.manage",
+        lambda w: aupb.AutomationToggleRequest(**_automation_ref(w), enabled=False),
+    ),
+    _automation_endpoint(
+        AC,
+        "AutomationController",
+        "DryRun",
+        "automation.manage",
+        lambda w: aupb.AutomationDryRunRequest(**_automation_ref(w), task_id=w.task_id),
+    ),
+    _automation_endpoint(
+        AR,
+        "AutomationRunController",
+        "List",
+        "workspace.view",
+        lambda w: aupb.AutomationRunListRequest(**_project_ref(w)),
+    ),
+    _automation_endpoint(
+        AR,
+        "AutomationRunController",
+        "Get",
+        "workspace.view",
+        lambda w: aupb.AutomationRunGetRequest(**_project_ref(w), run_id=w.automation_run_id),
     ),
 )
 

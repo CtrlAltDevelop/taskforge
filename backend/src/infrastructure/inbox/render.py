@@ -44,4 +44,10 @@ def render(row: Any, actor_name: str) -> tuple[str, str]:
             return "A task is due soon", f"{task} is due {clean(payload.get('due_date', ''))}"
         case kinds.TIMER_LONG:
             return "Your timer is still running", f"{task}: {payload.get('hours', 0)} h so far"
+        case kinds.AUTOMATION:
+            name = clean(payload.get("automation", ""))
+            return f"Automation: {name}", f"{task}\n{clean(payload.get('message', ''))}".strip()
+        case kinds.AUTOMATION_DISABLED:
+            name = clean(payload.get("automation", ""))
+            return f"Automation switched off: {name}", clean(payload.get("reason", ""))
     return "Notification", task

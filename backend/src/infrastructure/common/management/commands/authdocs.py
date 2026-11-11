@@ -63,6 +63,7 @@ PROJECT_LABELS = frozenset(
         "timetracking",
         "sprints",
         "wikidocs",
+        "automations",
         "shop",
         "support",
         "wallet",

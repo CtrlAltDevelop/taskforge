@@ -56,6 +56,7 @@ PERMISSIONS: Final = (
     Permission("sprint.manage", "Plan, start and complete sprints and move tasks in and out"),
     Permission("doc.edit", "Create, edit, move, archive and restore pages and their history"),
     Permission("doc.manage", "Restrict pages, choose who may open them, open any restricted page"),
+    Permission("automation.manage", "Create, edit, switch on and off, test and delete automations"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 

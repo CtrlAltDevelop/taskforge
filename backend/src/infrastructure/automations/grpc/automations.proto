@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package config.automations;
+
+service AutomationController {
+    rpc Create(AutomationCreateRequest) returns (AutomationAnswer) {}
+    rpc Delete(AutomationDeleteRequest) returns (AutomationDeleted) {}
+    rpc DryRun(AutomationDryRunRequest) returns (AutomationDryRunAnswer) {}
+    rpc List(AutomationListRequest) returns (AutomationList) {}
+    rpc Toggle(AutomationToggleRequest) returns (AutomationAnswer) {}
+    rpc Update(AutomationUpdateRequest) returns (AutomationAnswer) {}
+}
+
+service AutomationRunController {
+    rpc Get(AutomationRunGetRequest) returns (AutomationRunAnswer) {}
+    rpc List(AutomationRunListRequest) returns (AutomationRunList) {}
+}
+
+message Automation {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string name = 4;
+    bool enabled = 5;
+    string trigger_json = 6;
+    string condition_tfql = 7;
+    string condition_json = 8;
+    string actions_json = 9;
+    string owner_id = 10;
+    string disabled_reason = 11;
+    int32 version = 12;
+    string created_at = 13;
+    string updated_at = 14;
+    string last_run_at = 15;
+    string last_run_status = 16;
+}
+
+message AutomationAnswer {
+    Automation automation = 1;
+}
+
+message AutomationCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string name = 3;
+    string trigger_json = 4;
+    string condition_tfql = 5;
+    string actions_json = 6;
+    bool enabled = 7;
+}
+
+message AutomationDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string automation_id = 3;
+}
+
+message AutomationDeleted {
+    string id = 1;
+}
+
+message AutomationDryRunAnswer {
+    bool would_run = 1;
+    string status = 2;
+    string explanation = 3;
+    string error = 4;
+    string steps_json = 5;
+}
+
+message AutomationDryRunRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string automation_id = 3;
+    string task_id = 4;
+}
+
+message AutomationList {
+    repeated Automation automations = 1;
+}
+
+message AutomationListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message AutomationRun {
+    string id = 1;
+    string automation_id = 2;
+    string automation_name = 3;
+    string task_id = 4;
+    string task_key = 5;
+    string status = 6;
+    int32 depth = 7;
+    string event_key = 8;
+    string input_json = 9;
+    string steps_json = 10;
+    string error = 11;
+    string explanation = 12;
+    string started_at = 13;
+    string finished_at = 14;
+}
+
+message AutomationRunAnswer {
+    AutomationRun run = 1;
+}
+
+message AutomationRunGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string run_id = 3;
+}
+
+message AutomationRunList {
+    repeated AutomationRun runs = 1;
+}
+
+message AutomationRunListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string automation_id = 3;
+    string task_id = 4;
+    string status = 5;
+    string before = 6;
+    int32 limit = 7;
+}
+
+message AutomationToggleRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string automation_id = 3;
+    bool enabled = 4;
+}
+
+message AutomationUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string automation_id = 3;
+    repeated string fields = 4;
+    int32 expected_version = 5;
+    string name = 6;
+    string trigger_json = 7;
+    string condition_tfql = 8;
+    string actions_json = 9;
+}
+

@@ -11,6 +11,8 @@ COMMENTED: Final = "comment.added"
 STATUS_CHANGED: Final = "status.changed"
 DUE_SOON: Final = "task.due_soon"
 TIMER_LONG: Final = "timer.long"
+AUTOMATION: Final = "automation.notice"
+AUTOMATION_DISABLED: Final = "automation.disabled"
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +31,8 @@ KINDS: Final = (
     Kind(STATUS_CHANGED, "The status of a task you watch changes"),
     Kind(DUE_SOON, "A task assigned to you is due soon", push=True),
     Kind(TIMER_LONG, "Your timer has been running for a long time", push=True),
+    Kind(AUTOMATION, "An automation sends you a message"),
+    Kind(AUTOMATION_DISABLED, "An automation of yours was switched off", push=True),
 )
 BY_KEY: Final = {k.key: k for k in KINDS}
 

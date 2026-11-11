@@ -1050,6 +1050,7 @@ INSTALLED_APPS = [
     "infrastructure.timetracking.apps.TimeTrackingConfig",
     "infrastructure.sprints.apps.SprintsConfig",
     "infrastructure.docs.apps.DocsConfig",
+    "infrastructure.automations.apps.AutomationsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1259,6 +1260,9 @@ INBOX_FCM_CREDENTIALS_FILE = os.getenv("DJANGO_INBOX_FCM_CREDENTIALS_FILE", "")
 INBOX_COALESCE_SECONDS = int(os.getenv("DJANGO_INBOX_COALESCE_SECONDS", "60"))
 # Deliver a push or email in the request's thread (tests); otherwise on a small background pool.
 INBOX_SYNC_DELIVERY = os.getenv("DJANGO_INBOX_SYNC_DELIVERY", "") == "1"
+# Automation runs: in a worker thread; "1" runs them on the spot (tests). The seam is
+# ``infrastructure.automations.queue.run_later``: Celery replaces it.
+AUTOMATIONS_SYNC_RUN = os.getenv("DJANGO_AUTOMATIONS_SYNC_RUN", "") == "1"
 # The link in an email that turns that kind off; ``{token}`` is replaced.
 INBOX_UNSUBSCRIBE_URL = os.getenv(
     "DJANGO_INBOX_UNSUBSCRIBE_URL", "http://localhost:8010/api/v1/inbox/unsubscribe?token={token}"
