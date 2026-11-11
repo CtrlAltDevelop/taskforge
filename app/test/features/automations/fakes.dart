@@ -35,6 +35,7 @@ AutomationRun run(
   String explanation = '',
   String error = '',
   List<RunStep> steps = const [],
+  String startedAt = '2026-11-12 10:00',
 }) => AutomationRun(
   id: id,
   automationId: ruleId,
@@ -42,7 +43,7 @@ AutomationRun run(
   status: status,
   rawStatus: status.wire,
   taskKey: 'WEB-1',
-  startedAt: '2026-11-12 10:00',
+  startedAt: startedAt,
   explanation: explanation,
   error: error,
   steps: steps,
@@ -63,6 +64,7 @@ class FakeAutomationsClient implements AutomationsClient {
   final toggles = <String>[];
   final deleted = <String>[];
   final dryRuns = <String>[];
+  final runRequests = <({String before, int limit})>[];
   AutomationException? failNext;
   DryRunResult dryAnswer = const DryRunResult(wouldRun: true);
   var _n = 0;
@@ -205,9 +207,21 @@ class FakeAutomationsClient implements AutomationsClient {
     int limit = 0,
   }) async {
     _maybeFail();
-    return List.unmodifiable([
+    runRequests.add((before: before, limit: limit));
+    // `before` is `<started_at>#<run id>`: runs sharing a time page on by id.
+    final cut = before.split('#');
+    bool older(AutomationRun r) {
+      final byTime = r.startedAt.compareTo(cut.first);
+      return byTime < 0 ||
+          (byTime == 0 && cut.length > 1 && r.id.compareTo(cut[1]) < 0);
+    }
+
+    final rows = [
       for (final r in allRuns)
-        if (automationId.isEmpty || r.automationId == automationId) r,
-    ]);
+        if ((automationId.isEmpty || r.automationId == automationId) &&
+            (before.isEmpty || older(r)))
+          r,
+    ];
+    return List.unmodifiable(limit > 0 ? rows.take(limit) : rows);
   }
 }

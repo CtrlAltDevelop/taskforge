@@ -83,6 +83,12 @@ const registry = [
     PermissionInfo(Perm.commentCreate, 'Write comments'),
     PermissionInfo(Perm.commentModerate, 'Moderate comments'),
   ]),
+  PermissionArea('Automations', [
+    PermissionInfo(
+      Perm.automationManage,
+      'Create, edit, switch on and off, test and delete automations',
+    ),
+  ]),
 ];
 
 /// In-memory roles server. The caller's role is [callerRole] (by name) and may

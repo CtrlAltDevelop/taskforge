@@ -125,7 +125,22 @@ class TfqlEditor extends StatefulWidget {
     required this.suggestions,
     required this.onChanged,
     required this.onCursor,
+    this.fieldKey = const Key('tfql-text'),
+    this.minLines = 3,
+    this.maxLines = 8,
+    this.hint = 'status = "In progress" AND assignee = me AND due < +7d',
+    this.helper,
+    this.readOnly = false,
   });
+
+  /// Where the editor is used: the text field's key, size, hint and whether
+  /// it may be changed (a project's filter, or a rule's condition).
+  final Key fieldKey;
+  final int minLines;
+  final int maxLines;
+  final String hint;
+  final String? helper;
+  final bool readOnly;
 
   final String initial;
   final List<QueryProblem> problems;
@@ -182,14 +197,16 @@ class TfqlEditorState extends State<TfqlEditor> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       TextField(
-        key: const Key('tfql-text'),
+        key: widget.fieldKey,
         controller: controller,
-        minLines: 3,
-        maxLines: 8,
+        readOnly: widget.readOnly,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
         style: const TextStyle(fontFamily: 'monospace'),
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'status = "In progress" AND assignee = me AND due < +7d',
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          hintText: widget.hint,
+          helperText: widget.helper,
         ),
         onChanged: (t) => widget.onChanged(
           t,

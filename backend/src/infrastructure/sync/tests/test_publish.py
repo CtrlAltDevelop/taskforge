@@ -239,3 +239,12 @@ def test_an_attachment_is_announced_as_a_change_to_its_tasks_files(
         ("attachment.deleted", str(task.pk)),
     ]
     assert f"proj:{project.pk}" in broker.rooms()
+
+
+def test_automation_events_are_hints_about_a_rule_or_a_run() -> None:
+    from infrastructure.sync.models import event_type
+
+    assert event_type("automation", "created") == "automation.created"
+    assert event_type("automation", "deleted") == "automation.deleted"
+    assert event_type("automation", "run") == "automation.run"
+    assert event_type("automation", "toggled") == "automation.updated"

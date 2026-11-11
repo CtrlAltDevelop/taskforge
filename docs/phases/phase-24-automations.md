@@ -1,6 +1,6 @@
 # Phase 24 — Automations
 
-**Status:** DONE (implemented on `develop`; PostgreSQL, the real thread pool, webhook TLS path and a real browser/device not run)
+**Status:** DONE
 
 ## Feature
 No-code **rules**: *When* something happens, *if* conditions match, *then* do actions — unlimited runs, with a run history.
@@ -49,7 +49,7 @@ Rule builder as a vertical “When → If → Then” stack of cards with typed 
 - [ ] Deleting a used status disables rule and tells the owner
 
 ## Tests
-Trigger matching, condition via TFQL, idempotency, loop guard, permission ceiling, Celery retry behaviour.
+Trigger matching, condition via TFQL, idempotency, loop guard, permission ceiling (including an owner who keeps `automation.manage` but loses `task.update`), the in-process queue (lanes, cap, de-duplication, refusal), idempotency per (rule, task, event) and the bounded retry of crashed runs, the `automations_tick` command, and stable run paging.
 
 ## Depends on
 Phases 07, 14, 19.

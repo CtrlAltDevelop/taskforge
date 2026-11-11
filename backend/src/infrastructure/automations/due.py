@@ -87,3 +87,36 @@ def prune_runs(now: Any = None) -> int:
         if stale:
             removed += AutomationRun.objects.filter(pk__in=stale).delete()[0]
     return removed
+
+
+def retry_crashed(now: Any = None) -> int:
+    """Run again the runs that crashed (never finished, quiet for ``RETRY_AFTER``), at most
+    ``MAX_ATTEMPTS`` times in all; then the failure is recorded for good. A run that failed a
+    step finished, so it is never touched. The run row is reused, so the (rule, task, event)
+    constraint keeps it one run. Returns how many were queued."""
+    moment = now or timezone.now()
+    stale = AutomationRun.objects.filter(
+        finished_at__isnull=True, started_at__lt=moment - engine.RETRY_AFTER
+    )
+    stale.filter(attempts__gte=engine.MAX_ATTEMPTS).update(
+        finished_at=moment,
+        error=f"The run did not finish after {engine.MAX_ATTEMPTS} tries.",
+    )
+    queued = 0
+    for run in stale.select_related("automation")[:PER_TICK]:
+        claimed = AutomationRun.objects.filter(
+            pk=run.pk, finished_at__isnull=True, attempts=run.attempts
+        ).update(attempts=run.attempts + 1, started_at=moment)
+        if not claimed:
+            continue
+        accepted = queue.run_later(
+            engine.resume,
+            str(run.pk),
+            lane=queue.lane_for(run.automation.actions),
+            key=f"retry:{run.pk}:{run.attempts + 1}",
+        )
+        if not accepted:  # the queue is full: give the attempt back, try again later
+            AutomationRun.objects.filter(pk=run.pk).update(attempts=run.attempts)
+            continue
+        queued += 1
+    return queued

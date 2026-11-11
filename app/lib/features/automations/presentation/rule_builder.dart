@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/action_cards.dart';
+import 'package:taskforge/features/automations/presentation/condition_editor.dart';
 
 /// Opens the builder; returns true when a rule was saved.
 Future<bool?> showRuleBuilder(
@@ -43,7 +44,8 @@ class RuleBuilder extends ConsumerStatefulWidget {
 
 class _RuleBuilderState extends ConsumerState<RuleBuilder> {
   late final _name = TextEditingController();
-  late final _condition = TextEditingController();
+  final _conditionEditor = GlobalKey<ConditionEditorState>();
+  var _condition = '';
   var _trigger = const Trigger();
   var _actions = <RuleAction>[];
   var _ids = <int>[];
@@ -66,7 +68,8 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
     _rule = rule;
     final d = rule?.toDraft() ?? const RuleDraft();
     _name.text = d.name;
-    _condition.text = d.condition;
+    _condition = d.condition;
+    _conditionEditor.currentState?.setText(d.condition);
     _trigger = d.trigger;
     _actions = [...d.actions];
     _ids = [for (final _ in _actions) _next++];
@@ -76,14 +79,13 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
   @override
   void dispose() {
     _name.dispose();
-    _condition.dispose();
     super.dispose();
   }
 
   RuleDraft get _draft => RuleDraft(
     name: _name.text,
     trigger: _trigger,
-    condition: _condition.text,
+    condition: _condition,
     actions: _actions,
   );
 
@@ -126,6 +128,14 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
       _error = null;
       _conflict = false;
     });
+    if (!await (_conditionEditor.currentState?.check() ?? Future.value(true))) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _error = 'The condition has a problem: see under the If card.';
+      });
+      return;
+    }
     final actions = ref.read(automationActionsProvider);
     try {
       final rule = _rule;
@@ -220,21 +230,12 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                 _Section(
                   keyName: 'if',
                   label: 'If (optional)',
-                  child: TextField(
-                    key: const Key('rule-condition'),
-                    controller: _condition,
+                  child: ConditionEditor(
+                    key: _conditionEditor,
+                    projectId: widget.projectId,
+                    initial: _condition,
                     readOnly: _ro,
-                    minLines: 1,
-                    maxLines: 4,
-                    onChanged: (_) => setState(() {}),
-                    style: const TextStyle(fontFamily: 'monospace'),
-                    decoration: InputDecoration(
-                      hintText: 'priority = high AND assignee = me',
-                      helperText:
-                          'A TFQL filter on the task. Empty means always.',
-                      errorText: conditionProblem(_condition.text),
-                      border: const OutlineInputBorder(),
-                    ),
+                    onChanged: (t) => setState(() => _condition = t),
                   ),
                 ),
                 const _Arrow(),

@@ -21,7 +21,7 @@ from typing import Any, Final
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
-from infrastructure.automations import safe_http, spec
+from infrastructure.automations import safe_http, signals, spec
 from infrastructure.automations.models import Automation, AutomationRun, RunStatus
 from infrastructure.comments import services as comments
 from infrastructure.common.errors import ApiError
@@ -41,6 +41,10 @@ logger = logging.getLogger(__name__)
 MANAGE: Final = "automation.manage"
 MAX_DEPTH: Final = 5
 RATE_PER_MINUTE: Final = 30
+MAX_ATTEMPTS: Final = 3  # a crashed run is tried this many times in all
+RETRY_AFTER: Final = timedelta(minutes=2)
+DID_NOT_FINISH: Final = "The run did not finish."
+CRASHED: Final = "An unexpected error stopped the run."
 _depth: ContextVar[int] = ContextVar("automation_depth", default=0)
 
 
@@ -351,7 +355,7 @@ def _begin(automation: Automation, task: Task, event: dict[str, Any]) -> Automat
                 event_key=str(event["id"])[:200],
                 depth=int(event.get("depth", 0)),
                 status=RunStatus.FAILED,
-                error="The run did not finish.",
+                error=DID_NOT_FINISH,
                 input=_snapshot(task, event),
             )
     except IntegrityError:
@@ -363,15 +367,54 @@ def _finish(run: AutomationRun, result: Result) -> AutomationRun:
     run.error, run.explanation = result.error[:1000], result.explanation[:1000]
     run.finished_at = timezone.now()
     run.save(update_fields=["status", "steps", "error", "explanation", "finished_at"])
+    signals.announce_run(run)
     return run
 
 
-def _too_fast(automation: Automation) -> bool:
+def _too_fast(automation: Automation, exclude: Any = None) -> bool:
     since = timezone.now() - timedelta(minutes=1)
+    rows = AutomationRun.objects.filter(automation=automation, started_at__gte=since)
+    if exclude is not None:
+        rows = rows.exclude(pk=exclude)
+    return rows.count() >= RATE_PER_MINUTE
+
+
+def _load_task(automation: Automation, task_id: Any) -> Task | None:
     return (
-        AutomationRun.objects.filter(automation=automation, started_at__gte=since).count()
-        >= RATE_PER_MINUTE
+        Task.objects.filter(
+            pk=task_id,
+            project_id=automation.project_id,
+            workspace_id=automation.workspace_id,
+            deleted_at__isnull=True,
+        )
+        .select_related("project", "status")
+        .first()
     )
+
+
+def _crashed(run: AutomationRun) -> AutomationRun:
+    """Left unfinished on purpose: ``finished_at`` stays empty so the tick retries it."""
+    run.status, run.error = RunStatus.FAILED, CRASHED
+    run.save(update_fields=["status", "error"])
+    signals.announce_run(run)
+    return run
+
+
+def _perform(
+    run: AutomationRun, automation: Automation, task: Task, event: dict[str, Any]
+) -> AutomationRun:
+    if int(event.get("depth", 0)) >= MAX_DEPTH:
+        why = f"Stopped: {MAX_DEPTH} automations in a row led here (a possible loop)."
+        return _finish(run, Result(RunStatus.SKIPPED_LOOP, explanation=why))
+    if _too_fast(automation, exclude=run.pk):
+        why = f"Stopped: this rule already ran {RATE_PER_MINUTE} times in the last minute."
+        return _finish(run, Result(RunStatus.SKIPPED_RATE, explanation=why))
+    try:
+        result = evaluate(automation, task, event, apply=True, run_id=str(run.pk))
+    except Exception:  # noqa: BLE001 -- the run record must say it failed
+        logger.exception("automation %s crashed", automation.pk)
+        return _crashed(run)
+    return _finish(run, result)
 
 
 def execute(automation_id: Any, event: dict[str, Any]) -> AutomationRun | None:
@@ -384,30 +427,34 @@ def execute(automation_id: Any, event: dict[str, Any]) -> AutomationRun | None:
     )
     if automation is None:
         return None
-    task = (
-        Task.objects.filter(
-            pk=event["task_id"],
-            project_id=automation.project_id,
-            workspace_id=automation.workspace_id,
-            deleted_at__isnull=True,
-        )
-        .select_related("project", "status")
-        .first()
-    )
+    task = _load_task(automation, event["task_id"])
     if task is None:
         return None
     run = _begin(automation, task, event)
     if run is None:
         return None
-    if int(event.get("depth", 0)) >= MAX_DEPTH:
-        why = f"Stopped: {MAX_DEPTH} automations in a row led here (a possible loop)."
-        return _finish(run, Result(RunStatus.SKIPPED_LOOP, explanation=why))
-    if _too_fast(automation):
-        why = f"Stopped: this rule already ran {RATE_PER_MINUTE} times in the last minute."
-        return _finish(run, Result(RunStatus.SKIPPED_RATE, explanation=why))
-    try:
-        result = evaluate(automation, task, event, apply=True, run_id=str(run.pk))
-    except Exception:  # noqa: BLE001 -- the run record must say it failed
-        logger.exception("automation %s crashed", automation.pk)
-        result = Result(RunStatus.FAILED, [], "An unexpected error stopped the run.")
-    return _finish(run, result)
+    return _perform(run, automation, task, event)
+
+
+def _give_up(run: AutomationRun, why: str) -> AutomationRun:
+    return _finish(run, Result(RunStatus.FAILED, error=why, explanation=why))
+
+
+def resume(run_id: Any) -> AutomationRun | None:
+    """Run a crashed run again, in place (its row is the idempotency record). Only a run that
+    never finished is taken. Actions done before a crash mid-run may be done again."""
+    run = (
+        AutomationRun.objects.select_related("automation__project", "automation__workspace")
+        .select_related("automation__owner")
+        .filter(pk=run_id, finished_at__isnull=True)
+        .first()
+    )
+    if run is None:
+        return None
+    automation = run.automation
+    if not automation.enabled:
+        return _give_up(run, "The rule was switched off before the run could be retried.")
+    task = _load_task(automation, run.task_id) if run.task_id else None
+    if task is None:
+        return _give_up(run, "The task was deleted before the run could be retried.")
+    return _perform(run, automation, task, dict(run.input.get("event", {})))

@@ -57,7 +57,8 @@ def event_type(entity_type: str, action: str) -> str:
     ``attachment.added`` / ``attachment.deleted`` (likewise the *task*),
     ``sprint.created`` / ``sprint.updated`` (entity: the sprint), ``doc.created`` /
     ``doc.updated`` / ``doc.moved`` (entity: the page; a hint only, never its content),
-    ``workflow.updated``,
+    ``automation.created`` / ``automation.updated`` / ``automation.deleted`` (entity: the rule) and
+    ``automation.run`` (entity: the run; a hint, never its steps), ``workflow.updated``,
     ``fields.updated`` and ``access.changed``."""
     if entity_type == "access":
         return "access.changed"
@@ -69,6 +70,12 @@ def event_type(entity_type: str, action: str) -> str:
         return f"attachment.{action}"  # attachment.added | attachment.deleted
     if entity_type == "doc":
         return f"doc.{action}" if action in ("created", "moved") else "doc.updated"
+    if entity_type == "automation":
+        return (
+            f"automation.{action}"
+            if action in ("created", "deleted", "run")
+            else "automation.updated"
+        )
     if entity_type in ("task", "comment", "sprint") and action in ("created", "deleted"):
         return f"{entity_type}.{action}"
     if entity_type == "project" and action == "created":

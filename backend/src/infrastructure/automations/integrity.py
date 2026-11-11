@@ -10,7 +10,7 @@ from typing import Any
 from django.db import transaction
 from django.utils import timezone
 
-from infrastructure.automations import spec
+from infrastructure.automations import signals, spec
 from infrastructure.automations.models import Automation
 from infrastructure.filters import language
 from infrastructure.filters.language import Catalogue, QueryError
@@ -54,6 +54,7 @@ def disable(automation: Automation, reasons: list[str]) -> None:
         automation.version += 1
         automation.updated_at = timezone.now()
         automation.save(update_fields=["enabled", "disabled_reason", "version", "updated_at"])
+        signals.announce(automation, "updated")
     _tell_owner(automation, reason)
 
 

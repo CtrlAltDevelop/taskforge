@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 
+import 'package:taskforge/features/filters/domain/filter_query.dart';
+import 'package:taskforge/features/filters/domain/saved_filters.dart';
+
+import '../filters/fakes.dart';
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
 import '../tasks/fakes.dart' as t;
 import 'fakes.dart';
+
+final _high = FilterQuery(
+  root: const FilterGroup(
+    children: [
+      FilterCondition(
+        field: 'priority',
+        cmp: 'eq',
+        values: [FilterValue.id('high')],
+      ),
+    ],
+  ),
+);
 
 Finder key(String k) => find.byKey(Key(k));
 
@@ -15,6 +32,7 @@ Future<Pumped> open(
   String role = 'Owner',
   Size size = const Size(1400, 1200),
   t.FakeTasksClient? tasks,
+  FakeFiltersClient? filters,
 }) async {
   final pumped = await pumpProjects(
     tester,
@@ -23,6 +41,7 @@ Future<Pumped> open(
     projects: [project('p1', 'Web')],
     automations: automations,
     tasks: tasks,
+    filters: filters ?? FakeFiltersClient(texts: {'priority = high': _high}),
   );
   await pumped.go(tester, '/projects/p1/automations');
   return pumped;
@@ -388,5 +407,119 @@ void main() {
   testWidgets('the sidebar links to the page', (tester) async {
     await open(tester, FakeAutomationsClient());
     expect(key('open-automations-p1'), findsOneWidget);
+  });
+
+  testWidgets('run history pages on identical start times by id', (
+    tester,
+  ) async {
+    final fake = FakeAutomationsClient(
+      rules: [rule('a1', 'Rule one')],
+      runs: [
+        for (var n = 99; n >= 40; n--)
+          run('r$n', startedAt: '2026-11-12 10:00'),
+      ],
+    );
+    await open(tester, fake);
+    await tester.tap(find.text('Run history'));
+    await tester.pumpAndSettle();
+    final scroll = find.descendant(
+      of: key('runs-list'),
+      matching: find.byType(Scrollable),
+    );
+    await tester.scrollUntilVisible(
+      key('runs-load-more'),
+      300,
+      scrollable: scroll,
+    );
+    await tester.tap(key('runs-load-more'));
+    await tester.pumpAndSettle();
+    expect(fake.runRequests.last, (
+      before: '2026-11-12 10:00#r50',
+      limit: runPageSize,
+    ));
+    await tester.scrollUntilVisible(key('run-r40'), 300, scrollable: scroll);
+    expect(key('run-r40'), findsOneWidget);
+  });
+
+  testWidgets('run history pages older runs with Load more', (tester) async {
+    String at(int n) => '2026-11-12 ${(100 - n).toString().padLeft(3, '0')}';
+    final fake = FakeAutomationsClient(
+      rules: [rule('a1', 'Rule one')],
+      runs: [for (var n = 0; n < 60; n++) run('r$n', startedAt: at(n))],
+    );
+    await open(tester, fake);
+    await tester.tap(find.text('Run history'));
+    await tester.pumpAndSettle();
+    expect(key('run-r0'), findsOneWidget);
+    expect(fake.runRequests.last, (before: '', limit: runPageSize));
+
+    await tester.scrollUntilVisible(
+      key('runs-load-more'),
+      300,
+      scrollable: find.descendant(
+        of: key('runs-list'),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    await tester.tap(key('runs-load-more'));
+    await tester.pumpAndSettle();
+    expect(fake.runRequests.last, (
+      before: '${at(49)}#r49',
+      limit: runPageSize,
+    ));
+    // 10 older rows came; the button is gone because the page was short.
+    expect(key('runs-load-more'), findsNothing);
+    await tester.scrollUntilVisible(
+      key('run-r59'),
+      300,
+      scrollable: find.descendant(
+        of: key('runs-list'),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    expect(key('run-r59'), findsOneWidget);
+  });
+
+  testWidgets('the condition is checked by the server as you type', (
+    tester,
+  ) async {
+    final filters = FakeFiltersClient(texts: {'priority = high': _high})
+      ..suggestions = const [
+        QuerySuggestion('assignee', 'field', 0, 'Assignee'),
+      ];
+    final fake = FakeAutomationsClient();
+    await open(tester, fake, filters: filters);
+    await tester.tap(key('new-rule'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(key('rule-condition'), 'priority ? high');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('Unexpected text. (at character 10)'), findsOneWidget);
+    expect(filters.validated.last.tfql, 'priority ? high');
+    expect(key('suggest-assignee'), findsOneWidget);
+
+    // Saving asks again and refuses while the condition is wrong.
+    await tester.enterText(key('rule-name'), 'X');
+    await choose(tester, 'trigger-type', 'A status changes');
+    await choose(tester, 'trigger-status', 'Done');
+    await tester.tap(key('add-action'));
+    await tester.pumpAndSettle();
+    await tester.enterText(key('action-text').first, 'Hi');
+    await tester.ensureVisible(key('rule-save'));
+    await tester.tap(key('rule-save'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('The condition has a problem'), findsOneWidget);
+    expect(fake.created, isEmpty);
+
+    // Fixed: it saves.
+    await tester.enterText(key('rule-condition'), 'priority = high');
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Unexpected text'), findsNothing);
+    await tester.ensureVisible(key('rule-save'));
+    await tester.tap(key('rule-save'));
+    await tester.pumpAndSettle();
+    expect(fake.created.single.condition, 'priority = high');
   });
 }

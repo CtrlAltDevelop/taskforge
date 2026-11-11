@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 Color statusColor(BuildContext context, RunStatus? s) {
   final scheme = Theme.of(context).colorScheme;
@@ -75,25 +76,109 @@ class StepsView extends StatelessWidget {
   }
 }
 
-/// The run history of a project, or of one rule.
-class RunsPanel extends ConsumerWidget {
+/// The run history of a project, or of one rule: the newest page, and older
+/// ones on "Load more" (the page after the last run shown, by its start time).
+class RunsPanel extends ConsumerStatefulWidget {
   const RunsPanel({super.key, required this.projectId, this.ruleId = ''});
 
   final String projectId;
   final String ruleId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final runs = ref.watch(
-      automationRunsProvider((project: projectId, rule: ruleId)),
-    );
+  ConsumerState<RunsPanel> createState() => _RunsPanelState();
+}
+
+class _RunsPanelState extends ConsumerState<RunsPanel> {
+  var _older = const <AutomationRun>[];
+  var _exhausted = false;
+  var _loading = false;
+  Object? _moreError;
+
+  RunsKey get _key => (project: widget.projectId, rule: widget.ruleId);
+
+  Future<void> _loadMore(List<AutomationRun> newest) async {
+    final shown = [...newest, ..._older];
+    if (shown.isEmpty || _loading) return;
+    final ws = ref.read(workspaceScopeProvider);
+    if (ws == null) return;
+    setState(() {
+      _loading = true;
+      _moreError = null;
+    });
+    try {
+      final page = await ref
+          .read(automationsClientProvider)
+          .runs(
+            ws,
+            widget.projectId,
+            automationId: widget.ruleId,
+            before: '${shown.last.startedAt}#${shown.last.id}',
+            limit: runPageSize,
+          );
+      if (!mounted) return;
+      final have = {for (final r in shown) r.id};
+      setState(() {
+        _older = [
+          ..._older,
+          for (final r in page)
+            if (!have.contains(r.id)) r,
+        ];
+        _exhausted = page.length < runPageSize;
+        _loading = false;
+      });
+    } on AutomationException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _moreError = e;
+        _loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // A fresh read of the newest page (a change elsewhere) starts over.
+    ref.listen(automationRunsProvider(_key), (prev, next) {
+      if (next is AsyncData && prev?.value != next.value) {
+        setState(() {
+          _older = const [];
+          _exhausted = false;
+          _moreError = null;
+        });
+      }
+    });
+    final runs = ref.watch(automationRunsProvider(_key));
     return switch (runs) {
       AsyncData(:final value) when value.isEmpty => const Center(
         child: Text('Nothing has run yet.', key: Key('runs-empty')),
       ),
       AsyncData(:final value) => ListView(
         key: const Key('runs-list'),
-        children: [for (final r in value) RunTile(run: r)],
+        children: [
+          for (final r in [...value, ..._older]) RunTile(run: r),
+          if (_moreError != null)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                automationErrorMessage(_moreError!),
+                key: const Key('runs-more-error'),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ),
+          if (value.length >= runPageSize && !_exhausted)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: _loading
+                    ? const CircularProgressIndicator()
+                    : TextButton(
+                        key: const Key('runs-load-more'),
+                        onPressed: () => _loadMore(value),
+                        child: const Text('Load more'),
+                      ),
+              ),
+            ),
+        ],
       ),
       AsyncError(:final error) => Center(
         child: Column(

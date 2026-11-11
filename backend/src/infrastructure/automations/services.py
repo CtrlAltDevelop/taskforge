@@ -13,9 +13,10 @@ from datetime import datetime
 from typing import Any, Final
 
 from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 
-from infrastructure.automations import engine, integrity, spec
+from infrastructure.automations import engine, integrity, signals, spec
 from infrastructure.automations.models import Automation, AutomationRun, RunStatus
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
@@ -59,7 +60,7 @@ def _load(project: Project, automation_id: str, *, lock: bool = False) -> Automa
         raise not_found() from None
     rows = Automation.objects.filter(pk=pk, project=project, workspace_id=project.workspace_id)
     row = (
-        (rows.select_for_update() if lock else rows)
+        (rows.select_for_update(of=("self",)) if lock else rows)
         .select_related("project", "workspace", "owner")
         .first()
     )
@@ -162,6 +163,7 @@ def create(
             actions=clean_actions,
             owner=actor,
         )
+        signals.announce(automation, "created")
     return _view(_load(project, str(automation.pk)))
 
 
@@ -209,6 +211,7 @@ def _bump(automation: Automation) -> None:
     automation.version += 1
     automation.updated_at = timezone.now()
     automation.save()
+    signals.announce(automation, "updated")
 
 
 def toggle(
@@ -233,7 +236,9 @@ def toggle(
 def delete(actor: Any, workspace: Workspace, project_id: str, automation_id: str) -> None:
     with transaction.atomic():
         project = _project(actor, workspace, project_id, MANAGE, lock=True)
-        _load(project, automation_id, lock=True).delete()
+        automation = _load(project, automation_id, lock=True)
+        signals.announce(automation, "deleted")
+        automation.delete()
 
 
 @dataclass(frozen=True, slots=True)
@@ -271,13 +276,16 @@ def dry_run(
 # --------------------------------------------------------------------------------- run history
 
 
-def _since(raw: str) -> datetime | None:
+def _cursor(raw: str) -> tuple[datetime, uuid.UUID | None] | None:
+    """``before``: a time, or ``<time>#<run id>`` (the last run of the page) so that runs sharing
+    a start time are neither skipped nor repeated."""
     if not raw:
         return None
+    moment, _, run_id = raw.partition("#")
     try:
-        return datetime.fromisoformat(raw)
+        return datetime.fromisoformat(moment), (uuid.UUID(run_id) if run_id else None)
     except ValueError:
-        raise spec.bad("before is a time like 2026-11-05T10:00:00+00:00.") from None
+        raise spec.bad("before is a time like 2026-11-05T10:00:00+00:00 (then #run id).") from None
 
 
 def list_runs(
@@ -302,11 +310,17 @@ def list_runs(
         if status not in RunStatus.values:
             raise spec.bad(f"Unknown run status: {status}.")
         rows = rows.filter(status=status)
-    cut = _since(before)
-    if cut is not None:
-        rows = rows.filter(started_at__lt=cut)
+    cursor = _cursor(before)
+    if cursor is not None:
+        moment, run_pk = cursor
+        older = Q(started_at__lt=moment)
+        if run_pk is not None:
+            older |= Q(started_at=moment, pk__lt=run_pk)
+        rows = rows.filter(older)
     size = min(limit or RUNS_DEFAULT, RUNS_MAX)
-    return list(rows.select_related("automation", "task__project").order_by("-started_at")[:size])
+    return list(
+        rows.select_related("automation", "task__project").order_by("-started_at", "-pk")[:size]
+    )
 
 
 def get_run(actor: Any, workspace: Workspace, project_id: str, run_id: str) -> AutomationRun:

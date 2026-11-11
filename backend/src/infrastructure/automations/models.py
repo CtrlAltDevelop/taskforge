@@ -58,7 +58,7 @@ class AutomationRun(models.Model):
     the same event can never run a rule twice (a retry finds this row). ``depth`` is how many
     automations in a row led here. ``input`` is the event and the task as the rule saw it,
     ``steps`` what each action did (or why it did not), ``explanation`` the plain reason a run did
-    not do anything."""
+    not do anything. A run with no ``finished_at`` crashed; the tick retries it (``attempts``)."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     automation = models.ForeignKey(Automation, on_delete=models.CASCADE, related_name="runs")
@@ -71,6 +71,7 @@ class AutomationRun(models.Model):
     steps = models.JSONField(default=list)
     error = models.CharField(max_length=1000, blank=True)
     explanation = models.CharField(max_length=1000, blank=True)
+    attempts = models.PositiveSmallIntegerField(default=1)
     started_at = models.DateTimeField(default=timezone.now)
     finished_at = models.DateTimeField(null=True, blank=True)
 

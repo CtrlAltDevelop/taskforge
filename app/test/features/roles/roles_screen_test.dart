@@ -64,6 +64,40 @@ void main() {
       expect(find.byKey(const Key('lock-100')), findsNothing);
     });
 
+    testWidgets('shows the Automations area with automation.manage', (
+      tester,
+    ) async {
+      final roles = await _withSupport();
+      await _openRoles(tester, roles);
+
+      expect(find.text('Automations'), findsOneWidget);
+      expect(
+        find.text(
+          'Create, edit, switch on and off, test and delete automations',
+        ),
+        findsOneWidget,
+      );
+      bool checked(String key) =>
+          tester.widget<Checkbox>(find.byKey(Key(key))).value ?? false;
+      expect(checked('cell-1-${Perm.automationManage}'), isTrue); // Owner
+      expect(checked('cell-2-${Perm.automationManage}'), isTrue); // Admin
+      expect(checked('cell-3-${Perm.automationManage}'), isFalse); // Member
+      expect(checked('cell-100-${Perm.automationManage}'), isFalse);
+
+      // A custom role can be given it.
+      await tester.ensureVisible(
+        find.byKey(const Key('cell-100-${Perm.automationManage}')),
+      );
+      await tester.tap(
+        find.byKey(const Key('cell-100-${Perm.automationManage}')),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        roles.roleNamed('Support').permissions,
+        contains(Perm.automationManage),
+      );
+    });
+
     testWidgets('built-in cells are read-only, custom ones toggle', (
       tester,
     ) async {

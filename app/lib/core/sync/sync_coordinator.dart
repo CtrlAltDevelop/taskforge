@@ -123,6 +123,16 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       readSprintsAgain(ref);
       return;
     }
+    if (event.type.startsWith('automation.')) {
+      // A rule changed (or was switched off by the server) or a run finished:
+      // the rules and the run history read again. Ids and a version only.
+      if (event.type == 'automation.run') {
+        ref.invalidate(automationRunsProvider);
+      } else {
+        readAutomationsAgain(ref);
+      }
+      return;
+    }
     if (event.type.startsWith('doc.')) {
       // A page was made, saved or moved: the tree, backlinks and the open
       // page read again (ids and a version only come with the event).
