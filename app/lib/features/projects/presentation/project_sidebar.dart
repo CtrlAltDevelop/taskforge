@@ -9,6 +9,7 @@ import 'package:taskforge/features/projects/presentation/create_project_dialog.d
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
+import 'package:taskforge/features/search/presentation/search_overlay.dart';
 
 /// Projects of the current workspace: favorites on top, then the others.
 /// [onNavigate] runs after a link is followed (the drawer closes itself).
@@ -61,6 +62,17 @@ class ProjectSidebar extends ConsumerWidget {
 
     return Column(
       children: [
+        ListTile(
+          key: const Key('open-search'),
+          dense: true,
+          leading: const Icon(Icons.search),
+          title: const Text('Search'),
+          trailing: Text('/', style: theme.textTheme.bodySmall),
+          onTap: () {
+            onNavigate?.call();
+            openSearch(context);
+          },
+        ),
         ListTile(
           key: const Key('open-inbox'),
           dense: true,

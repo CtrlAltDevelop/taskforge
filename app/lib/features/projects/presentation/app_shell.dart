@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/features/projects/presentation/project_sidebar.dart';
+import 'package:taskforge/features/search/presentation/search_hotkeys.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
 const sidebarWidth = 280.0;
@@ -16,6 +17,10 @@ class ShellScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= desktopBreakpoint;
+    return SearchHotkeys(child: _scaffold(wide));
+  }
+
+  Widget _scaffold(bool wide) {
     if (wide) {
       return Scaffold(
         appBar: appBar,
