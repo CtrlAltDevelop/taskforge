@@ -299,6 +299,9 @@ def delete(actor: Any, workspace: Workspace, project_id: str, comment_id: str) -
         CommentMention.objects.filter(comment=comment).delete()
         CommentRevision.objects.filter(comment=comment).delete()
         CommentReaction.objects.filter(comment=comment).delete()
+        from infrastructure.attachments import services as attachment_services
+
+        attachment_services.remove_for_comment(comment)  # its files go with it
         announce(comment, "deleted")
     return present([comment])[0]
 

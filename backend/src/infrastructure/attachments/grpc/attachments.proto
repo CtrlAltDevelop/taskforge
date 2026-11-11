@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package config.attachments;
+
+service AttachmentController {
+    rpc Delete(AttachmentDeleteRequest) returns (Attachment) {}
+    rpc List(AttachmentListRequest) returns (AttachmentList) {}
+    rpc Usage(UsageRequest) returns (StorageUsage) {}
+}
+
+message Attachment {
+    string id = 1;
+    string task_id = 2;
+    string comment_id = 3;
+    string uploader_id = 4;
+    string filename = 5;
+    string mime = 6;
+    int64 size = 7;
+    bool has_thumb = 8;
+    string created_at = 9;
+}
+
+message AttachmentDeleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string id = 3;
+}
+
+message AttachmentList {
+    repeated Attachment attachments = 1;
+}
+
+message AttachmentListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message StorageUsage {
+    int64 used_bytes = 1;
+    int64 quota_bytes = 2;
+    int32 file_count = 3;
+    int64 max_file_bytes = 4;
+}
+
+message UsageRequest {
+    string workspace_id = 1;
+}
+

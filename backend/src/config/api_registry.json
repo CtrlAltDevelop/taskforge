@@ -21,6 +21,20 @@
         "router": "infrastructure.workspaces.rest.invites.router",
         "tag": "Invitations",
         "description": "Preview and accept workspace invitations. Preview is public; accept needs a signed-in account."
+      },
+      {
+        "app_config": "infrastructure.attachments.apps.AttachmentsConfig",
+        "prefix": "/uploads",
+        "router": "infrastructure.attachments.rest.uploads.router",
+        "tag": "Uploads",
+        "description": "Send a file to a task in chunks: open a session, put chunks (resumable), complete. Files suit REST better than gRPC."
+      },
+      {
+        "app_config": "infrastructure.attachments.apps.AttachmentsConfig",
+        "prefix": "/files",
+        "router": "infrastructure.attachments.rest.files.router",
+        "tag": "Files",
+        "description": "Read an attachment: ask for a short-lived signed link, then fetch the bytes with it. Listing and deleting are gRPC."
       }
     ]
   }

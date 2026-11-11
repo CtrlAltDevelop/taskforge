@@ -48,6 +48,7 @@ PERMISSIONS: Final = (
     Permission("task.create", "Create tasks"),
     Permission("task.update", "Edit tasks and their assignees"),
     Permission("task.delete", "Delete and restore tasks"),
+    Permission("task.attachment_manage", "Delete anyone's attachments"),
     Permission("comment.create", "Write comments and react to them"),
     Permission("comment.moderate", "Delete anyone's comments and pin them"),
 )

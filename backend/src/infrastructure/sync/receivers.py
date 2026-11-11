@@ -4,6 +4,7 @@ import functools
 import logging
 from typing import Any
 
+from infrastructure.attachments.signals import attachment_changed
 from infrastructure.comments.signals import comment_changed
 from infrastructure.customfields.signals import fields_changed
 from infrastructure.projects.signals import project_changed
@@ -93,6 +94,19 @@ def _comment(sender: Any, **kw: Any) -> None:
     )
 
 
+@_guarded
+def _attachment(sender: Any, **kw: Any) -> None:
+    # The entity is the task: a screen reads the attachments of a task, not of one file.
+    publish.record(
+        entity_type="attachment",
+        entity_id=kw["task_id"],
+        workspace_id=kw["workspace_id"],
+        project_id=kw["project_id"],
+        version=0,
+        action=kw["action"],
+    )
+
+
 _workflow = _project_part("workflow")
 _fields = _project_part("fields")
 
@@ -104,3 +118,4 @@ def connect() -> None:
     fields_changed.connect(_fields, dispatch_uid=f"{UID}.fields")
     access_changed.connect(_access, dispatch_uid=f"{UID}.access")
     comment_changed.connect(_comment, dispatch_uid=f"{UID}.comment")
+    attachment_changed.connect(_attachment, dispatch_uid=f"{UID}.attachment")

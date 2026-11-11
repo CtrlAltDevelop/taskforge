@@ -51,7 +51,10 @@ totp = ["pyotp>=2.9,<3.0"]
 # lets `make serve --reload` notice a changed template: uvicorn's own reloader
 # watches Python files and refuses `--reload-include` without it.
 asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
-all = ["backend[oauth,redis,totp,asgi]"]
+# Thumbnails of images (Pillow) and of the first page of a PDF (pypdfium2). Without them uploads
+# still work; there is just no thumbnail.
+media = ["pillow>=11,<13", "pypdfium2>=4.30,<6.0"]
+all = ["backend[oauth,redis,totp,asgi,media]"]
 dev = [
   "backend[all]",
   "fakeredis>=2.26,<3.0",

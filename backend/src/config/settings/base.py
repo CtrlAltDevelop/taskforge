@@ -1226,3 +1226,21 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = os.getenv("DJANGO_MEDIA_URL", "media/")
 MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT", "") or BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Phase 18: attachments. Sizes in bytes unless the name says MB; zero means no limit.
+ATTACHMENT_MAX_MB = int(os.getenv("DJANGO_ATTACHMENT_MAX_MB", "100"))
+ATTACHMENT_MAX_BYTES = ATTACHMENT_MAX_MB * 1024 * 1024
+# What one workspace may store in all (every live attachment counts, deduplicated or not).
+ATTACHMENT_WORKSPACE_QUOTA_MB = int(os.getenv("DJANGO_ATTACHMENT_WORKSPACE_QUOTA_MB", "10240"))
+ATTACHMENT_WORKSPACE_QUOTA_BYTES = ATTACHMENT_WORKSPACE_QUOTA_MB * 1024 * 1024
+ATTACHMENT_CHUNK_BYTES = int(os.getenv("DJANGO_ATTACHMENT_CHUNK_BYTES", str(5 * 1024 * 1024)))
+# An upload that never completes is removed after this long (``manage.py purge_uploads``).
+ATTACHMENT_UPLOAD_TTL_HOURS = int(os.getenv("DJANGO_ATTACHMENT_UPLOAD_TTL_HOURS", "24"))
+# How long a signed file link works. After that the caller must ask again (and be checked again).
+ATTACHMENT_LINK_TTL_SECONDS = int(os.getenv("DJANGO_ATTACHMENT_LINK_TTL_SECONDS", "120"))
+# Programs and scripts are refused unless this is on.
+ATTACHMENT_ALLOW_EXECUTABLES = os.getenv("DJANGO_ATTACHMENT_ALLOW_EXECUTABLES", "") == "1"
+# A ClamAV daemon ("host:port") every file is streamed to before it is kept; empty turns it off.
+ATTACHMENT_CLAMAV_ADDRESS = os.getenv("DJANGO_ATTACHMENT_CLAMAV_ADDRESS", "")
+# How many uploads one person may have open (started, not completed) in a workspace.
+ATTACHMENT_MAX_OPEN_UPLOADS = int(os.getenv("DJANGO_ATTACHMENT_MAX_OPEN_UPLOADS", "10"))

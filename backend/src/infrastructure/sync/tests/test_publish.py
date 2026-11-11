@@ -209,3 +209,31 @@ def test_a_comment_is_announced_as_a_change_to_its_tasks_comments(
         ("comment.deleted", str(task.pk)),
     ]
     assert f"proj:{project.pk}" in broker.rooms()
+
+
+def test_an_attachment_is_announced_as_a_change_to_its_tasks_files(
+    team: Any, project: Any, broker: Any, tmp_path: Any, settings: Any
+) -> None:
+    from infrastructure.attachments import services as attachments
+
+    settings.MEDIA_ROOT = str(tmp_path)
+    settings.ATTACHMENT_MAX_BYTES = 1024
+    settings.ATTACHMENT_WORKSPACE_QUOTA_BYTES = 0
+    task = _make(team, project)
+    broker.sent.clear()
+
+    session = attachments.start_upload(
+        team.member, team.ws, str(project.pk), str(task.pk), "a.txt", 5
+    )
+    attachments.put_chunk(team.member, str(session.pk), 0, b"hello")
+    made = attachments.complete(team.member, str(session.pk))
+    attachments.delete(team.member, team.ws, str(project.pk), str(made.pk))
+
+    types = [
+        (e["type"], e["entity_id"]) for e in {e["cursor"]: e for e in broker.events()}.values()
+    ]
+    assert types == [
+        ("attachment.added", str(task.pk)),
+        ("attachment.deleted", str(task.pk)),
+    ]
+    assert f"proj:{project.pk}" in broker.rooms()

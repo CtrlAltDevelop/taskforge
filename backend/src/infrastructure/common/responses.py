@@ -169,6 +169,14 @@ class ResponseTitle(StrEnum):
     COMMENT_LOCKED = "COMMENT_LOCKED"
     MENTION_NO_ACCESS = "MENTION_NO_ACCESS"
 
+    # Attachments
+    ATTACHMENT_TOO_BIG = "ATTACHMENT_TOO_BIG"
+    ATTACHMENT_REFUSED = "ATTACHMENT_REFUSED"
+    ATTACHMENT_QUOTA = "ATTACHMENT_QUOTA"
+    UPLOAD_INCOMPLETE = "UPLOAD_INCOMPLETE"
+    UPLOAD_EXPIRED = "UPLOAD_EXPIRED"
+    LINK_EXPIRED = "LINK_EXPIRED"
+
 
 DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SUCCESS: "The request succeeded.",
@@ -233,6 +241,12 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.COMMENT_INVALID: "The comment is not valid (the detail says why).",
     ResponseTitle.COMMENT_LOCKED: "That comment can no longer be edited.",
     ResponseTitle.MENTION_NO_ACCESS: "Somebody mentioned cannot see this task.",
+    ResponseTitle.ATTACHMENT_TOO_BIG: "That file is larger than an attachment may be.",
+    ResponseTitle.ATTACHMENT_REFUSED: "That kind of file is not accepted (the detail says why).",
+    ResponseTitle.ATTACHMENT_QUOTA: "The workspace has used all its storage.",
+    ResponseTitle.UPLOAD_INCOMPLETE: "Some chunks of the upload have not arrived (data.missing).",
+    ResponseTitle.UPLOAD_EXPIRED: "That upload expired; start it again.",
+    ResponseTitle.LINK_EXPIRED: "That file link has expired; ask for a new one.",
     ResponseTitle.INVALID_CODE: "The code is wrong.",
     ResponseTitle.CODE_NOT_REQUESTED: "Ask for a code before trying to verify one.",
     ResponseTitle.CODE_EXPIRED: "The code has expired. Ask for another.",

@@ -180,6 +180,12 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `COMMENT_INVALID` | The comment is not valid (the detail says why). |
 | `COMMENT_LOCKED` | That comment can no longer be edited. |
 | `MENTION_NO_ACCESS` | Somebody mentioned cannot see this task. |
+| `ATTACHMENT_TOO_BIG` | That file is larger than an attachment may be. |
+| `ATTACHMENT_REFUSED` | That kind of file is not accepted (the detail says why). |
+| `ATTACHMENT_QUOTA` | The workspace has used all its storage. |
+| `UPLOAD_INCOMPLETE` | Some chunks of the upload have not arrived (data.missing). |
+| `UPLOAD_EXPIRED` | That upload expired; start it again. |
+| `LINK_EXPIRED` | That file link has expired; ask for a new one. |
 | `OPTION_NEEDS_REMAP` | Removed options are in use: say what their values become. |
 
 ## Writing an endpoint

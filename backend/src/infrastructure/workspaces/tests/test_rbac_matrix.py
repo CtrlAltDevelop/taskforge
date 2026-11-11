@@ -17,6 +17,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from google.protobuf.empty_pb2 import Empty
 
+from infrastructure.attachments import services as attachment_services
+from infrastructure.attachments.grpc import attachments_pb2 as apb
+from infrastructure.attachments.grpc import attachments_pb2_grpc as astubs
 from infrastructure.comments import services as comment_services
 from infrastructure.comments.grpc import comments_pb2 as cpb
 from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
@@ -74,6 +77,7 @@ class World:
     view_id: str = ""  # a saved layout shared with the open project
     filter_id: str = ""  # a filter shared with the open project
     comment_id: str = ""  # a comment by the Owner on ``task_id``
+    attachment_id: str = ""  # a file the Owner attached to ``task_id``
 
     @property
     def ws(self) -> str:
@@ -782,6 +786,97 @@ ENDPOINTS += (
     ),
 )
 
+AT = astubs.AttachmentControllerStub
+
+
+def _make_attachment(w: World) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    session = attachment_services.start_upload(
+        owner, w.workspace, w.project_id, w.task_id, "a.txt", 5
+    )
+    attachment_services.put_chunk(owner, str(session.pk), 0, b"hello")
+    w.attachment_id = str(attachment_services.complete(owner, str(session.pk)).pk)
+
+
+def _rest(method: str, path: Callable[[World], str], body: Callable[[World], Any] | None = None):  # type: ignore[no-untyped-def]
+    def call(w: World, role: str, _: GrpcCall) -> Any:
+        send = getattr(Client(), method)
+        extra = {"HTTP_AUTHORIZATION": f"Bearer {w.tokens[role]}"}
+        if body is None:
+            response = send(path(w), **extra)
+        else:
+            response = send(path(w), body(w), content_type="application/json", **extra)
+        if response.status_code >= 400:
+            raise RestRefusal(response)
+        return response
+
+    return call
+
+
+NO_ID = "00000000-0000-0000-0000-000000000000"  # REST wants a real UUID even where none is set up
+
+
+def _upload_body(w: World) -> dict[str, Any]:
+    return {
+        "workspace_id": w.ws,
+        "project_id": w.project_id,
+        "task_id": w.task_id or NO_ID,
+        "filename": "b.txt",
+        "size": 5,
+    }
+
+
+ENDPOINTS += (
+    Endpoint(
+        "AttachmentController.Delete",
+        "task.attachment_manage",  # the uploader may delete their own; anyone else needs this
+        _grpc(
+            AT,
+            "Delete",
+            lambda w: apb.AttachmentDeleteRequest(
+                workspace_id=w.ws, project_id=w.project_id, id=w.attachment_id
+            ),
+        ),
+        _make_attachment,
+    ),
+    Endpoint(
+        "AttachmentController.List",
+        "workspace.view",
+        _grpc(
+            AT,
+            "List",
+            lambda w: apb.AttachmentListRequest(
+                workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id
+            ),
+        ),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "AttachmentController.Usage",
+        "workspace.view",
+        _grpc(AT, "Usage", lambda w: apb.UsageRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "POST /uploads",
+        "task.update",
+        _rest("post", lambda w: "/api/v1/uploads", _upload_body),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "GET /files/{attachment_id}/link",
+        "workspace.view",
+        _rest("get", lambda w: f"/api/v1/files/{w.attachment_id or NO_ID}/link"),
+        _make_attachment,
+    ),
+    Endpoint(
+        "GET /files/{attachment_id}",
+        "workspace.view",
+        _rest("get", lambda w: f"/api/v1/files/{w.attachment_id or NO_ID}"),
+        _make_attachment,
+    ),
+)
+
 LK = tstubs.LinkControllerStub
 ENDPOINTS += (
     Endpoint(
@@ -989,6 +1084,11 @@ ENDPOINTS += (
 # Handlers that need no workspace permission, and why.
 EXEMPT = {
     "CommentController.Edit": "the author only: ownership, not the matrix (service tests)",
+    "GET /uploads/{upload_id}": "the uploader only: ownership, not the matrix (service tests)",
+    "PUT /uploads/{upload_id}/chunk/{n}": "the uploader only (service tests)",
+    "POST /uploads/{upload_id}/complete": "the uploader only (service tests)",
+    "DELETE /uploads/{upload_id}": "the uploader only (service tests)",
+    "GET /files/{attachment_id}/raw": "the signed, short-lived token is the capability",
     "WorkspaceController.List": "account-level: the caller's own workspaces",
     "WorkspaceController.Create": "account-level: anyone signed in may start a workspace",
     "MemberController.Leave": "self-service (last-owner protection still applies)",
