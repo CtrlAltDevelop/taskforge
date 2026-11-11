@@ -56,6 +56,7 @@ message SearchResults {
     repeated Hit members = 4;
     Hit jump = 5;
     string next_cursor = 6;
+    repeated Hit docs = 7;
 }
 
 message Span {

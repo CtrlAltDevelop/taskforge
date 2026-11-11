@@ -179,6 +179,9 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `FILTER_LIMIT` | That is the most saved filters one place can hold. |
 | `COMMENT_INVALID` | The comment is not valid (the detail says why). |
 | `COMMENT_LOCKED` | That comment can no longer be edited. |
+| `DOC_INVALID` | The page is not valid (the detail says why). |
+| `DOC_ARCHIVED` | That page is archived. Restore it first. |
+| `DOC_CYCLE` | A page cannot be put under itself or one of its own subpages. |
 | `MENTION_NO_ACCESS` | Somebody mentioned cannot see this task. |
 | `ATTACHMENT_TOO_BIG` | That file is larger than an attachment may be. |
 | `ATTACHMENT_REFUSED` | That kind of file is not accepted (the detail says why). |

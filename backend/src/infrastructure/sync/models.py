@@ -55,7 +55,9 @@ def event_type(entity_type: str, action: str) -> str:
     update), ``project.created`` / ``project.updated``, ``comment.created`` / ``comment.updated`` /
     ``comment.deleted`` (whose ``entity_id`` is the *task* the comments belong to),
     ``attachment.added`` / ``attachment.deleted`` (likewise the *task*),
-    ``sprint.created`` / ``sprint.updated`` (entity: the sprint), ``workflow.updated``,
+    ``sprint.created`` / ``sprint.updated`` (entity: the sprint), ``doc.created`` /
+    ``doc.updated`` / ``doc.moved`` (entity: the page; a hint only, never its content),
+    ``workflow.updated``,
     ``fields.updated`` and ``access.changed``."""
     if entity_type == "access":
         return "access.changed"
@@ -65,6 +67,8 @@ def event_type(entity_type: str, action: str) -> str:
         return f"notification.{action}"  # notification.new | notification.changed (entity: you)
     if entity_type == "attachment":
         return f"attachment.{action}"  # attachment.added | attachment.deleted
+    if entity_type == "doc":
+        return f"doc.{action}" if action in ("created", "moved") else "doc.updated"
     if entity_type in ("task", "comment", "sprint") and action in ("created", "deleted"):
         return f"{entity_type}.{action}"
     if entity_type == "project" and action == "created":

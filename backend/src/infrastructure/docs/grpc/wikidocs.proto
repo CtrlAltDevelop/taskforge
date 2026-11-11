@@ -1,0 +1,220 @@
+syntax = "proto3";
+
+package config.wikidocs;
+
+service DocController {
+    rpc Archive(DocArchiveRequest) returns (DocAnswer) {}
+    rpc Backlinks(DocBacklinksRequest) returns (DocTree) {}
+    rpc Create(DocCreateRequest) returns (DocAnswer) {}
+    rpc ExportMarkdown(DocExportRequest) returns (DocMarkdown) {}
+    rpc ForTask(DocForTaskRequest) returns (RelatedDocs) {}
+    rpc Get(DocGetRequest) returns (DocAnswer) {}
+    rpc LinkTask(DocLinkTaskRequest) returns (RelatedDocs) {}
+    rpc Move(DocMoveRequest) returns (DocAnswer) {}
+    rpc Presence(DocPresenceRequest) returns (DocPresence) {}
+    rpc Restore(DocRestoreRequest) returns (DocAnswer) {}
+    rpc RevisionGet(DocRevisionGetRequest) returns (DocRevisionAnswer) {}
+    rpc RevisionList(DocRevisionListRequest) returns (DocRevisionList) {}
+    rpc RevisionRestore(DocRevisionRestoreRequest) returns (DocAnswer) {}
+    rpc SetAccess(DocSetAccessRequest) returns (DocAnswer) {}
+    rpc TaskCards(DocTaskCardsRequest) returns (DocTaskCards) {}
+    rpc Tree(DocTreeRequest) returns (DocTree) {}
+    rpc UnlinkTask(DocLinkTaskRequest) returns (RelatedDocs) {}
+    rpc Update(DocUpdateRequest) returns (DocAnswer) {}
+}
+
+message DocAnswer {
+    DocNode doc = 1;
+    int32 version = 2;
+    int32 schema_version = 3;
+    string blocks_json = 4;
+    string updated_by = 5;
+    repeated Editor editing = 6;
+    repeated TaskCard cards = 7;
+    bool can_edit = 8;
+    bool can_manage = 9;
+    repeated string access_user_ids = 10;
+}
+
+message DocArchiveRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocBacklinksRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string parent_id = 3;
+    string title = 4;
+    string icon = 5;
+    string blocks_json = 6;
+}
+
+message DocExportRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocForTaskRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message DocGetRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocLinkTaskRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string doc_id = 4;
+}
+
+message DocMarkdown {
+    string title = 1;
+    string markdown = 2;
+}
+
+message DocMoveRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    string parent_id = 3;
+    int32 index = 4;
+}
+
+message DocNode {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string parent_id = 4;
+    string title = 5;
+    string icon = 6;
+    int32 position = 7;
+    bool restricted = 8;
+    bool archived = 9;
+    string created_by = 10;
+    string created_at = 11;
+    string updated_at = 12;
+}
+
+message DocPresence {
+    repeated Editor editing = 1;
+}
+
+message DocPresenceRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    string state = 3;
+}
+
+message DocRestoreRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocRevisionAnswer {
+    RevisionInfo revision = 1;
+    string blocks_json = 2;
+}
+
+message DocRevisionGetRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    int64 revision_id = 3;
+}
+
+message DocRevisionList {
+    repeated RevisionInfo revisions = 1;
+}
+
+message DocRevisionListRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+}
+
+message DocRevisionRestoreRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    int64 revision_id = 3;
+    int32 expected_version = 4;
+}
+
+message DocSetAccessRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    bool restricted = 3;
+    repeated string user_ids = 4;
+}
+
+message DocTaskCards {
+    repeated TaskCard cards = 1;
+}
+
+message DocTaskCardsRequest {
+    string workspace_id = 1;
+    repeated string task_ids = 2;
+}
+
+message DocTree {
+    repeated DocNode docs = 1;
+}
+
+message DocTreeRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    bool include_archived = 3;
+}
+
+message DocUpdateRequest {
+    string workspace_id = 1;
+    string doc_id = 2;
+    int32 expected_version = 3;
+    repeated string fields = 4;
+    string title = 5;
+    string icon = 6;
+    string blocks_json = 7;
+    int32 schema_version = 8;
+}
+
+message Editor {
+    string user_id = 1;
+    bool editing = 2;
+}
+
+message RelatedDoc {
+    DocNode doc = 1;
+    string kind = 2;
+}
+
+message RelatedDocs {
+    repeated RelatedDoc docs = 1;
+}
+
+message RevisionInfo {
+    int32 id = 1;
+    int32 version = 2;
+    string title = 3;
+    string author_id = 4;
+    string at = 5;
+    string saved_at = 6;
+}
+
+message TaskCard {
+    string task_id = 1;
+    bool hidden = 2;
+    string project_id = 3;
+    string key = 4;
+    string title = 5;
+    string status_name = 6;
+    string status_category = 7;
+    string priority = 8;
+}
+

@@ -3,6 +3,7 @@
 from typing import Any
 
 from infrastructure.comments.signals import comment_changed
+from infrastructure.docs.signals import doc_changed
 from infrastructure.search import index
 from infrastructure.search.models import Kind
 from infrastructure.tasks.signals import task_changed
@@ -25,6 +26,11 @@ def on_comment(sender: Any, comment_id: str, action: str, **_: Any) -> None:
         index.drop(Kind.COMMENT, comment_id)
 
 
+def on_doc(sender: Any, doc_id: str, **_: Any) -> None:
+    index.put_doc(doc_id)  # written, or dropped when the page is archived
+
+
 def connect() -> None:
     task_changed.connect(on_task, dispatch_uid="search.task")
     comment_changed.connect(on_comment, dispatch_uid="search.comment")
+    doc_changed.connect(on_doc, dispatch_uid="search.doc")

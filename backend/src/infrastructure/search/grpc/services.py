@@ -2,7 +2,7 @@
 ``infrastructure.search.services``.
 
 ``Query`` takes ``text`` (with operators such as ``in:WEB assignee:me status:open``), the
-``types`` wanted (task, comment, project, member; none means all), a ``cursor`` (the previous
+``types`` wanted (task, comment, project, member, doc; none means all), a ``cursor`` (the previous
 answer's ``next_cursor``: the same offset in every group) and ``page_size``. The answer groups
 hits by type, and ``jump`` is the task when the text is an id like ``WEB-12`` (empty ``id`` when
 not). INVALID_ARGUMENT for an unknown type, a bad cursor or text over 200 characters;
@@ -72,6 +72,7 @@ class SearchService(generics.GenericService):
             {"name": "members", "cardinality": "repeated", "type": Hit},
             {"name": "jump", "type": Hit},
             {"name": "next_cursor", "type": "string"},
+            {"name": "docs", "cardinality": "repeated", "type": Hit},
         ],
         response_name="SearchResults",
     )
@@ -96,6 +97,7 @@ class SearchService(generics.GenericService):
                 members=groups.get("member", []),
                 jump=_hit(page.jump) if page.jump else None,
                 next_cursor=page.next_cursor,
+                docs=groups.get("doc", []),
             )
 
         return await sync_to_async(read)()

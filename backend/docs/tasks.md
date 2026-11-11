@@ -41,6 +41,8 @@ The record an override leaves: who completed a blocked task anyway, and the open
 | `due_date` | Date | nullable |
 | `due_time` | Time | nullable |
 | `estimate_sec` | PositiveInteger | nullable |
+| `points` | Decimal | nullable |
+| `sprint` | ForeignKey | → `sprints.Sprint`, nullable |
 | `created_by` | ForeignKey | → `accounts.User` |
 | `version` | PositiveInteger |  |
 | `field_versions` | JSON |  |

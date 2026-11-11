@@ -1049,6 +1049,7 @@ INSTALLED_APPS = [
     "infrastructure.search.apps.SearchConfig",
     "infrastructure.timetracking.apps.TimeTrackingConfig",
     "infrastructure.sprints.apps.SprintsConfig",
+    "infrastructure.docs.apps.DocsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

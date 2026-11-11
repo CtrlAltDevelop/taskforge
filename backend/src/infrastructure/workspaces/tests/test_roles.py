@@ -26,6 +26,7 @@ RECRUITER = [
     "comment.create",  # a Member holds it; removing one needs every permission it has
     "time.log",
     "sprint.manage",
+    "doc.edit",
 ]
 
 

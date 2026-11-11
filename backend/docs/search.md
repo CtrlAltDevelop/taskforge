@@ -13,13 +13,14 @@ _This app publishes no routes of its own._
 <!-- generated:models -->
 #### `SearchEntry`
 
-The searchable text of one task (title, description) or one comment, folded (see
+The searchable text of one task (title, description), one comment or one doc (``doc`` set,
 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `id` | UUID | primary key, not editable |
 | `workspace` | ForeignKey | → `workspaces.Workspace` |
-| `task` | ForeignKey | → `tasks.Task` |
+| `task` | ForeignKey | → `tasks.Task`, nullable |
+| `doc` | ForeignKey | → `wikidocs.Doc`, nullable |
 | `kind` | Char |  |
 | `ref_id` | UUID |  |
 | `title` | Char |  |

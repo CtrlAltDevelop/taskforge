@@ -197,6 +197,7 @@ class SearchResults(_message.Message):
     MEMBERS_FIELD_NUMBER: _builtins.int
     JUMP_FIELD_NUMBER: _builtins.int
     NEXT_CURSOR_FIELD_NUMBER: _builtins.int
+    DOCS_FIELD_NUMBER: _builtins.int
     next_cursor: _builtins.str
     @_builtins.property
     def tasks(self) -> _containers.RepeatedCompositeFieldContainer[Global___Hit]: ...
@@ -208,6 +209,8 @@ class SearchResults(_message.Message):
     def members(self) -> _containers.RepeatedCompositeFieldContainer[Global___Hit]: ...
     @_builtins.property
     def jump(self) -> Global___Hit: ...
+    @_builtins.property
+    def docs(self) -> _containers.RepeatedCompositeFieldContainer[Global___Hit]: ...
     def __init__(
         self,
         *,
@@ -217,10 +220,11 @@ class SearchResults(_message.Message):
         members: _abc.Iterable[Global___Hit] | None = ...,
         jump: Global___Hit | None = ...,
         next_cursor: _builtins.str = ...,
+        docs: _abc.Iterable[Global___Hit] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["jump", b"jump"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["comments", b"comments", "jump", b"jump", "members", b"members", "next_cursor", b"next_cursor", "projects", b"projects", "tasks", b"tasks"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["comments", b"comments", "docs", b"docs", "jump", b"jump", "members", b"members", "next_cursor", b"next_cursor", "projects", b"projects", "tasks", b"tasks"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

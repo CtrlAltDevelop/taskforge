@@ -43,6 +43,37 @@ def _comment_values(comment: Comment) -> dict[str, Any]:
     }
 
 
+def plain_blocks(blocks_value: Any) -> str:
+    """The text of a stored doc body (a list of blocks)."""
+    from infrastructure.docs import blocks
+
+    return blocks.plain_text(blocks_value) if isinstance(blocks_value, list) else ""
+
+
+def _doc_values(doc: Any) -> dict[str, Any]:
+    from infrastructure.docs import blocks
+
+    content = getattr(doc, "content", None)
+    return {
+        "workspace_id": doc.workspace_id,
+        "doc_id": doc.pk,
+        "title": fold(doc.title),
+        "body": fold(blocks.plain_text(content.blocks) if content else ""),
+        "updated_at": doc.updated_at,
+    }
+
+
+def put_doc(doc_id: Any) -> None:
+    """Write the page's row, or remove it when the page is gone or archived."""
+    from infrastructure.docs.models import Doc
+
+    doc = Doc.objects.filter(pk=doc_id, archived_at__isnull=True).select_related("content").first()
+    if doc is None:
+        drop(Kind.DOC, doc_id)
+        return
+    SearchEntry.objects.update_or_create(kind=Kind.DOC, ref_id=doc.pk, defaults=_doc_values(doc))
+
+
 def put_task(task_id: Any) -> None:
     """Write the task's row, or remove it when the task is gone or deleted."""
     task = Task.objects.filter(pk=task_id, deleted_at__isnull=True).first()
@@ -90,7 +121,7 @@ def reindex(workspace_id: Any = None) -> int:
         comments = comments.filter(workspace_id=workspace_id)
         stale = stale.filter(workspace_id=workspace_id)
     stale.delete()
-    written = 0
+    written = _reindex_docs(workspace_id)
     for kind, rows, values in (
         (Kind.TASK, tasks, _task_values),
         (Kind.COMMENT, comments, _comment_values),
@@ -100,4 +131,19 @@ def reindex(workspace_id: Any = None) -> int:
                 [SearchEntry(kind=kind, ref_id=row.pk, **values(row)) for row in chunk]
             )
             written += len(chunk)
+    return written
+
+
+def _reindex_docs(workspace_id: Any) -> int:
+    from infrastructure.docs.models import Doc
+
+    docs = Doc.objects.filter(archived_at__isnull=True).select_related("content")
+    if workspace_id:
+        docs = docs.filter(workspace_id=workspace_id)
+    written = 0
+    for chunk in _chunks(docs.iterator(chunk_size=BATCH)):
+        SearchEntry.objects.bulk_create(
+            [SearchEntry(kind=Kind.DOC, ref_id=d.pk, **_doc_values(d)) for d in chunk]
+        )
+        written += len(chunk)
     return written

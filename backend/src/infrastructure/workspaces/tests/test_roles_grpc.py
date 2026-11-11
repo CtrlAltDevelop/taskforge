@@ -67,6 +67,7 @@ def test_list_returns_roles_counts_and_the_grouped_registry(team: Any, grpc_call
         "comment",
         "time",
         "sprint",
+        "doc",
     ]
     assert {p.key for a in listed.registry for p in a.permissions} == ALL_KEYS
     assert all(p.label for a in listed.registry for p in a.permissions)

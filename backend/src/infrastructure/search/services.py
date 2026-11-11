@@ -30,7 +30,7 @@ from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
 
 VIEW = "workspace.view"
-KINDS = ("task", "comment", "project", "member")
+KINDS = ("task", "comment", "project", "member", "doc")
 MAX_TEXT = 200
 DEFAULT_PAGE = 8
 MAX_PAGE = 50
@@ -220,6 +220,42 @@ def _comment_hits(entries: list[SearchEntry], words: list[str]) -> list[Hit]:
     return hits
 
 
+def _doc_hits(
+    actor: Any, workspace: Workspace, parsed: Parsed, offset: int, size: int, mine: Exists
+) -> tuple[list[Hit], bool]:
+    """Pages the caller may open (the restriction rules are part of the id list, so a restricted
+    page is never matched, counted or snippeted for someone outside it); archived ones are left
+    out."""
+    from infrastructure.docs import reach
+    from infrastructure.docs.models import Doc
+
+    # ponytail: the permitted ids are computed in Python and passed as an IN list.
+    readable = reach.readable(actor, workspace).filter(archived_at__isnull=True)
+    rows = SearchEntry.objects.filter(
+        workspace=workspace, kind="doc", doc_id__in=readable.values("pk")
+    )
+    page, more = _slice(matching.match(rows, parsed.words, mine), offset, size)
+    docs = Doc.objects.select_related("content", "project").in_bulk([e.doc_id for e in page])
+    hits = []
+    for entry in page:
+        doc = docs[entry.doc_id]
+        text, spans = snippet(index.plain_blocks(doc.content.blocks), parsed.words)
+        hits.append(
+            Hit(
+                kind="doc",
+                id=str(doc.pk),
+                title=doc.title,
+                title_marks=marks(doc.title, parsed.words),
+                project_id=str(doc.project_id or ""),
+                project_name=doc.project.name if doc.project else "",
+                snippet=text,
+                snippet_marks=spans,
+                updated_at=doc.updated_at.isoformat(),
+            )
+        )
+    return hits, more
+
+
 def _words_filter(words: list[str], *fields: str) -> Q:
     where = Q()
     for word in words:
@@ -341,6 +377,9 @@ def query(
             hits[kind] = (_task_hits if kind == "task" else _comment_hits)(page, parsed.words)
             more = more or has_more
         if not parsed.has_operator and parsed.words:
+            if "doc" in wanted:
+                hits["doc"], has_more = _doc_hits(actor, workspace, parsed, offset, size, mine)
+                more = more or has_more
             if "project" in wanted:
                 hits["project"], has_more = _project_hits(
                     actor, workspace, parsed.words, offset, size

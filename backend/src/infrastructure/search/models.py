@@ -13,19 +13,22 @@ from infrastructure.workspaces.models import Workspace
 class Kind(models.TextChoices):
     TASK = "task"
     COMMENT = "comment"
+    DOC = "doc"
 
 
 class SearchEntry(models.Model):
-    """The searchable text of one task (title, description) or one comment, folded (see
-    ``fold``). ``ref_id`` is the task's or comment's id; ``task`` is the task it is on (for a task,
-    itself), so access, status and assignment are always read from the live task and a move, a
-    rename of the project or a workflow change needs no reindex. On PostgreSQL the migration adds a
+    """The searchable text of one task (title, description), one comment or one doc (``doc`` set,
+    ``task`` empty), folded (see ``fold``). ``ref_id`` is the task's, comment's or doc's id;
+    ``task`` is the task it is on (for a task, itself), so access, status and assignment are
+    always read from the live task and a move, a rename of the project or a workflow change needs
+    no reindex. On PostgreSQL the migration adds a
     generated ``search_vector`` column and the GIN indexes beside this table; nothing in Python
     writes it."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="+")
+    task = models.ForeignKey(Task, null=True, on_delete=models.CASCADE, related_name="+")
+    doc = models.ForeignKey("wikidocs.Doc", null=True, on_delete=models.CASCADE, related_name="+")
     kind = models.CharField(max_length=8, choices=Kind.choices)
     ref_id = models.UUIDField()
     title = models.CharField(max_length=500, blank=True)  # tasks only

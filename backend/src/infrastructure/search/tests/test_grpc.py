@@ -47,7 +47,7 @@ def test_bad_input_and_strangers_are_refused(team: Any, grpc_call: GrpcCall) -> 
             grpc_call,
             S,
             "Query",
-            pb.SearchQueryRequest(workspace_id=team["ws"], text="x", types=["doc"]),
+            pb.SearchQueryRequest(workspace_id=team["ws"], text="x", types=["wiki"]),
             token=team["tokens"]["max"],
         ).code()
         == grpc.StatusCode.INVALID_ARGUMENT

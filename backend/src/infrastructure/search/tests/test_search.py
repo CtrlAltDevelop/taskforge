@@ -163,7 +163,7 @@ def test_people_and_projects_are_found(team: Any, web: Any) -> None:
 
 def test_unknown_types_cursor_and_length_are_refused(team: Any) -> None:
     for call in (
-        lambda: find(team, team.member, "x", "doc"),
+        lambda: find(team, team.member, "x", "wiki"),
         lambda: find(team, team.member, "x", cursor="abc"),
         lambda: find(team, team.member, "x" * 201),
     ):

@@ -167,6 +167,9 @@ class ResponseTitle(StrEnum):
     # Comments
     COMMENT_INVALID = "COMMENT_INVALID"
     COMMENT_LOCKED = "COMMENT_LOCKED"
+    DOC_INVALID = "DOC_INVALID"
+    DOC_ARCHIVED = "DOC_ARCHIVED"
+    DOC_CYCLE = "DOC_CYCLE"
     MENTION_NO_ACCESS = "MENTION_NO_ACCESS"
 
     # Attachments
@@ -240,6 +243,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.FILTER_LIMIT: "That is the most saved filters one place can hold.",
     ResponseTitle.COMMENT_INVALID: "The comment is not valid (the detail says why).",
     ResponseTitle.COMMENT_LOCKED: "That comment can no longer be edited.",
+    ResponseTitle.DOC_INVALID: "The page is not valid (the detail says why).",
+    ResponseTitle.DOC_ARCHIVED: "That page is archived. Restore it first.",
+    ResponseTitle.DOC_CYCLE: "A page cannot be put under itself or one of its own subpages.",
     ResponseTitle.MENTION_NO_ACCESS: "Somebody mentioned cannot see this task.",
     ResponseTitle.ATTACHMENT_TOO_BIG: "That file is larger than an attachment may be.",
     ResponseTitle.ATTACHMENT_REFUSED: "That kind of file is not accepted (the detail says why).",

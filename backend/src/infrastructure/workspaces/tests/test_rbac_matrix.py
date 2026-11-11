@@ -26,6 +26,10 @@ from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
 from infrastructure.customfields import services as field_services
 from infrastructure.customfields.grpc import customfields_pb2 as fpb
 from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
+from infrastructure.docs import services as doc_services
+from infrastructure.docs.grpc import wikidocs_pb2 as dpb
+from infrastructure.docs.grpc import wikidocs_pb2_grpc as dstubs
+from infrastructure.docs.models import DocRevision
 from infrastructure.filters import services as filter_services
 from infrastructure.filters.grpc import filters_pb2 as flpb
 from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
@@ -88,6 +92,8 @@ class World:
     comment_id: str = ""  # a comment by the Owner on ``task_id``
     attachment_id: str = ""  # a file the Owner attached to ``task_id``
     sprint_id: str = ""  # a sprint of the open project (made by the sprint prepares)
+    doc_id: str = ""  # a workspace page made by the Owner (the doc prepares)
+    doc_revision: int = 0  # its first revision
 
     @property
     def ws(self) -> str:
@@ -1357,6 +1363,111 @@ ENDPOINTS += (
         "project.update",
         _grpc(FC, "Restore", _field_request(fpb.FieldRestoreRequest, version=2)),
         _make_archived_field,
+    ),
+)
+
+
+def _doc_on(w: World) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    made = doc_services.create(owner, w.workspace, "", "", "Spec").doc
+    w.doc_id = str(made.pk)
+    first = DocRevision.objects.filter(doc=made).order_by("id").first()
+    w.doc_revision = int(first.pk) if first else 0
+
+
+def _doc_archived(w: World) -> None:
+    _doc_on(w)
+    doc_services.archive(w.workspace.created_by, w.workspace, w.doc_id)
+
+
+def _doc_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "doc_id": w.doc_id}
+
+
+def _doc_task_ref(w: World) -> dict[str, Any]:
+    return {
+        "workspace_id": w.ws,
+        "project_id": w.project_id,
+        "task_id": w.task_id,
+        "doc_id": w.doc_id,
+    }
+
+
+DC = dstubs.DocControllerStub
+
+
+def _doc_endpoint(
+    method: str,
+    permission: str,
+    request: Callable[[World], Any],
+    prepare: Callable[[World], None] = _doc_on,
+) -> Endpoint:
+    return Endpoint(f"DocController.{method}", permission, _grpc(DC, method, request), prepare)
+
+
+ENDPOINTS += (
+    _doc_endpoint("Tree", "workspace.view", lambda w: dpb.DocTreeRequest(workspace_id=w.ws)),
+    _doc_endpoint("Get", "workspace.view", lambda w: dpb.DocGetRequest(**_doc_ref(w))),
+    _doc_endpoint(
+        "Create", "doc.edit", lambda w: dpb.DocCreateRequest(workspace_id=w.ws, title="New")
+    ),
+    _doc_endpoint(
+        "Update",
+        "doc.edit",
+        lambda w: dpb.DocUpdateRequest(
+            **_doc_ref(w), expected_version=1, fields=["title"], title="Renamed"
+        ),
+    ),
+    _doc_endpoint(
+        "Move", "doc.edit", lambda w: dpb.DocMoveRequest(**_doc_ref(w), parent_id="", index=0)
+    ),
+    _doc_endpoint("Archive", "doc.edit", lambda w: dpb.DocArchiveRequest(**_doc_ref(w))),
+    _doc_endpoint(
+        "Restore", "doc.edit", lambda w: dpb.DocRestoreRequest(**_doc_ref(w)), _doc_archived
+    ),
+    _doc_endpoint(
+        "SetAccess",
+        "doc.manage",
+        lambda w: dpb.DocSetAccessRequest(**_doc_ref(w), restricted=True),
+    ),
+    _doc_endpoint(
+        "RevisionList", "workspace.view", lambda w: dpb.DocRevisionListRequest(**_doc_ref(w))
+    ),
+    _doc_endpoint(
+        "RevisionGet",
+        "workspace.view",
+        lambda w: dpb.DocRevisionGetRequest(**_doc_ref(w), revision_id=w.doc_revision),
+    ),
+    _doc_endpoint(
+        "RevisionRestore",
+        "doc.edit",
+        lambda w: dpb.DocRevisionRestoreRequest(
+            **_doc_ref(w), revision_id=w.doc_revision, expected_version=1
+        ),
+    ),
+    _doc_endpoint("Backlinks", "workspace.view", lambda w: dpb.DocBacklinksRequest(**_doc_ref(w))),
+    _doc_endpoint(
+        "ExportMarkdown", "workspace.view", lambda w: dpb.DocExportRequest(**_doc_ref(w))
+    ),
+    _doc_endpoint(
+        "ForTask",
+        "workspace.view",
+        lambda w: dpb.DocForTaskRequest(
+            workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id
+        ),
+    ),
+    _doc_endpoint("LinkTask", "doc.edit", lambda w: dpb.DocLinkTaskRequest(**_doc_task_ref(w))),
+    _doc_endpoint("UnlinkTask", "doc.edit", lambda w: dpb.DocLinkTaskRequest(**_doc_task_ref(w))),
+    _doc_endpoint(
+        "TaskCards",
+        "workspace.view",
+        lambda w: dpb.DocTaskCardsRequest(workspace_id=w.ws, task_ids=[w.task_id]),
+    ),
+    _doc_endpoint(
+        "Presence",
+        "workspace.view",
+        lambda w: dpb.DocPresenceRequest(**_doc_ref(w), state="viewing"),
     ),
 )
 
