@@ -1,6 +1,6 @@
 # Phase 24 — Automations
 
-**Status:** TODO
+**Status:** DONE (implemented on `develop`; PostgreSQL, the real thread pool, webhook TLS path and a real browser/device not run)
 
 ## Feature
 No-code **rules**: *When* something happens, *if* conditions match, *then* do actions — unlimited runs, with a run history.
@@ -9,7 +9,17 @@ No-code **rules**: *When* something happens, *if* conditions match, *then* do ac
 Both tools cap automation runs on cheaper plans and give poor visibility when a rule misbehaves. Ours is unlimited and every run is inspectable.
 
 ## How it works (plain words)
-A rule has a **trigger** (task created, status changed, field changed, assigned, due date reached, comment added), optional **conditions** (reuse the TFQL filter from phase 14 on the task), and **actions** (set field/status/assignee, add comment, create subtask, notify user, call webhook). Triggers consume the same domain events as realtime/notifications. A Celery worker evaluates matching rules, runs actions as the special actor “Automation: <rule name>”, and writes a **run record** with input, result and any error. Loop protection stops chains where rule A triggers rule B triggers A.
+A rule has a **trigger** (task created, status changed, field changed, assigned, due date reached, comment added), optional **conditions** (reuse the TFQL filter from phase 14 on the task), and **actions** (set field/status/assignee, add comment, create subtask, notify user, call webhook). Triggers consume the same domain events as realtime/notifications. A worker evaluates matching rules (in-process for now, see Reality check), runs actions as the special actor “Automation: <rule name>”, and writes a **run record** with input, result and any error. Loop protection stops chains where rule A triggers rule B triggers A.
+
+## Reality check (no Celery yet)
+There is no Celery in this repo (see `docs/01-architecture.md`). The backend therefore:
+- consumes the existing signals (`task_activity`, `task_changed`, `comment_changed`) in `automations/receivers.py` and queues each matching rule through `automations/queue.py: run_later` — a two-thread pool in the process (like the inbox pushes), or inline with `DJANGO_AUTOMATIONS_SYNC_RUN=1` (tests). `run_later` is the single seam Celery replaces; the job itself (`engine.execute(rule_id, event)`) is already idempotent and takes only plain data.
+- fires "due date reached" from `manage.py automations_tick` (added to `make tick`), once per (rule, task, due date); the same command prunes run history (30 days, newest 500 per rule).
+- a "field changed" event names the fields whose `field_versions` entry equals the event's version.
+- the "special actor" is the rule's owner with a run depth: actions go through the normal services as the owner (so the permission ceiling is real), the depth travels in a context variable, and comments carry an `[Automation: <name>]` prefix. Switching a rule on or editing it makes the editor its owner.
+- new permission `automation.manage` (Owner, Admin); reading rules and runs needs `workspace.view`.
+- "completion date" is a custom date field set with the `{today}` placeholder (Tasks have no built-in completed-at).
+- webhooks are SSRF-safe (`automations/safe_http.py`): http(s) only, every resolved address public, connection pinned to the checked address, no redirects, 5 s timeout, 64 KB response cap.
 
 ## Scope
 **In:** rule builder UI, triggers, conditions, actions listed above, enable/disable, test run (dry run on a chosen task), run history with failure reasons, rate/loop guards, per-rule owner.
