@@ -91,9 +91,9 @@ def test_every_page_is_reachable_from_the_index() -> None:
     index = (DOCS / "README.md").read_text(encoding="utf-8")
 
     unlinked = [
-        str(app.path.relative_to(DOCS))
+        app.path.relative_to(DOCS).as_posix()
         for app in documented_apps(DOCS)
-        if str(app.path.relative_to(DOCS)) not in index
+        if app.path.relative_to(DOCS).as_posix() not in index
     ]
 
     assert unlinked == []

@@ -1,6 +1,6 @@
 """TFQL against a project: names to ids, the AST, the text it renders back, and what it finds."""
 
-from datetime import date
+from datetime import UTC, date, datetime
 from typing import Any
 
 import pytest
@@ -376,7 +376,7 @@ def test_relative_months_clamp_to_the_end_of_the_month() -> None:
 
 def test_created_compares_by_day(team: Any, project: Any) -> None:
     _make(team, project, "now")
-    today = date.today().isoformat()
+    today = datetime.now(UTC).date().isoformat()  # the filter compares UTC days
 
     assert _find(team, project, f"created = {today}") == ["now"]
     assert _find(team, project, "created < 2000-01-01") == []
