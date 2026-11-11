@@ -549,6 +549,7 @@ class SearchResults extends $pb.GeneratedMessage {
     $core.Iterable<Hit>? members,
     Hit? jump,
     $core.String? nextCursor,
+    $core.Iterable<Hit>? docs,
   }) {
     final result = SearchResults._();
     if (tasks != null) result.tasks.addAll(tasks);
@@ -557,6 +558,7 @@ class SearchResults extends $pb.GeneratedMessage {
     if (members != null) result.members.addAll(members);
     if (jump != null) result.jump = jump;
     if (nextCursor != null) result.nextCursor = nextCursor;
+    if (docs != null) result.docs.addAll(docs);
     return result;
   }
 
@@ -584,6 +586,8 @@ class SearchResults extends $pb.GeneratedMessage {
     ..aOM<Hit>(5, _omitFieldNames ? '' : 'jump',
         subBuilder: Hit.$_createMessage)
     ..aOS(6, _omitFieldNames ? '' : 'nextCursor')
+    ..pPM<Hit>(7, _omitFieldNames ? '' : 'docs',
+        subBuilder: Hit.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -639,6 +643,9 @@ class SearchResults extends $pb.GeneratedMessage {
   $core.bool hasNextCursor() => $_has(5);
   @$pb.TagNumber(6)
   void clearNextCursor() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<Hit> get docs => $_getList(6);
 }
 
 class Span extends $pb.GeneratedMessage {

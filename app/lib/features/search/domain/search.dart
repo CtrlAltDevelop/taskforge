@@ -6,7 +6,8 @@ enum SearchKind {
   task('task', 'Tasks', Icons.check_circle_outline),
   comment('comment', 'Comments', Icons.chat_bubble_outline),
   project('project', 'Projects', Icons.folder_outlined),
-  member('member', 'People', Icons.person_outline);
+  member('member', 'People', Icons.person_outline),
+  doc('doc', 'Pages', Icons.description_outlined);
 
   const SearchKind(this.wire, this.label, this.icon);
 
@@ -69,6 +70,7 @@ class SearchHit {
     SearchKind.comment => '/projects/$projectId?task=$taskId',
     SearchKind.project => '/projects/$projectId',
     SearchKind.member => '/members',
+    SearchKind.doc => '/docs/$id',
   };
 }
 

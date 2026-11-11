@@ -29,6 +29,8 @@ final _builtinGrants = <String, Set<String>>{
     Perm.timeLog,
     Perm.timeEditOthers,
     Perm.sprintManage,
+    Perm.docEdit,
+    Perm.docManage,
   },
   'Member': {
     Perm.workspaceView,
@@ -42,6 +44,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.commentCreate,
     Perm.timeLog,
     Perm.sprintManage,
+    Perm.docEdit,
   },
   'Viewer': {Perm.workspaceView, Perm.memberView, Perm.roleView},
 };

@@ -174,6 +174,14 @@ const SearchResults$json = {
       '10': 'jump'
     },
     {'1': 'next_cursor', '3': 6, '4': 1, '5': 9, '10': 'nextCursor'},
+    {
+      '1': 'docs',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.config.search.Hit',
+      '10': 'docs'
+    },
   ],
 };
 
@@ -183,7 +191,8 @@ final $typed_data.Uint8List searchResultsDescriptor = $convert.base64Decode(
     'tzEi4KCGNvbW1lbnRzGAIgAygLMhIuY29uZmlnLnNlYXJjaC5IaXRSCGNvbW1lbnRzEi4KCHBy'
     'b2plY3RzGAMgAygLMhIuY29uZmlnLnNlYXJjaC5IaXRSCHByb2plY3RzEiwKB21lbWJlcnMYBC'
     'ADKAsyEi5jb25maWcuc2VhcmNoLkhpdFIHbWVtYmVycxImCgRqdW1wGAUgASgLMhIuY29uZmln'
-    'LnNlYXJjaC5IaXRSBGp1bXASHwoLbmV4dF9jdXJzb3IYBiABKAlSCm5leHRDdXJzb3I=');
+    'LnNlYXJjaC5IaXRSBGp1bXASHwoLbmV4dF9jdXJzb3IYBiABKAlSCm5leHRDdXJzb3ISJgoEZG'
+    '9jcxgHIAMoCzISLmNvbmZpZy5zZWFyY2guSGl0UgRkb2Nz');
 
 @$core.Deprecated('Use spanDescriptor instead')
 const Span$json = {

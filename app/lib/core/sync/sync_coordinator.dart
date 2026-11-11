@@ -19,6 +19,7 @@ import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
@@ -98,6 +99,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       inboxDirty = true;
       readTimeAgain(ref);
       readSprintsAgain(ref);
+      readDocsAgain(ref);
       _everythingElse(ref);
       soon();
       return;
@@ -119,6 +121,20 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       readSprintsAgain(ref);
       return;
     }
+    if (event.type.startsWith('doc.')) {
+      // A page was made, saved or moved: the tree, backlinks and the open
+      // page read again (ids and a version only come with the event).
+      ref.invalidate(docTreeProvider);
+      ref.invalidate(docBacklinksProvider);
+      ref.invalidate(relatedDocsProvider);
+      if (event.type == 'doc.updated' &&
+          ref.exists(docSessionProvider(event.entityId))) {
+        ref
+            .read(docSessionProvider(event.entityId).notifier)
+            .remoteSaved(event.version);
+      }
+      return;
+    }
     if (event.type == 'access.changed') {
       _access(ref);
       everything = true;
@@ -126,6 +142,9 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       return;
     }
     if (event.isTask) {
+      // Task cards in open pages show its status.
+      ref.invalidate(docCardsProvider);
+      ref.invalidate(relatedDocsProvider);
       ref.invalidate(backlogProvider(event.project));
       ref.invalidate(sprintTasksProvider);
       ref.read(recentChangesProvider.notifier).flash([event.entityId]);

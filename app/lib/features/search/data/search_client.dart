@@ -112,6 +112,7 @@ class GrpcSearchClient implements SearchClient {
       SearchKind.comment: answer.comments.map(hitFromPb).toList(),
       SearchKind.project: answer.projects.map(hitFromPb).toList(),
       SearchKind.member: answer.members.map(hitFromPb).toList(),
+      SearchKind.doc: answer.docs.map(hitFromPb).toList(),
     };
     return SearchResults(
       hits: hits,

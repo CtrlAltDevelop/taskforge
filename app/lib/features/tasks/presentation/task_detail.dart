@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
 import 'package:taskforge/features/time/domain/time.dart' show timeFeature;
 import 'package:taskforge/features/time/presentation/time_section.dart';
@@ -281,6 +282,12 @@ class TaskDetail extends ConsumerWidget {
                 .firstOrNull;
             if (other != null) onOpen?.call(other);
           },
+        ),
+        const SizedBox(height: 16),
+        RelatedDocsPanel(
+          projectId: project.id,
+          taskId: task.id,
+          canEdit: ref.watch(permissionSetProvider).can(Perm.docEdit),
         ),
         if (project.enabledFeatures.contains(timeFeature)) ...[
           const SizedBox(height: 16),

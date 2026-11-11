@@ -25,6 +25,8 @@ abstract final class Perm {
   static const timeLog = 'time.log';
   static const timeEditOthers = 'time.edit_others';
   static const sprintManage = 'sprint.manage';
+  static const docEdit = 'doc.edit';
+  static const docManage = 'doc.manage';
 
   static const all = [
     workspaceView,
@@ -50,6 +52,8 @@ abstract final class Perm {
     timeLog,
     timeEditOthers,
     sprintManage,
+    docEdit,
+    docManage,
   ];
 }
 
