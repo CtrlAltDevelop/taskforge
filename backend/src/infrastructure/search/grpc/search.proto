@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package config.search;
+
+service SearchController {
+    rpc Query(SearchQueryRequest) returns (SearchResults) {}
+    rpc Recent(SearchRecentRequest) returns (SearchRecent) {}
+    rpc Remember(SearchRememberRequest) returns (SearchRemembered) {}
+}
+
+message Hit {
+    string kind = 1;
+    string id = 2;
+    string task_id = 3;
+    string project_id = 4;
+    string key = 5;
+    string title = 6;
+    repeated Span title_marks = 7;
+    string snippet = 8;
+    repeated Span snippet_marks = 9;
+    string project_name = 10;
+    string status = 11;
+    string author = 12;
+    string updated_at = 13;
+}
+
+message SearchQueryRequest {
+    string workspace_id = 1;
+    string text = 2;
+    repeated string types = 3;
+    string cursor = 4;
+    int32 page_size = 5;
+}
+
+message SearchRecent {
+    repeated string queries = 1;
+}
+
+message SearchRecentRequest {
+    string workspace_id = 1;
+}
+
+message SearchRememberRequest {
+    string workspace_id = 1;
+    string text = 2;
+}
+
+message SearchRemembered {
+    bool ok = 1;
+}
+
+message SearchResults {
+    repeated Hit tasks = 1;
+    repeated Hit comments = 2;
+    repeated Hit projects = 3;
+    repeated Hit members = 4;
+    Hit jump = 5;
+    string next_cursor = 6;
+}
+
+message Span {
+    int32 start = 1;
+    int32 end = 2;
+}
+

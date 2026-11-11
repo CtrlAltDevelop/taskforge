@@ -59,6 +59,7 @@ PROJECT_LABELS = frozenset(
         "comments",
         "attachments",
         "inbox",
+        "search",
         "shop",
         "support",
         "wallet",

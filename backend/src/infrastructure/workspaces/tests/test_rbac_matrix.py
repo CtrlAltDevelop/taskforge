@@ -38,6 +38,8 @@ from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
 from infrastructure.savedviews import services as view_services
 from infrastructure.savedviews.grpc import savedviews_pb2 as vpb
 from infrastructure.savedviews.grpc import savedviews_pb2_grpc as vstubs
+from infrastructure.search.grpc import search_pb2 as qpb
+from infrastructure.search.grpc import search_pb2_grpc as qstubs
 from infrastructure.sync.grpc import sync_pb2 as spb
 from infrastructure.sync.grpc import sync_pb2_grpc as sstubs
 from infrastructure.tasks import links as task_links
@@ -789,6 +791,7 @@ ENDPOINTS += (
 )
 
 AT = astubs.AttachmentControllerStub
+SE = qstubs.SearchControllerStub
 IN = istubs.InboxControllerStub
 WA = istubs.WatcherControllerStub
 
@@ -798,6 +801,21 @@ def _task_ref(w: World) -> dict[str, str]:
 
 
 ENDPOINTS += (
+    Endpoint(
+        "SearchController.Query",
+        "workspace.view",
+        _grpc(SE, "Query", lambda w: qpb.SearchQueryRequest(workspace_id=w.ws, text="x")),
+    ),
+    Endpoint(
+        "SearchController.Remember",
+        "workspace.view",
+        _grpc(SE, "Remember", lambda w: qpb.SearchRememberRequest(workspace_id=w.ws, text="xx")),
+    ),
+    Endpoint(
+        "SearchController.Recent",
+        "workspace.view",
+        _grpc(SE, "Recent", lambda w: qpb.SearchRecentRequest(workspace_id=w.ws)),
+    ),
     Endpoint(
         "InboxController.List",
         "workspace.view",

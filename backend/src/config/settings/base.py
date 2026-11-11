@@ -1046,6 +1046,7 @@ INSTALLED_APPS = [
     "infrastructure.filters.apps.FiltersConfig",
     "infrastructure.sync.apps.SyncConfig",
     "infrastructure.comments.apps.CommentsConfig",
+    "infrastructure.search.apps.SearchConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1266,3 +1267,8 @@ INBOX_UNSUBSCRIBE_DAYS = int(os.getenv("DJANGO_INBOX_UNSUBSCRIBE_DAYS", "180"))
 # At most this many notifications of one kind from one person to another within ten minutes (a flood
 # of mentions or assignments is dropped past it).
 INBOX_FLOOD_LIMIT = int(os.getenv("DJANGO_INBOX_FLOOD_LIMIT", "20"))
+
+# Phase 20: search. Searches one person may make per minute (0 = no limit), and how long one may
+# run on PostgreSQL before it is cancelled.
+SEARCH_RATE_PER_MINUTE = int(os.getenv("DJANGO_SEARCH_RATE_PER_MINUTE", "120"))
+SEARCH_TIMEOUT_MS = int(os.getenv("DJANGO_SEARCH_TIMEOUT_MS", "2000"))

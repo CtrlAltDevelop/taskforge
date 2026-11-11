@@ -632,6 +632,8 @@ def restore(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> 
             .select_for_update(of=("self",))
         )
         _bump(batch, timezone.now(), deleted_at=None)
+        for sub in batch:
+            announce(sub, "restored")
         parent_gone = (
             task.parent_id is not None
             and Task.objects.filter(pk=task.parent_id, deleted_at__isnull=False).exists()
