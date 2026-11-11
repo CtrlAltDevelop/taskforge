@@ -1,6 +1,6 @@
 # Phase 17 — Comments and Mentions
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Threaded **comments** on tasks with rich text, `@mentions`, reactions and edit/delete history.
@@ -35,13 +35,20 @@ Composer with mention autocomplete and formatting toolbar (desktop shortcuts: Cm
 - Large threads paginated, newest-last with “load earlier”.
 
 ## Acceptance criteria
-- [ ] Mention picker lists only users who can see the task
-- [ ] Edit history stored and viewable
-- [ ] Optimistic send with retry on failure
-- [ ] `user.mentioned` event emitted exactly once per mentioned user per comment version
+- [x] Mention picker lists only users who can see the task (the server decides; tested there)
+- [x] Edit history stored and viewable
+- [x] Optimistic send with retry on failure
+- [x] `user.mentioned` event emitted exactly once per mentioned user per comment version (the author is never told about mentioning themselves)
 
 ## Tests
 Mention parsing, permission filtering, sanitization, revision creation, reaction toggling concurrency.
 
 ## Depends on
 Phase 06 (events used by 16 and 19).
+
+## As built
+- **Backend**: a `comments` app (`Comment`, `CommentRevision`, `CommentMention`, `CommentReaction`), `CommentController` over gRPC with two extra RPCs, `History` and `Mentionable` (the picker's list). New permissions `comment.create` (Owner, Admin, Member) and `comment.moderate` (Owner, Admin: delete anyone's comment, pin). Reference: `backend/docs/comments.md`.
+- **Body**: rebuilt from an allow-list on every write; links are http, https or mailto. A mention's label is always replaced by the person's real name on the server, so what is shown matches who was notified.
+- **Rules as built**: edits are the author's alone (24 h, `COMMENT_EDIT_WINDOW_HOURS`); deleting, like every other write, needs a project that is not archived; at most 5 pinned comments and 30 different reactions per comment (counted under a lock on the task); the grant offered for a mention of someone outside a private project goes through the same function as adding a project member, so the member list updates live.
+- **Flutter**: the composer has a small formatting toolbar (bullet, quote, code block, link; the text stays lightly marked up as in descriptions) and Ctrl/Cmd+Enter. Links are shown underlined but are not tappable yet, so there is no `rel=noopener` to set; add it when they become tappable. Loading shows skeleton rows. There is no bold/italic button: the shared description format has no marker for them yet.
+- Not verified: a real browser, PostgreSQL (the pin and reaction limit locks only matter there), a real network.

@@ -24,8 +24,9 @@ Groups are just for reading — a phase is still exactly one feature.
 - **Phase 14** — implemented on `develop`: TFQL and saved filters (hand-written parser with positions, id-based AST that renders back to text, ORM compiler, `QueryController` Validate/Suggest, `FilterController` List/Save/Delete, `filter_ast` on list, group counts, board and calendar; a filter bar with a visual builder and a highlighted text editor in the app). Backend and Flutter suites pass on SQLite; PostgreSQL (the statement timeout) and a real browser/device were not run.
 - **Phase 15** — implemented on `develop`: the timeline (`TimelineController` `Get` / `CriticalPath` / `PreviewShift` / `ApplyShift` / working days; a pure scheduling engine with cascade through blocking links and a critical path; a per-workspace working-day calendar; a canvas chart with drag, resize, zoom, arrows, today line, grouping, PNG export, a list fallback; personal `timeline` layouts) and a List | Board | Calendar | Timeline switch. Backend and Flutter suites pass on SQLite; PostgreSQL, device frame rate and a real browser were not run.
 - **Phase 16** — implemented on `develop`: realtime sync (`/ws/sync` socket with rooms checked on join and on delivery, a change log with cursor catch-up through `SyncController`, access-change events that drop rooms at once, presence with an editing hint, a reconnecting client state machine, live indicator, banner and row flash). Backend and Flutter suites pass on SQLite; a real network, a browser and PostgreSQL were not run.
-- **Next:** phase 17 (Comments and mentions).
-- Phases 17–40 — planned.
+- **Phase 17** — implemented on `develop`: comments and mentions (`CommentController`, safe rich-text bodies, one level of replies, edit history, reactions, pinning, comment to subtask, a permission-aware `@` picker with an optional grant for private projects, `user.mentioned` once per person per version, live `comment.*` events; in the app a composer with toolbar, optimistic send with retry, replies, reactions and history inside the task). Backend and Flutter suites pass on SQLite; PostgreSQL, a real browser and a real network were not run.
+- **Next:** phase 18 (Attachments).
+- Phases 18–40 — planned.
 
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)
