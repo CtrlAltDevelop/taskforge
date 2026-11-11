@@ -35,6 +35,7 @@ LITE_ENV := DJANGO_SETTINGS_MODULE=config.settings.development \
 # gRPC-Web from Flutter web still needs Envoy (`make dev`); native clients don't.
 run:
 	cd backend && $(LITE_ENV) ../$(VENV)/python manage.py migrate
+	cd backend && $(LITE_ENV) ../$(VENV)/python manage.py reindex
 	cd backend && trap 'kill 0' INT TERM EXIT; \
 	$(LITE_ENV) ../$(VENV)/python -m uvicorn config.asgi:application --reload --app-dir src --port 8010 & \
 	$(LITE_ENV) ../$(VENV)/python manage.py grpcrunaioserver & \
@@ -49,6 +50,7 @@ web:
 # Apply pending migrations to the dev database (run after pulling or finishing a phase).
 migrate:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py migrate
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py reindex
 
 # The two clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
 # entries. Put it in cron or a scheduled job, daily.
@@ -80,6 +82,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/attachments/grpc/attachments.proto \
 	infrastructure/inbox/grpc/inbox.proto \
 	infrastructure/search/grpc/search.proto \
+	infrastructure/timetracking/grpc/timetracking.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos
