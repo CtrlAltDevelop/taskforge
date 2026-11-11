@@ -37,6 +37,12 @@ class Task(models.Model):
     # date of 5 Nov is 5 Nov everywhere), only the clock time is shown in the viewer's zone.
     due_time = models.TimeField(null=True, blank=True)
     estimate_sec = models.PositiveIntegerField(null=True, blank=True)  # phase 21; None = none
+    # Phase 22: story points, and the sprint the task is planned in (a task is in at most one;
+    # a finished sprint keeps the tasks that were done in it).
+    points = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    sprint = models.ForeignKey(
+        "sprints.Sprint", null=True, blank=True, on_delete=models.SET_NULL, related_name="tasks"
+    )
     created_by = models.ForeignKey(
         django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
     )

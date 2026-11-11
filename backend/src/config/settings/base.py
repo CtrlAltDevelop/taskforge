@@ -1048,6 +1048,7 @@ INSTALLED_APPS = [
     "infrastructure.comments.apps.CommentsConfig",
     "infrastructure.search.apps.SearchConfig",
     "infrastructure.timetracking.apps.TimeTrackingConfig",
+    "infrastructure.sprints.apps.SprintsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

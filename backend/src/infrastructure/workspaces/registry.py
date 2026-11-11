@@ -53,6 +53,7 @@ PERMISSIONS: Final = (
     Permission("comment.moderate", "Delete anyone's comments and pin them"),
     Permission("time.log", "Track time and log your own time entries"),
     Permission("time.edit_others", "See and edit other people's time entries and timesheets"),
+    Permission("sprint.manage", "Plan, start and complete sprints and move tasks in and out"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -67,6 +68,7 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
         "project.create",
         "comment.create",
         "time.log",
+        "sprint.manage",
         *TASK_KEYS,
     },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,

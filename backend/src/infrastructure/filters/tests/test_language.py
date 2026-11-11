@@ -393,7 +393,7 @@ def test_blocked_id_and_sprint(team: Any, project: Any) -> None:
     assert _find(team, project, f"id = {blocker.number}") == ["blocker"]
     both = f'id in ("WEB-{blocked.number}", {blocker.number})'
     assert _find(team, project, both) == ["blocked", "blocker"]
-    assert _find(team, project, "sprint = currentSprint()") == []
+    assert _find(team, project, "sprint = currentSprint()") == []  # no active sprint here
     assert _find(team, project, "sprint != currentSprint()") == ["blocked", "blocker"]
 
 

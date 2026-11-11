@@ -1,0 +1,204 @@
+syntax = "proto3";
+
+package config.sprints;
+
+service BacklogController {
+    rpc List(BacklogListRequest) returns (BacklogList) {}
+}
+
+service SprintController {
+    rpc AddTasks(SprintTasksChangeRequest) returns (SprintTasksChanged) {}
+    rpc Burndown(BurndownRequest) returns (BurndownAnswer) {}
+    rpc Complete(SprintCompleteRequest) returns (SprintAnswer) {}
+    rpc Create(SprintCreateRequest) returns (SprintAnswer) {}
+    rpc List(SprintListRequest) returns (SprintList) {}
+    rpc RemoveTasks(SprintTasksChangeRequest) returns (SprintTasksChanged) {}
+    rpc SetPoints(PointsSetRequest) returns (SprintTask) {}
+    rpc Start(SprintStartRequest) returns (SprintAnswer) {}
+    rpc Tasks(SprintTasksRequest) returns (SprintTaskList) {}
+    rpc Update(SprintUpdateRequest) returns (SprintAnswer) {}
+}
+
+message BacklogList {
+    repeated SprintTask tasks = 1;
+    int32 total = 2;
+}
+
+message BacklogListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    int32 limit = 3;
+}
+
+message BurndownAnswer {
+    Sprint sprint = 1;
+    double baseline_points = 2;
+    int32 baseline_tasks = 3;
+    repeated BurndownDay days = 4;
+    repeated ScopeChange scope_changes = 5;
+    repeated VelocityItem velocity = 6;
+    double average_velocity = 7;
+    string server_now = 8;
+}
+
+message BurndownDay {
+    string date = 1;
+    double ideal_points = 2;
+    double ideal_tasks = 3;
+    bool has_actual = 4;
+    bool live = 5;
+    bool backfilled = 6;
+    double remaining_points = 7;
+    int32 remaining_tasks = 8;
+    double scope_points = 9;
+    int32 scope_tasks = 10;
+}
+
+message BurndownRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+}
+
+message PointsSetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string points = 4;
+    int32 expected_version = 5;
+}
+
+message ScopeChange {
+    string date = 1;
+    double points = 2;
+    int32 tasks = 3;
+}
+
+message Sprint {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string name = 4;
+    string goal = 5;
+    string start_date = 6;
+    string end_date = 7;
+    string state = 8;
+    string started_at = 9;
+    string completed_at = 10;
+    double baseline_points = 11;
+    int32 baseline_tasks = 12;
+    double completed_points = 13;
+    int32 completed_tasks = 14;
+    int32 unfinished_tasks = 15;
+    int32 version = 16;
+    int32 task_count = 17;
+    double points_total = 18;
+    int32 open_tasks = 19;
+    double open_points = 20;
+    int32 done_tasks = 21;
+    double done_points = 22;
+    int32 estimate_sec_total = 23;
+}
+
+message SprintAnswer {
+    Sprint sprint = 1;
+    repeated string warnings = 2;
+}
+
+message SprintCompleteRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+    string carry_over = 4;
+    string next_sprint_id = 5;
+}
+
+message SprintCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string name = 3;
+    string goal = 4;
+    string start_date = 5;
+    string end_date = 6;
+}
+
+message SprintList {
+    repeated Sprint sprints = 1;
+}
+
+message SprintListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    repeated string states = 3;
+}
+
+message SprintStartRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+}
+
+message SprintTask {
+    string id = 1;
+    string project_id = 2;
+    string key = 3;
+    string title = 4;
+    string status_id = 5;
+    string status_name = 6;
+    string status_category = 7;
+    string priority = 8;
+    double points = 9;
+    bool has_points = 10;
+    int32 estimate_sec = 11;
+    string sprint_id = 12;
+    int32 version = 13;
+    string position = 14;
+    bool late = 15;
+}
+
+message SprintTaskList {
+    repeated SprintTask tasks = 1;
+}
+
+message SprintTasksChangeRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+    repeated string task_ids = 4;
+}
+
+message SprintTasksChanged {
+    Sprint sprint = 1;
+    int32 changed = 2;
+    int32 added_after_start = 3;
+}
+
+message SprintTasksRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+}
+
+message SprintUpdateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string sprint_id = 3;
+    repeated string fields = 4;
+    int32 expected_version = 5;
+    string name = 6;
+    string goal = 7;
+    string start_date = 8;
+    string end_date = 9;
+}
+
+message VelocityItem {
+    string sprint_id = 1;
+    string name = 2;
+    string start_date = 3;
+    string end_date = 4;
+    double committed_points = 5;
+    double completed_points = 6;
+    int32 committed_tasks = 7;
+    int32 completed_tasks = 8;
+}
+

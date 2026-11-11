@@ -94,7 +94,8 @@ def _positive_task(ctx: _Context, ref: str, op: str, values: list[dict[str, Any]
     if ref == "id":
         return Q(number__in=[int(v["v"]) for v in values])
     if ref == "sprint":
-        return Q(pk__in=[])  # sprints arrive with phase 22: nothing is in "the current sprint" yet
+        # ``currentSprint()``: the project's one active sprint (a project-only field)
+        return Q(sprint__state="active")
     raise ValueError(ref)
 
 

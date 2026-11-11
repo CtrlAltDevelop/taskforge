@@ -47,6 +47,7 @@ SCALAR_FIELDS: Final[dict[str, Callable[[str], Any]]] = {
     "due_date": fields.clean_date,
     "due_time": fields.clean_time,
     "estimate_sec": fields.clean_estimate,
+    "points": fields.clean_points,
 }
 EDITABLE: Final = (*SCALAR_FIELDS, "status", "assignee_ids")
 
@@ -327,14 +328,19 @@ def update(
     *,
     subtasks_taken: bool = False,
     override_blocked: bool = False,
+    allow_points: bool = False,
 ) -> Task:
-    """``override_blocked``: let a project manager complete a task that still has open blockers
+    """``allow_points``: only the sprints service sets it, because a points edit in an active
+    sprint must be logged as a scope change.
+    ``override_blocked``: let a project manager complete a task that still has open blockers
     (recorded). ``subtasks_taken``: the caller moves the open subtasks along in the same
     transaction; when the target is a done status that satisfies a "subtasks done" condition on
     this move (``move`` with subtasks), otherwise they would not be done and the condition is
     checked as usual."""
     if not changes:
         raise ApiError("Send at least one field to change.")
+    if "points" in changes and not allow_points:
+        raise ApiError("Set story points through Sprints.SetPoints.")
     with transaction.atomic():
         project = _writable_project(actor, workspace, project_id, "task.update")
         task = _load_task(project, task_id, lock=True)

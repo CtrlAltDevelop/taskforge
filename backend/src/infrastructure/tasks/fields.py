@@ -2,6 +2,7 @@
 
 import json
 from datetime import date, time
+from decimal import Decimal, InvalidOperation
 from typing import Any, Final
 
 from infrastructure.common.errors import ApiError
@@ -115,3 +116,19 @@ def clean_estimate(value: str) -> int | None:
     if not 0 < seconds <= ESTIMATE_MAX:
         raise ApiError("The estimate must be between a second and 100 days.")
     return seconds
+
+
+POINTS_MAX: Final = Decimal("9999.99")
+
+
+def clean_points(value: str) -> Decimal | None:
+    """Story points (up to two decimals), or empty for none."""
+    if not value:
+        return None
+    try:
+        points = Decimal(value).quantize(Decimal("0.01"))
+    except (InvalidOperation, ValueError):
+        raise ApiError("The points must be a number.") from None
+    if not points.is_finite() or not 0 <= points <= POINTS_MAX:
+        raise ApiError("The points must be between 0 and 9999.99.")
+    return points

@@ -40,6 +40,9 @@ from infrastructure.savedviews.grpc import savedviews_pb2 as vpb
 from infrastructure.savedviews.grpc import savedviews_pb2_grpc as vstubs
 from infrastructure.search.grpc import search_pb2 as qpb
 from infrastructure.search.grpc import search_pb2_grpc as qstubs
+from infrastructure.sprints import services as sprint_services
+from infrastructure.sprints.grpc import sprints_pb2 as sppb
+from infrastructure.sprints.grpc import sprints_pb2_grpc as spstubs
 from infrastructure.sync.grpc import sync_pb2 as spb
 from infrastructure.sync.grpc import sync_pb2_grpc as sstubs
 from infrastructure.tasks import links as task_links
@@ -84,6 +87,7 @@ class World:
     filter_id: str = ""  # a filter shared with the open project
     comment_id: str = ""  # a comment by the Owner on ``task_id``
     attachment_id: str = ""  # a file the Owner attached to ``task_id``
+    sprint_id: str = ""  # a sprint of the open project (made by the sprint prepares)
 
     @property
     def ws(self) -> str:
@@ -807,11 +811,138 @@ def _time_on(w: World) -> None:
     )
 
 
+def _sprint_on(w: World, *, started: bool = False, with_task: bool = False) -> None:
+    _make_two_tasks(w)
+    owner = w.workspace.created_by
+    current = project_services.get(owner, w.workspace, w.project_id).project
+    project_services.set_features(owner, w.workspace, w.project_id, {"sprints"}, current.version)
+    made = sprint_services.create(
+        owner, w.workspace, w.project_id, "S1", "", "2026-11-02", "2026-11-06"
+    ).sprint
+    w.sprint_id = str(made.pk)
+    if with_task:
+        sprint_services.add_tasks(owner, w.workspace, w.project_id, w.sprint_id, [w.task_id])
+    if started:
+        sprint_services.start(owner, w.workspace, w.project_id, w.sprint_id)
+
+
+def _sprint_started(w: World) -> None:
+    _sprint_on(w, started=True, with_task=True)
+
+
+def _sprint_with_task(w: World) -> None:
+    _sprint_on(w, with_task=True)
+
+
+def _sprint_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "project_id": w.project_id, "sprint_id": w.sprint_id}
+
+
 def _task_ref(w: World) -> dict[str, Any]:
     return {"workspace_id": w.ws, "project_id": w.project_id, "task_id": w.task_id}
 
 
+PS = spstubs.SprintControllerStub
+PB = spstubs.BacklogControllerStub
+
+
+def _project_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "project_id": w.project_id}
+
+
 ENDPOINTS += (
+    Endpoint(
+        "SprintController.List",
+        "workspace.view",
+        _grpc(PS, "List", lambda w: sppb.SprintListRequest(**_project_ref(w))),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.Create",
+        "sprint.manage",
+        _grpc(
+            PS,
+            "Create",
+            lambda w: sppb.SprintCreateRequest(
+                **_project_ref(w), name="S2", start_date="2026-11-09", end_date="2026-11-13"
+            ),
+        ),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.Update",
+        "sprint.manage",
+        _grpc(
+            PS,
+            "Update",
+            lambda w: sppb.SprintUpdateRequest(**_sprint_ref(w), fields=["name"], name="N"),
+        ),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.Start",
+        "sprint.manage",
+        _grpc(PS, "Start", lambda w: sppb.SprintStartRequest(**_sprint_ref(w))),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.Complete",
+        "sprint.manage",
+        _grpc(
+            PS,
+            "Complete",
+            lambda w: sppb.SprintCompleteRequest(**_sprint_ref(w), carry_over="backlog"),
+        ),
+        _sprint_started,
+    ),
+    Endpoint(
+        "SprintController.AddTasks",
+        "sprint.manage",
+        _grpc(
+            PS,
+            "AddTasks",
+            lambda w: sppb.SprintTasksChangeRequest(**_sprint_ref(w), task_ids=[w.task_id]),
+        ),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.RemoveTasks",
+        "sprint.manage",
+        _grpc(
+            PS,
+            "RemoveTasks",
+            lambda w: sppb.SprintTasksChangeRequest(**_sprint_ref(w), task_ids=[w.task_id]),
+        ),
+        _sprint_with_task,
+    ),
+    Endpoint(
+        "SprintController.Tasks",
+        "workspace.view",
+        _grpc(PS, "Tasks", lambda w: sppb.SprintTasksRequest(**_sprint_ref(w))),
+        _sprint_with_task,
+    ),
+    Endpoint(
+        "SprintController.SetPoints",
+        "task.update",
+        _grpc(
+            PS,
+            "SetPoints",
+            lambda w: sppb.PointsSetRequest(**_project_ref(w), task_id=w.task_id, points="3"),
+        ),
+        _sprint_on,
+    ),
+    Endpoint(
+        "SprintController.Burndown",
+        "workspace.view",
+        _grpc(PS, "Burndown", lambda w: sppb.BurndownRequest(**_sprint_ref(w))),
+        _sprint_started,
+    ),
+    Endpoint(
+        "BacklogController.List",
+        "workspace.view",
+        _grpc(PB, "List", lambda w: sppb.BacklogListRequest(**_project_ref(w))),
+        _sprint_on,
+    ),
     Endpoint(
         "TimeController.Current",
         "workspace.view",

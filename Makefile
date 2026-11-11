@@ -59,9 +59,11 @@ purge:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py trim_changelog
 
 # The notifications' clock (no Celery yet): snoozes ending, tasks due soon, pushes and emails held for
-# quiet hours or digests, retries. Run it every minute from cron.
+# quiet hours or digests, retries; the burndown snapshots of active sprints (back-filling missed
+# days). Run it every minute from cron.
 tick:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py inbox_tick
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py sprint_snapshots
 
 grpc:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py grpcrunaioserver
