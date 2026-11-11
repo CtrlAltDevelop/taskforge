@@ -15,6 +15,7 @@ import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/calendar/presentation/workspace_calendar_screen.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_screen.dart';
 import 'package:taskforge/features/inbox/presentation/prefs_screen.dart';
+import 'package:taskforge/features/sprints/presentation/sprints_screen.dart';
 import 'package:taskforge/features/time/presentation/timesheet_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
@@ -142,6 +143,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/projects/:id/settings',
         builder: (_, state) =>
             ProjectSettingsScreen(projectId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/projects/:id/sprints',
+        builder: (_, state) =>
+            SprintsScreen(projectId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: '/projects/:id/workflow',

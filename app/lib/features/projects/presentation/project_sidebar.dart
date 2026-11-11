@@ -10,6 +10,7 @@ import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
+import 'package:taskforge/features/sprints/domain/sprints.dart';
 
 /// Projects of the current workspace: favorites on top, then the others.
 /// [onNavigate] runs after a link is followed (the drawer closes itself).
@@ -39,7 +40,7 @@ class ProjectSidebar extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
           child: Text(title, style: theme.textTheme.labelLarge),
         ),
-        for (final p in items)
+        for (final p in items) ...[
           ListTile(
             key: Key('project-${p.id}'),
             dense: true,
@@ -57,6 +58,18 @@ class ProjectSidebar extends ConsumerWidget {
                 : null,
             onTap: () => _go(context, '/projects/${p.id}'),
           ),
+          if (p.enabledFeatures.contains(sprintsFeature) &&
+              current.startsWith('/projects/${p.id}'))
+            ListTile(
+              key: Key('open-sprints-${p.id}'),
+              dense: true,
+              contentPadding: const EdgeInsets.only(left: 40, right: 16),
+              selected: current == '/projects/${p.id}/sprints',
+              leading: const Icon(Icons.timelapse, size: 20),
+              title: const Text('Sprints'),
+              onTap: () => _go(context, '/projects/${p.id}/sprints'),
+            ),
+        ],
       ],
     );
 

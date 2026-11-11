@@ -19,6 +19,7 @@ import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
@@ -96,6 +97,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       everything = true;
       inboxDirty = true;
       readTimeAgain(ref);
+      readSprintsAgain(ref);
       _everythingElse(ref);
       soon();
       return;
@@ -111,6 +113,12 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       readTimeAgain(ref);
       return;
     }
+    if (event.type.startsWith('sprint.')) {
+      // A sprint changed (or its tasks moved): sprints, backlog and burndowns
+      // read again.
+      readSprintsAgain(ref);
+      return;
+    }
     if (event.type == 'access.changed') {
       _access(ref);
       everything = true;
@@ -118,6 +126,8 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       return;
     }
     if (event.isTask) {
+      ref.invalidate(backlogProvider(event.project));
+      ref.invalidate(sprintTasksProvider);
       ref.read(recentChangesProvider.notifier).flash([event.entityId]);
       if (ref.exists(taskLinksProvider(event.entityId))) {
         ref.invalidate(taskLinksProvider(event.entityId));

@@ -15,6 +15,7 @@ import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
+import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -25,6 +26,7 @@ import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
 import '../inbox/fakes.dart';
 import '../projects/fakes.dart';
 import '../roles/fakes.dart';
+import '../sprints/fakes.dart';
 import '../time/fakes.dart';
 
 class MockAuthApi extends Mock implements AuthApi {
@@ -151,6 +153,7 @@ Future<ProviderContainer> pumpSignedIn(
   FakeProjectsClient? projects,
   FakeInboxClient? inbox,
   FakeTimeClient? time,
+  FakeSprintsClient? sprints,
   FakeLocalNotifier? localNotifier,
 
   /// The live connection: none unless a test brings its own.
@@ -186,6 +189,7 @@ Future<ProviderContainer> pumpSignedIn(
       inboxClientProvider.overrideWithValue(inbox ?? FakeInboxClient()),
       // Nobody is timed for real either.
       timeClientProvider.overrideWithValue(time ?? FakeTimeClient()),
+      sprintsClientProvider.overrideWithValue(sprints ?? FakeSprintsClient()),
       localNotifierProvider.overrideWithValue(
         localNotifier ?? FakeLocalNotifier(),
       ),

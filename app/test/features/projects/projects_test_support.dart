@@ -19,6 +19,7 @@ import 'package:taskforge/features/workflows/application/workflows_providers.dar
 
 import '../fields/fakes.dart';
 import '../tasks/fakes.dart';
+import '../sprints/fakes.dart';
 import '../time/fakes.dart';
 import '../workflows/fakes.dart';
 
@@ -71,6 +72,7 @@ Future<Pumped> pumpProjects(
   FakeAttachments? attachments,
   FakeInboxClient? inbox,
   FakeTimeClient? time,
+  FakeSprintsClient? sprints,
   FakeLocalNotifier? localNotifier,
   FakeFiltersClient? filters,
   Day? today,
@@ -91,6 +93,7 @@ Future<Pumped> pumpProjects(
     projects: fake,
     inbox: inbox,
     time: time,
+    sprints: sprints,
     localNotifier: localNotifier,
     sync: sync,
     overrides: [

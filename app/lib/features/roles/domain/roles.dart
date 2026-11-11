@@ -24,6 +24,7 @@ abstract final class Perm {
   static const commentModerate = 'comment.moderate';
   static const timeLog = 'time.log';
   static const timeEditOthers = 'time.edit_others';
+  static const sprintManage = 'sprint.manage';
 
   static const all = [
     workspaceView,
@@ -48,6 +49,7 @@ abstract final class Perm {
     commentModerate,
     timeLog,
     timeEditOthers,
+    sprintManage,
   ];
 }
 
