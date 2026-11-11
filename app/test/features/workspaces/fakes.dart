@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:taskforge/app.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/token_store.dart';
@@ -143,6 +144,9 @@ Future<ProviderContainer> pumpSignedIn(
   List<Override> overrides = const [],
   FakeRolesClient? roles,
   FakeProjectsClient? projects,
+
+  /// The live connection: none unless a test brings its own.
+  Override? sync,
 }) async {
   final store = MemoryTokenStore();
   await store.write(
@@ -169,6 +173,7 @@ Future<ProviderContainer> pumpSignedIn(
         projects ?? FakeProjectsClient(),
       ),
       logoPickerProvider.overrideWithValue(() async => null),
+      sync ?? syncClientProvider.overrideWithValue(null),
       ...overrides,
     ],
   );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/core/deep_links.dart';
+import 'package:taskforge/core/sync/sync_coordinator.dart';
 
 class TaskForgeApp extends ConsumerWidget {
   const TaskForgeApp({super.key});
@@ -10,6 +11,9 @@ class TaskForgeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    ref.watch(
+      syncCoordinatorProvider,
+    ); // live changes read the open screens again
     ref.listen(deepLinksProvider, (_, link) {
       final route = link.value == null ? null : customSchemeRoute(link.value!);
       if (route != null) router.go(route);

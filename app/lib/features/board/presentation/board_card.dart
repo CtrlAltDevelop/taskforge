@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/sync/presentation/live_flash.dart';
 
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
@@ -47,47 +48,50 @@ class BoardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      color: selected ? scheme.secondaryContainer : null,
-      child: InkWell(
-        key: Key('card-${task.id}'),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 4, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    task.displayId,
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                  if (task.isBlocked) ...[
-                    const SizedBox(width: 4),
-                    BlockedBadge(blockedBy: task.blockedBy),
-                  ],
-                  const Spacer(),
-                  if (onMoveTo != null && moveChoices.isNotEmpty)
-                    _MoveMenu(
-                      taskId: task.id,
-                      choices: moveChoices,
-                      onSelected: onMoveTo!,
+    return LiveFlash(
+      taskId: task.id,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        color: selected ? scheme.secondaryContainer : null,
+        child: InkWell(
+          key: Key('card-${task.id}'),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 4, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      task.displayId,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 6, bottom: 4),
-                child: Text(
-                  task.title,
-                  key: Key('card-title-${task.id}'),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                    if (task.isBlocked) ...[
+                      const SizedBox(width: 4),
+                      BlockedBadge(blockedBy: task.blockedBy),
+                    ],
+                    const Spacer(),
+                    if (onMoveTo != null && moveChoices.isNotEmpty)
+                      _MoveMenu(
+                        taskId: task.id,
+                        choices: moveChoices,
+                        onSelected: onMoveTo!,
+                      ),
+                  ],
                 ),
-              ),
-              _details(context),
-            ],
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 6, bottom: 4),
+                  child: Text(
+                    task.title,
+                    key: Key('card-title-${task.id}'),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                _details(context),
+              ],
+            ),
           ),
         ),
       ),

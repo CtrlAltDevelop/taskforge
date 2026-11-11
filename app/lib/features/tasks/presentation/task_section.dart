@@ -13,6 +13,8 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/sync/presentation/connection_status.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
@@ -113,120 +115,127 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
   }
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, box) {
-      final wide = box.maxWidth >= wideBreakpoint;
-      _openPending(wide);
-      Future<void> openFromView(Task t) async {
-        await _open(t, wide);
-        if (!wide) _refreshView();
-      }
+  Widget build(BuildContext context) {
+    ref.watch(
+      liveProjectProvider(widget.project.id),
+    ); // this project's changes arrive live
+    return LayoutBuilder(
+      builder: (context, box) {
+        final wide = box.maxWidth >= wideBreakpoint;
+        _openPending(wide);
+        Future<void> openFromView(Task t) async {
+          await _open(t, wide);
+          if (!wide) _refreshView();
+        }
 
-      final body = _view == _TaskView.board
-          ? BoardView(
-              project: widget.project,
-              openTaskId: wide ? _selected : null,
-              onOpen: openFromView,
-            )
-          : _view == _TaskView.timeline
-          ? TimelineView(
-              project: widget.project,
-              openTaskId: wide ? _selected : null,
-              onOpen: openFromView,
-            )
-          : _view == _TaskView.calendar
-          ? CalendarView(
-              scope: widget.project.id,
-              archived: widget.project.isArchived,
-              openTaskId: wide ? _selected : null,
-              onOpen: openFromView,
-            )
-          : _TaskList(
-              project: widget.project,
-              wide: wide,
-              selected: wide ? _selected : null,
-              onOpen: (t) => _open(t, wide),
-            );
-      final switcher = Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
+        final body = _view == _TaskView.board
+            ? BoardView(
+                project: widget.project,
+                openTaskId: wide ? _selected : null,
+                onOpen: openFromView,
+              )
+            : _view == _TaskView.timeline
+            ? TimelineView(
+                project: widget.project,
+                openTaskId: wide ? _selected : null,
+                onOpen: openFromView,
+              )
+            : _view == _TaskView.calendar
+            ? CalendarView(
+                scope: widget.project.id,
+                archived: widget.project.isArchived,
+                openTaskId: wide ? _selected : null,
+                onOpen: openFromView,
+              )
+            : _TaskList(
+                project: widget.project,
+                wide: wide,
+                selected: wide ? _selected : null,
+                onOpen: (t) => _open(t, wide),
+              );
+        final switcher = Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              SegmentedButton<_TaskView>(
+                key: const Key('view-switch'),
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(
+                    value: _TaskView.list,
+                    icon: Icon(Icons.table_rows_outlined),
+                    label: Text('List'),
+                  ),
+                  ButtonSegment(
+                    value: _TaskView.board,
+                    icon: Icon(Icons.view_kanban_outlined),
+                    label: Text('Board'),
+                  ),
+                  ButtonSegment(
+                    value: _TaskView.calendar,
+                    icon: Icon(Icons.calendar_month_outlined),
+                    label: Text('Calendar'),
+                  ),
+                  ButtonSegment(
+                    value: _TaskView.timeline,
+                    icon: Icon(Icons.stacked_bar_chart),
+                    label: Text('Timeline'),
+                  ),
+                ],
+                selected: {_view},
+                onSelectionChanged: (v) => setState(() => _view = v.first),
+              ),
+              const LiveIndicator(),
+              FilterBar(
+                projectId: widget.project.id,
+                canShare:
+                    !widget.project.isArchived &&
+                    ref.watch(permissionSetProvider).can(Perm.projectUpdate),
+              ),
+            ],
+          ),
+        );
+        // Always a Row on a wide screen, so opening or closing the detail keeps
+        // the view (its scroll position, focus and picked rows) where it is.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SegmentedButton<_TaskView>(
-              key: const Key('view-switch'),
-              showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(
-                  value: _TaskView.list,
-                  icon: Icon(Icons.table_rows_outlined),
-                  label: Text('List'),
-                ),
-                ButtonSegment(
-                  value: _TaskView.board,
-                  icon: Icon(Icons.view_kanban_outlined),
-                  label: Text('Board'),
-                ),
-                ButtonSegment(
-                  value: _TaskView.calendar,
-                  icon: Icon(Icons.calendar_month_outlined),
-                  label: Text('Calendar'),
-                ),
-                ButtonSegment(
-                  value: _TaskView.timeline,
-                  icon: Icon(Icons.stacked_bar_chart),
-                  label: Text('Timeline'),
-                ),
-              ],
-              selected: {_view},
-              onSelectionChanged: (v) => setState(() => _view = v.first),
-            ),
-            FilterBar(
-              projectId: widget.project.id,
-              canShare:
-                  !widget.project.isArchived &&
-                  ref.watch(permissionSetProvider).can(Perm.projectUpdate),
+            const ConnectionBanner(),
+            switcher,
+            Expanded(
+              child: !wide
+                  ? body
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: body),
+                        if (_selected != null) ...[
+                          const VerticalDivider(width: 1),
+                          SizedBox(
+                            width: 420,
+                            child: TaskDetail(
+                              key: ValueKey(_selected),
+                              project: widget.project,
+                              taskId: _selected!,
+                              onClose: () {
+                                setState(() => _selected = null);
+                                _refreshView();
+                              },
+                              onOpen: (t) => _open(t, true),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
             ),
           ],
-        ),
-      );
-      // Always a Row on a wide screen, so opening or closing the detail keeps
-      // the view (its scroll position, focus and picked rows) where it is.
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          switcher,
-          Expanded(
-            child: !wide
-                ? body
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: body),
-                      if (_selected != null) ...[
-                        const VerticalDivider(width: 1),
-                        SizedBox(
-                          width: 420,
-                          child: TaskDetail(
-                            key: ValueKey(_selected),
-                            project: widget.project,
-                            taskId: _selected!,
-                            onClose: () {
-                              setState(() => _selected = null);
-                              _refreshView();
-                            },
-                            onOpen: (t) => _open(t, true),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-          ),
-        ],
-      );
-    },
-  );
+        );
+      },
+    );
+  }
 }
 
 class _TaskList extends ConsumerStatefulWidget {

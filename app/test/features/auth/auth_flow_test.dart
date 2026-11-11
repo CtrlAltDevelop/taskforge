@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/app.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
@@ -123,6 +124,7 @@ Future<(AuthSession, _FakeApi)> _pump(
     ProviderScope(
       overrides: [
         authSessionProvider.overrideWithValue(session),
+        syncClientProvider.overrideWithValue(null),
         accountClientProvider.overrideWithValue(_FakeAccounts()),
         workspaceClientProvider.overrideWithValue(
           FakeWorkspaceClient([ws('w1', 'Acme')]),

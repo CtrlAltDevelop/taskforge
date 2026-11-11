@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/sync/presentation/live_flash.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -430,7 +431,10 @@ class _TaskTableState extends ConsumerState<TaskTable> {
         ),
       ),
     );
-    return widget.wrapRow?.call(task, row) ?? row;
+    return LiveFlash(
+      taskId: task.id,
+      child: widget.wrapRow?.call(task, row) ?? row,
+    );
   }
 
   /// The title cell is the part of a row that opens the task (a click on the

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:taskforge/app.dart';
 import 'package:taskforge/app_router.dart';
@@ -36,6 +37,7 @@ Future<ProviderContainer> _pumpSignedOut(
   final container = ProviderContainer(
     overrides: [
       authSessionProvider.overrideWithValue(session),
+      syncClientProvider.overrideWithValue(null),
       accountClientProvider.overrideWithValue(FakeAccounts()),
       workspaceClientProvider.overrideWithValue(workspaces),
       membersClientProvider.overrideWithValue(members),

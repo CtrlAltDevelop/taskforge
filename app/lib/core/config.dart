@@ -26,6 +26,9 @@ class AppConfig {
 
   static String get wsUrl => _env('WS_URL', 'ws://$_host:8010/ws/ping/');
 
+  /// The live-sync socket (see `core/sync`).
+  static String get syncUrl => _env('SYNC_WS_URL', 'ws://$_host:8010/ws/sync');
+
   /// Public address of the web app, used to build shareable invite links.
   static String get webUrl =>
       _env('WEB_URL', kIsWeb ? Uri.base.origin : 'http://localhost:5173');
@@ -40,6 +43,7 @@ class AppConfig {
       'GRPC_WEB_URL' => const String.fromEnvironment('GRPC_WEB_URL'),
       'WEB_URL' => const String.fromEnvironment('WEB_URL'),
       'WS_URL' => const String.fromEnvironment('WS_URL'),
+      'SYNC_WS_URL' => const String.fromEnvironment('SYNC_WS_URL'),
       _ => '',
     };
     return value.isEmpty ? fallback : value;

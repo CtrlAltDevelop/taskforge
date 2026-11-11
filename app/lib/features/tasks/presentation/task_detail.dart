@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/features/tasks/presentation/presence_strip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -70,6 +72,7 @@ class TaskDetail extends ConsumerWidget {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
+            PresenceStrip(projectId: project.id, taskId: task.id),
             if (task.isBlocked) BlockedBadge(blockedBy: task.blockedBy),
             if (canDelete)
               IconButton(
@@ -225,6 +228,8 @@ class TaskDetail extends ConsumerWidget {
           enabled: canEdit,
           label: 'Description',
           multiline: true,
+          onFocusChanged: (focused) =>
+              ref.read(presenceReporterProvider).setEditing(focused),
           onSave: (v) {
             if (v == docToMarkdown(task.description)) return;
             saveTask(
@@ -235,6 +240,7 @@ class TaskDetail extends ConsumerWidget {
             );
           },
         ),
+        EditingHint(taskId: task.id),
         const SizedBox(height: 16),
         TaskFieldsPanel(
           projectId: project.id,
@@ -465,6 +471,7 @@ class _TextField extends StatefulWidget {
     this.maxLength,
     this.multiline = false,
     this.allowEmpty = true,
+    this.onFocusChanged,
   });
 
   final Key fieldKey;
@@ -477,6 +484,9 @@ class _TextField extends StatefulWidget {
   /// False for a required field: blanking it puts the old value back.
   final bool allowEmpty;
   final void Function(String) onSave;
+
+  /// Told when the field gains or loses focus (someone typing in it).
+  final void Function(bool focused)? onFocusChanged;
 
   @override
   State<_TextField> createState() => _TextFieldState();
@@ -502,6 +512,7 @@ class _TextFieldState extends State<_TextField> {
   void initState() {
     super.initState();
     _focus.addListener(() {
+      widget.onFocusChanged?.call(_focus.hasFocus);
       if (!_focus.hasFocus) _commit(_controller.text);
     });
   }

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -62,6 +63,7 @@ Future<Pumped> pumpProjects(
   FakeTimelineClient? timeline,
   FakeFiltersClient? filters,
   Day? today,
+  Override? sync,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -74,6 +76,7 @@ Future<Pumped> pumpProjects(
     FakeWorkspaceClient([for (final id in workspaces) ws(id, 'WS $id')]),
     roles: FakeRolesClient(callerRole: (_) => role),
     projects: fake,
+    sync: sync,
     overrides: [
       membersClientProvider.overrideWithValue(team()),
       viewsClientProvider.overrideWithValue(views ?? FakeViewsClient()),
