@@ -71,7 +71,7 @@ def _listed(row: ChangeLog, actor: Any, workspace: Workspace, visible: set[Any])
     access change aimed at somebody else."""
     if row.project is not None:
         return row.project in visible
-    if row.entity_type == "notification":
+    if row.entity_type in ("notification", "timer"):
         return str(row.entity_id) == str(actor.pk)  # only ever about the person themselves
     if row.entity_type == "access":
         return str(row.entity_id) in (str(actor.pk), str(workspace.pk))

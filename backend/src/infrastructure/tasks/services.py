@@ -46,6 +46,7 @@ SCALAR_FIELDS: Final[dict[str, Callable[[str], Any]]] = {
     "start_date": fields.clean_date,
     "due_date": fields.clean_date,
     "due_time": fields.clean_time,
+    "estimate_sec": fields.clean_estimate,
 }
 EDITABLE: Final = (*SCALAR_FIELDS, "status", "assignee_ids")
 

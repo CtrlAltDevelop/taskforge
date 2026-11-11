@@ -36,7 +36,15 @@ def _granted(role: Role) -> set[str]:
 
 def test_registry_keys_are_unique_and_grouped_by_area() -> None:
     assert len(ALL_KEYS) == len(PERMISSIONS)
-    assert [a for a, _ in areas()] == ["workspace", "member", "role", "project", "task", "comment"]
+    assert [a for a, _ in areas()] == [
+        "workspace",
+        "member",
+        "role",
+        "project",
+        "task",
+        "comment",
+        "time",
+    ]
     assert all(k in ALL_KEYS for grants in BUILTIN_GRANTS.values() for k in grants)
 
 

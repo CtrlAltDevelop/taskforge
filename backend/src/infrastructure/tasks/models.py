@@ -36,6 +36,7 @@ class Task(models.Model):
     # Optional time of day the task is due, in UTC; the due *date* is never shifted by it (a due
     # date of 5 Nov is 5 Nov everywhere), only the clock time is shown in the viewer's zone.
     due_time = models.TimeField(null=True, blank=True)
+    estimate_sec = models.PositiveIntegerField(null=True, blank=True)  # phase 21; None = none
     created_by = models.ForeignKey(
         django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
     )

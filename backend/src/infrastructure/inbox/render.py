@@ -42,4 +42,6 @@ def render(row: Any, actor_name: str) -> tuple[str, str]:
             return f"{who} moved a task{more}", f"{task}: {moved}"
         case kinds.DUE_SOON:
             return "A task is due soon", f"{task} is due {clean(payload.get('due_date', ''))}"
+        case kinds.TIMER_LONG:
+            return "Your timer is still running", f"{task}: {payload.get('hours', 0)} h so far"
     return "Notification", task

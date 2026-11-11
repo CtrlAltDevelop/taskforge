@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package config.timetracking;
+
+service TimeController {
+    rpc CreateEntry(EntryCreateRequest) returns (Entry) {}
+    rpc Current(TimeCurrentRequest) returns (TimerState) {}
+    rpc DeleteEntry(EntryDeleteRequest) returns (EntryDeleted) {}
+    rpc Entries(EntriesRequest) returns (EntryList) {}
+    rpc SetEstimate(EstimateSetRequest) returns (EstimateSet) {}
+    rpc Start(TimeStartRequest) returns (TimerStarted) {}
+    rpc Stop(TimeStopRequest) returns (TimerStopped) {}
+    rpc Summary(TimeSummaryRequest) returns (TimeSummary) {}
+    rpc Timesheet(TimesheetRequest) returns (TimesheetAnswer) {}
+    rpc Totals(TotalsRequest) returns (TotalsAnswer) {}
+    rpc UpdateEntry(EntryUpdateRequest) returns (Entry) {}
+}
+
+message EntriesRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message Entry {
+    string id = 1;
+    string workspace_id = 2;
+    string task_id = 3;
+    string project_id = 4;
+    string key = 5;
+    string title = 6;
+    string user_id = 7;
+    string user_name = 8;
+    string started_at = 9;
+    string ended_at = 10;
+    int32 duration_sec = 11;
+    string note = 12;
+    bool billable = 13;
+    string source = 14;
+    repeated string flags = 15;
+}
+
+message EntryCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string started_at = 4;
+    int32 duration_sec = 5;
+    string note = 6;
+    bool billable = 7;
+    string for_user_id = 8;
+}
+
+message EntryDeleteRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message EntryDeleted {
+    bool ok = 1;
+}
+
+message EntryList {
+    repeated Entry entries = 1;
+}
+
+message EntryUpdateRequest {
+    string workspace_id = 1;
+    string id = 2;
+    repeated string fields = 3;
+    string started_at = 4;
+    int32 duration_sec = 5;
+    string note = 6;
+    bool billable = 7;
+}
+
+message EstimateSet {
+    int32 estimate_sec = 1;
+}
+
+message EstimateSetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    int32 estimate_sec = 4;
+    int32 expected_version = 5;
+}
+
+message PersonTotal {
+    string user_id = 1;
+    string name = 2;
+    int32 seconds = 3;
+    int32 billable = 4;
+}
+
+message SheetRow {
+    string task_id = 1;
+    string project_id = 2;
+    string key = 3;
+    string title = 4;
+    repeated int32 seconds = 5;
+    int32 total = 6;
+    int32 billable = 7;
+}
+
+message TimeCurrentRequest {
+    string workspace_id = 1;
+}
+
+message TimeStartRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string note = 4;
+}
+
+message TimeStopRequest {
+    string workspace_id = 1;
+}
+
+message TimeSummary {
+    int32 estimate_sec = 1;
+    int32 logged_sec = 2;
+    int32 billable_sec = 3;
+    bool running = 4;
+}
+
+message TimeSummaryRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message TimerStarted {
+    Entry entry = 1;
+    Entry stopped = 2;
+    string server_now = 3;
+}
+
+message TimerState {
+    bool running = 1;
+    Entry entry = 2;
+    string server_now = 3;
+}
+
+message TimerStopped {
+    Entry entry = 1;
+    string server_now = 2;
+}
+
+message TimesheetAnswer {
+    string user_id = 1;
+    string week_start = 2;
+    repeated SheetRow rows = 3;
+    repeated int32 day_totals = 4;
+    int32 total = 5;
+}
+
+message TimesheetRequest {
+    string workspace_id = 1;
+    string week_start = 2;
+    string timezone = 3;
+    string user_id = 4;
+    int32 utc_offset_minutes = 5;
+}
+
+message TotalsAnswer {
+    repeated PersonTotal people = 1;
+}
+
+message TotalsRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string start = 3;
+    string end = 4;
+}
+

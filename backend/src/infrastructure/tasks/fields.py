@@ -99,3 +99,19 @@ def clean_description(value: str) -> dict[str, Any]:
     for child in children:
         _check_node(child, 1)
     return document
+
+
+ESTIMATE_MAX: Final = 100 * 24 * 3600
+
+
+def clean_estimate(value: str) -> int | None:
+    """Seconds as a whole number, or empty for no estimate."""
+    if not value:
+        return None
+    try:
+        seconds = int(value)
+    except ValueError:
+        raise ApiError("The estimate must be a whole number of seconds.") from None
+    if not 0 < seconds <= ESTIMATE_MAX:
+        raise ApiError("The estimate must be between a second and 100 days.")
+    return seconds

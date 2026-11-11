@@ -27,7 +27,7 @@ from infrastructure.sync import publish
 logger = logging.getLogger(__name__)
 
 # A person who may assign (bulk, thirty tasks at once) must be heard; it is mentions that can flood.
-NEVER_FLOODED = frozenset({kinds.ASSIGNED, kinds.DUE_SOON})
+NEVER_FLOODED = frozenset({kinds.ASSIGNED, kinds.DUE_SOON, kinds.TIMER_LONG})
 
 
 def _announce(user_id: Any, workspace_id: Any, action: str) -> None:

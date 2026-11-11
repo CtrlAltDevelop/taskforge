@@ -46,6 +46,8 @@ from infrastructure.tasks import links as task_links
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
 from infrastructure.tasks.grpc import tasks_pb2_grpc as tstubs
+from infrastructure.timetracking.grpc import timetracking_pb2 as mpb
+from infrastructure.timetracking.grpc import timetracking_pb2_grpc as mstubs
 from infrastructure.workflows import services as workflow_services
 from infrastructure.workflows.grpc import workflows_pb2 as wpb
 from infrastructure.workflows.grpc import workflows_pb2_grpc as wstubs
@@ -792,15 +794,89 @@ ENDPOINTS += (
 
 AT = astubs.AttachmentControllerStub
 SE = qstubs.SearchControllerStub
+TI = mstubs.TimeControllerStub
 IN = istubs.InboxControllerStub
 WA = istubs.WatcherControllerStub
 
 
-def _task_ref(w: World) -> dict[str, str]:
+def _time_on(w: World) -> None:
+    _make_two_tasks(w)
+    current = project_services.get(w.workspace.created_by, w.workspace, w.project_id).project
+    project_services.set_features(
+        w.workspace.created_by, w.workspace, w.project_id, {"time_tracking"}, current.version
+    )
+
+
+def _task_ref(w: World) -> dict[str, Any]:
     return {"workspace_id": w.ws, "project_id": w.project_id, "task_id": w.task_id}
 
 
 ENDPOINTS += (
+    Endpoint(
+        "TimeController.Current",
+        "workspace.view",
+        _grpc(TI, "Current", lambda w: mpb.TimeCurrentRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "TimeController.Timesheet",
+        "workspace.view",
+        _grpc(
+            TI,
+            "Timesheet",
+            lambda w: mpb.TimesheetRequest(workspace_id=w.ws, week_start="2026-11-02"),
+        ),
+    ),
+    Endpoint(
+        "TimeController.Start",
+        "time.log",
+        _grpc(TI, "Start", lambda w: mpb.TimeStartRequest(**_task_ref(w))),
+        _time_on,
+    ),
+    Endpoint(
+        "TimeController.CreateEntry",
+        "time.log",
+        _grpc(
+            TI,
+            "CreateEntry",
+            lambda w: mpb.EntryCreateRequest(
+                **_task_ref(w), started_at="2026-11-02T09:00:00+00:00", duration_sec=60
+            ),
+        ),
+        _time_on,
+    ),
+    Endpoint(
+        "TimeController.Entries",
+        "workspace.view",
+        _grpc(TI, "Entries", lambda w: mpb.EntriesRequest(**_task_ref(w))),
+        _time_on,
+    ),
+    Endpoint(
+        "TimeController.Summary",
+        "workspace.view",
+        _grpc(TI, "Summary", lambda w: mpb.TimeSummaryRequest(**_task_ref(w))),
+        _time_on,
+    ),
+    Endpoint(
+        "TimeController.SetEstimate",
+        "task.update",
+        _grpc(TI, "SetEstimate", lambda w: mpb.EstimateSetRequest(**_task_ref(w), estimate_sec=60)),
+        _time_on,
+    ),
+    Endpoint(
+        "TimeController.Totals",
+        "workspace.view",
+        _grpc(
+            TI,
+            "Totals",
+            lambda w: mpb.TotalsRequest(
+                workspace_id=w.ws,
+                project_id=w.project_id,
+                start="2026-11-01T00:00:00+00:00",
+                end="2026-11-08T00:00:00+00:00",
+            ),
+        ),
+        _time_on,
+    ),
     Endpoint(
         "SearchController.Query",
         "workspace.view",
@@ -1161,6 +1237,9 @@ EXEMPT = {
     "POST /uploads/{upload_id}/complete": "the uploader only (service tests)",
     "DELETE /uploads/{upload_id}": "the uploader only (service tests)",
     "GET /files/{attachment_id}/raw": "the signed, short-lived token is the capability",
+    "TimeController.Stop": "your own timer: ownership, not the matrix (time tests)",
+    "TimeController.UpdateEntry": "your own entry, or time.edit_others (time tests)",
+    "TimeController.DeleteEntry": "your own entry, or time.edit_others (time tests)",
     "InboxController.Snooze": "your own notification: ownership, not the matrix (inbox tests)",
     "GET /inbox/unsubscribe": "the signed token in the email is the capability",
     "POST /inbox/unsubscribe": "the signed token in the email is the capability",

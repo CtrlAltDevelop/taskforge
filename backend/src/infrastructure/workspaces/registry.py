@@ -51,6 +51,8 @@ PERMISSIONS: Final = (
     Permission("task.attachment_manage", "Delete anyone's attachments"),
     Permission("comment.create", "Write comments and react to them"),
     Permission("comment.moderate", "Delete anyone's comments and pin them"),
+    Permission("time.log", "Track time and log your own time entries"),
+    Permission("time.edit_others", "See and edit other people's time entries and timesheets"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -64,6 +66,7 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
         "member.invite",
         "project.create",
         "comment.create",
+        "time.log",
         *TASK_KEYS,
     },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,

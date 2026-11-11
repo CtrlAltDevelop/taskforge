@@ -1047,6 +1047,7 @@ INSTALLED_APPS = [
     "infrastructure.sync.apps.SyncConfig",
     "infrastructure.comments.apps.CommentsConfig",
     "infrastructure.search.apps.SearchConfig",
+    "infrastructure.timetracking.apps.TimeTrackingConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1272,3 +1273,6 @@ INBOX_FLOOD_LIMIT = int(os.getenv("DJANGO_INBOX_FLOOD_LIMIT", "20"))
 # run on PostgreSQL before it is cancelled.
 SEARCH_RATE_PER_MINUTE = int(os.getenv("DJANGO_SEARCH_RATE_PER_MINUTE", "120"))
 SEARCH_TIMEOUT_MS = int(os.getenv("DJANGO_SEARCH_TIMEOUT_MS", "2000"))
+
+# Phase 21: a timer running longer than this many hours reminds its owner (once, via the inbox).
+TIME_LONG_TIMER_HOURS = int(os.getenv("DJANGO_TIME_LONG_TIMER_HOURS", "8"))

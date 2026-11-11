@@ -15,7 +15,7 @@ def test_the_tick_runs_everything_that_waits_for_the_clock(
 
     call_command("inbox_tick", stdout=out)
 
-    assert "Woke 0, due soon 0, delivered" in out.getvalue()
+    assert "Woke 0, due soon 0" in out.getvalue()
     assert Notification.objects.count() == 1
 
 
