@@ -64,7 +64,8 @@ env-based settings, JWT auth (password/email-code/magic-link, TOTP and other
 second factors, Google/Apple/Microsoft/GitHub OIDC), a notifications app with a
 socket, an Unfold admin, CI, and a response-envelope convention. Per phase:
 00 adopts it; 01 enables its `accounts` + `auth_password` + token mode instead of
-rewriting auth; 19 builds on its `notifications` app; 37 enables its
+rewriting auth; 19 builds its own `inbox` app (the starter's notification tables have no workspace, task or
+per-person preferences) on its broker and the phase-16 socket; 37 enables its
 `auth_twofactor` and `oauth_*` apps. Read its `docs/` before writing any
 backend code, and keep apps that TaskForge does not need (shop, wallet, club,
 cms, support) switched off. TaskForge's own apps live under `infrastructure/`
@@ -107,6 +108,7 @@ Run (three terminals, from the repo root):
 | `make serve` | Django REST + WebSocket (uvicorn, development settings) | 8010 |
 | `make grpc` | gRPC server | 50051 |
 | `make web` | Flutter web dev server in Chrome | 5173 |
+| `make tick` | The notifications' clock: snoozes ending, tasks due soon, pushes/emails held for quiet hours or digests, retries. Run it every minute from cron (no Celery yet) | |
 | `make purge` | Remove expired uploads and old change-log entries. Nothing schedules it yet (no Celery): run it daily from cron | |
 | `make migrate` | Apply pending migrations to the dev database. Run it after pulling or finishing a phase, or the app errors on missing tables | |
 

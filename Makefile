@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate purge web proto proto-lint check test
+.PHONY: setup dev down run serve grpc migrate purge tick web proto proto-lint check test
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -56,6 +56,11 @@ purge:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_uploads
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py trim_changelog
 
+# The notifications' clock (no Celery yet): snoozes ending, tasks due soon, pushes and emails held for
+# quiet hours or digests, retries. Run it every minute from cron.
+tick:
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py inbox_tick
+
 grpc:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py grpcrunaioserver
 
@@ -73,6 +78,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/sync/grpc/sync.proto \
 	infrastructure/comments/grpc/comments.proto \
 	infrastructure/attachments/grpc/attachments.proto \
+	infrastructure/inbox/grpc/inbox.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos
