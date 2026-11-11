@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/features/comments/presentation/comments_section.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/tasks/presentation/presence_strip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -275,6 +276,15 @@ class TaskDetail extends ConsumerWidget {
                 .firstOrNull;
             if (other != null) onOpen?.call(other);
           },
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        CommentsSection(
+          key: ValueKey('comments-${task.id}'),
+          projectId: project.id,
+          taskId: task.id,
+          archived: project.isArchived,
+          isPrivate: project.isPrivate,
         ),
       ],
     );

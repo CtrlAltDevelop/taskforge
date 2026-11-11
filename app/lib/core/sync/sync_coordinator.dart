@@ -11,6 +11,7 @@ import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
@@ -36,6 +37,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     presenceProvider,
   ); // listening from the start, so no frame is missed
   final pending = <String>{}; // project ids to read again
+  final commentTasks = <TaskRef>{}; // tasks whose comments to read again
   var everything = false;
   Timer? timer;
 
@@ -50,6 +52,12 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     final all = everything;
     pending.clear();
     everything = false;
+    for (final task in commentTasks) {
+      if (ref.exists(commentsProvider(task))) {
+        unawaited(ref.read(commentsProvider(task).notifier).refresh());
+      }
+    }
+    commentTasks.clear();
     for (final project in projects) {
       _readAgain(ref, project);
     }
@@ -84,6 +92,12 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       if (ref.exists(taskLinksProvider(event.entityId))) {
         ref.invalidate(taskLinksProvider(event.entityId));
       }
+    }
+    if (event.type.startsWith('comment.')) {
+      // The entity of a comment event is its task.
+      commentTasks.add((project: event.project, task: event.entityId));
+      soon();
+      return;
     }
     if (event.type.startsWith('project.')) ref.invalidate(projectsProvider);
     if (event.type == 'workflow.updated') {

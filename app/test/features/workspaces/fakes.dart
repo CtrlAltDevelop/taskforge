@@ -30,7 +30,7 @@ class MockAuthApi extends Mock implements AuthApi {
 class FakeAccounts implements AccountClient {
   @override
   Future<Account> me() async =>
-      const Account(email: 'zoe@example.com', displayName: 'Zoe');
+      const Account(id: 'u1', email: 'zoe@example.com', displayName: 'Zoe');
 
   @override
   Future<List<SessionInfo>> sessions() async => const [];

@@ -10,8 +10,10 @@ import 'package:taskforge/gen/infrastructure/oauth/rotation/grpc/oauth_rotation.
 
 @immutable
 class Account {
-  const Account({required this.email, required this.displayName});
+  const Account({required this.email, required this.displayName, this.id = ''});
 
+  /// The account's id (what the server calls this person in comments, members...).
+  final String id;
   final String email;
   final String displayName;
 }
@@ -77,6 +79,7 @@ class GrpcAccountClient implements AccountClient {
       () => _accounts.me(Empty(), options: _auth),
     );
     return Account(
+      id: account.id,
       email: account.email,
       displayName: account.profile.displayName,
     );

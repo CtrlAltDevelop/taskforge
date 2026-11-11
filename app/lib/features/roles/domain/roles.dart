@@ -19,6 +19,8 @@ abstract final class Perm {
   static const taskCreate = 'task.create';
   static const taskUpdate = 'task.update';
   static const taskDelete = 'task.delete';
+  static const commentCreate = 'comment.create';
+  static const commentModerate = 'comment.moderate';
 
   static const all = [
     workspaceView,
@@ -38,6 +40,8 @@ abstract final class Perm {
     taskCreate,
     taskUpdate,
     taskDelete,
+    commentCreate,
+    commentModerate,
   ];
 }
 

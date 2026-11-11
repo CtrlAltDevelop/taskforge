@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
@@ -27,6 +28,7 @@ import '../views/fakes.dart';
 import '../board/fakes.dart';
 import '../filters/fakes.dart';
 import '../calendar/fakes.dart';
+import '../comments/fakes.dart';
 import '../timeline/fakes.dart';
 
 export '../workspaces/fakes.dart' show byKey;
@@ -61,6 +63,7 @@ Future<Pumped> pumpProjects(
   FakeBoardClient? board,
   FakeCalendarClient? calendar,
   FakeTimelineClient? timeline,
+  FakeCommentsClient? comments,
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
@@ -84,6 +87,9 @@ Future<Pumped> pumpProjects(
       filtersClientProvider.overrideWithValue(filters ?? FakeFiltersClient()),
       calendarClientProvider.overrideWithValue(
         calendar ?? FakeCalendarClient(tasks ?? FakeTasksClient()),
+      ),
+      commentsClientProvider.overrideWithValue(
+        comments ?? FakeCommentsClient(),
       ),
       timelineClientProvider.overrideWithValue(
         timeline ?? FakeTimelineClient(tasks ?? FakeTasksClient()),

@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/sync/sync_client.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
+import 'package:taskforge/features/comments/domain/comment_text.dart';
+import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
 import '../../core/sync/fakes.dart';
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
+import '../comments/fakes.dart';
 import '../tasks/fakes.dart';
 
 typedef Live = ({
@@ -17,6 +20,7 @@ typedef Live = ({
   FakeTasksClient tasks,
   FakeConnector connector,
   ManualTimers timers,
+  FakeCommentsClient comments,
 });
 
 Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
@@ -26,10 +30,12 @@ Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
   ]);
   final connector = FakeConnector();
   final timers = ManualTimers();
+  final comments = FakeCommentsClient();
   final pumped = await pumpProjects(
     tester,
     projects: [project('p1', 'Web')],
     tasks: server,
+    comments: comments,
     sync: syncClientProvider.overrideWith((ref) {
       final client = SyncClient(
         connector: connector,
@@ -45,7 +51,13 @@ Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
     }),
   );
   await pumped.go(tester, '/projects/p1');
-  return (pumped: pumped, tasks: server, connector: connector, timers: timers);
+  return (
+    pumped: pumped,
+    tasks: server,
+    connector: connector,
+    timers: timers,
+    comments: comments,
+  );
 }
 
 /// The tag the server says marks this client's own changes.
@@ -332,5 +344,45 @@ void main() {
 
     expect(find.byKey(const Key('viewer-u2')), findsNothing);
     expect(find.byKey(const Key('editing-hint')), findsNothing);
+  });
+
+  liveTest('a comment somebody else wrote appears in the open task', (
+    tester,
+  ) async {
+    final live = await _open(tester);
+    final c = await _connect(tester, live);
+    await tester.tap(find.text('Alpha'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('no-comments')), findsOneWidget);
+
+    live.comments.comments.add(
+      Comment(
+        id: 'c9',
+        taskId: 'a',
+        authorId: 'u2',
+        body: bodyFromComposer('from the other side', const []),
+        createdAt: DateTime.now(),
+      ),
+    );
+    c.say({
+      'type': 'event',
+      'room': 'proj:p1',
+      'event': {
+        'type': 'comment.created',
+        'workspace': 'w1',
+        'project': 'p1',
+        'entity_id': 'a', // the task the comments belong to
+        'version': 1,
+        'actor': 'u2',
+        'origin': 'someone-else',
+        'cursor': 40,
+      },
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('comment-c9')), findsOneWidget);
+    expect(find.byKey(const Key('no-comments')), findsNothing);
   });
 }

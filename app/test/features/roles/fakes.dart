@@ -23,6 +23,8 @@ final _builtinGrants = <String, Set<String>>{
     Perm.taskCreate,
     Perm.taskUpdate,
     Perm.taskDelete,
+    Perm.commentCreate,
+    Perm.commentModerate,
   },
   'Member': {
     Perm.workspaceView,
@@ -33,6 +35,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.taskCreate,
     Perm.taskUpdate,
     Perm.taskDelete,
+    Perm.commentCreate,
   },
   'Viewer': {Perm.workspaceView, Perm.memberView, Perm.roleView},
 };
@@ -64,6 +67,10 @@ const registry = [
     PermissionInfo(Perm.taskCreate, 'Create tasks'),
     PermissionInfo(Perm.taskUpdate, 'Edit tasks'),
     PermissionInfo(Perm.taskDelete, 'Delete tasks'),
+  ]),
+  PermissionArea('Comments', [
+    PermissionInfo(Perm.commentCreate, 'Write comments'),
+    PermissionInfo(Perm.commentModerate, 'Moderate comments'),
   ]),
 ];
 
