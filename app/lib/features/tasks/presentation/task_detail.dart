@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
 import 'package:taskforge/features/comments/presentation/comments_section.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/tasks/presentation/presence_strip.dart';
@@ -276,6 +277,14 @@ class TaskDetail extends ConsumerWidget {
                 .firstOrNull;
             if (other != null) onOpen?.call(other);
           },
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        AttachmentsSection(
+          key: ValueKey('attachments-${task.id}'),
+          projectId: project.id,
+          taskId: task.id,
+          archived: project.isArchived,
         ),
         const SizedBox(height: 16),
         const Divider(),

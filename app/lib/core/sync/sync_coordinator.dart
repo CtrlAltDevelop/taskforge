@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
@@ -38,6 +39,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
   ); // listening from the start, so no frame is missed
   final pending = <String>{}; // project ids to read again
   final commentTasks = <TaskRef>{}; // tasks whose comments to read again
+  final fileTasks = <TaskRef>{}; // tasks whose attachments to read again
   var everything = false;
   Timer? timer;
 
@@ -58,6 +60,13 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       }
     }
     commentTasks.clear();
+    for (final task in fileTasks) {
+      if (ref.exists(attachmentsProvider(task))) {
+        unawaited(ref.read(attachmentsProvider(task).notifier).refresh());
+      }
+    }
+    if (fileTasks.isNotEmpty) ref.invalidate(storageUsageProvider);
+    fileTasks.clear();
     for (final project in projects) {
       _readAgain(ref, project);
     }
@@ -92,6 +101,12 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       if (ref.exists(taskLinksProvider(event.entityId))) {
         ref.invalidate(taskLinksProvider(event.entityId));
       }
+    }
+    if (event.type.startsWith('attachment.')) {
+      // The entity of an attachment event is its task.
+      fileTasks.add((project: event.project, task: event.entityId));
+      soon();
+      return;
     }
     if (event.type.startsWith('comment.')) {
       // The entity of a comment event is its task.
@@ -151,8 +166,11 @@ void _access(Ref ref) {
 }
 
 /// What a gap (the change log no longer reaches back far enough) asks for
-/// besides the open views: the catalogues.
+/// besides the open views: the catalogues and the open lists of files.
 void _everythingElse(Ref ref) {
   ref.invalidate(projectsProvider);
   ref.invalidate(membersProvider);
+  // Every open list of files reads again, and what the workspace uses.
+  ref.read(attachmentsResyncProvider.notifier).bump();
+  ref.invalidate(storageUsageProvider);
 }

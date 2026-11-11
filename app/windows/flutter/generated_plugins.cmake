@@ -4,7 +4,11 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
+  desktop_drop
+  file_selector_windows
   flutter_secure_storage_windows
+  pasteboard
+  url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

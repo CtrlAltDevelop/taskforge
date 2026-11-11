@@ -43,7 +43,8 @@ class SyncEvent {
 
   /// `task.created`, `task.updated`, `task.deleted`, `project.created`,
   /// `project.updated`, `comment.created|updated|deleted` (the entity is the
-  /// task the comments belong to), `workflow.updated`, `fields.updated`,
+  /// task the comments belong to), `attachment.added|deleted` (likewise the
+  /// task), `workflow.updated`, `fields.updated`,
   /// `access.changed`, or `sync.gap` (made here: what was missed is gone, read
   /// the screens again).
   final String type;

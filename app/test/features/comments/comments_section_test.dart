@@ -60,6 +60,7 @@ Future<Opened> open(
     tasks: server,
     workflows: FakeWorkflowsClient(defaultWorkflow()),
     comments: fake,
+    size: const Size(1400, 2000), // the files section sits above the comments
   );
   await pumped.go(tester, '/projects/p1');
   await tester.tap(find.text('Fix login'));

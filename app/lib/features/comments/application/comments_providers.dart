@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/features/account/account_providers.dart';
+import 'package:taskforge/features/attachments/application/attachments_providers.dart';
+import 'package:taskforge/features/attachments/domain/attachments.dart'
+    show UploadSource;
 import 'package:taskforge/features/comments/data/comments_client.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
@@ -78,7 +81,11 @@ class CommentsNotifier extends Notifier<CommentsState> {
   String? lastFailedId;
 
   /// What a failed or sending comment was meant to be, to send again.
-  final _pending = <String, ({String body, String parentId, bool grant})>{};
+  final _pending =
+      <
+        String,
+        ({String body, String parentId, bool grant, List<UploadSource> files})
+      >{};
 
   CommentsClient get _client => ref.read(commentsClientProvider);
 
@@ -171,14 +178,22 @@ class CommentsNotifier extends Notifier<CommentsState> {
 
   /// Sends a comment (or a reply to [parentId]). It shows at once; the
   /// returned future ends when the server has answered, throwing the
-  /// [CommentException] a failed send leaves on the comment too.
+  /// [CommentException] a failed send leaves on the comment too. [files] are
+  /// uploaded to the comment once it exists (the comment comes first, so a
+  /// failed upload never loses it; the upload shows its own retry).
   Future<void> send(
     String body, {
     String parentId = '',
     bool grantAccess = false,
+    List<UploadSource> files = const [],
   }) async {
     final localId = 'local-${++_localCounter}';
-    _pending[localId] = (body: body, parentId: parentId, grant: grantAccess);
+    _pending[localId] = (
+      body: body,
+      parentId: parentId,
+      grant: grantAccess,
+      files: List.unmodifiable(files),
+    );
     final draft = Comment(
       id: localId,
       taskId: ref0.task,
@@ -232,12 +247,27 @@ class CommentsNotifier extends Notifier<CommentsState> {
             if (c.id != localId) c else if (!have) saved,
         ],
       );
+      if (job.files.isNotEmpty) await _attach(saved.id, job.files);
     } on CommentException {
       lastFailedId = localId;
       if (ref.mounted) {
         _swap(localId, (c) => c.copyWith(sendState: SendState.failed));
       }
       rethrow;
+    }
+  }
+
+  /// Uploads [files] to the comment [commentId]. The task's file list keeps
+  /// the notifier alive from here on (it holds itself alive while any upload
+  /// runs), so this only has to make sure it exists until it has taken them.
+  Future<void> _attach(String commentId, List<UploadSource> files) async {
+    final hold = ref.listen(attachmentsProvider(ref0), (_, _) {});
+    try {
+      await ref
+          .read(attachmentsProvider(ref0).notifier)
+          .add(files, commentId: commentId);
+    } finally {
+      hold.close();
     }
   }
 

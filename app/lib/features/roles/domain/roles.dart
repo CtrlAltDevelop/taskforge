@@ -19,6 +19,7 @@ abstract final class Perm {
   static const taskCreate = 'task.create';
   static const taskUpdate = 'task.update';
   static const taskDelete = 'task.delete';
+  static const taskAttachmentManage = 'task.attachment_manage';
   static const commentCreate = 'comment.create';
   static const commentModerate = 'comment.moderate';
 
@@ -40,6 +41,7 @@ abstract final class Perm {
     taskCreate,
     taskUpdate,
     taskDelete,
+    taskAttachmentManage,
     commentCreate,
     commentModerate,
   ];

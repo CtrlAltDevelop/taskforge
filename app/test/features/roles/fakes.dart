@@ -23,6 +23,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.taskCreate,
     Perm.taskUpdate,
     Perm.taskDelete,
+    Perm.taskAttachmentManage,
     Perm.commentCreate,
     Perm.commentModerate,
   },
@@ -67,6 +68,7 @@ const registry = [
     PermissionInfo(Perm.taskCreate, 'Create tasks'),
     PermissionInfo(Perm.taskUpdate, 'Edit tasks'),
     PermissionInfo(Perm.taskDelete, 'Delete tasks'),
+    PermissionInfo(Perm.taskAttachmentManage, "Delete anyone's attachments"),
   ]),
   PermissionArea('Comments', [
     PermissionInfo(Perm.commentCreate, 'Write comments'),

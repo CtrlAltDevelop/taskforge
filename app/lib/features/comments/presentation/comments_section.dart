@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/attachments/domain/attachments.dart'
+    show UploadSource;
+import 'package:taskforge/features/attachments/presentation/comment_attachments.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
@@ -81,16 +84,20 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
 
   /// Sends and says what went wrong. A mention of somebody who cannot see the
   /// task is the one failure with a way forward: add them (if allowed).
-  Future<void> _send(String body, {String parentId = ''}) async {
+  Future<void> _send(
+    String body, {
+    String parentId = '',
+    List<UploadSource> files = const [],
+  }) async {
     try {
-      await _notifier.send(body, parentId: parentId);
+      await _notifier.send(body, parentId: parentId, files: files);
       if (mounted && parentId.isNotEmpty) setState(() => _replyingTo = null);
     } on CommentException catch (e) {
       if (e.failure == CommentFailure.mentionNoAccess) {
         final failed = _notifier.lastFailedId;
         if (failed != null) _notifier.discard(failed);
         // Posted after all (they were added): the composer is done with it.
-        if (await _offerGrant(body, parentId, e.people)) return;
+        if (await _offerGrant(body, parentId, e.people, files)) return;
       } else {
         _say(commentErrorMessage(e));
       }
@@ -103,6 +110,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
     String body,
     String parentId,
     List<String> people,
+    List<UploadSource> files,
   ) async {
     // The server decides who may add people; the client only knows it is a
     // private project, so it offers and shows the answer.
@@ -115,7 +123,12 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
     );
     if (grant != true || !mounted) return false;
     try {
-      await _notifier.send(body, parentId: parentId, grantAccess: true);
+      await _notifier.send(
+        body,
+        parentId: parentId,
+        grantAccess: true,
+        files: files,
+      );
       if (mounted && parentId.isNotEmpty) setState(() => _replyingTo = null);
       return true;
     } on CommentException catch (e) {
@@ -199,6 +212,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       canPin: canPin && !c.deleted && !c.isLocal,
       canSubtask: canSubtask && !c.deleted && !c.isLocal,
       editing: _editing == c.id,
+      archived: widget.archived,
       task: _ref,
       onAction: (a) => _act(a, c),
       onReact: (e) => _guard(() => _notifier.react(c, e)),
@@ -296,7 +310,9 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                 hint: 'Reply…',
                 sendLabel: 'Reply',
                 onCancel: () => setState(() => _replyingTo = null),
-                onSend: (body, _) => _send(body, parentId: c.id),
+                allowFiles: !widget.archived,
+                onSend: (body, _, files) =>
+                    _send(body, parentId: c.id, files: files),
               ),
             ),
         ],
@@ -305,7 +321,8 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           CommentComposer(
             key: const Key('main-composer'),
             task: _ref,
-            onSend: (body, _) => _send(body),
+            allowFiles: true,
+            onSend: (body, _, files) => _send(body, files: files),
           )
         else
           Text(
@@ -343,6 +360,7 @@ class _CommentTile extends StatelessWidget {
     required this.canPin,
     required this.canSubtask,
     required this.editing,
+    required this.archived,
     required this.task,
     required this.onAction,
     required this.onReact,
@@ -364,6 +382,7 @@ class _CommentTile extends StatelessWidget {
   final bool canPin;
   final bool canSubtask;
   final bool editing;
+  final bool archived;
   final TaskRef task;
   final void Function(_Action) onAction;
   final void Function(String emoji) onReact;
@@ -460,10 +479,16 @@ class _CommentTile extends StatelessWidget {
                 sendLabel: 'Save',
                 autofocus: true,
                 onCancel: onCancelEdit,
-                onSend: onSaveEdit,
+                onSend: (body, picks, _) => onSaveEdit(body, picks),
               )
             else
               _BodyView(c.body),
+            if (c.sendState == SendState.sent)
+              CommentAttachments(
+                task: task,
+                commentId: c.id,
+                archived: archived,
+              ),
             if (c.sendState == SendState.sending)
               Text(
                 'Sending…',

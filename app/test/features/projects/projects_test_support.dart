@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
@@ -28,6 +29,7 @@ import '../views/fakes.dart';
 import '../board/fakes.dart';
 import '../filters/fakes.dart';
 import '../calendar/fakes.dart';
+import '../attachments/fakes.dart';
 import '../comments/fakes.dart';
 import '../timeline/fakes.dart';
 
@@ -64,9 +66,11 @@ Future<Pumped> pumpProjects(
   FakeCalendarClient? calendar,
   FakeTimelineClient? timeline,
   FakeCommentsClient? comments,
+  FakeAttachments? attachments,
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
+  List<Override> overrides = const [],
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -74,6 +78,7 @@ Future<Pumped> pumpProjects(
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   final fake = server ?? FakeProjectsClient(projects);
+  final files = attachments ?? FakeAttachments();
   final container = await pumpSignedIn(
     tester,
     FakeWorkspaceClient([for (final id in workspaces) ws(id, 'WS $id')]),
@@ -91,6 +96,8 @@ Future<Pumped> pumpProjects(
       commentsClientProvider.overrideWithValue(
         comments ?? FakeCommentsClient(),
       ),
+      attachmentsClientProvider.overrideWithValue(files),
+      uploadsClientProvider.overrideWithValue(files),
       timelineClientProvider.overrideWithValue(
         timeline ?? FakeTimelineClient(tasks ?? FakeTasksClient()),
       ),
@@ -100,6 +107,7 @@ Future<Pumped> pumpProjects(
         workflows ?? FakeWorkflowsClient(),
       ),
       fieldsClientProvider.overrideWithValue(fields ?? FakeFieldsClient()),
+      ...overrides,
     ],
   );
   return Pumped(container, fake);

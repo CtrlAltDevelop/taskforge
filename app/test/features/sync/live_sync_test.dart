@@ -12,6 +12,7 @@ import 'package:taskforge/features/tasks/domain/tasks.dart';
 import '../../core/sync/fakes.dart';
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
+import '../attachments/fakes.dart';
 import '../comments/fakes.dart';
 import '../tasks/fakes.dart';
 
@@ -21,6 +22,7 @@ typedef Live = ({
   FakeConnector connector,
   ManualTimers timers,
   FakeCommentsClient comments,
+  FakeAttachments attachments,
 });
 
 Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
@@ -31,11 +33,13 @@ Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
   final connector = FakeConnector();
   final timers = ManualTimers();
   final comments = FakeCommentsClient();
+  final attachments = FakeAttachments();
   final pumped = await pumpProjects(
     tester,
     projects: [project('p1', 'Web')],
     tasks: server,
     comments: comments,
+    attachments: attachments,
     sync: syncClientProvider.overrideWith((ref) {
       final client = SyncClient(
         connector: connector,
@@ -57,6 +61,7 @@ Future<Live> _open(WidgetTester tester, {CatchUp? caughtUp}) async {
     connector: connector,
     timers: timers,
     comments: comments,
+    attachments: attachments,
   );
 }
 
@@ -384,5 +389,59 @@ void main() {
 
     expect(find.byKey(const Key('comment-c9')), findsOneWidget);
     expect(find.byKey(const Key('no-comments')), findsNothing);
+  });
+
+  liveTest('a file somebody else added appears in the open task', (
+    tester,
+  ) async {
+    final live = await _open(tester);
+    final c = await _connect(tester, live);
+    await tester.tap(find.text('Alpha'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('attachment-f9')), findsNothing);
+
+    live.attachments.files.add(attachment('f9', 'spec.pdf', uploader: 'u2'));
+    c.say({
+      'type': 'event',
+      'room': 'proj:p1',
+      'event': {
+        'type': 'attachment.added',
+        'workspace': 'w1',
+        'project': 'p1',
+        'entity_id': 'a', // the task the files belong to
+        'version': 1,
+        'actor': 'u2',
+        'origin': 'someone-else',
+        'cursor': 41,
+      },
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('attachment-f9')), findsOneWidget);
+  });
+
+  liveTest('after a gap the open task reads its files again', (tester) async {
+    final live = await _open(
+      tester,
+      caughtUp: const CatchUp(gap: true, head: 500),
+    );
+    final first = await _connect(tester, live);
+    await tester.tap(find.text('Alpha'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('attachment-f8')), findsNothing);
+
+    live.attachments.files.add(attachment('f8', 'while-away.pdf'));
+    await first.drop();
+    await tester.pump();
+    live.timers.pending
+        .firstWhere((t) => t.delay < const Duration(seconds: 2))
+        .fire();
+    await _connect(tester, live);
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('attachment-f8')), findsOneWidget);
   });
 }

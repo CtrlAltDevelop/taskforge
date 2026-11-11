@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/attachments/domain/attachments.dart';
+import 'package:taskforge/features/attachments/presentation/attach_buttons.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
@@ -19,9 +21,18 @@ import 'package:taskforge/features/comments/domain/comments.dart';
   return (start: at, query: query);
 }
 
+/// What a composer hands over: the document (JSON), the people mentioned and
+/// the files chosen to go with it.
+typedef ComposerSend = Future<void> Function(
+  String body,
+  List<MentionPick> picks,
+  List<UploadSource> files,
+);
+
 /// Where comments are written: a box that grows, `@` opens a list of people
-/// who can see the task, Ctrl/Cmd + Enter sends. [onSend] gets the document
-/// (JSON) and the people mentioned; it may throw (the box keeps the text).
+/// who can see the task, Ctrl/Cmd + Enter sends, and (with [allowFiles])
+/// files can be attached and show as chips until they are sent. [onSend] may
+/// throw (the box keeps the text and the files).
 class CommentComposer extends ConsumerStatefulWidget {
   const CommentComposer({
     super.key,
@@ -33,16 +44,20 @@ class CommentComposer extends ConsumerStatefulWidget {
     this.sendLabel = 'Comment',
     this.onCancel,
     this.autofocus = false,
+    this.allowFiles = false,
   });
 
   final TaskRef task;
-  final Future<void> Function(String body, List<MentionPick> picks) onSend;
+  final ComposerSend onSend;
   final String initialText;
   final List<MentionPick> initialPicks;
   final String hint;
   final String sendLabel;
   final VoidCallback? onCancel;
   final bool autofocus;
+
+  /// Whether files can be attached (a new comment or reply; not an edit).
+  final bool allowFiles;
 
   @override
   ConsumerState<CommentComposer> createState() => _CommentComposerState();
@@ -53,6 +68,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
   final _focus = FocusNode();
   late final _picks = [...widget.initialPicks];
   var _sending = false;
+  final _files = <UploadSource>[];
   ({int start, String query})? _open;
 
   @override
@@ -168,10 +184,11 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
       await widget.onSend(body, [
         for (final p in _picks)
           if (text.contains(p.token)) p,
-      ]);
+      ], List.unmodifiable(_files));
       if (!mounted) return;
       _controller.clear();
       _picks.clear();
+      setState(_files.clear);
     } on Object {
       // The owner of onSend says what went wrong; the text stays for another go.
     } finally {
@@ -243,6 +260,30 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
             ),
           ),
         ),
+        if (_files.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Wrap(
+              key: const Key('chosen-files'),
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (var i = 0; i < _files.length; i++)
+                  InputChip(
+                    key: Key('chosen-file-$i'),
+                    avatar: const Icon(Icons.attach_file, size: 16),
+                    label: Text(
+                      _files[i].name,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    deleteButtonTooltipMessage: 'Remove ${_files[i].name}',
+                    onDeleted: _sending
+                        ? null
+                        : () => setState(() => _files.removeAt(i)),
+                  ),
+              ],
+            ),
+          ),
         const SizedBox(height: 6),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -250,7 +291,25 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: _toolbar(),
+                child: Row(
+                  children: [
+                    _toolbar(),
+                    if (widget.allowFiles)
+                      AttachButtons(
+                        keyPrefix: 'comment-attach',
+                        labelled: false,
+                        onPicked: (sources) async =>
+                            setState(() => _files.addAll(sources)),
+                        onError: () => ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                              content: Text('Could not read that file.'),
+                            ),
+                          ),
+                      ),
+                  ],
+                ),
               ),
             ),
             if (widget.onCancel != null)
