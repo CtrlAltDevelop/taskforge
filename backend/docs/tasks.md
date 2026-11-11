@@ -40,6 +40,7 @@ The record an override leaves: who completed a blocked task anyway, and the open
 | `start_date` | Date | nullable |
 | `due_date` | Date | nullable |
 | `due_time` | Time | nullable |
+| `estimate_sec` | PositiveInteger | nullable |
 | `created_by` | ForeignKey | → `accounts.User` |
 | `version` | PositiveInteger |  |
 | `field_versions` | JSON |  |

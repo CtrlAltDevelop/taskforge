@@ -1,6 +1,6 @@
 # Phase 21 — Time Tracking
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Track time on tasks with a **start/stop timer** and manual entries, plus estimates and timesheets.
@@ -44,3 +44,32 @@ Concurrency of Start (DB constraint), timezone week boundaries, totals, permissi
 
 ## Depends on
 Phases 05, 06.
+
+## Contract (as built)
+New backend app `infrastructure.timetracking` (gRPC package `config.timetracking`, stubs in `app/lib/gen/infrastructure/timetracking/grpc/`). Full description: `backend/docs/timetracking.md`.
+
+| RPC | Request | Answer |
+|---|---|---|
+| `TimeController.Start` | `workspace_id`, `project_id`, `task_id`, `note` | `TimerStarted{entry, stopped, server_now}`: `stopped` is the caller's timer it replaced |
+| `TimeController.Stop` / `Current` | `workspace_id` | `TimerStopped{entry}` / `TimerState{running, entry, server_now}` |
+| `TimeController.CreateEntry` | task, `started_at` (ISO with offset), `duration_sec`, `note`, `billable`, `for_user_id` | `Entry` |
+| `TimeController.UpdateEntry` | `id`, `fields[]` (what to change), the new values | `Entry` |
+| `TimeController.DeleteEntry` | `id` | `{ok}` |
+| `TimeController.Entries` / `Summary` | task | everyone's `Entry[]` on it / `TimeSummary{estimate_sec, logged_sec, billable_sec, running}` |
+| `TimeController.SetEstimate` | task, `estimate_sec` (0 clears), `expected_version` (0 = whatever is there; else a stale one is refused 409) | `{estimate_sec}` |
+| `TimeController.Timesheet` | `week_start`, `timezone` (IANA) or `utc_offset_minutes` (when the device cannot name its zone), `user_id` | `TimesheetAnswer{rows[7 days each], day_totals, total}` |
+| `TimeController.Totals` | `project_id`, `start`, `end` | `TotalsAnswer{people[]}` |
+
+Permissions: `time.log` (Owner, Admin, Member) and `time.edit_others` (Owner, Admin) are new registry keys. Live: `timer.changed` on the person's own `user:<id>` room (no content; the app reads again).
+
+Built differently from the plan:
+- **Estimate** is `Task.estimate_sec`, set through `SetEstimate` (which calls `tasks.update`), not through the task RPCs.
+- **Timesheet** takes a `week_start` date and a time zone (or a UTC offset) rather than a week number, so the app decides what a week is (it uses Monday). The app sends the device's offset on that Monday, so a week that contains a daylight-saving change clips the days after the change by an hour off; naming the zone needs a plugin the app does not have.
+- **Archived projects** take no new time (`projects.writable`) but keep and show the old; deleting a task stops its running timers; starting a timer in another workspace stops the first one and tells both workspaces' devices.
+- **Feature switch** is enforced on the server (start, log, read), not only hidden in the app.
+- **Idle reminder** is an inbox notification (`timer.long`) sent by `inbox_tick` after `TIME_LONG_TIMER_HOURS` (8).
+- **App:** a timer chip (floating, on every screen with the sidebar), a Time section in the task detail, a Timesheet screen (week grid, cell dialog to edit, person picker with `time.edit_others`, project totals), and on mobile a persistent ongoing notification (`flutter_local_notifications`) while the timer runs.
+- **Timer chip** is a floating chip on every screen that has the sidebar (not in the app bar); login and the debug screen have none.
+- **Timesheet "inline edit"** is a dialog opened from a cell (that task's entries for the day: change, delete, add), not editing inside the cell.
+- **Not built:** the desktop menu-bar/tray indicator (needs a native tray plugin that could not be verified here).
+- **Not verified here:** parallel Start on PostgreSQL (the database rule and the retry loop are tested on SQLite only), a real device (the ongoing notification), and a real browser.
