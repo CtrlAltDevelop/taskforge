@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,6 +64,28 @@ Future<void> typeIn(WidgetTester tester, String k, String text) async {
 }
 
 void main() {
+  testWidgets('words typed while a quiet reload runs are kept', (tester) async {
+    final docs = workspace();
+    final pumped = await open(tester, docs);
+
+    docs.holdGet = Completer<void>();
+    pumped.container.read(docSessionProvider('a').notifier).remoteSaved(5);
+    await tester.pump();
+    await typeIn(tester, 'field-p1', 'typed meanwhile');
+    docs.holdGet!.complete();
+    await tester.pump();
+    docs.holdGet = null;
+    await tester.pump();
+
+    expect(find.text('typed meanwhile'), findsOneWidget);
+    expect(
+      pumped.container.read(docSessionProvider('a')).blocks[1].plain,
+      'typed meanwhile',
+    );
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pump();
+  });
+
   testWidgets('the tree shows nested pages and opens one', (tester) async {
     await open(tester, workspace(), location: '/docs');
 

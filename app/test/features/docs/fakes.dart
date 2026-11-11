@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:taskforge/features/docs/data/docs_client.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
@@ -43,6 +45,9 @@ DocBlock taskCard(String id, String taskId) => DocBlock({
 
 /// An in-memory docs server. Pages are listed in tree order.
 class FakeDocsClient implements DocsClient {
+  /// While set, `get` waits for it before answering.
+  Completer<void>? holdGet;
+
   FakeDocsClient({
     List<DocNode> nodes = const [],
     Map<String, List<DocBlock>> bodies = const {},
@@ -166,7 +171,10 @@ class FakeDocsClient implements DocsClient {
   Future<DocPage> get(String workspaceId, String docId) async {
     calls.add('get:$docId');
     _maybeFail();
-    return _page(docId);
+    final page = _page(docId);
+    final gate = holdGet;
+    if (gate != null) await gate.future;
+    return page;
   }
 
   @override

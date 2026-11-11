@@ -207,10 +207,17 @@ class DocSession extends Notifier<DocEditState> {
   /// Reads the page. [quiet] keeps what is on screen while it loads.
   Future<void> load({bool quiet = false}) async {
     final gen = ++_generation;
+    final editsBefore = _edits;
     if (!quiet) state = const DocEditState();
     try {
       final page = await _client.get(_ws, docId);
       if (gen != _generation) return;
+      if (quiet && _edits != editsBefore) {
+        // Words were typed while the page was being read: keep them, and let the
+        // next save meet the newer version as a conflict.
+        state = state.copyWith(remoteChanged: true);
+        return;
+      }
       state = DocEditState(
         loading: false,
         page: page,
