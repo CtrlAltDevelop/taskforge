@@ -13,6 +13,7 @@ if "DJANGO_DB_ENGINE" not in os.environ:
 # The starter's own reuse tests replay a token immediately; the grace window has its own tests.
 os.environ.setdefault("DJANGO_AUTH_REFRESH_REUSE_GRACE_SECONDS", "0")
 os.environ.setdefault("DJANGO_WORKSPACE_EMAIL_ASYNC", "false")
+os.environ.setdefault("DJANGO_INBOX_SYNC_DELIVERY", "1")  # no background threads in tests
 os.environ.setdefault("DJANGO_WORKSPACE_EMAIL_BACKOFF_SECONDS", "0")
 os.environ.setdefault("DJANGO_OAUTH_MODE", "all")
 os.environ.setdefault("DJANGO_AUTH_TOKEN_MODE", "rotation")

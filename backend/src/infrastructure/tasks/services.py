@@ -29,7 +29,7 @@ from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project, ProjectMember, Visibility
 from infrastructure.tasks import fields, links, listing, tree
 from infrastructure.tasks.models import Task, TaskAssignee
-from infrastructure.tasks.signals import announce
+from infrastructure.tasks.signals import announce, announce_activity
 from infrastructure.workflows import services as workflows
 from infrastructure.workflows.models import Category, Status
 from infrastructure.workspaces import access
@@ -282,6 +282,9 @@ def create(
         custom.save(task, custom_changes)
         tree.refresh_above(task)
         announce(task, "created")
+        announce_activity(task, "created", actor)
+        if users:
+            announce_activity(task, "assigned", actor, user_ids=[str(u.pk) for u in users])
     return _reload(task, actor, workspace)
 
 
@@ -345,6 +348,8 @@ def update(
             if seen.get(name, 1) > expected_version:
                 raise _conflict(task, name)
         users = cleaned.pop("assignee_ids", None)
+        was_assigned = {str(i) for i in task.assignee_ids()}
+        was_status = task.status
         if "status" in cleaned:
             workflows.check_move(
                 actor,
@@ -374,7 +379,22 @@ def update(
         if "status" in cleaned:
             tree.refresh_above(task)
         announce(task, "updated")
+        _announce_changes(task, actor, was_assigned, users, was_status)
     return _reload(task, actor, workspace)
+
+
+def _announce_changes(
+    task: Task, actor: Any, was_assigned: set[str], users: list[Any] | None, was_status: Status
+) -> None:
+    """Tell the notifications who was newly assigned and whether the status moved."""
+    if users is not None:
+        added = [str(u.pk) for u in users if str(u.pk) not in was_assigned]
+        if added:
+            announce_activity(task, "assigned", actor, user_ids=added)
+    if task.status_id != was_status.pk:
+        announce_activity(
+            task, "status_changed", actor, from_name=was_status.name, to_name=task.status.name
+        )
 
 
 def move(
@@ -429,6 +449,7 @@ def _move_open_subtasks(
 ) -> None:
     now = timezone.now()
     moved: list[Task] = []
+    was: dict[Any, str] = {}
     rows = (
         tree.descendants(task)
         .exclude(status__category__in=tree.FINAL)  # finished ones (done, cancelled) are left alone
@@ -442,6 +463,7 @@ def _move_open_subtasks(
             actor, workspace, project, sub.status, target, assignee_count=sub.assignees.count()
         )
         links.check_unblocked(actor, workspace, project, sub, target, override_blocked)
+        was[sub.pk] = sub.status.name
         sub.status = target
         sub.version += 1
         sub.field_versions = {**sub.field_versions, "status": sub.version}
@@ -452,6 +474,7 @@ def _move_open_subtasks(
     Task.objects.bulk_update(moved, ["status", "version", "field_versions", "updated_at"])
     for sub in moved:
         announce(sub, "updated")
+        announce_activity(sub, "status_changed", actor, from_name=was[sub.pk], to_name=target.name)
     with_children = tree.descendants(task).filter(progress_total__gt=0)
     tree.refresh_progress(
         [task.pk, *tree.ancestor_ids(task), *with_children.values_list("pk", flat=True)]

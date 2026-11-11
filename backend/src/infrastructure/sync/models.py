@@ -58,6 +58,8 @@ def event_type(entity_type: str, action: str) -> str:
     ``workflow.updated``, ``fields.updated`` and ``access.changed``."""
     if entity_type == "access":
         return "access.changed"
+    if entity_type == "notification":
+        return f"notification.{action}"  # notification.new | notification.changed (entity: you)
     if entity_type == "attachment":
         return f"attachment.{action}"  # attachment.added | attachment.deleted
     if entity_type in ("task", "comment") and action in ("created", "deleted"):

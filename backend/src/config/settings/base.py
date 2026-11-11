@@ -1244,3 +1244,25 @@ ATTACHMENT_ALLOW_EXECUTABLES = os.getenv("DJANGO_ATTACHMENT_ALLOW_EXECUTABLES", 
 ATTACHMENT_CLAMAV_ADDRESS = os.getenv("DJANGO_ATTACHMENT_CLAMAV_ADDRESS", "")
 # How many uploads one person may have open (started, not completed) in a workspace.
 ATTACHMENT_MAX_OPEN_UPLOADS = int(os.getenv("DJANGO_ATTACHMENT_MAX_OPEN_UPLOADS", "10"))
+
+# Phase 19: notifications. A push provider is a dotted path (see infrastructure.inbox.push).
+INBOX_PUSH_PROVIDER = os.getenv(
+    "DJANGO_INBOX_PUSH_PROVIDER", "infrastructure.inbox.push.LoggingPush"
+)
+INBOX_FCM_PROJECT_ID = os.getenv("DJANGO_INBOX_FCM_PROJECT_ID", "")
+INBOX_FCM_CREDENTIALS_FILE = os.getenv("DJANGO_INBOX_FCM_CREDENTIALS_FILE", "")
+# Events of one kind on one task within this many seconds fold into one notification.
+INBOX_COALESCE_SECONDS = int(os.getenv("DJANGO_INBOX_COALESCE_SECONDS", "60"))
+# Deliver a push or email in the request's thread (tests); otherwise on a small background pool.
+INBOX_SYNC_DELIVERY = os.getenv("DJANGO_INBOX_SYNC_DELIVERY", "") == "1"
+# The link in an email that turns that kind off; ``{token}`` is replaced.
+INBOX_UNSUBSCRIBE_URL = os.getenv(
+    "DJANGO_INBOX_UNSUBSCRIBE_URL", "http://localhost:8010/api/v1/inbox/unsubscribe?token={token}"
+)
+# How soon before its due date (in days) a task counts as due soon.
+INBOX_DUE_SOON_DAYS = int(os.getenv("DJANGO_INBOX_DUE_SOON_DAYS", "1"))
+# An unsubscribe link in an email works for this many days.
+INBOX_UNSUBSCRIBE_DAYS = int(os.getenv("DJANGO_INBOX_UNSUBSCRIBE_DAYS", "180"))
+# At most this many notifications of one kind from one person to another within ten minutes (a flood
+# of mentions or assignments is dropped past it).
+INBOX_FLOOD_LIMIT = int(os.getenv("DJANGO_INBOX_FLOOD_LIMIT", "20"))

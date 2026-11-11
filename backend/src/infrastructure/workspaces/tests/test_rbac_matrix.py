@@ -29,6 +29,8 @@ from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
 from infrastructure.filters import services as filter_services
 from infrastructure.filters.grpc import filters_pb2 as flpb
 from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
+from infrastructure.inbox.grpc import inbox_pb2 as ipb
+from infrastructure.inbox.grpc import inbox_pb2_grpc as istubs
 from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
@@ -787,6 +789,58 @@ ENDPOINTS += (
 )
 
 AT = astubs.AttachmentControllerStub
+IN = istubs.InboxControllerStub
+WA = istubs.WatcherControllerStub
+
+
+def _task_ref(w: World) -> dict[str, str]:
+    return {"workspace_id": w.ws, "project_id": w.project_id, "task_id": w.task_id}
+
+
+ENDPOINTS += (
+    Endpoint(
+        "InboxController.List",
+        "workspace.view",
+        _grpc(IN, "List", lambda w: ipb.InboxListRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "InboxController.MarkRead",
+        "workspace.view",
+        _grpc(
+            IN, "MarkRead", lambda w: ipb.MarkReadRequest(workspace_id=w.ws, all=True, read=True)
+        ),
+    ),
+    Endpoint(
+        "InboxController.UnreadCount",
+        "workspace.view",
+        _grpc(IN, "UnreadCount", lambda w: ipb.UnreadCountRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "InboxController.Archive",
+        "workspace.view",
+        _grpc(
+            IN, "Archive", lambda w: ipb.ArchiveRequest(workspace_id=w.ws, ids=[], archived=True)
+        ),
+    ),
+    Endpoint(
+        "WatcherController.Get",
+        "workspace.view",
+        _grpc(WA, "Get", lambda w: ipb.WatchGetRequest(**_task_ref(w))),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "WatcherController.Add",
+        "workspace.view",
+        _grpc(WA, "Add", lambda w: ipb.WatchAddRequest(**_task_ref(w))),
+        _make_two_tasks,
+    ),
+    Endpoint(
+        "WatcherController.Remove",
+        "workspace.view",
+        _grpc(WA, "Remove", lambda w: ipb.WatchRemoveRequest(**_task_ref(w))),
+        _make_two_tasks,
+    ),
+)
 
 
 def _make_attachment(w: World) -> None:
@@ -1089,6 +1143,9 @@ EXEMPT = {
     "POST /uploads/{upload_id}/complete": "the uploader only (service tests)",
     "DELETE /uploads/{upload_id}": "the uploader only (service tests)",
     "GET /files/{attachment_id}/raw": "the signed, short-lived token is the capability",
+    "InboxController.Snooze": "your own notification: ownership, not the matrix (inbox tests)",
+    "GET /inbox/unsubscribe": "the signed token in the email is the capability",
+    "POST /inbox/unsubscribe": "the signed token in the email is the capability",
     "WorkspaceController.List": "account-level: the caller's own workspaces",
     "WorkspaceController.Create": "account-level: anyone signed in may start a workspace",
     "MemberController.Leave": "self-service (last-owner protection still applies)",
@@ -1103,6 +1160,7 @@ EXEMPT = {
 ACCOUNT_LEVEL_MODULES = frozenset(
     {
         "infrastructure.accounts.grpc.services",
+        "infrastructure.inbox.grpc.account_services",
         "infrastructure.accounts.rest.api",
         "infrastructure.auth.email_code.grpc.services",
         "infrastructure.auth.email_code.rest.login",

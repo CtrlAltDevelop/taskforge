@@ -35,6 +35,13 @@
         "router": "infrastructure.attachments.rest.files.router",
         "tag": "Files",
         "description": "Read an attachment: ask for a short-lived signed link, then fetch the bytes with it. Listing and deleting are gRPC."
+      },
+      {
+        "app_config": "infrastructure.inbox.apps.InboxConfig",
+        "prefix": "/inbox",
+        "router": "infrastructure.inbox.rest.api.router",
+        "tag": "Inbox",
+        "description": "Unsubscribe from a kind of notification email with the signed link in the email. The inbox itself is gRPC."
       }
     ]
   }

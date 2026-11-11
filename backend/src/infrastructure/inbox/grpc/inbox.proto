@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package config.inbox;
+
+service DeviceController {
+    rpc Register(DeviceRegisterRequest) returns (DeviceAnswer) {}
+    rpc Unregister(DeviceUnregisterRequest) returns (DeviceAnswer) {}
+}
+
+service InboxController {
+    rpc Archive(ArchiveRequest) returns (UnreadTotal) {}
+    rpc List(InboxListRequest) returns (InboxPage) {}
+    rpc MarkRead(MarkReadRequest) returns (UnreadTotal) {}
+    rpc Snooze(SnoozeRequest) returns (Notification) {}
+    rpc UnreadCount(UnreadCountRequest) returns (UnreadTotal) {}
+}
+
+service PrefController {
+    rpc Get(PrefsGetRequest) returns (PrefsAnswer) {}
+    rpc Set(PrefSetRequest) returns (PrefsAnswer) {}
+    rpc SetSettings(SettingsSetRequest) returns (PrefsAnswer) {}
+}
+
+service WatcherController {
+    rpc Add(WatchAddRequest) returns (WatchState) {}
+    rpc Get(WatchGetRequest) returns (WatchState) {}
+    rpc Remove(WatchRemoveRequest) returns (WatchState) {}
+}
+
+message ArchiveRequest {
+    string workspace_id = 1;
+    repeated string ids = 2;
+    bool archived = 3;
+}
+
+message DeviceAnswer {
+    bool registered = 1;
+}
+
+message DeviceRegisterRequest {
+    string platform = 1;
+    string token = 2;
+}
+
+message DeviceUnregisterRequest {
+    string token = 1;
+}
+
+message InboxListRequest {
+    string workspace_id = 1;
+    string filter = 2;
+    string before = 3;
+    int32 page_size = 4;
+}
+
+message InboxPage {
+    repeated Notification notifications = 1;
+    string cursor = 2;
+    int32 unread_count = 3;
+}
+
+message InboxSettings {
+    string timezone = 1;
+    string quiet_start = 2;
+    string quiet_end = 3;
+    int32 digest_hour = 4;
+}
+
+message MarkReadRequest {
+    string workspace_id = 1;
+    repeated string ids = 2;
+    bool all = 3;
+    bool read = 4;
+}
+
+message Notification {
+    string id = 1;
+    string workspace_id = 2;
+    string type = 3;
+    string task_id = 4;
+    string project_id = 5;
+    string actor_id = 6;
+    string actor_name = 7;
+    string payload = 8;
+    int32 count = 9;
+    string created_at = 10;
+    string updated_at = 11;
+    string read_at = 12;
+    string snoozed_until = 13;
+    string archived_at = 14;
+}
+
+message PrefRow {
+    string event_type = 1;
+    string label = 2;
+    bool inbox = 3;
+    bool push = 4;
+    string email_mode = 5;
+}
+
+message PrefSetRequest {
+    string event_type = 1;
+    bool inbox = 2;
+    bool push = 3;
+    string email_mode = 4;
+}
+
+message PrefsAnswer {
+    repeated PrefRow prefs = 1;
+    InboxSettings settings = 2;
+}
+
+message PrefsGetRequest {
+}
+
+message SettingsSetRequest {
+    string timezone = 1;
+    string quiet_start = 2;
+    string quiet_end = 3;
+    int32 digest_hour = 4;
+}
+
+message SnoozeRequest {
+    string workspace_id = 1;
+    string id = 2;
+    string until = 3;
+}
+
+message UnreadCountRequest {
+    string workspace_id = 1;
+}
+
+message UnreadTotal {
+    int32 count = 1;
+}
+
+message WatchAddRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message WatchGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message WatchRemoveRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message WatchState {
+    bool watching = 1;
+    int32 watcher_count = 2;
+}
+

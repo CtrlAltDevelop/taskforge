@@ -10,6 +10,11 @@ if SECRET_KEY == "unsafe-development-key":  # noqa: F405
 if not ALLOWED_HOSTS:  # noqa: F405
     raise ImproperlyConfigured("DJANGO_ALLOWED_HOSTS must be set in production")
 
+if INBOX_UNSUBSCRIBE_URL.startswith("http://localhost"):  # noqa: F405
+    raise ImproperlyConfigured(
+        "DJANGO_INBOX_UNSUBSCRIBE_URL must be set in production (the link in notification emails)"
+    )
+
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "true").lower() == "true"

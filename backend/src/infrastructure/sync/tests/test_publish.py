@@ -201,7 +201,9 @@ def test_a_comment_is_announced_as_a_change_to_its_tasks_comments(
     comments.delete(team.member, team.ws, str(project.pk), str(made.pk))
 
     types = [
-        (e["type"], e["entity_id"]) for e in {e["cursor"]: e for e in broker.events()}.values()
+        (e["type"], e["entity_id"])
+        for e in {e["cursor"]: e for e in broker.events()}.values()
+        if e["type"].startswith("comment.")  # (the watchers' notifications are the inbox's own)
     ]
     assert types == [
         ("comment.created", str(task.pk)),
