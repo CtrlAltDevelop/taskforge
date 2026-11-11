@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate web proto proto-lint check test
+.PHONY: setup dev down run serve grpc migrate purge web proto proto-lint check test
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -50,6 +50,12 @@ web:
 migrate:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py migrate
 
+# The two clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
+# entries. Put it in cron or a scheduled job, daily.
+purge:
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_uploads
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py trim_changelog
+
 grpc:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py grpcrunaioserver
 
@@ -66,6 +72,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/filters/grpc/filters.proto \
 	infrastructure/sync/grpc/sync.proto \
 	infrastructure/comments/grpc/comments.proto \
+	infrastructure/attachments/grpc/attachments.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos
