@@ -1,6 +1,6 @@
 # Phase 20 — Global Search
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 One search box that finds **tasks, comments, projects, people and docs** quickly, respecting permissions.
@@ -43,3 +43,23 @@ Ranking fixtures, permission matrix, id-jump, RTL text queries, EXPLAIN uses ind
 
 ## Depends on
 Phases 05, 06, 17.
+
+## Contract (as built)
+New backend app `infrastructure.search` (gRPC package `config.search`, stubs in `app/lib/gen/infrastructure/search/grpc/`). Full description: `backend/docs/search.md`.
+
+| RPC | Request | Answer |
+|---|---|---|
+| `SearchController.Query` | `workspace_id`, `text`, `types[]` (task, comment, project, member; none = all), `cursor`, `page_size` (default 8, max 50) | `SearchResults{tasks, comments, projects, members, jump, next_cursor}`; each `Hit` carries `title_marks`/`snippet_marks` (UTF-16 spans) |
+| `SearchController.Remember` | `workspace_id`, `text` | `{ok}`: keeps a recent search (call when a result is opened) |
+| `SearchController.Recent` | `workspace_id` | `{queries[]}`, newest first, at most 20 |
+
+Built differently from the plan:
+- **Filters are operators in the text** (`in:KEY`, `assignee:me`, `status:open|done|closed|<name>`), not a separate `filters` field; the filter chips add and remove them. With an operator, people and projects are left out.
+- **One index table for tasks and comments** (`SearchEntry`, folded text, kept current by the task/comment change signals; `manage.py reindex` for bulk) instead of generated columns on each model: task descriptions are JSON rich text, so the text has to be extracted in Python. The PostgreSQL `search_vector` (generated column, GIN) and the title trigram index sit on that table. Projects and people are scanned with `icontains` (small tables); people need `member.view`.
+- **Persian/Arabic:** the `simple` config plus a one-character-for-one-character fold (Arabic yeh/kaf, digits).
+- **Cursor** is an offset, the same for every group; ask again with one type to page that group.
+- **Request cancellation:** the app waits 200 ms after typing stops and drops any answer a newer question has overtaken; the in-flight gRPC call itself is not cancelled.
+- **Rate limit:** `SEARCH_RATE_PER_MINUTE` (120) per person, counted in Django's cache (per process unless the cache is Redis).
+- **Hotkeys:** `/` (not while typing in a field) and Ctrl/Cmd+K; a Search row in the sidebar. Phase 25's command palette can reuse the overlay.
+- **Not verified here:** no PostgreSQL was available, so typo tolerance, index use (`tests/test_postgres.py`, skipped on SQLite) and the p95 < 150 ms target on 200k tasks were reasoned, not measured. On SQLite search is substring-only. Run `DJANGO_DB_ENGINE=django.db.backends.postgresql` before relying on them.
+- Docs search joins the index in phase 23.
