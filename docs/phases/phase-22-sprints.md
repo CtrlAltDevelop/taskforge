@@ -1,6 +1,6 @@
 # Phase 22 — Sprints
 
-**Status:** TODO
+**Status:** DONE (implemented on `develop`; PostgreSQL and a real browser/device not run)
 
 ## Feature
 Agile **sprints** for a project: backlog, sprint planning, start/complete, carry-over and a burndown chart.
