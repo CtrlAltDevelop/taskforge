@@ -81,6 +81,14 @@ class ProjectSidebar extends ConsumerWidget {
           title: const Text('Inbox'),
           onTap: () => _go(context, '/inbox'),
         ),
+        ListTile(
+          key: const Key('open-timesheet'),
+          dense: true,
+          selected: current.startsWith('/timesheet'),
+          leading: const Icon(Icons.schedule),
+          title: const Text('Timesheet'),
+          onTap: () => _go(context, '/timesheet'),
+        ),
         const Divider(height: 1),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),

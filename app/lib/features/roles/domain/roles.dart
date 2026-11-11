@@ -22,6 +22,8 @@ abstract final class Perm {
   static const taskAttachmentManage = 'task.attachment_manage';
   static const commentCreate = 'comment.create';
   static const commentModerate = 'comment.moderate';
+  static const timeLog = 'time.log';
+  static const timeEditOthers = 'time.edit_others';
 
   static const all = [
     workspaceView,
@@ -44,6 +46,8 @@ abstract final class Perm {
     taskAttachmentManage,
     commentCreate,
     commentModerate,
+    timeLog,
+    timeEditOthers,
   ];
 }
 

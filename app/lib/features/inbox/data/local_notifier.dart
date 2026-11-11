@@ -17,6 +17,19 @@ abstract class LocalNotifier {
     required String body,
     String payload = '',
   });
+
+  /// A notification that stays while something runs (the timer), with the
+  /// system's own clock counting from [since] where the platform has one.
+  Future<void> showOngoing({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime since,
+    String payload = '',
+  });
+
+  /// Takes the notification [id] away.
+  Future<void> cancel(int id);
 }
 
 /// The platform's notifications through `flutter_local_notifications`. Every
@@ -117,6 +130,55 @@ class SystemLocalNotifier extends LocalNotifier {
       );
     } on Object {
       // No notifications on this platform: nothing to show.
+    }
+  }
+
+  @override
+  Future<void> showOngoing({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime since,
+    String payload = '',
+  }) async {
+    if (kIsWeb) return;
+    try {
+      await _init();
+      await _plugin.show(
+        id: id,
+        title: title,
+        body: body,
+        payload: payload,
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            'taskforge-timer',
+            'Timer',
+            channelDescription: 'The time tracking timer while it runs',
+            ongoing: true,
+            autoCancel: false,
+            onlyAlertOnce: true,
+            usesChronometer: true,
+            when: since.millisecondsSinceEpoch,
+            showWhen: true,
+          ),
+          iOS: const DarwinNotificationDetails(presentSound: false),
+          macOS: const DarwinNotificationDetails(presentSound: false),
+          linux: const LinuxNotificationDetails(),
+        ),
+      );
+    } on Object {
+      // No notifications on this platform: nothing to show.
+    }
+  }
+
+  @override
+  Future<void> cancel(int id) async {
+    if (kIsWeb) return;
+    try {
+      await _init();
+      await _plugin.cancel(id: id);
+    } on Object {
+      // Nothing to take away.
     }
   }
 }

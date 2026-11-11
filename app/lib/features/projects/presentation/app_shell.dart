@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:taskforge/features/projects/presentation/project_sidebar.dart';
 import 'package:taskforge/features/search/presentation/search_hotkeys.dart';
+import 'package:taskforge/features/time/presentation/timer_chip.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
 const sidebarWidth = 280.0;
@@ -24,6 +25,7 @@ class ShellScaffold extends StatelessWidget {
     if (wide) {
       return Scaffold(
         appBar: appBar,
+        floatingActionButton: const TimerChip(),
         body: Row(
           children: [
             const SizedBox(width: sidebarWidth, child: ProjectSidebar()),
@@ -35,6 +37,7 @@ class ShellScaffold extends StatelessWidget {
     }
     return Scaffold(
       appBar: appBar,
+      floatingActionButton: const TimerChip(),
       drawer: Drawer(
         child: SafeArea(
           child: Builder(

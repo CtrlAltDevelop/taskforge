@@ -10,6 +10,7 @@ enum NotificationKind {
   commented('comment.added', 'Comments', Icons.chat_bubble_outline),
   statusChanged('status.changed', 'Status changes', Icons.swap_horiz),
   dueSoon('task.due_soon', 'Due soon', Icons.schedule),
+  timerLong('timer.long', 'Long timers', Icons.timer_outlined),
   unknown('', 'Notification', Icons.notifications_none);
 
   const NotificationKind(this.wire, this.label, this.icon);
@@ -104,6 +105,7 @@ class InboxNotification {
           ? '$who changed the status of'
           : '$who moved from $from to $to',
     NotificationKind.dueSoon => 'Due soon:',
+    NotificationKind.timerLong => 'Your timer is still running on',
     NotificationKind.unknown => 'New activity on',
   };
 

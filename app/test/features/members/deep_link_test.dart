@@ -1,6 +1,8 @@
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
+import 'package:taskforge/features/time/application/time_providers.dart';
 
 import '../inbox/fakes.dart';
+import '../time/fakes.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,6 +48,7 @@ Future<ProviderContainer> _pumpSignedOut(
       workspaceClientProvider.overrideWithValue(workspaces),
       membersClientProvider.overrideWithValue(members),
       inboxClientProvider.overrideWithValue(FakeInboxClient()),
+      timeClientProvider.overrideWithValue(FakeTimeClient()),
     ],
   );
   addTearDown(container.dispose);

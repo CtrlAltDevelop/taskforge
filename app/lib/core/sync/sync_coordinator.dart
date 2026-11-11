@@ -20,6 +20,7 @@ import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 
@@ -94,6 +95,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     if (event.isGap) {
       everything = true;
       inboxDirty = true;
+      readTimeAgain(ref);
       _everythingElse(ref);
       soon();
       return;
@@ -102,6 +104,11 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       // The entity is this person: the badges and the open inbox read again.
       inboxDirty = true;
       soon();
+      return;
+    }
+    if (event.type == 'timer.changed') {
+      // The entity is this person: their timer, entries and totals read again.
+      readTimeAgain(ref);
       return;
     }
     if (event.type == 'access.changed') {

@@ -307,6 +307,23 @@ class FakeLocalNotifier extends LocalNotifier {
   }) async {
     shown.add((id: id, title: title, body: body, payload: payload));
   }
+
+  /// The ongoing notifications now showing, by id (the timer's).
+  final ongoing = <int, ({String title, String body, DateTime since})>{};
+
+  @override
+  Future<void> showOngoing({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime since,
+    String payload = '',
+  }) async {
+    ongoing[id] = (title: title, body: body, since: since);
+  }
+
+  @override
+  Future<void> cancel(int id) async => ongoing.remove(id);
 }
 
 class FakePushTokenSource implements PushTokenSource {
