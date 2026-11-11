@@ -1,0 +1,151 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:taskforge/features/automations/application/automations_providers.dart';
+import 'package:taskforge/features/automations/domain/automations.dart';
+import 'package:taskforge/features/automations/presentation/runs_panel.dart';
+
+/// Tries [rule] on a chosen task without changing anything.
+Future<void> showDryRun(BuildContext context, Automation rule) =>
+    showDialog<void>(
+      context: context,
+      builder: (_) => DryRunDialog(rule: rule),
+    );
+
+class DryRunDialog extends ConsumerStatefulWidget {
+  const DryRunDialog({super.key, required this.rule});
+
+  final Automation rule;
+
+  @override
+  ConsumerState<DryRunDialog> createState() => _DryRunDialogState();
+}
+
+class _DryRunDialogState extends ConsumerState<DryRunDialog> {
+  String? _task;
+  DryRunResult? _result;
+  String? _error;
+  var _busy = false;
+
+  Future<void> _run() async {
+    final id = _task;
+    if (id == null) return;
+    setState(() {
+      _busy = true;
+      _error = null;
+      _result = null;
+    });
+    try {
+      final r = await ref
+          .read(automationActionsProvider)
+          .dryRun(widget.rule, id);
+      if (mounted) setState(() => _result = r);
+    } on AutomationException catch (e) {
+      if (mounted) setState(() => _error = automationErrorMessage(e));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tasks = ref.watch(dryRunTasksProvider(widget.rule.projectId));
+    final scheme = Theme.of(context).colorScheme;
+    final result = _result;
+    return AlertDialog(
+      title: Text('Dry run: ${widget.rule.name}'),
+      content: SizedBox(
+        width: 480,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Shows what would happen on a task. Nothing is changed, '
+                'sent or notified.',
+              ),
+              const SizedBox(height: 12),
+              switch (tasks) {
+                AsyncData(:final value) => DropdownButtonFormField<String>(
+                  key: const Key('dry-task'),
+                  initialValue: _task,
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Task',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    for (final t in value)
+                      DropdownMenuItem(
+                        value: t.id,
+                        child: Text(
+                          '${t.displayId} ${t.title}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
+                  onChanged: (v) => setState(() {
+                    _task = v;
+                    _result = null;
+                  }),
+                ),
+                AsyncError() => const Text('Could not load the tasks.'),
+                _ => const LinearProgressIndicator(),
+              },
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    _error!,
+                    key: const Key('dry-error'),
+                    style: TextStyle(color: scheme.error),
+                  ),
+                ),
+              if (result != null) ...[
+                const Divider(height: 24),
+                Text(
+                  result.wouldRun
+                      ? 'It would run.'
+                      : 'It would not run on this task.',
+                  key: const Key('dry-verdict'),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                if (result.explanation.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      result.explanation,
+                      key: const Key('dry-explanation'),
+                    ),
+                  ),
+                if (result.error.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      result.error,
+                      key: const Key('dry-result-error'),
+                      style: TextStyle(color: scheme.error),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                StepsView(steps: result.steps),
+              ],
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
+        FilledButton(
+          key: const Key('dry-run'),
+          onPressed: _task == null || _busy ? null : _run,
+          child: const Text('Run'),
+        ),
+      ],
+    );
+  }
+}

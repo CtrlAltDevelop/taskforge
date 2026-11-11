@@ -31,6 +31,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.sprintManage,
     Perm.docEdit,
     Perm.docManage,
+    Perm.automationManage,
   },
   'Member': {
     Perm.workspaceView,

@@ -69,6 +69,16 @@ class ProjectSidebar extends ConsumerWidget {
               title: const Text('Sprints'),
               onTap: () => _go(context, '/projects/${p.id}/sprints'),
             ),
+          if (current.startsWith('/projects/${p.id}'))
+            ListTile(
+              key: Key('open-automations-${p.id}'),
+              dense: true,
+              contentPadding: const EdgeInsets.only(left: 40, right: 16),
+              selected: current == '/projects/${p.id}/automations',
+              leading: const Icon(Icons.bolt, size: 20),
+              title: const Text('Automations'),
+              onTap: () => _go(context, '/projects/${p.id}/automations'),
+            ),
         ],
       ],
     );

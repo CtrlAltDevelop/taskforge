@@ -19,6 +19,7 @@ import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
@@ -100,6 +101,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       readTimeAgain(ref);
       readSprintsAgain(ref);
       readDocsAgain(ref);
+      readAutomationsAgain(ref);
       _everythingElse(ref);
       soon();
       return;
