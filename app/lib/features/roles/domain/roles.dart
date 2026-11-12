@@ -30,6 +30,7 @@ abstract final class Perm {
   static const automationManage = 'automation.manage';
   static const auditView = 'audit.view';
   static const dashboardManage = 'dashboard.manage';
+  static const dataManage = 'data.manage';
 
   static const all = [
     workspaceView,
@@ -60,6 +61,7 @@ abstract final class Perm {
     automationManage,
     auditView,
     dashboardManage,
+    dataManage,
   ];
 }
 

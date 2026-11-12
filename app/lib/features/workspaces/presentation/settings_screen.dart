@@ -84,6 +84,18 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     onTap: () => context.push('/audit'),
                   ),
                 ),
+                PermissionGate(
+                  permission: Perm.dataManage,
+                  child: ListTile(
+                    key: const Key('open-import'),
+                    leading: const Icon(Icons.swap_vert),
+                    title: const Text('Import and export'),
+                    subtitle: const Text(
+                      'Bring in Jira, ClickUp or CSV data; take it out',
+                    ),
+                    onTap: () => context.push('/import'),
+                  ),
+                ),
               ],
             ),
     );

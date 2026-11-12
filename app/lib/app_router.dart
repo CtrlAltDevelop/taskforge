@@ -6,6 +6,7 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dart';
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
+import 'package:taskforge/features/imports/presentation/import_screen.dart';
 import 'package:taskforge/features/account/home_screen.dart';
 import 'package:taskforge/features/account/sessions_screen.dart';
 import 'package:taskforge/features/auth/change_password_screen.dart';
@@ -189,6 +190,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(path: '/audit', builder: (_, _) => const AuditScreen()),
+      GoRoute(path: '/import', builder: (_, _) => const ImportScreen()),
       GoRoute(path: '/dashboards', builder: (_, _) => const DashboardsScreen()),
       GoRoute(
         path: '/projects/:id/dashboards',
