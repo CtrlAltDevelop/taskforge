@@ -42,15 +42,6 @@ class OutboxRows extends Table {
   DateTimeColumn get createdAt => dateTime()();
 }
 
-/// Where each workspace's live feed was read up to (the `Sync.Since` cursor).
-class SyncCursors extends Table {
-  TextColumn get workspaceId => text()();
-  TextColumn get cursor => text()();
-
-  @override
-  Set<Column<Object>> get primaryKey => {workspaceId};
-}
-
 /// Small settings of the cache itself (its size cap, the projects kept offline).
 class OfflineMeta extends Table {
   TextColumn get key => text()();
@@ -69,7 +60,7 @@ const localSchemaVersion = 1;
 final Map<int, Future<void> Function(Migrator m, LocalDb db)> localMigrations =
     {};
 
-@DriftDatabase(tables: [CachedRows, OutboxRows, SyncCursors, OfflineMeta])
+@DriftDatabase(tables: [CachedRows, OutboxRows, OfflineMeta])
 class LocalDb extends _$LocalDb {
   LocalDb(super.e);
 

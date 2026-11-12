@@ -110,6 +110,8 @@ class CommentsNotifier extends Notifier<CommentsState> {
   @override
   CommentsState build() {
     ref.watch(workspaceScopeProvider);
+    // The connection is back / the outbox was sent: read what the server says.
+    ref.listen(outboxDrainedProvider, (_, _) => unawaited(refresh()));
     Future.microtask(load);
     return const CommentsState();
   }

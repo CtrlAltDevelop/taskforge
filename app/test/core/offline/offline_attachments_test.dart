@@ -128,10 +128,9 @@ void main() {
       expect(queue.single.payload['taskId'], 'a');
       expect(File('${queue.single.payload['path']}').existsSync(), isTrue);
       expect(server.created, isEmpty);
-      expect(
-        container.read(attachmentsProvider(_task)).uploads.single.state,
-        UploadState.queued,
-      );
+      final item = container.read(attachmentsProvider(_task)).uploads.single;
+      expect(item.state, UploadState.queued);
+      expect(item.kept, isTrue); // shown with a clock, not a progress bar
     });
 
     test(

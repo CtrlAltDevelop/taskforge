@@ -8,6 +8,7 @@ import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 /// What the client needs from its surroundings; tests bring their own.
 class OfflineEnv {
@@ -489,6 +490,9 @@ class OfflineTasksClient implements TasksClient {
   Future<Task> setParent(String workspaceId, Task task, String parentId) =>
       _call(() => _inner.setParent(workspaceId, task, parentId));
 
+  /// A status change alone is an edit like any other: online it goes to the
+  /// server, offline (or cut off) it is queued and shown at once. Moving the
+  /// open subtasks with it needs the server.
   @override
   Future<Task> move(
     String workspaceId,
@@ -496,15 +500,66 @@ class OfflineTasksClient implements TasksClient {
     String statusId, {
     bool includeSubtasks = false,
     bool overrideBlocked = false,
-  }) => _call(
-    () => _inner.move(
+  }) async {
+    if (includeSubtasks) {
+      return _call(
+        () => _inner.move(
+          workspaceId,
+          task,
+          statusId,
+          includeSubtasks: true,
+          overrideBlocked: overrideBlocked,
+        ),
+      );
+    }
+    final store = await _env.store();
+    if (store == null) {
+      return _call(
+        () => _inner.move(
+          workspaceId,
+          task,
+          statusId,
+          overrideBlocked: overrideBlocked,
+        ),
+      );
+    }
+    final status = await _statusOf(
+      store,
+      workspaceId,
+      task.projectId,
+      statusId,
+    );
+    return update(
       workspaceId,
       task,
-      statusId,
-      includeSubtasks: includeSubtasks,
+      TaskPatch(status: status),
       overrideBlocked: overrideBlocked,
-    ),
-  );
+    );
+  }
+
+  /// The status [statusId] as the local copy knows it (name and category come
+  /// from a task that has it).
+  Future<WorkflowStatus> _statusOf(
+    OfflineStore store,
+    String workspaceId,
+    String projectId,
+    String statusId,
+  ) async {
+    for (final t in await _cachedTasks(store, workspaceId, projectId)) {
+      if (t.statusId == statusId) {
+        return WorkflowStatus(
+          id: statusId,
+          name: t.statusName,
+          category: t.statusCategory,
+        );
+      }
+    }
+    return WorkflowStatus(
+      id: statusId,
+      name: '',
+      category: StatusCategory.active,
+    );
+  }
 
   @override
   Future<List<LinkCandidate>> searchTasks(String workspaceId, String query) =>

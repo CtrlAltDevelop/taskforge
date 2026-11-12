@@ -88,6 +88,11 @@ Future<Pumped> pumpProjects(
   Override? sync,
   FakeShortcutsClient? shortcuts,
   List<Override> overrides = const [],
+
+  /// Replace the fake tasks / comments clients (e.g. with the offline ones
+  /// over a fake server).
+  Override? tasksProvider,
+  Override? commentsProvider,
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
 }) async {
@@ -118,16 +123,18 @@ Future<Pumped> pumpProjects(
       calendarClientProvider.overrideWithValue(
         calendar ?? FakeCalendarClient(tasks ?? FakeTasksClient()),
       ),
-      commentsClientProvider.overrideWithValue(
-        comments ?? FakeCommentsClient(),
-      ),
+      commentsProvider ??
+          commentsClientProvider.overrideWithValue(
+            comments ?? FakeCommentsClient(),
+          ),
       attachmentsClientProvider.overrideWithValue(files),
       uploadsClientProvider.overrideWithValue(files),
       timelineClientProvider.overrideWithValue(
         timeline ?? FakeTimelineClient(tasks ?? FakeTasksClient()),
       ),
       if (today != null) todayProvider.overrideWithValue(today),
-      tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
+      tasksProvider ??
+          tasksClientProvider.overrideWithValue(tasks ?? FakeTasksClient()),
       workflowsClientProvider.overrideWithValue(
         workflows ?? FakeWorkflowsClient(),
       ),

@@ -338,7 +338,7 @@ class _Storage extends ConsumerWidget {
         ),
         Row(
           children: [
-            const Text('Most it may hold'),
+            const Expanded(child: Text('Most it may hold')),
             const SizedBox(width: 12),
             DropdownButton<int>(
               key: const Key('cache-cap'),

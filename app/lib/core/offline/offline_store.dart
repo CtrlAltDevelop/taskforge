@@ -14,6 +14,7 @@ abstract final class Kinds {
   static const members = 'members';
   static const workflow = 'workflow';
   static const fields = 'fields';
+  static const board = 'board';
 }
 
 /// How much the cache may hold unless the person chose another size.
@@ -170,8 +171,9 @@ class OfflineStore {
   Future<void> setCacheCap(int bytes) => _setMeta(_capKey, '$bytes');
 
   /// Drops the oldest cached tasks and comments until the cache fits its cap
-  /// again; never touches what the outbox still needs. Returns how many rows
-  /// went.
+  /// again; never touches what the outbox still needs or the projects kept
+  /// offline (with their comments). The [recentProjectsSpared] projects read
+  /// last go after everything else. Returns how many rows went.
   Future<int> trimToCap({String? workspaceId}) async {
     final cap = await cacheCap();
     var size = await sizeBytes(workspaceId: workspaceId);
@@ -180,6 +182,7 @@ class OfflineStore {
     final kept = {
       for (final ws in await _workspacesWithKept()) ...await keptProjects(ws),
     };
+    final recent = await recentProjects(recentProjectsSpared);
     final rows =
         await (db.select(db.cachedRows)
               ..where(
@@ -191,15 +194,49 @@ class OfflineStore {
               )
               ..orderBy([(r) => OrderingTerm.asc(r.savedAt)]))
             .get();
+    // A comment belongs to its task's project.
+    final projectOf = {
+      for (final r in rows)
+        if (r.kind == Kinds.task) r.id: r.scope,
+    };
+    bool spared(CachedRow r, Set<String> projects) {
+      final project = r.kind == Kinds.task ? r.scope : projectOf[r.scope];
+      return waiting.contains(r.id) ||
+          waiting.contains(r.scope) ||
+          (project != null && projects.contains(project));
+    }
+
     var dropped = 0;
-    for (final r in rows) {
-      if (size <= cap) break;
-      if (waiting.contains(r.id) || kept.contains(r.scope)) continue;
-      await remove(r.workspaceId, r.kind, r.id);
-      size -= r.json.length;
-      dropped++;
+    for (final keep in [
+      {...kept, ...recent},
+      kept,
+    ]) {
+      for (final r in rows) {
+        if (size <= cap) return dropped;
+        if (spared(r, keep) || !await _exists(r)) continue;
+        await remove(r.workspaceId, r.kind, r.id);
+        size -= r.json.length;
+        dropped++;
+      }
     }
     return dropped;
+  }
+
+  Future<bool> _exists(CachedRow r) async =>
+      await get(r.workspaceId, r.kind, r.id) != null;
+
+  /// How many of the projects read last are dropped last.
+  static const recentProjectsSpared = 3;
+
+  /// The [count] projects whose lists were read most recently.
+  Future<Set<String>> recentProjects(int count) async {
+    final rows =
+        await (db.select(db.offlineMeta)
+              ..where((m) => m.key.like('read:%'))
+              ..orderBy([(m) => OrderingTerm.desc(m.value)])
+              ..limit(count))
+            .get();
+    return {for (final r in rows) r.key.split(':').last};
   }
 
   Future<Set<String>> _waitingIds() async {
@@ -238,7 +275,7 @@ class OfflineStore {
       await _meta('read:$workspaceId:$projectId') != null;
 
   Future<void> markProjectRead(String workspaceId, String projectId) =>
-      _setMeta('read:$workspaceId:$projectId', '1');
+      _setMeta('read:$workspaceId:$projectId', _now().toIso8601String());
 
   Future<String?> _meta(String key) async => (await (db.select(
     db.offlineMeta,
@@ -248,21 +285,6 @@ class OfflineStore {
       .into(db.offlineMeta)
       .insertOnConflictUpdate(
         OfflineMetaCompanion.insert(key: key, value: value),
-      );
-
-  // ----------------------------------------------------------------- cursor
-
-  Future<String> cursor(String workspaceId) async =>
-      (await (db.select(
-            db.syncCursors,
-          )..where((c) => c.workspaceId.equals(workspaceId))).getSingleOrNull())
-          ?.cursor ??
-      '';
-
-  Future<void> setCursor(String workspaceId, String cursor) => db
-      .into(db.syncCursors)
-      .insertOnConflictUpdate(
-        SyncCursorsCompanion.insert(workspaceId: workspaceId, cursor: cursor),
       );
 
   // ----------------------------------------------------------------- outbox
@@ -442,11 +464,10 @@ class OfflineStore {
         .go();
   }
 
-  /// Everything, outbox and cursors included: for sign-out.
+  /// Everything, outbox included: for sign-out.
   Future<void> wipe() => db.transaction(() async {
     await db.delete(db.cachedRows).go();
     await db.delete(db.outboxRows).go();
-    await db.delete(db.syncCursors).go();
     await db.delete(db.offlineMeta).go();
   });
 }

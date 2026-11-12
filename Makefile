@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint check test
+.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint check test integration
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -53,11 +53,12 @@ migrate:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py reindex
 
 # The clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
-# entries, old export zips. Put it in cron or a scheduled job, daily.
+# entries, old export zips, audit entries past the optional retention. Put it in cron or a scheduled job, daily.
 purge:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_uploads
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py trim_changelog
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_exports
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_audit
 
 # The notifications' clock (no Celery yet): snoozes ending, tasks due soon, pushes and emails held for
 # quiet hours or digests, retries; the burndown snapshots of active sprints (back-filling missed
@@ -119,3 +120,7 @@ check:
 test:
 	cd backend && ../$(VENV)/python -m pytest --cov
 	cd app && flutter test --coverage
+
+# End-to-end flows through the whole app with fakes (builds a desktop runner, so it is slow).
+integration:
+	cd app && flutter test integration_test

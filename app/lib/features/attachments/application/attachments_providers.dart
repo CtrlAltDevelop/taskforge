@@ -432,7 +432,7 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
     _parked[item.localId] = id;
     _setItem(
       item.localId,
-      (u) => u.copyWith(state: UploadState.queued, error: null),
+      (u) => u.copyWith(state: UploadState.queued, kept: true),
     );
     return true;
   }

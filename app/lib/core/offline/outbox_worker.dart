@@ -181,6 +181,7 @@ class OutboxWorker {
             stoppedOffline: true,
           );
         }
+        worked(); // it answered, it only said no
         await db.setState(
           entry.id,
           OutboxState.rejected,

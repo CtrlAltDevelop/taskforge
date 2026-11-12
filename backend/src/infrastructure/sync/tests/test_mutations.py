@@ -220,3 +220,35 @@ def test_sending_a_create_twice_works_without_a_chosen_task_id(
     first = _make(grpc_call, team, client_mutation_id=mutation)
     again = _make(grpc_call, team, client_mutation_id=mutation)
     assert again.id == first.id and Task.objects.count() == 1
+
+
+def test_an_id_held_by_another_workspace_is_refused_like_a_bad_one(
+    team: Any, grpc_call: GrpcCall
+) -> None:
+    from infrastructure.comments import services as comment_services
+    from infrastructure.common.errors import ApiError
+    from infrastructure.tasks import services as task_services
+    from infrastructure.workspaces.models import Workspace
+
+    made = _make(grpc_call, team)
+    owner = Workspace.objects.get(pk=team["ws"]).created_by
+    other = Workspace.objects.create(name="Other", slug="other-two", created_by=owner)
+    mine = Workspace.objects.get(pk=team["ws"])
+    for service, held in ((task_services, made.id),):
+        with_bad = _error(service._chosen_id, "nope", other)
+        across = _error(service._chosen_id, held, other)
+        assert (across.status, str(across)) == (with_bad.status, str(with_bad))
+        assert _error(service._chosen_id, held, mine).status == 409  # my own: as before
+    assert Comment.objects.count() == 0
+    bad = _error(comment_services._chosen_id, "nope", other)
+    assert bad.status == 400 and isinstance(bad, ApiError)
+
+
+def _error(call: Any, *args: Any) -> Any:
+    from infrastructure.common.errors import ApiError
+
+    try:
+        call(*args)
+    except ApiError as e:
+        return e
+    raise AssertionError("expected a refusal")

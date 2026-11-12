@@ -7,14 +7,25 @@ import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/auth/token_store.dart';
+import 'package:taskforge/core/offline/codecs.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/offline/offline_store.dart';
 import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/offline/read_cache.dart';
+import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/core/offline/keep_offline.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
+import 'package:taskforge/features/fields/application/fields_providers.dart';
+import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/features/projects/application/projects_providers.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
+import '../../features/fields/fakes.dart' show FakeFieldsClient;
+import '../../features/members/fakes.dart' show FakeMembersClient;
+import '../../features/projects/fakes.dart' show FakeProjectsClient;
+import '../../features/workflows/fakes.dart' show FakeWorkflowsClient;
 import 'fakes.dart';
 
 class _NoApi implements AuthApi {
@@ -51,6 +62,11 @@ void main() {
         rawTasksClientProvider.overrideWithValue(h.server.t),
         rawCommentsClientProvider.overrideWithValue(h.server.c),
         workspaceScopeProvider.overrideWithValue('w1'),
+        syncClientProvider.overrideWithValue(null),
+        workflowsClientProvider.overrideWithValue(FakeWorkflowsClient()),
+        fieldsClientProvider.overrideWithValue(FakeFieldsClient()),
+        membersClientProvider.overrideWithValue(FakeMembersClient()),
+        projectsClientProvider.overrideWithValue(FakeProjectsClient()),
         reachabilityProbeProvider.overrideWithValue(() async {}),
       ],
     );
@@ -100,6 +116,39 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 50));
       expect(await h.store.get('w1', Kinds.task, 't'), isNull);
     });
+  });
+
+  group('catching up after being offline', () {
+    test('a kept project is read again when the connection is back', () async {
+      h.server.tasks['a'] = serverTask('a', 'Alpha');
+      final keeper = container.read(keepOfflineProvider.notifier);
+      container.read(offlineSyncProvider);
+      await keeper.keep('p1');
+      expect(await h.store.keptProjects('w1'), {'p1'});
+      // The server goes away; somebody else renames the task meanwhile.
+      container.read(networkProvider.notifier).failed();
+      h.server.tasks['a'] = serverTask('a', 'Renamed', version: 2);
+
+      final before = container.read(outboxDrainedProvider);
+      container.read(networkProvider.notifier).worked(); // it is back
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      expect(container.read(outboxDrainedProvider), greaterThan(before));
+      final json = await h.store.get('w1', Kinds.task, 'a');
+      expect(taskFromJson(json!).title, 'Renamed');
+    });
+
+    test(
+      'open screens are told to read again even with nothing to send',
+      () async {
+        container.read(offlineSyncProvider);
+        container.read(networkProvider.notifier).failed();
+        final before = container.read(outboxDrainedProvider);
+        container.read(networkProvider.notifier).worked();
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        expect(container.read(outboxDrainedProvider), greaterThan(before));
+      },
+    );
   });
 
   group('sign-out', () {

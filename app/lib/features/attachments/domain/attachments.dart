@@ -173,6 +173,7 @@ class UploadItem {
     this.commentId = '',
     this.error,
     this.errorDetail,
+    this.kept = false,
   });
 
   final String localId;
@@ -185,6 +186,9 @@ class UploadItem {
 
   /// What the server said about a refusal, when it said more than the kind.
   final String? errorDetail;
+
+  /// Kept on this device until the connection is back (see the outbox).
+  final bool kept;
 
   double get progress => size <= 0 ? 0 : (sent / size).clamp(0.0, 1.0);
   bool get active =>
@@ -204,6 +208,7 @@ class UploadItem {
     int? sent,
     AttachmentFailure? error,
     String? errorDetail,
+    bool? kept,
   }) {
     final next = state ?? this.state;
     return UploadItem(
@@ -215,6 +220,7 @@ class UploadItem {
       commentId: commentId,
       error: next == UploadState.failed ? error : null,
       errorDetail: next == UploadState.failed ? errorDetail : null,
+      kept: kept ?? this.kept,
     );
   }
 }

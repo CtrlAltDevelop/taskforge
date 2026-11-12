@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/config.dart';
+import 'package:taskforge/core/offline/keep_offline.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/offline/outbox.dart';
 import 'package:taskforge/core/offline/outbox_files.dart';
@@ -113,7 +114,7 @@ class OfflineSync extends Notifier<bool> {
     // Signed out already at launch (a wipe that never finished): finish it.
     if (session.status == AuthStatus.signedOut) unawaited(_wipe());
     ref.listen(networkProvider, (was, now) {
-      if (now && was == false) unawaited(syncNow());
+      if (now && was == false) unawaited(_back());
     });
     ref.listen(workspaceScopeProvider, (_, _) => unawaited(syncNow()));
     unawaited(_start());
@@ -122,6 +123,17 @@ class OfflineSync extends Notifier<bool> {
       _timer?.cancel();
     });
     return false;
+  }
+
+  /// The server can be reached again: send what waited, tell the open screens
+  /// to read again (others may have changed things meanwhile; the live feed
+  /// replays what it missed, this covers what it does not reach) and bring the
+  /// projects kept offline up to date.
+  Future<void> _back() async {
+    await syncNow();
+    if (!ref.mounted) return;
+    ref.read(outboxDrainedProvider.notifier).bump();
+    await ref.read(keepOfflineProvider.notifier).refreshKept();
   }
 
   Future<void> _start() async {

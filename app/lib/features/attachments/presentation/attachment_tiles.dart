@@ -197,7 +197,7 @@ class UploadRow extends StatelessWidget {
   final VoidCallback onDismiss;
 
   String get _status => switch (item.state) {
-    UploadState.queued => 'Waiting…',
+    UploadState.queued => item.kept ? 'Waiting for a connection…' : 'Waiting…',
     UploadState.uploading => '${(item.progress * 100).floor()}%',
     UploadState.done => 'Done',
     UploadState.cancelled => 'Cancelled',
@@ -225,7 +225,7 @@ class UploadRow extends StatelessWidget {
                   '${item.filename} · ${formatBytes(item.size)}',
                   overflow: TextOverflow.ellipsis,
                 ),
-                if (item.active)
+                if (item.active && !item.kept)
                   LinearProgressIndicator(
                     key: Key('upload-progress-$id'),
                     semanticsLabel:
@@ -247,7 +247,14 @@ class UploadRow extends StatelessWidget {
               ],
             ),
           ),
-          if (item.active)
+          if (item.kept)
+            Icon(
+              Icons.schedule,
+              key: Key('upload-pending-$id'),
+              size: 18,
+              semanticLabel: 'Waiting to be sent',
+            )
+          else if (item.active)
             IconButton(
               key: Key('upload-cancel-$id'),
               tooltip: 'Cancel ${item.filename}',

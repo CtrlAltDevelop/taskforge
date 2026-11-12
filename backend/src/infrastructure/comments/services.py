@@ -211,7 +211,7 @@ def create(
         people = mentions.resolve(
             actor, workspace, project, cleaned.mention_ids, grant_access=grant_access
         )
-        chosen = _chosen_id(comment_id)
+        chosen = _chosen_id(comment_id, workspace)
         comment = Comment.objects.create(
             id=chosen,
             workspace=workspace,
@@ -226,16 +226,23 @@ def create(
     return present([comment])[0]
 
 
-def _chosen_id(raw: str) -> uuid.UUID:
-    """The id for a new comment: the one an offline client chose, else a new one."""
+_UNUSABLE_ID = "The comment id must be a new UUID."
+
+
+def _chosen_id(raw: str, workspace: Workspace) -> uuid.UUID:
+    """The id for a new comment: the one an offline client chose, else a new one.
+
+    An id that another workspace holds is refused exactly like one that is not a UUID."""
     if not raw:
         return uuid.uuid4()
     try:
         chosen = uuid.UUID(str(raw))
     except ValueError:
-        raise ApiError("The comment id must be a UUID.") from None
-    if Comment.objects.filter(pk=chosen).exists():
+        raise ApiError(_UNUSABLE_ID) from None
+    if Comment.objects.filter(pk=chosen, workspace=workspace).exists():
         raise ApiError("A comment with that id exists already.", status=409)
+    if Comment.objects.filter(pk=chosen).exists():
+        raise ApiError(_UNUSABLE_ID)
     return chosen
 
 

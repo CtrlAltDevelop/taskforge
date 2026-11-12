@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/board/data/board_client.dart';
+import 'package:taskforge/features/board/data/offline_board_client.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/domain/board_sprint_filter.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
@@ -21,10 +23,14 @@ import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 final boardClientProvider = Provider<BoardClient>(
-  (ref) => GrpcBoardClient(
-    ref.watch(grpcChannelProvider),
-    ref.watch(authSessionProvider),
-    onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
+  (ref) => OfflineBoardClient(
+    GrpcBoardClient(
+      ref.watch(grpcChannelProvider),
+      ref.watch(authSessionProvider),
+      onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
+    ),
+    ref.watch(tasksClientProvider),
+    ref.watch(offlineEnvProvider),
   ),
 );
 
@@ -146,6 +152,8 @@ class BoardNotifier extends Notifier<BoardState> {
   BoardState build() {
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
+    // The connection is back / the outbox was sent: read the board again.
+    ref.listen(outboxDrainedProvider, (_, _) => unawaited(refresh()));
     ref.watch(
       boardFilterJsonProvider(projectId),
     ); // a new filter reads the board again

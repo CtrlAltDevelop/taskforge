@@ -151,6 +151,43 @@ void main() {
       expect(await store.get('w1', Kinds.task, 'loose'), isNull);
     });
 
+    test('the comments of a kept project are spared with its tasks', () async {
+      await store.put('w1', Kinds.task, 'T', 'x' * 100, scope: 'p1');
+      await store.put('w1', Kinds.comment, 'c', 'x' * 100, scope: 'T');
+      await store.put('w1', Kinds.task, 'U', 'x' * 100, scope: 'p2');
+      await store.put('w1', Kinds.comment, 'd', 'x' * 100, scope: 'U');
+      await store.setKeptProjects('w1', {'p1'});
+      await store.setCacheCap(150);
+      await store.trimToCap();
+      expect(await store.get('w1', Kinds.comment, 'c'), isNotNull);
+      expect(await store.get('w1', Kinds.task, 'T'), isNotNull);
+      expect(await store.get('w1', Kinds.comment, 'd'), isNull);
+      expect(await store.get('w1', Kinds.task, 'U'), isNull);
+    });
+
+    test('the projects read last go last', () async {
+      var clock = DateTime.utc(2026, 11, 12);
+      final timed = OfflineStore(
+        store.db,
+        now: () => clock = clock.add(const Duration(minutes: 1)),
+      );
+      for (final p in ['old', 'a', 'b', 'c']) {
+        await timed.put('w1', Kinds.task, 't-$p', 'x' * 100, scope: p);
+        await timed.markProjectRead('w1', p); // oldest read first
+      }
+      expect(await timed.recentProjects(3), {'a', 'b', 'c'});
+      await timed.setCacheCap(300);
+      await timed.trimToCap();
+      expect(await timed.get('w1', Kinds.task, 't-old'), isNull); // went first
+      expect(await timed.get('w1', Kinds.task, 't-c'), isNotNull);
+      // Still over its cap: the recent ones go too, oldest first, never kept.
+      await timed.setKeptProjects('w1', {'c'});
+      await timed.setCacheCap(150);
+      await timed.trimToCap();
+      expect(await timed.get('w1', Kinds.task, 't-a'), isNull);
+      expect(await timed.get('w1', Kinds.task, 't-c'), isNotNull);
+    });
+
     test('a comment waiting on a task protects that task too', () async {
       await store.put('w1', Kinds.task, 'T', 'x' * 100);
       await store.enqueue(
@@ -189,12 +226,10 @@ void main() {
     test('wipe removes everything, for sign-out', () async {
       await store.put('w1', Kinds.task, 'a', '1');
       await store.enqueue(_entry(OutboxOp.create));
-      await store.setCursor('w1', '9');
       await store.setKeptProjects('w1', {'p1'});
       await store.wipe();
       expect(await store.list('w1', Kinds.task), isEmpty);
       expect(await store.queue('w1'), isEmpty);
-      expect(await store.cursor('w1'), '');
       expect(await store.keptProjects('w1'), isEmpty);
     });
   });
@@ -293,15 +328,7 @@ void main() {
     });
   });
 
-  group('cursor and offline projects', () {
-    test('the feed cursor is kept per workspace', () async {
-      expect(await store.cursor('w1'), '');
-      await store.setCursor('w1', '12');
-      await store.setCursor('w1', '15');
-      expect(await store.cursor('w1'), '15');
-      expect(await store.cursor('w2'), '');
-    });
-
+  group('offline projects', () {
     test('the projects kept offline are remembered', () async {
       expect(await store.keptProjects('w1'), isEmpty);
       await store.setKeptProjects('w1', {'p1', 'p2'});

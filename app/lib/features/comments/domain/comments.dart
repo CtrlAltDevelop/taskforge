@@ -159,8 +159,7 @@ String commentErrorMessage(Object error) {
     CommentFailure.archived =>
       'This project is archived. Restore it to make changes.',
     CommentFailure.notFound => 'That comment no longer exists.',
-    CommentFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
+    CommentFailure.network => 'This needs a connection to the server. It works again once you are back online.',
     CommentFailure.other => 'Something went wrong. Try again.',
   };
 }

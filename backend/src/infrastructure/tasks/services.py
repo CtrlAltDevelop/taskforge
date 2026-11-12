@@ -241,16 +241,24 @@ def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> T
     return _reload(_load_task(project, task_id, trashed=True), actor, workspace)
 
 
-def _chosen_id(raw: str) -> uuid.UUID:
-    """The id for a new task: the one a client chose (a fresh UUID), else a new one."""
+_UNUSABLE_ID = "The task id must be a new UUID."
+
+
+def _chosen_id(raw: str, workspace: Workspace) -> uuid.UUID:
+    """The id for a new task: the one a client chose (a fresh UUID), else a new one.
+
+    An id that another workspace holds is refused exactly like one that is not a UUID, so the
+    answer never says whether an id exists in somebody else's workspace."""
     if not raw:
         return uuid.uuid4()
     try:
         chosen = uuid.UUID(str(raw))
     except ValueError:
-        raise ApiError("The task id must be a UUID.") from None
-    if Task.objects.filter(pk=chosen).exists():
+        raise ApiError(_UNUSABLE_ID) from None
+    if Task.objects.filter(pk=chosen, workspace=workspace).exists():
         raise ApiError("A task with that id exists already.", status=409)
+    if Task.objects.filter(pk=chosen).exists():
+        raise ApiError(_UNUSABLE_ID)
     return chosen
 
 
@@ -294,7 +302,7 @@ def create(
         custom_changes = custom.prepare(project, field_values or {}, creating=True)
         workflows.check_create(project, cleaned["status"])
         number = projects.next_task_number(project)
-        made_id = _chosen_id(task_id)
+        made_id = _chosen_id(task_id, workspace)
         position = tree.next_position(project.pk, parent.pk if parent else None)
         depth, path, tree_key = tree.placement(parent, made_id, position)
         tree.check_depth(depth)

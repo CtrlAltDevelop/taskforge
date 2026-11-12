@@ -73,7 +73,7 @@ void main() {
   test('error messages are friendly', () {
     expect(
       taskErrorMessage(const TaskException(TaskFailure.network)),
-      contains('Cannot reach'),
+      contains('needs a connection'),
     );
     expect(
       taskErrorMessage(

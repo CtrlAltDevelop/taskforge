@@ -549,6 +549,7 @@ void main() {
       h.server.refuseComment = const CommentException(CommentFailure.forbidden);
       final r = await worker.drain();
       expect(r.rejected, 1);
+      expect(h.online, isTrue); // a refusal is an answer: the server is there
       expect((await h.store.queue('w1')).single.state, OutboxState.rejected);
       expect(
         commentErrorText(const CommentException(CommentFailure.notFound)),

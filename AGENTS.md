@@ -118,6 +118,7 @@ Quality:
 |---------|--------------|
 | `make check` | ruff, mypy, Django/migration/proto checks, `dart format`, `flutter analyze` |
 | `make test` | pytest with coverage, `flutter test --coverage` |
+| `make integration` | `flutter test integration_test`: whole-app flows with fakes (offline flow); builds a desktop runner, so slow |
 | `make proto` | Regenerate Python `.proto` + stubs and Dart stubs. Add new protos to `DART_PROTOS` in the Makefile |
 | `make proto-lint` | `buf lint` |
 | `make gen` | Regenerate the Drift code of the offline store (`app/lib/core/offline/local_db.g.dart`, committed). Run it after changing a table there |

@@ -280,6 +280,19 @@ void main() {
       expect(find.byKey(const Key('nothing-to-decide')), findsOneWidget);
     });
 
+    ui('it fits a phone without overflowing', (tester) async {
+      tester.view.physicalSize = const Size(390 * 3, 800 * 3);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      await seed(tester, () async {
+        await h.store.enqueue(_entry('a', OutboxOp.update, {'title': 'X'}));
+        await h.store.setKeptProjects('w1', {'p1'});
+      });
+      await show(tester, const OfflineScreen());
+      await settle(tester);
+      expect(tester.takeException(), isNull);
+    });
+
     ui('storage shows the size and clearing it asks first', (tester) async {
       await seed(
         tester,

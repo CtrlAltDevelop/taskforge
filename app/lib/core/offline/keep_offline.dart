@@ -74,6 +74,18 @@ class KeepOffline extends Notifier<Map<String, KeepProgress>> {
     }
   }
 
+  /// Reads the kept projects again (after the connection came back), one
+  /// after the other: what others changed meanwhile is in the copy.
+  Future<void> refreshKept() async {
+    final workspace = ref.read(workspaceScopeProvider);
+    final store = await ref.read(offlineStoreFutureProvider);
+    if (workspace == null || store == null) return;
+    for (final id in await store.keptProjects(workspace)) {
+      if (!ref.mounted) return;
+      await keep(id);
+    }
+  }
+
   Future<void> forget(String projectId) async {
     final workspace = ref.read(workspaceScopeProvider);
     final store = await ref.read(offlineStoreFutureProvider);

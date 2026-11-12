@@ -9,15 +9,7 @@ void main() {
         .customSelect("SELECT name FROM sqlite_master WHERE type = 'table'")
         .get();
     final names = {for (final t in tables) t.read<String>('name')};
-    expect(
-      names,
-      containsAll([
-        'cached_rows',
-        'outbox_rows',
-        'sync_cursors',
-        'offline_meta',
-      ]),
-    );
+    expect(names, containsAll(['cached_rows', 'outbox_rows', 'offline_meta']));
     final indexes = await db
         .customSelect("SELECT name FROM sqlite_master WHERE type = 'index'")
         .get();
@@ -59,7 +51,6 @@ void main() {
     localMigrations[2] = (m, db) async {
       steps.add(2);
       await m.createTable(db.outboxRows);
-      await m.createTable(db.syncCursors);
       await m.createTable(db.offlineMeta);
     };
     addTearDown(() => localMigrations.remove(2));

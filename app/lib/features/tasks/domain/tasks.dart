@@ -398,8 +398,7 @@ String taskErrorMessage(Object error) {
     TaskFailure.archived =>
       'This project is archived. Restore it to make changes.',
     TaskFailure.notFound => 'That task no longer exists.',
-    TaskFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
+    TaskFailure.network => 'This needs a connection to the server. It works again once you are back online.',
     TaskFailure.other => 'Something went wrong. Try again.',
   };
 }

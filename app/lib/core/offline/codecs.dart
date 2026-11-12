@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
@@ -203,3 +204,41 @@ Comment commentFromJson(String json, {SendState sendState = SendState.sent}) =>
       jsonDecode(json) as Map<String, dynamic>,
       sendState: sendState,
     );
+
+/// The board as it was last read (lanes, columns and their first cards).
+String lanesToJson(List<BoardLane> lanes) => jsonEncode([
+  for (final l in lanes)
+    {
+      'key': l.key,
+      'columns': [
+        for (final c in l.columns)
+          {
+            'key': c.key,
+            'name': c.name,
+            'count': c.count,
+            'cursor': c.cursor,
+            'tasks': [for (final t in c.tasks) taskToMap(t)],
+          },
+      ],
+    },
+]);
+
+List<BoardLane> lanesFromJson(String json) => [
+  for (final l in jsonDecode(json) as List<dynamic>)
+    BoardLane(
+      key: '${l['key']}',
+      columns: [
+        for (final c in l['columns'] as List<dynamic>)
+          BoardColumn(
+            key: '${c['key']}',
+            name: '${c['name']}',
+            count: (c['count'] as num?)?.toInt() ?? 0,
+            cursor: '${c['cursor'] ?? ''}',
+            tasks: List.unmodifiable([
+              for (final t in c['tasks'] as List<dynamic>)
+                taskFromMap(t as Map<String, dynamic>),
+            ]),
+          ),
+      ],
+    ),
+];

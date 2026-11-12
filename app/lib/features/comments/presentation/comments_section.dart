@@ -490,10 +490,21 @@ class _CommentTile extends StatelessWidget {
                 archived: archived,
               ),
             if (c.sendState == SendState.sending)
-              Text(
-                'Sending…',
-                key: Key('sending-${c.id}'),
-                style: theme.textTheme.labelSmall,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.schedule,
+                    size: 12,
+                    semanticLabel: 'Waiting to be sent',
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Sending…',
+                    key: Key('sending-${c.id}'),
+                    style: theme.textTheme.labelSmall,
+                  ),
+                ],
               ),
             if (c.sendState == SendState.failed)
               Row(
