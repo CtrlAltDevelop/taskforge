@@ -1,6 +1,6 @@
 # Phase 29 — Import and Export
 
-**Status:** DONE (PostgreSQL not run, no database here: see *Built*)
+**Status:** DONE
 
 ## Feature
 **Import** projects and tasks from Jira, ClickUp and CSV; **export** everything to open formats (JSON + CSV).
@@ -56,4 +56,5 @@ Phases 06–10, 17, 22; benefits from 27.
 - **App**: Import and export screen (Settings): a five-step wizard (Source, Upload with streaming, Map with project/columns/statuses/priorities/people/labels tables, Review from the dry run, Import with a streamed progress bar, cancel, resume, undo), past imports with undo/continue/forget, people waiting to join (assign now), and an export dialog with a scope chooser.
 - **Tests**: backend parsers/streams/richtext, every source end to end, idempotent re-run, undo (including a user's own sub-task), resume and cancel, dry run, permissions and cross-workspace, export and the round trip into a fresh workspace, the 50,000-issue Jira file (a streaming memory bound), the RBAC matrix and audit coverage; Flutter domain, REST client, wizard and export UI tests.
 - **Review fixes**: one run owns a job (token + heartbeats while reading); a private target the importer cannot open is refused; parents only from the same project; deep chains and loops flattened iteratively; loop-breaking is deterministic and sees links stored by earlier runs; undo keeps tasks, sprints and fields people have used; the download link re-checks the exporter's right; exports spool to disk and include comment replies; lines and JSON entries are read with bounded growth; the real export zip uploads as it is.
+- **Audit fixes**: a placeholder is claimed whenever a member turns active, so a removed member invited back takes over their tasks too (the signal no longer needs a new row); handing a placeholder over keeps the assignments of tasks in private projects the person cannot open, and leaves the placeholder open so a later claim finishes it (deleted tasks are dropped); tests for both, for a Jira sprint that is not closed becoming planned, and for ClickUp JSON corners and the background lane.
 - **Not verified**: PostgreSQL (no database here); the row lock on the project during chunks and the background thread under a real server; a real browser or device (file chooser, saving the zip); real Jira and ClickUp exports (the fixtures are real-shaped, hand-written).

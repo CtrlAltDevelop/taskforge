@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 def _joined(sender: Any, instance: WorkspaceMember, created: bool, **kw: Any) -> None:
-    if not created or instance.status != MemberStatus.ACTIVE or not instance.user.email:
+    # Not only on creation: a removed member who is invited back is an update of the same row.
+    if instance.status != MemberStatus.ACTIVE or not instance.user.email:
         return
     try:
         from infrastructure.imports import placeholders

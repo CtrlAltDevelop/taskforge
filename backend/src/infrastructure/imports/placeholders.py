@@ -21,18 +21,25 @@ def _hand_over(holder: PlaceholderUser, user: Any) -> int:
         PlaceholderAssignment.objects.filter(placeholder=holder).select_related("task__project")
     )
     made = 0
+    kept = 0
     for row in rows:
         task = row.task
+        if task.deleted_at:
+            row.delete()
+            continue
         visible = (
             task.project.visibility != Visibility.PRIVATE
             or ProjectMember.objects.filter(project=task.project, user=user).exists()
         )
-        if visible and not task.deleted_at:
-            _, created = TaskAssignee.objects.get_or_create(task=task, user=user)
-            made += int(created)
-    PlaceholderAssignment.objects.filter(placeholder=holder).delete()
-    holder.claimed_by = user
-    holder.save(update_fields=["claimed_by"])
+        if not visible:
+            kept += 1  # still waits: handed over when they can open that project
+            continue
+        _, created = TaskAssignee.objects.get_or_create(task=task, user=user)
+        made += int(created)
+        row.delete()
+    if not kept:  # a holder with tasks left stays open, so a later claim finishes the job
+        holder.claimed_by = user
+        holder.save(update_fields=["claimed_by"])
     return made
 
 

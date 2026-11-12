@@ -4,6 +4,7 @@ from typing import Any
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from infrastructure.comments.models import Comment
 from infrastructure.common.errors import ApiError
@@ -17,6 +18,7 @@ from infrastructure.imports.models import (
 from infrastructure.imports.tests.conftest import World
 from infrastructure.imports.tests.samples import GENERIC_CSV, JIRA_CSV
 from infrastructure.projects import services as project_services
+from infrastructure.projects.models import ProjectMember
 from infrastructure.sprints.models import Sprint
 from infrastructure.sync.actor import set_actor
 from infrastructure.tasks import services as task_services
@@ -223,6 +225,51 @@ def test_placeholders_are_claimed_when_the_person_joins(world: World) -> None:
     assert TaskAssignee.objects.filter(task=story, user=bob).exists()
     assert not PlaceholderAssignment.objects.filter(task=story).exists()
     assert PlaceholderUser.objects.get(key="bob@old.test").claimed_by_id == bob.pk
+
+
+def test_a_removed_member_invited_back_takes_over_the_placeholder(world: World) -> None:
+    from django.utils import timezone
+
+    from infrastructure.workspaces import access, invitations
+    from infrastructure.workspaces.models import MemberStatus, WorkspaceMember
+
+    _start(world)
+    story = Task.objects.get(title="Card form")
+    bob = get_user_model().objects.create_user("bob", "Bob@Old.Test", "pw-123456-x")
+    WorkspaceMember.objects.create(
+        workspace=world.ws,
+        user=bob,
+        role=access.builtin_role("Member"),
+        status=MemberStatus.REMOVED,
+        removed_at=timezone.now() - timezone.timedelta(days=1),
+    )
+    invitations.accept(invitations.create_link(world.ws, world.owner).token, bob)
+    assert TaskAssignee.objects.filter(task=story, user=bob).exists()
+    assert PlaceholderUser.objects.get(key="bob@old.test").claimed_by_id == bob.pk
+
+
+def test_a_task_in_a_private_project_keeps_waiting_until_they_can_open_it(world: World) -> None:
+    holder = PlaceholderUser.objects.create(workspace=world.ws, key="dan@x.test", name="Dan")
+    open_task = task_services.create(world.owner, world.ws, str(world.web.pk), "Open").pk
+    secret = task_services.create(world.owner, world.ws, str(world.sec.pk), "Secret").pk
+    gone = task_services.create(world.owner, world.ws, str(world.web.pk), "Gone")
+    for pk in (open_task, secret, gone.pk):
+        PlaceholderAssignment.objects.create(task_id=pk, placeholder=holder)
+    Task.objects.filter(pk=gone.pk).update(deleted_at=timezone.now())
+
+    assert placeholders.claim(world.owner, world.ws, str(holder.pk), str(world.alice.pk)) == 1
+    assert TaskAssignee.objects.filter(task_id=open_task, user=world.alice).exists()
+    left = PlaceholderAssignment.objects.filter(placeholder=holder)
+    assert [a.task_id for a in left] == [secret]  # kept; the deleted one is dropped
+    holder.refresh_from_db()
+    assert holder.claimed_by_id is None  # still open, so it can be claimed again
+
+    ProjectMember.objects.create(project=world.sec, user=world.alice)
+    assert placeholders.claim(world.owner, world.ws, str(holder.pk), str(world.alice.pk)) == 1
+    assert TaskAssignee.objects.filter(task_id=secret, user=world.alice).exists()
+    holder.refresh_from_db()
+    assert holder.claimed_by_id == world.alice.pk
+    assert not PlaceholderAssignment.objects.filter(placeholder=holder).exists()
 
 
 def test_an_admin_can_claim_a_placeholder_for_a_member(world: World) -> None:

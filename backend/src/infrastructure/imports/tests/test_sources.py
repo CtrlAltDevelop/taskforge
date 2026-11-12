@@ -134,3 +134,9 @@ def test_a_clickup_import_is_dry_run_first_and_names_comment_authors(world: Worl
     done = services.start(world.owner, world.ws, str(job.pk), mapping)
     comment = Comment.objects.get(task__title="Plan launch")
     assert "Dave wrote on 2024-11-12" in str(comment.body) and done.status == "done"
+
+
+def test_a_jira_sprint_that_is_not_closed_is_imported_as_planned(world: World) -> None:
+    job = _go(world, JIRA_JSON.replace('"state": "closed"', '"state": "active"'), "export.json")
+    assert job.status == "done", job.error
+    assert Task.objects.get(title="Design the API").sprint.state == "planned"
