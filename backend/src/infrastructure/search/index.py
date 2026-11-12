@@ -95,6 +95,14 @@ def put_comment(comment_id: Any) -> None:
     )
 
 
+def add_many(tasks: Iterable[Task], comments: Iterable[Comment]) -> None:
+    """Index rows that were just made in bulk (an import writes without the change signals):
+    one insert for all of them. A row that is already indexed is left as it is."""
+    rows = [SearchEntry(kind=Kind.TASK, ref_id=t.pk, **_task_values(t)) for t in tasks]
+    rows += [SearchEntry(kind=Kind.COMMENT, ref_id=c.pk, **_comment_values(c)) for c in comments]
+    SearchEntry.objects.bulk_create(rows, ignore_conflicts=True)
+
+
 def drop(kind: str, ref_id: Any) -> None:
     SearchEntry.objects.filter(kind=kind, ref_id=ref_id).delete()
 

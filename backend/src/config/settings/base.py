@@ -1277,6 +1277,12 @@ AUTOMATIONS_SYNC_RUN = os.getenv("DJANGO_AUTOMATIONS_SYNC_RUN", "") == "1"
 # Recurring tasks: how many missed instances the clock makes after downtime (the most recent ones;
 # older ones are skipped so a long outage never floods a project).
 RECURRENCE_MAX_CATCHUP = int(os.getenv("DJANGO_RECURRENCE_MAX_CATCHUP", "1"))
+# Imports: one run at a time in a background thread; "1" runs them on the spot (tests). The seam is
+# ``infrastructure.imports.queue.run_later``: Celery replaces it. ``IMPORTS_MAX_BYTES`` is the
+# largest upload (a zip counts compressed); an export link lives ``EXPORT_LINK_TTL_SECONDS``.
+IMPORTS_SYNC_RUN = os.getenv("DJANGO_IMPORTS_SYNC_RUN", "") == "1"
+IMPORTS_MAX_BYTES = int(os.getenv("DJANGO_IMPORTS_MAX_BYTES", str(1024**3)))
+EXPORT_LINK_TTL_SECONDS = int(os.getenv("DJANGO_EXPORT_LINK_TTL_SECONDS", "600"))
 # The link in an email that turns that kind off; ``{token}`` is replaced.
 INBOX_UNSUBSCRIBE_URL = os.getenv(
     "DJANGO_INBOX_UNSUBSCRIBE_URL", "http://localhost:8010/api/v1/inbox/unsubscribe?token={token}"

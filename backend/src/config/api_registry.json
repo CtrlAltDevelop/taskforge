@@ -42,6 +42,20 @@
         "router": "infrastructure.inbox.rest.api.router",
         "tag": "Inbox",
         "description": "Unsubscribe from a kind of notification email with the signed link in the email. The inbox itself is gRPC."
+      },
+      {
+        "app_config": "infrastructure.imports.apps.ImportsConfig",
+        "prefix": "/imports",
+        "router": "infrastructure.imports.rest.imports.router",
+        "tag": "Imports",
+        "description": "Upload a Jira, ClickUp, CSV or TaskForge export to import. Reading it, mapping, running and undoing are gRPC."
+      },
+      {
+        "app_config": "infrastructure.imports.apps.ImportsConfig",
+        "prefix": "/exports",
+        "router": "infrastructure.imports.rest.exports.router",
+        "tag": "Exports",
+        "description": "Download an export zip with the short-lived signed link that Exports.Status returns."
       }
     ]
   }

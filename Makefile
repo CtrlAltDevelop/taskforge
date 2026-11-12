@@ -52,20 +52,22 @@ migrate:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py migrate
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py reindex
 
-# The two clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
-# entries. Put it in cron or a scheduled job, daily.
+# The clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
+# entries, old export zips. Put it in cron or a scheduled job, daily.
 purge:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_uploads
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py trim_changelog
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py purge_exports
 
 # The notifications' clock (no Celery yet): snoozes ending, tasks due soon, pushes and emails held for
 # quiet hours or digests, retries; the burndown snapshots of active sprints (back-filling missed
-# days); the due-date automations and the pruning of their run history; the recurring tasks' due instances. Run it every minute from cron.
+# days); the due-date automations and the pruning of their run history; the recurring tasks' due instances; imports whose process died. Run it every minute from cron.
 tick:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py inbox_tick
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py sprint_snapshots
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py automations_tick
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py recurrence_tick
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py imports_tick
 
 grpc:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python manage.py grpcrunaioserver
@@ -94,6 +96,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/audit/grpc/audit.proto \
 	infrastructure/dashboards/grpc/dashboards.proto \
 	infrastructure/recurrence/grpc/recurrence.proto \
+	infrastructure/imports/grpc/imports.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos

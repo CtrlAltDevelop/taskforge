@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+package config.imports;
+
+service ExportController {
+    rpc Start(ExportStartRequest) returns (ExportStarted) {}
+    rpc Status(ExportStatusRequest) returns (ExportStatus) {}
+}
+
+service ImportController {
+    rpc Analyze(ImportAnalyzeRequest) returns (ImportProposal) {}
+    rpc Cancel(ImportCancelRequest) returns (ImportCancelled) {}
+    rpc ClaimPlaceholder(PlaceholderClaimRequest) returns (PlaceholderClaimed) {}
+    rpc Discard(ImportDiscardRequest) returns (ImportDiscarded) {}
+    rpc DryRun(ImportDryRunRequest) returns (ImportReport) {}
+    rpc Get(ImportGetRequest) returns (ImportDetail) {}
+    rpc List(ImportListRequest) returns (ImportList) {}
+    rpc ListPlaceholders(PlaceholderListRequest) returns (PlaceholderList) {}
+    rpc Progress(ImportProgressRequest) returns (stream ImportProgress) {}
+    rpc Start(ImportStartRequest) returns (ImportStarted) {}
+    rpc Undo(ImportUndoRequest) returns (ImportUndone) {}
+}
+
+message ExportJob {
+    string id = 1;
+    string scope = 2;
+    string project_id = 3;
+    string status = 4;
+    string filename = 5;
+    int32 size = 6;
+    string stats_json = 7;
+    string error = 8;
+    string download_path = 9;
+    string created_at = 10;
+}
+
+message ExportStartRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message ExportStarted {
+    ExportJob export = 1;
+}
+
+message ExportStatus {
+    ExportJob export = 1;
+}
+
+message ExportStatusRequest {
+    string workspace_id = 1;
+    string export_id = 2;
+}
+
+message ImportAnalyzeRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+    string source = 3;
+    string member = 4;
+}
+
+message ImportCancelRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+}
+
+message ImportCancelled {
+    Job job = 1;
+}
+
+message ImportDetail {
+    Job job = 1;
+    repeated Problem problems = 2;
+    string mapping_json = 3;
+    string analysis_json = 4;
+}
+
+message ImportDiscardRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+}
+
+message ImportDiscarded {
+    string job_id = 1;
+}
+
+message ImportDryRunRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+    string mapping_json = 3;
+}
+
+message ImportGetRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+}
+
+message ImportList {
+    repeated Job jobs = 1;
+}
+
+message ImportListRequest {
+    string workspace_id = 1;
+}
+
+message ImportProgress {
+    Job job = 1;
+}
+
+message ImportProgressRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+}
+
+message ImportProposal {
+    Job job = 1;
+    string mapping_json = 2;
+    string analysis_json = 3;
+    repeated string members = 4;
+}
+
+message ImportReport {
+    string counts_json = 1;
+    repeated Problem warnings = 2;
+    int32 errors = 3;
+    int32 warning_total = 4;
+    int32 already_imported = 5;
+}
+
+message ImportStartRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+    string mapping_json = 3;
+}
+
+message ImportStarted {
+    Job job = 1;
+}
+
+message ImportUndoRequest {
+    string workspace_id = 1;
+    string job_id = 2;
+}
+
+message ImportUndone {
+    Job job = 1;
+    string removed_json = 2;
+}
+
+message Job {
+    string id = 1;
+    string source = 2;
+    string status = 3;
+    string filename = 4;
+    string project_id = 5;
+    int32 total = 6;
+    int32 done = 7;
+    string phase = 8;
+    string error = 9;
+    string stats_json = 10;
+    int32 problem_count = 11;
+    string created_at = 12;
+    string started_at = 13;
+    string finished_at = 14;
+    int32 version = 15;
+}
+
+message Placeholder {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    int32 tasks = 4;
+}
+
+message PlaceholderClaimRequest {
+    string workspace_id = 1;
+    string placeholder_id = 2;
+    string user_id = 3;
+}
+
+message PlaceholderClaimed {
+    int32 assigned = 1;
+}
+
+message PlaceholderList {
+    repeated Placeholder placeholders = 1;
+}
+
+message PlaceholderListRequest {
+    string workspace_id = 1;
+}
+
+message Problem {
+    int32 line = 1;
+    string message = 2;
+    string level = 3;
+}
+

@@ -49,6 +49,7 @@ def test_registry_keys_are_unique_and_grouped_by_area() -> None:
         "automation",
         "audit",
         "dashboard",
+        "data",
     ]
     assert all(k in ALL_KEYS for grants in BUILTIN_GRANTS.values() for k in grants)
 

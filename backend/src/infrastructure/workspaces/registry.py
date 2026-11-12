@@ -61,6 +61,7 @@ PERMISSIONS: Final = (
     Permission(
         "dashboard.manage", "Share dashboards with a project or the workspace, edit shared ones"
     ),
+    Permission("data.manage", "Import projects from other tools, undo an import, export data"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 

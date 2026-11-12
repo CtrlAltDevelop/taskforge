@@ -6,6 +6,8 @@ neither ``ENDPOINTS`` nor ``EXEMPT`` (and is not in ``ACCOUNT_LEVEL_MODULES``) f
 not from hand-written booleans.
 """
 
+import io
+import json
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -43,6 +45,11 @@ from infrastructure.docs.models import DocRevision
 from infrastructure.filters import services as filter_services
 from infrastructure.filters.grpc import filters_pb2 as flpb
 from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
+from infrastructure.imports import exports as export_services
+from infrastructure.imports import services as import_services
+from infrastructure.imports.grpc import imports_pb2 as impb
+from infrastructure.imports.grpc import imports_pb2_grpc as imstubs
+from infrastructure.imports.models import ImportJob, PlaceholderUser
 from infrastructure.inbox.grpc import inbox_pb2 as ipb
 from infrastructure.inbox.grpc import inbox_pb2_grpc as istubs
 from infrastructure.projects import members as project_members
@@ -111,6 +118,10 @@ class World:
     automation_run_id: str = ""  # a run of it (the task was made after the rule)
     dashboard_id: str = ""  # a workspace dashboard of the Owner's, with one number widget
     widget_id: str = ""  # its widget
+    import_job_id: str = ""  # an import job of the Owner's (the import prepares)
+    import_mapping: str = ""  # the mapping the analysis proposed, as JSON
+    placeholder_id: str = ""  # a person an import named who is not a member
+    export_id: str = ""  # a finished export of the open project
 
     @property
     def ws(self) -> str:
@@ -1723,6 +1734,7 @@ EXEMPT = {
     "PermissionController.Check": "membership only: answers about the caller's own grants",
     "POST /invites/preview": "public, token-based",
     "POST /invites/accept": "token is the capability",
+    "GET /exports/download": "the signed, short-lived token is the capability",
 }
 # Account-level or platform handler modules (exact names): can() does not apply. A new
 # workspace-scoped handler under infrastructure.common or apps must NOT be added here.
@@ -1958,6 +1970,132 @@ ENDPOINTS += (
             ),
         ),
         _repeating,
+    ),
+)
+
+
+IM = imstubs.ImportControllerStub
+EX = imstubs.ExportControllerStub
+IMPORT_CSV = b"Name,State\nA,Open\nB,Done\n"
+
+
+def _import_uploaded(w: World) -> None:
+    job = import_services.upload(
+        w.workspace.created_by, w.workspace, io.BytesIO(IMPORT_CSV), "t.csv"
+    )
+    w.import_job_id = str(job.pk)
+
+
+def _import_analyzed(w: World) -> None:
+    _import_uploaded(w)
+    found = import_services.analyze(w.workspace.created_by, w.workspace, w.import_job_id)
+    mapping = {**found.job.mapping, "target": {"project_id": w.project_id}}
+    w.import_mapping = json.dumps(mapping)
+
+
+def _import_done(w: World) -> None:
+    _import_analyzed(w)
+    import_services.start(
+        w.workspace.created_by, w.workspace, w.import_job_id, json.loads(w.import_mapping)
+    )
+
+
+def _import_running(w: World) -> None:
+    _import_analyzed(w)
+    ImportJob.objects.filter(pk=w.import_job_id).update(status="running")
+
+
+def _placeholder_on(w: World) -> None:
+    holder = PlaceholderUser.objects.create(workspace=w.workspace, key="x@old.test", name="X")
+    w.placeholder_id = str(holder.pk)
+
+
+def _export_done(w: World) -> None:
+    job = export_services.start(w.workspace.created_by, w.workspace, w.project_id)
+    w.export_id = str(job.pk)
+
+
+def _import_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "job_id": w.import_job_id}
+
+
+def _import_endpoint(
+    method: str, request: Callable[[World], Any], prepare: Callable[[World], None] | None
+) -> Endpoint:
+    return Endpoint(
+        f"ImportController.{method}", "data.manage", _grpc(IM, method, request), prepare
+    )
+
+
+def _import_upload(w: World, role: str, _: GrpcCall) -> Any:
+    response = Client().post(
+        "/api/v1/imports/upload",
+        {
+            "workspace_id": w.ws,
+            "file": SimpleUploadedFile("t.csv", IMPORT_CSV, content_type="text/csv"),
+        },
+        HTTP_AUTHORIZATION=f"Bearer {w.tokens[role]}",
+    )
+    if response.status_code != 200:
+        raise RestRefusal(response)
+    return response
+
+
+ENDPOINTS += (
+    _import_endpoint("List", lambda w: impb.ImportListRequest(workspace_id=w.ws), None),
+    _import_endpoint("Get", lambda w: impb.ImportGetRequest(**_import_ref(w)), _import_uploaded),
+    _import_endpoint(
+        "Analyze", lambda w: impb.ImportAnalyzeRequest(**_import_ref(w)), _import_uploaded
+    ),
+    _import_endpoint(
+        "DryRun",
+        lambda w: impb.ImportDryRunRequest(**_import_ref(w), mapping_json=w.import_mapping),
+        _import_analyzed,
+    ),
+    _import_endpoint(
+        "Start",
+        lambda w: impb.ImportStartRequest(**_import_ref(w), mapping_json=w.import_mapping),
+        _import_analyzed,
+    ),
+    _import_endpoint(
+        "Progress", lambda w: impb.ImportProgressRequest(**_import_ref(w)), _import_analyzed
+    ),
+    _import_endpoint(
+        "Cancel", lambda w: impb.ImportCancelRequest(**_import_ref(w)), _import_running
+    ),
+    _import_endpoint("Undo", lambda w: impb.ImportUndoRequest(**_import_ref(w)), _import_done),
+    _import_endpoint(
+        "Discard", lambda w: impb.ImportDiscardRequest(**_import_ref(w)), _import_uploaded
+    ),
+    _import_endpoint(
+        "ListPlaceholders", lambda w: impb.PlaceholderListRequest(workspace_id=w.ws), None
+    ),
+    _import_endpoint(
+        "ClaimPlaceholder",
+        lambda w: impb.PlaceholderClaimRequest(
+            workspace_id=w.ws, placeholder_id=w.placeholder_id, user_id=str(w.target.pk)
+        ),
+        _placeholder_on,
+    ),
+    Endpoint("POST /imports/upload", "data.manage", _import_upload),
+    Endpoint(
+        "ExportController.Start",
+        "data.manage",
+        _grpc(
+            EX,
+            "Start",
+            lambda w: impb.ExportStartRequest(workspace_id=w.ws, project_id=w.project_id),
+        ),
+    ),
+    Endpoint(
+        "ExportController.Status",
+        "data.manage",
+        _grpc(
+            EX,
+            "Status",
+            lambda w: impb.ExportStatusRequest(workspace_id=w.ws, export_id=w.export_id),
+        ),
+        _export_done,
     ),
 )
 
