@@ -8,10 +8,16 @@ from infrastructure.audit import recorder
 
 log = logging.getLogger(__name__)
 
-# AuthEvent types worth showing an admin; failures have no person to file them under.
+# AuthEvent types worth showing an admin. A failed login or a reset request is filed only when it
+# names an account (the auth app passes the person then); a guess at an address with no account has
+# no workspace to file under, and "throttled" is not an event the auth app emits at all: both are
+# deliberate non-goals (they stay in the auth app's own AuthEvent trail, which admins can read).
 AUDITED: Final = frozenset(
     {
         "login_succeeded",
+        "login_failed",
+        "password_reset_requested",
+        "second_factor_failed",
         "password_changed",
         "second_factor_enrolled",
         "second_factor_removed",

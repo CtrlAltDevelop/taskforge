@@ -183,6 +183,42 @@ def test_a_sign_in_is_filed_under_each_workspace_of_the_person(w: Any, rf: Any) 
     assert not AuditEntry.objects.filter(action="auth.login_failed").exists()
 
 
+def test_a_failed_login_and_a_reset_request_on_a_real_account_are_filed(w: Any, rf: Any) -> None:
+    from infrastructure.auth.core import flows
+
+    request = rf.post("/login", REMOTE_ADDR="198.51.100.8")
+    flows.record_event(request, "login_failed", user=w.owner, identifier="o@x.test")
+    flows.record_event(request, "password_reset_requested", user=w.owner, identifier="o@x.test")
+    flows.record_event(request, "second_factor_failed", user=w.owner, method="totp")
+    for action in (
+        "auth.login_failed",
+        "auth.password_reset_requested",
+        "auth.second_factor_failed",
+    ):
+        entry = _one(action, workspace=w.ws.pk)
+        assert (entry.target_id, entry.ip) == (str(w.owner.pk), "198.51.100.8")
+
+
+def test_events_without_a_person_or_outside_the_list_are_not_filed(w: Any, rf: Any) -> None:
+    """Non-goals: a guess at an address with no account has no workspace to file under, and
+    "throttled" (like a logout) is not worth an admin's line."""
+    from infrastructure.auth.core import flows
+
+    request = rf.post("/login", REMOTE_ADDR="198.51.100.9")
+    flows.record_event(request, "password_reset_requested", identifier="ghost@x.test")
+    flows.record_event(request, "throttled", user=w.owner)
+    assert not AuditEntry.objects.filter(action__startswith="auth.").exists()
+
+
+def test_completing_a_blocked_task_anyway_leaves_an_entry(w: Any) -> None:
+    from infrastructure.tasks.models import BlockOverride
+
+    t = task_services.create(w.owner, w.ws, w.pid, "Blocked")
+    BlockOverride.objects.create(task=t, actor=w.owner, blockers="WEB-9")
+    entry = _one("block_override.created", target_id=str(t.pk))
+    assert entry.changes["blockers"] == "WEB-9" and entry.actor == str(w.owner.pk)
+
+
 def test_assigning_someone_records_who_before_and_after(w: Any) -> None:
     t = task_services.create(w.owner, w.ws, w.pid, "T")
     task_services.update(

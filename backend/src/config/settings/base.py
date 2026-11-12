@@ -1270,6 +1270,8 @@ INBOX_SYNC_DELIVERY = os.getenv("DJANGO_INBOX_SYNC_DELIVERY", "") == "1"
 # Audit log: how many proxies of ours sit in front of the app (0: the peer address is the client's;
 # 1 behind Envoy: the last hop of X-Forwarded-For), and extra keys to blank in recorded changes.
 AUDIT_TRUSTED_PROXY_HOPS = int(os.getenv("DJANGO_AUDIT_TRUSTED_PROXY_HOPS", "0"))
+# Audit log retention in days; 0 (the default) keeps entries forever; `make purge` removes older.
+AUDIT_RETENTION_DAYS = int(os.getenv("DJANGO_AUDIT_RETENTION_DAYS", "0"))
 AUDIT_REDACT_KEYS = tuple(k for k in os.getenv("DJANGO_AUDIT_REDACT_KEYS", "").split(",") if k)
 # Automation runs: in a worker thread; "1" runs them on the spot (tests). The seam is
 # ``infrastructure.automations.queue.run_later``: Celery replaces it.

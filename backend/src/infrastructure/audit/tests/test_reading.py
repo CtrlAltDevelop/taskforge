@@ -72,6 +72,19 @@ def test_filters_narrow_by_actor_action_prefix_and_time(w: Any) -> None:
         services.list_entries(w.owner, w.ws, services.Filters(since="yesterday-ish"))
 
 
+def test_the_project_filter_keeps_only_that_projects_entries(w: Any) -> None:
+    other = project_services.create(w.owner, w.ws, "Api", "API").project
+    task_services.create(w.owner, w.ws, str(w.project.pk), "In web")
+    task_services.create(w.owner, w.ws, str(other.pk), "In api")
+    page = services.list_entries(
+        w.owner, w.ws, services.Filters(project_id=str(other.pk), action="task."), limit=200
+    )
+    assert [e.action for e in page.entries] == ["task.created"]
+    assert {str(e.project) for e in page.entries} == {str(other.pk)}
+    both = services.list_entries(w.owner, w.ws, services.Filters(action="task."), limit=200)
+    assert len(both.entries) == 2
+
+
 def test_one_workspace_never_reads_anothers_log(w: Any) -> None:
     other = workspace_services.create(w.member, "Beta", "beta")
     _noise(w, 1, "mine.only")

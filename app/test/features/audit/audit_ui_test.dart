@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,6 +64,30 @@ Future<void> _reveal(WidgetTester tester, String name) async {
   await tester.pumpAndSettle();
 }
 
+class _RecordingPicker extends MethodChannelFilePicker {
+  String? fileName;
+  String? mimeType;
+  Uint8List? bytes;
+
+  @override
+  Future<Uri?> saveFile({
+    required String fileName,
+    required Uint8List bytes,
+    required String mimeType,
+    String? dialogTitle,
+    String? initialDirectory,
+    Function(FilePickerStatus)? onFileSaving,
+    WindowsOptions windowsOptions = const WindowsOptions(),
+    LinuxOptions linuxOptions = const LinuxOptions(),
+    WebOptions webOptions = const WebOptions(),
+  }) async {
+    this.fileName = fileName;
+    this.mimeType = mimeType;
+    this.bytes = bytes;
+    return null;
+  }
+}
+
 void main() {
   group('a task’s activity', () {
     testWidgets('opens on demand and says who did what, newest first', (
@@ -98,6 +125,43 @@ void main() {
       await tester.tap(key('activity-retry'));
       await tester.pumpAndSettle();
       expect(key('activity-empty'), findsOneWidget);
+    });
+
+    testWidgets('days get headings and quick edits by one person fold', (
+      tester,
+    ) async {
+      final now = DateTime.utc(2026, 11, 12, 12);
+      final fake = FakeAuditClient([
+        entry(1, 'task.created', at: now.subtract(const Duration(days: 1))),
+        entry(
+          2,
+          'task.updated',
+          at: now.subtract(const Duration(minutes: 5)),
+          changes: {
+            'title': ['A', 'B'],
+          },
+        ),
+        entry(
+          3,
+          'task.updated',
+          at: now.subtract(const Duration(minutes: 3)),
+          changes: {
+            'title': ['B', 'C'],
+          },
+        ),
+      ]);
+      await open(tester, at: '/projects/p1?task=a', audit: fake);
+      await _reveal(tester, 'activity-section');
+      await tester.tap(key('activity-section'));
+      await tester.pumpAndSettle();
+      await _reveal(tester, 'activity-1');
+
+      expect(find.text('Today'), findsOneWidget);
+      expect(find.text('Yesterday'), findsOneWidget);
+      // Two edits by Ali within ten minutes are one line (the newest id).
+      expect(key('activity-3'), findsOneWidget);
+      expect(key('activity-2'), findsNothing);
+      expect(key('activity-1'), findsOneWidget);
     });
 
     testWidgets('Show older reads the next page', (tester) async {
@@ -210,6 +274,77 @@ void main() {
       await tester.tap(key('audit-export-copy'));
       await tester.pumpAndSettle();
       expect(copied, startsWith('id,at,action'));
+    });
+
+    testWidgets('the person and project filters narrow the read', (
+      tester,
+    ) async {
+      final fake = await open(tester, at: '/audit');
+      expect(fake.listCalls.last.filters.isEmpty, isTrue);
+
+      await tester.tap(key('filter-person'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Hank Hill').last);
+      await tester.pumpAndSettle();
+      expect(fake.listCalls.last.filters.actor, 'u2');
+      expect(key('filters-clear'), findsOneWidget);
+
+      await tester.tap(key('filter-project'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Web').last);
+      await tester.pumpAndSettle();
+      expect(fake.listCalls.last.filters.projectId, 'p1');
+      expect(fake.listCalls.last.filters.actor, 'u2'); // they combine
+
+      await tester.tap(key('filters-clear'));
+      await tester.pumpAndSettle();
+      expect(fake.listCalls.last.filters.isEmpty, isTrue);
+    });
+
+    testWidgets('the date filter reads a range, the end day included', (
+      tester,
+    ) async {
+      final fake = await open(tester, at: '/audit');
+      await tester.tap(key('filter-dates'));
+      await tester.pumpAndSettle();
+      // The first of the month is always inside [five years ago, today].
+      await tester.tap(find.text('1').first);
+      await tester.pump();
+      await tester.tap(find.text('1').first);
+      await tester.pump();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      final f = fake.listCalls.last.filters;
+      expect(f.since, isNotNull);
+      expect(f.until, f.since!.add(const Duration(days: 1)));
+      expect(find.textContaining('Any time'), findsNothing);
+    });
+
+    testWidgets('Save as file hands the whole CSV to the file picker', (
+      tester,
+    ) async {
+      final fake = await open(tester, at: '/audit');
+      fake.bigExport = [
+        'id,at,action',
+        for (var i = 0; i < 100; i++) '$i,2026-11-12,task.created',
+      ].join('\n');
+      final picker = _RecordingPicker();
+      final before = FilePickerPlatform.instance;
+      FilePickerPlatform.instance = picker;
+      addTearDown(() => FilePickerPlatform.instance = before);
+      await tester.tap(key('audit-export'));
+      await tester.pumpAndSettle();
+      await tester.tap(key('audit-export-save'));
+      await tester.pumpAndSettle();
+
+      expect(picker.fileName, 'audit-log.csv');
+      expect(picker.mimeType, 'text/csv');
+      expect(
+        utf8.decode(picker.bytes!),
+        fake.bigExport,
+      ); // all of it, not the preview
+      expect(key('audit-export-dialog'), findsNothing); // closed after saving
     });
 
     testWidgets('a failed read offers Retry', (tester) async {

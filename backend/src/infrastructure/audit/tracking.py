@@ -69,6 +69,15 @@ TRACKED: dict[str, Track] = {
         states={"deleted_at": ("deleted", "restored")},
         single={"status_id": "status_changed"},
     ),
+    # A blocked task completed anyway: who, and which blockers were open.
+    "tasks.BlockOverride": Track(
+        "block_override",
+        "task",
+        ("blockers",),
+        workspace=lambda o: o.task.workspace_id,
+        target=lambda o: o.task_id,
+        project=lambda o: o.task.project_id,
+    ),
     "tasks.TaskLink": Track(
         "link",
         "task",

@@ -12,7 +12,7 @@ Integrations are how teams connect CI, chat and scripts. Incumbents rate-limit o
 A user (or admin for service accounts) creates a **token** with a name, scopes (`tasks:read`, `tasks:write`, …) and optional expiry; the secret is shown **once**, stored only as a hash. The public API is the Ninja REST surface under `/api/v1/` using `Authorization: Bearer tf_…`; docs at `/api/docs`. A **webhook** subscribes a URL to events (`task.created`, `task.status_changed`, `comment.created`…). On each event the server sends a signed POST (HMAC-SHA256 header with timestamp) via Celery, retrying with backoff; each delivery attempt is logged and can be replayed from the UI.
 
 ## Scope
-**In:** token CRUD/revoke/last-used, scopes, rate limiting per token, public v1 endpoints for core objects (workspaces, projects, tasks, comments), webhook CRUD, event catalog, signing, retries, delivery log + redeliver, test ping.
+**In:** token CRUD/revoke/last-used, scopes, rate limiting per token, public v1 endpoints for core objects (workspaces, projects, tasks, comments), webhook CRUD, event catalog, signing, retries, delivery log + redeliver, test ping, audit entries for token creation and revocation (`token.created`, `token.revoked`, via `audit.recorder`; owed by phase 27).
 **Out:** OAuth app marketplace, GraphQL, inbound “apps” platform.
 
 ## Data model
@@ -38,6 +38,7 @@ Settings → Developer: token list/create (copy-once secret dialog), scopes pick
 - [ ] Webhook receives correctly signed event; tampered signature fails verification sample
 - [ ] SSRF attempts to `127.0.0.1`/metadata IP are refused
 - [ ] Redelivery works from UI
+- [ ] Creating and revoking a token each leave an audit entry (actor, token name and prefix; never the token or its hash)
 
 ## Tests
 Hash/prefix lookup, scope enforcement, signature fixtures, SSRF suite, retry schedule.

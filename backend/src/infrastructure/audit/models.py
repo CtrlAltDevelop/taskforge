@@ -29,6 +29,10 @@ class AuditQuerySet(models.QuerySet["AuditEntry"]):
     def bulk_update(self, *args: Any, **kwargs: Any) -> int:
         raise ImmutableError("Audit entries cannot be changed.")
 
+    def purge_before(self, cutoff: Any) -> int:
+        """The one way rows go: retention (``retention.purge``). Not part of any request path."""
+        return models.QuerySet.delete(self.filter(at__lt=cutoff))[0]
+
 
 class AuditEntry(models.Model):
     """Who did what, to what, when. Ids are plain values (no foreign keys) so that deleting a
