@@ -67,6 +67,7 @@ PROJECT_LABELS = frozenset(
         "automations",
         "audit",
         "dashboards",
+        "recurrence",
         "shop",
         "support",
         "wallet",

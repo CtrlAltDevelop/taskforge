@@ -35,6 +35,9 @@ dependencies = [
   "django-unfold>=0.104,<1.0",
   "PyJWT>=2.10,<3.0",
   "python-dotenv>=1.1,<2.0",
+  # Recurring tasks: RRULE expansion, and the time-zone database a slim image does not ship.
+  "python-dateutil>=2.9,<3.0",
+  "tzdata>=2024.1",
   "strawberry-graphql-django>=0.88,<1.0",
 ]
 

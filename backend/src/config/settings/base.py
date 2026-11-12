@@ -1057,6 +1057,7 @@ INSTALLED_APPS = [
     "infrastructure.automations.apps.AutomationsConfig",
     "infrastructure.audit.apps.AuditConfig",
     "infrastructure.dashboards.apps.DashboardsConfig",
+    "infrastructure.recurrence.apps.RecurrenceConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1273,6 +1274,9 @@ AUDIT_REDACT_KEYS = tuple(k for k in os.getenv("DJANGO_AUDIT_REDACT_KEYS", "").s
 # Automation runs: in a worker thread; "1" runs them on the spot (tests). The seam is
 # ``infrastructure.automations.queue.run_later``: Celery replaces it.
 AUTOMATIONS_SYNC_RUN = os.getenv("DJANGO_AUTOMATIONS_SYNC_RUN", "") == "1"
+# Recurring tasks: how many missed instances the clock makes after downtime (the most recent ones;
+# older ones are skipped so a long outage never floods a project).
+RECURRENCE_MAX_CATCHUP = int(os.getenv("DJANGO_RECURRENCE_MAX_CATCHUP", "1"))
 # The link in an email that turns that kind off; ``{token}`` is replaced.
 INBOX_UNSUBSCRIBE_URL = os.getenv(
     "DJANGO_INBOX_UNSUBSCRIBE_URL", "http://localhost:8010/api/v1/inbox/unsubscribe?token={token}"

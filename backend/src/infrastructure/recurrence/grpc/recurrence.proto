@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package config.recurrence;
+
+service RecurrenceController {
+    rpc Clear(RecurrenceClearRequest) returns (RecurrenceCleared) {}
+    rpc Get(RecurrenceGetRequest) returns (RecurrenceAnswer) {}
+    rpc Pause(RecurrencePauseRequest) returns (RecurrenceSeriesAnswer) {}
+    rpc Preview(RecurrencePreviewRequest) returns (RecurrencePreview) {}
+    rpc Set(RecurrenceSetRequest) returns (RecurrenceSeriesAnswer) {}
+    rpc Upcoming(RecurrenceUpcomingRequest) returns (RecurrenceUpcoming) {}
+    rpc UpdateFuture(RecurrenceUpdateFutureRequest) returns (RecurrenceFutureUpdated) {}
+}
+
+message Ghost {
+    string series_id = 1;
+    string project_id = 2;
+    string title = 3;
+    string due_date = 4;
+}
+
+message RecurrenceAnswer {
+    bool repeats = 1;
+    Series series = 2;
+}
+
+message RecurrenceClearRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message RecurrenceCleared {
+    string task_id = 1;
+}
+
+message RecurrenceFutureUpdated {
+    Series series = 1;
+    int32 changed = 2;
+}
+
+message RecurrenceGetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message RecurrencePauseRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    bool paused = 4;
+}
+
+message RecurrencePreview {
+    string summary = 1;
+    repeated string dates = 2;
+}
+
+message RecurrencePreviewRequest {
+    string workspace_id = 1;
+    string rrule = 2;
+    string mode = 3;
+    string timezone = 4;
+    bool skip_weekends = 5;
+    string ends_on = 6;
+    string starts_on = 7;
+    int32 count = 8;
+    string after = 9;
+}
+
+message RecurrenceSeriesAnswer {
+    Series series = 1;
+}
+
+message RecurrenceSetRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string rrule = 4;
+    string mode = 5;
+    string timezone = 6;
+    bool skip_weekends = 7;
+    string ends_on = 8;
+    string at_time = 9;
+    int32 lead_days = 10;
+}
+
+message RecurrenceUpcoming {
+    repeated Ghost ghosts = 1;
+}
+
+message RecurrenceUpcomingRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string start = 3;
+    string end = 4;
+}
+
+message RecurrenceUpdateFutureRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+}
+
+message Series {
+    string id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string rrule = 4;
+    string mode = 5;
+    string timezone = 6;
+    string at_time = 7;
+    int32 lead_days = 8;
+    string starts_on = 9;
+    string ends_on = 10;
+    bool skip_weekends = 11;
+    bool paused = 12;
+    string pause_reason = 13;
+    string summary = 14;
+    string next_due_on = 15;
+    string next_run_at = 16;
+    repeated string next_dates = 17;
+    int32 instance_count = 18;
+    int32 index = 19;
+    bool is_template = 20;
+    bool template_missing = 21;
+    string owner_id = 22;
+    int32 version = 23;
+}
+

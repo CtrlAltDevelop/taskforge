@@ -49,6 +49,9 @@ from infrastructure.projects import members as project_members
 from infrastructure.projects import services as project_services
 from infrastructure.projects.grpc import projects_pb2 as ppb
 from infrastructure.projects.grpc import projects_pb2_grpc as pstubs
+from infrastructure.recurrence import services as recurrence_services
+from infrastructure.recurrence.grpc import recurrence_pb2 as rcpb
+from infrastructure.recurrence.grpc import recurrence_pb2_grpc as rcstubs
 from infrastructure.savedviews import services as view_services
 from infrastructure.savedviews.grpc import savedviews_pb2 as vpb
 from infrastructure.savedviews.grpc import savedviews_pb2_grpc as vstubs
@@ -1886,6 +1889,77 @@ def _rest_handlers() -> set[str]:
                     continue
                 found.update(f"{m} {prefix}{path}" for m in operation.methods)
     return found
+
+
+RC = rcstubs.RecurrenceControllerStub
+
+
+def _repeating(w: World) -> None:
+    _make_task(w)
+    recurrence_services.set_rule(
+        w.workspace.created_by,
+        w.workspace,
+        w.project_id,
+        w.task_id,
+        rrule="FREQ=WEEKLY",
+        mode="schedule",
+    )
+
+
+def _repeat_ref(w: World) -> dict[str, Any]:
+    return {"workspace_id": w.ws, "project_id": w.project_id, "task_id": w.task_id}
+
+
+def _recurrence(method: str, permission: str, build: Callable[[World], Any]) -> Endpoint:
+    return Endpoint(
+        f"RecurrenceController.{method}", permission, _grpc(RC, method, build), _repeating
+    )
+
+
+ENDPOINTS += (
+    _recurrence("Get", "workspace.view", lambda w: rcpb.RecurrenceGetRequest(**_repeat_ref(w))),
+    _recurrence(
+        "Set",
+        "task.update",
+        lambda w: rcpb.RecurrenceSetRequest(
+            **_repeat_ref(w), rrule="FREQ=DAILY", mode="schedule", timezone="UTC"
+        ),
+    ),
+    _recurrence("Clear", "task.update", lambda w: rcpb.RecurrenceClearRequest(**_repeat_ref(w))),
+    _recurrence(
+        "Pause",
+        "task.update",
+        lambda w: rcpb.RecurrencePauseRequest(**_repeat_ref(w), paused=True),
+    ),
+    _recurrence(
+        "UpdateFuture",
+        "task.update",
+        lambda w: rcpb.RecurrenceUpdateFutureRequest(**_repeat_ref(w)),
+    ),
+    Endpoint(
+        "RecurrenceController.Preview",
+        "workspace.view",
+        _grpc(
+            RC,
+            "Preview",
+            lambda w: rcpb.RecurrencePreviewRequest(
+                workspace_id=w.ws, rrule="FREQ=DAILY", mode="schedule", count=3
+            ),
+        ),
+    ),
+    Endpoint(
+        "RecurrenceController.Upcoming",
+        "workspace.view",
+        _grpc(
+            RC,
+            "Upcoming",
+            lambda w: rcpb.RecurrenceUpcomingRequest(
+                workspace_id=w.ws, start="2026-11-01", end="2026-11-30"
+            ),
+        ),
+        _repeating,
+    ),
+)
 
 
 def test_every_handler_is_classified() -> None:

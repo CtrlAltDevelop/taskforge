@@ -270,6 +270,15 @@ TRACKED: dict[str, Track] = {
         project=lambda o: o.project_id,
         single={"enabled": "toggled"},
     ),
+    "recurrence.RecurrenceSeries": Track(
+        "recurrence",
+        "recurrence",
+        ("rrule", "mode", "timezone", "at_time", "lead_days", "ends_on", "skip_weekends", "paused"),
+        workspace=lambda o: o.workspace_id,
+        project=lambda o: o.project_id,
+        extra=lambda o: {"task_id": o.template_task_id},
+        single={"paused": "paused"},
+    ),
     "savedviews.SavedView": Track(
         "view",
         "view",

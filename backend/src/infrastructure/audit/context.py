@@ -89,3 +89,14 @@ def as_automation(automation_id: object = "") -> Iterator[None]:
     finally:
         _actor_id.reset(who)
         _actor_type.reset(kind)
+
+
+@contextmanager
+def as_system() -> Iterator[None]:
+    """Changes made inside are the system's (a clock making a recurring task), not a person's,
+    although the rows still belong to the person whose permissions it borrows."""
+    kind = _actor_type.set("system")
+    try:
+        yield
+    finally:
+        _actor_type.reset(kind)
