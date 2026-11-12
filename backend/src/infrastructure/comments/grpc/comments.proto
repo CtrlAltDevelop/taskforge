@@ -37,6 +37,8 @@ message CommentCreateRequest {
     string body = 4;
     string parent_id = 5;
     bool grant_access = 6;
+    string client_id = 7;
+    string client_mutation_id = 8;
 }
 
 message CommentDeleteRequest {

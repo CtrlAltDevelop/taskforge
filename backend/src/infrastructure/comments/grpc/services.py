@@ -24,6 +24,7 @@ from infrastructure.comments.grpc.serializers import Comment, CommentRevision, M
 from infrastructure.comments.models import Comment as CommentRow
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
+from infrastructure.sync import mutations
 from infrastructure.workspaces.scoping import require_workspace
 
 TASK = [
@@ -109,6 +110,8 @@ class CommentService(generics.GenericService):
             {"name": "body", "type": "string"},
             {"name": "parent_id", "type": "string"},
             {"name": "grant_access", "type": "bool"},
+            {"name": "client_id", "type": "string"},
+            {"name": "client_mutation_id", "type": "string"},
         ],
         request_name="CommentCreateRequest",
         response=Comment,
@@ -117,9 +120,10 @@ class CommentService(generics.GenericService):
     @action
     async def Create(self, request: Any, context: Any) -> Any:
         user, workspace = await _scope(request, context)
-        return await sync_to_async(
-            lambda: _message(
-                services.create(
+
+        def run() -> Any:
+            def apply() -> Any:
+                return services.create(
                     user,
                     workspace,
                     request.project_id,
@@ -127,9 +131,24 @@ class CommentService(generics.GenericService):
                     request.body,
                     parent_id=request.parent_id,
                     grant_access=request.grant_access,
+                    comment_id=request.client_id,
+                )
+
+            return _message(
+                mutations.once(
+                    user,
+                    workspace,
+                    request.client_mutation_id,
+                    "comment.create",
+                    apply,
+                    entity=lambda c: ("comment", c.pk),
+                    current=lambda applied: services.present_one(
+                        user, workspace, request.project_id, str(applied.entity_id)
+                    ),
                 )
             )
-        )()
+
+        return await sync_to_async(run)()
 
     @grpc_action(
         request=[

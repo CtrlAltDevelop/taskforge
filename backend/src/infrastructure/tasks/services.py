@@ -241,6 +241,19 @@ def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> T
     return _reload(_load_task(project, task_id, trashed=True), actor, workspace)
 
 
+def _chosen_id(raw: str) -> uuid.UUID:
+    """The id for a new task: the one a client chose (a fresh UUID), else a new one."""
+    if not raw:
+        return uuid.uuid4()
+    try:
+        chosen = uuid.UUID(str(raw))
+    except ValueError:
+        raise ApiError("The task id must be a UUID.") from None
+    if Task.objects.filter(pk=chosen).exists():
+        raise ApiError("A task with that id exists already.", status=409)
+    return chosen
+
+
 def create(
     actor: Any,
     workspace: Workspace,
@@ -256,9 +269,11 @@ def create(
     assignee_ids: Any = (),
     parent_id: str = "",
     field_values: Mapping[str, str] | None = None,
+    task_id: str = "",
 ) -> Task:
     """``field_values`` maps custom field ids to wire values; required fields without a value or
-    default refuse the whole create (``FIELD_REQUIRED``)."""
+    default refuse the whole create (``FIELD_REQUIRED``). ``task_id`` is the id an offline client
+    chose for the task (a UUID not used before); the server numbers it."""
     with transaction.atomic():
         project = _writable_project(actor, workspace, project_id, "task.create")
         parent = _live_parent(project, parent_id) if parent_id else None
@@ -279,12 +294,12 @@ def create(
         custom_changes = custom.prepare(project, field_values or {}, creating=True)
         workflows.check_create(project, cleaned["status"])
         number = projects.next_task_number(project)
-        task_id = uuid.uuid4()
+        made_id = _chosen_id(task_id)
         position = tree.next_position(project.pk, parent.pk if parent else None)
-        depth, path, tree_key = tree.placement(parent, task_id, position)
+        depth, path, tree_key = tree.placement(parent, made_id, position)
         tree.check_depth(depth)
         task = Task.objects.create(
-            id=task_id,
+            id=made_id,
             workspace=workspace,
             project=project,
             number=number,

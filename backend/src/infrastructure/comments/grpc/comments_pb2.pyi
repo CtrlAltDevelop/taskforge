@@ -85,12 +85,16 @@ class CommentCreateRequest(_message.Message):
     BODY_FIELD_NUMBER: _builtins.int
     PARENT_ID_FIELD_NUMBER: _builtins.int
     GRANT_ACCESS_FIELD_NUMBER: _builtins.int
+    CLIENT_ID_FIELD_NUMBER: _builtins.int
+    CLIENT_MUTATION_ID_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     task_id: _builtins.str
     body: _builtins.str
     parent_id: _builtins.str
     grant_access: _builtins.bool
+    client_id: _builtins.str
+    client_mutation_id: _builtins.str
     def __init__(
         self,
         *,
@@ -100,10 +104,12 @@ class CommentCreateRequest(_message.Message):
         body: _builtins.str = ...,
         parent_id: _builtins.str = ...,
         grant_access: _builtins.bool = ...,
+        client_id: _builtins.str = ...,
+        client_mutation_id: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["body", b"body", "grant_access", b"grant_access", "parent_id", b"parent_id", "project_id", b"project_id", "task_id", b"task_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["body", b"body", "client_id", b"client_id", "client_mutation_id", b"client_mutation_id", "grant_access", b"grant_access", "parent_id", b"parent_id", "project_id", b"project_id", "task_id", b"task_id", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

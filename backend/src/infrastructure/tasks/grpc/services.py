@@ -32,6 +32,7 @@ from django_socio_grpc.decorators import grpc_action
 
 from infrastructure.common.grpc.errors import action, require_caller, stream_action
 from infrastructure.common.identity import grpc_caller
+from infrastructure.sync import mutations
 from infrastructure.tasks import bulk, services
 from infrastructure.tasks.grpc.link_services import LinkService
 from infrastructure.tasks.grpc.serializers import (
@@ -49,6 +50,9 @@ IDS: list[dict[str, str]] = [
     {"name": "project_id", "type": "string"},
 ]
 ID = {"name": "id", "type": "string"}
+# An offline client names its change (and a task it creates) itself; see sync.mutations.
+CLIENT_ID = {"name": "client_id", "type": "string"}
+MUTATION = {"name": "client_mutation_id", "type": "string"}
 # A filter (the AST of a TFQL query as JSON) and the viewer's today for its relative dates.
 FILTER: list[dict[str, str]] = [
     {"name": "filter_ast", "type": "string"},
@@ -136,6 +140,27 @@ async def _one(request: Any, context: Any, call: Any) -> Any:
     return await sync_to_async(lambda: _message(call(user, workspace)))()
 
 
+async def _once(request: Any, context: Any, rpc: str, call: Any, current: Any) -> Any:
+    """Like ``_one``, but a change that carries a ``client_mutation_id`` is applied once: a repeat
+    answers with the task as it is now (``current(user, workspace, task_id)``, the id recorded the
+    first time)."""
+    user, workspace = await _scope(request, context)
+
+    def run() -> Any:
+        done = mutations.once(
+            user,
+            workspace,
+            request.client_mutation_id,
+            rpc,
+            lambda: call(user, workspace),
+            entity=lambda task: ("task", task.pk),
+            current=lambda applied: current(user, workspace, str(applied.entity_id)),
+        )
+        return _message(done)
+
+    return await sync_to_async(run)()
+
+
 def _page(user: Any, workspace: Any, request: Any, cursor: str) -> tuple[list[Any], str]:
     tasks, following = services.list_page(
         user,
@@ -165,16 +190,17 @@ class TaskService(generics.GenericService):
         )
 
     @grpc_action(
-        request=[*IDS, *CREATE_FIELDS],
+        request=[*IDS, *CREATE_FIELDS, CLIENT_ID, MUTATION],
         request_name="TaskCreateRequest",
         response=Task,
         response_name="Task",
     )
     @action
     async def Create(self, request: Any, context: Any) -> Any:
-        return await _one(
+        return await _once(
             request,
             context,
+            "task.create",
             lambda u, w: services.create(
                 u,
                 w,
@@ -189,7 +215,9 @@ class TaskService(generics.GenericService):
                 assignee_ids=list(request.assignee_ids),
                 parent_id=request.parent_id,
                 field_values={v.field_id: v.value for v in request.field_values},
+                task_id=request.client_id,
             ),
+            lambda u, w, task: services.get(u, w, request.project_id, task),
         )
 
     @grpc_action(
@@ -197,6 +225,7 @@ class TaskService(generics.GenericService):
             *IDS,
             ID,
             VERSION,
+            MUTATION,
             *({"name": n, "type": "string", "cardinality": "optional"} for n in TEXT_FIELDS),
             {"name": "set_assignees", "type": "bool"},
             {"name": "assignee_ids", "cardinality": "repeated", "type": "string"},
@@ -214,9 +243,10 @@ class TaskService(generics.GenericService):
             sent["assignee_ids"] = list(request.assignee_ids)
         if request.field_values:
             sent["field_values"] = {v.field_id: v.value for v in request.field_values}
-        return await _one(
+        return await _once(
             request,
             context,
+            "task.update",
             lambda u, w: services.update(
                 u,
                 w,
@@ -226,6 +256,7 @@ class TaskService(generics.GenericService):
                 sent,
                 override_blocked=request.override_blocked,
             ),
+            lambda u, w, task: services.get(u, w, request.project_id, task),
         )
 
     @grpc_action(
@@ -259,17 +290,19 @@ class TaskService(generics.GenericService):
         )
 
     @grpc_action(
-        request=[*IDS, ID, {"name": "mode", "type": "string"}],
+        request=[*IDS, ID, {"name": "mode", "type": "string"}, MUTATION],
         request_name="TaskDeleteRequest",
         response=Task,
         response_name="Task",
     )
     @action
     async def Delete(self, request: Any, context: Any) -> Any:
-        return await _one(
+        return await _once(
             request,
             context,
+            "task.delete",
             lambda u, w: services.delete(u, w, request.project_id, request.id, request.mode),
+            lambda u, w, task: services.reload(u, w, request.project_id, task),
         )
 
     @grpc_action(

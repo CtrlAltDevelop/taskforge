@@ -11,6 +11,21 @@ _This app publishes no routes of its own._
 ## Models
 
 <!-- generated:models -->
+#### `AppliedMutation`
+
+A change a client made offline and sent later, remembered by the id the client gave it, so
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | BigAuto | primary key |
+| `workspace` | ForeignKey | → `workspaces.Workspace` |
+| `client_mutation_id` | UUID |  |
+| `actor` | Char |  |
+| `rpc` | Char |  |
+| `entity_type` | Char |  |
+| `entity_id` | UUID |  |
+| `created_at` | DateTime |  |
+
 #### `ChangeLog`
 
 What changed, never the content. Appended after the change commits and trimmed after

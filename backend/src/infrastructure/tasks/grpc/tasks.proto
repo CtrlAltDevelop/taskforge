@@ -270,6 +270,8 @@ message TaskCreateRequest {
     string parent_id = 10;
     repeated TaskFieldValue field_values = 11;
     string due_time = 12;
+    string client_id = 13;
+    string client_mutation_id = 14;
 }
 
 message TaskDeleteRequest {
@@ -277,6 +279,7 @@ message TaskDeleteRequest {
     string project_id = 2;
     string id = 3;
     string mode = 4;
+    string client_mutation_id = 5;
 }
 
 message TaskFieldValue {
@@ -413,6 +416,7 @@ message TaskUpdateRequest {
     bool override_blocked = 13;
     repeated TaskFieldValue field_values = 14;
     optional string due_time = 15;
+    string client_mutation_id = 16;
 }
 
 message TimelineApplied {

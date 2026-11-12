@@ -92,3 +92,29 @@ class TrimMark(models.Model):
 
     def __str__(self) -> str:
         return f"trimmed up to {self.upto}"
+
+
+class AppliedMutation(models.Model):
+    """A change a client made offline and sent later, remembered by the id the client gave it, so
+    sending it again (a retry after a dropped answer, a replay after a crash) does nothing twice:
+    the second call answers with the entity as it is now. Only changes that were applied are
+    recorded; a refused one can be sent again."""
+
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
+    client_mutation_id = models.UUIDField()
+    actor = models.CharField(max_length=36)
+    rpc = models.CharField(max_length=40)
+    entity_type = models.CharField(max_length=12)
+    entity_id = models.UUIDField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["workspace", "client_mutation_id"], name="applied_mutation_unique"
+            )
+        ]
+        indexes = [models.Index(fields=["created_at"], name="applied_mutation_at_idx")]
+
+    def __str__(self) -> str:
+        return f"{self.rpc} {self.client_mutation_id}"

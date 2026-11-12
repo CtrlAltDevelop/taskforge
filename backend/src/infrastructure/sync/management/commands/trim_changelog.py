@@ -2,7 +2,7 @@ from typing import Any
 
 from django.core.management.base import BaseCommand
 
-from infrastructure.sync import services
+from infrastructure.sync import mutations, services
 from infrastructure.sync.publish import RETENTION_DAYS
 
 
@@ -14,3 +14,4 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
         self.stdout.write(f"Trimmed {services.trim(options['days'])} entries.")
+        self.stdout.write(f"Forgot {mutations.purge()} old offline mutations.")

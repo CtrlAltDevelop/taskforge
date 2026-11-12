@@ -103,6 +103,12 @@ def _load(
     return project, comment
 
 
+def present_one(actor: Any, workspace: Workspace, project_id: str, comment_id: str) -> Comment:
+    """The comment as a client shows it, for whoever may see its task."""
+    _, comment = _load(actor, workspace, project_id, comment_id)
+    return present([comment])[0]
+
+
 def present(comments: list[Comment]) -> list[Comment]:
     """Attach what a client shows of each comment (its mentions, reactions as ``{emoji: [user
     ids]}``, how many edits it has) in three queries; returns the same comments."""
@@ -194,6 +200,7 @@ def create(
     *,
     parent_id: str = "",
     grant_access: bool = False,
+    comment_id: str = "",
 ) -> Comment:
     """Add a comment (or, with ``parent_id``, a reply to a top-level one of the same task).
     Everyone it mentions must be able to see the task (see ``mentions.resolve``)."""
@@ -204,7 +211,9 @@ def create(
         people = mentions.resolve(
             actor, workspace, project, cleaned.mention_ids, grant_access=grant_access
         )
+        chosen = _chosen_id(comment_id)
         comment = Comment.objects.create(
+            id=chosen,
             workspace=workspace,
             task=task,
             author=actor,
@@ -215,6 +224,19 @@ def create(
         announce(comment, "created")
         announce_mentions(comment, _others(actor, fresh))
     return present([comment])[0]
+
+
+def _chosen_id(raw: str) -> uuid.UUID:
+    """The id for a new comment: the one an offline client chose, else a new one."""
+    if not raw:
+        return uuid.uuid4()
+    try:
+        chosen = uuid.UUID(str(raw))
+    except ValueError:
+        raise ApiError("The comment id must be a UUID.") from None
+    if Comment.objects.filter(pk=chosen).exists():
+        raise ApiError("A comment with that id exists already.", status=409)
+    return chosen
 
 
 def _parent(task: Task, parent_id: str) -> Comment | None:
