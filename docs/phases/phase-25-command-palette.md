@@ -1,6 +1,6 @@
 # Phase 25 — Command Palette and Keyboard Shortcuts
 
-**Status:** TODO
+**Status:** DONE (partial: see *Built* — actions that act on a selected task or the timer are not registered yet)
 
 ## Feature
 A **command palette** (`Cmd/Ctrl+K`) to run any action or jump anywhere, plus a consistent set of customizable keyboard shortcuts.
@@ -31,13 +31,20 @@ Overlay dialog with input and result list (keyboard-driven), `Shortcuts`/`Action
 - Rebinding two actions to one key is rejected.
 
 ## Acceptance criteria
-- [ ] Every primary action in phases 05–24 reachable from palette
-- [ ] Cheat sheet is generated from the registry (no hand-maintained list)
-- [ ] Rebinding persists and syncs
-- [ ] Palette opens < 50 ms and filters as you type
+- [ ] Every primary action in phases 05–24 reachable from palette — **partly**: every page and project area is; creating a task, changing status, assigning, starting a timer are not (they need a handle on the selected task)
+- [x] Cheat sheet is generated from the registry (no hand-maintained list)
+- [x] Rebinding persists and syncs (server-side per person; read at start-up, so another device picks it up on its next launch, not live)
+- [ ] Palette opens < 50 ms and filters as you type — filters as you type (actions are ranked in memory); the 50 ms was not measured
 
 ## Tests
 Registry uniqueness, availability predicates, fuzzy ranking, conflict detection, shortcut widget tests.
 
 ## Depends on
 Phases 20 (search) and all feature phases that register actions.
+
+## Built
+- Backend: new `shortcuts` app (`UserShortcut`, `ShortcutController.Get/Set`). Personal, not per workspace. Chords are validated and normalised (`mod+shift+k`; browser keys refused); a chord two of a person's actions share is `SHORTCUT_CONFLICT` and names the other action; `reset` drops the override.
+- App: `core/actions` (action, registry with uniqueness/label/default-clash checks, chord, fuzzy ranking) and `features/shortcuts` (built-in actions, palette, cheat sheet with rebinding, key host, phone quick-actions sheet). `Ctrl/Cmd+K` is now the palette (it used to open search; `/` still opens search). `?` opens the cheat sheet. Palette: `>` actions, `#` projects, `@` people, anything else actions plus a search (a task id jumps).
+- Registered: palette, search, cheat sheet, every top-level page and every page of the current project (offered only inside a project).
+- Not done: task-level actions (create, status, assign, timer), live pick-up of a rebinding on another open device, a measured open time.
+- A phone shows a quick-actions button beside the timer chip instead of keys.
