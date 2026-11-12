@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/misc.dart' show Override;
+
+import '../shortcuts/fakes.dart';
+
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -81,6 +84,7 @@ Future<Pumped> pumpProjects(
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
+  FakeShortcutsClient? shortcuts,
   List<Override> overrides = const [],
   List<String> workspaces = const ['w1'],
   Size size = const Size(1400, 1200),
@@ -101,6 +105,7 @@ Future<Pumped> pumpProjects(
     docs: docs,
     automations: automations,
     localNotifier: localNotifier,
+    shortcuts: shortcuts,
     sync: sync,
     overrides: [
       membersClientProvider.overrideWithValue(team()),

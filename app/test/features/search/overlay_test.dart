@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
-import 'package:taskforge/features/search/presentation/search_hotkeys.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_host.dart';
 
 import '../projects/fakes.dart';
 import '../projects/projects_test_support.dart';
@@ -234,7 +235,7 @@ void main() {
     expect(key('more-task'), findsNothing);
   });
 
-  testWidgets('the slash key and Ctrl+K open the box, but not while typing', (
+  testWidgets('the slash key opens the box and Ctrl+K the command palette', (
     tester,
   ) async {
     await open(tester);
@@ -250,7 +251,7 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.keyK);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
     await tester.pumpAndSettle();
-    expect(key('search-field'), findsOneWidget);
+    expect(key('palette-field'), findsOneWidget);
   });
 
   testWidgets('a slash typed into a text field is text, not a shortcut', (
@@ -259,8 +260,10 @@ void main() {
     // No router here: opening the search would throw, so a pass means the
     // guard held.
     await tester.pumpWidget(
-      const MaterialApp(
-        home: SearchHotkeys(child: Scaffold(body: TextField(autofocus: true))),
+      const ProviderScope(
+        child: MaterialApp(
+          home: ShortcutHost(child: Scaffold(body: TextField(autofocus: true))),
+        ),
       ),
     );
     await tester.pump();

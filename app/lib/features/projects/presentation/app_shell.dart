@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/features/projects/presentation/project_sidebar.dart';
-import 'package:taskforge/features/search/presentation/search_hotkeys.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_host.dart';
 import 'package:taskforge/features/time/presentation/timer_chip.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
@@ -18,7 +18,7 @@ class ShellScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= desktopBreakpoint;
-    return SearchHotkeys(child: _scaffold(wide));
+    return ShortcutHost(child: _scaffold(wide));
   }
 
   Widget _scaffold(bool wide) {
@@ -37,7 +37,12 @@ class ShellScaffold extends StatelessWidget {
     }
     return Scaffold(
       appBar: appBar,
-      floatingActionButton: const TimerChip(),
+      // No keyboard on a phone: a button opens the actions as a sheet.
+      floatingActionButton: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [TimerChip(), SizedBox(height: 8), QuickActionsButton()],
+      ),
       drawer: Drawer(
         child: SafeArea(
           child: Builder(

@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:taskforge/app.dart';
+import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
+
+import '../shortcuts/fakes.dart';
+
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
@@ -152,6 +156,7 @@ class FakeWorkspaceClient implements WorkspaceClient {
 Future<ProviderContainer> pumpSignedIn(
   WidgetTester tester,
   FakeWorkspaceClient client, {
+  FakeShortcutsClient? shortcuts,
   List<Override> overrides = const [],
   FakeRolesClient? roles,
   FakeProjectsClient? projects,
@@ -202,6 +207,9 @@ Future<ProviderContainer> pumpSignedIn(
       ),
       localNotifierProvider.overrideWithValue(
         localNotifier ?? FakeLocalNotifier(),
+      ),
+      shortcutsClientProvider.overrideWithValue(
+        shortcuts ?? FakeShortcutsClient(),
       ),
       ...overrides,
     ],
