@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/actions/action_registry.dart';
 import 'package:taskforge/core/actions/app_action.dart';
@@ -35,6 +36,13 @@ class _FakeContext implements ActionContext {
   @override
   String? get projectId =>
       RegExp(r'^/projects/([^/?]+)').firstMatch(location)?.group(1);
+
+  @override
+  String? get taskId => Uri.tryParse(location)?.queryParameters['task'];
+
+  /// Nothing loaded: task and timer actions answer "not available".
+  @override
+  final ProviderContainer container = ProviderContainer();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -252,5 +260,21 @@ void main() {
     final groups = groupActions(builtInActions);
     final all = groups.values.expand((a) => a).map((a) => a.id).toSet();
     expect(all, {for (final a in builtInActions) a.id});
+  });
+
+  test('ranking every action for a keystroke takes far under 50 ms', () {
+    final watch = Stopwatch()..start();
+    for (final query in ['i', 'in', 'inb', 'new task', 'timer', 'zzzz']) {
+      for (final a in builtInActions) {
+        fuzzyScore(query, a.title);
+        for (final k in a.keywords) {
+          fuzzyScore(query, k);
+        }
+      }
+    }
+    watch.stop();
+    // Six keystrokes over the whole registry, with generous headroom for a
+    // slow CI machine: one keystroke has a 50 ms budget.
+    expect(watch.elapsedMilliseconds, lessThan(50));
   });
 }

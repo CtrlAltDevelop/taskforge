@@ -22,6 +22,7 @@ import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
+import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
@@ -99,6 +100,7 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       everything = true;
       inboxDirty = true;
       readTimeAgain(ref);
+      ref.invalidate(shortcutOverridesProvider);
       readSprintsAgain(ref);
       readDocsAgain(ref);
       readAutomationsAgain(ref);
@@ -110,6 +112,11 @@ final syncCoordinatorProvider = Provider<void>((ref) {
       // The entity is this person: the badges and the open inbox read again.
       inboxDirty = true;
       soon();
+      return;
+    }
+    if (event.type == 'shortcuts.changed') {
+      // The entity is this person: their key bindings read again.
+      ref.invalidate(shortcutOverridesProvider);
       return;
     }
     if (event.type == 'timer.changed') {

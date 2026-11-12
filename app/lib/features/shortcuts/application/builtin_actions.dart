@@ -1,5 +1,6 @@
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
+import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
 import 'package:taskforge/features/shortcuts/presentation/cheat_sheet.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
 
@@ -40,9 +41,8 @@ AppAction _projectPage(
 );
 
 /// Every action the app offers, registered once. The palette, the keys, the
-/// cheat sheet and the phone quick-actions sheet all read this list. Pages
-/// that act on what is selected on screen (a task, a timer) register their
-/// own entries here as they get a handle the palette can call.
+/// cheat sheet and the phone quick-actions sheet all read this list. Actions
+/// on the open task or the timer live in [taskLevelActions].
 final List<AppAction> builtInActions = [
   AppAction(
     id: 'palette.open',
@@ -192,4 +192,5 @@ final List<AppAction> builtInActions = [
     '/settings',
     keywords: const ['archive', 'members', 'features'],
   ),
+  ...taskLevelActions,
 ];

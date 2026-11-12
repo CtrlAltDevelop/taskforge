@@ -25,6 +25,9 @@ class ActionContext {
   /// The project the current route belongs to, or null.
   String? get projectId =>
       RegExp(r'^/projects/([^/?]+)').firstMatch(location)?.group(1);
+
+  /// The task open on screen (`?task=` in the route), or null.
+  String? get taskId => Uri.tryParse(location)?.queryParameters['task'];
 }
 
 /// One thing a person can do, registered once. The palette, the keys, the
