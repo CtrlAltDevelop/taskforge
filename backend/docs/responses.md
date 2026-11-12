@@ -176,6 +176,9 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `VIEW_LIMIT` | That is the most layouts one list can hold. |
 | `SHORTCUT_INVALID` | The shortcut is not valid. |
 | `SHORTCUT_CONFLICT` | Another action already uses those keys. |
+| `DASHBOARD_INVALID` | The dashboard or widget is not valid (the detail says why). |
+| `DASHBOARD_LIMIT` | That is the most widgets or dashboards one place can hold. |
+| `DASHBOARD_TOO_HEAVY` | This widget takes too long to compute. Narrow its filter. |
 | `FILTER_INVALID` | The filter is not valid (the detail says where). |
 | `FILTER_NAME_TAKEN` | A filter with that name already exists here. |
 | `FILTER_LIMIT` | That is the most saved filters one place can hold. |

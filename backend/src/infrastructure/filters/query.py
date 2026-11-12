@@ -98,18 +98,30 @@ def _time_limit() -> Any:
         yield
 
 
-def guarded[T](read: Callable[[], T], where: Q) -> T:
-    """``read()`` (which must run its query to completion) under the time limit when it is
-    filtered by ``where``. A query that runs out of time is an ``ApiError`` asking for a narrower
-    filter."""
-    if not where:
-        return read()
+class StatementTimeout(Exception):  # noqa: N818 - a condition, not an error of the caller's making
+    """A query ran past ``STATEMENT_TIMEOUT_MS`` (PostgreSQL cancelled it)."""
+
+
+def timed[T](read: Callable[[], T]) -> T:
+    """``read()`` (which must run its query to completion) under the time limit, whatever it
+    asks. Running out of time is a ``StatementTimeout`` the caller words for its own users."""
     try:
         with _time_limit():
             return read()
     except OperationalError as error:
         if "statement timeout" not in str(error).lower():
             raise
+        raise StatementTimeout from None
+
+
+def guarded[T](read: Callable[[], T], where: Q) -> T:
+    """``read()`` under the time limit when it is filtered by ``where``. A query that runs out of
+    time is an ``ApiError`` asking for a narrower filter."""
+    if not where:
+        return read()
+    try:
+        return timed(read)
+    except StatementTimeout:
         raise ApiError(
             "This filter takes too long to run. Narrow it down.",
             title=ResponseTitle.FILTER_INVALID,

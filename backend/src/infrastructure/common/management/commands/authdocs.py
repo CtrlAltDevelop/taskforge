@@ -66,6 +66,7 @@ PROJECT_LABELS = frozenset(
         "wikidocs",
         "automations",
         "audit",
+        "dashboards",
         "shop",
         "support",
         "wallet",

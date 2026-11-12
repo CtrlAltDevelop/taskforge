@@ -78,6 +78,22 @@ TRACKED: dict[str, Track] = {
         project=lambda o: o.from_task.project_id,
         extra=lambda o: {"link_id": o.pk},
     ),
+    "dashboards.Dashboard": Track(
+        "dashboard",
+        "dashboard",
+        ("name", "visibility", "project_id", "layout"),
+        workspace=lambda o: o.workspace_id,
+        project=lambda o: o.project_id,
+    ),
+    "dashboards.Widget": Track(
+        "widget",
+        "dashboard",
+        ("type", "title", "config"),
+        workspace=lambda o: o.dashboard.workspace_id,
+        target=lambda o: o.dashboard_id,
+        project=lambda o: o.dashboard.project_id,
+        extra=lambda o: {"widget_id": o.pk},
+    ),
     "tasks.WorkingCalendarSetting": Track(
         "calendar",
         "workspace",

@@ -1056,6 +1056,7 @@ INSTALLED_APPS = [
     "infrastructure.docs.apps.DocsConfig",
     "infrastructure.automations.apps.AutomationsConfig",
     "infrastructure.audit.apps.AuditConfig",
+    "infrastructure.dashboards.apps.DashboardsConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,

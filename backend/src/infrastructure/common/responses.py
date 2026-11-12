@@ -163,6 +163,11 @@ class ResponseTitle(StrEnum):
     SHORTCUT_INVALID = "SHORTCUT_INVALID"
     SHORTCUT_CONFLICT = "SHORTCUT_CONFLICT"
 
+    # Dashboards
+    DASHBOARD_INVALID = "DASHBOARD_INVALID"
+    DASHBOARD_LIMIT = "DASHBOARD_LIMIT"
+    DASHBOARD_TOO_HEAVY = "DASHBOARD_TOO_HEAVY"
+
     # Filters
     FILTER_INVALID = "FILTER_INVALID"
     FILTER_NAME_TAKEN = "FILTER_NAME_TAKEN"
@@ -244,6 +249,9 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.VIEW_LIMIT: "That is the most layouts one list can hold.",
     ResponseTitle.SHORTCUT_INVALID: "The shortcut is not valid.",
     ResponseTitle.SHORTCUT_CONFLICT: "Another action already uses those keys.",
+    ResponseTitle.DASHBOARD_INVALID: "The dashboard or widget is not valid (the detail says why).",
+    ResponseTitle.DASHBOARD_LIMIT: "That is the most widgets or dashboards one place can hold.",
+    ResponseTitle.DASHBOARD_TOO_HEAVY: "This widget takes too long to compute. Narrow its filter.",
     ResponseTitle.FILTER_INVALID: "The filter is not valid (the detail says where).",
     ResponseTitle.FILTER_NAME_TAKEN: "A filter with that name already exists here.",
     ResponseTitle.FILTER_LIMIT: "That is the most saved filters one place can hold.",

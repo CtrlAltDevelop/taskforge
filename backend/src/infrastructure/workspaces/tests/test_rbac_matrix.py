@@ -6,6 +6,7 @@ neither ``ENDPOINTS`` nor ``EXEMPT`` (and is not in ``ACCOUNT_LEVEL_MODULES``) f
 not from hand-written booleans.
 """
 
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -32,6 +33,9 @@ from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
 from infrastructure.customfields import services as field_services
 from infrastructure.customfields.grpc import customfields_pb2 as fpb
 from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
+from infrastructure.dashboards import services as dashboard_services
+from infrastructure.dashboards.grpc import dashboards_pb2 as dbpb
+from infrastructure.dashboards.grpc import dashboards_pb2_grpc as dbstubs
 from infrastructure.docs import services as doc_services
 from infrastructure.docs.grpc import wikidocs_pb2 as dpb
 from infrastructure.docs.grpc import wikidocs_pb2_grpc as dstubs
@@ -102,6 +106,8 @@ class World:
     doc_revision: int = 0  # its first revision
     automation_id: str = ""  # a rule of the open project, made by the Owner
     automation_run_id: str = ""  # a run of it (the task was made after the rule)
+    dashboard_id: str = ""  # a workspace dashboard of the Owner's, with one number widget
+    widget_id: str = ""  # its widget
 
     @property
     def ws(self) -> str:
@@ -1603,6 +1609,91 @@ ENDPOINTS += (
             ),
         ),
         _make_task,
+    ),
+)
+
+DB = dbstubs.DashboardControllerStub
+DW = dbstubs.WidgetControllerStub
+
+
+def _dashboard_on(w: World) -> None:
+    owner = w.workspace.created_by
+    made = dashboard_services.save(
+        owner,
+        w.workspace,
+        "",
+        name="Team",
+        visibility="workspace",
+        project_id="",
+        widgets=[
+            dashboard_services.WidgetInput(str(uuid.uuid4()), "number", "Open", {"scope": "open"})
+        ],
+        layout=[],
+    )
+    w.dashboard_id = str(made.dashboard.pk)
+    w.widget_id = str(made.widgets[0].pk)
+
+
+def _widget_endpoint(method: str, build: Callable[[World], Any]) -> Endpoint:
+    return Endpoint(
+        f"WidgetController.{method}", "workspace.view", _grpc(DW, method, build), _dashboard_on
+    )
+
+
+ENDPOINTS += (
+    Endpoint(
+        "DashboardController.List",
+        "workspace.view",
+        _grpc(DB, "List", lambda w: dbpb.DashboardListRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "DashboardController.Get",
+        "workspace.view",
+        _grpc(DB, "Get", lambda w: dbpb.DashboardGetRequest(workspace_id=w.ws, id=w.dashboard_id)),
+        _dashboard_on,
+    ),
+    Endpoint(
+        "DashboardController.Save",
+        "workspace.view",  # personal is anyone's; sharing is in the service tests
+        _grpc(
+            DB,
+            "Save",
+            lambda w: dbpb.DashboardSaveRequest(
+                workspace_id=w.ws, name="Mine", visibility="personal", layout_json="[]"
+            ),
+        ),
+    ),
+    Endpoint(
+        "DashboardController.Delete",
+        "dashboard.manage",  # the Owner made it; anyone else needs the permission
+        _grpc(
+            DB,
+            "Delete",
+            lambda w: dbpb.DashboardDeleteRequest(workspace_id=w.ws, id=w.dashboard_id),
+        ),
+        _dashboard_on,
+    ),
+    Endpoint(
+        "DashboardController.FromTemplate",
+        "workspace.view",
+        _grpc(
+            DB,
+            "FromTemplate",
+            lambda w: dbpb.DashboardFromTemplateRequest(workspace_id=w.ws, template="my_work"),
+        ),
+    ),
+    _widget_endpoint(
+        "Data", lambda w: dbpb.WidgetDataRequest(workspace_id=w.ws, widget_id=w.widget_id)
+    ),
+    _widget_endpoint(
+        "Preview",
+        lambda w: dbpb.WidgetPreviewRequest(workspace_id=w.ws, type="number", config_json="{}"),
+    ),
+    _widget_endpoint(
+        "Drilldown", lambda w: dbpb.WidgetDrilldownRequest(workspace_id=w.ws, widget_id=w.widget_id)
+    ),
+    _widget_endpoint(
+        "Export", lambda w: dbpb.WidgetExportRequest(workspace_id=w.ws, widget_id=w.widget_id)
     ),
 )
 

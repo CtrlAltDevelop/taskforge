@@ -1,0 +1,172 @@
+syntax = "proto3";
+
+package config.dashboards;
+
+service DashboardController {
+    rpc Delete(DashboardDeleteRequest) returns (DashboardDeleted) {}
+    rpc FromTemplate(DashboardFromTemplateRequest) returns (DashboardAnswer) {}
+    rpc Get(DashboardGetRequest) returns (DashboardAnswer) {}
+    rpc List(DashboardListRequest) returns (DashboardList) {}
+    rpc Save(DashboardSaveRequest) returns (DashboardAnswer) {}
+}
+
+service WidgetController {
+    rpc Data(WidgetDataRequest) returns (WidgetData) {}
+    rpc Drilldown(WidgetDrilldownRequest) returns (stream DrilledTask) {}
+    rpc Export(WidgetExportRequest) returns (WidgetExport) {}
+    rpc Preview(WidgetPreviewRequest) returns (WidgetData) {}
+}
+
+message Bucket {
+    string key = 1;
+    string label = 2;
+    string value = 3;
+}
+
+message Dashboard {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string owner_id = 4;
+    string name = 5;
+    string visibility = 6;
+    string layout_json = 7;
+    int32 version = 8;
+    bool can_edit = 9;
+    repeated Widget widgets = 10;
+    string updated_at = 11;
+}
+
+message DashboardAnswer {
+    Dashboard dashboard = 1;
+}
+
+message DashboardDeleteRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message DashboardDeleted {
+    string id = 1;
+}
+
+message DashboardFromTemplateRequest {
+    string workspace_id = 1;
+    string template = 2;
+    string project_id = 3;
+}
+
+message DashboardGetRequest {
+    string workspace_id = 1;
+    string id = 2;
+}
+
+message DashboardList {
+    repeated Dashboard dashboards = 1;
+}
+
+message DashboardListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message DashboardSaveRequest {
+    string workspace_id = 1;
+    string id = 2;
+    string name = 3;
+    string visibility = 4;
+    string project_id = 5;
+    repeated WidgetInput widgets = 6;
+    string layout_json = 7;
+    int32 expected_version = 8;
+}
+
+message DrillTask {
+    string id = 1;
+    string project_id = 2;
+    string display_id = 3;
+    string title = 4;
+    string status_name = 5;
+    string status_category = 6;
+    string priority = 7;
+    string due_date = 8;
+    string points = 9;
+    repeated string assignee_ids = 10;
+}
+
+message DrilledTask {
+    DrillTask task = 1;
+    bool truncated = 2;
+}
+
+message Point {
+    string x = 1;
+    string y = 2;
+}
+
+message Series {
+    string name = 1;
+    repeated Point points = 2;
+}
+
+message Widget {
+    string id = 1;
+    string type = 2;
+    string title = 3;
+    string config_json = 4;
+    int32 version = 5;
+}
+
+message WidgetData {
+    string widget_id = 1;
+    string total = 2;
+    repeated Bucket buckets = 3;
+    repeated Series series = 4;
+    bool truncated = 5;
+    string computed_at = 6;
+    bool cached = 7;
+}
+
+message WidgetDataRequest {
+    string workspace_id = 1;
+    string widget_id = 2;
+    string today = 3;
+    int32 utc_offset_minutes = 4;
+    bool refresh = 5;
+}
+
+message WidgetDrilldownRequest {
+    string workspace_id = 1;
+    string widget_id = 2;
+    string bucket = 3;
+    string today = 4;
+    int32 utc_offset_minutes = 5;
+}
+
+message WidgetExport {
+    string csv = 1;
+}
+
+message WidgetExportRequest {
+    string workspace_id = 1;
+    string widget_id = 2;
+    string today = 3;
+    int32 utc_offset_minutes = 4;
+}
+
+message WidgetInput {
+    string id = 1;
+    string type = 2;
+    string title = 3;
+    string config_json = 4;
+}
+
+message WidgetPreviewRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string type = 3;
+    string config_json = 4;
+    string today = 5;
+    int32 utc_offset_minutes = 6;
+}
+
