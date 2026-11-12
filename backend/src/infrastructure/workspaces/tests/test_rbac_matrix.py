@@ -1578,6 +1578,8 @@ ENDPOINTS += (
 
 # Handlers that need no workspace permission, and why.
 EXEMPT = {
+    "ShortcutController.Get": "personal, not workspace data: a caller reads only their own rows",
+    "ShortcutController.Set": "personal, not workspace data: a caller writes only their own rows",
     "CommentController.Edit": "the author only: ownership, not the matrix (service tests)",
     "GET /uploads/{upload_id}": "the uploader only: ownership, not the matrix (service tests)",
     "PUT /uploads/{upload_id}/chunk/{n}": "the uploader only (service tests)",

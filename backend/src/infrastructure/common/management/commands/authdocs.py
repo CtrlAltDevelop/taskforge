@@ -54,6 +54,7 @@ PROJECT_LABELS = frozenset(
         "workflows",
         "customfields",
         "savedviews",
+        "shortcuts",
         "filters",
         "sync",
         "comments",

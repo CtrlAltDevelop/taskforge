@@ -1046,6 +1046,7 @@ INSTALLED_APPS = [
     "infrastructure.tasks.apps.TasksConfig",
     "infrastructure.customfields.apps.CustomFieldsConfig",
     "infrastructure.savedviews.apps.SavedViewsConfig",
+    "infrastructure.shortcuts.apps.ShortcutsConfig",
     "infrastructure.filters.apps.FiltersConfig",
     "infrastructure.sync.apps.SyncConfig",
     "infrastructure.comments.apps.CommentsConfig",

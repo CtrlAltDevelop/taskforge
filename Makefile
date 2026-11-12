@@ -79,6 +79,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/workflows/grpc/workflows.proto \
 	infrastructure/customfields/grpc/customfields.proto \
 	infrastructure/savedviews/grpc/savedviews.proto \
+	infrastructure/shortcuts/grpc/shortcuts.proto \
 	infrastructure/filters/grpc/filters.proto \
 	infrastructure/sync/grpc/sync.proto \
 	infrastructure/comments/grpc/comments.proto \

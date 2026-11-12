@@ -159,6 +159,10 @@ class ResponseTitle(StrEnum):
     VIEW_NAME_TAKEN = "VIEW_NAME_TAKEN"
     VIEW_LIMIT = "VIEW_LIMIT"
 
+    # Shortcuts
+    SHORTCUT_INVALID = "SHORTCUT_INVALID"
+    SHORTCUT_CONFLICT = "SHORTCUT_CONFLICT"
+
     # Filters
     FILTER_INVALID = "FILTER_INVALID"
     FILTER_NAME_TAKEN = "FILTER_NAME_TAKEN"
@@ -238,6 +242,8 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.VIEW_INVALID: "The saved layout is not valid.",
     ResponseTitle.VIEW_NAME_TAKEN: "You already have a layout with that name in this project.",
     ResponseTitle.VIEW_LIMIT: "That is the most layouts one list can hold.",
+    ResponseTitle.SHORTCUT_INVALID: "The shortcut is not valid.",
+    ResponseTitle.SHORTCUT_CONFLICT: "Another action already uses those keys.",
     ResponseTitle.FILTER_INVALID: "The filter is not valid (the detail says where).",
     ResponseTitle.FILTER_NAME_TAKEN: "A filter with that name already exists here.",
     ResponseTitle.FILTER_LIMIT: "That is the most saved filters one place can hold.",

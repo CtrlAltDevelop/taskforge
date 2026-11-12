@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package config.shortcuts;
+
+service ShortcutController {
+    rpc Get(ShortcutGetRequest) returns (ShortcutList) {}
+    rpc Set(ShortcutSetRequest) returns (ShortcutList) {}
+}
+
+message Shortcut {
+    string action_id = 1;
+    string keys = 2;
+}
+
+message ShortcutGetRequest {
+}
+
+message ShortcutList {
+    repeated Shortcut shortcuts = 1;
+}
+
+message ShortcutSetRequest {
+    string action_id = 1;
+    string keys = 2;
+    bool reset = 3;
+}
+
