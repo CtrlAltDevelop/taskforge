@@ -87,3 +87,28 @@ def record(
         # log, so a broker that is away must not fail the request or the hooks after this one.
         log.exception("Could not publish %s", event["type"])
     return row
+
+
+def to_user(user_id: Any, event_type: str) -> None:
+    """Tell one person's devices something personal that belongs to no workspace (their key
+    bindings). Nothing is logged, so there is no cursor (0) to catch up from: a device that was
+    away reads it again at start-up or on a gap. The event carries no content."""
+    from datetime import UTC, datetime
+
+    actor = current_actor()
+    event = {
+        "type": event_type,
+        "workspace": "",
+        "project": "",
+        "entity_id": str(user_id),
+        "version": 0,
+        "actor": actor,
+        "ts": datetime.now(UTC).isoformat(),
+        "cursor": 0,
+        "origin": origin_tag(actor, current_origin()),
+    }
+    room = user_room(user_id)
+    try:
+        get_broker().publish(channel_of(room), {"room": room, "event": event})
+    except Exception:
+        log.exception("Could not publish %s", event_type)

@@ -15,6 +15,17 @@ MAX_BINDINGS = 300
 ACTION_ID = re.compile(r"^[a-z][a-z0-9_.:-]{0,79}$")
 
 
+def _announce(user: Any) -> None:
+    """Tell the person's other devices to read their bindings again (after the commit)."""
+
+    def send() -> None:
+        from infrastructure.sync import publish
+
+        publish.to_user(user.pk, "shortcuts.changed")
+
+    transaction.on_commit(send)
+
+
 def get(user: Any) -> list[UserShortcut]:
     return list(UserShortcut.objects.filter(user=user).order_by("action_id"))
 
@@ -29,6 +40,7 @@ def set_binding(user: Any, action_id: str, raw_keys: str, *, reset: bool = False
         mine = list(UserShortcut.objects.select_for_update().filter(user=user))
         if reset:
             UserShortcut.objects.filter(user=user, action_id=action_id).delete()
+            _announce(user)
             return
         chord = keys.normalise(raw_keys)
         if chord:
@@ -45,3 +57,4 @@ def set_binding(user: Any, action_id: str, raw_keys: str, *, reset: bool = False
         UserShortcut.objects.update_or_create(
             user=user, action_id=action_id, defaults={"keys": chord, "updated_at": timezone.now()}
         )
+        _announce(user)

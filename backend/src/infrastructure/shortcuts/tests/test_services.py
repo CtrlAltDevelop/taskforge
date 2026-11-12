@@ -89,3 +89,41 @@ def test_limit(zoe: object, monkeypatch: pytest.MonkeyPatch) -> None:
     services.set_binding(zoe, "a.one", "alt+2")  # replacing is not adding
     with pytest.raises(ApiError):
         services.set_binding(zoe, "a.two", "alt+3")
+
+
+def test_a_change_tells_only_that_persons_devices(
+    zoe: object,
+    monkeypatch: pytest.MonkeyPatch,
+    django_capture_on_commit_callbacks: object,
+) -> None:
+    sent: list[tuple[str, dict[str, object]]] = []
+
+    class Recorder:
+        def publish(self, channel: str, payload: dict[str, object]) -> None:
+            sent.append((channel, payload))
+
+    monkeypatch.setattr("infrastructure.sync.publish.get_broker", lambda: Recorder())
+
+    with django_capture_on_commit_callbacks(execute=True):  # type: ignore[operator]
+        services.set_binding(zoe, "nav.inbox", "alt+j")
+        services.set_binding(zoe, "nav.inbox", "", reset=True)
+
+    assert [p["event"]["type"] for _, p in sent] == ["shortcuts.changed"] * 2  # type: ignore[index]
+    assert {p["room"] for _, p in sent} == {f"user:{zoe.pk}"}  # type: ignore[attr-defined]
+    assert all(p["event"]["entity_id"] == str(zoe.pk) for _, p in sent)  # type: ignore[index,attr-defined]
+
+
+def test_a_refused_change_tells_nobody(
+    zoe: object, monkeypatch: pytest.MonkeyPatch, django_capture_on_commit_callbacks: object
+) -> None:
+    sent: list[object] = []
+    monkeypatch.setattr(
+        "infrastructure.sync.publish.get_broker",
+        lambda: type("B", (), {"publish": lambda self, c, p: sent.append(p)})(),
+    )
+    with (
+        django_capture_on_commit_callbacks(execute=True),  # type: ignore[operator]
+        pytest.raises(ApiError),
+    ):
+        services.set_binding(zoe, "nav.inbox", "mod+t")
+    assert sent == []
