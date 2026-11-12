@@ -17,6 +17,7 @@ import 'package:taskforge/features/projects/application/projects_providers.dart'
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/recurrence/presentation/repeat_section.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
@@ -209,6 +210,8 @@ class TaskDetail extends ConsumerWidget {
                 saveTask(context, ref, task, TaskPatch(dueTime: utc)),
           ),
         ],
+        const SizedBox(height: 12),
+        RepeatSection(task: task, canEdit: canEdit),
         const SizedBox(height: 16),
         Text('Assignees', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 8),
@@ -418,6 +421,9 @@ class TaskDetail extends ConsumerWidget {
       mode = await askDeleteMode(context, task, below);
       if (mode == null || !context.mounted) return;
     }
+    // Last, so cancelling an earlier question never stops a series.
+    if (!await confirmDeleteTemplate(context, ref, task)) return;
+    if (!context.mounted) return;
     onClose?.call();
     if (onClose == null) Navigator.of(context).maybePop();
     try {

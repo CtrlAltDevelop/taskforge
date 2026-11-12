@@ -21,6 +21,7 @@ import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
+import 'package:taskforge/features/recurrence/application/recurrence_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -33,6 +34,7 @@ import '../inbox/fakes.dart';
 import '../projects/fakes.dart';
 import '../roles/fakes.dart';
 import '../automations/fakes.dart';
+import '../recurrence/fakes.dart';
 import '../docs/fakes.dart';
 import '../sprints/fakes.dart';
 import '../time/fakes.dart';
@@ -165,6 +167,7 @@ Future<ProviderContainer> pumpSignedIn(
   FakeSprintsClient? sprints,
   FakeDocsClient? docs,
   FakeAutomationsClient? automations,
+  FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
 
   /// The live connection: none unless a test brings its own.
@@ -204,6 +207,9 @@ Future<ProviderContainer> pumpSignedIn(
       docsClientProvider.overrideWithValue(docs ?? FakeDocsClient()),
       automationsClientProvider.overrideWithValue(
         automations ?? FakeAutomationsClient(),
+      ),
+      recurrenceClientProvider.overrideWithValue(
+        recurrence ?? FakeRecurrenceClient(),
       ),
       localNotifierProvider.overrideWithValue(
         localNotifier ?? FakeLocalNotifier(),

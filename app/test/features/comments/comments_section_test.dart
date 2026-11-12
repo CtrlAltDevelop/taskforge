@@ -79,12 +79,14 @@ Future<void> send(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 6));
   await tester.pumpAndSettle();
   await tester.ensureVisible(find.byKey(const Key('comment-send')).first);
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('comment-send')).first);
   await tester.pumpAndSettle();
 }
 
 Future<void> menu(WidgetTester tester, String id, String item) async {
   await tester.ensureVisible(find.byKey(Key('menu-$id')));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('menu-$id')));
   await tester.pumpAndSettle();
   await tester.tap(find.text(item));
@@ -139,6 +141,7 @@ void main() {
 
     await type(tester, 'Looks good');
     await tester.ensureVisible(find.byKey(const Key('comment-send')).first);
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('comment-send')).first);
     await tester.pump();
 
@@ -310,6 +313,7 @@ void main() {
       expect(fake.created.single.parentId, 'c1');
       expect(find.byKey(const Key('reply-composer')), findsNothing);
       await tester.ensureVisible(find.byKey(const Key('menu-n1')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('menu-n1')));
       await tester.pumpAndSettle();
       expect(find.text('Reply'), findsNothing); // one level deep
@@ -371,6 +375,7 @@ void main() {
     await open(tester, client: fake);
 
     await tester.ensureVisible(find.byKey(const Key('menu-c1')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('menu-c1')));
     await tester.pumpAndSettle();
     expect(find.text('Edit'), findsNothing);
@@ -433,6 +438,7 @@ void main() {
     await open(tester, client: fake);
 
     await tester.ensureVisible(find.byKey(const Key('react-c1')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('react-c1')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('👍').last);
@@ -499,12 +505,14 @@ void main() {
     expect(find.byKey(const Key('load-earlier')), findsOneWidget);
 
     await tester.ensureVisible(find.byKey(const Key('load-earlier')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('load-earlier')));
     await tester.pumpAndSettle();
 
     expect(find.text('Comments (4)'), findsOneWidget);
     expect(fake.lists.last, isNotEmpty);
     await tester.ensureVisible(find.byKey(const Key('load-earlier')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('load-earlier')));
     await tester.pumpAndSettle();
     expect(find.text('Comments (5)'), findsOneWidget);
@@ -526,6 +534,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('comments-retry')), findsOneWidget);
+    await tester.ensureVisible(find.byKey(const Key('comments-retry')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('comments-retry')));
     await tester.pumpAndSettle();
 

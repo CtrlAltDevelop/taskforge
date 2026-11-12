@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
+import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
 /// The tasks of one day as a list, each with a button that asks for a new date
@@ -14,9 +16,11 @@ class DayTasks extends StatelessWidget {
     required this.canMove,
     required this.onOpen,
     required this.onReschedule,
+    this.ghosts = const [],
   });
 
   final Day day;
+  final List<RepeatGhost> ghosts;
   final List<Task> tasks;
   final Color Function(Task) colorOf;
   final bool canMove;
@@ -26,7 +30,8 @@ class DayTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onDay = tasksOn(tasks, day);
-    if (onDay.isEmpty) {
+    final ghostsToday = ghostsOn(ghosts, day);
+    if (onDay.isEmpty && ghostsToday.isEmpty) {
       return Center(
         child: Text(
           'Nothing on ${formatDay(day)}.',
@@ -53,6 +58,7 @@ class DayTasks extends StatelessWidget {
                   )
                 : null,
           ),
+        for (final ghost in ghostsToday) GhostTile(ghost: ghost),
       ],
     );
   }
@@ -83,8 +89,10 @@ class MonthDots extends StatelessWidget {
     required this.today,
     required this.selected,
     required this.onSelect,
+    this.ghosts = const [],
   });
 
+  final List<RepeatGhost> ghosts;
   final Day first;
   final int weeks;
   final int month;
@@ -112,6 +120,7 @@ class MonthDots extends StatelessWidget {
   Widget _cell(ColorScheme scheme, Day d) {
     final isSelected = d == selected;
     final has = tasksOn(tasks, d).isNotEmpty;
+    final hasGhost = !has && ghostsOn(ghosts, d).isNotEmpty;
     return InkWell(
       key: Key('dot-${formatDay(d)}'),
       onTap: () => onSelect(d),
@@ -137,6 +146,16 @@ class MonthDots extends StatelessWidget {
                 height: 6,
                 decoration: BoxDecoration(
                   color: scheme.primary,
+                  shape: BoxShape.circle,
+                ),
+              )
+            else if (hasGhost)
+              Container(
+                key: Key('has-ghost-${formatDay(d)}'),
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  border: Border.all(color: scheme.outline),
                   shape: BoxShape.circle,
                 ),
               )

@@ -23,6 +23,7 @@ import 'package:taskforge/features/workflows/application/workflows_providers.dar
 import '../fields/fakes.dart';
 import '../tasks/fakes.dart';
 import '../automations/fakes.dart';
+import '../recurrence/fakes.dart';
 import '../docs/fakes.dart';
 import '../sprints/fakes.dart';
 import '../time/fakes.dart';
@@ -80,6 +81,7 @@ Future<Pumped> pumpProjects(
   FakeSprintsClient? sprints,
   FakeDocsClient? docs,
   FakeAutomationsClient? automations,
+  FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
   FakeFiltersClient? filters,
   Day? today,
@@ -104,6 +106,7 @@ Future<Pumped> pumpProjects(
     sprints: sprints,
     docs: docs,
     automations: automations,
+    recurrence: recurrence,
     localNotifier: localNotifier,
     shortcuts: shortcuts,
     sync: sync,

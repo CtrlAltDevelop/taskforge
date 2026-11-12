@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
+import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
+import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
 const _dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -29,6 +31,7 @@ class CalendarGrid extends StatelessWidget {
     this.canMove = false,
     this.longPress = false,
     this.openTaskId,
+    this.ghosts = const [],
   });
 
   /// The first day of the first week shown, and how many weeks.
@@ -46,6 +49,9 @@ class CalendarGrid extends StatelessWidget {
   /// Touch: a bar is picked up with a long press, so a plain drag scrolls.
   final bool longPress;
   final String? openTaskId;
+
+  /// Dates a repeating task will still make, shown faded.
+  final List<RepeatGhost> ghosts;
   final Color Function(Task) colorOf;
   final void Function(Task) onOpen;
   final void Function(CalDrag drag, Day target) onDrop;
@@ -77,12 +83,14 @@ class CalendarGrid extends StatelessWidget {
             key: const Key('cal-scroll'),
             child: Column(
               children: [
-                for (var w = 0; w < weeks; w++)
+                for (var w = 0; w < weeks; w++) ...[
                   _WeekRow(
                     key: Key('week-${formatDay(addDays(first, 7 * w))}'),
                     weekFirst: addDays(first, 7 * w),
                     grid: this,
                   ),
+                  GhostRow(weekFirst: addDays(first, 7 * w), ghosts: ghosts),
+                ],
               ],
             ),
           ),

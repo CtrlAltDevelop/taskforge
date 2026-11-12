@@ -10,6 +10,8 @@ import 'package:taskforge/features/calendar/presentation/calendar_toolbar.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_tray.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/recurrence/application/recurrence_providers.dart';
+import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
@@ -217,6 +219,17 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         final range = visibleRange(mode, anchor, weekStart);
         final weeks = (daysBetween(range.first, range.last) + 1) ~/ 7;
         Color colorOf(Task t) => _colorOf(t, layout.colorBy);
+        final ghosts =
+            ref
+                .watch(
+                  repeatGhostsProvider((
+                    project: _id,
+                    start: formatDay(range.first),
+                    end: formatDay(range.last),
+                  )),
+                )
+                .value ??
+            const <RepeatGhost>[];
         final Widget body;
         if (phone) {
           final selected = _picked ?? anchor;
@@ -227,6 +240,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 weeks: weeks,
                 month: anchor.month,
                 tasks: state.tasks,
+                ghosts: ghosts,
                 today: today,
                 selected: selected,
                 onSelect: (d) => setState(() => _picked = d),
@@ -236,6 +250,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 child: DayTasks(
                   day: selected,
                   tasks: state.tasks,
+                  ghosts: ghosts,
                   colorOf: colorOf,
                   canMove: canMove,
                   onOpen: widget.onOpen,
@@ -248,6 +263,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
           body = DayTasks(
             day: anchor,
             tasks: state.tasks,
+            ghosts: ghosts,
             colorOf: colorOf,
             canMove: canMove,
             onOpen: widget.onOpen,
@@ -259,6 +275,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             weeks: weeks,
             weekStart: weekStart,
             tasks: state.tasks,
+            ghosts: ghosts,
             today: today,
             month: mode == CalendarMode.month ? anchor.month : null,
             maxLanes: mode == CalendarMode.month ? 3 : 30,

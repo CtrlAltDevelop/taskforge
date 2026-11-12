@@ -186,6 +186,8 @@ void main() {
     expect(find.text('1h 30m logged'), findsOneWidget);
     expect(find.text('1h 30m of 1h 30m'), findsNothing);
 
+    await tester.ensureVisible(key('edit-${entry.id}'));
+    await tester.pumpAndSettle();
     await tester.tap(key('edit-${entry.id}'));
     await tester.pumpAndSettle();
     await tester.enterText(key('entry-duration'), '45m');
@@ -390,6 +392,8 @@ void main() {
     final e = time.add(time.make(task: 'a', running: true));
     await open(tester, time: time);
 
+    await tester.ensureVisible(key('edit-${e.id}'));
+    await tester.pumpAndSettle();
     await tester.tap(key('edit-${e.id}'));
     await tester.pumpAndSettle();
     expect(key('entry-duration'), findsNothing);
