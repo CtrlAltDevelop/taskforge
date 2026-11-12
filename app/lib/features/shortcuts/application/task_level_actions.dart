@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
@@ -121,6 +122,18 @@ bool _timeTracked(ActionContext c) =>
 TimeEntry? _running(ActionContext c) =>
     c.container.read(currentTimerProvider).value?.entry;
 
+/// Asks the list to rename the row the cursor is on; the table listens.
+final renameRequestProvider = NotifierProvider<RenameRequest, int>(
+  RenameRequest.new,
+);
+
+class RenameRequest extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void ask() => state++;
+}
+
 /// The actions that need a project or a task on screen: they are offered
 /// only there (a task is on screen when the route carries `?task=`).
 final List<AppAction> taskLevelActions = [
@@ -133,6 +146,17 @@ final List<AppAction> taskLevelActions = [
     defaultKeys: 'alt+n',
     available: (c) => _can(c, Perm.taskCreate),
     run: _newTask,
+  ),
+  AppAction(
+    id: 'task.rename',
+    title: 'Rename the task under the cursor',
+    group: 'List view',
+    semanticLabel: 'Rename the task the cursor is on in the list',
+    keywords: const ['edit', 'title'],
+    defaultKeys: 'f2',
+    views: const {'list'},
+    available: (c) => _can(c, Perm.taskUpdate),
+    run: (c) => c.container.read(renameRequestProvider.notifier).ask(),
   ),
   AppAction(
     id: 'task.status',

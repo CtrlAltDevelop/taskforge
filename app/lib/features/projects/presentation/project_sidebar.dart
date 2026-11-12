@@ -10,6 +10,7 @@ import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
 /// Projects of the current workspace: favorites on top, then the others.
@@ -90,7 +91,7 @@ class ProjectSidebar extends ConsumerWidget {
           dense: true,
           leading: const Icon(Icons.search),
           title: const Text('Search'),
-          trailing: Text('/', style: theme.textTheme.bodySmall),
+          trailing: const ShortcutHint('search.open'),
           onTap: () {
             onNavigate?.call();
             openSearch(context);
@@ -102,6 +103,7 @@ class ProjectSidebar extends ConsumerWidget {
           selected: current.startsWith('/inbox'),
           leading: const InboxBadge(child: Icon(Icons.inbox_outlined)),
           title: const Text('Inbox'),
+          trailing: const ShortcutHint('nav.inbox'),
           onTap: () => _go(context, '/inbox'),
         ),
         ListTile(
@@ -110,6 +112,7 @@ class ProjectSidebar extends ConsumerWidget {
           selected: current.startsWith('/timesheet'),
           leading: const Icon(Icons.schedule),
           title: const Text('Timesheet'),
+          trailing: const ShortcutHint('nav.timesheet'),
           onTap: () => _go(context, '/timesheet'),
         ),
         ListTile(
@@ -118,6 +121,7 @@ class ProjectSidebar extends ConsumerWidget {
           selected: current.startsWith('/dashboards'),
           leading: const Icon(Icons.dashboard_outlined),
           title: const Text('Dashboards'),
+          trailing: const ShortcutHint('nav.dashboards'),
           onTap: () => _go(context, '/dashboards'),
         ),
         ListTile(
@@ -126,6 +130,7 @@ class ProjectSidebar extends ConsumerWidget {
           selected: current.startsWith('/docs'),
           leading: const Icon(Icons.description_outlined),
           title: const Text('Docs'),
+          trailing: const ShortcutHint('nav.docs'),
           onTap: () => _go(context, '/docs'),
         ),
         const Divider(height: 1),

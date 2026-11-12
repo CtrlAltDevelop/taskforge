@@ -7,6 +7,7 @@ import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/sync/sync_coordinator.dart';
 import 'package:taskforge/features/inbox/application/icon_badge.dart';
 import 'package:taskforge/features/inbox/application/live_alerts.dart';
+import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/time/application/timer_notification.dart';
 
 class TaskForgeApp extends ConsumerWidget {
@@ -28,6 +29,7 @@ class TaskForgeApp extends ConsumerWidget {
     });
     return MaterialApp.router(
       title: 'TaskForge',
+      themeMode: ref.watch(themeModeProvider),
       theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       darkTheme: ThemeData(
         colorSchemeSeed: Colors.indigo,

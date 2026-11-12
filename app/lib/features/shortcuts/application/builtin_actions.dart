@@ -2,7 +2,9 @@ import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
+import 'package:taskforge/features/shortcuts/application/more_actions.dart';
 import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
+import 'package:taskforge/features/shortcuts/application/view_actions.dart';
 import 'package:taskforge/features/shortcuts/presentation/cheat_sheet.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
 
@@ -218,5 +220,7 @@ final List<AppAction> builtInActions = [
     '/settings',
     keywords: const ['archive', 'members', 'features'],
   ),
+  ...moreActions,
+  ...viewActions,
   ...taskLevelActions,
 ];

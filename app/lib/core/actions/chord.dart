@@ -1,6 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+/// The chords the browser keeps for itself. The server holds the same list
+/// (`backend/.../shortcuts/reserved_chords.json`); a test on each side reads
+/// that file, so the two cannot drift.
+const browserReserved = {
+  'mod+t',
+  'mod+w',
+  'mod+n',
+  'mod+shift+t',
+  'mod+shift+n',
+  'mod+q',
+  'mod+l',
+  'mod+r',
+  'mod+shift+r',
+  'mod+p',
+  'mod+s',
+  'mod+d',
+  'alt+left',
+  'alt+right',
+};
+
 /// One key combination, in the same words the server stores: modifiers in the
 /// order `mod`, `ctrl`, `alt`, `shift`, then one key, joined by `+`
 /// (`mod+shift+k`). `mod` is Cmd on macOS and Ctrl elsewhere, so a chord
@@ -84,14 +104,7 @@ class Chord {
   }
 
   /// Keys the browser keeps for itself: a binding on one could never fire.
-  bool get isBrowserReserved => const {
-    'mod+t',
-    'mod+w',
-    'mod+n',
-    'mod+shift+t',
-    'mod+shift+n',
-    'mod+q',
-  }.contains(wire);
+  bool get isBrowserReserved => browserReserved.contains(wire);
 
   @override
   bool operator ==(Object other) => other is Chord && other.wire == wire;

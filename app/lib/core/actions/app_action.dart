@@ -26,6 +26,14 @@ class ActionContext {
   String? get projectId =>
       RegExp(r'^/projects/([^/?]+)').firstMatch(location)?.group(1);
 
+  /// The way the project's tasks are shown (`?view=` in the route; the list
+  /// when it names none), or null off a project page.
+  String? get view {
+    if (projectId == null) return null;
+    final v = Uri.tryParse(location)?.queryParameters['view'];
+    return v == null || v.isEmpty ? 'list' : v;
+  }
+
   /// The task open on screen (`?task=` in the route), or null.
   String? get taskId => Uri.tryParse(location)?.queryParameters['task'];
 }
@@ -42,6 +50,7 @@ class AppAction {
     required this.run,
     this.keywords = const [],
     this.defaultKeys = '',
+    this.views,
     this.available,
   });
 
@@ -59,9 +68,18 @@ class AppAction {
   /// The wire form of the default chord, or empty for none.
   final String defaultKeys;
 
+  /// The views of a project page this action belongs to (`list`, `board`,
+  /// `calendar`, `timeline`): it is offered, and its keys work, only there.
+  /// Null: every page.
+  final Set<String>? views;
+
   /// Null: always available.
   final bool Function(ActionContext)? available;
   final FutureOr<void> Function(ActionContext) run;
 
-  bool isAvailable(ActionContext context) => available?.call(context) ?? true;
+  bool isAvailable(ActionContext context) {
+    final only = views;
+    if (only != null && !only.contains(context.view)) return false;
+    return available?.call(context) ?? true;
+  }
 }

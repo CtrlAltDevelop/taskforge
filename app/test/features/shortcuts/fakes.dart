@@ -38,9 +38,23 @@ class FakeShortcutsClient implements ShortcutsClient {
   }
 
   @override
-  Future<Map<String, String>> reset(String actionId) async {
+  Future<Map<String, String>> reset(
+    String actionId, {
+    String defaultKeys = '',
+  }) async {
     calls.add('reset $actionId');
     if (failWith != null) throw failWith!;
+    if (defaultKeys.isNotEmpty) {
+      for (final e in stored.entries) {
+        if (e.value == defaultKeys && e.key != actionId) {
+          throw ShortcutException(
+            ShortcutFailure.conflict,
+            detail: '$defaultKeys is already used by ${e.key}.',
+            other: e.key,
+          );
+        }
+      }
+    }
     stored.remove(actionId);
     return {...stored};
   }

@@ -44,8 +44,12 @@ class ShortcutOverrides extends AsyncNotifier<Map<String, String>> {
   }
 
   /// Drops the override: the action answers to its default again.
-  Future<void> reset(String actionId) async {
-    state = AsyncData(await ref.read(shortcutsClientProvider).reset(actionId));
+  Future<void> reset(String actionId, {String defaultKeys = ''}) async {
+    state = AsyncData(
+      await ref
+          .read(shortcutsClientProvider)
+          .reset(actionId, defaultKeys: defaultKeys),
+    );
   }
 
   bool get hasOverrides => _now.isNotEmpty;

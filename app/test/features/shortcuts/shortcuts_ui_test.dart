@@ -55,6 +55,10 @@ Future<void> chord(
   await tester.pumpAndSettle();
 }
 
+/// [keys] in the cheat sheet's row of [action] (the sidebar shows them too).
+Finder inRow(String action, String keys) =>
+    find.descendant(of: key('cheat-$action'), matching: find.text(keys));
+
 String location(Pumped pumped) => pumped.container
     .read(routerProvider)
     .routeInformationProvider
@@ -198,7 +202,7 @@ void main() {
 
     expect(find.text('Keyboard shortcuts'), findsWidgets);
     expect(key('cheat-nav.inbox'), findsOneWidget);
-    expect(find.text('Alt+I'), findsOneWidget);
+    expect(inRow('nav.inbox', 'Alt+I'), findsOneWidget);
   });
 
   testWidgets('rebinding saves, shows the new keys and takes effect', (
@@ -217,7 +221,7 @@ void main() {
 
     expect(h.shortcuts.stored['nav.inbox'], 'alt+j');
     expect(find.text('Changed by you'), findsOneWidget);
-    expect(find.text('Alt+J'), findsOneWidget);
+    expect(inRow('nav.inbox', 'Alt+J'), findsOneWidget);
 
     await tester.tap(key('cheat-close'));
     await tester.pumpAndSettle();
@@ -295,7 +299,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(h.shortcuts.stored, isEmpty);
-    expect(find.text('Alt+I'), findsOneWidget);
+    expect(inRow('nav.inbox', 'Alt+I'), findsOneWidget);
   });
 
   testWidgets('offline, the defaults still work', (tester) async {

@@ -73,3 +73,15 @@ def test_unauthenticated_is_refused(transactional_db: None, grpc_call: GrpcCall)
         grpc_call(S, "Get", pb.ShortcutGetRequest(), token=None)
 
     assert refusal.value.code() == grpc.StatusCode.UNAUTHENTICATED
+
+
+def test_a_reset_onto_a_taken_chord_is_already_exists(
+    tokens: dict[str, str], grpc_call: GrpcCall
+) -> None:
+    _set(grpc_call, tokens["zoe"], "nav.inbox", "alt+h")
+    _set(grpc_call, tokens["zoe"], "nav.home", "alt+x")
+
+    with pytest.raises(grpc.aio.AioRpcError) as refusal:
+        _set(grpc_call, tokens["zoe"], "nav.home", "alt+h", reset=True)
+
+    assert refusal.value.code() == grpc.StatusCode.ALREADY_EXISTS

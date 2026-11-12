@@ -188,17 +188,30 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
   }
 
   Future<void> _reset() async {
+    // The default may have been given to another action meanwhile.
+    final home = Chord.parse(widget.action.defaultKeys);
+    final clash = home == null
+        ? null
+        : ref.read(bindingsProvider).conflict(widget.action.id, home);
+    if (clash != null) {
+      setState(
+        () => _problem = 'The default keys are used by "${clash.title}".',
+      );
+      return;
+    }
     setState(() => _saving = true);
     try {
       await ref
           .read(shortcutOverridesProvider.notifier)
-          .reset(widget.action.id);
+          .reset(widget.action.id, defaultKeys: home?.wire ?? '');
       if (mounted) Navigator.of(context).pop();
-    } on ShortcutException {
+    } on ShortcutException catch (e) {
       if (!mounted) return;
       setState(() {
         _saving = false;
-        _problem = 'Could not save. Check your connection.';
+        _problem = e.failure == ShortcutFailure.conflict
+            ? 'The default keys are used by another action.'
+            : 'Could not save. Check your connection.';
       });
     }
   }

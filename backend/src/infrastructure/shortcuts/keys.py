@@ -3,7 +3,9 @@
 ``mod`` is Cmd on macOS and Ctrl elsewhere, so a chord means the same thing on every device a
 person signs in on. Anything else is refused, not repaired, so a client bug shows up at once."""
 
+import json
 import re
+from pathlib import Path
 from typing import Final
 
 from infrastructure.common.errors import ApiError
@@ -33,8 +35,11 @@ NAMED: Final = frozenset(
     }  # fmt: skip
 )
 FUNCTION_KEY = re.compile(r"^f([1-9]|1[0-2])$")
-# Browsers keep these: a binding that cannot fire is worse than none.
-RESERVED: Final = frozenset({"mod+t", "mod+w", "mod+n", "mod+shift+t", "mod+shift+n", "mod+q"})
+# Browsers keep these: a binding that cannot fire is worse than none. One list for both sides: the
+# app's ``Chord.isBrowserReserved`` must hold the same chords (a test in each reads this file).
+RESERVED: Final = frozenset(
+    json.loads((Path(__file__).parent / "reserved_chords.json").read_text())
+)
 
 
 def invalid(message: str) -> ApiError:

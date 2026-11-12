@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/time/domain/time.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
 
 /// The running timer, on every screen with the sidebar: the task, the time so
 /// far (ticking), and a stop button. Nothing while no timer runs. Tapping the
@@ -103,7 +104,7 @@ class _TimerChipState extends ConsumerState<TimerChip> {
             ),
             IconButton(
               key: const Key('timer-stop'),
-              tooltip: 'Stop the timer',
+              tooltip: withShortcut(ref, 'Stop the timer', 'timer.stop'),
               color: theme.colorScheme.onInverseSurface,
               icon: const Icon(Icons.stop_circle_outlined),
               onPressed: _busy ? null : _stop,

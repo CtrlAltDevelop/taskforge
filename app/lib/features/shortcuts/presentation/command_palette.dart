@@ -10,6 +10,7 @@ import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/actions/fuzzy.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
+import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
@@ -122,17 +123,29 @@ List<AppAction> rankActions(
 // A keyword is a weaker signal than the title.
 int? _discount(int? score) => score == null ? null : score - 150;
 
-/// Ids of the actions run lately, newest first; kept for this run of the app.
+/// Ids of the actions run lately, newest first; kept on this device.
 final recentActionsProvider = NotifierProvider<RecentActions, List<String>>(
   RecentActions.new,
 );
 
 class RecentActions extends Notifier<List<String>> {
-  @override
-  List<String> build() => const [];
+  static const _key = 'recent.actions';
+  static const _keep = 8;
 
-  void ran(String id) =>
-      state = [id, ...state.where((x) => x != id)].take(8).toList();
+  @override
+  List<String> build() {
+    ref.read(localPrefsProvider).read(_key).then((saved) {
+      if (!ref.mounted || saved == null || saved.isEmpty) return;
+      // What was run since the app opened is newer than what was saved.
+      state = {...state, ...saved.split(',')}.take(_keep).toList();
+    });
+    return const [];
+  }
+
+  void ran(String id) {
+    state = [id, ...state.where((x) => x != id)].take(_keep).toList();
+    ref.read(localPrefsProvider).write(_key, state.join(','));
+  }
 }
 
 class CommandPalette extends ConsumerStatefulWidget {

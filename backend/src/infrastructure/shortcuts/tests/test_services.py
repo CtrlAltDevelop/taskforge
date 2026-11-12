@@ -127,3 +127,33 @@ def test_a_refused_change_tells_nobody(
     ):
         services.set_binding(zoe, "nav.inbox", "mod+t")
     assert sent == []
+
+
+@pytest.mark.parametrize("chord", sorted(keys.RESERVED))
+def test_every_browser_reserved_chord_is_refused(chord: str) -> None:
+    with pytest.raises(ApiError) as refusal:
+        keys.normalise(chord)
+    assert refusal.value.title == ResponseTitle.SHORTCUT_INVALID
+
+
+def test_the_reserved_list_is_the_one_the_app_reads() -> None:
+    # The app's test reads the same file and compares it with `browserReserved`.
+    assert {"mod+l", "mod+s", "alt+left", "alt+right"} <= keys.RESERVED
+
+
+def test_a_reset_to_a_chord_another_action_holds_is_refused(zoe: object) -> None:
+    # "nav.inbox" was moved onto "alt+h", the default of "nav.home": sending "nav.home" back to
+    # its default would put two actions on one key.
+    services.set_binding(zoe, "nav.inbox", "alt+h")
+    services.set_binding(zoe, "nav.home", "alt+x")
+    with pytest.raises(ApiError) as refusal:
+        services.set_binding(zoe, "nav.home", "alt+h", reset=True)
+    assert refusal.value.title == ResponseTitle.SHORTCUT_CONFLICT
+    assert refusal.value.data == {"action_id": "nav.inbox"}
+    assert {s.action_id for s in services.get(zoe)} == {"nav.inbox", "nav.home"}  # nothing dropped
+
+
+def test_a_reset_to_a_free_chord_drops_the_override(zoe: object) -> None:
+    services.set_binding(zoe, "nav.home", "alt+x")
+    services.set_binding(zoe, "nav.home", "alt+h", reset=True)
+    assert services.get(zoe) == []

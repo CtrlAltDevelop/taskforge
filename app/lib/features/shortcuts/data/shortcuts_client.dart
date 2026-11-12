@@ -26,7 +26,11 @@ class ShortcutException implements Exception {
 abstract interface class ShortcutsClient {
   Future<Map<String, String>> get();
   Future<Map<String, String>> set(String actionId, String keys);
-  Future<Map<String, String>> reset(String actionId);
+
+  /// Drops the override. [defaultKeys] is the chord the action goes back to
+  /// (the server cannot know it): the reset is refused if another action
+  /// holds it.
+  Future<Map<String, String>> reset(String actionId, {String defaultKeys = ''});
 }
 
 ShortcutException mapShortcutError(Object error) {
@@ -94,9 +98,12 @@ class GrpcShortcutsClient implements ShortcutsClient {
   );
 
   @override
-  Future<Map<String, String>> reset(String actionId) => _run(
+  Future<Map<String, String>> reset(
+    String actionId, {
+    String defaultKeys = '',
+  }) => _run(
     () => _client.set(
-      pb.ShortcutSetRequest(actionId: actionId, reset: true),
+      pb.ShortcutSetRequest(actionId: actionId, keys: defaultKeys, reset: true),
       options: _options,
     ),
   );

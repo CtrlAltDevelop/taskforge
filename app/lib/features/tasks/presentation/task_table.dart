@@ -17,6 +17,12 @@ import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/core/actions/chord.dart';
+import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
+import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
+import 'package:taskforge/features/shortcuts/presentation/command_palette.dart'
+    show isApplePlatform;
+import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
 
 const tableRowHeight = 44.0;
 const tableGroupHeight = 36.0;
@@ -132,6 +138,19 @@ class _TaskTableState extends ConsumerState<TaskTable> {
     _reveal(next);
   }
 
+  /// Whether [event] is the key the person has for "rename": the registry
+  /// knows it (F2 unless rebound). With a shortcut host the key reaches
+  /// [renameRequestProvider] first; this keeps a bare table working too.
+  bool _isRenameKey(KeyEvent event) {
+    final chord = Chord.fromEvent(
+      event,
+      HardwareKeyboard.instance,
+      isMac: isApplePlatform,
+    );
+    return chord != null &&
+        chord == ref.read(bindingsProvider).chordOf('task.rename');
+  }
+
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     if (event is KeyUpEvent || _renaming != null) return KeyEventResult.ignored;
     final key = event.logicalKey;
@@ -170,9 +189,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
       selection.addAll(taskIds(widget.entries));
     } else if (key == LogicalKeyboardKey.escape) {
       selection.clear();
-    } else if (key == LogicalKeyboardKey.f2 &&
-        widget.canUpdate &&
-        entry is TaskEntry) {
+    } else if (widget.canUpdate && entry is TaskEntry && _isRenameKey(event)) {
       setState(() => _renaming = entry.task.id);
     } else {
       return KeyEventResult.ignored;
@@ -201,6 +218,13 @@ class _TaskTableState extends ConsumerState<TaskTable> {
   @override
   Widget build(BuildContext context) {
     final selected = ref.watch(taskSelectionProvider(widget.projectId));
+    ref.listen(renameRequestProvider, (_, _) {
+      final i = _index(_cursor);
+      final entry = i < 0 ? null : widget.entries[i];
+      if (widget.canUpdate && entry is TaskEntry && _renaming == null) {
+        setState(() => _renaming = entry.task.id);
+      }
+    });
     final ids = taskIds(widget.entries);
     final allPicked = ids.isNotEmpty && ids.every(selected.contains);
     return Focus(
@@ -505,7 +529,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
         if (widget.canUpdate)
           IconButton(
             key: Key('rename-btn-${task.id}'),
-            tooltip: 'Rename (F2)',
+            tooltip: withShortcut(ref, 'Rename', 'task.rename'),
             iconSize: 16,
             visualDensity: VisualDensity.compact,
             icon: const Icon(Icons.edit_outlined),

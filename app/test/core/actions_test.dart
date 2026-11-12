@@ -38,6 +38,11 @@ class _FakeContext implements ActionContext {
       RegExp(r'^/projects/([^/?]+)').firstMatch(location)?.group(1);
 
   @override
+  String? get view => projectId == null
+      ? null
+      : (Uri.tryParse(location)?.queryParameters['view'] ?? 'list');
+
+  @override
   String? get taskId => Uri.tryParse(location)?.queryParameters['task'];
 
   /// Nothing loaded: task and timer actions answer "not available".
