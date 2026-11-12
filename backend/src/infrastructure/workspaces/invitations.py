@@ -27,6 +27,7 @@ from django.db import transaction
 from django.db.models import F, Q
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
 from infrastructure.auth.core.challenges import get_challenge_store
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
@@ -179,9 +180,12 @@ def create_invitations(
     created: list[Created] = []
     now = timezone.now()
     with transaction.atomic():
-        Invitation.objects.filter(
-            workspace=workspace, email__in=targets, revoked_at__isnull=True, accepted_at=None
-        ).update(revoked_at=now)
+        audit_changes.update_rows(
+            Invitation.objects.filter(
+                workspace=workspace, email__in=targets, revoked_at__isnull=True, accepted_at=None
+            ),
+            revoked_at=now,
+        )
         for email in targets:
             raw, digest = _new_token()
             row = Invitation.objects.create(

@@ -15,6 +15,7 @@ from typing import Any
 from django.db import transaction
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access, roles
@@ -68,10 +69,15 @@ def list_members(workspace: Workspace, actor: Any) -> list[WorkspaceMember]:
 def _deactivate(workspace: Workspace, member: WorkspaceMember) -> None:
     """Mark removed and kill every pending invitation the user created in this workspace."""
     now = timezone.now()
-    WorkspaceMember.objects.filter(pk=member.pk).update(status=MemberStatus.REMOVED, removed_at=now)
-    Invitation.objects.filter(
-        workspace=workspace, created_by_id=member.user_id, revoked_at__isnull=True
-    ).update(revoked_at=now)
+    audit_changes.update_rows(
+        WorkspaceMember.objects.filter(pk=member.pk), status=MemberStatus.REMOVED, removed_at=now
+    )
+    audit_changes.update_rows(
+        Invitation.objects.filter(
+            workspace=workspace, created_by_id=member.user_id, revoked_at__isnull=True
+        ),
+        revoked_at=now,
+    )
 
 
 def remove(workspace: Workspace, actor: Any, user_id: str) -> None:
@@ -109,6 +115,6 @@ def set_role(workspace: Workspace, actor: Any, user_id: str, role_id: str) -> Wo
         access.require_holds(grant, access.role_keys(role))
         if not access.is_owner_role(role):
             _guard_last_owner(workspace, target)
-        WorkspaceMember.objects.filter(pk=target.pk).update(role=role)
+        audit_changes.update_rows(WorkspaceMember.objects.filter(pk=target.pk), role=role)
         announce_access(workspace, target.user_id)
     return _target(workspace, user_id)

@@ -17,6 +17,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count, F
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.projects.features import FEATURE_KEYS
@@ -173,8 +174,11 @@ def _bump(project: Project, expected_version: int, **changes: Any) -> Project:
     """Apply ``changes`` only if the row is still at ``expected_version``; bump the version."""
     try:
         with transaction.atomic():  # savepoint: a key clash must not poison the caller's tx
-            updated = Project.objects.filter(pk=project.pk, version=expected_version).update(
-                version=F("version") + 1, updated_at=timezone.now(), **changes
+            updated = audit_changes.update_rows(
+                Project.objects.filter(pk=project.pk, version=expected_version),
+                version=F("version") + 1,
+                updated_at=timezone.now(),
+                **changes,
             )
     except IntegrityError:
         raise _key_taken() from None

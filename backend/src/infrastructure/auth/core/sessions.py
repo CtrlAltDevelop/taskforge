@@ -416,6 +416,13 @@ class JwtBearer(HttpBearer):
         """Put the resolved account on the request, so a view can read request.user."""
         if user is not None:
             request.user = user
+            # So the change log and the audit log know who a REST write belongs to, as they do
+            # for gRPC (see ``common.identity``).
+            from infrastructure.audit.context import set_client
+            from infrastructure.sync.actor import set_actor
+
+            set_actor(user, str(request.META.get("HTTP_X_CLIENT_ID", "")))
+            set_client(request.META)
         return user
 
 

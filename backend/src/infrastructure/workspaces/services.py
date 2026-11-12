@@ -16,6 +16,9 @@ from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
+from infrastructure.audit import context as audit_context
+from infrastructure.audit import recorder
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access
@@ -64,6 +67,7 @@ def _versioned_update(
     workspace: Workspace, expected_version: int | None, **changes: Any
 ) -> Workspace:
     """Apply ``changes`` only if the row still has ``expected_version``; bump it."""
+    before = audit_changes.snapshot(workspace)
     rows = Workspace.objects.filter(pk=workspace.pk)
     if expected_version is not None:
         rows = rows.filter(version=expected_version)
@@ -79,7 +83,9 @@ def _versioned_update(
             status=409,
             title=ResponseTitle.VERSION_CONFLICT,
         )
-    return Workspace.objects.get(pk=workspace.pk)
+    fresh = Workspace.objects.get(pk=workspace.pk)
+    audit_changes.updated(fresh, before)
+    return fresh
 
 
 def create(actor: Any, name: str, slug: str) -> Workspace:
@@ -199,7 +205,16 @@ def purge_expired() -> int:
     for workspace in expired:
         logo = workspace.logo.name
         try:
-            with transaction.atomic():
+            with transaction.atomic(), audit_context.suppressed():
+                # Thousands of cascaded rows are one event, not thousands of entries.
+                recorder.record(
+                    workspace_id=workspace.pk,
+                    action="workspace.purged",
+                    target_type="workspace",
+                    target_id=workspace.pk,
+                    actor_type="system",
+                    changes={"name": workspace.name, "slug": workspace.slug},
+                )
                 workspace.delete()
             if logo:
                 workspace.logo.storage.delete(logo)

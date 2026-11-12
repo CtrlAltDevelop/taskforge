@@ -20,6 +20,8 @@ from google.protobuf.empty_pb2 import Empty
 from infrastructure.attachments import services as attachment_services
 from infrastructure.attachments.grpc import attachments_pb2 as apb
 from infrastructure.attachments.grpc import attachments_pb2_grpc as astubs
+from infrastructure.audit.grpc import audit_pb2 as adpb
+from infrastructure.audit.grpc import audit_pb2_grpc as adstubs
 from infrastructure.automations import services as automation_services
 from infrastructure.automations.grpc import automations_pb2 as aupb
 from infrastructure.automations.grpc import automations_pb2_grpc as austubs
@@ -1577,6 +1579,33 @@ ENDPOINTS += (
 )
 
 # Handlers that need no workspace permission, and why.
+AD = adstubs.AuditControllerStub
+ADT = adstubs.ActivityControllerStub
+ENDPOINTS += (
+    Endpoint(
+        "AuditController.List",
+        "audit.view",
+        _grpc(AD, "List", lambda w: adpb.AuditListRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "AuditController.Export",
+        "audit.view",
+        _grpc(AD, "Export", lambda w: adpb.AuditExportRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "ActivityController.ForTask",
+        "workspace.view",
+        _grpc(
+            ADT,
+            "ForTask",
+            lambda w: adpb.ActivityForTaskRequest(
+                workspace_id=w.ws, project_id=w.project_id, task_id=w.task_id
+            ),
+        ),
+        _make_task,
+    ),
+)
+
 EXEMPT = {
     "ShortcutController.Get": "personal, not workspace data: a caller reads only their own rows",
     "ShortcutController.Set": "personal, not workspace data: a caller writes only their own rows",

@@ -18,6 +18,7 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.utils import timezone
 
+from infrastructure.audit import recorder
 from infrastructure.comments import body as bodies
 from infrastructure.comments import mentions
 from infrastructure.comments.models import (
@@ -332,6 +333,17 @@ def _gone() -> ApiError:
     return ApiError("That comment was removed.", title=ResponseTitle.COMMENT_LOCKED)
 
 
+def _record_reaction(comment: Comment, action: str, emoji: str) -> None:
+    recorder.record(
+        workspace_id=comment.workspace_id,
+        action=action,
+        target_type="task",
+        target_id=comment.task_id,
+        project_id=comment.task.project_id,
+        changes={"comment_id": comment.pk, "emoji": emoji},
+    )
+
+
 def react(
     actor: Any, workspace: Workspace, project_id: str, comment_id: str, emoji: str, on: bool
 ) -> Comment:
@@ -356,9 +368,11 @@ def react(
             CommentReaction.objects.bulk_create(
                 [CommentReaction(comment=comment, user=actor, emoji=token)], ignore_conflicts=True
             )
+            _record_reaction(comment, "comment.reacted", token)
             announce(comment, "reacted")
         elif not on and mine.exists():
             mine.delete()
+            _record_reaction(comment, "comment.unreacted", token)
             announce(comment, "reacted")
     return present([comment])[0]
 

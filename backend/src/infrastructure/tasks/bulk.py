@@ -10,10 +10,12 @@ A bulk edit is not an edit of a version the user was looking at, so it changes t
 now (retrying if someone edits it in the very same moment) rather than answering a conflict.
 """
 
+import uuid
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Final
 
+from infrastructure.audit import context as audit_context
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.tasks import services, tree
@@ -102,18 +104,20 @@ def update_many(
         depth = _depths(project.pk, task_ids)
         task_ids.sort(key=lambda i: depth.get(i, 0))
     chosen = set(task_ids)
+    batch_id = uuid.uuid4()  # the entries of this call share it; one entry per task
     for task_id in task_ids:
         try:
-            if task_id in swept:
-                task = services.reload(actor, workspace, project_id, task_id)
-            elif delete is not None:
-                inside = _chosen_below(project.pk, task_id, chosen)
-                task = services.delete(
-                    actor, workspace, project_id, task_id, "subtree" if inside else delete
-                )
-                swept |= inside
-            else:
-                task = _update_one(actor, workspace, project_id, task_id, changes or {})
+            with audit_context.batch(batch_id):
+                if task_id in swept:
+                    task = services.reload(actor, workspace, project_id, task_id)
+                elif delete is not None:
+                    inside = _chosen_below(project.pk, task_id, chosen)
+                    task = services.delete(
+                        actor, workspace, project_id, task_id, "subtree" if inside else delete
+                    )
+                    swept |= inside
+                else:
+                    task = _update_one(actor, workspace, project_id, task_id, changes or {})
         except ApiError as error:
             yield Result(task_id, error=error)
         else:

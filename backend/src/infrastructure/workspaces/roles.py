@@ -15,6 +15,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count, F, Q
 from django.db.models.functions import Lower
 
+from infrastructure.audit import changes as audit_changes
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access
@@ -174,8 +175,10 @@ def update_role(
         try:
             with transaction.atomic():
                 changes = {} if cleaned is None else {"name": cleaned}
-                bumped = Role.objects.filter(pk=role.pk, version=expected_version).update(
-                    version=F("version") + 1, **changes
+                bumped = audit_changes.update_rows(
+                    Role.objects.filter(pk=role.pk, version=expected_version),
+                    version=F("version") + 1,
+                    **changes,
                 )
                 if not bumped:
                     raise _conflict()
@@ -201,6 +204,6 @@ def delete_role(workspace: Workspace, actor: Any, role_id: str, reassign_to: str
             if target.pk == role.pk:
                 raise ApiError("Choose a different role to move the members to.")
             access.require_holds(grant, access.role_keys(role) | access.role_keys(target))
-            holders.update(role=target)
+            audit_changes.update_rows(holders, role=target)
         role.delete()
         announce_access(workspace)

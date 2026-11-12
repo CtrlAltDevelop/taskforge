@@ -62,6 +62,10 @@ def record_event(
         user_agent=user_agent(request),
         metadata=metadata,
     )
+    if app_installed("audit"):
+        from infrastructure.audit import signin
+
+        signin.record(event_type, user, client_ip(request) or "", user_agent(request))
 
 
 def enrolled_second_factors(user: Any) -> list[str]:

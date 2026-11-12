@@ -1055,6 +1055,7 @@ INSTALLED_APPS = [
     "infrastructure.sprints.apps.SprintsConfig",
     "infrastructure.docs.apps.DocsConfig",
     "infrastructure.automations.apps.AutomationsConfig",
+    "infrastructure.audit.apps.AuditConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1264,6 +1265,10 @@ INBOX_FCM_CREDENTIALS_FILE = os.getenv("DJANGO_INBOX_FCM_CREDENTIALS_FILE", "")
 INBOX_COALESCE_SECONDS = int(os.getenv("DJANGO_INBOX_COALESCE_SECONDS", "60"))
 # Deliver a push or email in the request's thread (tests); otherwise on a small background pool.
 INBOX_SYNC_DELIVERY = os.getenv("DJANGO_INBOX_SYNC_DELIVERY", "") == "1"
+# Audit log: how many proxies of ours sit in front of the app (0: the peer address is the client's;
+# 1 behind Envoy: the last hop of X-Forwarded-For), and extra keys to blank in recorded changes.
+AUDIT_TRUSTED_PROXY_HOPS = int(os.getenv("DJANGO_AUDIT_TRUSTED_PROXY_HOPS", "0"))
+AUDIT_REDACT_KEYS = tuple(k for k in os.getenv("DJANGO_AUDIT_REDACT_KEYS", "").split(",") if k)
 # Automation runs: in a worker thread; "1" runs them on the spot (tests). The seam is
 # ``infrastructure.automations.queue.run_later``: Celery replaces it.
 AUTOMATIONS_SYNC_RUN = os.getenv("DJANGO_AUTOMATIONS_SYNC_RUN", "") == "1"

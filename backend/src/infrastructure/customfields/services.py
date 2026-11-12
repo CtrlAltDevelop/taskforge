@@ -22,6 +22,9 @@ from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
+from infrastructure.audit import context as audit_context
+from infrastructure.audit import recorder
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.customfields import types, values
@@ -326,7 +329,9 @@ def reorder(
         if sorted(field_ids) != sorted(fields):
             raise types.invalid("Send every active field exactly once to reorder them.")
         for position, key in enumerate(field_ids):
-            FieldDefinition.objects.filter(pk=fields[key].pk).update(position=position)
+            audit_changes.update_rows(
+                FieldDefinition.objects.filter(pk=fields[key].pk), position=position
+            )
         announce(project)
     return list_fields(actor, workspace, project_id)
 
@@ -387,5 +392,17 @@ def purge_expired(now: Any = None) -> int:
     cutoff = (now or timezone.now()) - timedelta(days=RESTORE_DAYS)
     expired = FieldDefinition.objects.filter(archived_at__lt=cutoff)
     count = expired.count()
-    expired.delete()
+    with transaction.atomic(), audit_context.suppressed():
+        # Their values go with them: one entry per field, not one per value.
+        for field in expired.select_related("project"):
+            recorder.record(
+                workspace_id=field.project.workspace_id,
+                action="field.purged",
+                target_type="project",
+                target_id=field.project_id,
+                project_id=field.project_id,
+                actor_type="system",
+                changes={"field_id": field.pk, "name": field.name},
+            )
+        expired.delete()
     return count

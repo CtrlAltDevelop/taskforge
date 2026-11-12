@@ -21,6 +21,7 @@ from typing import Any, Final
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
+from infrastructure.audit import context as audit_context
 from infrastructure.automations import safe_http, signals, spec
 from infrastructure.automations.models import Automation, AutomationRun, RunStatus
 from infrastructure.comments import services as comments
@@ -229,7 +230,14 @@ def _describe(
 
 
 def _apply(action: dict[str, Any], task: Task, ctx: Ctx, event: dict[str, Any], index: int) -> str:
-    """Do one action; returns a short note for the step."""
+    """Do one action (its changes are recorded as the automation's); returns a note."""
+    with audit_context.as_automation(ctx.automation.pk):
+        return _apply_action(action, task, ctx, event, index)
+
+
+def _apply_action(
+    action: dict[str, Any], task: Task, ctx: Ctx, event: dict[str, Any], index: int
+) -> str:
     kind, owner, project = action["type"], ctx.owner, task.project
     ws = ctx.automation.workspace
     if kind in (spec.SET_FIELD, spec.SET_STATUS, spec.SET_ASSIGNEE):

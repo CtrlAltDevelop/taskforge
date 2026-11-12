@@ -81,6 +81,9 @@ def _grpc_caller(context: Any) -> Any | None:
     from infrastructure.sync.actor import set_actor
 
     set_actor(user, str(request.META.get(CLIENT_ID_META_KEY, "")))
+    from infrastructure.audit.context import set_client
+
+    set_client(request.META)  # for the audit log: where the call came from
     return user
 
 

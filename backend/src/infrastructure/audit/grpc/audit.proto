@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package config.audit;
+
+service ActivityController {
+    rpc ForTask(ActivityForTaskRequest) returns (AuditPage) {}
+}
+
+service AuditController {
+    rpc Export(AuditExportRequest) returns (stream AuditExportChunk) {}
+    rpc List(AuditListRequest) returns (AuditPage) {}
+}
+
+message ActivityForTaskRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    int64 before = 4;
+    int32 limit = 5;
+}
+
+message AuditEntry {
+    int64 id = 1;
+    string at = 2;
+    string actor = 3;
+    string actor_name = 4;
+    string actor_type = 5;
+    string action = 6;
+    string target_type = 7;
+    string target_id = 8;
+    string project_id = 9;
+    string batch_id = 10;
+    string ip = 11;
+    string user_agent = 12;
+    string changes_json = 13;
+}
+
+message AuditExportChunk {
+    string csv = 1;
+}
+
+message AuditExportRequest {
+    string workspace_id = 1;
+    string actor = 2;
+    string action = 3;
+    string target_type = 4;
+    string target_id = 5;
+    string project_id = 6;
+    string since = 7;
+    string until = 8;
+}
+
+message AuditListRequest {
+    string workspace_id = 1;
+    string actor = 2;
+    string action = 3;
+    string target_type = 4;
+    string target_id = 5;
+    string project_id = 6;
+    string since = 7;
+    string until = 8;
+    int64 before = 9;
+    int32 limit = 10;
+}
+
+message AuditPage {
+    repeated AuditEntry entries = 1;
+    repeated Label labels = 2;
+    int64 next_before = 3;
+}
+
+message Label {
+    string id = 1;
+    string name = 2;
+}
+

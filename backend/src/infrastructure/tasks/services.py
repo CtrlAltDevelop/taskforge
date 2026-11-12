@@ -21,6 +21,9 @@ from django.db import transaction
 from django.db.models import Prefetch, Q
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
+from infrastructure.audit import context as audit_context
+from infrastructure.audit import recorder
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.customfields import values as custom
@@ -191,8 +194,21 @@ def _clean(
 
 
 def _set_assignees(task: Task, users: list[Any]) -> None:
+    was = sorted(
+        str(i) for i in TaskAssignee.objects.filter(task=task).values_list("user_id", flat=True)
+    )
     TaskAssignee.objects.filter(task=task).delete()
     TaskAssignee.objects.bulk_create([TaskAssignee(task=task, user=u) for u in users])
+    now = sorted(str(u.pk) for u in users)
+    if was != now:
+        recorder.record(
+            workspace_id=task.workspace_id,
+            action="task.assignees_changed",
+            target_type="task",
+            target_id=task.pk,
+            project_id=task.project_id,
+            changes={"assignees": [was, now]},
+        )
 
 
 def _reload(task: Task, actor: Any, workspace: Workspace) -> Task:
@@ -457,6 +473,7 @@ def _move_open_subtasks(
     now = timezone.now()
     moved: list[Task] = []
     was: dict[Any, str] = {}
+    before: dict[Any, dict[str, Any]] = {}
     rows = (
         tree.descendants(task)
         .exclude(status__category__in=tree.FINAL)  # finished ones (done, cancelled) are left alone
@@ -471,6 +488,7 @@ def _move_open_subtasks(
         )
         links.check_unblocked(actor, workspace, project, sub, target, override_blocked)
         was[sub.pk] = sub.status.name
+        before[sub.pk] = audit_changes.snapshot(sub)
         sub.status = target
         sub.version += 1
         sub.field_versions = {**sub.field_versions, "status": sub.version}
@@ -479,6 +497,9 @@ def _move_open_subtasks(
     if not moved:
         return
     Task.objects.bulk_update(moved, ["status", "version", "field_versions", "updated_at"])
+    with audit_context.batch():
+        for sub in moved:
+            audit_changes.updated(sub, before[sub.pk])
     for sub in moved:
         announce(sub, "updated")
         announce_activity(sub, "status_changed", actor, from_name=was[sub.pk], to_name=target.name)
@@ -506,12 +527,16 @@ def _live_parent(project: Project, parent_id: str) -> Task:
 
 def _bump(rows: list[Task], now: Any, **changes: Any) -> None:
     """Count one edit on each of ``rows`` (and set ``changes``), saved in one batch."""
+    before = {row.pk: audit_changes.snapshot(row) for row in rows}
     for row in rows:
         row.version += 1
         row.updated_at = now
         for name, value in changes.items():
             setattr(row, name, value)
     Task.objects.bulk_update(rows, ["version", "updated_at", *changes], batch_size=500)
+    with audit_context.batch():
+        for row in rows:
+            audit_changes.updated(row, before[row.pk])
 
 
 def set_parent(
@@ -542,10 +567,12 @@ def set_parent(
             )
         base_depth = new_parent.depth + 1 if new_parent else 0
         tree.check_depth(base_depth + tree.subtree_depth(task))
+        before = audit_changes.snapshot(task)
         touched = tree.move_subtree(task, new_parent)
         task.version += 1
         task.field_versions = {**task.field_versions, "parent": task.version}
         task.save(update_fields=["version", "field_versions"])
+        audit_changes.updated(task, before)
         tree.refresh_progress(touched)
         announce(task, "reparented")
     return _reload(task, actor, workspace)
@@ -578,7 +605,7 @@ def delete(actor: Any, workspace: Workspace, project_id: str, task_id: str, mode
     first. Without subtasks the mode is ignored."""
     if mode not in DELETE_MODES:
         raise ApiError("The delete mode must be 'subtree' or 'promote'.")
-    with transaction.atomic():
+    with transaction.atomic(), audit_context.batch():  # a subtree goes as one batch
         project = _writable_project(actor, workspace, project_id, "task.delete")
         task = _load_task(project, task_id, lock=True)
         below = tree.descendants(task).count()
@@ -618,10 +645,12 @@ def _promote_children(task: Task) -> None:
     for kid in Task.objects.filter(parent=task, deleted_at__isnull=True).order_by(
         "position", "number"
     ):
+        before = audit_changes.snapshot(kid)
         touched += tree.move_subtree(kid, grandparent)
         kid.version += 1
         kid.field_versions = {**kid.field_versions, "parent": kid.version}
         kid.save(update_fields=["version", "field_versions"])
+        audit_changes.updated(kid, before)
         announce(kid, "reparented")
     tree.refresh_progress(touched)
 
@@ -647,9 +676,11 @@ def restore(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> 
         )
         restored = _soft(task, False, actor, workspace)
         if parent_gone:
+            before = audit_changes.snapshot(task)
             tree.move_subtree(task, None)
             task.field_versions = {**task.field_versions, "parent": task.version}
             task.save(update_fields=["field_versions"])
+            audit_changes.updated(task, before)
             announce(task, "reparented")
         inner = tree.descendants(task).filter(progress_total__gt=0).values_list("pk", flat=True)
         tree.refresh_progress([task.pk, *inner, *tree.ancestor_ids(task)])

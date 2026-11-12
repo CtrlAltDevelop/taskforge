@@ -18,6 +18,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.docs import blocks as block_schema
@@ -436,8 +437,10 @@ def archive(actor: Any, workspace: Workspace, doc_id: str) -> DocView:
         doc = reach.load(actor, workspace, doc_id, lock=True)
         _writable(doc)
         now = timezone.now()
-        Doc.objects.filter(pk__in=reach.subtree_ids(doc), archived_at__isnull=True).update(
-            archived_at=now, updated_at=now
+        audit_changes.update_rows(
+            Doc.objects.filter(pk__in=reach.subtree_ids(doc), archived_at__isnull=True),
+            archived_at=now,
+            updated_at=now,
         )
         doc.refresh_from_db()
         announce(doc, "archived", _content(doc).version)
@@ -456,8 +459,10 @@ def restore(actor: Any, workspace: Workspace, doc_id: str) -> DocView:
         if doc.parent_id and Doc.objects.get(pk=doc.parent_id).archived_at is not None:
             raise _bad("Restore the parent page first.")
         stamp = doc.archived_at
-        Doc.objects.filter(pk__in=reach.subtree_ids(doc), archived_at=stamp).update(
-            archived_at=None, updated_at=timezone.now()
+        audit_changes.update_rows(
+            Doc.objects.filter(pk__in=reach.subtree_ids(doc), archived_at=stamp),
+            archived_at=None,
+            updated_at=timezone.now(),
         )
         doc.refresh_from_db()
         announce(doc, "restored", _content(doc).version)
@@ -491,7 +496,10 @@ def set_access(
         doc.save(update_fields=["restricted", "updated_at"])
         DocAccess.objects.filter(doc=doc).exclude(user_id__in=members).delete()
         have = set(DocAccess.objects.filter(doc=doc).values_list("user_id", flat=True))
-        DocAccess.objects.bulk_create([DocAccess(doc=doc, user_id=u) for u in members - have])
+        for given in DocAccess.objects.bulk_create(
+            [DocAccess(doc=doc, user_id=u) for u in members - have]
+        ):
+            audit_changes.created(given)
         announce(doc, "access", _content(doc).version)
     return _view(actor, workspace, doc, body=False)
 

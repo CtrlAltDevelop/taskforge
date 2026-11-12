@@ -20,6 +20,8 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.utils import timezone
 
+from infrastructure.audit import changes as audit_changes
+from infrastructure.audit import context as audit_context
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.projects import services as projects
@@ -177,6 +179,7 @@ def _move_tasks(source: Status, target: Status) -> None:
         batch = list(
             Task.objects.select_for_update().filter(pk__in=ids[start : start + MIGRATE_BATCH])
         )
+        before = {task.pk: audit_changes.snapshot(task) for task in batch}
         for task in batch:
             task.status = target
             task.version += 1
@@ -185,6 +188,9 @@ def _move_tasks(source: Status, target: Status) -> None:
         Task.objects.bulk_update(
             batch, ["status", "version", "field_versions", "updated_at"], batch_size=MIGRATE_BATCH
         )
+        with audit_context.batch():
+            for task in batch:
+                audit_changes.updated(task, before[task.pk])
 
 
 def _apply(
@@ -198,17 +204,40 @@ def _apply(
     removed = [s for key, s in existing.items() if key not in kept_keys]
     # Free every name and the default flag first: a save may swap two names, or reuse the name
     # of a status it deletes, and both are unique per project.
+    before = {key: audit_changes.snapshot(s) for key, s in existing.items()}
     for status in existing.values():
         Status.objects.filter(pk=status.pk).update(name=_temporary(status), is_default=False)
     by_key: dict[str, Status] = {}
     for position, item in enumerate(draft.statuses):
         by_key[item.key] = _write_status(project, existing.get(item.key), item, position)
+        if item.key in before:  # an edit of a status that was there: what it was -> what it is
+            audit_changes.updated(by_key[item.key], before[item.key])
     for gone in removed:
         if gone.tasks.exists():
             _move_tasks(gone, by_key[migrate[str(gone.pk)]])
         gone.delete()
-    Transition.objects.filter(project=project).delete()
-    Transition.objects.bulk_create(
+    _replace_transitions(project, draft, by_key)
+    workflow.restrict_transitions = draft.restrict
+    workflow.restrict_creation = draft.restrict_creation
+    workflow.version += 1
+    workflow.save(update_fields=["restrict_transitions", "restrict_creation", "version"])
+
+
+def _rule(t: Transition) -> tuple[Any, ...]:
+    return (
+        t.from_status_id,
+        t.to_status_id,
+        t.required_role_id,
+        t.require_assignee,
+        t.require_subtasks_done,
+    )
+
+
+def _replace_transitions(
+    project: Project, draft: WorkflowDraft, by_key: Mapping[str, Status]
+) -> None:
+    """Swap the rules for the draft's, recording only the ones that really went or came."""
+    wanted = [
         Transition(
             project=project,
             from_status=by_key[t.from_key],
@@ -218,11 +247,18 @@ def _apply(
             require_subtasks_done=t.require_subtasks_done,
         )
         for t in draft.transitions
-    )
-    workflow.restrict_transitions = draft.restrict
-    workflow.restrict_creation = draft.restrict_creation
-    workflow.version += 1
-    workflow.save(update_fields=["restrict_transitions", "restrict_creation", "version"])
+    ]
+    old = list(Transition.objects.filter(project=project))
+    with audit_context.suppressed():  # the swap itself is not a change; the difference is
+        Transition.objects.filter(project=project).delete()
+        Transition.objects.bulk_create(wanted)
+    kept = {_rule(t) for t in old} & {_rule(t) for t in wanted}
+    for gone in old:
+        if _rule(gone) not in kept:
+            audit_changes.deleted(gone)
+    for new in wanted:
+        if _rule(new) not in kept:
+            audit_changes.created(new)
 
 
 def _recount_progress(project: Project) -> None:
