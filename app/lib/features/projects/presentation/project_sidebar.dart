@@ -113,6 +113,14 @@ class ProjectSidebar extends ConsumerWidget {
           onTap: () => _go(context, '/timesheet'),
         ),
         ListTile(
+          key: const Key('open-dashboards'),
+          dense: true,
+          selected: current.startsWith('/dashboards'),
+          leading: const Icon(Icons.dashboard_outlined),
+          title: const Text('Dashboards'),
+          onTap: () => _go(context, '/dashboards'),
+        ),
+        ListTile(
           key: const Key('open-docs'),
           dense: true,
           selected: current.startsWith('/docs'),

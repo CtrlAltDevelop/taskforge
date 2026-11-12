@@ -96,6 +96,13 @@ final List<AppAction> builtInActions = [
     keywords: const ['wiki', 'pages'],
   ),
   _go(
+    'nav.dashboards',
+    'Dashboards',
+    '/dashboards',
+    keys: 'alt+b',
+    keywords: const ['reports', 'charts', 'metrics', 'widgets'],
+  ),
+  _go(
     'nav.timesheet',
     'Timesheet',
     '/timesheet',
@@ -180,6 +187,12 @@ final List<AppAction> builtInActions = [
     'Sprints',
     '/sprints',
     keywords: const ['backlog', 'burndown', 'velocity'],
+  ),
+  _projectPage(
+    'project.dashboards',
+    'Dashboards',
+    '/dashboards',
+    keywords: const ['reports', 'charts', 'metrics'],
   ),
   _projectPage(
     'project.automations',

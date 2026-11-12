@@ -33,6 +33,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.docManage,
     Perm.automationManage,
     Perm.auditView,
+    Perm.dashboardManage,
   },
   'Member': {
     Perm.workspaceView,
@@ -92,6 +93,12 @@ const registry = [
   ]),
   PermissionArea('Audit', [
     PermissionInfo(Perm.auditView, 'Read and export the workspace audit log'),
+  ]),
+  PermissionArea('Dashboards', [
+    PermissionInfo(
+      Perm.dashboardManage,
+      'Share dashboards with a project or the workspace, edit shared ones',
+    ),
   ]),
 ];
 
