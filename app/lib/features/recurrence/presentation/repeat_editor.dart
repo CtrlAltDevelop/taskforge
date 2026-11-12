@@ -471,6 +471,28 @@ class _Timing extends StatelessWidget {
           const Flexible(child: Text('days ahead of its due date')),
         ],
       ),
+      ListTile(
+        key: const Key('repeat-time'),
+        dense: true,
+        contentPadding: EdgeInsets.zero,
+        leading: const Icon(Icons.schedule),
+        title: Text('At ${draft.atTime}'),
+        onTap: () async {
+          final parts = draft.atTime.split(':');
+          final picked = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay(
+              hour: int.tryParse(parts.first) ?? 9,
+              minute: int.tryParse(parts.last) ?? 0,
+            ),
+          );
+          if (picked == null) return;
+          String two(int n) => n.toString().padLeft(2, '0');
+          onChanged(
+            draft.copyWith(atTime: '${two(picked.hour)}:${two(picked.minute)}'),
+          );
+        },
+      ),
       const SizedBox(height: 4),
       DropdownButton<String>(
         key: const Key('repeat-zone'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/recurrence/presentation/repeat_section.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -124,7 +125,14 @@ class _BulkBarState extends ConsumerState<BulkBar> {
         ],
       ),
     );
-    if (sure == true) await _run(const BulkChange.delete());
+    if (sure != true) return;
+    // A series' template among them: ask, one by one (cancel stops it all).
+    final picked = ref.read(taskSelectionProvider(widget.projectId));
+    for (final t in ref.read(taskListProvider(widget.projectId)).tasks) {
+      if (!picked.contains(t.id)) continue;
+      if (!mounted || !await confirmDeleteTemplate(context, ref, t)) return;
+    }
+    if (mounted) await _run(const BulkChange.delete());
   }
 
   @override

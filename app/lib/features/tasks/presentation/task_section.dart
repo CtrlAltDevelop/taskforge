@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/presentation/board_view.dart';
@@ -16,6 +17,7 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/core/offline/presentation/offline_banner.dart';
 import 'package:taskforge/core/sync/presentation/connection_status.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/features/recurrence/presentation/repeat_section.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
@@ -38,6 +40,7 @@ import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
 
 /// Width from which the detail opens as a side panel instead of a page.
 const wideBreakpoint = 900.0;
@@ -73,6 +76,46 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
       _TaskView.values.where((v) => v.name == widget.initialView).firstOrNull ??
       _TaskView.list;
 
+  var _wide = false;
+
+  _TaskView? _viewNamed(String? name) =>
+      _TaskView.values.where((v) => v.name == name).firstOrNull;
+
+  /// The route says which view and task are on screen (the palette's actions
+  /// read it there): keep it in step with what was picked. Skipped on a
+  /// narrow screen, where a task opens as a page of its own.
+  void _syncUrl() {
+    if (!_wide) return;
+    final query = {
+      'task': ?_selected,
+      if (_view != _TaskView.list) 'view': _view.name,
+    };
+    GoRouter.maybeOf(context)?.replace(
+      Uri(
+        path: '/projects/${widget.project.id}',
+        queryParameters: query.isEmpty ? null : query,
+      ).toString(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(TaskSection old) {
+    super.didUpdateWidget(old);
+    // The route changed under us (an action, a search hit, a link).
+    if (widget.initialView != old.initialView) {
+      final view = _viewNamed(widget.initialView) ?? _TaskView.list;
+      if (view != _view) setState(() => _view = view);
+    }
+    if (widget.initialTask != old.initialTask &&
+        widget.initialTask != _selected) {
+      if (_wide) {
+        setState(() => _selected = widget.initialTask);
+      } else {
+        _pending = widget.initialTask;
+      }
+    }
+  }
+
   /// A card shows what the detail may have just changed: read the board again
   /// when the detail closes or another task opens.
   void _refreshView() {
@@ -94,6 +137,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
   Future<void> _open(Task task, bool wide) async {
     if (wide) {
       setState(() => _selected = task.id);
+      _syncUrl();
       _refreshView();
       return;
     }
@@ -134,6 +178,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     return LayoutBuilder(
       builder: (context, box) {
         final wide = box.maxWidth >= wideBreakpoint;
+        _wide = wide;
         _openPending(wide);
         Future<void> openFromView(Task t) async {
           await _open(t, wide);
@@ -198,7 +243,10 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                   ),
                 ],
                 selected: {_view},
-                onSelectionChanged: (v) => setState(() => _view = v.first),
+                onSelectionChanged: (v) {
+                  setState(() => _view = v.first);
+                  _syncUrl();
+                },
               ),
               const LiveIndicator(),
               FilterBar(
@@ -235,6 +283,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                               taskId: _selected!,
                               onClose: () {
                                 setState(() => _selected = null);
+                                _syncUrl();
                                 _refreshView();
                               },
                               onOpen: (t) => _open(t, true),
@@ -648,6 +697,8 @@ class _TaskListState extends ConsumerState<_TaskList> {
       mode = await askDeleteMode(context, task, below);
       if (mode == null || !mounted) return;
     }
+    // Last, so cancelling an earlier question never stops a series.
+    if (!await confirmDeleteTemplate(context, ref, task) || !mounted) return;
     try {
       final moved = await list.delete(task, mode: mode);
       messenger
@@ -952,11 +1003,11 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
       enabled: !_busy,
       maxLength: maxTitleLength,
       textInputAction: TextInputAction.done,
-      decoration: const InputDecoration(
-        hintText: 'Add a task and press Enter',
-        prefixIcon: Icon(Icons.add),
+      decoration: InputDecoration(
+        hintText: withShortcut(ref, 'Add a task and press Enter', 'task.new'),
+        prefixIcon: const Icon(Icons.add),
         counterText: '',
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
       onSubmitted: _submit,
     ),

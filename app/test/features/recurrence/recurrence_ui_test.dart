@@ -350,4 +350,85 @@ void main() {
     expect(server.calls, isEmpty);
     expect(server.series, contains('a'));
   });
+
+  Future<FakeRecurrenceClient> openList(
+    WidgetTester tester,
+    FakeRecurrenceClient server,
+  ) async {
+    final pumped = await pumpProjects(
+      tester,
+      projects: [project('p1', 'Web')],
+      tasks: FakeTasksClient([task('a', 'Weekly report')]),
+      workflows: FakeWorkflowsClient(defaultWorkflow()),
+      recurrence: server,
+    );
+    await pumped.go(tester, '/projects/p1');
+    return server;
+  }
+
+  testWidgets('deleting a template from the list menu asks first too', (
+    tester,
+  ) async {
+    final server = await openList(
+      tester,
+      FakeRecurrenceClient(series: {'a': repeating('a')}),
+    );
+    await tester.tap(key('task-menu-a'));
+    await tester.pumpAndSettle();
+    await tester.tap(key('delete-a'));
+    await tester.pumpAndSettle();
+    expect(key('delete-template-dialog'), findsOneWidget);
+    await tester.tap(key('stop-series'));
+    await tester.pumpAndSettle();
+    expect(server.calls, ['clear a']);
+    expect(find.text('WEB-1 deleted'), findsOneWidget);
+  });
+
+  testWidgets('a bulk delete asks about a template among the picked', (
+    tester,
+  ) async {
+    final server = await openList(
+      tester,
+      FakeRecurrenceClient(series: {'a': repeating('a')}),
+    );
+    await tester.tap(key('check-a'));
+    await tester.pumpAndSettle();
+    await tester.tap(key('bulk-delete'));
+    await tester.pumpAndSettle();
+    await tester.tap(key('bulk-delete-confirm'));
+    await tester.pumpAndSettle();
+    expect(key('delete-template-dialog'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(server.calls, isEmpty);
+    expect(find.text('Weekly report'), findsOneWidget); // nothing deleted
+  });
+
+  testWidgets('the time of day can be chosen and reaches the preview', (
+    tester,
+  ) async {
+    final server = await _open(tester);
+    await tester.tap(key('repeat-chip'));
+    await tester.pumpAndSettle();
+    expect(find.text('At 09:00'), findsOneWidget);
+    await tester.tap(key('repeat-time'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.keyboard_outlined));
+    await tester.pumpAndSettle();
+    final fields = find.descendant(
+      of: find.byType(Dialog).last,
+      matching: find.byType(TextField),
+    );
+    await tester.enterText(fields.at(0), '10');
+    await tester.enterText(fields.at(1), '30');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    debugPrint(
+      'FIELDS ${fields.evaluate().length} ${find.text('OK').evaluate().length}',
+    );
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    expect(find.text('At 10:30'), findsOneWidget);
+    expect(server.previews.last.atTime, '10:30');
+  });
 }

@@ -1,6 +1,6 @@
 # Phase 28 — Recurring Tasks
 
-**Status:** DONE (PostgreSQL not run, no database here: see *Built*)
+**Status:** DONE
 
 ## Feature
 Tasks that **repeat on a schedule** (daily, weekly, monthly, custom, or after completion).
@@ -52,5 +52,6 @@ Phases 06, 08, 13.
 - **Backend** (`recurrence` app): `rules.py` (RRULE parse/render/dates/describe, month-end clamp), `schedule.py` (shared arithmetic of the clock, preview and ghosts), `template.py` (snapshot, instance with open checklist), `clock.py` (row-locked generation, catch-up cap, after-completion hook + safety net, pause on failure), `services.py`, gRPC `RecurrenceController`, audit tracking (`recurrence.*`, instances recorded as the system), RBAC matrix entries, `backend/docs/recurrence.md`.
 - **App**: Repeat chip, series badge, task count and paused notice in task detail; editor with the sentence and next five dates from the server's `Preview`; stop / pause / "use this task for future ones"; stop-or-keep prompt when deleting a template; calendar ghosts (grid, month dots, agenda).
 - **Tests**: backend recurrence suite (rules, clock, DST through the clock, Feb 29, preview parity for five schedule rules and after-completion, double run, catch-up cap, edit this/future, cross-workspace, per-viewer ghosts, failure branches, gRPC); Flutter domain, UI and calendar-ghost tests.
+- **Audit follow-up**: the stop-or-keep prompt on deleting a template now appears on every delete path (task detail, list and tree menu, the Delete shortcut, and a bulk delete, which asks once per template among the picked; cancelling stops the whole delete). The editor has a time-of-day picker (`at_time`). A subtask cannot be the template of a series (refused with a message: instances are made at the top level, so it would leave its parent). New tests: pause when the owner lost access or a required field has no value, audit rows for set, pause and clear, the subtask refusal, and widget tests for the prompt on list/bulk delete and the time picker.
 - **Time zones**: the editor offers 13 common zones (the server accepts any IANA name); the app has no device-zone plugin.
 - **Not verified**: PostgreSQL (the row lock is a no-op on SQLite, so the two-machine race is argued from the lock and the unique constraints, not run); a real browser or device.

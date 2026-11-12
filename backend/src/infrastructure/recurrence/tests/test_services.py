@@ -290,3 +290,30 @@ def test_the_tick_command_runs(world: World) -> None:
     out = StringIO()
     call_command("recurrence_tick", stdout=out)
     assert "Recurring tasks made 0" in out.getvalue()
+
+
+def test_a_subtask_cannot_be_the_template_of_a_series(world: World) -> None:
+    parent = world.task(due_date="2026-11-02")
+    sub = world.task(title="Step", parent_id=str(parent.pk), due_date="2026-11-03")
+    refused = world.refused(world.repeat, sub, "FREQ=WEEKLY")
+    assert "subtask" in str(refused).lower()
+    assert not RecurrenceSeries.objects.exists()
+
+
+def test_setting_clearing_and_pausing_a_rule_are_audited(world: World) -> None:
+    from infrastructure.audit.models import AuditEntry
+
+    first = world.task(due_date="2026-11-02")
+    world.repeat(first, "FREQ=WEEKLY")
+    services.pause(world.owner, world.ws, str(first.project_id), str(first.pk), True)
+    services.clear(world.owner, world.ws, str(first.project_id), str(first.pk))
+    actions = list(
+        AuditEntry.objects.filter(action__startswith="recurrence.")
+        .order_by("pk")
+        .values_list("action", flat=True)
+    )
+    assert actions[0].endswith("created") and any(a.endswith("paused") for a in actions)
+    assert actions[-1].endswith("deleted")
+    assert all(
+        AuditEntry.objects.filter(action=a).first().actor_type == "user" for a in set(actions)
+    )

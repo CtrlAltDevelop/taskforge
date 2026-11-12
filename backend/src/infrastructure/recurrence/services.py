@@ -117,6 +117,9 @@ def set_rule(
     with transaction.atomic():
         project = tasks.lock_for_write(actor, workspace, project_id, EDIT)
         task = tasks.load_task(project, task_id, lock=True)
+        if task.parent_id and _series_of(task, lock=True) is None:
+            # Instances are made at the top level, so a subtask would leave its parent.
+            raise ApiError("A subtask cannot repeat by itself: repeat its parent task.")
         found = _series_of(task, lock=True)
         now = timezone.now()
         values: dict[str, Any] = {

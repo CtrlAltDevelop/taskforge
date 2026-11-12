@@ -121,3 +121,26 @@ def test_a_lost_assignee_is_dropped_not_fatal(world: World) -> None:
     WorkspaceMember.objects.filter(user=world.member).update(status=MemberStatus.REMOVED)
     assert clock.generate_due(at("2026-11-09", 10)) == 1
     assert list(Task.objects.get(occurrence__index=1).assignee_ids()) == []
+
+
+def test_a_series_whose_owner_lost_access_is_paused_with_the_reason(world: World) -> None:
+    world.repeat(world.task(due_date="2026-11-02"), "FREQ=WEEKLY")
+    RecurrenceSeries.objects.update(created_by=world.member)
+    WorkspaceMember.objects.filter(user=world.member).update(status=MemberStatus.REMOVED)
+    assert clock.generate_due(at("2026-11-09", 10)) == 0
+    series = RecurrenceSeries.objects.get()
+    assert series.paused and series.pause_reason
+    assert Occurrence.objects.count() == 1
+
+
+def test_a_required_field_with_no_value_pauses_the_series(world: World) -> None:
+    from infrastructure.customfields import services as field_services
+
+    world.repeat(world.task(due_date="2026-11-02"), "FREQ=WEEKLY")
+    field_services.create(
+        world.owner, world.ws, str(world.web.pk), name="Customer", type="text", required=True
+    )
+    assert clock.generate_due(at("2026-11-09", 10)) == 0
+    series = RecurrenceSeries.objects.get()
+    assert series.paused and "Customer" in series.pause_reason
+    assert Occurrence.objects.count() == 1
