@@ -213,6 +213,8 @@ class CommentCreateRequest extends $pb.GeneratedMessage {
     $core.String? body,
     $core.String? parentId,
     $core.bool? grantAccess,
+    $core.String? clientId,
+    $core.String? clientMutationId,
   }) {
     final result = CommentCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -221,6 +223,8 @@ class CommentCreateRequest extends $pb.GeneratedMessage {
     if (body != null) result.body = body;
     if (parentId != null) result.parentId = parentId;
     if (grantAccess != null) result.grantAccess = grantAccess;
+    if (clientId != null) result.clientId = clientId;
+    if (clientMutationId != null) result.clientMutationId = clientMutationId;
     return result;
   }
 
@@ -244,6 +248,8 @@ class CommentCreateRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'body')
     ..aOS(5, _omitFieldNames ? '' : 'parentId')
     ..aOB(6, _omitFieldNames ? '' : 'grantAccess')
+    ..aOS(7, _omitFieldNames ? '' : 'clientId')
+    ..aOS(8, _omitFieldNames ? '' : 'clientMutationId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -322,6 +328,24 @@ class CommentCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasGrantAccess() => $_has(5);
   @$pb.TagNumber(6)
   void clearGrantAccess() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get clientId => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set clientId($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasClientId() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearClientId() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get clientMutationId => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set clientMutationId($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasClientMutationId() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearClientMutationId() => $_clearField(8);
 }
 
 class CommentDeleteRequest extends $pb.GeneratedMessage {

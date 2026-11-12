@@ -10,6 +10,7 @@ import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart'
     show stripErrorTitle;
+import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/gen/infrastructure/customfields/grpc/customfields.pbgrpc.dart'
     as pb;
 
@@ -135,14 +136,21 @@ CustomField fieldFromPb(pb.Field f) => CustomField(
 );
 
 class GrpcFieldsClient implements FieldsClient {
-  GrpcFieldsClient(ClientChannelBase channel, this._session, {this.onRefusal})
-    : _stub = pb.FieldControllerClient(channel);
+  GrpcFieldsClient(
+    ClientChannelBase channel,
+    this._session, {
+    this.onRefusal,
+    this.cache,
+  }) : _stub = pb.FieldControllerClient(channel);
 
   final pb.FieldControllerClient _stub;
   final AuthSession _session;
 
   /// Called when a mutating call is refused (permissions may be stale).
   final void Function()? onRefusal;
+
+  /// Keeps the last list for when the server cannot be reached.
+  final ReadCache? cache;
 
   late final _options = scopedCallOptions(_session, () => null);
 
@@ -178,13 +186,19 @@ class GrpcFieldsClient implements FieldsClient {
     bool includeArchived = false,
   }) async {
     final reply = await _run(
-      () => _stub.list(
-        pb.FieldListRequest(
-          workspaceId: workspaceId,
-          projectId: projectId,
-          includeArchived: includeArchived,
+      () => readThrough(
+        cache,
+        workspaceId,
+        'fields:$projectId:$includeArchived',
+        () => _stub.list(
+          pb.FieldListRequest(
+            workspaceId: workspaceId,
+            projectId: projectId,
+            includeArchived: includeArchived,
+          ),
+          options: _options,
         ),
-        options: _options,
+        pb.FieldList.fromBuffer,
       ),
       isRead: true,
     );

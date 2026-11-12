@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/core/deep_links.dart';
+import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/sync/sync_coordinator.dart';
 import 'package:taskforge/features/inbox/application/icon_badge.dart';
 import 'package:taskforge/features/inbox/application/live_alerts.dart';
@@ -17,6 +18,7 @@ class TaskForgeApp extends ConsumerWidget {
     ref.watch(
       syncCoordinatorProvider,
     ); // live changes read the open screens again
+    ref.watch(offlineSyncProvider); // changes made offline go out when back
     ref.watch(liveAlertsProvider); // system notifications while the app runs
     ref.watch(timerNotificationProvider); // a notification while a timer runs
     ref.watch(iconBadgeProvider); // unread count on the app icon

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/members/data/members_client.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -14,6 +15,7 @@ final membersClientProvider = Provider<MembersClient>(
     ref.watch(authSessionProvider),
     restUrl: AppConfig.restUrl,
     onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
+    cache: ref.watch(readCacheProvider),
   ),
 );
 

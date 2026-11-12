@@ -9,6 +9,7 @@ import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
+import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/gen/infrastructure/workflows/grpc/workflows.pbgrpc.dart'
     as pb;
 
@@ -120,6 +121,7 @@ class GrpcWorkflowsClient implements WorkflowsClient {
     ClientChannelBase channel,
     this._session, {
     this.onRefusal,
+    this.cache,
   }) : _stub = pb.WorkflowControllerClient(channel);
 
   final pb.WorkflowControllerClient _stub;
@@ -127,6 +129,9 @@ class GrpcWorkflowsClient implements WorkflowsClient {
 
   /// Called when a mutating call is refused (permissions may be stale).
   final void Function()? onRefusal;
+
+  /// Keeps the last workflow read for when the server cannot be reached.
+  final ReadCache? cache;
 
   late final _options = scopedCallOptions(_session, () => null);
 
@@ -180,9 +185,15 @@ class GrpcWorkflowsClient implements WorkflowsClient {
   @override
   Future<Workflow> get(String workspaceId, String projectId) async => _workflow(
     await _run(
-      () => _stub.get(
-        pb.WorkflowGetRequest(workspaceId: workspaceId, projectId: projectId),
-        options: _options,
+      () => readThrough(
+        cache,
+        workspaceId,
+        'workflow:$projectId',
+        () => _stub.get(
+          pb.WorkflowGetRequest(workspaceId: workspaceId, projectId: projectId),
+          options: _options,
+        ),
+        pb.Workflow.fromBuffer,
       ),
       isRead: true,
     ),

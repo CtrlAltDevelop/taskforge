@@ -58,6 +58,11 @@ abstract interface class TasksClient {
     String parentId = '',
     String statusId = '',
     Map<String, String> fieldValues = const {},
+
+    /// An id the caller chose for the new task (a UUID) and a name for the
+    /// change: a change sent twice with the same [mutationId] is applied once.
+    String clientId = '',
+    String mutationId = '',
   });
 
   /// Makes [task] a subtask of [parentId] (empty: a top-level task), with
@@ -80,6 +85,7 @@ abstract interface class TasksClient {
     TaskPatch patch, {
     int? expectedVersion,
     bool overrideBlocked = false,
+    String mutationId = '',
   });
 
   /// Live tasks of every project the viewer can open whose title or `KEY-N`
@@ -112,6 +118,7 @@ abstract interface class TasksClient {
     String projectId,
     String id, {
     DeleteMode? mode,
+    String mutationId = '',
   });
   Future<Task> restore(String workspaceId, String projectId, String id);
 
@@ -430,6 +437,8 @@ class GrpcTasksClient implements TasksClient {
     String parentId = '',
     String statusId = '',
     Map<String, String> fieldValues = const {},
+    String clientId = '',
+    String mutationId = '',
   }) async => _task(
     await _run(
       () => _stub.create(
@@ -441,6 +450,8 @@ class GrpcTasksClient implements TasksClient {
           assigneeIds: assigneeIds,
           parentId: parentId,
           status: statusId,
+          clientId: clientId,
+          clientMutationId: mutationId,
           fieldValues: [
             for (final e in fieldValues.entries)
               pb.TaskFieldValue(fieldId: e.key, value: e.value),
@@ -458,6 +469,7 @@ class GrpcTasksClient implements TasksClient {
     TaskPatch patch, {
     int? expectedVersion,
     bool overrideBlocked = false,
+    String mutationId = '',
   }) async => _task(
     await _run(
       () => _stub.update(
@@ -476,6 +488,7 @@ class GrpcTasksClient implements TasksClient {
           setAssignees: patch.assigneeIds != null,
           assigneeIds: patch.assigneeIds,
           overrideBlocked: overrideBlocked,
+          clientMutationId: mutationId,
           fieldValues: [
             for (final e
                 in (patch.fieldValues ?? const <String, String>{}).entries)
@@ -493,6 +506,7 @@ class GrpcTasksClient implements TasksClient {
     String projectId,
     String id, {
     DeleteMode? mode,
+    String mutationId = '',
   }) async => _task(
     await _run(
       () => _stub.delete(
@@ -501,6 +515,7 @@ class GrpcTasksClient implements TasksClient {
           projectId: projectId,
           id: id,
           mode: mode?.wire,
+          clientMutationId: mutationId,
         ),
         options: _options,
       ),

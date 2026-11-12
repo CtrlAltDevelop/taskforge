@@ -9,6 +9,7 @@ import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
+import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/gen/infrastructure/workspaces/grpc/workspaces.pbgrpc.dart'
     as pb;
 
@@ -117,6 +118,7 @@ class GrpcMembersClient implements MembersClient {
     required this.restUrl,
     http.Client? httpClient,
     this.onRefusal,
+    this.cache,
   }) : _members = pb.MemberControllerClient(channel),
        _invites = pb.InvitationControllerClient(channel),
        _http = httpClient ?? http.Client();
@@ -126,6 +128,9 @@ class GrpcMembersClient implements MembersClient {
   final AuthSession _session;
   final String restUrl;
   final http.Client _http;
+
+  /// Keeps the last member list for when the server cannot be reached.
+  final ReadCache? cache;
 
   /// Called when a mutating call is refused (permissions may be stale).
   final void Function()? onRefusal;
@@ -157,9 +162,15 @@ class GrpcMembersClient implements MembersClient {
   @override
   Future<List<Member>> listMembers(String workspaceId) async {
     final reply = await _run(
-      () => _members.list(
-        pb.MemberListRequest(workspaceId: workspaceId),
-        options: _options,
+      () => readThrough(
+        cache,
+        workspaceId,
+        'members',
+        () => _members.list(
+          pb.MemberListRequest(workspaceId: workspaceId),
+          options: _options,
+        ),
+        pb.MemberList.fromBuffer,
       ),
       isRead: true,
     );

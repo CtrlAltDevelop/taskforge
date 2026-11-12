@@ -1,0 +1,8 @@
+# Only the local database needs code generation.
+targets:
+  $default:
+    builders:
+      drift_dev:
+        generate_for:
+          include:
+            - lib/core/offline/**

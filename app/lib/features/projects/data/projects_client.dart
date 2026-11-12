@@ -3,6 +3,7 @@ import 'package:grpc/grpc_connection_interface.dart' show ClientChannelBase;
 import 'package:http/http.dart' as http;
 
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -119,14 +120,21 @@ Project _project(pb.Project p) => Project(
 );
 
 class GrpcProjectsClient implements ProjectsClient {
-  GrpcProjectsClient(ClientChannelBase channel, this._session, {this.onRefusal})
-    : _stub = pb.ProjectControllerClient(channel);
+  GrpcProjectsClient(
+    ClientChannelBase channel,
+    this._session, {
+    this.onRefusal,
+    this.cache,
+  }) : _stub = pb.ProjectControllerClient(channel);
 
   final pb.ProjectControllerClient _stub;
   final AuthSession _session;
 
   /// Called when a mutating call is refused (permissions may be stale).
   final void Function()? onRefusal;
+
+  /// Keeps the last reads for when the server cannot be reached.
+  final ReadCache? cache;
 
   // The workspace id travels in each request body, so no x-workspace header.
   late final _options = scopedCallOptions(_session, () => null);
@@ -158,12 +166,18 @@ class GrpcProjectsClient implements ProjectsClient {
     bool includeArchived = false,
   }) async {
     final reply = await _run(
-      () => _stub.list(
-        pb.ProjectListRequest(
-          workspaceId: workspaceId,
-          includeArchived: includeArchived,
+      () => readThrough(
+        cache,
+        workspaceId,
+        'projects:$includeArchived',
+        () => _stub.list(
+          pb.ProjectListRequest(
+            workspaceId: workspaceId,
+            includeArchived: includeArchived,
+          ),
+          options: _options,
         ),
-        options: _options,
+        pb.ProjectList.fromBuffer,
       ),
       isRead: true,
     );
@@ -310,9 +324,15 @@ class GrpcProjectsClient implements ProjectsClient {
   @override
   Future<List<ProjectMember>> listMembers(String workspaceId, String id) async {
     final reply = await _run(
-      () => _stub.listMembers(
-        pb.ProjectListMembersRequest(workspaceId: workspaceId, projectId: id),
-        options: _options,
+      () => readThrough(
+        cache,
+        workspaceId,
+        'project-members:$id',
+        () => _stub.listMembers(
+          pb.ProjectListMembersRequest(workspaceId: workspaceId, projectId: id),
+          options: _options,
+        ),
+        pb.ProjectMemberList.fromBuffer,
       ),
       isRead: true,
     );

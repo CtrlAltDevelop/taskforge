@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
+import 'package:taskforge/features/tasks/data/offline_tasks_client.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/bulk.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
@@ -21,11 +23,22 @@ import 'package:taskforge/features/workspaces/application/workspace_providers.da
 /// How many streamed tasks are gathered before the list is rebuilt.
 const streamBatch = 100;
 
-final tasksClientProvider = Provider<TasksClient>(
+/// The server's tasks, with nothing local in between (the outbox sends with
+/// this).
+final rawTasksClientProvider = Provider<TasksClient>(
   (ref) => GrpcTasksClient(
     ref.watch(grpcChannelProvider),
     ref.watch(authSessionProvider),
     onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
+  ),
+);
+
+/// What the app uses: the server's tasks, kept locally and still working
+/// without a connection.
+final tasksClientProvider = Provider<TasksClient>(
+  (ref) => OfflineTasksClient(
+    ref.watch(rawTasksClientProvider),
+    ref.watch(offlineEnvProvider),
   ),
 );
 
@@ -109,6 +122,8 @@ class TaskList extends Notifier<TaskListState> {
     ref.watch(workspaceScopeProvider);
     ref.watch(refusalCountProvider);
     ref.watch(listQueryProvider(projectId));
+    // What was changed offline has been sent: show what the server now says.
+    ref.listen(outboxDrainedProvider, (_, _) => unawaited(refresh()));
     // The person's saved layout is read first, so the list is read once, in
     // the order they chose, instead of twice.
     if (ref.watch(listLayoutReadyProvider(projectId))) {

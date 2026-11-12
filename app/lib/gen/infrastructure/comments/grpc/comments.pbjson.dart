@@ -63,6 +63,14 @@ const CommentCreateRequest$json = {
     {'1': 'body', '3': 4, '4': 1, '5': 9, '10': 'body'},
     {'1': 'parent_id', '3': 5, '4': 1, '5': 9, '10': 'parentId'},
     {'1': 'grant_access', '3': 6, '4': 1, '5': 8, '10': 'grantAccess'},
+    {'1': 'client_id', '3': 7, '4': 1, '5': 9, '10': 'clientId'},
+    {
+      '1': 'client_mutation_id',
+      '3': 8,
+      '4': 1,
+      '5': 9,
+      '10': 'clientMutationId'
+    },
   ],
 };
 
@@ -71,7 +79,8 @@ final $typed_data.Uint8List commentCreateRequestDescriptor = $convert.base64Deco
     'ChRDb21tZW50Q3JlYXRlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZU'
     'lkEh0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIXCgd0YXNrX2lkGAMgASgJUgZ0YXNr'
     'SWQSEgoEYm9keRgEIAEoCVIEYm9keRIbCglwYXJlbnRfaWQYBSABKAlSCHBhcmVudElkEiEKDG'
-    'dyYW50X2FjY2VzcxgGIAEoCFILZ3JhbnRBY2Nlc3M=');
+    'dyYW50X2FjY2VzcxgGIAEoCFILZ3JhbnRBY2Nlc3MSGwoJY2xpZW50X2lkGAcgASgJUghjbGll'
+    'bnRJZBIsChJjbGllbnRfbXV0YXRpb25faWQYCCABKAlSEGNsaWVudE11dGF0aW9uSWQ=');
 
 @$core.Deprecated('Use commentDeleteRequestDescriptor instead')
 const CommentDeleteRequest$json = {

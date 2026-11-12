@@ -9,6 +9,7 @@ import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/core/workspace/scoped_requests.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
+import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/gen/infrastructure/workspaces/grpc/workspaces.pbgrpc.dart'
     as pb;
 
@@ -86,6 +87,7 @@ class GrpcWorkspaceClient implements WorkspaceClient {
     required String? Function() selectedWorkspace,
     http.Client? httpClient,
     this.onRefusal,
+    this.cache,
   }) : _rpc = pb.WorkspaceControllerClient(channel),
        _selected = selectedWorkspace,
        _http = httpClient ?? http.Client();
@@ -98,6 +100,9 @@ class GrpcWorkspaceClient implements WorkspaceClient {
 
   /// Called when a mutating call is refused (permissions may be stale).
   final void Function()? onRefusal;
+
+  /// Keeps the last list for when the server cannot be reached.
+  final ReadCache? cache;
 
   // Workspace calls name their workspace in the body, so no x-workspace header.
   late final _options = scopedCallOptions(_session, () => null);
@@ -130,7 +135,13 @@ class GrpcWorkspaceClient implements WorkspaceClient {
   @override
   Future<List<Workspace>> list() async {
     final reply = await _run(
-      () => _rpc.list(Empty(), options: _options),
+      () => readThrough(
+        cache,
+        '',
+        'workspaces',
+        () => _rpc.list(Empty(), options: _options),
+        pb.WorkspaceList.fromBuffer,
+      ),
       isRead: true,
     );
     return [for (final w in reply.workspaces) _fromPb(w)];

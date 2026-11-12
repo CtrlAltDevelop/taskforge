@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
+import 'package:taskforge/core/offline/outbox.dart';
+import 'package:taskforge/core/offline/outbox_files.dart';
 import 'package:taskforge/features/attachments/application/uploader.dart';
 import 'package:taskforge/features/attachments/data/attachments_client.dart';
 import 'package:taskforge/features/attachments/data/uploads_client.dart';
@@ -133,6 +136,9 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
   var _epoch = 0;
   final _jobs = <String, _Job>{};
 
+  /// Uploads handed to the outbox (kept on the device, sent when back online).
+  final _parked = <String, String>{}; // upload id -> its outbox entity id
+
   /// Waits between retries of a chunk; tests make it instant.
   @visibleForTesting
   Backoff backoff = exponentialBackoff;
@@ -149,6 +155,8 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
   AttachmentsState build() {
     ref.watch(workspaceScopeProvider);
     ref.listen(attachmentsResyncProvider, (_, _) => unawaited(refresh()));
+    // Files kept while offline have been sent: they are in the list now.
+    ref.listen(outboxDrainedProvider, (_, _) => unawaited(_parkedSent()));
     // Whatever was in flight belongs to the screen being left: stop it and let
     // the server drop what it holds.
     final uploads = ref.read(uploadsClientProvider);
@@ -250,7 +258,12 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
           error: refused,
         );
         state = state.copyWith(uploads: [...state.uploads, item]);
-        if (refused == null) _jobs[item.localId] = _Job(workspace!, source);
+        if (refused != null) continue;
+        if (!ref.read(networkProvider) &&
+            await _park(item, source, workspace!)) {
+          continue;
+        }
+        _jobs[item.localId] = _Job(workspace!, source);
       }
     } finally {
       if (ref.mounted) unawaited(_pump());
@@ -348,6 +361,13 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
         _setItem(id, (u) => u.copyWith(state: UploadState.cancelled));
       }
     } on AttachmentException catch (e) {
+      // The connection went: keep the file for when it is back.
+      if (e.failure == AttachmentFailure.network &&
+          current() &&
+          await _park(item, job.source, job.workspace)) {
+        _jobs.remove(id);
+        return;
+      }
       if (e.failure == AttachmentFailure.expired ||
           e.failure == AttachmentFailure.notFound) {
         job.sessionId = null;
@@ -374,6 +394,69 @@ class AttachmentsNotifier extends Notifier<AttachmentsState> {
         );
       }
     }
+  }
+
+  /// Copies the file to the device and queues it in the outbox. False when
+  /// that cannot be done (no local storage): the upload then fails as usual.
+  Future<bool> _park(
+    UploadItem item,
+    UploadSource source,
+    String workspace,
+  ) async {
+    final store = await ref.read(offlineStoreFutureProvider);
+    if (store == null) return false;
+    final id = ref.read(offlineEnvProvider).newId();
+    try {
+      final path = await ref.read(outboxFilesProvider).keep(source, id);
+      await store.enqueue(
+        OutboxEntry(
+          workspaceId: workspace,
+          projectId: task.project,
+          entity: OutboxEntity.attachment,
+          entityId: id,
+          op: OutboxOp.create,
+          mutationId: id,
+          createdAt: DateTime.now(),
+          payload: {
+            'taskId': task.task,
+            'commentId': item.commentId,
+            'name': source.name,
+            'path': path,
+            'size': item.size,
+          },
+        ),
+      );
+    } on Object {
+      return false; // disk full, no folder: tell the person it failed
+    }
+    _parked[item.localId] = id;
+    _setItem(
+      item.localId,
+      (u) => u.copyWith(state: UploadState.queued, error: null),
+    );
+    return true;
+  }
+
+  /// The outbox sent what it held: the parked uploads that left it are real
+  /// files now (one it refused stays, and shows in the attention list).
+  Future<void> _parkedSent() async {
+    if (_parked.isEmpty) return;
+    final store = await ref.read(offlineStoreFutureProvider);
+    if (store == null || !ref.mounted) return;
+    final waiting = {for (final e in await store.everyEntry()) e.entityId};
+    final sent = {
+      for (final e in _parked.entries)
+        if (!waiting.contains(e.value)) e.key,
+    };
+    if (sent.isEmpty || !ref.mounted) return;
+    _parked.removeWhere((id, _) => sent.contains(id));
+    state = state.copyWith(
+      uploads: [
+        for (final u in state.uploads)
+          if (!sent.contains(u.localId)) u,
+      ],
+    );
+    unawaited(refresh());
   }
 
   /// Stops an upload: at once if it has not started, by dropping the request

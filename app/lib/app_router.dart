@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/offline/presentation/offline_screen.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dart';
@@ -223,6 +224,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             ResetPasswordScreen(ticket: state.extra as String),
       ),
+      GoRoute(path: '/offline', builder: (_, _) => const OfflineScreen()),
       GoRoute(path: '/debug', builder: (_, _) => const DebugScreen()),
       GoRoute(
         path: '/sign-in',

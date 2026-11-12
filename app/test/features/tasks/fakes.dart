@@ -472,6 +472,8 @@ class FakeTasksClient implements TasksClient {
     List<String> assigneeIds = const [],
     String parentId = '',
     String statusId = '',
+    String clientId = '',
+    String mutationId = '',
     Map<String, String> fieldValues = const {},
   }) async {
     await createGate?.future;
@@ -558,6 +560,7 @@ class FakeTasksClient implements TasksClient {
     TaskPatch patch, {
     int? expectedVersion,
     bool overrideBlocked = false,
+    String mutationId = '',
   }) async {
     updates.add((task: task, patch: patch, expectedVersion: expectedVersion));
     await updateGate?.future;
@@ -612,6 +615,7 @@ class FakeTasksClient implements TasksClient {
     String projectId,
     String id, {
     DeleteMode? mode,
+    String mutationId = '',
   }) async {
     _maybeFail();
     final kids = [

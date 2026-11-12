@@ -87,6 +87,13 @@ class HomeScreen extends ConsumerWidget {
             onTap: () => context.push('/inbox/preferences'),
           ),
           ListTile(
+            key: const Key('open-offline'),
+            leading: const Icon(Icons.cloud_off_outlined),
+            title: const Text('Offline and storage'),
+            subtitle: const Text('Changes made offline, the local copy'),
+            onTap: () => context.push('/offline'),
+          ),
+          ListTile(
             key: const Key('open-sessions'),
             leading: const Icon(Icons.devices),
             title: const Text('Sessions'),

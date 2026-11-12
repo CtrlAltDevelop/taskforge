@@ -5,19 +5,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart'
     show UploadSource;
 import 'package:taskforge/features/comments/data/comments_client.dart';
+import 'package:taskforge/features/comments/data/offline_comments_client.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
-final commentsClientProvider = Provider<CommentsClient>(
+/// The server's comments, with nothing local in between (the outbox sends
+/// with this).
+final rawCommentsClientProvider = Provider<CommentsClient>(
   (ref) => GrpcCommentsClient(
     ref.watch(grpcChannelProvider),
     ref.watch(authSessionProvider),
+  ),
+);
+
+/// What the app uses: comments that can be written without a connection.
+final commentsClientProvider = Provider<CommentsClient>(
+  (ref) => OfflineCommentsClient(
+    ref.watch(rawCommentsClientProvider),
+    ref.watch(offlineEnvProvider),
   ),
 );
 

@@ -610,6 +610,14 @@ const TaskCreateRequest$json = {
       '10': 'fieldValues'
     },
     {'1': 'due_time', '3': 12, '4': 1, '5': 9, '10': 'dueTime'},
+    {'1': 'client_id', '3': 13, '4': 1, '5': 9, '10': 'clientId'},
+    {
+      '1': 'client_mutation_id',
+      '3': 14,
+      '4': 1,
+      '5': 9,
+      '10': 'clientMutationId'
+    },
   ],
 };
 
@@ -622,7 +630,8 @@ final $typed_data.Uint8List taskCreateRequestDescriptor = $convert.base64Decode(
     'dGUSGQoIZHVlX2RhdGUYCCABKAlSB2R1ZURhdGUSIQoMYXNzaWduZWVfaWRzGAkgAygJUgthc3'
     'NpZ25lZUlkcxIbCglwYXJlbnRfaWQYCiABKAlSCHBhcmVudElkEj8KDGZpZWxkX3ZhbHVlcxgL'
     'IAMoCzIcLmNvbmZpZy50YXNrcy5UYXNrRmllbGRWYWx1ZVILZmllbGRWYWx1ZXMSGQoIZHVlX3'
-    'RpbWUYDCABKAlSB2R1ZVRpbWU=');
+    'RpbWUYDCABKAlSB2R1ZVRpbWUSGwoJY2xpZW50X2lkGA0gASgJUghjbGllbnRJZBIsChJjbGll'
+    'bnRfbXV0YXRpb25faWQYDiABKAlSEGNsaWVudE11dGF0aW9uSWQ=');
 
 @$core.Deprecated('Use taskDeleteRequestDescriptor instead')
 const TaskDeleteRequest$json = {
@@ -632,6 +641,13 @@ const TaskDeleteRequest$json = {
     {'1': 'project_id', '3': 2, '4': 1, '5': 9, '10': 'projectId'},
     {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
     {'1': 'mode', '3': 4, '4': 1, '5': 9, '10': 'mode'},
+    {
+      '1': 'client_mutation_id',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'clientMutationId'
+    },
   ],
 };
 
@@ -639,7 +655,8 @@ const TaskDeleteRequest$json = {
 final $typed_data.Uint8List taskDeleteRequestDescriptor = $convert.base64Decode(
     'ChFUYXNrRGVsZXRlUmVxdWVzdBIhCgx3b3Jrc3BhY2VfaWQYASABKAlSC3dvcmtzcGFjZUlkEh'
     '0KCnByb2plY3RfaWQYAiABKAlSCXByb2plY3RJZBIOCgJpZBgDIAEoCVICaWQSEgoEbW9kZRgE'
-    'IAEoCVIEbW9kZQ==');
+    'IAEoCVIEbW9kZRIsChJjbGllbnRfbXV0YXRpb25faWQYBSABKAlSEGNsaWVudE11dGF0aW9uSW'
+    'Q=');
 
 @$core.Deprecated('Use taskFieldValueDescriptor instead')
 const TaskFieldValue$json = {
@@ -999,6 +1016,13 @@ const TaskUpdateRequest$json = {
       '10': 'dueTime',
       '17': true
     },
+    {
+      '1': 'client_mutation_id',
+      '3': 16,
+      '4': 1,
+      '5': 9,
+      '10': 'clientMutationId'
+    },
   ],
   '8': [
     {'1': '_title'},
@@ -1022,9 +1046,10 @@ final $typed_data.Uint8List taskUpdateRequestDescriptor = $convert.base64Decode(
     'RGF0ZYgBARIjCg1zZXRfYXNzaWduZWVzGAsgASgIUgxzZXRBc3NpZ25lZXMSIQoMYXNzaWduZW'
     'VfaWRzGAwgAygJUgthc3NpZ25lZUlkcxIpChBvdmVycmlkZV9ibG9ja2VkGA0gASgIUg9vdmVy'
     'cmlkZUJsb2NrZWQSPwoMZmllbGRfdmFsdWVzGA4gAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaW'
-    'VsZFZhbHVlUgtmaWVsZFZhbHVlcxIeCghkdWVfdGltZRgPIAEoCUgGUgdkdWVUaW1liAEBQggK'
-    'Bl90aXRsZUIOCgxfZGVzY3JpcHRpb25CCQoHX3N0YXR1c0ILCglfcHJpb3JpdHlCDQoLX3N0YX'
-    'J0X2RhdGVCCwoJX2R1ZV9kYXRlQgsKCV9kdWVfdGltZQ==');
+    'VsZFZhbHVlUgtmaWVsZFZhbHVlcxIeCghkdWVfdGltZRgPIAEoCUgGUgdkdWVUaW1liAEBEiwK'
+    'EmNsaWVudF9tdXRhdGlvbl9pZBgQIAEoCVIQY2xpZW50TXV0YXRpb25JZEIICgZfdGl0bGVCDg'
+    'oMX2Rlc2NyaXB0aW9uQgkKB19zdGF0dXNCCwoJX3ByaW9yaXR5Qg0KC19zdGFydF9kYXRlQgsK'
+    'CV9kdWVfZGF0ZUILCglfZHVlX3RpbWU=');
 
 @$core.Deprecated('Use timelineAppliedDescriptor instead')
 const TimelineApplied$json = {

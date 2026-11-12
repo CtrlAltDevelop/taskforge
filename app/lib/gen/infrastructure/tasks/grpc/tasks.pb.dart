@@ -2726,6 +2726,8 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     $core.String? parentId,
     $core.Iterable<TaskFieldValue>? fieldValues,
     $core.String? dueTime,
+    $core.String? clientId,
+    $core.String? clientMutationId,
   }) {
     final result = TaskCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -2740,6 +2742,8 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     if (parentId != null) result.parentId = parentId;
     if (fieldValues != null) result.fieldValues.addAll(fieldValues);
     if (dueTime != null) result.dueTime = dueTime;
+    if (clientId != null) result.clientId = clientId;
+    if (clientMutationId != null) result.clientMutationId = clientMutationId;
     return result;
   }
 
@@ -2769,6 +2773,8 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
     ..pPM<TaskFieldValue>(11, _omitFieldNames ? '' : 'fieldValues',
         subBuilder: TaskFieldValue.$_createMessage)
     ..aOS(12, _omitFieldNames ? '' : 'dueTime')
+    ..aOS(13, _omitFieldNames ? '' : 'clientId')
+    ..aOS(14, _omitFieldNames ? '' : 'clientMutationId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2888,6 +2894,24 @@ class TaskCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasDueTime() => $_has(11);
   @$pb.TagNumber(12)
   void clearDueTime() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get clientId => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set clientId($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasClientId() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearClientId() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get clientMutationId => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set clientMutationId($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasClientMutationId() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearClientMutationId() => $_clearField(14);
 }
 
 class TaskDeleteRequest extends $pb.GeneratedMessage {
@@ -2896,12 +2920,14 @@ class TaskDeleteRequest extends $pb.GeneratedMessage {
     $core.String? projectId,
     $core.String? id,
     $core.String? mode,
+    $core.String? clientMutationId,
   }) {
     final result = TaskDeleteRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
     if (projectId != null) result.projectId = projectId;
     if (id != null) result.id = id;
     if (mode != null) result.mode = mode;
+    if (clientMutationId != null) result.clientMutationId = clientMutationId;
     return result;
   }
 
@@ -2922,6 +2948,7 @@ class TaskDeleteRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'projectId')
     ..aOS(3, _omitFieldNames ? '' : 'id')
     ..aOS(4, _omitFieldNames ? '' : 'mode')
+    ..aOS(5, _omitFieldNames ? '' : 'clientMutationId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2981,6 +3008,15 @@ class TaskDeleteRequest extends $pb.GeneratedMessage {
   $core.bool hasMode() => $_has(3);
   @$pb.TagNumber(4)
   void clearMode() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get clientMutationId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set clientMutationId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasClientMutationId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearClientMutationId() => $_clearField(5);
 }
 
 class TaskFieldValue extends $pb.GeneratedMessage {
@@ -4507,6 +4543,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     $core.bool? overrideBlocked,
     $core.Iterable<TaskFieldValue>? fieldValues,
     $core.String? dueTime,
+    $core.String? clientMutationId,
   }) {
     final result = TaskUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -4524,6 +4561,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     if (overrideBlocked != null) result.overrideBlocked = overrideBlocked;
     if (fieldValues != null) result.fieldValues.addAll(fieldValues);
     if (dueTime != null) result.dueTime = dueTime;
+    if (clientMutationId != null) result.clientMutationId = clientMutationId;
     return result;
   }
 
@@ -4556,6 +4594,7 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
     ..pPM<TaskFieldValue>(14, _omitFieldNames ? '' : 'fieldValues',
         subBuilder: TaskFieldValue.$_createMessage)
     ..aOS(15, _omitFieldNames ? '' : 'dueTime')
+    ..aOS(16, _omitFieldNames ? '' : 'clientMutationId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4702,6 +4741,15 @@ class TaskUpdateRequest extends $pb.GeneratedMessage {
   $core.bool hasDueTime() => $_has(14);
   @$pb.TagNumber(15)
   void clearDueTime() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get clientMutationId => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set clientMutationId($core.String value) => $_setString(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasClientMutationId() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearClientMutationId() => $_clearField(16);
 }
 
 class TimelineApplied extends $pb.GeneratedMessage {

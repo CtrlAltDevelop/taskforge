@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/offline/presentation/offline_banner.dart';
 import 'package:taskforge/features/audit/presentation/activity_section.dart';
 import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
@@ -73,6 +74,7 @@ class TaskDetail extends ConsumerWidget {
       children: [
         Row(
           children: [
+            PendingMark(id: task.id),
             Expanded(
               child: Text(
                 task.displayId,

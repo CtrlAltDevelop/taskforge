@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/fields/data/fields_client.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
@@ -12,6 +13,7 @@ final fieldsClientProvider = Provider<FieldsClient>(
     ref.watch(grpcChannelProvider),
     ref.watch(authSessionProvider),
     onRefusal: () => ref.read(refusalCountProvider.notifier).bump(),
+    cache: ref.watch(readCacheProvider),
   ),
 );
 

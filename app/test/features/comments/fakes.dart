@@ -72,6 +72,8 @@ class FakeCommentsClient implements CommentsClient {
     String body, {
     String parentId = '',
     bool grantAccess = false,
+    String clientId = '',
+    String mutationId = '',
   }) async {
     await gate?.future;
     created.add((body: body, parentId: parentId, grant: grantAccess));

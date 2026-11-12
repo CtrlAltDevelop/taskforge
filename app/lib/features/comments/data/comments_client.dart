@@ -27,6 +27,11 @@ abstract interface class CommentsClient {
     String body, {
     String parentId = '',
     bool grantAccess = false,
+
+    /// An id the caller chose for the comment and a name for the change (see
+    /// the tasks client).
+    String clientId = '',
+    String mutationId = '',
   });
 
   Future<Comment> edit(
@@ -179,6 +184,8 @@ class GrpcCommentsClient implements CommentsClient {
     String body, {
     String parentId = '',
     bool grantAccess = false,
+    String clientId = '',
+    String mutationId = '',
   }) => _run(
     () async => commentFromPb(
       await _stub.create(
@@ -189,6 +196,8 @@ class GrpcCommentsClient implements CommentsClient {
           body: body,
           parentId: parentId,
           grantAccess: grantAccess,
+          clientId: clientId,
+          clientMutationId: mutationId,
         ),
         options: _options,
       ),

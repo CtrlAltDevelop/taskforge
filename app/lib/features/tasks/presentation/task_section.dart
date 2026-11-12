@@ -13,6 +13,7 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/offline/presentation/offline_banner.dart';
 import 'package:taskforge/core/sync/presentation/connection_status.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
@@ -215,6 +216,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const ConnectionBanner(),
+            const OfflineBanner(),
             switcher,
             Expanded(
               child: !wide
@@ -770,6 +772,7 @@ class TaskTile extends StatelessWidget {
     ),
     subtitle: Row(
       children: [
+        PendingMark(id: task.id),
         Icon(
           Icons.circle,
           size: 10,
