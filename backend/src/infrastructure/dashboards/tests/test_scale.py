@@ -48,6 +48,7 @@ def test_the_common_widgets_over_100k_tasks_load_in_two_seconds(world: Any) -> N
         ("pie", {"group_by": "priority"}),
         ("line", {"group_by": "created_week"}),
         ("workload", {}),
+        ("number", {"measure": "cycle_days"}),
     ]
     widgets = [WidgetInput(str(uuid.uuid4()), k, k, c) for k, c in kinds]
     view = services.save(
@@ -60,4 +61,6 @@ def test_the_common_widgets_over_100k_tasks_load_in_two_seconds(world: Any) -> N
     ]
     elapsed = time.perf_counter() - began
     assert totals[0] == ROWS + 1
-    assert elapsed < BUDGET_SECONDS, f"{elapsed:.2f}s for six widgets over {ROWS} tasks"
+    cycle = services.widget_data(world.owner, world.ws, str(view.widgets[-1].pk))
+    assert cycle.result.truncated  # past the row cap the average says it is a sample
+    assert elapsed < BUDGET_SECONDS, f"{elapsed:.2f}s for seven widgets over {ROWS} tasks"

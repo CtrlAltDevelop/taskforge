@@ -240,6 +240,33 @@ void main() {
     expect(fake.days.last, '2026-11-13');
   });
 
+  testWidgets('the numbers are read again every refresh period', (
+    tester,
+  ) async {
+    final fake = FakeDashboardsClient([
+      dashboardOf('d1', 'Team', [widgetOf('w1', WidgetKind.number)]),
+    ])..dataOf['w1'] = numberData('5');
+    final pumped = await pumpProjects(
+      tester,
+      projects: [project('p1', 'Web')],
+      overrides: [
+        dashboardsClientProvider.overrideWithValue(fake),
+        dashboardRefreshProvider.overrideWithValue(const Duration(seconds: 30)),
+        viewerDayProvider.overrideWithValue(
+          () => (today: '2026-11-12', offsetMinutes: 0),
+        ),
+      ],
+    );
+    await pumped.go(tester, '/dashboards');
+    final first = fake.days.length;
+    await tester.pump(const Duration(seconds: 30));
+    await tester.pump();
+    expect(fake.days.length, greaterThan(first));
+    // Leaving the screen stops the clock (no timer is left running).
+    await pumped.go(tester, '/');
+    await tester.pump(const Duration(seconds: 60));
+  });
+
   testWidgets('a widget that fails says so and Retry reads it again', (
     tester,
   ) async {
