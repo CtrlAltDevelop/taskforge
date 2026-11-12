@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/features/audit/presentation/audit_screen.dart';
 import 'package:taskforge/features/account/home_screen.dart';
 import 'package:taskforge/features/account/sessions_screen.dart';
 import 'package:taskforge/features/auth/change_password_screen.dart';
@@ -186,6 +187,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const NotificationPrefsScreen(),
       ),
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
+      GoRoute(path: '/audit', builder: (_, _) => const AuditScreen()),
       GoRoute(
         path: '/calendar',
         builder: (_, _) => const WorkspaceCalendarScreen(),

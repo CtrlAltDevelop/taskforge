@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/features/audit/presentation/activity_section.dart';
 import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
 import 'package:taskforge/features/time/domain/time.dart' show timeFeature;
@@ -315,6 +316,13 @@ class TaskDetail extends ConsumerWidget {
           taskId: task.id,
           archived: project.isArchived,
           isPrivate: project.isPrivate,
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        ActivitySection(
+          key: ValueKey('activity-${task.id}'),
+          projectId: project.id,
+          taskId: task.id,
         ),
       ],
     );

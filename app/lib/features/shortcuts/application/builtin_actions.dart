@@ -1,4 +1,6 @@
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/features/roles/application/roles_providers.dart';
+import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
 import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
 import 'package:taskforge/features/shortcuts/presentation/cheat_sheet.dart';
@@ -125,6 +127,17 @@ final List<AppAction> builtInActions = [
     '/workspaces/settings',
     group: 'Workspace',
     keywords: const ['preferences', 'logo'],
+  ),
+  AppAction(
+    id: 'nav.audit',
+    title: 'Audit log',
+    group: 'Workspace',
+    semanticLabel: 'Go to the audit log',
+    keywords: const ['history', 'who changed', 'log', 'export'],
+    available: (c) =>
+        c.location != '/audit' &&
+        c.container.read(permissionSetProvider).can(Perm.auditView),
+    run: (c) => c.router.go('/audit'),
   ),
   _go(
     'nav.workspace_roles',

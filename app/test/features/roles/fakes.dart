@@ -32,6 +32,7 @@ final _builtinGrants = <String, Set<String>>{
     Perm.docEdit,
     Perm.docManage,
     Perm.automationManage,
+    Perm.auditView,
   },
   'Member': {
     Perm.workspaceView,
@@ -88,6 +89,9 @@ const registry = [
       Perm.automationManage,
       'Create, edit, switch on and off, test and delete automations',
     ),
+  ]),
+  PermissionArea('Audit', [
+    PermissionInfo(Perm.auditView, 'Read and export the workspace audit log'),
   ]),
 ];
 

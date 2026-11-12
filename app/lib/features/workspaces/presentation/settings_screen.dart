@@ -74,6 +74,16 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     onTap: () => context.push('/workspaces/roles'),
                   ),
                 ),
+                PermissionGate(
+                  permission: Perm.auditView,
+                  child: ListTile(
+                    key: const Key('open-audit'),
+                    leading: const Icon(Icons.fact_check_outlined),
+                    title: const Text('Audit log'),
+                    subtitle: const Text('Who changed what, and when'),
+                    onTap: () => context.push('/audit'),
+                  ),
+                ),
               ],
             ),
     );
