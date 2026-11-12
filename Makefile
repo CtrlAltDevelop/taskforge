@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate purge tick web proto proto-lint check test
+.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint check test
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -103,6 +103,10 @@ proto:
 	rm -rf app/lib/gen && mkdir -p app/lib/gen
 	protoc -I backend/src --dart_out=grpc:app/lib/gen $(DART_PROTOS)
 	rm -rf app/lib/gen/google
+
+# Regenerate the Drift code of the offline store (app/lib/core/offline/local_db.g.dart; commit it).
+gen:
+	cd app && dart run build_runner build --delete-conflicting-outputs
 
 proto-lint:
 	buf lint

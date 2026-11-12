@@ -120,8 +120,11 @@ Quality:
 | `make test` | pytest with coverage, `flutter test --coverage` |
 | `make proto` | Regenerate Python `.proto` + stubs and Dart stubs. Add new protos to `DART_PROTOS` in the Makefile |
 | `make proto-lint` | `buf lint` |
+| `make gen` | Regenerate the Drift code of the offline store (`app/lib/core/offline/local_db.g.dart`, committed). Run it after changing a table there |
 
 Live sync (phase 16): changes are made in the gRPC process and sockets are held in the REST process, so the two share events through Redis; `make run`, `make serve` and `make grpc` set `DJANGO_NOTIFICATIONS_BROKER` to the Redis broker (run `make dev` first).
+
+Offline (phase 30): the app keeps a local SQLite copy (Drift; none in the browser, which stays online-only) and an outbox of changes made without a connection; `OutboxWorker` sends them in order with idempotent `client_mutation_id`s when the server is reachable again. `tasksClientProvider`/`commentsClientProvider` are the offline decorators over `rawTasksClientProvider`/`rawCommentsClientProvider`: never use the raw ones except to send the outbox.
 
 Notes: ports 8010/8081 (not 8000/8080) because those are commonly taken. Android emulators
 reach the host at `10.0.2.2` (handled in `app/lib/core/config.dart`); real phones need

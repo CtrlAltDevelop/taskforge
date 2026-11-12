@@ -3,3 +3,6 @@
 
 # IDE
 .idea/
+
+# Files the backend tests write
+backend/media/
