@@ -33,6 +33,7 @@ def workspace_message(workspace: WorkspaceRow, is_owner: bool) -> Any:
         deleted_at=workspace.deleted_at.isoformat() if workspace.deleted_at else "",
         version=workspace.version,
         is_owner=is_owner,  # the caller's role in it is Owner
+        default_locale=workspace.default_locale,
     )
 
 
@@ -88,6 +89,7 @@ class WorkspaceService(generics.GenericService):
             {"name": "expected_version", "type": "int32"},
             {"name": "name", "type": "string", "cardinality": "optional"},
             {"name": "slug", "type": "string", "cardinality": "optional"},
+            {"name": "default_locale", "type": "string", "cardinality": "optional"},
         ],
         request_name="WorkspaceUpdateRequest",
         response=Workspace,
@@ -102,6 +104,9 @@ class WorkspaceService(generics.GenericService):
             request.expected_version,
             name=request.name if request.HasField("name") else None,
             slug=request.slug if request.HasField("slug") else None,
+            default_locale=(
+                request.default_locale if request.HasField("default_locale") else None
+            ),
         )
         return await sync_to_async(_one)(row, user)
 

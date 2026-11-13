@@ -20,7 +20,13 @@ from django.http import Http404, HttpRequest, HttpResponse
 from ninja import NinjaAPI
 from ninja.errors import HttpError, ValidationError
 
-from infrastructure.common.responses import ResponseTitle, envelope, title_for_status
+from infrastructure.common.locales import localized_message, request_locale
+from infrastructure.common.responses import (
+    DESCRIPTIONS,
+    ResponseTitle,
+    envelope,
+    title_for_status,
+)
 
 
 class ApiError(RuntimeError):
@@ -57,6 +63,17 @@ def _validation_messages(errors: list[dict[str, Any]]) -> list[str]:
     return messages
 
 
+def _described(request: HttpRequest, title: ResponseTitle, description: str, *, generic: bool) -> str:
+    """The sentence in the caller's language -- but only when it is the generic one.
+
+    A specific message ("slug must be 3-40 characters") carries detail that a
+    translation keyed by title would discard, so it goes out as written.
+    """
+    if generic or description == DESCRIPTIONS.get(title):
+        return localized_message(title.value, request_locale(request), description)
+    return description
+
+
 def register_error_handlers(api: NinjaAPI) -> None:
     """Teach one API instance to render every refusal in the same envelope.
 
@@ -75,7 +92,7 @@ def register_error_handlers(api: NinjaAPI) -> None:
                 data=error.data,
                 errors=error.errors,
                 title=error.title,
-                description=str(error),
+                description=_described(request, error.title, str(error), generic=False),
             ),
             status=error.status,
         )
@@ -98,7 +115,16 @@ def register_error_handlers(api: NinjaAPI) -> None:
     def _not_found(request: HttpRequest, error: Http404) -> HttpResponse:
         return api.create_response(
             request,
-            envelope(status=404, title=ResponseTitle.NOT_FOUND),
+            envelope(
+                status=404,
+                title=ResponseTitle.NOT_FOUND,
+                description=_described(
+                    request,
+                    ResponseTitle.NOT_FOUND,
+                    DESCRIPTIONS[ResponseTitle.NOT_FOUND],
+                    generic=True,
+                ),
+            ),
             status=404,
         )
 
@@ -110,6 +136,11 @@ def register_error_handlers(api: NinjaAPI) -> None:
         title = ResponseTitle.AUTHENTICATION_REQUIRED if status == 401 else derived
         return api.create_response(
             request,
-            envelope(status=status, errors=[str(error)], title=title, description=str(error)),
+            envelope(
+                status=status,
+                errors=[str(error)],
+                title=title,
+                description=_described(request, title, str(error), generic=True),
+            ),
             status=status,
         )

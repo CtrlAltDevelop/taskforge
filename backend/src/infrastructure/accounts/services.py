@@ -19,6 +19,12 @@ from django.core.validators import URLValidator
 
 from infrastructure.accounts.models import Profile
 from infrastructure.common.errors import ApiError
+from infrastructure.common.locales import (
+    CALENDAR_SYSTEMS,
+    NUMERALS,
+    WEEK_STARTS,
+    normalize_locale,
+)
 from infrastructure.common.responses import ResponseTitle
 
 
@@ -31,6 +37,9 @@ class ProfileView:
     bio: str
     locale: str
     timezone: str
+    calendar_system: str
+    week_start: str
+    numerals: str
     date_of_birth: str
     marketing_opt_in: bool
 
@@ -56,6 +65,12 @@ class AccountService:
     # Stored as a date, carried as an ISO string, cleared with an empty one.
     DATE_FIELDS = frozenset({"date_of_birth"})
     URL_FIELDS = frozenset({"avatar_url"})
+    # field -> (allowed values, whether "" is allowed to mean "the language's default")
+    CHOICE_FIELDS = {
+        "calendar_system": (CALENDAR_SYSTEMS, False),
+        "week_start": (WEEK_STARTS, True),
+        "numerals": (NUMERALS, True),
+    }
 
     def __init__(self) -> None:
         self._validate_url = URLValidator()
@@ -81,6 +96,9 @@ class AccountService:
             bio=profile.bio,
             locale=profile.locale,
             timezone=profile.timezone,
+            calendar_system=profile.calendar_system,
+            week_start=profile.week_start,
+            numerals=profile.numerals,
             date_of_birth=profile.date_of_birth.isoformat() if profile.date_of_birth else "",
             marketing_opt_in=profile.marketing_opt_in,
         )
@@ -113,11 +131,38 @@ class AccountService:
         return self.view(user)
 
     def _clean(self, field: str, value: Any) -> Any:
+        if field == "locale":
+            return self._as_locale(value)
+        if field in self.CHOICE_FIELDS:
+            return self._as_choice(field, value)
         if field in self.DATE_FIELDS:
             return self._as_date(field, value)
         if isinstance(value, str):
             return self._checked(field, value)
         return value
+
+    def _as_locale(self, value: Any) -> str:
+        """The language alone (``fa-AF`` -> ``fa``); empty clears it."""
+        if not value:
+            return ""
+        language = normalize_locale(str(value))
+        if language is None:
+            raise ApiError(
+                "locale must be one of the supported languages: en, fa, ar, ps.",
+                status=400,
+                title=ResponseTitle.VALIDATION_ERROR,
+            )
+        return language
+
+    def _as_choice(self, field: str, value: Any) -> str:
+        allowed, blank_ok = self.CHOICE_FIELDS[field]
+        if value in allowed or (blank_ok and value == ""):
+            return str(value)
+        raise ApiError(
+            f"{field} must be one of: {', '.join(allowed)}.",
+            status=400,
+            title=ResponseTitle.VALIDATION_ERROR,
+        )
 
     def _as_date(self, field: str, value: Any) -> date | None:
         if not value:

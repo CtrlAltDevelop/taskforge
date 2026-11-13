@@ -168,3 +168,14 @@ def test_an_account_is_ordered_newest_first(db: None) -> None:
     newer = User._default_manager.create_user("newer")
 
     assert list(User.objects.all()) == [newer, older]
+
+
+def test_a_new_profile_has_no_calendar_or_week_start_preference(transactional_db: None) -> None:
+    from django.contrib.auth import get_user_model
+
+    user = get_user_model().objects.create_user(username="newbie", password="x" * 12)
+    profile = user.profile
+
+    assert profile.calendar_system == "gregorian"
+    assert profile.week_start == ""
+    assert profile.numerals == ""

@@ -228,6 +228,7 @@ A company or team. Everything else in TaskForge belongs to exactly one.
 | `name` | Char |  |
 | `slug` | Char | unique |
 | `logo` | File |  |
+| `default_locale` | Char |  |
 | `created_by` | ForeignKey | → `accounts.User` |
 | `created_at` | DateTime |  |
 | `deleted_at` | DateTime | nullable |

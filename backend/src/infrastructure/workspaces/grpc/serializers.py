@@ -15,6 +15,7 @@ class Workspace(serializers.Serializer[dict[str, object]]):
     deleted_at = serializers.CharField()
     version = serializers.IntegerField()
     is_owner = serializers.BooleanField()
+    default_locale = serializers.CharField()
 
 
 class Member(serializers.Serializer[dict[str, object]]):

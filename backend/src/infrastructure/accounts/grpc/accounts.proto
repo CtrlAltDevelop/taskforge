@@ -29,6 +29,9 @@ message Profile {
     string timezone = 5;
     string date_of_birth = 6;
     bool marketing_opt_in = 7;
+    string calendar_system = 8;
+    string week_start = 9;
+    string numerals = 10;
 }
 
 message ProfileUpdate {
@@ -39,5 +42,8 @@ message ProfileUpdate {
     optional string timezone = 5;
     optional string date_of_birth = 6;
     optional bool marketing_opt_in = 7;
+    optional string calendar_system = 8;
+    optional string week_start = 9;
+    optional string numerals = 10;
 }
 

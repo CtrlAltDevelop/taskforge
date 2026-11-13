@@ -20,6 +20,7 @@ from infrastructure.audit import changes as audit_changes
 from infrastructure.audit import context as audit_context
 from infrastructure.audit import recorder
 from infrastructure.common.errors import ApiError
+from infrastructure.common.locales import normalize_locale
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access
 from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
@@ -137,8 +138,9 @@ def update(
     *,
     name: str | None = None,
     slug: str | None = None,
+    default_locale: str | None = None,
 ) -> Workspace:
-    """Rename and/or re-slug in one transaction: both apply or neither does."""
+    """Rename, re-slug and/or change the default language in one transaction."""
     with transaction.atomic():
         workspace = _find(actor, workspace_id, "workspace.update")
         changes: dict[str, str] = {}
@@ -146,6 +148,15 @@ def update(
             changes["name"] = _clean_name(name)
         if slug is not None:
             changes["slug"] = validate_slug(slug)
+        if default_locale is not None:
+            language = normalize_locale(default_locale)
+            if language is None:
+                raise ApiError(
+                    "default_locale must be one of the supported languages: en, fa, ar, ps.",
+                    status=400,
+                    title=ResponseTitle.VALIDATION_ERROR,
+                )
+            changes["default_locale"] = language
         return _versioned_update(workspace, expected_version, **changes)
 
 

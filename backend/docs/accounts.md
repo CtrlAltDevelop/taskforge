@@ -29,6 +29,9 @@ Everything about an account that authentication has no opinion about.
 | `bio` | Text |  |
 | `locale` | Char |  |
 | `timezone` | Char |  |
+| `calendar_system` | Char |  |
+| `week_start` | Char |  |
+| `numerals` | Char |  |
 | `date_of_birth` | Date | nullable |
 | `marketing_opt_in` | Boolean |  |
 | `created_at` | DateTime | not editable |

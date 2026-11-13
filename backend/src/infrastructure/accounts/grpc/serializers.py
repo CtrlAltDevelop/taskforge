@@ -25,3 +25,6 @@ class Profile(serializers.Serializer[dict[str, object]]):
     timezone = serializers.CharField()
     date_of_birth = serializers.CharField()
     marketing_opt_in = serializers.BooleanField()
+    calendar_system = serializers.CharField()
+    week_start = serializers.CharField()
+    numerals = serializers.CharField()

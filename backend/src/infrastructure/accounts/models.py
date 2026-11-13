@@ -118,6 +118,10 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     locale = models.CharField(max_length=35, blank=True)
     timezone = models.CharField(max_length=64, blank=True)
+    # Display only: stored dates stay Gregorian whatever is chosen here.
+    calendar_system = models.CharField(max_length=10, default="gregorian")
+    week_start = models.CharField(max_length=3, blank=True)  # "" = the language's own default
+    numerals = models.CharField(max_length=6, blank=True)  # "" = the language's own default
     date_of_birth = models.DateField(null=True, blank=True)
     marketing_opt_in = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

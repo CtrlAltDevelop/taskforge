@@ -220,6 +220,7 @@ message Workspace {
     string deleted_at = 7;
     int32 version = 8;
     bool is_owner = 9;
+    string default_locale = 10;
 }
 
 message WorkspaceCreateRequest {
@@ -245,5 +246,6 @@ message WorkspaceUpdateRequest {
     int32 expected_version = 2;
     optional string name = 3;
     optional string slug = 4;
+    optional string default_locale = 5;
 }
 

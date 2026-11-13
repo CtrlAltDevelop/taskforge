@@ -21,6 +21,7 @@ class Workspace(models.Model):
     name = models.CharField(max_length=80)
     slug = models.CharField(max_length=40, unique=True)
     logo = models.FileField(upload_to="workspaces/logos", blank=True)
+    default_locale = models.CharField(max_length=5, default="en")  # a new member's starting language
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_workspaces"
     )

@@ -9,6 +9,9 @@ class ProfileOut(Schema):
     bio: str
     locale: str
     timezone: str
+    calendar_system: str = "gregorian"
+    week_start: str = ""
+    numerals: str = ""
     date_of_birth: str = ""
     marketing_opt_in: bool
 
@@ -40,6 +43,9 @@ class ProfileIn(Schema):
     bio: str | None = None
     locale: str | None = None
     timezone: str | None = None
+    calendar_system: str | None = None
+    week_start: str | None = None
+    numerals: str | None = None
     date_of_birth: str | None = None
     marketing_opt_in: bool | None = None
 

@@ -28,6 +28,9 @@ PROFILE_FIELDS = [
     {"name": "timezone", "type": "string"},
     {"name": "date_of_birth", "type": "string"},
     {"name": "marketing_opt_in", "type": "bool"},
+    {"name": "calendar_system", "type": "string"},
+    {"name": "week_start", "type": "string"},
+    {"name": "numerals", "type": "string"},
 ]
 PROFILE_UPDATE_REQUEST = [{**field, "cardinality": "optional"} for field in PROFILE_FIELDS]
 ACCOUNT_RESPONSE = [
@@ -90,6 +93,9 @@ def _account_message(account: AccountView) -> Any:
             bio=account.profile.bio,
             locale=account.profile.locale,
             timezone=account.profile.timezone,
+            calendar_system=account.profile.calendar_system,
+            week_start=account.profile.week_start,
+            numerals=account.profile.numerals,
             date_of_birth=account.profile.date_of_birth,
             marketing_opt_in=account.profile.marketing_opt_in,
         ),

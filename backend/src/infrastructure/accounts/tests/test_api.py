@@ -307,3 +307,59 @@ def test_a_real_avatar_url_still_goes_through(token: str) -> None:
 
     assert response.status_code == 200
     assert response.json()["data"]["profile"]["avatar_url"] == "https://example.com/zoe.png"
+
+
+def _patch_profile(token: str, body: dict[str, Any]) -> Any:
+    return Client().patch(PROFILE, body, content_type="application/json", **_bearer(token))
+
+
+def test_language_calendar_and_week_start_are_saved_and_come_back(token: str) -> None:
+    response = _patch_profile(
+        token,
+        {"locale": "fa-AF", "calendar_system": "jalali", "week_start": "sat", "numerals": "native"},
+    )
+
+    assert response.status_code == 200, response.content
+    profile = response.json()["data"]["profile"]
+    assert profile["locale"] == "fa", "the region is dropped; the language is what is stored"
+    assert (profile["calendar_system"], profile["week_start"], profile["numerals"]) == (
+        "jalali",
+        "sat",
+        "native",
+    )
+    assert Client().get(ME, **_bearer(token)).json()["data"]["profile"]["calendar_system"] == "jalali"
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"locale": "xx"},
+        {"calendar_system": "lunar"},
+        {"week_start": "friday"},
+        {"numerals": "roman"},
+    ],
+)
+def test_an_unsupported_preference_is_refused_and_nothing_changes(
+    token: str, body: dict[str, str]
+) -> None:
+    response = _patch_profile(token, body)
+
+    assert response.status_code == 400
+    assert response.json()["title"] == "VALIDATION_ERROR"
+    assert Client().get(ME, **_bearer(token)).json()["data"]["profile"]["locale"] == "en-us"
+
+
+def test_an_empty_week_start_goes_back_to_the_language_default(token: str) -> None:
+    _patch_profile(token, {"week_start": "mon"})
+
+    cleared = _patch_profile(token, {"week_start": ""})
+
+    assert cleared.json()["data"]["profile"]["week_start"] == ""
+
+
+def test_error_descriptions_follow_the_accept_language_of_the_request(db: None) -> None:
+    english = Client().get(ME)
+    persian = Client().get(ME, HTTP_ACCEPT_LANGUAGE="fa")
+
+    assert english.json()["title"] == persian.json()["title"] == "AUTHENTICATION_REQUIRED"
+    assert persian.json()["description"] != english.json()["description"]

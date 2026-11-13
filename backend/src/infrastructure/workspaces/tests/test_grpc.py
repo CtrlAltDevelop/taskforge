@@ -145,3 +145,36 @@ def test_list_deleted_then_restore(zoe: str, max_: str, grpc_call: Callable[...,
 
     assert [w.id for w in mine.workspaces] == [created.id]
     assert list(others.workspaces) == [] and list(after.workspaces) == []
+
+
+def test_a_workspace_starts_in_english_and_its_default_language_can_change(
+    zoe: str, grpc_call: Callable[..., Any]
+) -> None:
+    created = _create(grpc_call, zoe)
+    assert created.default_locale == "en"
+
+    updated = grpc_call(
+        Stub,
+        "Update",
+        pb.WorkspaceUpdateRequest(id=created.id, expected_version=1, default_locale="fa-AF"),
+        token=zoe,
+    )
+
+    assert updated.default_locale == "fa"
+    assert updated.name == "Acme"
+
+
+def test_an_unsupported_default_language_is_refused(
+    zoe: str, grpc_call: Callable[..., Any]
+) -> None:
+    created = _create(grpc_call, zoe)
+
+    with pytest.raises(grpc.aio.AioRpcError) as refusal:
+        grpc_call(
+            Stub,
+            "Update",
+            pb.WorkspaceUpdateRequest(id=created.id, expected_version=1, default_locale="xx"),
+            token=zoe,
+        )
+
+    assert refusal.value.code() is grpc.StatusCode.INVALID_ARGUMENT
