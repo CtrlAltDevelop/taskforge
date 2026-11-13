@@ -8,3 +8,6 @@ class CommonConfig(AppConfig):
 
     def ready(self) -> None:
         from infrastructure.common import checks  # noqa: F401
+        from infrastructure.common.tickers import register_builtin_workers
+
+        register_builtin_workers()

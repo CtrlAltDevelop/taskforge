@@ -1304,3 +1304,19 @@ SEARCH_TIMEOUT_MS = int(os.getenv("DJANGO_SEARCH_TIMEOUT_MS", "2000"))
 
 # Phase 21: a timer running longer than this many hours reminds its owner (once, via the inbox).
 TIME_LONG_TIMER_HOURS = int(os.getenv("DJANGO_TIME_LONG_TIMER_HOURS", "8"))
+
+# Celery. Debug and tests run tasks eagerly (see `development.py`); production points the broker
+# and result backend at Redis (`production.py`). Delayed work is database-backed and drained by
+# the due-work registry (`infrastructure/common/dueworkers.py`), which beat runs every minute.
+CELERY_BROKER_URL = os.getenv("DJANGO_CELERY_BROKER_URL", "")
+CELERY_RESULT_BACKEND = os.getenv("DJANGO_CELERY_RESULT_BACKEND", "") or None
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_TASK_EAGER_PROPAGATES = False
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TIMEZONE = TIME_ZONE
+# Phases add entries here (`CELERY_BEAT_SCHEDULE["name"] = {...}`) for work that is periodic by
+# nature; work that is delayed per row goes through the registry instead.
+CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
+    "tick": {"task": "infrastructure.common.tick", "schedule": 60.0},
+}

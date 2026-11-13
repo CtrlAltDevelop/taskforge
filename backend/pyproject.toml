@@ -28,7 +28,9 @@ dependencies = [
   "argon2-cffi>=23.1,<26.0",
   "cryptography>=45,<51",
   "Django>=5.2,<7.0",
+  "celery[redis]>=5.4,<6.0",
   "django-cors-headers>=4.7,<5.0",
+  "django-redis>=5.4,<7.0",
   "psycopg[binary]>=3.2,<4.0",
   "django-ninja>=1.4,<2.0",
   "django-socio-grpc>=0.25,<1.0",
@@ -47,6 +49,8 @@ oauth = ["httpx>=0.28,<1.0"]
 # The challenge store that survives a restart and reaches every worker.
 redis = ["redis>=5.0,<9.0"]
 # Authenticator-app second factors.
+# Object storage (S3, MinIO) for uploads; set DJANGO_S3_BUCKET in production.
+s3 = ["django-storages[s3]>=1.14,<2.0"]
 totp = ["pyotp>=2.9,<3.0"]
 # An ASGI server and a WebSocket protocol implementation, for the notification
 # socket. `runserver` is WSGI and will not serve it, and uvicorn on its own
@@ -57,7 +61,7 @@ asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
 # Thumbnails of images (Pillow) and of the first page of a PDF (pypdfium2). Without them uploads
 # still work; there is just no thumbnail.
 media = ["pillow>=11,<13", "pypdfium2>=4.30,<6.0"]
-all = ["backend[oauth,redis,totp,asgi,media]"]
+all = ["backend[oauth,redis,s3,totp,asgi,media]"]
 dev = [
   "backend[all]",
   "fakeredis>=2.26,<3.0",

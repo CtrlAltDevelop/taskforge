@@ -21,5 +21,27 @@ services:
     volumes: ["./envoy.yaml:/etc/envoy/envoy.yaml:ro"]
     ports: ["127.0.0.1:8081:8080"]  # host 8081: 8080 is commonly taken
     extra_hosts: ["host.docker.internal:host-gateway"]
+  # Optional (`docker compose --profile workers up`): the same code as the API, in Celery roles.
+  worker:
+    profiles: ["workers"]
+    image: python:3.12-slim
+    working_dir: /app/src
+    volumes: ["../backend:/app"]
+    command: sh -c "pip install -q -e /app && celery -A config worker -l info"
+    env_file: ../backend/.env
+    environment: &celery_env
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DJANGO_REDIS_URL: redis://redis:6379/0
+      DJANGO_DB_HOST: postgres
+    depends_on: [postgres, redis]
+  beat:
+    profiles: ["workers"]
+    image: python:3.12-slim
+    working_dir: /app/src
+    volumes: ["../backend:/app"]
+    command: sh -c "pip install -q -e /app && celery -A config beat -l info"
+    env_file: ../backend/.env
+    environment: *celery_env
+    depends_on: [redis]
 volumes:
   pgdata:
