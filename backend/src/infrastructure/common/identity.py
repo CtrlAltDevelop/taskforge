@@ -78,6 +78,12 @@ def _grpc_caller(context: Any) -> Any | None:
         if header:
             request.META[AUTHORIZATION_META_KEY] = header
     user = caller(request)
+    if user is not None:
+        from infrastructure.developer import scopes
+
+        # An API token reaches only the workspace, project, task and comment services, and only
+        # with the scope each action needs.
+        scopes.check_grpc(user, context.service_class_name, context.grpc_action)
     from infrastructure.sync.actor import set_actor
 
     set_actor(user, str(request.META.get(CLIENT_ID_META_KEY, "")))

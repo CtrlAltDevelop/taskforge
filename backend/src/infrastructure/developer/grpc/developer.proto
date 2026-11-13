@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package config.developer;
+
+service ApiTokenController {
+    rpc Catalog(CatalogRequest) returns (CatalogAnswer) {}
+    rpc Create(ApiTokenCreateRequest) returns (ApiTokenCreated) {}
+    rpc List(ApiTokenListRequest) returns (ApiTokenList) {}
+    rpc Revoke(ApiTokenRevokeRequest) returns (ApiTokenAnswer) {}
+}
+
+service WebhookController {
+    rpc Create(WebhookCreateRequest) returns (WebhookAnswer) {}
+    rpc Delete(WebhookDeleteRequest) returns (WebhookDeleted) {}
+    rpc Deliveries(DeliveriesRequest) returns (DeliveryList) {}
+    rpc List(WebhookListRequest) returns (WebhookList) {}
+    rpc Redeliver(RedeliverRequest) returns (DeliveryAnswer) {}
+    rpc Test(WebhookTestRequest) returns (DeliveryAnswer) {}
+    rpc Update(WebhookUpdateRequest) returns (WebhookAnswer) {}
+}
+
+message ApiToken {
+    string id = 1;
+    string name = 2;
+    string prefix = 3;
+    repeated string scopes = 4;
+    string status = 5;
+    string expires_at = 6;
+    string last_used_at = 7;
+    string revoked_at = 8;
+    string created_at = 9;
+}
+
+message ApiTokenAnswer {
+    ApiToken token = 1;
+}
+
+message ApiTokenCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    repeated string scopes = 3;
+    int32 expires_in_days = 4;
+}
+
+message ApiTokenCreated {
+    ApiToken token = 1;
+    string secret = 2;
+}
+
+message ApiTokenList {
+    repeated ApiToken tokens = 1;
+}
+
+message ApiTokenListRequest {
+    string workspace_id = 1;
+}
+
+message ApiTokenRevokeRequest {
+    string workspace_id = 1;
+    string token_id = 2;
+}
+
+message CatalogAnswer {
+    repeated CatalogItem scopes = 1;
+    repeated CatalogItem events = 2;
+}
+
+message CatalogItem {
+    string key = 1;
+    string label = 2;
+}
+
+message CatalogRequest {
+    string workspace_id = 1;
+}
+
+message DeliveriesRequest {
+    string workspace_id = 1;
+    string webhook_id = 2;
+    string before = 3;
+    int32 limit = 4;
+}
+
+message Delivery {
+    string id = 1;
+    string webhook_id = 2;
+    string event = 3;
+    string event_id = 4;
+    string status = 5;
+    int32 status_code = 6;
+    int32 attempt = 7;
+    string error = 8;
+    string response_snippet = 9;
+    string payload_json = 10;
+    string request_headers_json = 11;
+    string next_retry_at = 12;
+    string created_at = 13;
+    string at = 14;
+    int32 duration_ms = 15;
+    string resend_of = 16;
+}
+
+message DeliveryAnswer {
+    Delivery delivery = 1;
+}
+
+message DeliveryList {
+    repeated Delivery deliveries = 1;
+    string cursor = 2;
+}
+
+message RedeliverRequest {
+    string workspace_id = 1;
+    string webhook_id = 2;
+    string delivery_id = 3;
+}
+
+message Webhook {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string name = 4;
+    string url = 5;
+    string secret = 6;
+    repeated string events = 7;
+    bool active = 8;
+    string disabled_reason = 9;
+    int32 version = 10;
+    string created_at = 11;
+    string last_status = 12;
+    string last_at = 13;
+}
+
+message WebhookAnswer {
+    Webhook webhook = 1;
+}
+
+message WebhookCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    string url = 3;
+    repeated string events = 4;
+    string project_id = 5;
+}
+
+message WebhookDeleteRequest {
+    string workspace_id = 1;
+    string webhook_id = 2;
+}
+
+message WebhookDeleted {
+    string id = 1;
+}
+
+message WebhookList {
+    repeated Webhook webhooks = 1;
+}
+
+message WebhookListRequest {
+    string workspace_id = 1;
+}
+
+message WebhookTestRequest {
+    string workspace_id = 1;
+    string webhook_id = 2;
+}
+
+message WebhookUpdateRequest {
+    string workspace_id = 1;
+    string webhook_id = 2;
+    repeated string fields = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string url = 6;
+    repeated string events = 7;
+    bool active = 8;
+    string project_id = 9;
+}
+

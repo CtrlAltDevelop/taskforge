@@ -1305,6 +1305,18 @@ SEARCH_TIMEOUT_MS = int(os.getenv("DJANGO_SEARCH_TIMEOUT_MS", "2000"))
 # Phase 21: a timer running longer than this many hours reminds its owner (once, via the inbox).
 TIME_LONG_TIMER_HOURS = int(os.getenv("DJANGO_TIME_LONG_TIMER_HOURS", "8"))
 
+# Phase 32: API tokens and webhooks. Each token may make this many calls per minute (0 = no limit).
+# Webhooks refuse private, loopback, link-local and metadata addresses; a self-hoster who really
+# wants to call an internal service lists its host name or network here (comma separated, e.g.
+# "10.1.0.0/16,hooks.internal"). The address is still checked when the connection is made.
+DEVELOPER_TOKEN_RATE_PER_MINUTE = int(os.getenv("DJANGO_DEVELOPER_TOKEN_RATE_PER_MINUTE", "300"))
+DEVELOPER_WEBHOOK_ALLOWLIST = tuple(
+    h.strip() for h in os.getenv("DJANGO_DEVELOPER_WEBHOOK_ALLOWLIST", "").split(",") if h.strip()
+)
+# Most webhooks one workspace may have, and most tokens one person may have in a workspace.
+DEVELOPER_MAX_WEBHOOKS = int(os.getenv("DJANGO_DEVELOPER_MAX_WEBHOOKS", "20"))
+DEVELOPER_MAX_TOKENS = int(os.getenv("DJANGO_DEVELOPER_MAX_TOKENS", "20"))
+
 # Celery. Debug and tests run tasks eagerly (see `development.py`); production points the broker
 # and result backend at Redis (`production.py`). Delayed work is database-backed and drained by
 # the due-work registry (`infrastructure/common/dueworkers.py`), which beat runs every minute.

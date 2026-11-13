@@ -81,6 +81,9 @@ def grant_of(actor: Any, resource: Any) -> Grant | None:
     workspace_id = _workspace_id(resource)
     if workspace_id is None or actor is None or not getattr(actor, "is_authenticated", False):
         return None
+    token = getattr(actor, "api_token", None)
+    if token is not None and token.workspace_id != workspace_id:
+        return None  # an API token belongs to one workspace and is nothing in any other
     member = (
         WorkspaceMember.objects.filter(
             workspace_id=workspace_id, user=actor, status=MemberStatus.ACTIVE
@@ -88,7 +91,14 @@ def grant_of(actor: Any, resource: Any) -> Grant | None:
         .select_related("role")
         .first()
     )
-    return None if member is None else Grant(member.role, role_keys(member.role))
+    if member is None:
+        return None
+    keys = role_keys(member.role)
+    if token is not None:  # the owner's permissions intersected with the token's scopes
+        from infrastructure.developer.scopes import allowed_keys
+
+        keys &= allowed_keys(token.scopes)
+    return Grant(member.role, keys)
 
 
 # The creator rule: whoever created a project (and still may create projects) manages it,

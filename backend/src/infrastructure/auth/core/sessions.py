@@ -26,6 +26,7 @@ from ninja.security import HttpBearer
 
 from infrastructure.common.app_labels import app_installed
 from infrastructure.common.identity import session_csrf_failure
+from infrastructure.developer import scopes, tokens
 from infrastructure.oauth.core import jwt_tokens
 from infrastructure.oauth.core.credentials import (
     BEARER,
@@ -363,10 +364,14 @@ def resolve_request_user(request: HttpRequest) -> Any | None:
     keeps an in-use session from idling out.
     """
     mode = settings.AUTH_TOKEN_MODE
+    presented = bearer_token(request)
+    if presented and tokens.looks_like_token(presented):
+        # An API token (phase 32) works in every mode; ``JwtBearer`` and the gRPC door decide
+        # where it is accepted, and its scopes narrow what the owner may do.
+        return tokens.authenticate(presented)
     if mode == "none":
         user = getattr(request, "user", None)
         return user if user is not None and user.is_authenticated else None
-    presented = bearer_token(request)
     if not presented:
         return None
     try:
@@ -401,15 +406,24 @@ class JwtBearer(HttpBearer):
     openapi_name = "JWT"
     openapi_description = "A signed access token, as returned by any login endpoint."
 
+    # An API token is accepted only where the route says so (the public API): everywhere else
+    # a token holder would reach endpoints its scopes know nothing about.
+    allow_tokens = False
+
     def __call__(self, request: HttpRequest) -> Any | None:
-        if settings.AUTH_TOKEN_MODE == "none":
+        if settings.AUTH_TOKEN_MODE == "none" and not tokens.looks_like_token(
+            bearer_token(request)
+        ):
             if session_csrf_failure(request) is not None:
                 raise HttpError(403, "CSRF check failed.")
             return self._adopt(request, resolve_request_user(request))
         return super().__call__(request)
 
     def authenticate(self, request: HttpRequest, token: str) -> Any | None:
-        return self._adopt(request, resolve_request_user(request))
+        user = resolve_request_user(request)
+        if user is not None and not self.allow_tokens and scopes.token_of(user) is not None:
+            return None
+        return self._adopt(request, user)
 
     @staticmethod
     def _adopt(request: HttpRequest, user: Any | None) -> Any | None:

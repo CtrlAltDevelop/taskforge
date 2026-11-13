@@ -56,6 +56,9 @@ def require_workspace(user: Any, raw_id: str | None, permission: str | None = No
     ).first()
     if workspace is None:
         raise _forbidden()
+    token = getattr(user, "api_token", None)
+    if token is not None and token.workspace_id != workspace.pk:
+        raise _forbidden()  # an API token belongs to one workspace
     if permission is not None:
         access.require(user, permission, workspace)
     return workspace

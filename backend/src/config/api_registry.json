@@ -56,6 +56,27 @@
         "router": "infrastructure.imports.rest.exports.router",
         "tag": "Exports",
         "description": "Download an export zip with the short-lived signed link that Exports.Status returns."
+      },
+      {
+        "app_config": "infrastructure.developer.apps.DeveloperConfig",
+        "prefix": "/workspaces",
+        "router": "infrastructure.developer.rest.public.router",
+        "tag": "Public API",
+        "description": "Workspaces, projects, tasks and comments for scripts and integrations. Send Authorization: Bearer tf_... (an API token from Settings, Developer); its scopes narrow what its owner may do."
+      },
+      {
+        "app_config": "infrastructure.developer.apps.DeveloperConfig",
+        "prefix": "/tokens",
+        "router": "infrastructure.developer.rest.manage.tokens_router",
+        "tag": "API tokens",
+        "description": "Make, list and revoke your API tokens. The secret is shown once, in the answer to the create call."
+      },
+      {
+        "app_config": "infrastructure.developer.apps.DeveloperConfig",
+        "prefix": "/webhooks",
+        "router": "infrastructure.developer.rest.manage.webhooks_router",
+        "tag": "Webhooks",
+        "description": "Signed event deliveries to a URL: manage them, read the delivery log, send a delivery again or a test ping."
       }
     ]
   }

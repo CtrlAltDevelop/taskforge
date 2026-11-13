@@ -62,6 +62,7 @@ PERMISSIONS: Final = (
         "dashboard.manage", "Share dashboards with a project or the workspace, edit shared ones"
     ),
     Permission("data.manage", "Import projects from other tools, undo an import, export data"),
+    Permission("webhook.manage", "Create, edit and delete webhooks and see what was sent"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
