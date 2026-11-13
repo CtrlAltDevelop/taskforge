@@ -27,6 +27,7 @@ from django.utils import timezone
 from django.utils.module_loading import import_string
 
 from infrastructure.comments import mentions
+from infrastructure.common.messages import recipient_locale, tr
 from infrastructure.inbox import prefs, push, render, schedule
 from infrastructure.inbox.models import (
     Channel,
@@ -158,7 +159,8 @@ def _push_words(row: Notification, actor_name: str) -> tuple[str, str]:
     """What a push says. A push crosses a third party's servers and shows on a lock screen, so for
     a private project it names only the task's key."""
     if row.task_id is not None and _private(row):
-        return "New activity", render.clean(row.payload.get("key", ""))
+        lang = recipient_locale(row.user, row.workspace)
+        return tr("notify.private.title", lang), render.clean(row.payload.get("key", ""))
     return render.render(row, actor_name)
 
 
@@ -192,7 +194,8 @@ def _send_email(row: Notification, actor_name: str) -> bool:
         return False
     title, body = render.render(row, actor_name)
     link = settings.INBOX_UNSUBSCRIBE_URL.format(token=unsubscribe_token(row.user_id, row.type))
-    send_email(email, title, f"{body}\n\nStop these emails: {link}\n")
+    stop = tr("email.stop", recipient_locale(row.user, row.workspace), link=link)
+    send_email(email, title, f"{body}\n\n{stop}\n")
     return True
 
 
@@ -293,7 +296,7 @@ def deliver_due(now: datetime | None = None) -> int:
 # -- the daily digest ----------------------------------------------------------------------------
 
 
-def _digest_text(rows: list[Notification]) -> str:
+def _digest_text(rows: list[Notification], lang: str = "en") -> str:
     by_project: dict[Any, list[Notification]] = defaultdict(list)
     for row in rows:
         by_project[row.project_id].append(row)
@@ -303,16 +306,16 @@ def _digest_text(rows: list[Notification]) -> str:
     lines: list[str] = []
     shown = 0
     for project_id, items in by_project.items():
-        lines.append(render.clean(names.get(project_id, "Other")))
+        lines.append(render.clean(names.get(project_id, tr("digest.other", lang))))
         for row in items:
             if shown >= DIGEST_LINES:
                 break
-            title, body = render.render(row, _actor_name(row))
+            title, body = render.render(row, _actor_name(row), lang)
             lines.append(f"  - {title}: {body.splitlines()[0] if body else ''}")
             shown += 1
         lines.append("")
     if len(rows) > shown:
-        lines.append(f"…and {len(rows) - shown} more in your inbox.\n")
+        lines.append(tr("digest.more", lang, n=len(rows) - shown) + "\n")
     return "\n".join(lines)
 
 
@@ -337,10 +340,10 @@ def _send_digest(items: list[Delivery]) -> None:
     if live and user.email:
         try:
             link = settings.INBOX_UNSUBSCRIBE_URL.format(token=unsubscribe_token(user.pk, "all"))
-            text = _digest_text([i.notification for i in live])
-            send_email(
-                user.email, "Your daily TaskForge digest", f"{text}\nStop these emails: {link}\n"
-            )
+            lang = recipient_locale(user, live[0].notification.workspace)
+            text = _digest_text([i.notification for i in live], lang)
+            stop = tr("email.stop", lang, link=link)
+            send_email(user.email, tr("digest.subject", lang), f"{text}\n{stop}\n")
         except Exception:  # noqa: BLE001
             logger.exception("could not send the digest to %s", user.pk)
             for item in items:

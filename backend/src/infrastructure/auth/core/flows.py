@@ -161,9 +161,11 @@ def send_code_challenge(
     destination: str,
     method: str,
     intro: str = "Your sign-in code",
+    locale: str | None = None,
 ) -> str:
     """Mint a code, send it, and return the ticket that redeems it."""
     from infrastructure.auth.core.codes import generate_numeric_code
+    from infrastructure.common.messages import locale_for_email, tr_auth
     from infrastructure.auth.core.delivery import send_email, send_sms
     from infrastructure.auth.core.throttling import guard_delivery
 
@@ -176,6 +178,10 @@ def send_code_challenge(
         channel=channel,
         destination=destination,
     )
+    if channel == "email":
+        intro = tr_auth(intro, locale or locale_for_email(destination))
+    elif locale:
+        intro = tr_auth(intro, locale)
     body = f"{intro}: {code}"
     if channel == "sms":
         send_sms(destination, body)

@@ -76,3 +76,21 @@ def test_without_a_saved_language_the_header_decides() -> None:
     assert request_locale(_Request("ps", _User(""))) == "ps"
     assert request_locale(_Request("ps", None)) == "ps"
     assert request_locale(_Request()) == DEFAULT_LOCALE
+
+
+def test_request_locale_falls_back_profile_then_workspace_then_header() -> None:
+    from types import SimpleNamespace
+
+    from infrastructure.common.locales import request_locale
+
+    ws = SimpleNamespace(default_locale="ar")
+
+    def req(user: object | None, header: str = "ps") -> _Request:
+        request = _Request(header, user)
+        request.workspace = ws  # type: ignore[attr-defined]
+        return request
+
+    assert request_locale(req(_User("fa"))) == "fa"
+    assert request_locale(req(_User(""))) == "ar"
+    assert request_locale(req(None)) == "ar"
+    assert request_locale(_Request("ps", _User(""))) == "ps"

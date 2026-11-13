@@ -24,13 +24,15 @@ def test_a_new_account_gets_a_profile_without_being_asked(user: Any) -> None:
     assert Profile.objects.count() == 1
 
 
-def test_the_profile_starts_with_the_projects_defaults(settings: Any, db: None) -> None:
+def test_the_profile_starts_with_the_projects_timezone_and_no_language(
+    settings: Any, db: None
+) -> None:
     settings.ACCOUNTS_DEFAULT_LOCALE = "pt-br"
     settings.ACCOUNTS_DEFAULT_TIMEZONE = "Europe/Lisbon"
 
     created = User._default_manager.create_user("novo")
 
-    assert created.profile.locale == "pt-br"
+    assert created.profile.locale == "", "no language chosen yet: the workspace default applies"
     assert created.profile.timezone == "Europe/Lisbon"
 
 
@@ -179,3 +181,16 @@ def test_a_new_profile_has_no_calendar_or_week_start_preference(transactional_db
     assert profile.calendar_system == "gregorian"
     assert profile.week_start == ""
     assert profile.numerals == ""
+
+
+def test_the_unset_language_falls_back_to_the_workspace_default(user: Any) -> None:
+    from types import SimpleNamespace
+
+    from infrastructure.common.messages import recipient_locale
+
+    ws = SimpleNamespace(default_locale="fa")
+
+    assert user.profile.locale == ""
+    assert recipient_locale(user, ws) == "fa"
+    user.profile.locale = "ps"
+    assert recipient_locale(user, ws) == "ps"

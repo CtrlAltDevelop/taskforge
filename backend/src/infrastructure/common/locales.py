@@ -52,12 +52,17 @@ def pick_from_accept_language(header: str) -> str:
 
 
 def request_locale(request: Any) -> str:
-    """A signed-in person's saved language, else what the browser asked for."""
+    """A person's saved language, else the workspace default, else the browser's."""
     user = getattr(request, "user", None)
     if user is not None and getattr(user, "is_authenticated", False):
         saved = normalize_locale(getattr(getattr(user, "profile", None), "locale", "") or "")
         if saved:
             return saved
+    workspace_default = normalize_locale(
+        getattr(getattr(request, "workspace", None), "default_locale", "") or ""
+    )
+    if workspace_default:
+        return workspace_default
     return pick_from_accept_language(request.META.get("HTTP_ACCEPT_LANGUAGE", ""))
 
 

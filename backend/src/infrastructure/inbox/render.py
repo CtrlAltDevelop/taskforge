@@ -2,6 +2,7 @@
 
 from typing import Any
 
+from infrastructure.common.messages import recipient_locale, tr
 from infrastructure.inbox import kinds
 
 EXCERPT_MAX = 140
@@ -24,30 +25,46 @@ def subject_of(row: Any) -> str:
     return clean(f"{payload.get('key', '')} {payload.get('title', '')}")
 
 
-def render(row: Any, actor_name: str) -> tuple[str, str]:
-    """``(title, body)``."""
+def render(row: Any, actor_name: str, locale: str | None = None) -> tuple[str, str]:
+    """``(title, body)`` in ``locale`` (default: the recipient's language)."""
+    lang = locale or recipient_locale(getattr(row, "user", None), getattr(row, "workspace", None))
     payload = row.payload
-    who = clean(actor_name) or "Someone"
+    who = clean(actor_name) or tr("notify.someone", lang)
     task = subject_of(row)
-    more = f" (+{row.count - 1} more)" if row.count > 1 else ""
+    more = tr("notify.more", lang, n=row.count - 1) if row.count > 1 else ""
+    note = f"{task}\n{clean(payload.get('excerpt', ''))}".strip()
     match row.type:
         case kinds.ASSIGNED:
-            return f"{who} assigned you a task", task
+            return tr("notify.assigned.title", lang, who=who), task
         case kinds.MENTIONED:
-            return f"{who} mentioned you", f"{task}\n{clean(payload.get('excerpt', ''))}".strip()
+            return tr("notify.mentioned.title", lang, who=who), note
         case kinds.COMMENTED:
-            return f"{who} commented{more}", f"{task}\n{clean(payload.get('excerpt', ''))}".strip()
+            return tr("notify.commented.title", lang, who=who, more=more), note
         case kinds.STATUS_CHANGED:
             moved = clean(f"{payload.get('from', '')} → {payload.get('to', '')}")
-            return f"{who} moved a task{more}", f"{task}: {moved}"
+            return (
+                tr("notify.status_changed.title", lang, who=who, more=more),
+                tr("notify.status_changed.body", lang, task=task, moved=moved),
+            )
         case kinds.DUE_SOON:
-            return "A task is due soon", f"{task} is due {clean(payload.get('due_date', ''))}"
+            date = clean(payload.get("due_date", ""))
+            return (
+                tr("notify.due_soon.title", lang),
+                tr("notify.due_soon.body", lang, task=task, date=date),
+            )
         case kinds.TIMER_LONG:
-            return "Your timer is still running", f"{task}: {payload.get('hours', 0)} h so far"
+            return (
+                tr("notify.timer_long.title", lang),
+                tr("notify.timer_long.body", lang, task=task, hours=payload.get("hours", 0)),
+            )
         case kinds.AUTOMATION:
             name = clean(payload.get("automation", ""))
-            return f"Automation: {name}", f"{task}\n{clean(payload.get('message', ''))}".strip()
+            body = f"{task}\n{clean(payload.get('message', ''))}".strip()
+            return tr("notify.automation.title", lang, name=name), body
         case kinds.AUTOMATION_DISABLED:
             name = clean(payload.get("automation", ""))
-            return f"Automation switched off: {name}", clean(payload.get("reason", ""))
-    return "Notification", task
+            return (
+                tr("notify.automation_disabled.title", lang, name=name),
+                clean(payload.get("reason", "")),
+            )
+    return tr("notify.fallback.title", lang), task

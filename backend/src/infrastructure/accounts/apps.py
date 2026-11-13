@@ -16,7 +16,7 @@ class AccountsConfig(AppConfig):
             Requirement(
                 "ACCOUNTS_DEFAULT_LOCALE",
                 env="DJANGO_ACCOUNTS_DEFAULT_LOCALE",
-                purpose="the locale a new profile starts with",
+                purpose="unused: a new profile starts with no language (the workspace default applies)",
                 required=True,
             ),
             Requirement(

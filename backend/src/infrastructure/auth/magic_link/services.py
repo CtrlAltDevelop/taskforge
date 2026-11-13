@@ -20,6 +20,7 @@ from infrastructure.accounts.profiles import confirm_email
 from infrastructure.auth.core.challenges import get_challenge_store
 from infrastructure.auth.core.delivery import send_email
 from infrastructure.auth.core.errors import AuthError
+from infrastructure.common.messages import locale_for_email, tr, tr_auth
 from infrastructure.auth.core.flows import (
     LoginResult,
     complete_login,
@@ -99,7 +100,10 @@ class MagicLinkService:
             destination=email,
             metadata={"intent": intent},
         )
-        send_email(email, intro, f"{intro}: {self.link(token)}\n\nThis link can be used once.")
+        lang = locale_for_email(email)
+        intro = tr_auth(intro, lang)
+        once = tr("auth.link_once", lang)
+        send_email(email, intro, f"{intro}: {self.link(token)}\n\n{once}")
         record_event(
             request,
             AuthEventType.CODE_SENT,

@@ -24,6 +24,7 @@ from infrastructure.auth.core.challenges import Challenge, InvalidCode, get_chal
 from infrastructure.auth.core.codes import generate_numeric_code
 from infrastructure.auth.core.delivery import send_email, send_sms
 from infrastructure.auth.core.errors import AuthError
+from infrastructure.common.messages import recipient_locale, tr
 from infrastructure.auth.core.flows import (
     PENDING_PURPOSE,
     pending_methods,
@@ -248,11 +249,12 @@ def send_factor_code(user: Any, factor: SecondFactor) -> tuple[str, str, str]:
         destination=destination,
         metadata={"method": factor.method},
     )
-    body = f"Your verification code is {code}."
+    lang = recipient_locale(user)
+    body = tr("auth.verification_body", lang, code=code)
     if channel == "sms":
         send_sms(destination, body)
     else:
-        send_email(destination, "Your verification code", body)
+        send_email(destination, tr("auth.verification_subject", lang), body)
     return ticket, channel, destination
 
 

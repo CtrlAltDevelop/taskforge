@@ -29,7 +29,9 @@ def create_profile(sender: Any, instance: Any, created: bool, **kwargs: Any) -> 
     Profile.objects.get_or_create(
         user=instance,
         defaults={
-            "locale": settings.ACCOUNTS_DEFAULT_LOCALE,
+            # Blank = "never chose a language", so the workspace's default
+            # applies; seeding it here made every account look like a choice.
+            "locale": "",
             "timezone": settings.ACCOUNTS_DEFAULT_TIMEZONE,
         },
     )

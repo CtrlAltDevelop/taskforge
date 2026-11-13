@@ -19,6 +19,7 @@ from django.conf import settings
 from django.dispatch import Signal, receiver
 
 from infrastructure.auth.core.delivery import send_email
+from infrastructure.common.messages import locale_for_email, tr
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +48,13 @@ def _send(
     inviter_name: str,
     email: str,
     token: str,
+    locale: str = "en",
 ) -> None:
     url = settings.WORKSPACE_INVITE_URL.format(token=token)
-    body = f"{inviter_name} invited you to join {workspace_name} on TaskForge.\n\nJoin: {url}\n"
-    subject = f"{inviter_name} invited you to {workspace_name}"
+    lang = locale
+    names = {"inviter": inviter_name, "workspace": workspace_name}
+    body = f"{tr('invite.body', lang, **names)}\n\n{tr('invite.join', lang, url=url)}\n"
+    subject = tr("invite.subject", lang, **names)
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             send_email(email, subject, body)
@@ -77,6 +81,7 @@ def _send(
 @receiver(invitation_issued, dispatch_uid="workspaces.invite_mail")
 def deliver_invitation(sender: Any, signal: Any, **job: Any) -> None:
     """Hand the email to the pool, or run it inline when ``WORKSPACE_EMAIL_ASYNC`` is off."""
+    job.setdefault("locale", locale_for_email(job.get("email", "")))
     if settings.WORKSPACE_EMAIL_ASYNC:
         _executor().submit(_send, **job)
     else:

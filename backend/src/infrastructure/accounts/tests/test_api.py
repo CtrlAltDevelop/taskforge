@@ -49,7 +49,7 @@ def test_me_describes_the_signed_in_account(token: str) -> None:
     assert body["email"] == "zoe@example.com"
     assert body["is_active"] is True
     assert body["is_staff"] is False
-    assert body["profile"]["locale"] == "en-us"
+    assert body["profile"]["locale"] == ""
 
 
 def test_me_needs_a_credential(db: None) -> None:
@@ -215,7 +215,7 @@ def test_a_token_from_any_method_authenticates_an_unrelated_endpoint(
     response = client.get(ME, **_bearer(make_token(client)))
 
     assert response.status_code == 200, response.content
-    assert response.json()["data"]["profile"]["locale"] == "en-us"
+    assert response.json()["data"]["profile"]["locale"] == ""
 
 
 def test_a_code_login_records_that_the_address_was_reached(db: None) -> None:
@@ -346,7 +346,7 @@ def test_an_unsupported_preference_is_refused_and_nothing_changes(
 
     assert response.status_code == 400
     assert response.json()["title"] == "VALIDATION_ERROR"
-    assert Client().get(ME, **_bearer(token)).json()["data"]["profile"]["locale"] == "en-us"
+    assert Client().get(ME, **_bearer(token)).json()["data"]["profile"]["locale"] == ""
 
 
 def test_an_empty_week_start_goes_back_to_the_language_default(token: str) -> None:

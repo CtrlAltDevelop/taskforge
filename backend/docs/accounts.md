@@ -115,7 +115,7 @@ refuses that unless the target admin declares what it can be searched by.
 <!-- generated:settings -->
 | Environment variable | Required | Purpose |
 | --- | --- | --- |
-| `DJANGO_ACCOUNTS_DEFAULT_LOCALE` | **Yes** | the locale a new profile starts with. |
+| `DJANGO_ACCOUNTS_DEFAULT_LOCALE` | **Yes** | unused: a new profile starts with no language (the workspace default applies). |
 | `DJANGO_ACCOUNTS_DEFAULT_TIMEZONE` | **Yes** | the time zone a new profile starts with. |
 | `DJANGO_AUTH_USER_MODEL` | **Yes** | the model every login resolves to and every table points at. |
 <!-- /generated:settings -->
