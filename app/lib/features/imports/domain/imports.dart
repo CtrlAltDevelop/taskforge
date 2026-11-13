@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Mirrors the server's limits; the server stays the authority.
 const maxProblemsShown = 100;
@@ -18,6 +21,16 @@ enum ImportSource {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    jiraCsv => l.grpMImpJiraCsv,
+    jiraJson => l.grpMImpJiraJson,
+    clickupCsv => l.grpMImpClickupCsv,
+    clickupJson => l.grpMImpClickupJson,
+    csv => l.grpMImpCsv,
+    taskforge => l.grpMImpTaskforge,
+  };
   final bool isCsv;
 
   static ImportSource? tryParse(String wire) =>
@@ -400,18 +413,19 @@ class ImportException implements Exception {
   String toString() => 'ImportException($failure)';
 }
 
-String importErrorMessage(Object error) {
-  if (error is! ImportException) return 'Something went wrong. Try again.';
+String importErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! ImportException) return t.grpLGeneric;
   final detail = error.detail;
   final said = detail != null && detail.isNotEmpty;
   return switch (error.failure) {
-    ImportFailure.invalid => said ? detail : 'That is not valid.',
-    ImportFailure.conflict => said ? detail : 'That cannot be done now.',
-    ImportFailure.tooBig => 'That file is larger than this server accepts.',
-    ImportFailure.denied => 'Only admins can import and export data.',
-    ImportFailure.notFound => 'That import no longer exists.',
-    ImportFailure.network => 'Could not reach the server. Try again.',
-    ImportFailure.other => 'Something went wrong. Try again.',
+    ImportFailure.invalid => said ? detail : t.grpLNotValid,
+    ImportFailure.conflict => said ? detail : t.grpLImpCannot,
+    ImportFailure.tooBig => t.grpLImpTooBig,
+    ImportFailure.denied => t.grpLImpDenied,
+    ImportFailure.notFound => t.grpLImpNotFound,
+    ImportFailure.network => t.grpLNetTry,
+    ImportFailure.other => t.grpLGeneric,
   };
 }
 

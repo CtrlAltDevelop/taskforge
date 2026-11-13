@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
@@ -35,7 +36,7 @@ class DayTasks extends StatelessWidget {
     if (onDay.isEmpty && ghostsToday.isEmpty) {
       return Center(
         child: Text(
-          context.l10n.grpFNothingOn(formatDay(day)),
+          context.l10n.grpFNothingOn(context.localIso(day)),
           key: const Key('day-empty'),
         ),
       );
@@ -48,7 +49,7 @@ class DayTasks extends StatelessWidget {
             key: Key('agenda-${task.id}'),
             leading: CircleAvatar(radius: 6, backgroundColor: colorOf(task)),
             title: Text(task.title),
-            subtitle: Text(_span(task)),
+            subtitle: Text(_span(context, task)),
             onTap: () => onOpen(task),
             trailing: canMove
                 ? IconButton(
@@ -69,12 +70,12 @@ class DayTasks extends StatelessWidget {
     return time.isEmpty ? '' : ' $time';
   }
 
-  static String _span(Task task) {
+  static String _span(BuildContext context, Task task) {
     final s = spanOf(task);
     if (s == null) return task.displayId;
     return s.first == s.last
-        ? '${task.displayId} · ${formatDay(s.first)}${_at(task)}'
-        : '${task.displayId} · ${formatDay(s.first)} → ${formatDay(s.last)}${_at(task)}';
+        ? '${task.displayId} · ${context.localIso(s.first)}${_at(task)}'
+        : '${task.displayId} · ${context.localIso(s.first)} → ${context.localIso(s.last)}${_at(task)}';
   }
 }
 

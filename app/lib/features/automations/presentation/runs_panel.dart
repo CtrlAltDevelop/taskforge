@@ -27,7 +27,8 @@ class RunStatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Chip(
     label: Text(
-      status?.label ?? (raw.isEmpty ? context.l10n.grpGUnknown : raw),
+      status?.labelIn(context.l10n) ??
+          (raw.isEmpty ? context.l10n.grpGUnknown : raw),
     ),
     visualDensity: VisualDensity.compact,
     side: BorderSide(color: statusColor(context, status)),
@@ -56,7 +57,8 @@ class StepsView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${i + 1}. ${s.label} (${s.status.replaceAll('_', ' ')})',
+                  '${i + 1}. ${s.labelIn(context.l10n)} '
+                  '(${s.statusIn(context.l10n)})',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: s.isFailure ? scheme.error : null,
@@ -166,7 +168,7 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                automationErrorMessage(_moreError!),
+                automationErrorMessage(_moreError!, context.l10n),
                 key: const Key('runs-more-error'),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
@@ -190,7 +192,10 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(automationErrorMessage(error), key: const Key('runs-error')),
+            Text(
+              automationErrorMessage(error, context.l10n),
+              key: const Key('runs-error'),
+            ),
             TextButton(
               onPressed: () => ref.invalidate(automationRunsProvider),
               child: Text(context.l10n.grpGRetry),
@@ -230,7 +235,7 @@ class RunTile extends StatelessWidget {
         if (status != null &&
             status != RunStatus.succeeded &&
             status != RunStatus.failed)
-          Text(status.meaning, key: Key('meaning-${run.id}')),
+          Text(status.meaningIn(context.l10n), key: Key('meaning-${run.id}')),
         if (run.didNotRun || run.explanation.isNotEmpty)
           Container(
             key: Key('why-${run.id}'),
@@ -243,7 +248,7 @@ class RunTile extends StatelessWidget {
             child: Text(
               context.l10n.grpGWhyNotRun(
                 run.explanation.isEmpty
-                    ? status?.meaning ?? ''
+                    ? status?.meaningIn(context.l10n) ?? ''
                     : run.explanation,
               ),
             ),

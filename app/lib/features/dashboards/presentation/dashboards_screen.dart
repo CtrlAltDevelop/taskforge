@@ -55,12 +55,13 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
   Future<void> _try(Future<void> Function() act) async {
     if (_busy) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     setState(() => _busy = true);
     try {
       await act();
     } on Object catch (e) {
       messenger.showSnackBar(
-        SnackBar(content: Text(d.dashboardErrorMessage(e))),
+        SnackBar(content: Text(d.dashboardErrorMessage(e, l10n))),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -252,7 +253,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                d.dashboardErrorMessage(error),
+                d.dashboardErrorMessage(error, context.l10n),
                 key: const Key('dashboards-error'),
               ),
               TextButton(
@@ -410,7 +411,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           OutlinedButton.icon(
             key: const Key('share-dashboard'),
             icon: const Icon(Icons.group_outlined),
-            label: Text(_draft!.visibility.label),
+            label: Text(_draft!.visibility.labelIn(context.l10n)),
             onPressed: _share,
           ),
           FilledButton(
@@ -480,7 +481,7 @@ class _ShareDialogState extends State<_ShareDialog> {
                 RadioListTile<d.DashVisibility>(
                   key: Key('visibility-${v.wire}'),
                   value: v,
-                  title: Text(v.label),
+                  title: Text(v.labelIn(context.l10n)),
                   enabled:
                       (v == d.DashVisibility.personal || widget.canShare) &&
                       (v != d.DashVisibility.project || widget.hasProject),

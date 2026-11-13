@@ -71,7 +71,9 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
           .read(filtersClientProvider)
           .validate(workspace, _project, tfql: tfql, astJson: astJson);
     } on FilterException catch (e) {
-      if (mounted) setState(() => _message = filterErrorMessage(e));
+      if (mounted) {
+        setState(() => _message = filterErrorMessage(e, context.l10n));
+      }
       return null;
     }
   }
@@ -215,7 +217,9 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
           .apply(saved.query, saved: saved.id, text: checked.tfql);
       if (mounted) Navigator.of(context).pop();
     } on FilterException catch (e) {
-      if (mounted) setState(() => _message = filterErrorMessage(e));
+      if (mounted) {
+        setState(() => _message = filterErrorMessage(e, context.l10n));
+      }
     }
   }
 

@@ -48,21 +48,23 @@ class RelatedDocsPanel extends ConsumerWidget {
     );
     if (pick == null || !context.mounted) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       await ref.read(docsActionsProvider).link(projectId, taskId, pick.id);
       ref.invalidate(relatedDocsProvider(_key));
     } on DocException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(docErrorMessage(e))));
+      messenger.showSnackBar(SnackBar(content: Text(docErrorMessage(e, l10n))));
     }
   }
 
   Future<void> _unlink(BuildContext context, WidgetRef ref, String id) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       await ref.read(docsActionsProvider).unlink(projectId, taskId, id);
       ref.invalidate(relatedDocsProvider(_key));
     } on DocException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(docErrorMessage(e))));
+      messenger.showSnackBar(SnackBar(content: Text(docErrorMessage(e, l10n))));
     }
   }
 

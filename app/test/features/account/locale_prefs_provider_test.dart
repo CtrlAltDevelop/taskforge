@@ -40,6 +40,7 @@ ProviderContainer _container(_Accounts accounts, MemoryPrefs prefs) {
 }
 
 void main() {
+  workspaceDefaultTests();
   test(
     'a change shows at once, is kept on the device and sent to the server',
     () async {
@@ -104,4 +105,64 @@ void main() {
       expect(c.read(localePrefsProvider).weekStart, 'sat');
     },
   );
+}
+
+void workspaceDefaultTests() {
+  group('workspace default language', () {
+    test('starts a person with no saved language, without saving it', () async {
+      final accounts = _Accounts();
+      final store = MemoryPrefs();
+      final c = _container(accounts, store);
+      final n = c.read(localePrefsProvider.notifier);
+      await Future<void>.delayed(Duration.zero);
+
+      n.applyWorkspaceDefault('fa-AF');
+      expect(c.read(localePrefsProvider).language, 'fa');
+      expect(await store.read('locale.language'), isNull);
+
+      await n.update((p) => p.copyWith(calendar: 'jalali'));
+      expect(accounts.saved.single.language, '', reason: 'default not saved');
+      expect(c.read(localePrefsProvider).language, 'fa');
+    });
+
+    test('never overrides a language the person chose', () async {
+      final store = MemoryPrefs();
+      await store.write('locale.language', 'ps');
+      final c = _container(_Accounts(), store);
+      final n = c.read(localePrefsProvider.notifier);
+      await Future<void>.delayed(Duration.zero);
+
+      n.applyWorkspaceDefault('ar');
+      expect(c.read(localePrefsProvider).language, 'ps');
+    });
+
+    test('an explicit choice replaces it and is saved', () async {
+      final accounts = _Accounts();
+      final c = _container(accounts, MemoryPrefs());
+      final n = c.read(localePrefsProvider.notifier);
+      n.applyWorkspaceDefault('ar');
+
+      await n.update((p) => p.copyWith(language: 'en'));
+      expect(c.read(localePrefsProvider).language, 'en');
+      expect(accounts.saved.single.language, 'en');
+    });
+
+    test('the account language beats the default when adopted', () async {
+      final c = _container(
+        _Accounts(server: const LocalePrefs(language: 'fa')),
+        MemoryPrefs(),
+      );
+      final n = c.read(localePrefsProvider.notifier);
+      n.applyWorkspaceDefault('ar');
+      await n.adopt(await c.read(accountProvider.future));
+      expect(c.read(localePrefsProvider).language, 'fa');
+    });
+
+    test('an unsupported default is ignored', () {
+      final c = _container(_Accounts(), MemoryPrefs());
+      final n = c.read(localePrefsProvider.notifier);
+      n.applyWorkspaceDefault('xx');
+      expect(c.read(localePrefsProvider).language, '');
+    });
+  });
 }

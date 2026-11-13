@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
+import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/audit/application/audit_providers.dart';
 import 'package:taskforge/features/audit/domain/activity_lines.dart';
@@ -61,7 +63,7 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
 
   Future<void> _pickDates() async {
     final now = DateTime.now();
-    final range = await showDateRangePicker(
+    final range = await showAppDateRangePicker(
       context: context,
       firstDate: DateTime(now.year - 5),
       lastDate: now,
@@ -80,6 +82,7 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
     if (_exporting) return;
     setState(() => _exporting = true);
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       final csv = await ref.read(auditExportProvider)(_filters);
       if (!mounted) return;
@@ -88,7 +91,9 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
         builder: (_) => _ExportDialog(csv: csv, messenger: messenger),
       );
     } on Object catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(auditErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(auditErrorMessage(e, l10n))),
+      );
     } finally {
       if (mounted) setState(() => _exporting = false);
     }
@@ -161,7 +166,7 @@ class _Body extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  auditErrorMessage(state.error!),
+                  auditErrorMessage(state.error!, context.l10n),
                   key: const Key('audit-error'),
                 ),
               ),
@@ -185,7 +190,7 @@ class _Body extends ConsumerWidget {
             _Row(entry: e, labels: state.labels, now: now),
           if (state.error != null)
             Text(
-              auditErrorMessage(state.error!),
+              auditErrorMessage(state.error!, context.l10n),
               key: const Key('audit-error'),
             ),
           if (state.hasMore)
@@ -264,7 +269,9 @@ class _Filters extends ConsumerWidget {
           key: const Key('filter-dates'),
           icon: const Icon(Icons.date_range),
           label: Text(
-            filters.since == null ? context.l10n.grpBAnyTime : _range(filters),
+            filters.since == null
+                ? context.l10n.grpBAnyTime
+                : _range(context, filters),
           ),
           onPressed: onPickDates,
         ),
@@ -278,12 +285,9 @@ class _Filters extends ConsumerWidget {
     );
   }
 
-  static String _day(DateTime d) =>
-      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
-  static String _range(AuditFilters f) {
+  static String _range(BuildContext context, AuditFilters f) {
     final last = f.until?.subtract(const Duration(days: 1)) ?? f.since!;
-    return '${_day(f.since!)} – ${_day(last)}';
+    return '${context.localIso(f.since!)} – ${context.localIso(last)}';
   }
 }
 
@@ -299,9 +303,11 @@ class _Row extends StatelessWidget {
     key: Key('audit-row-${entry.id}'),
     dense: true,
     contentPadding: EdgeInsets.zero,
-    title: Text('${entry.who} · ${describeEntry(entry, labels)}'),
+    title: Text(
+      '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels)}',
+    ),
     subtitle: Text(
-      '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at)}',
+      '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
     ),
     trailing: entry.batchId.isEmpty
         ? null
@@ -347,7 +353,7 @@ class DiffDialog extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${entry.who} · ${entry.at.toLocal()}'),
+              Text('${entry.whoIn(context.l10n)} · ${entry.at.toLocal()}'),
               if (entry.ip.isNotEmpty || entry.userAgent.isNotEmpty)
                 Text('${entry.ip} ${entry.userAgent}'.trim()),
               const Divider(),

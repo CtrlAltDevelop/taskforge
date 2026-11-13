@@ -8,6 +8,7 @@ import 'package:taskforge/features/fields/presentation/field_input.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The custom fields of a project on the task detail: one input per field.
 /// A required field with no value is highlighted; clearing one is refused
@@ -74,6 +75,7 @@ String fieldSummary(
   List<CustomField> fields, {
   String Function(String id)? userLabel,
   int limit = 3,
+  AppLocalizations? l10n,
 }) {
   final parts = <String>[];
   for (final f in fields) {
@@ -82,6 +84,7 @@ String fieldSummary(
       f,
       task.fieldValues[f.id] ?? '',
       userLabel: userLabel,
+      l10n: l10n,
     );
     if (text.isNotEmpty) parts.add('${f.name}: $text');
     if (parts.length == limit) break;

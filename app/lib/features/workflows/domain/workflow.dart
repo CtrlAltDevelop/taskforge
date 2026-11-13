@@ -1,5 +1,9 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' show Color;
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const maxStatusNameLength = 40;
 const maxStatuses = 30;
@@ -27,6 +31,14 @@ enum StatusCategory {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    notStarted => l.grpMCatNotStarted,
+    active => l.grpMCatActive,
+    done => l.grpMCatDone,
+    cancelled => l.grpMCatCancelled,
+  };
 
   /// Done and Cancelled end a task's life: nothing needs to lead out of them.
   bool get isFinal => this == done || this == cancelled;
@@ -212,20 +224,17 @@ class WorkflowException implements Exception {
   String toString() => 'WorkflowException($failure, $detail)';
 }
 
-String workflowErrorMessage(Object error) {
-  if (error is! WorkflowException) return 'Something went wrong. Try again.';
+String workflowErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! WorkflowException) return t.grpLGeneric;
   return switch (error.failure) {
-    WorkflowFailure.invalid => 'The workflow has problems. Fix them to save.',
-    WorkflowFailure.conflict =>
-      'Someone else saved the workflow first. Your changes are still here: '
-          'review what changed and save again.',
-    WorkflowFailure.denied => error.detail ?? 'You do not have permission.',
-    WorkflowFailure.forbidden => 'You do not have permission to do that.',
-    WorkflowFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    WorkflowFailure.notFound => 'That project no longer exists.',
-    WorkflowFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    WorkflowFailure.other => 'Something went wrong. Try again.',
+    WorkflowFailure.invalid => t.grpLWfInvalid,
+    WorkflowFailure.conflict => t.grpLWfConflict,
+    WorkflowFailure.denied => error.detail ?? t.grpLNoPerm,
+    WorkflowFailure.forbidden => t.grpLNoPermDo,
+    WorkflowFailure.archived => t.grpLArchived,
+    WorkflowFailure.notFound => t.grpLProjectGone,
+    WorkflowFailure.network => t.grpLNetCheck,
+    WorkflowFailure.other => t.grpLGeneric,
   };
 }

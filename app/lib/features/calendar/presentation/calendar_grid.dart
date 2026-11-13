@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/weekday_names.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
@@ -196,12 +197,12 @@ class _DayCell extends StatelessWidget {
                       radius: 9,
                       backgroundColor: scheme.primary,
                       child: Text(
-                        '${day.day}',
+                        context.localDigits('${day.day}'),
                         style: TextStyle(fontSize: 11, color: scheme.onPrimary),
                       ),
                     )
                   : Text(
-                      '${day.day}',
+                      context.localDigits('${day.day}'),
                       style: TextStyle(
                         fontSize: 12,
                         color: dim ? scheme.outline : null,

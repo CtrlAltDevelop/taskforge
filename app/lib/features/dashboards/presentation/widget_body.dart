@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/charts/dashboard_charts.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 
@@ -18,45 +19,55 @@ class WidgetBody extends StatelessWidget {
   final WidgetData data;
   final ValueChanged<String>? onBucket;
 
-  List<ChartDatum> get _bars => [
+  List<ChartDatum> _bars(BuildContext context) => [
     for (final b in data.buckets)
-      ChartDatum(b.key, b.label, b.amount, shortNumber(b.value)),
+      ChartDatum(
+        b.key,
+        b.label,
+        b.amount,
+        context.localDigits(shortNumber(b.value)),
+      ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final label = widget.title.isEmpty ? widget.kind.label : widget.title;
+    final label = widget.title.isEmpty
+        ? widget.kind.labelIn(context.l10n)
+        : widget.title;
     switch (widget.kind) {
       case WidgetKind.number:
         return InkWell(
           key: const Key('number-tap'),
           onTap: onBucket == null ? null : () => onBucket!(''),
-          child: NumberTile(value: shortNumber(data.total), caption: label),
+          child: NumberTile(
+            value: context.localDigits(shortNumber(data.total)),
+            caption: label,
+          ),
         );
       case WidgetKind.bar:
       case WidgetKind.workload:
-        if (_bars.isEmpty) return const _Empty();
+        if (_bars(context).isEmpty) return const _Empty();
         return SingleChildScrollView(
           child: BarChartView(
-            data: _bars,
+            data: _bars(context),
             semanticsLabel: label,
             onTap: onBucket == null ? null : (d) => onBucket!(d.key),
           ),
         );
       case WidgetKind.pie:
-        if (_bars.isEmpty) return const _Empty();
+        if (_bars(context).isEmpty) return const _Empty();
         return SingleChildScrollView(
           child: PieChartView(
-            data: _bars,
+            data: _bars(context),
             semanticsLabel: label,
             onTap: onBucket == null ? null : (d) => onBucket!(d.key),
           ),
         );
       case WidgetKind.table:
-        if (_bars.isEmpty) return const _Empty();
+        if (_bars(context).isEmpty) return const _Empty();
         return TableChartView(
-          data: _bars,
-          valueHeader: widget.config.measure.label,
+          data: _bars(context),
+          valueHeader: widget.config.measure.labelIn(context.l10n),
           onTap: onBucket == null ? null : (d) => onBucket!(d.key),
         );
       case WidgetKind.line:

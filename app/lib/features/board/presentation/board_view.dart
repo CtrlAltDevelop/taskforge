@@ -111,7 +111,7 @@ class _BoardViewState extends ConsumerState<BoardView> {
     ..showSnackBar(
       SnackBar(
         key: const Key('move-refused'),
-        content: Text(taskErrorMessage(e)),
+        content: Text(taskErrorMessage(e, context.l10n)),
       ),
     );
 
@@ -159,7 +159,9 @@ class _BoardViewState extends ConsumerState<BoardView> {
                     key: const Key('retry-board'),
                     onPressed: () =>
                         ref.read(boardProvider(_id).notifier).load(),
-                    child: Text('${taskErrorMessage(state.error!)} Retry'),
+                    child: Text(
+                      '${taskErrorMessage(state.error!, context.l10n)} Retry',
+                    ),
                   ),
                 )
               : state.loading && state.lanes.isEmpty
@@ -258,7 +260,7 @@ class _BoardViewState extends ConsumerState<BoardView> {
                     ),
                     child: Text(
                       lane.key.isEmpty
-                          ? 'Unassigned'
+                          ? context.l10n.grpFUnassigned
                           : lookups.person(lane.key),
                       key: Key('lane-${lane.key}'),
                       style: Theme.of(context).textTheme.titleSmall,

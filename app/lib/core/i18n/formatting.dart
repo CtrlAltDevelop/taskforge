@@ -1,3 +1,5 @@
+import 'dart:ui' show Locale;
+
 import 'package:taskforge/core/i18n/jalali.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
@@ -40,4 +42,19 @@ String formatDate(
     text = '${date.year}/${_two(date.month)}/${_two(date.day)}';
   }
   return prefs.digits(text);
+}
+
+/// A date for domain code that may or may not know the person's preferences:
+/// without [prefs] the plain `YYYY-MM-DD`; with them the same shape in the
+/// chosen numerals, or [formatDate] when the calendar is Jalali.
+String dateOrIso(DateTime d, {LocalePrefs? prefs, AppLocalizations? l10n}) {
+  final iso =
+      '${d.year.toString().padLeft(4, '0')}-${_two(d.month)}-${_two(d.day)}';
+  if (prefs == null) return iso;
+  if (!prefs.isJalali) return prefs.digits(iso);
+  return formatDate(
+    d,
+    prefs,
+    l10n ?? lookupAppLocalizations(const Locale('en')),
+  );
 }

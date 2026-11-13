@@ -69,14 +69,16 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
     } on ProjectException catch (e) {
       if (e.failure == ProjectFailure.conflict) {
         // The refreshed project rebuilds this form, so say it out of band.
-        messenger.showSnackBar(SnackBar(content: Text(projectErrorMessage(e))));
+        messenger.showSnackBar(
+          SnackBar(content: Text(projectErrorMessage(e, l10n))),
+        );
       } else if (mounted) {
         setState(() {
           if (e.failure == ProjectFailure.keyTaken ||
               e.failure == ProjectFailure.keyLocked) {
-            _keyError = projectErrorMessage(e);
+            _keyError = projectErrorMessage(e, l10n);
           } else {
-            _error = projectErrorMessage(e);
+            _error = projectErrorMessage(e, l10n);
           }
         });
       }

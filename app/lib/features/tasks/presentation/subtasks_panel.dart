@@ -223,6 +223,7 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
     }
     if (_busy) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     // Everything is read before the await: the panel may be closed meanwhile.
     final list = ref.read(taskListProvider(widget.projectId).notifier);
     final collapsed = ref.read(
@@ -237,7 +238,9 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
       if (mounted) _controller.clear();
       onDone?.call();
     } on TaskException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(taskErrorMessage(e, l10n))),
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }

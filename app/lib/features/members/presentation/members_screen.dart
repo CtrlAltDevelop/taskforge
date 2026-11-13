@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -12,24 +13,20 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
-String formatDate(DateTime? date) {
-  if (date == null) return '';
-  final d = date.toLocal();
-  String two(int n) => n.toString().padLeft(2, '0');
-  return '${d.year}-${two(d.month)}-${two(d.day)}';
-}
-
 /// Runs [action]; shows the failure as a snackbar. True when it succeeded.
 Future<bool> runWithFeedback(
   BuildContext context,
   Future<void> Function() action,
 ) async {
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   try {
     await action();
     return true;
   } on InviteException catch (e) {
-    messenger.showSnackBar(SnackBar(content: Text(inviteErrorMessage(e))));
+    messenger.showSnackBar(
+      SnackBar(content: Text(inviteErrorMessage(e, l10n))),
+    );
     return false;
   }
 }
@@ -146,7 +143,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
               const SizedBox(height: 12),
               Text(m.label, style: Theme.of(sheet).textTheme.titleLarge),
               Text(m.email),
-              Text(context.l10n.grpJJoined(formatDate(m.joinedAt))),
+              Text(
+                context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt)),
+              ),
               const SizedBox(height: 8),
               RolePicker(
                 key: const Key('profile-role'),
@@ -201,7 +200,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
         child: TextButton(
           key: const Key('retry-members'),
           onPressed: () => ref.invalidate(membersProvider),
-          child: Text(context.l10n.grpJErrorRetry(inviteErrorMessage(e))),
+          child: Text(
+            context.l10n.grpJErrorRetry(inviteErrorMessage(e, context.l10n)),
+          ),
         ),
       ),
       data: (all) {
@@ -232,7 +233,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                 leading: CircleAvatar(child: Text(m.initials)),
                 title: Text(m.label),
                 subtitle: Text(
-                  '${context.l10n.grpJJoined(formatDate(m.joinedAt))}'
+                  '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
                   '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
                 ),
                 trailing: Row(

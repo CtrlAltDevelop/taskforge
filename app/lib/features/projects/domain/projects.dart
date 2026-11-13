@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const minKeyLength = 2;
 const maxKeyLength = 6;
@@ -206,23 +209,20 @@ class ProjectException implements Exception {
 }
 
 /// What to tell the user about a failed projects call.
-String projectErrorMessage(Object error) {
-  if (error is! ProjectException) return 'Something went wrong. Try again.';
+String projectErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! ProjectException) return t.grpLGeneric;
   return switch (error.failure) {
-    ProjectFailure.keyTaken => 'That key is already used by another project.',
-    ProjectFailure.keyLocked =>
-      'The key cannot change once the project has tasks.',
-    ProjectFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    ProjectFailure.lastMember => 'A private project needs at least one member.',
-    ProjectFailure.conflict =>
-      'This project changed in the meantime. Reloaded — try again.',
-    ProjectFailure.denied => error.detail ?? 'You do not have permission.',
-    ProjectFailure.forbidden => 'You do not have permission to do that.',
-    ProjectFailure.invalid => error.detail ?? 'Check the values and try again.',
-    ProjectFailure.notFound => 'That project no longer exists.',
-    ProjectFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    ProjectFailure.other => 'Something went wrong. Try again.',
+    ProjectFailure.keyTaken => t.grpLKeyTaken,
+    ProjectFailure.keyLocked => t.grpLKeyLocked,
+    ProjectFailure.archived => t.grpLArchived,
+    ProjectFailure.lastMember => t.grpLLastMember,
+    ProjectFailure.conflict => t.grpLProjConflict,
+    ProjectFailure.denied => error.detail ?? t.grpLNoPerm,
+    ProjectFailure.forbidden => t.grpLNoPermDo,
+    ProjectFailure.invalid => error.detail ?? t.grpLCheckValues,
+    ProjectFailure.notFound => t.grpLProjectGone,
+    ProjectFailure.network => t.grpLNetCheck,
+    ProjectFailure.other => t.grpLGeneric,
   };
 }

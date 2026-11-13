@@ -103,7 +103,7 @@ class _SourceStep extends ConsumerWidget {
               for (final s in ImportSource.values)
                 RadioListTile<ImportSource?>(
                   key: Key('source-${s.wire}'),
-                  title: Text(s.label),
+                  title: Text(s.labelIn(context.l10n)),
                   value: s,
                 ),
             ],
@@ -173,7 +173,7 @@ class _UploadStep extends ConsumerWidget {
         Text(
           source == null
               ? context.l10n.grpCImpChooseGeneric
-              : context.l10n.grpCImpChooseSource(source.label),
+              : context.l10n.grpCImpChooseSource(source.labelIn(context.l10n)),
         ),
         const SizedBox(height: 4),
         Text(

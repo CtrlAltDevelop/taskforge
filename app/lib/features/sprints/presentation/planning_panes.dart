@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
@@ -86,7 +87,9 @@ class PlanningTaskRow extends StatelessWidget {
       ),
       trailing: ActionChip(
         key: Key('points-${task.id}'),
-        label: Text(points == null ? '—' : pointsText(points)),
+        label: Text(
+          points == null ? '—' : context.localDigits(pointsText(points)),
+        ),
         tooltip: context.l10n.grpGStoryPoints,
         onPressed: onPoints,
       ),
@@ -148,7 +151,9 @@ class CapacityBar extends StatelessWidget {
     final unit = hours
         ? context.l10n.grpGUnitHours
         : context.l10n.grpGUnitPoints;
-    final load = pointsText(double.parse(capacity.load.toStringAsFixed(1)));
+    final load = context.localDigits(
+      pointsText(double.parse(capacity.load.toStringAsFixed(1))),
+    );
     final cap = capacity.capacity;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -160,7 +165,11 @@ class CapacityBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   capacity.known
-                      ? context.l10n.grpGLoadOf(load, unit, decimalText(cap!))
+                      ? context.l10n.grpGLoadOf(
+                          load,
+                          unit,
+                          context.localDigits(decimalText(cap!)),
+                        )
                       : context.l10n.grpGLoadNoCapacity(load, unit),
                   key: const Key('capacity-text'),
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -203,8 +212,10 @@ class CapacityBar extends StatelessWidget {
           if (capacity.over)
             Text(
               context.l10n.grpGOverCapacity(
-                pointsText(
-                  double.parse((-capacity.remaining).toStringAsFixed(1)),
+                context.localDigits(
+                  pointsText(
+                    double.parse((-capacity.remaining).toStringAsFixed(1)),
+                  ),
                 ),
                 unit,
               ),
@@ -272,7 +283,7 @@ class TaskListPane extends ConsumerWidget {
               children: [for (final t in value) rowBuilder(t)],
             ),
             AsyncError(:final error) => Center(
-              child: Text(sprintErrorMessage(error)),
+              child: Text(sprintErrorMessage(error, context.l10n)),
             ),
             _ => const Center(child: CircularProgressIndicator()),
           },

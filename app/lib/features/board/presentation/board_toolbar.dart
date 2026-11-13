@@ -101,7 +101,8 @@ class BoardToolbar extends ConsumerWidget {
                   value: key,
                   checked: layout.cardFields.contains(key),
                   child: Text(
-                    builtInCardFields[key] ?? lookups.columnLabel(key),
+                    builtInCardFieldLabelIn(context.l10n, key) ??
+                        lookups.columnLabel(key, context.l10n),
                   ),
                 ),
             ],

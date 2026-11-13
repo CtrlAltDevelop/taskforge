@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 
 /// The eye on a task: watching it means hearing about its comments and status
 /// changes.
@@ -17,7 +18,9 @@ class WatchButton extends ConsumerWidget {
     final ref0 = (project: projectId, task: taskId);
     final state = ref.watch(watchProvider(ref0));
     final watching = state.value?.watching ?? false;
-    final tip = watching ? 'Stop watching this task' : 'Watch this task';
+    final tip = watching
+        ? context.l10n.grp1StopWatchingTask
+        : context.l10n.grp1WatchTask;
     return IconButton(
       key: const Key('watch-toggle'),
       tooltip: tip,
@@ -31,9 +34,12 @@ class WatchButton extends ConsumerWidget {
               try {
                 await ref.read(watchProvider(ref0).notifier).toggle();
               } on Object catch (e) {
+                if (!context.mounted) return;
                 messenger
                   ?..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(content: Text(inboxErrorMessage(e))));
+                  ..showSnackBar(
+                    SnackBar(content: Text(inboxErrorMessage(e, context.l10n))),
+                  );
               }
             },
     );

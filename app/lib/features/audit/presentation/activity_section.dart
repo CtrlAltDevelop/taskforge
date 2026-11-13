@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/audit/application/audit_providers.dart';
 import 'package:taskforge/features/audit/domain/activity_lines.dart';
@@ -76,7 +77,12 @@ class ActivityList extends ConsumerWidget {
     final children = <Widget>[];
     String? heading;
     for (final line in lines) {
-      final h = dayHeading(now, line.entry.at);
+      final h = dayHeading(
+        now,
+        line.entry.at,
+        context.l10n,
+        context.localePrefs,
+      );
       if (h != heading) {
         heading = h;
         children.add(
@@ -104,7 +110,11 @@ class ActivityList extends ConsumerWidget {
             onPressed: state.loadingMore
                 ? null
                 : ref.read(taskActivityProvider(task).notifier).more,
-            child: Text(state.loadingMore ? 'Loading…' : 'Show older'),
+            child: Text(
+              state.loadingMore
+                  ? context.l10n.grpBLoading
+                  : context.l10n.grpBShowOlder,
+            ),
           ),
       ],
     );
@@ -129,8 +139,10 @@ class _Line extends StatelessWidget {
         e.actorType == 'user' ? Icons.person_outline : Icons.smart_toy_outlined,
         size: 18,
       ),
-      title: Text('${e.who} ${describeEntry(e, labels)}'),
-      subtitle: Text(relativeTime(now, e.at)),
+      title: Text('${e.whoIn(context.l10n)} ${describeEntry(e, labels)}'),
+      subtitle: Text(
+        relativeTime(now, e.at, context.l10n, context.localePrefs),
+      ),
     );
   }
 }
@@ -145,7 +157,10 @@ class _Failed extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     children: [
       Expanded(
-        child: Text(auditErrorMessage(error), key: const Key('activity-error')),
+        child: Text(
+          auditErrorMessage(error, context.l10n),
+          key: const Key('activity-error'),
+        ),
       ),
       TextButton(
         key: const Key('activity-retry'),

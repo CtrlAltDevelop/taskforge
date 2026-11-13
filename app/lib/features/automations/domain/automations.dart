@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 // Limits mirror the server (`spec.py`); the server stays the authority.
 const maxRulesPerProject = 50;
@@ -63,6 +66,16 @@ enum TriggerType {
   final String wire;
   final String label;
 
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    taskCreated => l.grpMTrigTaskCreated,
+    statusChanged => l.grpMTrigStatusChanged,
+    fieldChanged => l.grpMTrigFieldChanged,
+    assigned => l.grpMTrigAssigned,
+    dueDateReached => l.grpMTrigDueDateReached,
+    commentAdded => l.grpMTrigCommentAdded,
+  };
+
   static TriggerType? tryParse(String wire) =>
       values.where((t) => t.wire == wire).firstOrNull;
 }
@@ -80,6 +93,17 @@ enum ActionType {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    setField => l.grpMActSetField,
+    setStatus => l.grpMActSetStatus,
+    setAssignee => l.grpMActSetAssignee,
+    addComment => l.grpMActAddComment,
+    createSubtask => l.grpMActCreateSubtask,
+    notify => l.grpMActNotify,
+    webhook => l.grpMActWebhook,
+  };
 
   static ActionType? tryParse(String wire) =>
       values.where((t) => t.wire == wire).firstOrNull;
@@ -468,8 +492,26 @@ enum RunStatus {
   final String wire;
   final String label;
 
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    succeeded => l.grpMRunSucceeded,
+    failed => l.grpMRunFailed,
+    skippedCondition => l.grpMRunSkippedCondition,
+    skippedLoop => l.grpMRunSkippedLoop,
+    skippedRate => l.grpMRunSkippedRate,
+  };
+
   static RunStatus? tryParse(String wire) =>
       values.where((s) => s.wire == wire).firstOrNull;
+
+  /// [meaning] in the language of [l].
+  String meaningIn(AppLocalizations l) => switch (this) {
+    succeeded => l.grpMMeanSucceeded,
+    failed => l.grpMMeanFailed,
+    skippedCondition => l.grpMMeanSkippedCondition,
+    skippedLoop => l.grpMMeanSkippedLoop,
+    skippedRate => l.grpMMeanSkippedRate,
+  };
 
   /// What this status means, in plain words.
   String get meaning => switch (this) {
@@ -519,6 +561,20 @@ class RunStep {
 
   String get label =>
       ActionType.tryParse(type)?.label ?? type.replaceAll('_', ' ');
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) =>
+      ActionType.tryParse(type)?.labelIn(l) ?? type.replaceAll('_', ' ');
+
+  /// [status] in the language of [l] (unknown words are shown as sent).
+  String statusIn(AppLocalizations l) => switch (status) {
+    'ok' => l.grpMStepOk,
+    'failed' => l.grpMStepFailed,
+    'not_run' => l.grpMStepNotRun,
+    'planned' => l.grpMStepPlanned,
+    'would_fail' => l.grpMStepWouldFail,
+    _ => status.replaceAll('_', ' '),
+  };
 }
 
 List<RunStep> decodeSteps(String raw) {
@@ -623,22 +679,18 @@ class AutomationException implements Exception {
   String toString() => 'AutomationException($failure)';
 }
 
-String automationErrorMessage(Object error) {
-  if (error is! AutomationException) return 'Something went wrong. Try again.';
+String automationErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! AutomationException) return t.grpLGeneric;
   final detail = error.detail;
   final hasDetail = detail != null && detail.isNotEmpty;
   return switch (error.failure) {
-    AutomationFailure.network =>
-      'Could not reach the server. Check your connection.',
-    AutomationFailure.denied =>
-      'You need the "manage automations" permission for that.',
-    AutomationFailure.notFound => 'That no longer exists.',
-    AutomationFailure.conflict =>
-      hasDetail
-          ? detail
-          : 'Someone else changed this rule first. Load the latest and retry.',
-    AutomationFailure.invalid => hasDetail ? detail : 'That is not valid.',
-    AutomationFailure.other => 'Something went wrong. Try again.',
+    AutomationFailure.network => t.grpLNetCheckShort,
+    AutomationFailure.denied => t.grpLAutoDenied,
+    AutomationFailure.notFound => t.grpLGone,
+    AutomationFailure.conflict => hasDetail ? detail : t.grpLAutoConflict,
+    AutomationFailure.invalid => hasDetail ? detail : t.grpLNotValid,
+    AutomationFailure.other => t.grpLGeneric,
   };
 }
 

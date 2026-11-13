@@ -282,7 +282,9 @@ class _BoardColumnViewState extends State<BoardColumnView> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            widget.canMove ? 'Drop a card here' : 'No cards',
+            widget.canMove
+                ? context.l10n.grp1DropCardHere
+                : context.l10n.grp1NoCards,
             key: Key('empty-${column.key}'),
           ),
         ),

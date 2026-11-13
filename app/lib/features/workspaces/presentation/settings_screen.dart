@@ -141,9 +141,9 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
           _busy = false;
           _stale = e.failure == WorkspaceFailure.stale;
           if (e.failure == WorkspaceFailure.slugTaken) {
-            _slugError = workspaceErrorMessage(e);
+            _slugError = workspaceErrorMessage(e, context.l10n);
           } else {
-            _error = workspaceErrorMessage(e);
+            _error = workspaceErrorMessage(e, context.l10n);
           }
         });
       }

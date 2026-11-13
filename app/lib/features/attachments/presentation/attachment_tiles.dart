@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
@@ -75,7 +76,7 @@ class AttachmentTile extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    formatBytes(file.size),
+                    context.localDigits(formatBytes(file.size)),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ],
@@ -83,9 +84,9 @@ class AttachmentTile extends StatelessWidget {
             ),
           ),
           if (onDelete != null)
-            Positioned(
+            PositionedDirectional(
               top: 0,
-              right: 0,
+              end: 0,
               child: IconButton(
                 key: Key('attachment-delete-${file.id}'),
                 tooltip: context.l10n.grpHDeleteFile(file.filename),
@@ -158,7 +159,7 @@ class AttachmentChip extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
-                              formatBytes(file.size),
+                              context.localDigits(formatBytes(file.size)),
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
                           ],
@@ -209,6 +210,7 @@ class UploadRow extends StatelessWidget {
         item.error ?? AttachmentFailure.other,
         detail: item.errorDetail,
       ),
+      l10n,
     ),
   };
 
@@ -225,7 +227,7 @@ class UploadRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${item.filename} · ${formatBytes(item.size)}',
+                  '${item.filename} · ${context.localDigits(formatBytes(item.size))}',
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (item.active && !item.kept)

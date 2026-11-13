@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
+import 'package:taskforge/core/i18n/weekday_names.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Asks until when to hide a notification: a preset or a date and time of the
 /// person's choosing. Null when they back out.
@@ -19,7 +22,7 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
               key: Key('snooze-preset-$i'),
               leading: const Icon(Icons.snooze),
               title: Text(p.label),
-              subtitle: Text(_describe(p.at)),
+              subtitle: Text(sheet.localDigits(_describe(p.at, sheet.l10n))),
               onTap: () => Navigator.of(sheet).pop(p.at),
             ),
           ListTile(
@@ -55,8 +58,8 @@ Future<DateTime?> _pickDateTime(BuildContext context, DateTime now) async {
   return at.isAfter(now) ? at : null;
 }
 
-String _describe(DateTime at) {
+String _describe(DateTime at, AppLocalizations l) {
   String two(int n) => n.toString().padLeft(2, '0');
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  final days = l.weekdayShortNames;
   return '${days[at.weekday - 1]} ${two(at.hour)}:${two(at.minute)}';
 }

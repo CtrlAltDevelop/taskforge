@@ -49,7 +49,7 @@ class TaskTrashScreen extends ConsumerWidget {
             onPressed: () => ref.invalidate(taskTrashProvider(project.id)),
             child: Text(
               context.l10n.grpFErrorRetry(
-                taskErrorMessage(mapTrashError(error)),
+                taskErrorMessage(mapTrashError(error), context.l10n),
               ),
             ),
           ),
@@ -70,7 +70,9 @@ class TaskTrashScreen extends ConsumerWidget {
           SnackBar(content: Text(l10n.grpFTaskRestored(task.displayId))),
         );
     } on TaskException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(taskErrorMessage(e, l10n))),
+      );
     }
   }
 }

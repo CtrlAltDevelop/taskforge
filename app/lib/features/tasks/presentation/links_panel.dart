@@ -60,7 +60,7 @@ class LinksPanel extends ConsumerWidget {
           loading: () => const LinearProgressIndicator(),
           error: (e, _) => Row(
             children: [
-              Expanded(child: Text(taskErrorMessage(e))),
+              Expanded(child: Text(taskErrorMessage(e, context.l10n))),
               TextButton(
                 key: const Key('retry-links'),
                 onPressed: () => ref.invalidate(taskLinksProvider(task.id)),
@@ -87,6 +87,7 @@ class LinksPanel extends ConsumerWidget {
     TaskLink link,
   ) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final workspace = ref.read(workspaceScopeProvider);
     if (workspace == null) return;
     try {
@@ -95,7 +96,7 @@ class LinksPanel extends ConsumerWidget {
           .removeLink(workspace, task.id, link.id);
     } on Object catch (e) {
       messenger.showSnackBar(
-        SnackBar(content: Text(taskErrorMessage(mapTaskError(e)))),
+        SnackBar(content: Text(taskErrorMessage(mapTaskError(e), l10n))),
       );
       return;
     }
@@ -127,7 +128,10 @@ class _Groups extends StatelessWidget {
           if (items.any((l) => l.kind == kind)) ...[
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(kind.label, style: theme.textTheme.labelMedium),
+              child: Text(
+                kind.labelIn(context.l10n),
+                style: theme.textTheme.labelMedium,
+              ),
             ),
             for (final link in items.where((l) => l.kind == kind))
               ListTile(
@@ -216,7 +220,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
       if (!mounted || id != _searchId) return;
       setState(() {
         _searching = false;
-        _error = taskErrorMessage(mapTaskError(e));
+        _error = taskErrorMessage(mapTaskError(e), context.l10n);
       });
     }
   }
@@ -243,7 +247,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _error = taskErrorMessage(mapTaskError(e));
+        _error = taskErrorMessage(mapTaskError(e), context.l10n);
       });
       return;
     }
@@ -268,7 +272,10 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
               isExpanded: true,
               items: [
                 for (final k in LinkKind.values)
-                  DropdownMenuItem(value: k, child: Text(k.label)),
+                  DropdownMenuItem(
+                    value: k,
+                    child: Text(k.labelIn(context.l10n)),
+                  ),
               ],
               onChanged: _busy ? null : (k) => setState(() => _kind = k!),
             ),

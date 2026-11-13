@@ -124,7 +124,9 @@ class TriggerEditor extends StatelessWidget {
         key: const Key('trigger-type'),
         label: context.l10n.grpCAutoEvent,
         value: trigger.type.wire,
-        items: {for (final t in TriggerType.values) t.wire: t.label},
+        items: {
+          for (final t in TriggerType.values) t.wire: t.labelIn(context.l10n),
+        },
         enabled: enabled,
         onChanged: (v) =>
             onChanged(Trigger(type: TriggerType.tryParse(v) ?? trigger.type)),
@@ -322,8 +324,8 @@ class _ActionEditorState extends State<ActionEditor> {
             value: _a.value,
             items: {
               for (final p in TaskPriority.values)
-                if (p != TaskPriority.none) p.wire: p.label,
-              'none': TaskPriority.none.label,
+                if (p != TaskPriority.none) p.wire: p.labelIn(context.l10n),
+              'none': TaskPriority.none.labelIn(context.l10n),
             },
             enabled: widget.enabled,
             onChanged: (v) => _set(_a.copyWith(value: v)),
@@ -452,7 +454,9 @@ class _ActionEditorState extends State<ActionEditor> {
           key: const Key('action-type'),
           label: context.l10n.grpCAutoDoThis,
           value: _a.type.wire,
-          items: {for (final t in ActionType.values) t.wire: t.label},
+          items: {
+            for (final t in ActionType.values) t.wire: t.labelIn(context.l10n),
+          },
           enabled: widget.enabled,
           onChanged: (v) {
             final type = ActionType.tryParse(v) ?? _a.type;

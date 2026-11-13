@@ -105,7 +105,7 @@ class BoardCard extends StatelessWidget {
         _Chip(
           icon: priorityIcon(task.priority),
           color: priorityColor(task.priority),
-          label: task.priority.label,
+          label: task.priority.labelIn(context.l10n),
         ),
       if (cardFields.contains('due_date') && task.dueDate.isNotEmpty)
         _Chip(icon: Icons.event_outlined, label: task.dueDate),
@@ -115,6 +115,7 @@ class BoardCard extends StatelessWidget {
                 field,
                 task.fieldValues[field.id] ?? '',
                 userLabel: lookups.person,
+                l10n: context.l10n,
               )
               case final text when text.isNotEmpty)
             _Chip(label: '${field.name}: $text'),

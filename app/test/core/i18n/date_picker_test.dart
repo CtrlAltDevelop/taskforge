@@ -127,4 +127,50 @@ void main() {
     await _open(tester, const LocalePrefs(), (_) {});
     expect(find.byType(DatePickerDialog), findsOneWidget);
   });
+
+  testWidgets('range picker asks for a start then an end in Jalali', (
+    tester,
+  ) async {
+    DateTimeRange? result;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [localePrefsProvider.overrideWith(() => _Prefs(jalali))],
+        child: MaterialApp(
+          locale: jalali.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            FallbackCupertinoDelegate(),
+          ],
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () async => result = await showAppDateRangePicker(
+                context: context,
+                firstDate: DateTime(2020),
+                lastDate: DateTime(2030),
+                initialDateRange: DateTimeRange(
+                  start: DateTime(2025, 3, 21),
+                  end: DateTime(2025, 3, 21),
+                ),
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      ),
+    );
+    final ok = lookupAppLocalizations(const Locale('fa')).pickDateOk;
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('jalali-day-5')));
+    await tester.tap(find.text(ok));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('jalali-day-9')));
+    await tester.tap(find.text(ok));
+    await tester.pumpAndSettle();
+    expect(result?.start, DateTime(2025, 3, 25));
+    expect(result?.end, DateTime(2025, 3, 29));
+  });
 }

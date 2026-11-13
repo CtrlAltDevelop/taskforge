@@ -936,7 +936,7 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String grpBVersionShort(int version) {
-    return 'v$version';
+    return 'نسخه $version';
   }
 
   @override
@@ -1373,6 +1373,7 @@ class AppLocalizationsPs extends AppLocalizations {
       n,
       locale: localeName,
       other: '$n دندې وګمارل شوې.',
+      one: '$n دنده وګمارل شوه.',
     );
     return '$_temp0';
   }
@@ -1393,6 +1394,7 @@ class AppLocalizationsPs extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count دندې',
+      one: '$count دنده',
     );
     return '$email · $_temp0';
   }
@@ -1741,6 +1743,7 @@ class AppLocalizationsPs extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count عملونه',
+      one: '$count عمل',
     );
     return 'کله چې $trigger · $_temp0';
   }
@@ -2103,7 +2106,13 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String grpDRepeatUpdatedLater(int count) {
-    return '$count وروسته پرانیستې دندې تازه شوې.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وروسته پرانیستې دندې تازه شوې.',
+      one: '$count وروسته پرانیستې دنده تازه شوه.',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -4685,7 +4694,13 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String grpJUsesCount(int count) {
-    return '$count ځله کارول';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ځله کارول شو',
+      one: '$count ځل کارول شو',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -4970,4 +4985,1128 @@ class AppLocalizationsPs extends AppLocalizations {
   String grpJPingError(String error) {
     return 'تېروتنه: $error';
   }
+
+  @override
+  String get grpKClosePalette => 'د قوماندو پالټ تړل';
+
+  @override
+  String get grpKGroupGeneral => 'عمومي';
+
+  @override
+  String get grpKGroupGoTo => 'ورتلل';
+
+  @override
+  String get grpKGroupProjects => 'پروژې';
+
+  @override
+  String get grpKGroupWorkspace => 'کاري ځای';
+
+  @override
+  String get grpKGroupAccount => 'حساب';
+
+  @override
+  String get grpKGroupThisProject => 'دا پروژه';
+
+  @override
+  String get grpKGroupDocs => 'اسناد';
+
+  @override
+  String get grpKGroupDashboards => 'ډیشبورډونه';
+
+  @override
+  String get grpKGroupListView => 'د لیست لید';
+
+  @override
+  String get grpKGroupThisTask => 'دا دنده';
+
+  @override
+  String grpKGoTo(String title) {
+    return '$title ته ورتلل';
+  }
+
+  @override
+  String grpKProjectPageOf(String title) {
+    return 'د دې پروژې $title';
+  }
+
+  @override
+  String get grpKPaletteOpen => 'د قوماندو پالټ خلاصول';
+
+  @override
+  String get grpKSearch => 'لټون';
+
+  @override
+  String get grpKSearchSem => 'دندې، نظرونه، پروژې او خلک ولټوئ';
+
+  @override
+  String get grpKShortcuts => 'د کیبورډ شارټکټونه';
+
+  @override
+  String get grpKShortcutsSem => 'د کیبورډ شارټکټونه ښکاره کړئ';
+
+  @override
+  String get grpKTHome => 'کور';
+
+  @override
+  String get grpKTInbox => 'ان‌باکس';
+
+  @override
+  String get grpKTCalendar => 'د کاري ځای کلیز';
+
+  @override
+  String get grpKTDocs => 'اسناد';
+
+  @override
+  String get grpKTDashboards => 'ډیشبورډونه';
+
+  @override
+  String get grpKTTimesheet => 'د وخت پاڼه';
+
+  @override
+  String get grpKTMembers => 'غړي';
+
+  @override
+  String get grpKTArchivedProjects => 'آرشیف شوې پروژې';
+
+  @override
+  String get grpKTPrivateProjects => 'شخصي پروژې';
+
+  @override
+  String get grpKTWorkspaceSettings => 'د کاري ځای تنظیمات';
+
+  @override
+  String get grpKAuditLog => 'د پلټنې لاګ';
+
+  @override
+  String get grpKAuditSem => 'د پلټنې لاګ ته ورتلل';
+
+  @override
+  String get grpKTRoles => 'رولونه او اجازې';
+
+  @override
+  String get grpKTCreateWorkspace => 'کاري ځای جوړول';
+
+  @override
+  String get grpKTNotifPrefs => 'د خبرتیاوو غوره توبونه';
+
+  @override
+  String get grpKTDevices => 'ننوتي وسایل';
+
+  @override
+  String get grpKTChangePassword => 'پټنوم بدلول';
+
+  @override
+  String get grpKTTasks => 'دندې';
+
+  @override
+  String get grpKTSprints => 'سپرنټونه';
+
+  @override
+  String get grpKTAutomations => 'اتومات کارونه';
+
+  @override
+  String get grpKTWorkflow => 'د کار بهیر';
+
+  @override
+  String get grpKTCustomFields => 'ګمارل شوې ساحې';
+
+  @override
+  String get grpKTProjectSettings => 'د پروژې تنظیمات';
+
+  @override
+  String get grpKSwitchWs => 'کاري ځای بدلول';
+
+  @override
+  String get grpKSwitchWsSem => 'بل کاري ځای ته تلل';
+
+  @override
+  String get grpKToggleDark => 'تیاره حالت بدلول';
+
+  @override
+  String get grpKToggleDarkSem => 'د روښانه او تیاره بڼې ترمنځ بدلول';
+
+  @override
+  String get grpKCreateProject => 'پروژه جوړول';
+
+  @override
+  String get grpKCreateDoc => 'سند جوړول';
+
+  @override
+  String get grpKCreateDashboard => 'ډیشبورډ جوړول';
+
+  @override
+  String get grpKCreateSprint => 'سپرنټ جوړول';
+
+  @override
+  String get grpKCreateSprintSem => 'په دې پروژه کې سپرنټ جوړول';
+
+  @override
+  String get grpKInviteMember => 'غړی بلل';
+
+  @override
+  String get grpKInviteMemberSem => 'یو څوک دې کاري ځای ته بلل';
+
+  @override
+  String get grpKTImportExport => 'واردول او صادرول';
+
+  @override
+  String get grpKTOffline => 'آفلاین او ذخیره';
+
+  @override
+  String get grpKSignOut => 'وتل';
+
+  @override
+  String get grpKSignOutSem => 'له دې وسیلې وتل';
+
+  @override
+  String get grpKNewTask => 'نوې دنده';
+
+  @override
+  String get grpKNewTaskSem => 'په دې پروژه کې دنده جوړول';
+
+  @override
+  String get grpKRenameTask => 'د کرسر لاندې دنده نوم بدلول';
+
+  @override
+  String get grpKRenameTaskSem => 'په لیست کې د کرسر دنده نوم بدلول';
+
+  @override
+  String get grpKChangeStatus => 'د دې دندې حالت بدلول';
+
+  @override
+  String get grpKChangeStatusSem => 'د پرانیستې دندې حالت بدلول';
+
+  @override
+  String get grpKAssignMe => 'دا دنده ماته سپارل';
+
+  @override
+  String get grpKAssignMeSem => 'پرانیستې دنده ماته سپارل';
+
+  @override
+  String get grpKTimerStart => 'د دې دندې لپاره ټایمر پیلول';
+
+  @override
+  String get grpKTimerStartSem => 'د پرانیستې دندې ټایمر پیلول';
+
+  @override
+  String get grpKTimerStop => 'ټایمر ودرول';
+
+  @override
+  String get grpKTimerStopSem => 'روان ټایمر ودرول';
+
+  @override
+  String get grpKViewList => 'د لیست لید';
+
+  @override
+  String get grpKViewBoard => 'د تختې لید';
+
+  @override
+  String get grpKViewCalendar => 'د کلیز لید';
+
+  @override
+  String get grpKViewTimeline => 'د مهال ویش لید';
+
+  @override
+  String get grpKShowList => 'دا پروژه د لیست په توګه ښکاره کړئ';
+
+  @override
+  String get grpKShowBoard => 'دا پروژه د تختې په توګه ښکاره کړئ';
+
+  @override
+  String get grpKShowCalendar => 'دا پروژه د کلیز په توګه ښکاره کړئ';
+
+  @override
+  String get grpKShowTimeline => 'دا پروژه د مهال ویش په توګه ښکاره کړئ';
+
+  @override
+  String get grpLGeneric => 'یوه ستونزه رامنځته شوه. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNetCheck =>
+      'سرور ته نه شي رسیدلی. خپل اتصال وګورئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNetCheckShort => 'سرور ته نه شو رسیدلی. خپل اتصال وګورئ.';
+
+  @override
+  String get grpLNetTry => 'سرور ته نه شو رسیدلی. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNetOffline =>
+      'دا د سرور سره اتصال ته اړتیا لري. کله چې بیا آنلاین شئ، بیا به کار وکړي.';
+
+  @override
+  String get grpLNoConn => 'اتصال نشته. وګورئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNoPerm => 'تاسو اجازه نلرئ.';
+
+  @override
+  String get grpLNoPermDo => 'تاسو د دې کار اجازه نلرئ.';
+
+  @override
+  String get grpLNoAccess => 'تاسو ورته لاسرسی نلرئ.';
+
+  @override
+  String get grpLCheckValues => 'ارزښتونه وګورئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNotValid => 'دا اعتبار نلري.';
+
+  @override
+  String get grpLArchived =>
+      'دا پروژه آرشیف شوې ده. د بدلونونو لپاره یې بیا فعاله کړئ.';
+
+  @override
+  String get grpLGone => 'دا نور شتون نلري.';
+
+  @override
+  String get grpLTaskConflict => 'بل چا لومړی دا دنده بدله کړې.';
+
+  @override
+  String get grpLTaskTransition => 'کاري جریان دا لیږد نه منی.';
+
+  @override
+  String get grpLTaskHasSubtasks =>
+      'دې دندې فرعي دندې لري: وټاکئ چې څه به پرې کیږي.';
+
+  @override
+  String get grpLTaskCycle =>
+      'یوه دنده نشي کولی د ځان یا د خپلو فرعي دندو فرعي دنده شي.';
+
+  @override
+  String grpLTaskBlocked(String detail) {
+    return 'د $detail له امله بنده ده: لومړی هغه بشپړ کړئ.';
+  }
+
+  @override
+  String grpLTaskLinkCycle(String detail) {
+    return 'دا دندې به په یوه کړۍ کې یو بل بندې کړي: $detail.';
+  }
+
+  @override
+  String get grpLTaskLinkExists =>
+      'دا دندې مخکې له مخکې په همدې ډول تړل شوې دي.';
+
+  @override
+  String get grpLFieldRequired => 'یوه اړینه ساحه ارزښت نلري.';
+
+  @override
+  String get grpLTaskGone => 'دا دنده نور شتون نلري.';
+
+  @override
+  String get grpLCommentConflict => 'یو چا لومړی دا تبصره بدله کړې.';
+
+  @override
+  String get grpLCommentLocked => 'دا تبصره نور د سمون وړ نه ده.';
+
+  @override
+  String get grpLMentionNoAccess =>
+      'یو څوک چې تاسو یادونه کړې دا دنده نشي لیدلی.';
+
+  @override
+  String get grpLCommentCheck => 'تبصره وګورئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLCommentGone => 'دا تبصره نور شتون نلري.';
+
+  @override
+  String get grpLSlugTaken => 'دا یو آر ایل نیول شوی';
+
+  @override
+  String get grpLWsStale =>
+      'دا کاري ځای بل ځای کې بدل شوی. وروستی نسخه لیدلو لپاره تازه کړئ.';
+
+  @override
+  String get grpLWsNotRestorable => 'دا کاري ځای نور بیا نشي رغول کېدی.';
+
+  @override
+  String get grpLOwnerNeeded => 'یو کاري ځای لږ تر لږه یو مالک ته اړتیا لري.';
+
+  @override
+  String get grpLInvEmailMismatch => 'دا بلنه د بل بریښنالیک پتې لپاره ده.';
+
+  @override
+  String get grpLInvExpired => 'دا بلنه پای ته رسیدلې. نوې بلنه وغواړئ.';
+
+  @override
+  String get grpLInvRevoked => 'دا بلنه لغوه شوې.';
+
+  @override
+  String get grpLInvBeforeRemoval =>
+      'دا بلنه ستاسو له لرې کېدو دمخه ده. نوې بلنه وغواړئ.';
+
+  @override
+  String get grpLInvUsedUp => 'دا بلنه مخکې کارول شوې او ختمه شوې.';
+
+  @override
+  String get grpLInvNotFound => 'دا بلنه شتون نلري.';
+
+  @override
+  String get grpLInvRate =>
+      'همدا اوس ډیرې بلنې دي. لږ انتظار وکړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLInvExists => 'دا کس مخکې بلل شوی یا غړی دی.';
+
+  @override
+  String get grpLWfInvalid =>
+      'کاري جریان ستونزې لري. د خوندي کولو لپاره یې حل کړئ.';
+
+  @override
+  String get grpLWfConflict =>
+      'بل چا لومړی کاري جریان خوندي کړ. ستاسو بدلونونه لا دلته دي: بدلونونه وګورئ او بیا خوندي کړئ.';
+
+  @override
+  String get grpLProjectGone => 'دا پروژه نور شتون نلري.';
+
+  @override
+  String get grpLDashDenied => 'تاسو په دې ډشبورډ کې د دې کار اجازه نلرئ.';
+
+  @override
+  String get grpLDashNotFound => 'دا ډشبورډ یا ویجټ شتون نلري.';
+
+  @override
+  String get grpLDashHeavy =>
+      'د دې ویجټ محاسبه ډیر وخت نیسي. فلټر یې محدود کړئ.';
+
+  @override
+  String get grpLDashConflict =>
+      'بل چا دا ډشبورډ بدل کړ. بیا یې بار کړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLNotifGone => 'دا خبرتیا نور شتون نلري.';
+
+  @override
+  String get grpLViewConflict => 'بل چا لومړی دا ترتیب بدل کړ.';
+
+  @override
+  String get grpLViewInvalid => 'دا ترتیب اعتبار نلري.';
+
+  @override
+  String get grpLViewNameTaken => 'د دې نوم ترتیب مخکې شتون لري.';
+
+  @override
+  String get grpLViewLimit => 'دا ډیر ترتیبونه دي چې دلته یې ساتلی شئ.';
+
+  @override
+  String get grpLViewGone => 'دا ترتیب نور شتون نلري.';
+
+  @override
+  String get grpLAutoDenied =>
+      'د دې لپاره تاسو ته د «د اتومات کارونو مدیریت» اجازه پکار ده.';
+
+  @override
+  String get grpLAutoConflict =>
+      'بل چا لومړی دا قاعده بدله کړه. وروستۍ نسخه بار کړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLImpCannot => 'دا همدا اوس نشي کېدی.';
+
+  @override
+  String get grpLImpTooBig => 'دا فایل له هغه څخه لوی دی چې دا سرور یې مني.';
+
+  @override
+  String get grpLImpDenied => 'یوازې مدیران کولی شي معلومات واردوي او صادروي.';
+
+  @override
+  String get grpLImpNotFound => 'دا واردول نور شتون نلري.';
+
+  @override
+  String get grpLAuditDenied => 'تاسو د پلټنې ثبت لوستلو اجازه نلرئ.';
+
+  @override
+  String get grpLAuditTaskNA => 'دا دنده شتون نلري.';
+
+  @override
+  String get grpLAuditFilters => 'دا فلټرونه اعتبار نلري.';
+
+  @override
+  String get grpLSprintConflict =>
+      'بل چا لومړی دا بدل کړ. بیا بار کړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLFieldNameTaken => 'د دې نوم ساحه مخکې شتون لري.';
+
+  @override
+  String grpLFieldLimit(int count) {
+    return 'یوه پروژه ډیر تر ډیره $count فعالې ساحې لرلی شي.';
+  }
+
+  @override
+  String get grpLFieldNeedsRemap =>
+      'ځینې لرې شوي انتخابونه لا کارول کیږي: وټاکئ چې ارزښتونه یې څه شي.';
+
+  @override
+  String get grpLFieldConflict =>
+      'بل چا لومړی دا ساحه بدله کړه؛ بیا بار کړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get grpLFieldGone => 'دا ساحه نور شتون نلري.';
+
+  @override
+  String get grpLFilterInvalid => 'دا فلټر اعتبار نلري.';
+
+  @override
+  String get grpLFilterNameTaken => 'دلته د دې نوم فلټر مخکې شتون لري.';
+
+  @override
+  String get grpLFilterLimit => 'دا ډیر فلټرونه دي چې دلته یې ساتلی شئ.';
+
+  @override
+  String get grpLFilterGone => 'دا فلټر نور شتون نلري.';
+
+  @override
+  String get grpLFilterConflict => 'بل چا لومړی دا فلټر بدل کړ.';
+
+  @override
+  String get grpLAttTooBig => 'دا فایل له هغه څخه لوی دی چې ضمیمه یې کېدی شي.';
+
+  @override
+  String get grpLAttQuota => 'دا کاري ځای خپل ټول ذخیره کارولی.';
+
+  @override
+  String get grpLAttTooMany =>
+      'ډیر پورته کولو پرانیستل شوي دي. لومړی ځینې بشپړ یا لغوه کړئ.';
+
+  @override
+  String get grpLAttUnavailable =>
+      'فایل همدا اوس نه شو کتل کېدی. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLAttChunk => 'د فایل یوه برخه ونه منل شوه. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLAttRefusedPlain => 'دا ډول فایل نه منل کیږي.';
+
+  @override
+  String grpLAttRefused(String detail) {
+    return 'دا فایل نه منل کیږي: $detail';
+  }
+
+  @override
+  String get grpLAttIncomplete => 'پورته کول بشپړ نشول. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLAttExpired => 'دا پورته کول پای ته ورسیدل. بیا هڅه وکړئ.';
+
+  @override
+  String get grpLAttUnreadable => 'دا فایل ونه لوستل شو.';
+
+  @override
+  String get grpLAttNotAllowed => 'تاسو د دې کار اجازه نلرئ.';
+
+  @override
+  String get grpLAttArchived =>
+      'دا پروژه آرشیف شوې ده: فایلونه یوازې د لوستلو دي.';
+
+  @override
+  String get grpLAttGone => 'دا لرې شوی: فایل، تبصره یا دنده لرې شوې ده.';
+
+  @override
+  String get grpLDocNotFound => 'دا پاڼه شتون نلري یا تاسو یې نشئ خلاصولی.';
+
+  @override
+  String get grpLDocConflict => 'بل چا لومړی دا پاڼه بدله کړه.';
+
+  @override
+  String get grpLDocArchived => 'دا پاڼه آرشیف شوې ده.';
+
+  @override
+  String get grpLDocCycle => 'یوه پاڼه نشي کولی د ځان لاندې شي.';
+
+  @override
+  String get grpLKeyTaken => 'دا کیلي مخکې د بلې پروژې له خوا کارول شوې.';
+
+  @override
+  String get grpLKeyLocked => 'کله چې پروژه دندې ولري، کیلي نشي بدلېدی.';
+
+  @override
+  String get grpLLastMember => 'یوه خصوصي پروژه لږ تر لږه یو غړي ته اړتیا لري.';
+
+  @override
+  String get grpLProjConflict =>
+      'دا پروژه په دې موده کې بدله شوه. بیا بار شوه — بیا هڅه وکړئ.';
+
+  @override
+  String get grpLRoleBuiltin => 'جوړ شوي رولونه نشي بدلېدی یا ړنګېدی.';
+
+  @override
+  String get grpLRoleNameTaken => 'د دې نوم رول مخکې شتون لري.';
+
+  @override
+  String get grpLRoleGone => 'دا رول نور شتون نلري.';
+
+  @override
+  String get grpLRoleConflict =>
+      'دا رول په دې موده کې بدل شو. بیا بار شو — بیا هڅه وکړئ.';
+
+  @override
+  String get grpLRepeatInvalid => 'دا تکرار اعتبار نلري.';
+
+  @override
+  String get grpLRepeatDenied => 'تاسو د دې د تکرار د بدلولو اجازه نلرئ.';
+
+  @override
+  String get grpMPriUrgent => 'بيړني';
+
+  @override
+  String get grpMPriHigh => 'لوړ';
+
+  @override
+  String get grpMPriNormal => 'عادي';
+
+  @override
+  String get grpMPriLow => 'ټیټ';
+
+  @override
+  String get grpMPriNone => 'هیڅ';
+
+  @override
+  String get grpMLinkBlocks => 'بندوي';
+
+  @override
+  String get grpMLinkBlockedBy => 'بندیږي د خوا';
+
+  @override
+  String get grpMLinkRelates => 'اړوند له';
+
+  @override
+  String get grpMLinkDuplicates => 'تکرار دی';
+
+  @override
+  String get grpMLinkDuplicatedBy => 'تکرار شوی د خوا';
+
+  @override
+  String get grpMCatNotStarted => 'نه دی پیل شوی';
+
+  @override
+  String get grpMCatActive => 'فعال';
+
+  @override
+  String get grpMCatDone => 'سرته رسېدلی';
+
+  @override
+  String get grpMCatCancelled => 'لغوه شوی';
+
+  @override
+  String get grpMFtypeText => 'متن';
+
+  @override
+  String get grpMFtypeNumber => 'شمېره';
+
+  @override
+  String get grpMFtypeSelect => 'غوراوی';
+
+  @override
+  String get grpMFtypeMulti => 'څو غوراوی';
+
+  @override
+  String get grpMFtypeDate => 'نېټه';
+
+  @override
+  String get grpMFtypeCheckbox => 'چک‌بکس';
+
+  @override
+  String get grpMFtypeUrl => 'لینک';
+
+  @override
+  String get grpMFtypeUser => 'کارن';
+
+  @override
+  String get grpMFtypeMoney => 'پیسې';
+
+  @override
+  String get grpMTrigTaskCreated => 'یو کار جوړ شي';
+
+  @override
+  String get grpMTrigStatusChanged => 'حالت بدل شي';
+
+  @override
+  String get grpMTrigFieldChanged => 'ساحه بدله شي';
+
+  @override
+  String get grpMTrigAssigned => 'یو څوک وګمارل شي';
+
+  @override
+  String get grpMTrigDueDateReached => 'د پای نېټه ورسیږي';
+
+  @override
+  String get grpMTrigCommentAdded => 'یو نظر زیات شي';
+
+  @override
+  String get grpMActSetField => 'یوه ساحه تنظیمول';
+
+  @override
+  String get grpMActSetStatus => 'حالت تنظیمول';
+
+  @override
+  String get grpMActSetAssignee => 'ګمارل شوي بدلول';
+
+  @override
+  String get grpMActAddComment => 'نظر زیاتول';
+
+  @override
+  String get grpMActCreateSubtask => 'فرعي کار جوړول';
+
+  @override
+  String get grpMActNotify => 'خلکو ته خبرتیا ورکول';
+
+  @override
+  String get grpMActWebhook => 'ویب‌هوک کالول';
+
+  @override
+  String get grpMRunSucceeded => 'بریالی';
+
+  @override
+  String get grpMRunFailed => 'ناکام';
+
+  @override
+  String get grpMRunSkippedCondition => 'پرېښودل شو: شرط';
+
+  @override
+  String get grpMRunSkippedLoop => 'ودرول شو: ګرځنده';
+
+  @override
+  String get grpMRunSkippedRate => 'ځنډول شو: ډېر اجراات';
+
+  @override
+  String get grpMWkNumber => 'شمېره';
+
+  @override
+  String get grpMWkBar => 'میلې چارټ';
+
+  @override
+  String get grpMWkLine => 'کرښنی چارټ';
+
+  @override
+  String get grpMWkPie => 'دایروي چارټ';
+
+  @override
+  String get grpMWkTable => 'جدول';
+
+  @override
+  String get grpMWkBurndown => 'برن‌ډاون';
+
+  @override
+  String get grpMWkWorkload => 'د کار بار';
+
+  @override
+  String get grpMMeasCount => 'د کارونو شمېر';
+
+  @override
+  String get grpMMeasPoints => 'د کیسې نقطې';
+
+  @override
+  String get grpMMeasEstimateHours => 'اټکل شوي ساعتونه';
+
+  @override
+  String get grpMMeasLoggedHours => 'ثبت شوي ساعتونه';
+
+  @override
+  String get grpMMeasCycleDays => 'د دورې وخت (ورځې)';
+
+  @override
+  String get grpMScopeAll => 'ټول کارونه';
+
+  @override
+  String get grpMScopeOpen => 'پرانیستي کارونه';
+
+  @override
+  String get grpMScopeDone => 'سرته رسېدلي کارونه';
+
+  @override
+  String get grpMVisPersonal => 'یوازې زه';
+
+  @override
+  String get grpMVisProject => 'په پروژه کې ټول';
+
+  @override
+  String get grpMVisWorkspace => 'په کارځای کې ټول';
+
+  @override
+  String get grpMLblStatus => 'حالت';
+
+  @override
+  String get grpMLblStatusCategory => 'د حالت کټه‌ګورۍ';
+
+  @override
+  String get grpMLblPerson => 'کس';
+
+  @override
+  String get grpMLblPriority => 'لومړیتوب';
+
+  @override
+  String get grpMLblProject => 'پروژه';
+
+  @override
+  String get grpMLblSprint => 'سپرنټ';
+
+  @override
+  String get grpMLblCreatedDay => 'جوړ شوی (ورځ)';
+
+  @override
+  String get grpMLblCreatedWeek => 'جوړ شوی (اونۍ)';
+
+  @override
+  String get grpMLblDueWeek => 'پای نېټه (اونۍ)';
+
+  @override
+  String get grpMImpJiraCsv => 'Jira (د CSV صادرول)';
+
+  @override
+  String get grpMImpJiraJson => 'Jira (JSON)';
+
+  @override
+  String get grpMImpClickupCsv => 'ClickUp (د CSV صادرول)';
+
+  @override
+  String get grpMImpClickupJson => 'ClickUp (JSON)';
+
+  @override
+  String get grpMImpCsv => 'هر CSV فایل';
+
+  @override
+  String get grpMImpTaskforge => 'د TaskForge صادرول (tasks.json)';
+
+  @override
+  String get grpMNkAssigned => 'تاسو ته ګمارل شوی';
+
+  @override
+  String get grpMNkMentioned => 'یادونې';
+
+  @override
+  String get grpMNkCommented => 'نظرونه';
+
+  @override
+  String get grpMNkStatusChanged => 'د حالت بدلونونه';
+
+  @override
+  String get grpMNkDueSoon => 'ژر پای نېټه';
+
+  @override
+  String get grpMNkTimerLong => 'اوږده ټایمرونه';
+
+  @override
+  String get grpMNkUnknown => 'خبرتیا';
+
+  @override
+  String get grpMIfAll => 'ټول';
+
+  @override
+  String get grpMIfUnread => 'ناسترګې شوي';
+
+  @override
+  String get grpMIfMentions => 'یادونې';
+
+  @override
+  String get grpMIfAssigned => 'ګمارل شوي';
+
+  @override
+  String get grpMIfSnoozed => 'ځنډول شوي';
+
+  @override
+  String get grpMIfArchived => 'آرشیف شوي';
+
+  @override
+  String get grpMEmOff => 'بند';
+
+  @override
+  String get grpMEmInstant => 'سمدستي';
+
+  @override
+  String get grpMEmDigest => 'ورځنی لنډیز';
+
+  @override
+  String get grpMRkSchedule => 'د مهال‌ویش له مخې';
+
+  @override
+  String get grpMRkAfterCompletion => 'وروسته له بشپړېدو';
+
+  @override
+  String get grpMLblOpEq => 'دی';
+
+  @override
+  String get grpMLblOpNe => 'نه دی';
+
+  @override
+  String get grpMLblOpLt => 'مخکې / له ... لږ';
+
+  @override
+  String get grpMLblOpLte => 'په یا مخکې / تر ټولو ډېر';
+
+  @override
+  String get grpMLblOpGt => 'وروسته / له ... ډېر';
+
+  @override
+  String get grpMLblOpGte => 'په یا وروسته / لږ تر لږه';
+
+  @override
+  String get grpMLblOpContains => 'لري';
+
+  @override
+  String get grpMLblOpNotContains => 'نه لري';
+
+  @override
+  String get grpMLblOpIn => 'یو له';
+
+  @override
+  String get grpMLblOpNotIn => 'هیڅ یو له';
+
+  @override
+  String get grpMLblOpEmpty => 'تش دی';
+
+  @override
+  String get grpMLblOpNotEmpty => 'تش نه دی';
+
+  @override
+  String get grpMLblAssignee => 'ګمارل شوی';
+
+  @override
+  String get grpMLblStart => 'پیل';
+
+  @override
+  String get grpMLblDue => 'پای نېټه';
+
+  @override
+  String get grpMLblCreated => 'جوړ شوی';
+
+  @override
+  String get grpMLblUpdated => 'تازه شوی';
+
+  @override
+  String get grpMLblDueDate => 'د پای نېټه';
+
+  @override
+  String get grpMLblProgress => 'د فرعي کارونو پرمختګ';
+
+  @override
+  String get grpMLblViewList => 'لیست';
+
+  @override
+  String get grpMLblViewBoard => 'تخته';
+
+  @override
+  String get grpMLblViewCalendar => 'کلیز';
+
+  @override
+  String get grpMLblViewTimeline => 'مهال کرښه';
+
+  @override
+  String get grpMRelNow => 'اوس';
+
+  @override
+  String get grpMRelJustNow => 'همدا اوس';
+
+  @override
+  String grpMRelMin(int n) {
+    return '$n دقیقې مخکې';
+  }
+
+  @override
+  String grpMRelHour(int n) {
+    return '$n ساعته مخکې';
+  }
+
+  @override
+  String get grpMRelYesterday => 'پرون';
+
+  @override
+  String grpMRelDay(int n) {
+    return '$n ورځې مخکې';
+  }
+
+  @override
+  String get grpMNotifSomeone => 'یو څوک';
+
+  @override
+  String grpMNotifAssigned(String who) {
+    return '$who تاسو ته وګمارل:';
+  }
+
+  @override
+  String grpMNotifMentioned(String who) {
+    return '$who تاسو په دې کې یاد کړل:';
+  }
+
+  @override
+  String grpMNotifCommented(String who) {
+    return '$who په دې نظر ورکړ:';
+  }
+
+  @override
+  String grpMNotifStatusChanged(String who) {
+    return '$who د حالت بدلون وکړ:';
+  }
+
+  @override
+  String grpMNotifMoved(String who, String fromStatus, String toStatus) {
+    return '$who له $fromStatus څخه $toStatus ته واړاوه';
+  }
+
+  @override
+  String get grpMNotifDueSoon => 'ژر پای نېټه:';
+
+  @override
+  String get grpMNotifTimer => 'ستاسو ټایمر لا هم روان دی:';
+
+  @override
+  String get grpMNotifNew => 'نوې فعالیت په:';
+
+  @override
+  String get grpMUnitDay => 'ورځ';
+
+  @override
+  String get grpMUnitDays => 'ورځې';
+
+  @override
+  String get grpMUnitWeek => 'اونۍ';
+
+  @override
+  String get grpMUnitWeeks => 'اونۍ';
+
+  @override
+  String get grpMUnitMonth => 'میاشت';
+
+  @override
+  String get grpMUnitMonths => 'میاشتې';
+
+  @override
+  String get grpMUnitYear => 'کال';
+
+  @override
+  String get grpMUnitYears => 'کلونه';
+
+  @override
+  String get grpMSlashText => 'متن';
+
+  @override
+  String get grpMSlashH1 => 'سرلیک ۱';
+
+  @override
+  String get grpMSlashH2 => 'سرلیک ۲';
+
+  @override
+  String get grpMSlashH3 => 'سرلیک ۳';
+
+  @override
+  String get grpMSlashBullet => 'نقطه‌ایز لیست';
+
+  @override
+  String get grpMSlashNumbered => 'شمېرلړ لیست';
+
+  @override
+  String get grpMSlashTodo => 'د کتنې لیست';
+
+  @override
+  String get grpMSlashQuote => 'نقل قول';
+
+  @override
+  String get grpMSlashCode => 'کوډ';
+
+  @override
+  String get grpMSlashTable => 'جدول';
+
+  @override
+  String get grpMSlashDivider => 'جلا کوونکی';
+
+  @override
+  String get grpMSlashImage => 'انځور';
+
+  @override
+  String get grpMSlashCallout => 'یادونه';
+
+  @override
+  String get grpMSlashTask => 'د کار کارت';
+
+  @override
+  String get grpMMeanSucceeded => 'ټول عملونه اجرا شول.';
+
+  @override
+  String get grpMMeanFailed =>
+      'یو عمل ناکام شو؛ مخکني عملونه سرته رسېدلي پاتې کېږي.';
+
+  @override
+  String get grpMMeanSkippedCondition =>
+      'پېښه برابره وه، خو کار شرط نه پوره کړ.';
+
+  @override
+  String get grpMMeanSkippedLoop =>
+      'قاعدو له ۵ زیاتو پړاوونو پورې نورې قاعدې فعالې کړې، نو دا اجرا د ګرځنده ختمولو لپاره ودرول شوه.';
+
+  @override
+  String get grpMMeanSkippedRate =>
+      'دا قاعده په تېرې دقیقې کې ۳۰ ځله اجرا شوې وه، نو دا اجرا پرېښودل شوه.';
+
+  @override
+  String get grpMStepOk => 'بریالی';
+
+  @override
+  String get grpMStepFailed => 'ناکام';
+
+  @override
+  String get grpMStepNotRun => 'نه دی اجرا شوی';
+
+  @override
+  String get grpMStepPlanned => 'پلان شوی';
+
+  @override
+  String get grpMStepWouldFail => 'ناکامېده';
+
+  @override
+  String get grp1DropCardHere => 'یو کارت دلته پرېږدئ';
+
+  @override
+  String get grp1NoCards => 'کارتونه نشته';
+
+  @override
+  String get grp1StopWatchingTask => 'د دې دندې تعقیب بند کړئ';
+
+  @override
+  String get grp1WatchTask => 'دا دنده تعقیب کړئ';
+
+  @override
+  String get grp1SecondFactorRequired => 'دویم فکتور اړین دی.';
+
+  @override
+  String get grp1AnAutomation => 'یوه اتومات';
+
+  @override
+  String get grp1TheSystem => 'سیسټم';
+
+  @override
+  String grp1MemberCount(int count) {
+    return '$count غړی';
+  }
+
+  @override
+  String get grp1SyncLive => 'ژوندی';
+
+  @override
+  String get grp1SyncConnecting => 'نښلول کیږي…';
+
+  @override
+  String get grp1SyncReconnecting => 'بیا نښلول کیږي…';
+
+  @override
+  String get grp1SyncLiveTip => 'د نورو بدلونونه هماغه وخت ښکاري';
+
+  @override
+  String get grp1SyncNotLiveTip =>
+      'ژوندی نه: د نورو بدلونونه د بیا نښلولو وروسته ښکاري';
+
+  @override
+  String get grp1EnterNumber => 'یو شمېره ولیکئ.';
+
+  @override
+  String get grp1EnterAmount => 'یوه اندازه ولیکئ.';
+
+  @override
+  String get grp1EnterCurrency => 'د ۳ توریو اسعار ولیکئ، لکه USD.';
+
+  @override
+  String get grp1EnterUrl => 'یوه ویب پته ولیکئ چې په http(s):// پیل شي';
+
+  @override
+  String get grp1UseIsoDate => 'د YYYY-MM-DD بڼه وکاروئ.';
 }

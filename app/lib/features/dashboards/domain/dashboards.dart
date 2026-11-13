@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// How many columns the grid has; a cell is `x..x+w` of them.
 const gridColumns = 12;
@@ -22,6 +25,17 @@ enum WidgetKind {
   final String wire;
   final String label;
 
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    number => l.grpMWkNumber,
+    bar => l.grpMWkBar,
+    line => l.grpMWkLine,
+    pie => l.grpMWkPie,
+    table => l.grpMWkTable,
+    burndown => l.grpMWkBurndown,
+    workload => l.grpMWkWorkload,
+  };
+
   static WidgetKind of(String wire) =>
       values.firstWhere((k) => k.wire == wire, orElse: () => number);
 
@@ -41,6 +55,15 @@ enum Measure {
   final String wire;
   final String label;
 
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    count => l.grpMMeasCount,
+    points => l.grpMMeasPoints,
+    estimateHours => l.grpMMeasEstimateHours,
+    loggedHours => l.grpMMeasLoggedHours,
+    cycleDays => l.grpMMeasCycleDays,
+  };
+
   static Measure of(String wire) =>
       values.firstWhere((m) => m.wire == wire, orElse: () => count);
 }
@@ -58,6 +81,20 @@ const groupings = <String, String>{
   'due_week': 'Due (week)',
 };
 
+/// The label of [key] in the language of [l]; null when unknown.
+String? groupingLabelIn(AppLocalizations l, String key) => switch (key) {
+  'status' => l.grpMLblStatus,
+  'category' => l.grpMLblStatusCategory,
+  'assignee' => l.grpMLblPerson,
+  'priority' => l.grpMLblPriority,
+  'project' => l.grpMLblProject,
+  'sprint' => l.grpMLblSprint,
+  'created_day' => l.grpMLblCreatedDay,
+  'created_week' => l.grpMLblCreatedWeek,
+  'due_week' => l.grpMLblDueWeek,
+  _ => null,
+};
+
 /// The groupings that make sense on a time axis.
 const timeGroupings = ['created_day', 'created_week', 'due_week'];
 
@@ -70,6 +107,13 @@ enum Scope {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    all => l.grpMScopeAll,
+    open => l.grpMScopeOpen,
+    done => l.grpMScopeDone,
+  };
 
   static Scope of(String wire) =>
       values.firstWhere((s) => s.wire == wire, orElse: () => all);
@@ -85,6 +129,13 @@ enum DashVisibility {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    personal => l.grpMVisPersonal,
+    project => l.grpMVisProject,
+    workspace => l.grpMVisWorkspace,
+  };
 
   static DashVisibility of(String wire) =>
       values.firstWhere((v) => v.wire == wire, orElse: () => personal);
@@ -475,19 +526,16 @@ class DashboardException implements Exception {
   String toString() => 'DashboardException($failure: $detail)';
 }
 
-String dashboardErrorMessage(Object error) {
+String dashboardErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
   final e = error is DashboardException ? error : null;
   return switch (e?.failure) {
-    DashboardFailure.denied =>
-      'You are not allowed to do that on this dashboard.',
-    DashboardFailure.notFound => 'That dashboard or widget is not available.',
-    DashboardFailure.invalid =>
-      e!.detail.isEmpty ? 'That is not valid.' : e.detail,
-    DashboardFailure.tooHeavy =>
-      'This widget takes too long to compute. Narrow its filter.',
-    DashboardFailure.conflict =>
-      'Someone else changed this dashboard. Reload it and try again.',
-    DashboardFailure.network => 'Could not reach the server. Try again.',
-    _ => 'Something went wrong. Try again.',
+    DashboardFailure.denied => t.grpLDashDenied,
+    DashboardFailure.notFound => t.grpLDashNotFound,
+    DashboardFailure.invalid => e!.detail.isEmpty ? t.grpLNotValid : e.detail,
+    DashboardFailure.tooHeavy => t.grpLDashHeavy,
+    DashboardFailure.conflict => t.grpLDashConflict,
+    DashboardFailure.network => t.grpLNetTry,
+    _ => t.grpLGeneric,
   };
 }

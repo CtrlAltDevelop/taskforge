@@ -1,4 +1,8 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Limits mirror the server (`rules.py`, `schedule.py`); the server stays the
 /// authority.
@@ -33,6 +37,12 @@ enum RepeatKind {
   final String wire;
   final String label;
 
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    schedule => l.grpMRkSchedule,
+    afterCompletion => l.grpMRkAfterCompletion,
+  };
+
   static RepeatKind parse(String wire) =>
       values.where((m) => m.wire == wire).firstOrNull ?? schedule;
 }
@@ -48,6 +58,14 @@ enum RepeatFreq {
   final String wire;
   final String unit;
 
+  /// [unit] (or its plural) in the language of [l].
+  String unitIn(AppLocalizations l, {bool plural = false}) => switch (this) {
+    daily => plural ? l.grpMUnitDays : l.grpMUnitDay,
+    weekly => plural ? l.grpMUnitWeeks : l.grpMUnitWeek,
+    monthly => plural ? l.grpMUnitMonths : l.grpMUnitMonth,
+    yearly => plural ? l.grpMUnitYears : l.grpMUnitYear,
+  };
+
   static RepeatFreq? tryParse(String wire) =>
       values.where((f) => f.wire == wire).firstOrNull;
 }
@@ -58,7 +76,6 @@ enum RepeatEnd { never, count, until }
 enum MonthlyBy { dayOfMonth, nthWeekday }
 
 const weekdayCodes = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
-const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 /// What the editor holds: a rule a person can write, turned to and from the
 /// RRULE text the server keeps (`FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TH`).
@@ -411,15 +428,16 @@ class RepeatException implements Exception {
   String toString() => 'RepeatException($failure)';
 }
 
-String repeatErrorMessage(Object error) {
-  if (error is! RepeatException) return 'Something went wrong. Try again.';
+String repeatErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! RepeatException) return t.grpLGeneric;
   final detail = error.detail;
   return switch (error.failure) {
     RepeatFailure.invalid =>
-      detail == null || detail.isEmpty ? 'That repeat is not valid.' : detail,
-    RepeatFailure.denied => 'You are not allowed to change how this repeats.',
-    RepeatFailure.notFound => 'That task no longer exists.',
-    RepeatFailure.network => 'Could not reach the server. Try again.',
-    RepeatFailure.other => 'Something went wrong. Try again.',
+      detail == null || detail.isEmpty ? t.grpLRepeatInvalid : detail,
+    RepeatFailure.denied => t.grpLRepeatDenied,
+    RepeatFailure.notFound => t.grpLTaskGone,
+    RepeatFailure.network => t.grpLNetTry,
+    RepeatFailure.other => t.grpLGeneric,
   };
 }

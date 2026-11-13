@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -123,7 +124,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       }
     } on TaskException catch (e) {
       tray?.restore(task);
-      if (mounted) _say(taskErrorMessage(e));
+      if (mounted) _say(taskErrorMessage(e, context.l10n));
     }
   }
 
@@ -155,7 +156,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text(formatDay(d)),
+          title: Text(context.localIso(d)),
           content: SizedBox(
             width: 360,
             height: 360,
@@ -313,7 +314,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             if (state.error != null)
               MaterialBanner(
                 key: const Key('calendar-error'),
-                content: Text(taskErrorMessage(state.error!)),
+                content: Text(taskErrorMessage(state.error!, context.l10n)),
                 actions: [
                   TextButton(
                     key: const Key('retry-calendar'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
@@ -116,7 +117,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                   state.job != null
                       ? context.l10n.grpGExportSavedSized(
                           '${state.saved}',
-                          humanSize(state.job!.size),
+                          context.localDigits(humanSize(state.job!.size)),
                         )
                       : context.l10n.grpGExportSaved('${state.saved}'),
                   key: const Key('export-done'),

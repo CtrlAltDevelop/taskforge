@@ -97,7 +97,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
       if (mounted) {
         setState(() {
           _busy = false;
-          _error = docErrorMessage(e);
+          _error = docErrorMessage(e, context.l10n);
         });
       }
     }
@@ -296,6 +296,9 @@ Future<void> exportMarkdown(
       ),
     );
   } on DocException catch (e) {
-    messenger.showSnackBar(SnackBar(content: Text(docErrorMessage(e))));
+    if (!context.mounted) return;
+    messenger.showSnackBar(
+      SnackBar(content: Text(docErrorMessage(e, context.l10n))),
+    );
   }
 }

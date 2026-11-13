@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/config.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -44,7 +45,9 @@ class PendingTab extends ConsumerWidget {
         child: TextButton(
           key: const Key('retry-invitations'),
           onPressed: () => ref.invalidate(invitationsProvider),
-          child: Text(context.l10n.grpJErrorRetry(inviteErrorMessage(e))),
+          child: Text(
+            context.l10n.grpJErrorRetry(inviteErrorMessage(e, context.l10n)),
+          ),
         ),
       ),
       data: (all) => all.isEmpty
@@ -109,7 +112,7 @@ class _InvitationTile extends ConsumerWidget {
       title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
       subtitle: Text(
         '${i.isLink ? '$uses · ' : ''}'
-        '${context.l10n.grpJInvitationMeta(i.createdByName, formatDate(i.expiresAt))}',
+        '${context.l10n.grpJInvitationMeta(i.createdByName, context.localDateOrEmpty(i.expiresAt))}',
       ),
       trailing: Wrap(
         spacing: 4,

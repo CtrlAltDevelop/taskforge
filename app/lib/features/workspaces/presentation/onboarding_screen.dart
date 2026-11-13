@@ -51,9 +51,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       setState(() {
         _busy = false;
         if (e.failure == WorkspaceFailure.slugTaken) {
-          _slugError = workspaceErrorMessage(e);
+          _slugError = workspaceErrorMessage(e, context.l10n);
         } else {
-          _error = workspaceErrorMessage(e);
+          _error = workspaceErrorMessage(e, context.l10n);
         }
       });
     }

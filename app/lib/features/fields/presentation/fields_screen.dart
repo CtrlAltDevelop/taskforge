@@ -72,7 +72,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           .create(_workspace, widget.projectId, draft);
       _refresh();
     } on Object catch (e) {
-      if (mounted) _say(fieldErrorMessage(mapAny(e)));
+      if (mounted) _say(fieldErrorMessage(mapAny(e), context.l10n));
     }
   }
 
@@ -110,7 +110,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
         return;
       }
       if (mounted) {
-        _say(fieldErrorMessage(error));
+        _say(fieldErrorMessage(error, context.l10n));
         if (error.failure == FieldFailure.conflict) _refresh();
       }
     }
@@ -135,7 +135,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           ),
         );
     } on Object catch (e) {
-      if (mounted) _say(fieldErrorMessage(mapAny(e)));
+      if (mounted) _say(fieldErrorMessage(mapAny(e), context.l10n));
     }
   }
 
@@ -144,7 +144,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
       await ref.read(fieldsClientProvider).restore(_workspace, field);
       _refresh();
     } on Object catch (e) {
-      if (mounted) _say(fieldErrorMessage(mapAny(e)));
+      if (mounted) _say(fieldErrorMessage(mapAny(e), context.l10n));
     }
   }
 
@@ -162,7 +162,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
     } on Object catch (e) {
       if (mounted) {
         setState(() => _reordered = null);
-        _say(fieldErrorMessage(mapAny(e)));
+        _say(fieldErrorMessage(mapAny(e), context.l10n));
       }
     }
   }
@@ -203,7 +203,9 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           child: TextButton(
             key: const Key('fields-retry'),
             onPressed: () => ref.invalidate(fieldsProvider(widget.projectId)),
-            child: Text(context.l10n.grpIErrorRetry(fieldErrorMessage(e))),
+            child: Text(
+              context.l10n.grpIErrorRetry(fieldErrorMessage(e, context.l10n)),
+            ),
           ),
         ),
         data: (loaded) {
@@ -286,7 +288,7 @@ class _FieldTile extends StatelessWidget {
       title: Text(field.name),
       subtitle: Text(
         [
-          field.type.label,
+          field.type.labelIn(context.l10n),
           if (field.required) context.l10n.grpIRequired,
           if (field.type.hasOptions)
             context.l10n.grpIOptionsCount(field.options.length),

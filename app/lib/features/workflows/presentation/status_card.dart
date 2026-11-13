@@ -138,7 +138,10 @@ class StatusCard extends StatelessWidget {
                 value: status.category,
                 items: [
                   for (final c in StatusCategory.values)
-                    DropdownMenuItem(value: c, child: Text(c.label)),
+                    DropdownMenuItem(
+                      value: c,
+                      child: Text(c.labelIn(context.l10n)),
+                    ),
                 ],
                 onChanged: canEdit
                     ? (c) {

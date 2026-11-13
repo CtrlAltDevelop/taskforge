@@ -11,10 +11,13 @@ class RecentlyDeleted extends ConsumerWidget {
 
   Future<void> _restore(BuildContext context, WidgetRef ref, String id) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       await ref.read(workspacesProvider.notifier).restore(id);
     } on WorkspaceException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(workspaceErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(workspaceErrorMessage(e, l10n))),
+      );
     }
   }
 

@@ -4,6 +4,8 @@ import 'dart:ui' show Locale;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 
+import 'package:taskforge/core/i18n/formatting.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The kinds of notification the server sends (its `type` and `event_type`).
@@ -20,6 +22,17 @@ enum NotificationKind {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    assigned => l.grpMNkAssigned,
+    mentioned => l.grpMNkMentioned,
+    commented => l.grpMNkCommented,
+    statusChanged => l.grpMNkStatusChanged,
+    dueSoon => l.grpMNkDueSoon,
+    timerLong => l.grpMNkTimerLong,
+    unknown => l.grpMNkUnknown,
+  };
   final IconData icon;
 
   static NotificationKind of(String type) => values.firstWhere(
@@ -41,6 +54,16 @@ enum InboxFilter {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    all => l.grpMIfAll,
+    unread => l.grpMIfUnread,
+    mentions => l.grpMIfMentions,
+    assigned => l.grpMIfAssigned,
+    snoozed => l.grpMIfSnoozed,
+    archived => l.grpMIfArchived,
+  };
 }
 
 /// One notification. [count] is how many events were folded into it. Times
@@ -111,6 +134,27 @@ class InboxNotification {
     NotificationKind.timerLong => 'Your timer is still running on',
     NotificationKind.unknown => 'New activity on',
   };
+
+  /// [who] in the language of [l].
+  String whoIn(AppLocalizations l) =>
+      actorName.isEmpty ? l.grpMNotifSomeone : actorName;
+
+  /// [what] in the language of [l].
+  String whatIn(AppLocalizations l) {
+    final w = whoIn(l);
+    return switch (kind) {
+      NotificationKind.assigned => l.grpMNotifAssigned(w),
+      NotificationKind.mentioned => l.grpMNotifMentioned(w),
+      NotificationKind.commented => l.grpMNotifCommented(w),
+      NotificationKind.statusChanged =>
+        from.isEmpty || to.isEmpty
+            ? l.grpMNotifStatusChanged(w)
+            : l.grpMNotifMoved(w, from, to),
+      NotificationKind.dueSoon => l.grpMNotifDueSoon,
+      NotificationKind.timerLong => l.grpMNotifTimer,
+      NotificationKind.unknown => l.grpMNotifNew,
+    };
+  }
 
   /// The task as the row names it ("WEB-12 Fix login").
   String get taskLabel => [key, title].where((s) => s.isNotEmpty).join(' ');
@@ -201,6 +245,13 @@ enum EmailMode {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    off => l.grpMEmOff,
+    instant => l.grpMEmInstant,
+    digest => l.grpMEmDigest,
+  };
 
   static EmailMode of(String wire) =>
       values.firstWhere((m) => m.wire == wire, orElse: () => off);
@@ -317,33 +368,38 @@ class InboxException implements Exception {
   String toString() => 'InboxException($failure)';
 }
 
-String inboxErrorMessage(Object error) {
-  if (error is! InboxException) return 'Something went wrong. Try again.';
+String inboxErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! InboxException) return t.grpLGeneric;
   return switch (error.failure) {
-    InboxFailure.network =>
-      'Could not reach the server. Check your connection.',
-    InboxFailure.denied ||
-    InboxFailure.forbidden => 'You do not have access to that.',
+    InboxFailure.network => t.grpLNetCheckShort,
+    InboxFailure.denied || InboxFailure.forbidden => t.grpLNoAccess,
     InboxFailure.invalid =>
       error.detail == null || error.detail!.isEmpty
-          ? 'That is not valid.'
+          ? t.grpLNotValid
           : error.detail!,
-    InboxFailure.notFound => 'That notification no longer exists.',
-    InboxFailure.other => 'Something went wrong. Try again.',
+    InboxFailure.notFound => t.grpLNotifGone,
+    InboxFailure.other => t.grpLGeneric,
   };
 }
 
 /// "now", "5 min ago", "3 h ago", "yesterday", "4 d ago", then the date.
-String relativeTime(DateTime then, DateTime now) {
+String relativeTime(
+  DateTime then,
+  DateTime now, [
+  AppLocalizations? l10n,
+  LocalePrefs? prefs,
+]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
   final diff = now.difference(then);
-  if (diff.isNegative || diff.inSeconds < 45) return 'now';
-  if (diff.inMinutes < 60) return '${diff.inMinutes.clamp(1, 59)} min ago';
-  if (diff.inHours < 24) return '${diff.inHours} h ago';
-  if (diff.inDays == 1) return 'yesterday';
-  if (diff.inDays < 7) return '${diff.inDays} d ago';
-  final local = then.toLocal();
-  String two(int n) => n.toString().padLeft(2, '0');
-  return '${local.year}-${two(local.month)}-${two(local.day)}';
+  if (diff.isNegative || diff.inSeconds < 45) return l.grpMRelNow;
+  if (diff.inMinutes < 60) {
+    return l.grpMRelMin(diff.inMinutes.clamp(1, 59));
+  }
+  if (diff.inHours < 24) return l.grpMRelHour(diff.inHours);
+  if (diff.inDays == 1) return l.grpMRelYesterday;
+  if (diff.inDays < 7) return l.grpMRelDay(diff.inDays);
+  return dateOrIso(then.toLocal(), prefs: prefs, l10n: l10n);
 }
 
 /// "Later today" (18:00, or 2 h on when that is under half an hour away),

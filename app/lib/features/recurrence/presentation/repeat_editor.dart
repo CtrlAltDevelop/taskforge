@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/recurrence/application/recurrence_providers.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/core/i18n/weekday_names.dart';
 
 Future<void> showRepeatEditor(
   BuildContext context, {
@@ -85,7 +87,7 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
       await call();
       if (mounted && close) Navigator.pop(context);
     } on RepeatException catch (e) {
-      if (mounted) setState(() => _error = repeatErrorMessage(e));
+      if (mounted) setState(() => _error = repeatErrorMessage(e, context.l10n));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -140,7 +142,10 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
                       key: const Key('repeat-mode'),
                       segments: [
                         for (final m in RepeatKind.values)
-                          ButtonSegment(value: m, label: Text(m.label)),
+                          ButtonSegment(
+                            value: m,
+                            label: Text(m.labelIn(context.l10n)),
+                          ),
                       ],
                       selected: {_draft.mode},
                       onSelectionChanged: (s) =>
@@ -259,7 +264,7 @@ class _EveryRow extends StatelessWidget {
           for (final f in RepeatFreq.values)
             DropdownMenuItem(
               value: f,
-              child: Text(draft.interval == 1 ? f.unit : '${f.unit}s'),
+              child: Text(f.unitIn(context.l10n, plural: draft.interval != 1)),
             ),
         ],
         onChanged: (f) {
@@ -283,7 +288,7 @@ class _Weekdays extends StatelessWidget {
       for (var d = 0; d < 7; d++)
         FilterChip(
           key: Key('repeat-day-$d'),
-          label: Text(weekdayNames[d]),
+          label: Text(context.l10n.weekdayShortNames[d]),
           selected: draft.weekdays.contains(d),
           onSelected: (on) => onChanged(
             draft.copyWith(
@@ -370,7 +375,10 @@ class _Monthly extends StatelessWidget {
               value: draft.nthWeekday,
               items: [
                 for (var d = 0; d < 7; d++)
-                  DropdownMenuItem(value: d, child: Text(weekdayNames[d])),
+                  DropdownMenuItem(
+                    value: d,
+                    child: Text(context.l10n.weekdayShortNames[d]),
+                  ),
               ],
               onChanged: (d) {
                 if (d != null) onChanged(draft.copyWith(nthWeekday: d));
@@ -495,7 +503,9 @@ class _Timing extends StatelessWidget {
         dense: true,
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Icons.schedule),
-        title: Text(context.l10n.grpDRepeatAt(draft.atTime)),
+        title: Text(
+          context.l10n.grpDRepeatAt(context.localDigits(draft.atTime)),
+        ),
         onTap: () async {
           final parts = draft.atTime.split(':');
           final picked = await showTimePicker(
@@ -543,8 +553,10 @@ class _PreviewBox extends StatelessWidget {
     }
     return preview.when(
       loading: () => const LinearProgressIndicator(key: Key('repeat-loading')),
-      error: (e, _) =>
-          Text(repeatErrorMessage(e), key: const Key('repeat-preview-error')),
+      error: (e, _) => Text(
+        repeatErrorMessage(e, context.l10n),
+        key: const Key('repeat-preview-error'),
+      ),
       data: (p) => p == null
           ? const SizedBox.shrink()
           : Column(

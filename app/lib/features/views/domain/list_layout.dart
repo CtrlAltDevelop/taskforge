@@ -1,4 +1,8 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Columns a list can show besides the title, in the order they are offered.
 /// A custom field is `field:<id>` ([fieldColumnPrefix]).
@@ -12,6 +16,18 @@ const builtInColumns = <String, String>{
   'due_date': 'Due',
   'created_at': 'Created',
   'updated_at': 'Updated',
+};
+
+/// The label of [key] in the language of [l]; null when unknown.
+String? builtInColumnLabelIn(AppLocalizations l, String key) => switch (key) {
+  'status' => l.grpMLblStatus,
+  'assignee' => l.grpMLblAssignee,
+  'priority' => l.grpMLblPriority,
+  'start_date' => l.grpMLblStart,
+  'due_date' => l.grpMLblDue,
+  'created_at' => l.grpMLblCreated,
+  'updated_at' => l.grpMLblUpdated,
+  _ => null,
 };
 
 /// The columns a new list starts with.
@@ -246,20 +262,19 @@ class ViewException implements Exception {
   String toString() => 'ViewException($failure, $detail)';
 }
 
-String viewErrorMessage(Object error) {
-  if (error is! ViewException) return 'Something went wrong. Try again.';
+String viewErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! ViewException) return t.grpLGeneric;
   return switch (error.failure) {
-    ViewFailure.conflict => 'Someone else changed this layout first.',
-    ViewFailure.invalid => error.detail ?? 'That layout is not valid.',
-    ViewFailure.nameTaken => 'A layout with that name already exists.',
-    ViewFailure.limit => 'That is the most layouts you can keep here.',
-    ViewFailure.denied => error.detail ?? 'You do not have permission.',
-    ViewFailure.forbidden => 'You do not have permission to do that.',
-    ViewFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    ViewFailure.notFound => 'That layout no longer exists.',
-    ViewFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    ViewFailure.other => 'Something went wrong. Try again.',
+    ViewFailure.conflict => t.grpLViewConflict,
+    ViewFailure.invalid => error.detail ?? t.grpLViewInvalid,
+    ViewFailure.nameTaken => t.grpLViewNameTaken,
+    ViewFailure.limit => t.grpLViewLimit,
+    ViewFailure.denied => error.detail ?? t.grpLNoPerm,
+    ViewFailure.forbidden => t.grpLNoPermDo,
+    ViewFailure.archived => t.grpLArchived,
+    ViewFailure.notFound => t.grpLViewGone,
+    ViewFailure.network => t.grpLNetCheck,
+    ViewFailure.other => t.grpLGeneric,
   };
 }

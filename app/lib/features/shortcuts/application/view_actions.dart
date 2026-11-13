@@ -1,16 +1,25 @@
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/features/shortcuts/application/action_groups.dart';
 
 /// The ways to look at a project's tasks, in the order of the switcher.
 const projectViews = ['list', 'board', 'calendar', 'timeline'];
 
-String _label(String view) => view[0].toUpperCase() + view.substring(1);
-
 /// Show the project as [view]: offered on a project page showing another one.
 AppAction _show(String view, String keys) => AppAction(
   id: 'view.$view',
-  title: '${_label(view)} view',
-  group: 'This project',
-  semanticLabel: 'Show this project as a $view',
+  titleOf: (l) => switch (view) {
+    'list' => l.grpKViewList,
+    'board' => l.grpKViewBoard,
+    'calendar' => l.grpKViewCalendar,
+    _ => l.grpKViewTimeline,
+  },
+  groupOf: groupThisProject,
+  semanticOf: (l) => switch (view) {
+    'list' => l.grpKShowList,
+    'board' => l.grpKShowBoard,
+    'calendar' => l.grpKShowCalendar,
+    _ => l.grpKShowTimeline,
+  },
   keywords: const ['view', 'switch', 'layout'],
   defaultKeys: keys,
   available: (c) => c.projectId != null && c.view != view,

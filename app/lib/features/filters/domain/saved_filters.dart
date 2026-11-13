@@ -1,6 +1,9 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 
 import 'package:taskforge/features/filters/domain/filter_query.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Where in a query text something is wrong.
 @immutable
@@ -89,20 +92,19 @@ class FilterException implements Exception {
   String toString() => 'FilterException($failure, $detail)';
 }
 
-String filterErrorMessage(Object error) {
-  if (error is! FilterException) return 'Something went wrong. Try again.';
+String filterErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! FilterException) return t.grpLGeneric;
   return switch (error.failure) {
-    FilterFailure.invalid => error.detail ?? 'That filter is not valid.',
-    FilterFailure.nameTaken => 'A filter with that name already exists here.',
-    FilterFailure.limit => 'That is the most filters you can keep here.',
-    FilterFailure.denied => error.detail ?? 'You do not have permission.',
-    FilterFailure.forbidden => 'You do not have permission to do that.',
-    FilterFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    FilterFailure.notFound => 'That filter no longer exists.',
-    FilterFailure.conflict => 'Someone else changed this filter first.',
-    FilterFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    FilterFailure.other => 'Something went wrong. Try again.',
+    FilterFailure.invalid => error.detail ?? t.grpLFilterInvalid,
+    FilterFailure.nameTaken => t.grpLFilterNameTaken,
+    FilterFailure.limit => t.grpLFilterLimit,
+    FilterFailure.denied => error.detail ?? t.grpLNoPerm,
+    FilterFailure.forbidden => t.grpLNoPermDo,
+    FilterFailure.archived => t.grpLArchived,
+    FilterFailure.notFound => t.grpLFilterGone,
+    FilterFailure.conflict => t.grpLFilterConflict,
+    FilterFailure.network => t.grpLNetCheck,
+    FilterFailure.other => t.grpLGeneric,
   };
 }

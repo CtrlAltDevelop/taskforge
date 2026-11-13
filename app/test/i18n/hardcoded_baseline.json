@@ -2,8 +2,5 @@
   "lib/features/automations/presentation/action_cards.dart": 1,
   "lib/features/dashboards/presentation/widget_editor.dart": 1,
   "lib/features/filters/presentation/filter_builder.dart": 1,
-  "lib/features/shortcuts/application/builtin_actions.dart": 9,
-  "lib/features/shortcuts/application/more_actions.dart": 17,
-  "lib/features/shortcuts/application/task_level_actions.dart": 12,
-  "lib/features/shortcuts/application/view_actions.dart": 1
+  "lib/features/workflows/domain/workflow_merge.dart": 3
 }

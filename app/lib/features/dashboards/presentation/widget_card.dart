@@ -35,7 +35,9 @@ class WidgetCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final title = widget.title.isEmpty ? widget.kind.label : widget.title;
+    final title = widget.title.isEmpty
+        ? widget.kind.labelIn(context.l10n)
+        : widget.title;
     final key = (id: widget.id, version: widget.version);
     final data = saved ? ref.watch(widgetDataProvider(key)) : null;
     return Card(
@@ -125,7 +127,7 @@ class WidgetCard extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        dashboardErrorMessage(error),
+                        dashboardErrorMessage(error, context.l10n),
                         key: Key('error-${widget.id}'),
                         textAlign: TextAlign.center,
                       ),
@@ -153,6 +155,7 @@ class WidgetCard extends ConsumerWidget {
     String title,
   ) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       final csv = await ref.read(dashboardActionsProvider).exportCsv(widget.id);
       if (!context.mounted) return;
@@ -202,7 +205,9 @@ class WidgetCard extends ConsumerWidget {
         ),
       );
     } on Object catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(dashboardErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(dashboardErrorMessage(e, l10n))),
+      );
     }
   }
 }

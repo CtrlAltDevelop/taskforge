@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/offline/codecs.dart';
 import 'package:taskforge/core/offline/keep_offline.dart';
@@ -353,7 +354,7 @@ class _Storage extends ConsumerWidget {
           usage == null
               ? context.l10n.grpAReading
               : context.l10n.grpAStorageUsage(
-                  (usage.size / _mb).toStringAsFixed(1),
+                  context.localDigits((usage.size / _mb).toStringAsFixed(1)),
                   capMb!,
                 ),
           key: const Key('cache-usage'),

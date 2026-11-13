@@ -3148,5 +3148,471 @@
         "type": "String"
       }
     }
-  }
+  },
+  "grpKClosePalette": "Close the command palette",
+  "grpKGroupGeneral": "General",
+  "grpKGroupGoTo": "Go to",
+  "grpKGroupProjects": "Projects",
+  "grpKGroupWorkspace": "Workspace",
+  "grpKGroupAccount": "Account",
+  "grpKGroupThisProject": "This project",
+  "grpKGroupDocs": "Docs",
+  "grpKGroupDashboards": "Dashboards",
+  "grpKGroupListView": "List view",
+  "grpKGroupThisTask": "This task",
+  "grpKGoTo": "Go to {title}",
+  "@grpKGoTo": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpKProjectPageOf": "{title} of this project",
+  "@grpKProjectPageOf": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpKPaletteOpen": "Open the command palette",
+  "grpKSearch": "Search",
+  "grpKSearchSem": "Search tasks, comments, projects and people",
+  "grpKShortcuts": "Keyboard shortcuts",
+  "grpKShortcutsSem": "Show the keyboard shortcuts",
+  "grpKTHome": "Home",
+  "grpKTInbox": "Inbox",
+  "grpKTCalendar": "Workspace calendar",
+  "grpKTDocs": "Docs",
+  "grpKTDashboards": "Dashboards",
+  "grpKTTimesheet": "Timesheet",
+  "grpKTMembers": "Members",
+  "grpKTArchivedProjects": "Archived projects",
+  "grpKTPrivateProjects": "Private projects",
+  "grpKTWorkspaceSettings": "Workspace settings",
+  "grpKAuditLog": "Audit log",
+  "grpKAuditSem": "Go to the audit log",
+  "grpKTRoles": "Roles and permissions",
+  "grpKTCreateWorkspace": "Create a workspace",
+  "grpKTNotifPrefs": "Notification preferences",
+  "grpKTDevices": "Signed-in devices",
+  "grpKTChangePassword": "Change password",
+  "grpKTTasks": "Tasks",
+  "grpKTSprints": "Sprints",
+  "grpKTAutomations": "Automations",
+  "grpKTWorkflow": "Workflow",
+  "grpKTCustomFields": "Custom fields",
+  "grpKTProjectSettings": "Project settings",
+  "grpKSwitchWs": "Switch workspace",
+  "grpKSwitchWsSem": "Switch to another workspace",
+  "grpKToggleDark": "Toggle dark mode",
+  "grpKToggleDarkSem": "Switch between the light and the dark theme",
+  "grpKCreateProject": "Create a project",
+  "grpKCreateDoc": "Create a doc",
+  "grpKCreateDashboard": "Create a dashboard",
+  "grpKCreateSprint": "Create a sprint",
+  "grpKCreateSprintSem": "Create a sprint in this project",
+  "grpKInviteMember": "Invite a member",
+  "grpKInviteMemberSem": "Invite someone to this workspace",
+  "grpKTImportExport": "Import and export",
+  "grpKTOffline": "Offline and storage",
+  "grpKSignOut": "Sign out",
+  "grpKSignOutSem": "Sign out of this device",
+  "grpKNewTask": "New task",
+  "grpKNewTaskSem": "Create a task in this project",
+  "grpKRenameTask": "Rename the task under the cursor",
+  "grpKRenameTaskSem": "Rename the task the cursor is on in the list",
+  "grpKChangeStatus": "Change status of this task",
+  "grpKChangeStatusSem": "Change the status of the open task",
+  "grpKAssignMe": "Assign this task to me",
+  "grpKAssignMeSem": "Assign the open task to me",
+  "grpKTimerStart": "Start the timer on this task",
+  "grpKTimerStartSem": "Start the timer on the open task",
+  "grpKTimerStop": "Stop the timer",
+  "grpKTimerStopSem": "Stop the running timer",
+  "grpKViewList": "List view",
+  "grpKViewBoard": "Board view",
+  "grpKViewCalendar": "Calendar view",
+  "grpKViewTimeline": "Timeline view",
+  "grpKShowList": "Show this project as a list",
+  "grpKShowBoard": "Show this project as a board",
+  "grpKShowCalendar": "Show this project as a calendar",
+  "grpKShowTimeline": "Show this project as a timeline",
+  "grpLGeneric": "Something went wrong. Try again.",
+  "grpLNetCheck": "Cannot reach the server. Check your connection and try again.",
+  "grpLNetCheckShort": "Could not reach the server. Check your connection.",
+  "grpLNetTry": "Could not reach the server. Try again.",
+  "grpLNetOffline": "This needs a connection to the server. It works again once you are back online.",
+  "grpLNoConn": "No connection. Check it and try again.",
+  "grpLNoPerm": "You do not have permission.",
+  "grpLNoPermDo": "You do not have permission to do that.",
+  "grpLNoAccess": "You do not have access to that.",
+  "grpLCheckValues": "Check the values and try again.",
+  "grpLNotValid": "That is not valid.",
+  "grpLArchived": "This project is archived. Restore it to make changes.",
+  "grpLGone": "That no longer exists.",
+  "grpLTaskConflict": "Someone else changed this task first.",
+  "grpLTaskTransition": "The workflow does not allow that move.",
+  "grpLTaskHasSubtasks": "This task has subtasks: choose what happens to them.",
+  "grpLTaskCycle": "A task cannot become a subtask of itself or of one of its own subtasks.",
+  "grpLTaskBlocked": "Blocked by {detail}: finish those first.",
+  "@grpLTaskBlocked": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "grpLTaskLinkCycle": "Those tasks would block each other in a loop: {detail}.",
+  "@grpLTaskLinkCycle": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "grpLTaskLinkExists": "These tasks are already linked that way.",
+  "grpLFieldRequired": "A required field has no value.",
+  "grpLTaskGone": "That task no longer exists.",
+  "grpLCommentConflict": "Someone changed this comment first.",
+  "grpLCommentLocked": "That comment can no longer be edited.",
+  "grpLMentionNoAccess": "Somebody you mentioned cannot see this task.",
+  "grpLCommentCheck": "Check the comment and try again.",
+  "grpLCommentGone": "That comment no longer exists.",
+  "grpLSlugTaken": "That URL is taken",
+  "grpLWsStale": "This workspace was changed elsewhere. Refresh to see the latest version.",
+  "grpLWsNotRestorable": "This workspace can no longer be restored.",
+  "grpLOwnerNeeded": "A workspace needs at least one owner.",
+  "grpLInvEmailMismatch": "This invitation is for another email address.",
+  "grpLInvExpired": "This invitation has expired. Ask for a new one.",
+  "grpLInvRevoked": "This invitation was revoked.",
+  "grpLInvBeforeRemoval": "This invitation predates your removal. Ask for a new one.",
+  "grpLInvUsedUp": "This invitation has already been used up.",
+  "grpLInvNotFound": "This invitation does not exist.",
+  "grpLInvRate": "Too many invitations just now. Wait a while and try again.",
+  "grpLInvExists": "That person is already invited or a member.",
+  "grpLWfInvalid": "The workflow has problems. Fix them to save.",
+  "grpLWfConflict": "Someone else saved the workflow first. Your changes are still here: review what changed and save again.",
+  "grpLProjectGone": "That project no longer exists.",
+  "grpLDashDenied": "You are not allowed to do that on this dashboard.",
+  "grpLDashNotFound": "That dashboard or widget is not available.",
+  "grpLDashHeavy": "This widget takes too long to compute. Narrow its filter.",
+  "grpLDashConflict": "Someone else changed this dashboard. Reload it and try again.",
+  "grpLNotifGone": "That notification no longer exists.",
+  "grpLViewConflict": "Someone else changed this layout first.",
+  "grpLViewInvalid": "That layout is not valid.",
+  "grpLViewNameTaken": "A layout with that name already exists.",
+  "grpLViewLimit": "That is the most layouts you can keep here.",
+  "grpLViewGone": "That layout no longer exists.",
+  "grpLAutoDenied": "You need the \"manage automations\" permission for that.",
+  "grpLAutoConflict": "Someone else changed this rule first. Load the latest and retry.",
+  "grpLImpCannot": "That cannot be done now.",
+  "grpLImpTooBig": "That file is larger than this server accepts.",
+  "grpLImpDenied": "Only admins can import and export data.",
+  "grpLImpNotFound": "That import no longer exists.",
+  "grpLAuditDenied": "You are not allowed to read the audit log.",
+  "grpLAuditTaskNA": "That task is not available.",
+  "grpLAuditFilters": "Those filters are not valid.",
+  "grpLSprintConflict": "Someone else changed this first. Reload and retry.",
+  "grpLFieldNameTaken": "A field with that name already exists.",
+  "grpLFieldLimit": "A project can have at most {count} active fields.",
+  "@grpLFieldLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpLFieldNeedsRemap": "Some removed options are still used: choose what their values become.",
+  "grpLFieldConflict": "Someone else changed this field first; reload and try again.",
+  "grpLFieldGone": "That field no longer exists.",
+  "grpLFilterInvalid": "That filter is not valid.",
+  "grpLFilterNameTaken": "A filter with that name already exists here.",
+  "grpLFilterLimit": "That is the most filters you can keep here.",
+  "grpLFilterGone": "That filter no longer exists.",
+  "grpLFilterConflict": "Someone else changed this filter first.",
+  "grpLAttTooBig": "That file is larger than an attachment may be.",
+  "grpLAttQuota": "This workspace has used all its storage.",
+  "grpLAttTooMany": "Too many uploads are open. Finish or cancel some first.",
+  "grpLAttUnavailable": "The file could not be checked right now. Try again.",
+  "grpLAttChunk": "Part of the file was not taken. Try again.",
+  "grpLAttRefusedPlain": "That kind of file is not accepted.",
+  "grpLAttRefused": "That file is not accepted: {detail}",
+  "@grpLAttRefused": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "grpLAttIncomplete": "The upload did not finish. Try again.",
+  "grpLAttExpired": "That upload expired. Try again.",
+  "grpLAttUnreadable": "Could not read that file.",
+  "grpLAttNotAllowed": "You are not allowed to do that.",
+  "grpLAttArchived": "This project is archived: files are read-only.",
+  "grpLAttGone": "That is gone: the file, comment or task was removed.",
+  "grpLDocNotFound": "That page does not exist or you cannot open it.",
+  "grpLDocConflict": "Someone else changed this page first.",
+  "grpLDocArchived": "That page is archived.",
+  "grpLDocCycle": "A page cannot go under itself.",
+  "grpLKeyTaken": "That key is already used by another project.",
+  "grpLKeyLocked": "The key cannot change once the project has tasks.",
+  "grpLLastMember": "A private project needs at least one member.",
+  "grpLProjConflict": "This project changed in the meantime. Reloaded — try again.",
+  "grpLRoleBuiltin": "Built-in roles cannot be changed or deleted.",
+  "grpLRoleNameTaken": "A role with that name already exists.",
+  "grpLRoleGone": "That role no longer exists.",
+  "grpLRoleConflict": "This role changed in the meantime. Reloaded — try again.",
+  "grpLRepeatInvalid": "That repeat is not valid.",
+  "grpLRepeatDenied": "You are not allowed to change how this repeats.",
+  "grpMPriUrgent": "Urgent",
+  "grpMPriHigh": "High",
+  "grpMPriNormal": "Normal",
+  "grpMPriLow": "Low",
+  "grpMPriNone": "None",
+  "grpMLinkBlocks": "Blocks",
+  "grpMLinkBlockedBy": "Is blocked by",
+  "grpMLinkRelates": "Relates to",
+  "grpMLinkDuplicates": "Duplicates",
+  "grpMLinkDuplicatedBy": "Is duplicated by",
+  "grpMCatNotStarted": "Not started",
+  "grpMCatActive": "Active",
+  "grpMCatDone": "Done",
+  "grpMCatCancelled": "Cancelled",
+  "grpMFtypeText": "Text",
+  "grpMFtypeNumber": "Number",
+  "grpMFtypeSelect": "Select",
+  "grpMFtypeMulti": "Multi-select",
+  "grpMFtypeDate": "Date",
+  "grpMFtypeCheckbox": "Checkbox",
+  "grpMFtypeUrl": "URL",
+  "grpMFtypeUser": "User",
+  "grpMFtypeMoney": "Money",
+  "grpMTrigTaskCreated": "A task is created",
+  "grpMTrigStatusChanged": "A status changes",
+  "grpMTrigFieldChanged": "A field changes",
+  "grpMTrigAssigned": "Someone is assigned",
+  "grpMTrigDueDateReached": "A due date is reached",
+  "grpMTrigCommentAdded": "A comment is added",
+  "grpMActSetField": "Set a field",
+  "grpMActSetStatus": "Set the status",
+  "grpMActSetAssignee": "Change assignees",
+  "grpMActAddComment": "Add a comment",
+  "grpMActCreateSubtask": "Create a subtask",
+  "grpMActNotify": "Notify people",
+  "grpMActWebhook": "Call a webhook",
+  "grpMRunSucceeded": "Succeeded",
+  "grpMRunFailed": "Failed",
+  "grpMRunSkippedCondition": "Skipped: condition",
+  "grpMRunSkippedLoop": "Stopped: loop",
+  "grpMRunSkippedRate": "Paused: too many runs",
+  "grpMWkNumber": "Number",
+  "grpMWkBar": "Bar chart",
+  "grpMWkLine": "Line chart",
+  "grpMWkPie": "Pie chart",
+  "grpMWkTable": "Table",
+  "grpMWkBurndown": "Burndown",
+  "grpMWkWorkload": "Workload",
+  "grpMMeasCount": "Task count",
+  "grpMMeasPoints": "Story points",
+  "grpMMeasEstimateHours": "Estimated hours",
+  "grpMMeasLoggedHours": "Logged hours",
+  "grpMMeasCycleDays": "Cycle time (days)",
+  "grpMScopeAll": "All tasks",
+  "grpMScopeOpen": "Open tasks",
+  "grpMScopeDone": "Done tasks",
+  "grpMVisPersonal": "Only me",
+  "grpMVisProject": "Everyone in the project",
+  "grpMVisWorkspace": "Everyone in the workspace",
+  "grpMLblStatus": "Status",
+  "grpMLblStatusCategory": "Status category",
+  "grpMLblPerson": "Person",
+  "grpMLblPriority": "Priority",
+  "grpMLblProject": "Project",
+  "grpMLblSprint": "Sprint",
+  "grpMLblCreatedDay": "Created (day)",
+  "grpMLblCreatedWeek": "Created (week)",
+  "grpMLblDueWeek": "Due (week)",
+  "grpMImpJiraCsv": "Jira (CSV export)",
+  "grpMImpJiraJson": "Jira (JSON)",
+  "grpMImpClickupCsv": "ClickUp (CSV export)",
+  "grpMImpClickupJson": "ClickUp (JSON)",
+  "grpMImpCsv": "Any CSV file",
+  "grpMImpTaskforge": "TaskForge export (tasks.json)",
+  "grpMNkAssigned": "Assigned to you",
+  "grpMNkMentioned": "Mentions",
+  "grpMNkCommented": "Comments",
+  "grpMNkStatusChanged": "Status changes",
+  "grpMNkDueSoon": "Due soon",
+  "grpMNkTimerLong": "Long timers",
+  "grpMNkUnknown": "Notification",
+  "grpMIfAll": "All",
+  "grpMIfUnread": "Unread",
+  "grpMIfMentions": "Mentions",
+  "grpMIfAssigned": "Assigned",
+  "grpMIfSnoozed": "Snoozed",
+  "grpMIfArchived": "Archived",
+  "grpMEmOff": "Off",
+  "grpMEmInstant": "Instant",
+  "grpMEmDigest": "Daily digest",
+  "grpMRkSchedule": "On a schedule",
+  "grpMRkAfterCompletion": "After it is completed",
+  "grpMLblOpEq": "is",
+  "grpMLblOpNe": "is not",
+  "grpMLblOpLt": "before / less than",
+  "grpMLblOpLte": "on or before / at most",
+  "grpMLblOpGt": "after / more than",
+  "grpMLblOpGte": "on or after / at least",
+  "grpMLblOpContains": "contains",
+  "grpMLblOpNotContains": "does not contain",
+  "grpMLblOpIn": "is any of",
+  "grpMLblOpNotIn": "is none of",
+  "grpMLblOpEmpty": "is empty",
+  "grpMLblOpNotEmpty": "is not empty",
+  "grpMLblAssignee": "Assignee",
+  "grpMLblStart": "Start",
+  "grpMLblDue": "Due",
+  "grpMLblCreated": "Created",
+  "grpMLblUpdated": "Updated",
+  "grpMLblDueDate": "Due date",
+  "grpMLblProgress": "Subtask progress",
+  "grpMLblViewList": "List",
+  "grpMLblViewBoard": "Board",
+  "grpMLblViewCalendar": "Calendar",
+  "grpMLblViewTimeline": "Timeline",
+  "grpMRelNow": "now",
+  "grpMRelJustNow": "just now",
+  "grpMRelMin": "{n} min ago",
+  "@grpMRelMin": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "grpMRelHour": "{n} h ago",
+  "@grpMRelHour": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "grpMRelYesterday": "yesterday",
+  "grpMRelDay": "{n} d ago",
+  "@grpMRelDay": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "grpMNotifSomeone": "Someone",
+  "grpMNotifAssigned": "{who} assigned you",
+  "@grpMNotifAssigned": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
+  "grpMNotifMentioned": "{who} mentioned you in",
+  "@grpMNotifMentioned": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
+  "grpMNotifCommented": "{who} commented on",
+  "@grpMNotifCommented": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
+  "grpMNotifStatusChanged": "{who} changed the status of",
+  "@grpMNotifStatusChanged": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      }
+    }
+  },
+  "grpMNotifMoved": "{who} moved from {fromStatus} to {toStatus}",
+  "@grpMNotifMoved": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      },
+      "fromStatus": {
+        "type": "String"
+      },
+      "toStatus": {
+        "type": "String"
+      }
+    }
+  },
+  "grpMNotifDueSoon": "Due soon:",
+  "grpMNotifTimer": "Your timer is still running on",
+  "grpMNotifNew": "New activity on",
+  "grpMUnitDay": "day",
+  "grpMUnitDays": "days",
+  "grpMUnitWeek": "week",
+  "grpMUnitWeeks": "weeks",
+  "grpMUnitMonth": "month",
+  "grpMUnitMonths": "months",
+  "grpMUnitYear": "year",
+  "grpMUnitYears": "years",
+  "grpMSlashText": "Text",
+  "grpMSlashH1": "Heading 1",
+  "grpMSlashH2": "Heading 2",
+  "grpMSlashH3": "Heading 3",
+  "grpMSlashBullet": "Bulleted list",
+  "grpMSlashNumbered": "Numbered list",
+  "grpMSlashTodo": "Checklist",
+  "grpMSlashQuote": "Quote",
+  "grpMSlashCode": "Code",
+  "grpMSlashTable": "Table",
+  "grpMSlashDivider": "Divider",
+  "grpMSlashImage": "Image",
+  "grpMSlashCallout": "Callout",
+  "grpMSlashTask": "Task card",
+  "grpMMeanSucceeded": "Every action ran.",
+  "grpMMeanFailed": "An action failed; the ones before it stay done.",
+  "grpMMeanSkippedCondition": "The event matched, but the task did not meet the condition.",
+  "grpMMeanSkippedLoop": "Rules triggered rules more than 5 hops deep, so this run was stopped to end a loop.",
+  "grpMMeanSkippedRate": "This rule already ran 30 times in the last minute, so this run was skipped.",
+  "grpMStepOk": "ok",
+  "grpMStepFailed": "failed",
+  "grpMStepNotRun": "not run",
+  "grpMStepPlanned": "planned",
+  "grpMStepWouldFail": "would fail",
+  "grp1DropCardHere": "Drop a card here",
+  "grp1NoCards": "No cards",
+  "grp1StopWatchingTask": "Stop watching this task",
+  "grp1WatchTask": "Watch this task",
+  "grp1SecondFactorRequired": "Second factor required.",
+  "grp1AnAutomation": "An automation",
+  "grp1TheSystem": "The system",
+  "grp1MemberCount": "{count} member(s)",
+  "@grp1MemberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grp1SyncLive": "Live",
+  "grp1SyncConnecting": "Connecting…",
+  "grp1SyncReconnecting": "Reconnecting…",
+  "grp1SyncLiveTip": "Changes by others appear as they happen",
+  "grp1SyncNotLiveTip": "Not live: changes by others will appear once reconnected",
+  "grp1EnterNumber": "Enter a number.",
+  "grp1EnterAmount": "Enter an amount.",
+  "grp1EnterCurrency": "Enter a 3-letter currency, e.g. USD.",
+  "grp1EnterUrl": "Enter a web address starting with http(s)://",
+  "grp1UseIsoDate": "Use YYYY-MM-DD."
 }

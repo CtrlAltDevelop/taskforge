@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// One change as the server recorded it: who, what, to what, and the fields
 /// that moved. Immutable.
@@ -43,10 +45,13 @@ class AuditEntry {
   final Map<String, dynamic> changes;
 
   /// Who did it, in words: a person's name, "An automation", or "The system".
-  String get who => switch (actorType) {
-    'automation' => 'An automation',
-    'system' => 'The system',
-    _ => actorName.isEmpty ? 'Someone' : actorName,
+  String get who => whoIn(lookupAppLocalizations(const Locale('en')));
+
+  /// [who] in the language of [l10n].
+  String whoIn(AppLocalizations l10n) => switch (actorType) {
+    'automation' => l10n.grp1AnAutomation,
+    'system' => l10n.grp1TheSystem,
+    _ => actorName.isEmpty ? l10n.grpBSomeone : actorName,
   };
 
   static Map<String, dynamic> decodeChanges(String json) {
@@ -175,16 +180,17 @@ class AuditException implements Exception {
   String toString() => 'AuditException($failure: $detail)';
 }
 
-String auditErrorMessage(Object error) {
+String auditErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
   final failure = error is AuditException ? error.failure : AuditFailure.other;
   return switch (failure) {
-    AuditFailure.denied => 'You are not allowed to read the audit log.',
-    AuditFailure.notFound => 'That task is not available.',
+    AuditFailure.denied => t.grpLAuditDenied,
+    AuditFailure.notFound => t.grpLAuditTaskNA,
     AuditFailure.invalid =>
       error is AuditException && error.detail.isNotEmpty
           ? error.detail
-          : 'Those filters are not valid.',
-    AuditFailure.network => 'Could not reach the server. Try again.',
-    AuditFailure.other => 'Something went wrong. Try again.',
+          : t.grpLAuditFilters,
+    AuditFailure.network => t.grpLNetTry,
+    AuditFailure.other => t.grpLGeneric,
   };
 }

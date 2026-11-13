@@ -1,6 +1,9 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// A page in the tree (no body).
 @immutable
@@ -152,19 +155,20 @@ class DocException implements Exception {
   String toString() => 'DocException($failure)';
 }
 
-String docErrorMessage(Object error) {
-  if (error is! DocException) return 'Something went wrong. Try again.';
+String docErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! DocException) return t.grpLGeneric;
   final d = error.detail;
   final has = d != null && d.isNotEmpty;
   return switch (error.failure) {
-    DocFailure.network => 'Could not reach the server. Check your connection.',
-    DocFailure.denied => 'You do not have permission to do that.',
-    DocFailure.notFound => 'That page does not exist or you cannot open it.',
-    DocFailure.conflict => 'Someone else changed this page first.',
-    DocFailure.archived => has ? d : 'That page is archived.',
-    DocFailure.cycle => has ? d : 'A page cannot go under itself.',
-    DocFailure.invalid => has ? d : 'That is not valid.',
-    DocFailure.other => 'Something went wrong. Try again.',
+    DocFailure.network => t.grpLNetCheckShort,
+    DocFailure.denied => t.grpLNoPermDo,
+    DocFailure.notFound => t.grpLDocNotFound,
+    DocFailure.conflict => t.grpLDocConflict,
+    DocFailure.archived => has ? d : t.grpLDocArchived,
+    DocFailure.cycle => has ? d : t.grpLDocCycle,
+    DocFailure.invalid => has ? d : t.grpLNotValid,
+    DocFailure.other => t.grpLGeneric,
   };
 }
 

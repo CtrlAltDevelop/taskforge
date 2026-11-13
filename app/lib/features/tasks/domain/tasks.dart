@@ -1,7 +1,10 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 
 import 'package:taskforge/features/tasks/domain/rich_text.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const maxTitleLength = 500;
 
@@ -27,6 +30,15 @@ enum TaskPriority {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    urgent => l.grpMPriUrgent,
+    high => l.grpMPriHigh,
+    normal => l.grpMPriNormal,
+    low => l.grpMPriLow,
+    none => l.grpMPriNone,
+  };
 
   static TaskPriority parse(String wire) =>
       values.firstWhere((p) => p.wire == wire, orElse: () => TaskPriority.none);
@@ -375,31 +387,25 @@ class TaskException implements Exception {
 }
 
 /// What to tell the user about a failed tasks call.
-String taskErrorMessage(Object error) {
-  if (error is! TaskException) return 'Something went wrong. Try again.';
+String taskErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! TaskException) return t.grpLGeneric;
   return switch (error.failure) {
-    TaskFailure.conflict => 'Someone else changed this task first.',
-    TaskFailure.transitionNotAllowed =>
-      error.detail ?? 'The workflow does not allow that move.',
-    TaskFailure.hasSubtasks =>
-      'This task has subtasks: choose what happens to them.',
-    TaskFailure.cycle =>
-      'A task cannot become a subtask of itself or of one of its own subtasks.',
-    TaskFailure.blocked =>
-      'Blocked by ${error.detail ?? 'open tasks'}: finish those first.',
-    TaskFailure.linkCycle =>
-      'Those tasks would block each other in a loop: ${error.detail ?? ''}.',
-    TaskFailure.linkExists => 'These tasks are already linked that way.',
-    TaskFailure.fieldRequired =>
-      error.detail ?? 'A required field has no value.',
-    TaskFailure.denied => error.detail ?? 'You do not have permission.',
-    TaskFailure.forbidden => 'You do not have permission to do that.',
-    TaskFailure.invalid => error.detail ?? 'Check the values and try again.',
-    TaskFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    TaskFailure.notFound => 'That task no longer exists.',
-    TaskFailure.network => 'This needs a connection to the server. It works again once you are back online.',
-    TaskFailure.other => 'Something went wrong. Try again.',
+    TaskFailure.conflict => t.grpLTaskConflict,
+    TaskFailure.transitionNotAllowed => error.detail ?? t.grpLTaskTransition,
+    TaskFailure.hasSubtasks => t.grpLTaskHasSubtasks,
+    TaskFailure.cycle => t.grpLTaskCycle,
+    TaskFailure.blocked => t.grpLTaskBlocked(error.detail ?? 'open tasks'),
+    TaskFailure.linkCycle => t.grpLTaskLinkCycle(error.detail ?? ''),
+    TaskFailure.linkExists => t.grpLTaskLinkExists,
+    TaskFailure.fieldRequired => error.detail ?? t.grpLFieldRequired,
+    TaskFailure.denied => error.detail ?? t.grpLNoPerm,
+    TaskFailure.forbidden => t.grpLNoPermDo,
+    TaskFailure.invalid => error.detail ?? t.grpLCheckValues,
+    TaskFailure.archived => t.grpLArchived,
+    TaskFailure.notFound => t.grpLTaskGone,
+    TaskFailure.network => t.grpLNetOffline,
+    TaskFailure.other => t.grpLGeneric,
   };
 }
 

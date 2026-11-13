@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 
@@ -148,7 +149,7 @@ class _EntryDialogState extends State<_EntryDialog> {
             ListTile(
               key: const Key('entry-date'),
               contentPadding: EdgeInsets.zero,
-              title: Text(isoDate(_date)),
+              title: Text(context.localIso(_date)),
               trailing: const Icon(Icons.calendar_today),
               onTap: _pickDate,
             ),

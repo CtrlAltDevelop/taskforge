@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
@@ -133,7 +134,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
                   child: Semantics(
                     liveRegion: true,
                     child: Text(
-                      attachmentErrorMessage(state.error!),
+                      attachmentErrorMessage(state.error!, context.l10n),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.error,
                       ),
@@ -203,7 +204,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              usageLine(usage),
+              context.localDigits(usageLine(usage)),
               key: const Key('storage-usage'),
               style: Theme.of(context).textTheme.labelSmall,
             ),

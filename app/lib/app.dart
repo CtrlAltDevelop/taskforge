@@ -7,6 +7,8 @@ import 'package:taskforge/app_router.dart';
 import 'package:taskforge/core/deep_links.dart';
 import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/sync/sync_coordinator.dart';
+import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
@@ -22,6 +24,11 @@ const _arabicScriptFonts = [
   'Noto Naskh Arabic',
   'Noto Sans Arabic',
 ];
+
+/// `--dart-define=PSEUDO_LOCALE=true` runs the app in the pseudo-language
+/// (docs/translating.md): accented, padded English that shows clipped layouts
+/// and any text that is still hardcoded.
+const _pseudoLocale = bool.fromEnvironment('PSEUDO_LOCALE');
 
 class TaskForgeApp extends ConsumerWidget {
   const TaskForgeApp({super.key});
@@ -46,10 +53,20 @@ class TaskForgeApp extends ConsumerWidget {
         ref.read(localePrefsProvider.notifier).adopt(loaded);
       }
     });
+    void applyDefault(Workspace? workspace) => ref
+        .read(localePrefsProvider.notifier)
+        .applyWorkspaceDefault(workspace?.defaultLocale ?? '');
+    ref.listen(
+      currentWorkspaceProvider,
+      (_, workspace) => applyDefault(workspace),
+    );
+    // `listen` skips the value already there; start from it too.
+    final current = ref.read(currentWorkspaceProvider);
+    Future.microtask(() => applyDefault(current));
     final prefs = ref.watch(localePrefsProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-      locale: prefs.locale,
+      locale: _pseudoLocale ? const Locale('en', 'XA') : prefs.locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,

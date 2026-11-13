@@ -466,9 +466,11 @@ class AppLocalizationsAr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'جارٍ النسخ… $count مهمة',
+      many: 'جارٍ النسخ… $count مهمة',
       few: 'جارٍ النسخ… $count مهام',
       two: 'جارٍ النسخ… مهمتان',
       one: 'جارٍ النسخ… مهمة واحدة',
+      zero: 'جارٍ النسخ… $count مهمة',
     );
     return '$_temp0';
   }
@@ -534,10 +536,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count يومًا متبقيًا',
+      other: '$count يوم متبقٍ',
+      many: '$count يومًا متبقيًا',
       few: '$count أيام متبقية',
       two: 'يومان متبقيان',
       one: 'يوم واحد متبقٍ',
+      zero: 'لا أيام متبقية',
     );
     return '$_temp0';
   }
@@ -943,7 +947,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String grpBVersionShort(int version) {
-    return 'v$version';
+    return 'إصدار $version';
   }
 
   @override
@@ -1138,8 +1142,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'تم التعديل $count مرات: انقر لعرض السجل',
+      other: 'تم التعديل $count مرة: انقر لعرض السجل',
+      many: 'تم التعديل $count مرة: انقر لعرض السجل',
+      few: 'تم التعديل $count مرات: انقر لعرض السجل',
+      two: 'تم التعديل مرتين: انقر لعرض السجل',
       one: 'تم التعديل مرة واحدة: انقر لعرض السجل',
+      zero: 'لم يتم التعديل: انقر لعرض السجل',
     );
     return '$_temp0';
   }
@@ -1380,6 +1388,11 @@ class AppLocalizationsAr extends AppLocalizations {
       n,
       locale: localeName,
       other: 'تم تعيين $n مهمة.',
+      many: 'تم تعيين $n مهمة.',
+      few: 'تم تعيين $n مهام.',
+      two: 'تم تعيين مهمتين.',
+      one: 'تم تعيين مهمة واحدة.',
+      zero: 'لم يتم تعيين أي مهمة.',
     );
     return '$_temp0';
   }
@@ -1400,6 +1413,11 @@ class AppLocalizationsAr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count مهمة',
+      many: '$count مهمة',
+      few: '$count مهام',
+      two: 'مهمتان',
+      one: 'مهمة واحدة',
+      zero: 'لا مهام',
     );
     return '$email · $_temp0';
   }
@@ -1748,6 +1766,11 @@ class AppLocalizationsAr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count إجراء',
+      many: '$count إجراءً',
+      few: '$count إجراءات',
+      two: 'إجراءان',
+      one: 'إجراء واحد',
+      zero: 'لا إجراءات',
     );
     return 'عندما $trigger · $_temp0';
   }
@@ -2111,7 +2134,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String grpDRepeatUpdatedLater(int count) {
-    return 'تم تحديث $count من المهام المفتوحة اللاحقة.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مهمة مفتوحة لاحقة',
+      many: '$count مهمة مفتوحة لاحقة',
+      few: '$count مهام مفتوحة لاحقة',
+      two: 'مهمتين مفتوحتين لاحقتين',
+      one: 'مهمة مفتوحة لاحقة واحدة',
+      zero: 'لا مهام مفتوحة لاحقة',
+    );
+    return 'تم تحديث $_temp0.';
   }
 
   @override
@@ -2397,6 +2430,7 @@ class AppLocalizationsAr extends AppLocalizations {
       few: '$count قيم',
       two: 'قيمتان',
       one: 'قيمة واحدة',
+      zero: 'لا قيم',
     );
     return '$label ($_temp0) تصبح';
   }
@@ -2711,8 +2745,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'لديها $count مهام فرعية. ماذا يجب أن يحدث لها؟',
+      other: 'لديها $count مهمة فرعية. ماذا يجب أن يحدث لها؟',
+      many: 'لديها $count مهمة فرعية. ماذا يجب أن يحدث لها؟',
+      few: 'لديها $count مهام فرعية. ماذا يجب أن يحدث لها؟',
+      two: 'لديها مهمتان فرعيتان. ماذا يجب أن يحدث لهما؟',
       one: 'لديها مهمة فرعية واحدة. ماذا يجب أن يحدث لها؟',
+      zero: 'ليست لديها مهام فرعية. ماذا يجب أن يحدث لها؟',
     );
     return '$_temp0';
   }
@@ -2733,8 +2771,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام فرعية لم تنتهِ. هل تنقلها إلى $status أيضًا؟',
+      other: '$count مهمة فرعية لم تنتهِ. هل تنقلها إلى $status أيضًا؟',
+      many: '$count مهمة فرعية لم تنتهِ. هل تنقلها إلى $status أيضًا؟',
+      few: '$count مهام فرعية لم تنتهِ. هل تنقلها إلى $status أيضًا؟',
+      two: 'مهمتان فرعيتان لم تنتهيا. هل تنقلهما إلى $status أيضًا؟',
       one: 'مهمة فرعية واحدة لم تنتهِ. هل تنقلها إلى $status أيضًا؟',
+      zero: 'لا توجد مهام فرعية غير منتهية. هل تنقلها إلى $status أيضًا؟',
     );
     return '$_temp0';
   }
@@ -3377,8 +3419,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ملاحظات حول هذا الملف',
+      other: '$count ملاحظة حول هذا الملف',
+      many: '$count ملاحظة حول هذا الملف',
+      few: '$count ملاحظات حول هذا الملف',
+      two: 'ملاحظتان حول هذا الملف',
       one: 'ملاحظة واحدة حول هذا الملف',
+      zero: 'لا ملاحظات حول هذا الملف',
     );
     return '$_temp0';
   }
@@ -4018,8 +4064,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مشكلات يجب إصلاحها قبل الحفظ',
+      other: '$count مشكلة يجب إصلاحها قبل الحفظ',
+      many: '$count مشكلة يجب إصلاحها قبل الحفظ',
+      few: '$count مشكلات يجب إصلاحها قبل الحفظ',
+      two: 'مشكلتان يجب إصلاحهما قبل الحفظ',
       one: 'مشكلة واحدة يجب إصلاحها قبل الحفظ',
+      zero: 'لا مشكلات يجب إصلاحها قبل الحفظ',
     );
     return '$_temp0';
   }
@@ -4066,8 +4116,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام',
+      other: '$count مهمة',
+      many: '$count مهمة',
+      few: '$count مهام',
+      two: 'مهمتان',
       one: 'مهمة واحدة',
+      zero: '$count مهمة',
     );
     return '$_temp0';
   }
@@ -4091,8 +4145,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام في هذه الحالة. اختر وجهتها.',
+      other: '$count مهمة في هذه الحالة. اختر وجهتها.',
+      many: '$count مهمة في هذه الحالة. اختر وجهتها.',
+      few: '$count مهام في هذه الحالة. اختر وجهتها.',
+      two: 'مهمتان في هذه الحالة. اختر وجهتهما.',
       one: 'مهمة واحدة في هذه الحالة. اختر وجهتها.',
+      zero: 'لا مهام في هذه الحالة.',
     );
     return '$_temp0';
   }
@@ -4175,8 +4233,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'مهام',
+      other: 'مهمة',
+      many: 'مهمة',
+      few: 'مهام',
+      two: 'مهمة',
       one: 'مهمة',
+      zero: 'مهمة',
     );
     return '$title · $count$more $_temp0';
   }
@@ -4271,8 +4333,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count أيام',
+      other: '$count يوم',
+      many: '$count يومًا',
+      few: '$count أيام',
+      two: 'يومان',
       one: 'يوم واحد',
+      zero: '$count يوم',
     );
     return '$_temp0';
   }
@@ -4434,8 +4500,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count خيارات',
+      other: '$count خيار',
+      many: '$count خيارًا',
+      few: '$count خيارات',
+      two: 'خياران',
       one: 'خيار واحد',
+      zero: '$count خيار',
     );
     return '$_temp0';
   }
@@ -5004,4 +5074,1127 @@ class AppLocalizationsAr extends AppLocalizations {
   String grpJPingError(String error) {
     return 'خطأ: $error';
   }
+
+  @override
+  String get grpKClosePalette => 'إغلاق لوحة الأوامر';
+
+  @override
+  String get grpKGroupGeneral => 'عام';
+
+  @override
+  String get grpKGroupGoTo => 'الانتقال إلى';
+
+  @override
+  String get grpKGroupProjects => 'المشاريع';
+
+  @override
+  String get grpKGroupWorkspace => 'مساحة العمل';
+
+  @override
+  String get grpKGroupAccount => 'الحساب';
+
+  @override
+  String get grpKGroupThisProject => 'هذا المشروع';
+
+  @override
+  String get grpKGroupDocs => 'المستندات';
+
+  @override
+  String get grpKGroupDashboards => 'لوحات المعلومات';
+
+  @override
+  String get grpKGroupListView => 'عرض القائمة';
+
+  @override
+  String get grpKGroupThisTask => 'هذه المهمة';
+
+  @override
+  String grpKGoTo(String title) {
+    return 'الانتقال إلى $title';
+  }
+
+  @override
+  String grpKProjectPageOf(String title) {
+    return '$title لهذا المشروع';
+  }
+
+  @override
+  String get grpKPaletteOpen => 'فتح لوحة الأوامر';
+
+  @override
+  String get grpKSearch => 'بحث';
+
+  @override
+  String get grpKSearchSem => 'البحث في المهام والتعليقات والمشاريع والأشخاص';
+
+  @override
+  String get grpKShortcuts => 'اختصارات لوحة المفاتيح';
+
+  @override
+  String get grpKShortcutsSem => 'عرض اختصارات لوحة المفاتيح';
+
+  @override
+  String get grpKTHome => 'الرئيسية';
+
+  @override
+  String get grpKTInbox => 'صندوق الوارد';
+
+  @override
+  String get grpKTCalendar => 'تقويم مساحة العمل';
+
+  @override
+  String get grpKTDocs => 'المستندات';
+
+  @override
+  String get grpKTDashboards => 'لوحات المعلومات';
+
+  @override
+  String get grpKTTimesheet => 'سجل الوقت';
+
+  @override
+  String get grpKTMembers => 'الأعضاء';
+
+  @override
+  String get grpKTArchivedProjects => 'المشاريع المؤرشفة';
+
+  @override
+  String get grpKTPrivateProjects => 'المشاريع الخاصة';
+
+  @override
+  String get grpKTWorkspaceSettings => 'إعدادات مساحة العمل';
+
+  @override
+  String get grpKAuditLog => 'سجل التدقيق';
+
+  @override
+  String get grpKAuditSem => 'الانتقال إلى سجل التدقيق';
+
+  @override
+  String get grpKTRoles => 'الأدوار والأذونات';
+
+  @override
+  String get grpKTCreateWorkspace => 'إنشاء مساحة عمل';
+
+  @override
+  String get grpKTNotifPrefs => 'تفضيلات الإشعارات';
+
+  @override
+  String get grpKTDevices => 'الأجهزة المسجّل دخولها';
+
+  @override
+  String get grpKTChangePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get grpKTTasks => 'المهام';
+
+  @override
+  String get grpKTSprints => 'السبرنتات';
+
+  @override
+  String get grpKTAutomations => 'الأتمتة';
+
+  @override
+  String get grpKTWorkflow => 'سير العمل';
+
+  @override
+  String get grpKTCustomFields => 'حقول مخصصة';
+
+  @override
+  String get grpKTProjectSettings => 'إعدادات المشروع';
+
+  @override
+  String get grpKSwitchWs => 'تبديل مساحة العمل';
+
+  @override
+  String get grpKSwitchWsSem => 'التبديل إلى مساحة عمل أخرى';
+
+  @override
+  String get grpKToggleDark => 'تبديل الوضع الداكن';
+
+  @override
+  String get grpKToggleDarkSem => 'التبديل بين السمة الفاتحة والداكنة';
+
+  @override
+  String get grpKCreateProject => 'إنشاء مشروع';
+
+  @override
+  String get grpKCreateDoc => 'إنشاء مستند';
+
+  @override
+  String get grpKCreateDashboard => 'إنشاء لوحة معلومات';
+
+  @override
+  String get grpKCreateSprint => 'إنشاء سبرنت';
+
+  @override
+  String get grpKCreateSprintSem => 'إنشاء سبرنت في هذا المشروع';
+
+  @override
+  String get grpKInviteMember => 'دعوة عضو';
+
+  @override
+  String get grpKInviteMemberSem => 'دعوة شخص إلى مساحة العمل هذه';
+
+  @override
+  String get grpKTImportExport => 'الاستيراد والتصدير';
+
+  @override
+  String get grpKTOffline => 'دون اتصال والتخزين';
+
+  @override
+  String get grpKSignOut => 'تسجيل الخروج';
+
+  @override
+  String get grpKSignOutSem => 'تسجيل الخروج من هذا الجهاز';
+
+  @override
+  String get grpKNewTask => 'مهمة جديدة';
+
+  @override
+  String get grpKNewTaskSem => 'إنشاء مهمة في هذا المشروع';
+
+  @override
+  String get grpKRenameTask => 'إعادة تسمية المهمة تحت المؤشر';
+
+  @override
+  String get grpKRenameTaskSem =>
+      'إعادة تسمية المهمة التي عليها المؤشر في القائمة';
+
+  @override
+  String get grpKChangeStatus => 'تغيير حالة هذه المهمة';
+
+  @override
+  String get grpKChangeStatusSem => 'تغيير حالة المهمة المفتوحة';
+
+  @override
+  String get grpKAssignMe => 'إسناد هذه المهمة إليّ';
+
+  @override
+  String get grpKAssignMeSem => 'إسناد المهمة المفتوحة إليّ';
+
+  @override
+  String get grpKTimerStart => 'بدء المؤقت لهذه المهمة';
+
+  @override
+  String get grpKTimerStartSem => 'بدء المؤقت للمهمة المفتوحة';
+
+  @override
+  String get grpKTimerStop => 'إيقاف المؤقت';
+
+  @override
+  String get grpKTimerStopSem => 'إيقاف المؤقت الجاري';
+
+  @override
+  String get grpKViewList => 'عرض القائمة';
+
+  @override
+  String get grpKViewBoard => 'عرض اللوحة';
+
+  @override
+  String get grpKViewCalendar => 'عرض التقويم';
+
+  @override
+  String get grpKViewTimeline => 'عرض الجدول الزمني';
+
+  @override
+  String get grpKShowList => 'عرض هذا المشروع كقائمة';
+
+  @override
+  String get grpKShowBoard => 'عرض هذا المشروع كلوحة';
+
+  @override
+  String get grpKShowCalendar => 'عرض هذا المشروع كتقويم';
+
+  @override
+  String get grpKShowTimeline => 'عرض هذا المشروع كجدول زمني';
+
+  @override
+  String get grpLGeneric => 'حدث خطأ ما. حاول مرة أخرى.';
+
+  @override
+  String get grpLNetCheck =>
+      'تعذر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get grpLNetCheckShort => 'تعذر الوصول إلى الخادم. تحقق من اتصالك.';
+
+  @override
+  String get grpLNetTry => 'تعذر الوصول إلى الخادم. حاول مرة أخرى.';
+
+  @override
+  String get grpLNetOffline =>
+      'يحتاج هذا إلى اتصال بالخادم. سيعمل مجددًا عند عودتك إلى الإنترنت.';
+
+  @override
+  String get grpLNoConn => 'لا يوجد اتصال. تحقق منه وحاول مرة أخرى.';
+
+  @override
+  String get grpLNoPerm => 'ليس لديك إذن.';
+
+  @override
+  String get grpLNoPermDo => 'ليس لديك إذن للقيام بذلك.';
+
+  @override
+  String get grpLNoAccess => 'ليس لديك صلاحية الوصول إلى ذلك.';
+
+  @override
+  String get grpLCheckValues => 'تحقق من القيم وحاول مرة أخرى.';
+
+  @override
+  String get grpLNotValid => 'هذا غير صالح.';
+
+  @override
+  String get grpLArchived => 'هذا المشروع مؤرشف. استعده لإجراء تغييرات.';
+
+  @override
+  String get grpLGone => 'لم يعد هذا موجودًا.';
+
+  @override
+  String get grpLTaskConflict => 'قام شخص آخر بتغيير هذه المهمة أولاً.';
+
+  @override
+  String get grpLTaskTransition => 'لا يسمح سير العمل بهذا الانتقال.';
+
+  @override
+  String get grpLTaskHasSubtasks =>
+      'لهذه المهمة مهام فرعية: اختر ما سيحدث لها.';
+
+  @override
+  String get grpLTaskCycle =>
+      'لا يمكن أن تصبح المهمة مهمة فرعية لنفسها أو لإحدى مهامها الفرعية.';
+
+  @override
+  String grpLTaskBlocked(String detail) {
+    return 'محظورة بسبب $detail: أنهِ تلك أولاً.';
+  }
+
+  @override
+  String grpLTaskLinkCycle(String detail) {
+    return 'ستحظر هذه المهام بعضها بعضًا في حلقة: $detail.';
+  }
+
+  @override
+  String get grpLTaskLinkExists => 'هذه المهام مرتبطة بالفعل بهذه الطريقة.';
+
+  @override
+  String get grpLFieldRequired => 'حقل مطلوب بلا قيمة.';
+
+  @override
+  String get grpLTaskGone => 'لم تعد هذه المهمة موجودة.';
+
+  @override
+  String get grpLCommentConflict => 'قام شخص ما بتغيير هذا التعليق أولاً.';
+
+  @override
+  String get grpLCommentLocked => 'لم يعد بالإمكان تعديل هذا التعليق.';
+
+  @override
+  String get grpLMentionNoAccess => 'شخص ذكرته لا يستطيع رؤية هذه المهمة.';
+
+  @override
+  String get grpLCommentCheck => 'تحقق من التعليق وحاول مرة أخرى.';
+
+  @override
+  String get grpLCommentGone => 'لم يعد هذا التعليق موجودًا.';
+
+  @override
+  String get grpLSlugTaken => 'هذا العنوان مستخدم';
+
+  @override
+  String get grpLWsStale =>
+      'تم تغيير مساحة العمل هذه في مكان آخر. حدّث الصفحة لرؤية أحدث نسخة.';
+
+  @override
+  String get grpLWsNotRestorable => 'لم يعد بالإمكان استعادة مساحة العمل هذه.';
+
+  @override
+  String get grpLOwnerNeeded => 'تحتاج مساحة العمل إلى مالك واحد على الأقل.';
+
+  @override
+  String get grpLInvEmailMismatch =>
+      'هذه الدعوة موجهة إلى عنوان بريد إلكتروني آخر.';
+
+  @override
+  String get grpLInvExpired => 'انتهت صلاحية هذه الدعوة. اطلب دعوة جديدة.';
+
+  @override
+  String get grpLInvRevoked => 'تم إلغاء هذه الدعوة.';
+
+  @override
+  String get grpLInvBeforeRemoval =>
+      'هذه الدعوة سابقة لإزالتك. اطلب دعوة جديدة.';
+
+  @override
+  String get grpLInvUsedUp => 'تم استخدام هذه الدعوة بالكامل بالفعل.';
+
+  @override
+  String get grpLInvNotFound => 'هذه الدعوة غير موجودة.';
+
+  @override
+  String get grpLInvRate =>
+      'دعوات كثيرة جدًا الآن. انتظر قليلًا وحاول مرة أخرى.';
+
+  @override
+  String get grpLInvExists => 'هذا الشخص مدعو بالفعل أو عضو.';
+
+  @override
+  String get grpLWfInvalid => 'سير العمل فيه مشكلات. أصلحها للحفظ.';
+
+  @override
+  String get grpLWfConflict =>
+      'حفظ شخص آخر سير العمل أولاً. تغييراتك ما زالت هنا: راجع ما تغيّر واحفظ مرة أخرى.';
+
+  @override
+  String get grpLProjectGone => 'لم يعد هذا المشروع موجودًا.';
+
+  @override
+  String get grpLDashDenied => 'غير مسموح لك بفعل ذلك في لوحة المعلومات هذه.';
+
+  @override
+  String get grpLDashNotFound => 'لوحة المعلومات أو الأداة هذه غير متاحة.';
+
+  @override
+  String get grpLDashHeavy =>
+      'تستغرق هذه الأداة وقتًا طويلًا في الحساب. ضيّق عامل التصفية الخاص بها.';
+
+  @override
+  String get grpLDashConflict =>
+      'قام شخص آخر بتغيير لوحة المعلومات هذه. أعد تحميلها وحاول مرة أخرى.';
+
+  @override
+  String get grpLNotifGone => 'لم يعد هذا الإشعار موجودًا.';
+
+  @override
+  String get grpLViewConflict => 'قام شخص آخر بتغيير هذا التخطيط أولاً.';
+
+  @override
+  String get grpLViewInvalid => 'هذا التخطيط غير صالح.';
+
+  @override
+  String get grpLViewNameTaken => 'يوجد تخطيط بهذا الاسم بالفعل.';
+
+  @override
+  String get grpLViewLimit =>
+      'هذا أقصى عدد من التخطيطات يمكنك الاحتفاظ به هنا.';
+
+  @override
+  String get grpLViewGone => 'لم يعد هذا التخطيط موجودًا.';
+
+  @override
+  String get grpLAutoDenied => 'تحتاج إلى إذن «إدارة الأتمتة» لذلك.';
+
+  @override
+  String get grpLAutoConflict =>
+      'قام شخص آخر بتغيير هذه القاعدة أولاً. حمّل أحدث نسخة وأعد المحاولة.';
+
+  @override
+  String get grpLImpCannot => 'لا يمكن القيام بذلك الآن.';
+
+  @override
+  String get grpLImpTooBig => 'هذا الملف أكبر مما يقبله هذا الخادم.';
+
+  @override
+  String get grpLImpDenied => 'يستطيع المسؤولون فقط استيراد البيانات وتصديرها.';
+
+  @override
+  String get grpLImpNotFound => 'لم يعد هذا الاستيراد موجودًا.';
+
+  @override
+  String get grpLAuditDenied => 'غير مسموح لك بقراءة سجل التدقيق.';
+
+  @override
+  String get grpLAuditTaskNA => 'هذه المهمة غير متاحة.';
+
+  @override
+  String get grpLAuditFilters => 'عوامل التصفية هذه غير صالحة.';
+
+  @override
+  String get grpLSprintConflict =>
+      'قام شخص آخر بتغيير هذا أولاً. أعد التحميل وحاول مرة أخرى.';
+
+  @override
+  String get grpLFieldNameTaken => 'يوجد حقل بهذا الاسم بالفعل.';
+
+  @override
+  String grpLFieldLimit(int count) {
+    return 'يمكن أن يحتوي المشروع على $count حقلًا نشطًا كحد أقصى.';
+  }
+
+  @override
+  String get grpLFieldNeedsRemap =>
+      'بعض الخيارات المحذوفة لا تزال مستخدمة: اختر ما ستصبح عليه قيمها.';
+
+  @override
+  String get grpLFieldConflict =>
+      'قام شخص آخر بتغيير هذا الحقل أولاً؛ أعد التحميل وحاول مرة أخرى.';
+
+  @override
+  String get grpLFieldGone => 'لم يعد هذا الحقل موجودًا.';
+
+  @override
+  String get grpLFilterInvalid => 'عامل التصفية هذا غير صالح.';
+
+  @override
+  String get grpLFilterNameTaken => 'يوجد عامل تصفية بهذا الاسم هنا بالفعل.';
+
+  @override
+  String get grpLFilterLimit =>
+      'هذا أقصى عدد من عوامل التصفية يمكنك الاحتفاظ به هنا.';
+
+  @override
+  String get grpLFilterGone => 'لم يعد عامل التصفية هذا موجودًا.';
+
+  @override
+  String get grpLFilterConflict => 'قام شخص آخر بتغيير عامل التصفية هذا أولاً.';
+
+  @override
+  String get grpLAttTooBig => 'هذا الملف أكبر من الحجم المسموح للمرفق.';
+
+  @override
+  String get grpLAttQuota => 'استخدمت مساحة العمل هذه كل مساحة التخزين.';
+
+  @override
+  String get grpLAttTooMany =>
+      'هناك عمليات رفع مفتوحة كثيرة. أنهِ بعضها أو ألغِه أولاً.';
+
+  @override
+  String get grpLAttUnavailable => 'تعذر فحص الملف الآن. حاول مرة أخرى.';
+
+  @override
+  String get grpLAttChunk => 'لم يتم قبول جزء من الملف. حاول مرة أخرى.';
+
+  @override
+  String get grpLAttRefusedPlain => 'هذا النوع من الملفات غير مقبول.';
+
+  @override
+  String grpLAttRefused(String detail) {
+    return 'هذا الملف غير مقبول: $detail';
+  }
+
+  @override
+  String get grpLAttIncomplete => 'لم يكتمل الرفع. حاول مرة أخرى.';
+
+  @override
+  String get grpLAttExpired => 'انتهت صلاحية عملية الرفع. حاول مرة أخرى.';
+
+  @override
+  String get grpLAttUnreadable => 'تعذرت قراءة هذا الملف.';
+
+  @override
+  String get grpLAttNotAllowed => 'غير مسموح لك بفعل ذلك.';
+
+  @override
+  String get grpLAttArchived => 'هذا المشروع مؤرشف: الملفات للقراءة فقط.';
+
+  @override
+  String get grpLAttGone =>
+      'لم يعد موجودًا: تمت إزالة الملف أو التعليق أو المهمة.';
+
+  @override
+  String get grpLDocNotFound => 'هذه الصفحة غير موجودة أو لا يمكنك فتحها.';
+
+  @override
+  String get grpLDocConflict => 'قام شخص آخر بتغيير هذه الصفحة أولاً.';
+
+  @override
+  String get grpLDocArchived => 'هذه الصفحة مؤرشفة.';
+
+  @override
+  String get grpLDocCycle => 'لا يمكن وضع صفحة تحت نفسها.';
+
+  @override
+  String get grpLKeyTaken => 'هذا المفتاح مستخدم بالفعل في مشروع آخر.';
+
+  @override
+  String get grpLKeyLocked =>
+      'لا يمكن تغيير المفتاح بعد أن يحتوي المشروع على مهام.';
+
+  @override
+  String get grpLLastMember => 'يحتاج المشروع الخاص إلى عضو واحد على الأقل.';
+
+  @override
+  String get grpLProjConflict =>
+      'تغيّر هذا المشروع في هذه الأثناء. تمت إعادة التحميل — حاول مرة أخرى.';
+
+  @override
+  String get grpLRoleBuiltin => 'لا يمكن تغيير الأدوار المضمنة أو حذفها.';
+
+  @override
+  String get grpLRoleNameTaken => 'يوجد دور بهذا الاسم بالفعل.';
+
+  @override
+  String get grpLRoleGone => 'لم يعد هذا الدور موجودًا.';
+
+  @override
+  String get grpLRoleConflict =>
+      'تغيّر هذا الدور في هذه الأثناء. تمت إعادة التحميل — حاول مرة أخرى.';
+
+  @override
+  String get grpLRepeatInvalid => 'هذا التكرار غير صالح.';
+
+  @override
+  String get grpLRepeatDenied => 'غير مسموح لك بتغيير طريقة تكرار هذا.';
+
+  @override
+  String get grpMPriUrgent => 'عاجل';
+
+  @override
+  String get grpMPriHigh => 'مرتفع';
+
+  @override
+  String get grpMPriNormal => 'عادي';
+
+  @override
+  String get grpMPriLow => 'منخفض';
+
+  @override
+  String get grpMPriNone => 'بدون';
+
+  @override
+  String get grpMLinkBlocks => 'يحجب';
+
+  @override
+  String get grpMLinkBlockedBy => 'محجوب بواسطة';
+
+  @override
+  String get grpMLinkRelates => 'مرتبط بـ';
+
+  @override
+  String get grpMLinkDuplicates => 'يكرّر';
+
+  @override
+  String get grpMLinkDuplicatedBy => 'مكرَّر بواسطة';
+
+  @override
+  String get grpMCatNotStarted => 'لم يبدأ';
+
+  @override
+  String get grpMCatActive => 'نشط';
+
+  @override
+  String get grpMCatDone => 'مكتمل';
+
+  @override
+  String get grpMCatCancelled => 'ملغى';
+
+  @override
+  String get grpMFtypeText => 'نص';
+
+  @override
+  String get grpMFtypeNumber => 'رقم';
+
+  @override
+  String get grpMFtypeSelect => 'اختيار';
+
+  @override
+  String get grpMFtypeMulti => 'متعدد الاختيار';
+
+  @override
+  String get grpMFtypeDate => 'تاريخ';
+
+  @override
+  String get grpMFtypeCheckbox => 'خانة اختيار';
+
+  @override
+  String get grpMFtypeUrl => 'رابط';
+
+  @override
+  String get grpMFtypeUser => 'مستخدم';
+
+  @override
+  String get grpMFtypeMoney => 'مال';
+
+  @override
+  String get grpMTrigTaskCreated => 'تم إنشاء مهمة';
+
+  @override
+  String get grpMTrigStatusChanged => 'تغيّرت حالة';
+
+  @override
+  String get grpMTrigFieldChanged => 'تغيّر حقل';
+
+  @override
+  String get grpMTrigAssigned => 'تم تكليف شخص';
+
+  @override
+  String get grpMTrigDueDateReached => 'حان موعد استحقاق';
+
+  @override
+  String get grpMTrigCommentAdded => 'أُضيف تعليق';
+
+  @override
+  String get grpMActSetField => 'تعيين حقل';
+
+  @override
+  String get grpMActSetStatus => 'تعيين الحالة';
+
+  @override
+  String get grpMActSetAssignee => 'تغيير المكلّفين';
+
+  @override
+  String get grpMActAddComment => 'إضافة تعليق';
+
+  @override
+  String get grpMActCreateSubtask => 'إنشاء مهمة فرعية';
+
+  @override
+  String get grpMActNotify => 'إشعار الأشخاص';
+
+  @override
+  String get grpMActWebhook => 'استدعاء webhook';
+
+  @override
+  String get grpMRunSucceeded => 'نجح';
+
+  @override
+  String get grpMRunFailed => 'فشل';
+
+  @override
+  String get grpMRunSkippedCondition => 'تم التخطي: الشرط';
+
+  @override
+  String get grpMRunSkippedLoop => 'توقف: حلقة';
+
+  @override
+  String get grpMRunSkippedRate => 'متوقف: تشغيلات كثيرة';
+
+  @override
+  String get grpMWkNumber => 'رقم';
+
+  @override
+  String get grpMWkBar => 'مخطط شريطي';
+
+  @override
+  String get grpMWkLine => 'مخطط خطي';
+
+  @override
+  String get grpMWkPie => 'مخطط دائري';
+
+  @override
+  String get grpMWkTable => 'جدول';
+
+  @override
+  String get grpMWkBurndown => 'المخطط التنازلي';
+
+  @override
+  String get grpMWkWorkload => 'عبء العمل';
+
+  @override
+  String get grpMMeasCount => 'عدد المهام';
+
+  @override
+  String get grpMMeasPoints => 'نقاط القصة';
+
+  @override
+  String get grpMMeasEstimateHours => 'الساعات المقدَّرة';
+
+  @override
+  String get grpMMeasLoggedHours => 'الساعات المسجّلة';
+
+  @override
+  String get grpMMeasCycleDays => 'زمن الدورة (أيام)';
+
+  @override
+  String get grpMScopeAll => 'كل المهام';
+
+  @override
+  String get grpMScopeOpen => 'المهام المفتوحة';
+
+  @override
+  String get grpMScopeDone => 'المهام المنجزة';
+
+  @override
+  String get grpMVisPersonal => 'أنا فقط';
+
+  @override
+  String get grpMVisProject => 'الجميع في المشروع';
+
+  @override
+  String get grpMVisWorkspace => 'الجميع في مساحة العمل';
+
+  @override
+  String get grpMLblStatus => 'الحالة';
+
+  @override
+  String get grpMLblStatusCategory => 'فئة الحالة';
+
+  @override
+  String get grpMLblPerson => 'الشخص';
+
+  @override
+  String get grpMLblPriority => 'الأولوية';
+
+  @override
+  String get grpMLblProject => 'المشروع';
+
+  @override
+  String get grpMLblSprint => 'السبرنت';
+
+  @override
+  String get grpMLblCreatedDay => 'الإنشاء (يوم)';
+
+  @override
+  String get grpMLblCreatedWeek => 'الإنشاء (أسبوع)';
+
+  @override
+  String get grpMLblDueWeek => 'الاستحقاق (أسبوع)';
+
+  @override
+  String get grpMImpJiraCsv => 'Jira (تصدير CSV)';
+
+  @override
+  String get grpMImpJiraJson => 'Jira (JSON)';
+
+  @override
+  String get grpMImpClickupCsv => 'ClickUp (تصدير CSV)';
+
+  @override
+  String get grpMImpClickupJson => 'ClickUp (JSON)';
+
+  @override
+  String get grpMImpCsv => 'أي ملف CSV';
+
+  @override
+  String get grpMImpTaskforge => 'تصدير TaskForge (tasks.json)';
+
+  @override
+  String get grpMNkAssigned => 'مُكلَّف إليك';
+
+  @override
+  String get grpMNkMentioned => 'الإشارات';
+
+  @override
+  String get grpMNkCommented => 'التعليقات';
+
+  @override
+  String get grpMNkStatusChanged => 'تغييرات الحالة';
+
+  @override
+  String get grpMNkDueSoon => 'موعدها قريب';
+
+  @override
+  String get grpMNkTimerLong => 'مؤقّتات طويلة';
+
+  @override
+  String get grpMNkUnknown => 'إشعار';
+
+  @override
+  String get grpMIfAll => 'الكل';
+
+  @override
+  String get grpMIfUnread => 'غير المقروءة';
+
+  @override
+  String get grpMIfMentions => 'الإشارات';
+
+  @override
+  String get grpMIfAssigned => 'المُكلَّف بها';
+
+  @override
+  String get grpMIfSnoozed => 'المؤجَّلة';
+
+  @override
+  String get grpMIfArchived => 'المؤرشفة';
+
+  @override
+  String get grpMEmOff => 'متوقف';
+
+  @override
+  String get grpMEmInstant => 'فوري';
+
+  @override
+  String get grpMEmDigest => 'ملخص يومي';
+
+  @override
+  String get grpMRkSchedule => 'وفق جدول';
+
+  @override
+  String get grpMRkAfterCompletion => 'بعد اكتماله';
+
+  @override
+  String get grpMLblOpEq => 'يساوي';
+
+  @override
+  String get grpMLblOpNe => 'لا يساوي';
+
+  @override
+  String get grpMLblOpLt => 'قبل / أقل من';
+
+  @override
+  String get grpMLblOpLte => 'في أو قبل / على الأكثر';
+
+  @override
+  String get grpMLblOpGt => 'بعد / أكثر من';
+
+  @override
+  String get grpMLblOpGte => 'في أو بعد / على الأقل';
+
+  @override
+  String get grpMLblOpContains => 'يحتوي على';
+
+  @override
+  String get grpMLblOpNotContains => 'لا يحتوي على';
+
+  @override
+  String get grpMLblOpIn => 'هو أحد';
+
+  @override
+  String get grpMLblOpNotIn => 'ليس أيًّا من';
+
+  @override
+  String get grpMLblOpEmpty => 'فارغ';
+
+  @override
+  String get grpMLblOpNotEmpty => 'غير فارغ';
+
+  @override
+  String get grpMLblAssignee => 'المكلَّف';
+
+  @override
+  String get grpMLblStart => 'البداية';
+
+  @override
+  String get grpMLblDue => 'الاستحقاق';
+
+  @override
+  String get grpMLblCreated => 'الإنشاء';
+
+  @override
+  String get grpMLblUpdated => 'التحديث';
+
+  @override
+  String get grpMLblDueDate => 'تاريخ الاستحقاق';
+
+  @override
+  String get grpMLblProgress => 'تقدّم المهام الفرعية';
+
+  @override
+  String get grpMLblViewList => 'قائمة';
+
+  @override
+  String get grpMLblViewBoard => 'لوحة';
+
+  @override
+  String get grpMLblViewCalendar => 'التقويم';
+
+  @override
+  String get grpMLblViewTimeline => 'الجدول الزمني';
+
+  @override
+  String get grpMRelNow => 'الآن';
+
+  @override
+  String get grpMRelJustNow => 'للتو';
+
+  @override
+  String grpMRelMin(int n) {
+    return 'قبل $n دقيقة';
+  }
+
+  @override
+  String grpMRelHour(int n) {
+    return 'قبل $n ساعة';
+  }
+
+  @override
+  String get grpMRelYesterday => 'أمس';
+
+  @override
+  String grpMRelDay(int n) {
+    return 'قبل $n يوم';
+  }
+
+  @override
+  String get grpMNotifSomeone => 'شخص ما';
+
+  @override
+  String grpMNotifAssigned(String who) {
+    return '$who كلّفك بـ';
+  }
+
+  @override
+  String grpMNotifMentioned(String who) {
+    return '$who أشار إليك في';
+  }
+
+  @override
+  String grpMNotifCommented(String who) {
+    return '$who علّق على';
+  }
+
+  @override
+  String grpMNotifStatusChanged(String who) {
+    return '$who غيّر حالة';
+  }
+
+  @override
+  String grpMNotifMoved(String who, String fromStatus, String toStatus) {
+    return '$who نقل من $fromStatus إلى $toStatus';
+  }
+
+  @override
+  String get grpMNotifDueSoon => 'موعد قريب:';
+
+  @override
+  String get grpMNotifTimer => 'مؤقّتك لا يزال يعمل على';
+
+  @override
+  String get grpMNotifNew => 'نشاط جديد في';
+
+  @override
+  String get grpMUnitDay => 'يوم';
+
+  @override
+  String get grpMUnitDays => 'أيام';
+
+  @override
+  String get grpMUnitWeek => 'أسبوع';
+
+  @override
+  String get grpMUnitWeeks => 'أسابيع';
+
+  @override
+  String get grpMUnitMonth => 'شهر';
+
+  @override
+  String get grpMUnitMonths => 'أشهر';
+
+  @override
+  String get grpMUnitYear => 'سنة';
+
+  @override
+  String get grpMUnitYears => 'سنوات';
+
+  @override
+  String get grpMSlashText => 'نص';
+
+  @override
+  String get grpMSlashH1 => 'عنوان 1';
+
+  @override
+  String get grpMSlashH2 => 'عنوان 2';
+
+  @override
+  String get grpMSlashH3 => 'عنوان 3';
+
+  @override
+  String get grpMSlashBullet => 'قائمة نقطية';
+
+  @override
+  String get grpMSlashNumbered => 'قائمة مرقّمة';
+
+  @override
+  String get grpMSlashTodo => 'قائمة مراجعة';
+
+  @override
+  String get grpMSlashQuote => 'اقتباس';
+
+  @override
+  String get grpMSlashCode => 'شيفرة';
+
+  @override
+  String get grpMSlashTable => 'جدول';
+
+  @override
+  String get grpMSlashDivider => 'فاصل';
+
+  @override
+  String get grpMSlashImage => 'صورة';
+
+  @override
+  String get grpMSlashCallout => 'تنبيه';
+
+  @override
+  String get grpMSlashTask => 'بطاقة مهمة';
+
+  @override
+  String get grpMMeanSucceeded => 'نُفِّذت كل الإجراءات.';
+
+  @override
+  String get grpMMeanFailed =>
+      'فشل أحد الإجراءات؛ وتبقى الإجراءات السابقة له منفَّذة.';
+
+  @override
+  String get grpMMeanSkippedCondition =>
+      'تطابق الحدث، لكن المهمة لم تستوفِ الشرط.';
+
+  @override
+  String get grpMMeanSkippedLoop =>
+      'شغّلت القواعد قواعد أخرى بعمق يزيد على 5 مراحل، لذا أُوقف هذا التشغيل لإنهاء حلقة.';
+
+  @override
+  String get grpMMeanSkippedRate =>
+      'سبق أن شُغّلت هذه القاعدة 30 مرة في الدقيقة الأخيرة، لذا تم تخطي هذا التشغيل.';
+
+  @override
+  String get grpMStepOk => 'موفق';
+
+  @override
+  String get grpMStepFailed => 'فشل';
+
+  @override
+  String get grpMStepNotRun => 'لم يُنفَّذ';
+
+  @override
+  String get grpMStepPlanned => 'مخطَّط';
+
+  @override
+  String get grpMStepWouldFail => 'سيفشل';
+
+  @override
+  String get grp1DropCardHere => 'أفلت بطاقة هنا';
+
+  @override
+  String get grp1NoCards => 'لا توجد بطاقات';
+
+  @override
+  String get grp1StopWatchingTask => 'إيقاف متابعة هذه المهمة';
+
+  @override
+  String get grp1WatchTask => 'متابعة هذه المهمة';
+
+  @override
+  String get grp1SecondFactorRequired => 'العامل الثاني مطلوب.';
+
+  @override
+  String get grp1AnAutomation => 'أتمتة';
+
+  @override
+  String get grp1TheSystem => 'النظام';
+
+  @override
+  String grp1MemberCount(int count) {
+    return '$count عضو';
+  }
+
+  @override
+  String get grp1SyncLive => 'مباشر';
+
+  @override
+  String get grp1SyncConnecting => 'جارٍ الاتصال…';
+
+  @override
+  String get grp1SyncReconnecting => 'جارٍ إعادة الاتصال…';
+
+  @override
+  String get grp1SyncLiveTip => 'تظهر تغييرات الآخرين فور حدوثها';
+
+  @override
+  String get grp1SyncNotLiveTip =>
+      'غير مباشر: ستظهر تغييرات الآخرين بعد إعادة الاتصال';
+
+  @override
+  String get grp1EnterNumber => 'أدخل رقماً.';
+
+  @override
+  String get grp1EnterAmount => 'أدخل مبلغاً.';
+
+  @override
+  String get grp1EnterCurrency => 'أدخل عملة من 3 أحرف، مثل USD.';
+
+  @override
+  String get grp1EnterUrl => 'أدخل عنوان ويب يبدأ بـ http(s)://';
+
+  @override
+  String get grp1UseIsoDate => 'استخدم الصيغة YYYY-MM-DD.';
 }

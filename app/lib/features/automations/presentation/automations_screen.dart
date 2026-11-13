@@ -36,7 +36,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     try {
       await call();
     } on AutomationException catch (e) {
-      if (mounted) _say(automationErrorMessage(e));
+      if (mounted) _say(automationErrorMessage(e, context.l10n));
     }
   }
 
@@ -214,7 +214,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            automationErrorMessage(error),
+            automationErrorMessage(error, context.l10n),
             key: const Key('automations-error'),
           ),
           TextButton(
@@ -360,6 +360,6 @@ String describeTrigger(Trigger t, Lookups l, [AppLocalizations? loc]) {
       t.daysBefore == 0
           ? s.grpCAutoDueReached
           : s.grpCAutoDaysBefore(t.daysBefore),
-    _ => t.type.label.toLowerCase(),
+    _ => t.type.labelIn(s).toLowerCase(),
   };
 }

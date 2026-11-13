@@ -145,7 +145,10 @@ class _TextBlockViewState extends State<TextBlockView> {
     if (newline != null) {
       final slash = _slashQuery;
       if (slash != null) {
-        final items = SlashMenu.filter(slash.replaceAll('\n', ''));
+        final items = SlashMenu.filter(
+          slash.replaceAll('\n', ''),
+          context.l10n,
+        );
         // Take the break back out, then do what the menu would.
         _c.rich = rich.replaceRange(newline, newline + 1, '');
         if (items.isNotEmpty) {
@@ -388,8 +391,8 @@ class _TextBlockViewState extends State<TextBlockView> {
       field = Container(
         padding: const EdgeInsetsDirectional.only(start: 12),
         decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(color: theme.colorScheme.outline, width: 3),
+          border: BorderDirectional(
+            start: BorderSide(color: theme.colorScheme.outline, width: 3),
           ),
         ),
         child: field,
@@ -456,21 +459,27 @@ class _TextBlockViewState extends State<TextBlockView> {
         children: [
           OverlayPortal(
             controller: _overlay,
-            overlayChildBuilder: (_) => Stack(
+            overlayChildBuilder: (overlayContext) => Stack(
               children: [
                 if (showBar)
                   CompositedTransformFollower(
                     link: _anchor,
                     showWhenUnlinked: false,
-                    targetAnchor: Alignment.topLeft,
-                    followerAnchor: Alignment.bottomLeft,
+                    targetAnchor: AlignmentDirectional.topStart.resolve(
+                      Directionality.of(overlayContext),
+                    ),
+                    followerAnchor: AlignmentDirectional.bottomStart.resolve(
+                      Directionality.of(overlayContext),
+                    ),
                     child: _toolbar(),
                   ),
                 if (slash != null || mention != null)
                   CompositedTransformFollower(
                     link: _anchor,
                     showWhenUnlinked: false,
-                    targetAnchor: Alignment.bottomLeft,
+                    targetAnchor: AlignmentDirectional.bottomStart.resolve(
+                      Directionality.of(overlayContext),
+                    ),
                     child: slash != null
                         ? SlashMenu(
                             query: slash,

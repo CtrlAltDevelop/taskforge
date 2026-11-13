@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/features/shortcuts/application/action_groups.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
@@ -133,16 +135,16 @@ Future<void> _createSprint(ActionContext c) async {
 
 AppAction _go(
   String id,
-  String title,
+  String Function(AppLocalizations) title,
   String path, {
-  String group = 'Workspace',
+  String Function(AppLocalizations) group = groupWorkspace,
   List<String> keywords = const [],
   bool Function(ActionContext)? allowed,
 }) => AppAction(
   id: id,
-  title: title,
-  group: group,
-  semanticLabel: 'Go to $title',
+  titleOf: title,
+  groupOf: group,
+  semanticOf: (l) => l.grpKGoTo(title(l)),
   keywords: keywords,
   available: (c) => c.location != path && (allowed?.call(c) ?? true),
   run: (c) => c.router.go(path),
@@ -154,18 +156,18 @@ AppAction _go(
 final List<AppAction> moreActions = [
   AppAction(
     id: 'workspace.switch',
-    title: 'Switch workspace',
-    group: 'Workspace',
-    semanticLabel: 'Switch to another workspace',
+    titleOf: (l) => l.grpKSwitchWs,
+    groupOf: groupWorkspace,
+    semanticOf: (l) => l.grpKSwitchWsSem,
     keywords: const ['change', 'company', 'team'],
     available: (c) => _workspaces(c).length > 1,
     run: _switchWorkspace,
   ),
   AppAction(
     id: 'theme.toggle',
-    title: 'Toggle dark mode',
-    group: 'General',
-    semanticLabel: 'Switch between the light and the dark theme',
+    titleOf: (l) => l.grpKToggleDark,
+    groupOf: groupGeneral,
+    semanticOf: (l) => l.grpKToggleDarkSem,
     keywords: const ['theme', 'light', 'dark', 'appearance'],
     run: (c) => c.container
         .read(themeModeProvider.notifier)
@@ -173,35 +175,35 @@ final List<AppAction> moreActions = [
   ),
   AppAction(
     id: 'project.create',
-    title: 'Create a project',
-    group: 'Projects',
-    semanticLabel: 'Create a project',
+    titleOf: (l) => l.grpKCreateProject,
+    groupOf: groupProjects,
+    semanticOf: (l) => l.grpKCreateProject,
     keywords: const ['new', 'add'],
     available: (c) => _can(c, Perm.projectCreate),
     run: (c) => createProject(c.context),
   ),
   AppAction(
     id: 'doc.create',
-    title: 'Create a doc',
-    group: 'Docs',
-    semanticLabel: 'Create a doc',
+    titleOf: (l) => l.grpKCreateDoc,
+    groupOf: groupDocs,
+    semanticOf: (l) => l.grpKCreateDoc,
     keywords: const ['new', 'page', 'wiki', 'write'],
     available: (c) => _can(c, Perm.docEdit),
     run: _createDoc,
   ),
   AppAction(
     id: 'dashboard.create',
-    title: 'Create a dashboard',
-    group: 'Dashboards',
-    semanticLabel: 'Create a dashboard',
+    titleOf: (l) => l.grpKCreateDashboard,
+    groupOf: groupDashboards,
+    semanticOf: (l) => l.grpKCreateDashboard,
     keywords: const ['new', 'report', 'chart'],
     run: _createDashboard,
   ),
   AppAction(
     id: 'sprint.create',
-    title: 'Create a sprint',
-    group: 'This project',
-    semanticLabel: 'Create a sprint in this project',
+    titleOf: (l) => l.grpKCreateSprint,
+    groupOf: groupThisProject,
+    semanticOf: (l) => l.grpKCreateSprintSem,
     keywords: const ['new', 'iteration', 'plan'],
     available: (c) {
       final id = c.projectId;
@@ -215,9 +217,9 @@ final List<AppAction> moreActions = [
   ),
   AppAction(
     id: 'member.invite',
-    title: 'Invite a member',
-    group: 'Workspace',
-    semanticLabel: 'Invite someone to this workspace',
+    titleOf: (l) => l.grpKInviteMember,
+    groupOf: groupWorkspace,
+    semanticOf: (l) => l.grpKInviteMemberSem,
     keywords: const ['add', 'people', 'email', 'team'],
     available: (c) => _can(c, Perm.memberInvite),
     run: (c) => showDialog<void>(
@@ -227,23 +229,23 @@ final List<AppAction> moreActions = [
   ),
   _go(
     'nav.import',
-    'Import and export',
+    (l) => l.grpKTImportExport,
     '/import',
     keywords: const ['jira', 'clickup', 'csv', 'backup', 'download'],
     allowed: (c) => _can(c, Perm.dataManage),
   ),
   _go(
     'nav.offline',
-    'Offline and storage',
+    (l) => l.grpKTOffline,
     '/offline',
-    group: 'Account',
+    group: groupAccount,
     keywords: const ['sync', 'cache', 'pending', 'conflicts'],
   ),
   AppAction(
     id: 'account.sign_out',
-    title: 'Sign out',
-    group: 'Account',
-    semanticLabel: 'Sign out of this device',
+    titleOf: (l) => l.grpKSignOut,
+    groupOf: groupAccount,
+    semanticOf: (l) => l.grpKSignOutSem,
     keywords: const ['log out', 'logout', 'leave'],
     run: (c) => c.container.read(authSessionProvider).signOut(),
   ),

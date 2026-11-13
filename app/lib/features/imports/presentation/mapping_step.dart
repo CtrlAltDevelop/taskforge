@@ -184,7 +184,7 @@ class _Source extends StatelessWidget {
           value: current,
           items: [
             for (final s in ImportSource.values)
-              DropdownMenuItem(value: s, child: Text(s.label)),
+              DropdownMenuItem(value: s, child: Text(s.labelIn(context.l10n))),
           ],
           onChanged: wizard.busy
               ? null

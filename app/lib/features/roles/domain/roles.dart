@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Registry keys (mirrors backend `registry.py`; the server is the authority).
 abstract final class Perm {
@@ -166,20 +169,19 @@ class RoleException implements Exception {
 }
 
 /// What to tell the user about a failed roles call.
-String roleErrorMessage(Object error) {
-  if (error is! RoleException) return 'Something went wrong. Try again.';
+String roleErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! RoleException) return t.grpLGeneric;
   return switch (error.failure) {
-    RoleFailure.builtin => 'Built-in roles cannot be changed or deleted.',
-    RoleFailure.nameTaken => 'A role with that name already exists.',
-    RoleFailure.ownerProtected => 'A workspace needs at least one owner.',
-    RoleFailure.denied => error.detail ?? 'You do not have permission.',
-    RoleFailure.forbidden => 'You do not have permission to do that.',
-    RoleFailure.invalid => error.detail ?? 'Check the values and try again.',
-    RoleFailure.notFound => 'That role no longer exists.',
-    RoleFailure.conflict =>
-      'This role changed in the meantime. Reloaded — try again.',
-    RoleFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    RoleFailure.other => 'Something went wrong. Try again.',
+    RoleFailure.builtin => t.grpLRoleBuiltin,
+    RoleFailure.nameTaken => t.grpLRoleNameTaken,
+    RoleFailure.ownerProtected => t.grpLOwnerNeeded,
+    RoleFailure.denied => error.detail ?? t.grpLNoPerm,
+    RoleFailure.forbidden => t.grpLNoPermDo,
+    RoleFailure.invalid => error.detail ?? t.grpLCheckValues,
+    RoleFailure.notFound => t.grpLRoleGone,
+    RoleFailure.conflict => t.grpLRoleConflict,
+    RoleFailure.network => t.grpLNetCheck,
+    RoleFailure.other => t.grpLGeneric,
   };
 }

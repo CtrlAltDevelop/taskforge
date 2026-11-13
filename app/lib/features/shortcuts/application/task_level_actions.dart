@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/features/shortcuts/application/action_groups.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
@@ -53,7 +54,7 @@ Future<void> _save(ActionContext c, Task task, TaskPatch patch) async {
         .read(taskListProvider(task.projectId).notifier)
         .update(task, patch);
   } on TaskException catch (e) {
-    _say(c, taskErrorMessage(e));
+    _say(c, taskErrorMessage(e, c.context.mounted ? c.context.l10n : null));
   }
 }
 
@@ -70,7 +71,7 @@ Future<void> _newTask(ActionContext c) async {
         .read(taskListProvider(project).notifier)
         .create(title.trim());
   } on TaskException catch (e) {
-    _say(c, taskErrorMessage(e));
+    _say(c, taskErrorMessage(e, c.context.mounted ? c.context.l10n : null));
   }
 }
 
@@ -113,7 +114,7 @@ Future<void> _timer(ActionContext c, Future<void> Function() act) async {
   try {
     await act();
   } on Object catch (e) {
-    _say(c, timeErrorMessage(e));
+    _say(c, timeErrorMessage(e, c.context.mounted ? c.context.l10n : null));
   }
 }
 
@@ -140,9 +141,9 @@ class RenameRequest extends Notifier<int> {
 final List<AppAction> taskLevelActions = [
   AppAction(
     id: 'task.new',
-    title: 'New task',
-    group: 'This project',
-    semanticLabel: 'Create a task in this project',
+    titleOf: (l) => l.grpKNewTask,
+    groupOf: groupThisProject,
+    semanticOf: (l) => l.grpKNewTaskSem,
     keywords: const ['add', 'create', 'todo'],
     defaultKeys: 'alt+n',
     available: (c) => _can(c, Perm.taskCreate),
@@ -150,9 +151,9 @@ final List<AppAction> taskLevelActions = [
   ),
   AppAction(
     id: 'task.rename',
-    title: 'Rename the task under the cursor',
-    group: 'List view',
-    semanticLabel: 'Rename the task the cursor is on in the list',
+    titleOf: (l) => l.grpKRenameTask,
+    groupOf: groupListView,
+    semanticOf: (l) => l.grpKRenameTaskSem,
     keywords: const ['edit', 'title'],
     defaultKeys: 'f2',
     views: const {'list'},
@@ -161,18 +162,18 @@ final List<AppAction> taskLevelActions = [
   ),
   AppAction(
     id: 'task.status',
-    title: 'Change status of this task',
-    group: 'This task',
-    semanticLabel: 'Change the status of the open task',
+    titleOf: (l) => l.grpKChangeStatus,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.grpKChangeStatusSem,
     keywords: const ['move', 'done', 'progress', 'workflow'],
     available: (c) => _can(c, Perm.taskUpdate) && _task(c) != null,
     run: _changeStatus,
   ),
   AppAction(
     id: 'task.assign_me',
-    title: 'Assign this task to me',
-    group: 'This task',
-    semanticLabel: 'Assign the open task to me',
+    titleOf: (l) => l.grpKAssignMe,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.grpKAssignMeSem,
     keywords: const ['take', 'own', 'mine'],
     available: (c) {
       final task = _task(c);
@@ -184,9 +185,9 @@ final List<AppAction> taskLevelActions = [
   ),
   AppAction(
     id: 'timer.start',
-    title: 'Start the timer on this task',
-    group: 'This task',
-    semanticLabel: 'Start the timer on the open task',
+    titleOf: (l) => l.grpKTimerStart,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.grpKTimerStartSem,
     keywords: const ['track', 'time', 'clock'],
     defaultKeys: 'alt+s',
     available: (c) {
@@ -206,9 +207,9 @@ final List<AppAction> taskLevelActions = [
   ),
   AppAction(
     id: 'timer.stop',
-    title: 'Stop the timer',
-    group: 'General',
-    semanticLabel: 'Stop the running timer',
+    titleOf: (l) => l.grpKTimerStop,
+    groupOf: groupGeneral,
+    semanticOf: (l) => l.grpKTimerStopSem,
     keywords: const ['track', 'time', 'clock', 'pause'],
     defaultKeys: 'alt+shift+s',
     available: (c) => _running(c) != null,

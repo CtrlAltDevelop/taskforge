@@ -38,7 +38,9 @@ class _PageTreeState extends ConsumerState<PageTree> {
 
   void _say(Object error) => ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(docErrorMessage(error))));
+    ..showSnackBar(
+      SnackBar(content: Text(docErrorMessage(error, context.l10n))),
+    );
 
   Future<void> _run(Future<void> Function() call) async {
     try {

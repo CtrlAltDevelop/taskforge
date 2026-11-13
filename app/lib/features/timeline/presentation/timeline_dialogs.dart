@@ -4,6 +4,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/timeline/data/timeline_client.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/i18n/weekday_names.dart';
 
 /// What the person chose for a move that would push dependents.
 enum ShiftChoice { shift, keep, cancel }
@@ -67,15 +68,7 @@ String _range(String start, String due) => start.isNotEmpty && due.isNotEmpty
     ? '$start – $due'
     : (due.isEmpty ? start : due);
 
-List<String> _weekdayNames(AppLocalizations l) => [
-  l.grpIWeekdayMon,
-  l.grpIWeekdayTue,
-  l.grpIWeekdayWed,
-  l.grpIWeekdayThu,
-  l.grpIWeekdayFri,
-  l.grpIWeekdaySat,
-  l.grpIWeekdaySun,
-];
+List<String> _weekdayNames(AppLocalizations l) => l.weekdayShortNames;
 
 /// Edits the working weekdays and holidays; null when cancelled.
 Future<WorkingDays?> editWorkingDays(

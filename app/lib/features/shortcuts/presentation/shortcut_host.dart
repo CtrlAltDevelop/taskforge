@@ -104,13 +104,13 @@ class QuickActionsSheet extends StatelessWidget {
         children: [
           for (final a in actions)
             Semantics(
-              label: a.semanticLabel,
+              label: a.semanticLabelIn(context.l10n),
               button: true,
               excludeSemantics: true,
               child: ListTile(
                 key: Key('quick-${a.id}'),
-                title: Text(a.title),
-                subtitle: Text(a.group),
+                title: Text(a.titleIn(context.l10n)),
+                subtitle: Text(a.groupIn(context.l10n)),
                 onTap: () {
                   Navigator.of(context).pop();
                   from.container.read(recentActionsProvider.notifier).ran(a.id);

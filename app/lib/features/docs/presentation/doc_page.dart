@@ -197,7 +197,9 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              missing ? context.l10n.grpBDocNotFound : docErrorMessage(error),
+              missing
+                  ? context.l10n.grpBDocNotFound
+                  : docErrorMessage(error, context.l10n),
               key: Key(missing ? 'doc-not-found' : 'doc-error'),
             ),
             const SizedBox(height: 8),
@@ -255,7 +257,11 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                               } on DocException catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(docErrorMessage(e))),
+                                    SnackBar(
+                                      content: Text(
+                                        docErrorMessage(e, context.l10n),
+                                      ),
+                                    ),
                                   );
                                 }
                               }
@@ -392,7 +398,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                 ),
                 if (s.saveError != null && s.save == SaveState.error)
                   Text(
-                    docErrorMessage(s.saveError!),
+                    docErrorMessage(s.saveError!, context.l10n),
                     key: const Key('save-error'),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,

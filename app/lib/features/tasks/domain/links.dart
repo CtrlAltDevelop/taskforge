@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:taskforge/l10n/gen/app_localizations.dart';
+
 /// How a task relates to the one whose links are shown, from that task's side.
 enum LinkKind {
   blocks('blocks', 'Blocks'),
@@ -12,6 +14,15 @@ enum LinkKind {
 
   final String wire;
   final String label;
+
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (this) {
+    blocks => l.grpMLinkBlocks,
+    blockedBy => l.grpMLinkBlockedBy,
+    relates => l.grpMLinkRelates,
+    duplicates => l.grpMLinkDuplicates,
+    duplicatedBy => l.grpMLinkDuplicatedBy,
+  };
 
   static LinkKind parse(String wire) =>
       values.firstWhere((k) => k.wire == wire, orElse: () => LinkKind.relates);

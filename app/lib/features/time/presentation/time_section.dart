@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
@@ -43,7 +44,7 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
       await act();
       if (mounted) setState(() => _message = null);
     } on Object catch (e) {
-      if (mounted) setState(() => _message = timeErrorMessage(e));
+      if (mounted) setState(() => _message = timeErrorMessage(e, context.l10n));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -259,7 +260,7 @@ class _EntryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final day = entry.startedAt.toLocal();
-    final when = isoDate(day);
+    final when = context.localIso(day);
     return ListTile(
       key: Key('entry-${entry.id}'),
       dense: true,

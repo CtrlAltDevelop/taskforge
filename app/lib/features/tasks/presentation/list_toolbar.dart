@@ -6,6 +6,7 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Sort, group, columns, layouts and refresh for the list. On a phone this is
 /// the only way to sort and group (there are no column headers).
@@ -48,7 +49,7 @@ class ListToolbar extends ConsumerWidget {
                     key: Key('sort-$key'),
                     value: key,
                     child: Text(
-                      '${key == 'title' ? l10n.grpDTitle : lookups.columnLabel(key)}'
+                      '${key == 'title' ? l10n.grpDTitle : lookups.columnLabel(key, l10n)}'
                       '${_arrow(layout, key)}',
                     ),
                   ),
@@ -59,7 +60,9 @@ class ListToolbar extends ConsumerWidget {
                   ? l10n.grpDSort
                   : l10n.grpDSortBy(
                       layout.sort
-                          .map((s) => _name(lookups, s.key, l10n.grpDTitle))
+                          .map(
+                            (s) => _name(lookups, s.key, l10n.grpDTitle, l10n),
+                          )
                           .join(', '),
                     ),
             ),
@@ -105,7 +108,7 @@ class ListToolbar extends ConsumerWidget {
                   key: Key('column-$key'),
                   value: key,
                   checked: layout.columns.contains(key),
-                  child: Text(lookups.columnLabel(key)),
+                  child: Text(lookups.columnLabel(key, context.l10n)),
                 ),
             ],
             child: _Chip(
@@ -141,8 +144,12 @@ class ListToolbar extends ConsumerWidget {
     return layout.sort[i].desc ? '  ↓' : '  ↑';
   }
 
-  static String _name(ListLookups lookups, String key, String titleLabel) =>
-      key == 'title' ? titleLabel : lookups.columnLabel(key);
+  static String _name(
+    ListLookups lookups,
+    String key,
+    String titleLabel, [
+    AppLocalizations? l10n,
+  ]) => key == 'title' ? titleLabel : lookups.columnLabel(key, l10n);
 
   static String _groupName(ListLookups lookups, String key) =>
       lookups.groupChoices.where((g) => g.key == key).firstOrNull?.label ?? '';
@@ -273,7 +280,9 @@ class _LayoutsMenu extends ConsumerWidget {
         SnackBar(content: Text(l10n.grpDDeletedNamed(view.name))),
       );
     } on ViewException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(viewErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(viewErrorMessage(e, l10n))),
+      );
     }
   }
 
@@ -291,7 +300,9 @@ class _LayoutsMenu extends ConsumerWidget {
         SnackBar(content: Text(l10n.grpDSharedNamed(name))),
       );
     } on ViewException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(viewErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(viewErrorMessage(e, l10n))),
+      );
     }
   }
 }

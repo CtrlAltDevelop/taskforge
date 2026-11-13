@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The project feature switch for sprints.
 const sprintsFeature = 'sprints';
@@ -386,18 +389,17 @@ class SprintException implements Exception {
   String toString() => 'SprintException($failure)';
 }
 
-String sprintErrorMessage(Object error) {
-  if (error is! SprintException) return 'Something went wrong. Try again.';
+String sprintErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! SprintException) return t.grpLGeneric;
   final detail = error.detail;
   final hasDetail = detail != null && detail.isNotEmpty;
   return switch (error.failure) {
-    SprintFailure.network =>
-      'Could not reach the server. Check your connection.',
-    SprintFailure.denied => 'You do not have access to that.',
-    SprintFailure.notFound => 'That no longer exists.',
-    SprintFailure.conflict =>
-      hasDetail ? detail : 'Someone else changed this first. Reload and retry.',
-    SprintFailure.invalid => hasDetail ? detail : 'That is not valid.',
-    SprintFailure.other => 'Something went wrong. Try again.',
+    SprintFailure.network => t.grpLNetCheckShort,
+    SprintFailure.denied => t.grpLNoAccess,
+    SprintFailure.notFound => t.grpLGone,
+    SprintFailure.conflict => hasDetail ? detail : t.grpLSprintConflict,
+    SprintFailure.invalid => hasDetail ? detail : t.grpLNotValid,
+    SprintFailure.other => t.grpLGeneric,
   };
 }

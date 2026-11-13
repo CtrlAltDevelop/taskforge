@@ -8,6 +8,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/shortcuts/data/shortcuts_client.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Opens the list of every shortcut, where a key can also be changed.
 Future<void> openCheatSheet(BuildContext context) => showDialog<void>(
@@ -18,10 +19,15 @@ Future<void> openCheatSheet(BuildContext context) => showDialog<void>(
 
 /// Actions by heading, in the order they were registered. The sheet is built
 /// from this, so a new action shows up without anyone editing a list.
-Map<String, List<AppAction>> groupActions(Iterable<AppAction> actions) {
+Map<String, List<AppAction>> groupActions(
+  Iterable<AppAction> actions, [
+  AppLocalizations? l10n,
+]) {
   final groups = <String, List<AppAction>>{};
   for (final a in actions) {
-    groups.putIfAbsent(a.group, () => []).add(a);
+    groups
+        .putIfAbsent(l10n == null ? a.group : a.groupIn(l10n), () => [])
+        .add(a);
   }
   return groups;
 }
@@ -33,7 +39,7 @@ class CheatSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final registry = ref.watch(actionRegistryProvider);
     final bindings = ref.watch(bindingsProvider);
-    final groups = groupActions(registry.actions);
+    final groups = groupActions(registry.actions, context.l10n);
     return Dialog(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560, maxHeight: 640),
@@ -110,7 +116,7 @@ class _Row extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ListTile(
     key: Key('cheat-${action.id}'),
     dense: true,
-    title: Text(action.title),
+    title: Text(action.titleIn(context.l10n)),
     subtitle: changed ? Text(context.l10n.grpGChangedByYou) : null,
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
@@ -124,7 +130,7 @@ class _Row extends ConsumerWidget {
           Keycap(chord!.label(isMac: isApplePlatform)),
         IconButton(
           key: Key('rebind-${action.id}'),
-          tooltip: context.l10n.grpGChangeKeysFor(action.title),
+          tooltip: context.l10n.grpGChangeKeysFor(action.titleIn(context.l10n)),
           icon: const Icon(Icons.edit_outlined, size: 18),
           onPressed: () => showDialog<void>(
             context: context,
@@ -168,7 +174,7 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
           ? context.l10n.grpGBrowserKeeps(chord.label(isMac: isApplePlatform))
           : clash == null
           ? null
-          : context.l10n.grpGAlreadyUsedBy(clash.title);
+          : context.l10n.grpGAlreadyUsedBy(clash.titleIn(context.l10n));
     });
     return KeyEventResult.handled;
   }
@@ -203,7 +209,11 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
         ? null
         : ref.read(bindingsProvider).conflict(widget.action.id, home);
     if (clash != null) {
-      setState(() => _problem = context.l10n.grpGDefaultUsedBy(clash.title));
+      setState(
+        () => _problem = context.l10n.grpGDefaultUsedBy(
+          clash.titleIn(context.l10n),
+        ),
+      );
       return;
     }
     setState(() => _saving = true);
@@ -246,7 +256,9 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
         .overrides
         .containsKey(widget.action.id);
     return AlertDialog(
-      title: Text(context.l10n.grpGKeysFor(widget.action.title)),
+      title: Text(
+        context.l10n.grpGKeysFor(widget.action.titleIn(context.l10n)),
+      ),
       content: Focus(
         autofocus: true,
         onKeyEvent: _key,

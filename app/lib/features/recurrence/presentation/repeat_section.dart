@@ -165,8 +165,9 @@ Future<bool> confirmDeleteTemplate(
       await ref.read(repeatActionsProvider).clear(target);
     } on RepeatException catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(repeatErrorMessage(e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(repeatErrorMessage(e, context.l10n))),
+        );
       }
       return false;
     }

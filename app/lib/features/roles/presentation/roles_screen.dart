@@ -48,7 +48,9 @@ class RolesScreen extends ConsumerWidget {
           child: TextButton(
             key: const Key('retry-roles'),
             onPressed: () => ref.invalidate(rolesProvider),
-            child: Text(context.l10n.grpJErrorRetry(roleErrorMessage(e))),
+            child: Text(
+              context.l10n.grpJErrorRetry(roleErrorMessage(e, context.l10n)),
+            ),
           ),
         ),
         data: (catalog) => LayoutBuilder(

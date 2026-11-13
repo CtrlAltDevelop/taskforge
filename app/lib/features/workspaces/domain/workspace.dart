@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const workspaceNameMaxLength = 80;
 const slugMinLength = 3;
@@ -15,6 +18,7 @@ class Workspace {
     required this.version,
     this.logo = '',
     this.isOwner = false,
+    this.defaultLocale = '',
   });
 
   final String id;
@@ -24,6 +28,9 @@ class Workspace {
   final int version;
   final bool isOwner;
 
+  /// The language a member who never chose one starts with ('' = none).
+  final String defaultLocale;
+
   @override
   bool operator ==(Object other) =>
       other is Workspace &&
@@ -32,10 +39,12 @@ class Workspace {
       other.slug == slug &&
       other.logo == logo &&
       other.version == version &&
-      other.isOwner == isOwner;
+      other.isOwner == isOwner &&
+      other.defaultLocale == defaultLocale;
 
   @override
-  int get hashCode => Object.hash(id, name, slug, logo, version, isOwner);
+  int get hashCode =>
+      Object.hash(id, name, slug, logo, version, isOwner, defaultLocale);
 }
 
 /// Mirrors the server rule (the server also refuses reserved words such as `api`).
@@ -98,19 +107,18 @@ class WorkspaceException implements Exception {
 }
 
 /// What to tell the user about a failed workspace call.
-String workspaceErrorMessage(Object error) {
-  if (error is! WorkspaceException) return 'Something went wrong. Try again.';
+String workspaceErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! WorkspaceException) return t.grpLGeneric;
   return switch (error.failure) {
-    WorkspaceFailure.slugTaken => 'That URL is taken',
+    WorkspaceFailure.slugTaken => t.grpLSlugTaken,
     WorkspaceFailure.forbidden =>
       'You do not have permission to do that in this workspace.',
-    WorkspaceFailure.denied => error.detail ?? 'You do not have permission.',
-    WorkspaceFailure.stale => 'This workspace was changed elsewhere. Refresh to see the latest version.',
-    WorkspaceFailure.invalid =>
-      error.detail ?? 'Check the values and try again.',
-    WorkspaceFailure.notFound => 'This workspace can no longer be restored.',
-    WorkspaceFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    WorkspaceFailure.other => 'Something went wrong. Try again.',
+    WorkspaceFailure.denied => error.detail ?? t.grpLNoPerm,
+    WorkspaceFailure.stale => t.grpLWsStale,
+    WorkspaceFailure.invalid => error.detail ?? t.grpLCheckValues,
+    WorkspaceFailure.notFound => t.grpLWsNotRestorable,
+    WorkspaceFailure.network => t.grpLNetCheck,
+    WorkspaceFailure.other => t.grpLGeneric,
   };
 }

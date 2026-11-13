@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_initializing_formals
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderContainer;
 import 'package:go_router/go_router.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What an action can look at when it asks "am I available?" and when it runs.
 class ActionContext {
@@ -42,27 +44,52 @@ class ActionContext {
 /// cheat sheet and the phone quick-actions sheet all read this entry, so
 /// they cannot drift apart.
 class AppAction {
+  /// Each of title, group and semantic label is given either as plain text
+  /// (tests, simple entries) or as a localized callback (`titleOf` ...).
   const AppAction({
     required this.id,
-    required this.title,
-    required this.group,
-    required this.semanticLabel,
+    String? title,
+    String? group,
+    String? semanticLabel,
+    this.titleOf,
+    this.groupOf,
+    this.semanticOf,
     required this.run,
     this.keywords = const [],
     this.defaultKeys = '',
     this.views,
     this.available,
-  });
+  }) : _title = title,
+       _group = group,
+       _semanticLabel = semanticLabel;
 
   /// Stable and lower-case (`nav.inbox`): the server stores bindings by it.
   final String id;
-  final String title;
+  final String? _title;
+  final String? _group;
+  final String? _semanticLabel;
+  final String Function(AppLocalizations)? titleOf;
+  final String Function(AppLocalizations)? groupOf;
+  final String Function(AppLocalizations)? semanticOf;
 
-  /// The heading the cheat sheet files it under.
-  final String group;
+  static AppLocalizations get _english =>
+      lookupAppLocalizations(const Locale('en'));
 
-  /// What a screen reader says; never empty.
-  final String semanticLabel;
+  /// The title in English (search and tests); screens use [titleIn].
+  String get title => _title ?? titleOf!(_english);
+
+  /// The heading the cheat sheet files it under, in English.
+  String get group => _group ?? groupOf!(_english);
+
+  /// What a screen reader says, in English; never empty.
+  String get semanticLabel => _semanticLabel ?? semanticOf!(_english);
+
+  String titleIn(AppLocalizations l) => titleOf?.call(l) ?? title;
+  String groupIn(AppLocalizations l) => groupOf?.call(l) ?? group;
+  String semanticLabelIn(AppLocalizations l) =>
+      semanticOf?.call(l) ?? semanticLabel;
+
+  /// English words that also find it (searched next to the localized title).
   final List<String> keywords;
 
   /// The wire form of the default chord, or empty for none.

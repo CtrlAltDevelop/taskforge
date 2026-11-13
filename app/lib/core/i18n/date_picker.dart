@@ -48,6 +48,51 @@ Future<DateTime?> showAppDatePicker({
   );
 }
 
+/// A date range picker in the calendar the person chose.
+///
+/// Gregorian uses Flutter's own range picker. Jalali asks for the first day
+/// and then the last (which cannot be earlier than the first), each in the
+/// Jalali dialog. The answer is a date-only Gregorian range either way.
+Future<DateTimeRange?> showAppDateRangePicker({
+  required BuildContext context,
+  required DateTime firstDate,
+  required DateTime lastDate,
+  DateTimeRange? initialDateRange,
+}) async {
+  final prefs = ProviderScope.containerOf(context).read(localePrefsProvider);
+  if (!prefs.isJalali) {
+    return showDateRangePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialDateRange: initialDateRange,
+    );
+  }
+  final l10n = context.l10n;
+  final first = _dateOnly(firstDate);
+  final last = _dateOnly(lastDate);
+  final start = await showAppDatePicker(
+    context: context,
+    initialDate: initialDateRange?.start ?? last,
+    firstDate: first,
+    lastDate: last,
+    helpText: l10n.grpAPickStartDate,
+  );
+  if (start == null || !context.mounted) return null;
+  final end = await showAppDatePicker(
+    context: context,
+    initialDate:
+        initialDateRange != null && !initialDateRange.end.isBefore(start)
+        ? initialDateRange.end
+        : start,
+    firstDate: start,
+    lastDate: last,
+    helpText: l10n.grpAPickEndDate,
+  );
+  if (end == null) return null;
+  return DateTimeRange(start: start, end: end);
+}
+
 class _JalaliPickerDialog extends StatefulWidget {
   const _JalaliPickerDialog({
     required this.initial,

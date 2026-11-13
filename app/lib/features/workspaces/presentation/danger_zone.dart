@@ -23,7 +23,9 @@ class DangerZone extends ConsumerWidget {
     try {
       await notifier.delete(workspace, typed);
     } on WorkspaceException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(workspaceErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(workspaceErrorMessage(e, l10n))),
+      );
       return;
     }
     messenger.showSnackBar(
@@ -37,7 +39,7 @@ class DangerZone extends ConsumerWidget {
               await notifier.restore(workspace.id);
             } on WorkspaceException catch (e) {
               messenger.showSnackBar(
-                SnackBar(content: Text(workspaceErrorMessage(e))),
+                SnackBar(content: Text(workspaceErrorMessage(e, l10n))),
               );
             }
           },

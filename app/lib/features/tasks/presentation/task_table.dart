@@ -291,7 +291,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
           for (final c in _visible)
             _HeaderCell(
               columnKey: c,
-              label: widget.lookups.columnLabel(c),
+              label: widget.lookups.columnLabel(c, context.l10n),
               width: layout.widthOf(c),
               sort: _sortOf(c),
               sortable: widget.lookups.sortable(c),
@@ -488,7 +488,9 @@ class _TaskTableState extends ConsumerState<TaskTable> {
             ? IconButton(
                 key: Key('toggle-${task.id}'),
                 padding: EdgeInsets.zero,
-                tooltip: entry.expanded ? 'Collapse' : 'Expand',
+                tooltip: entry.expanded
+                    ? context.l10n.grpBCollapse
+                    : context.l10n.grpBExpand,
                 icon: DirectionalIcon(
                   entry.expanded ? Icons.expand_more : Icons.chevron_right,
                 ),
@@ -600,7 +602,9 @@ class _HeaderCell extends StatelessWidget {
                       sort!.desc ? Icons.arrow_downward : Icons.arrow_upward,
                       key: Key('sort-arrow-$columnKey'),
                       size: 14,
-                      semanticLabel: sort!.desc ? 'Descending' : 'Ascending',
+                      semanticLabel: sort!.desc
+                          ? context.l10n.grpDDescending
+                          : context.l10n.grpDAscending,
                     ),
                   ],
                 ],
@@ -608,8 +612,8 @@ class _HeaderCell extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          right: 0,
+        PositionedDirectional(
+          end: 0,
           top: 0,
           bottom: 0,
           width: 10,
@@ -618,7 +622,11 @@ class _HeaderCell extends StatelessWidget {
             child: GestureDetector(
               key: Key('resize-$columnKey'),
               behavior: HitTestBehavior.opaque,
-              onHorizontalDragUpdate: (d) => onResize(d.delta.dx),
+              onHorizontalDragUpdate: (d) => onResize(
+                Directionality.of(context) == TextDirection.rtl
+                    ? -d.delta.dx
+                    : d.delta.dx,
+              ),
               child: const VerticalDivider(width: 10, thickness: 1),
             ),
           ),

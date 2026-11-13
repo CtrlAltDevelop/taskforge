@@ -325,7 +325,7 @@ class _ConditionRow extends StatelessWidget {
       'lte' => l10n.grpDOpAtMost,
       'gt' => l10n.grpDOpMoreThan,
       'gte' => l10n.grpDOpAtLeast,
-      _ => operatorLabels[op]!,
+      _ => operatorLabelIn(l10n, op) ?? operatorLabels[op]!,
     };
   }
 }

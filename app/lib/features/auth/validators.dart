@@ -45,6 +45,8 @@ String authErrorMessage(Object error, [AppLocalizations? l10n]) {
       t.errTooManyAttempts,
     AuthApiException(title: 'ACCOUNT_EXISTS') => t.errAccountExists,
     AuthApiException(title: 'BAD_RESPONSE') => t.errServerProblem,
+    AuthApiException(title: 'SECOND_FACTOR_REQUIRED') =>
+      t.grp1SecondFactorRequired,
     AuthApiException(:final message) => message,
     NetworkUnavailable() => t.errNoConnection,
     _ => t.errGeneric,

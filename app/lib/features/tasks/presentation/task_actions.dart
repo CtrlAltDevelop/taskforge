@@ -81,6 +81,7 @@ Future<void> saveTask(
 ) async {
   // Captured before the await: the page may be rebuilt meanwhile.
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   final list = ref.read(taskListProvider(task.projectId).notifier);
   try {
     await list.update(task, patch);
@@ -97,7 +98,7 @@ Future<void> saveTask(
     }
     messenger
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
   }
 }
 
@@ -109,6 +110,7 @@ Future<void> _confirmOverride(
   TaskException blocked,
 ) async {
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   final list = ref.read(taskListProvider(task.projectId).notifier);
   if (!await askOverride(context, blocked)) return;
   try {
@@ -116,7 +118,7 @@ Future<void> _confirmOverride(
   } on TaskException catch (e) {
     messenger
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
   }
 }
 
@@ -190,7 +192,7 @@ Future<void> _resolveConflict(
       ?.where((f) => conflict.field == '$fieldKeyPrefix${f.id}')
       .firstOrNull;
   String show(String wire) =>
-      custom == null ? wire : fieldDisplay(custom, wire);
+      custom == null ? wire : fieldDisplay(custom, wire, l10n: context.l10n);
   final keepMine = await showDialog<bool>(
     context: context,
     builder: (context) => ConflictDialog(
@@ -208,8 +210,9 @@ Future<void> _resolveConflict(
     );
   } on TaskException catch (e) {
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(taskErrorMessage(e, context.l10n))));
   }
 }
 

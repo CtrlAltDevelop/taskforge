@@ -459,7 +459,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
       if (mounted) {
         setState(() {
           _busy = false;
-          _error = docErrorMessage(e);
+          _error = docErrorMessage(e, context.l10n);
         });
       }
     }

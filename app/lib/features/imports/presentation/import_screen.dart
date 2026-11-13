@@ -64,8 +64,9 @@ class ImportHistory extends ConsumerWidget {
       await action();
     } on ImportException catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(importErrorMessage(e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(importErrorMessage(e, context.l10n))),
+        );
       }
     }
   }
@@ -86,7 +87,7 @@ class ImportHistory extends ConsumerWidget {
           loading: () => const LinearProgressIndicator(),
           error: (e, _) => Row(
             children: [
-              Text(importErrorMessage(e)),
+              Text(importErrorMessage(e, context.l10n)),
               TextButton(
                 key: const Key('history-retry'),
                 onPressed: () => ref.invalidate(importJobsProvider),
@@ -110,7 +111,7 @@ class ImportHistory extends ConsumerWidget {
                         contentPadding: EdgeInsets.zero,
                         title: Text(job.filename),
                         subtitle: Text(
-                          '${job.kind?.label ?? job.source} · ${job.status}'
+                          '${job.kind?.labelIn(context.l10n) ?? job.source} · ${job.status}'
                           '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
                           '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
                         ),
@@ -244,8 +245,9 @@ class PlaceholdersPanel extends ConsumerWidget {
       }
     } on ImportException catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(importErrorMessage(e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(importErrorMessage(e, context.l10n))),
+        );
       }
     }
   }

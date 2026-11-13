@@ -129,7 +129,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
       }
     } on TaskException catch (e) {
       tray?.restore(task);
-      _say(taskErrorMessage(e));
+      if (mounted) _say(taskErrorMessage(e, context.l10n));
     }
   }
 
@@ -174,7 +174,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
       await ref.read(timelineClientProvider).setWorkingDays(workspace, chosen);
       ref.invalidate(workingDaysProvider);
     } on TaskException catch (e) {
-      _say(taskErrorMessage(e));
+      if (mounted) _say(taskErrorMessage(e, context.l10n));
     }
   }
 
@@ -251,7 +251,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
             if (state.loading) const LinearProgressIndicator(minHeight: 2),
             if (state.error != null)
               MaterialBanner(
-                content: Text(taskErrorMessage(state.error!)),
+                content: Text(taskErrorMessage(state.error!, context.l10n)),
                 actions: [
                   TextButton(
                     key: const Key('timeline-retry'),

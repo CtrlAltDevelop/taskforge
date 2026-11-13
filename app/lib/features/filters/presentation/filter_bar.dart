@@ -122,6 +122,7 @@ class _ManageDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final saved = ref.watch(savedFiltersProvider(projectId)).value ?? const [];
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     return AlertDialog(
       title: Text(context.l10n.grpGSavedFilters),
       content: SizedBox(
@@ -172,7 +173,9 @@ class _ManageDialog extends ConsumerWidget {
                             ref.invalidate(savedFiltersProvider(projectId));
                           } on FilterException catch (e) {
                             messenger.showSnackBar(
-                              SnackBar(content: Text(filterErrorMessage(e))),
+                              SnackBar(
+                                content: Text(filterErrorMessage(e, l10n)),
+                              ),
                             );
                           }
                         },

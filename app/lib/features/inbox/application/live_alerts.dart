@@ -8,10 +8,12 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// How far back a notification may be and still count as "just arrived" when
 /// the first live event is heard (device and server clocks differ a little).
@@ -115,6 +117,9 @@ class LiveAlerts {
           .list(workspace, InboxFilter.unread, pageSize: 10);
       final prefs = await _ref.read(prefsProvider.future);
       final cutoff = _started.subtract(alertFreshness);
+      final l10n = lookupAppLocalizations(
+        _ref.read(localePrefsProvider).locale,
+      );
       for (final n in page.notifications) {
         final known = _seen[n.id];
         _seen[n.id] = n.count;
@@ -126,8 +131,8 @@ class LiveAlerts {
             .read(localNotifierProvider)
             .show(
               id: n.id.hashCode & 0x7fffffff,
-              title: n.kind.label,
-              body: '${n.what} ${n.taskLabel}'.trim(),
+              title: n.kind.labelIn(l10n),
+              body: '${n.whatIn(l10n)} ${n.taskLabel}'.trim(),
               payload: '${n.projectId}|${n.taskId}',
             );
       }

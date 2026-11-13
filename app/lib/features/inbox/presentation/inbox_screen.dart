@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
@@ -40,18 +41,19 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
     try {
       await action();
     } on Object catch (e) {
-      _say(inboxErrorMessage(e));
+      if (mounted) _say(inboxErrorMessage(e, context.l10n));
     }
   }
 
   void _open(InboxNotification n) {
     final notifier = _notifier;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     unawaited(
       notifier.markRead(n).catchError((Object e) {
         messenger
           ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(inboxErrorMessage(e))));
+          ..showSnackBar(SnackBar(content: Text(inboxErrorMessage(e, l10n))));
       }),
     );
     if (n.canOpen) {
@@ -132,7 +134,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: ChoiceChip(
                       key: Key('filter-${f.wire}'),
-                      label: Text(f.label),
+                      label: Text(f.labelIn(context.l10n)),
                       selected: _filter == f,
                       onSelected: (_) => setState(() => _filter = f),
                     ),
@@ -159,7 +161,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                inboxErrorMessage(state.error!),
+                inboxErrorMessage(state.error!, context.l10n),
                 key: const Key('inbox-error'),
               ),
               TextButton(
@@ -246,7 +248,7 @@ class NotificationTile extends StatelessWidget {
     final n = notification;
     final theme = Theme.of(context);
     final unread = !n.isRead;
-    final title = '${n.what} ${n.taskLabel}'.trim();
+    final title = '${n.whatIn(context.l10n)} ${n.taskLabel}'.trim();
     final detail = n.excerpt.isNotEmpty
         ? n.excerpt
         : n.dueDate.isNotEmpty
@@ -265,8 +267,8 @@ class NotificationTile extends StatelessWidget {
           children: [
             CircleAvatar(child: Icon(n.kind.icon)),
             if (unread)
-              Positioned(
-                right: -2,
+              PositionedDirectional(
+                end: -2,
                 top: -2,
                 child: Container(
                   key: Key('unread-${n.id}'),
@@ -293,7 +295,15 @@ class NotificationTile extends StatelessWidget {
               Text(detail, maxLines: 2, overflow: TextOverflow.ellipsis),
             Row(
               children: [
-                Text(relativeTime(n.updatedAt, now), key: Key('time-${n.id}')),
+                Text(
+                  relativeTime(
+                    n.updatedAt,
+                    now,
+                    context.l10n,
+                    context.localePrefs,
+                  ),
+                  key: Key('time-${n.id}'),
+                ),
                 if (n.count > 1) ...[
                   const SizedBox(width: 8),
                   Chip(

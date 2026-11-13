@@ -76,6 +76,7 @@ Workspace _fromPb(pb.Workspace w) => Workspace(
   logo: w.logo,
   version: w.version,
   isOwner: w.isOwner,
+  defaultLocale: w.defaultLocale,
 );
 
 /// gRPC for the data calls, REST for the logo upload.
@@ -258,6 +259,7 @@ class GrpcWorkspaceClient implements WorkspaceClient {
       logo: (data['logo'] as String?) ?? '',
       version: data['version'] as int,
       isOwner: old.isOwner,
+      defaultLocale: old.defaultLocale,
     );
   }
 

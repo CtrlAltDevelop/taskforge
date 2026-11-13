@@ -1,6 +1,11 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 
+import 'package:taskforge/core/i18n/formatting.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/features/audit/domain/audit.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Edits by one person this close together read as one line, not five.
 const Duration quietWindow = Duration(minutes: 10);
@@ -68,19 +73,29 @@ List<ActivityLine> activityLines(List<AuditEntry> entries) {
 }
 
 /// "just now", "5 min ago", "2 h ago", "3 d ago", then the date.
-String relativeTime(DateTime now, DateTime at) {
+String relativeTime(
+  DateTime now,
+  DateTime at, [
+  AppLocalizations? l10n,
+  LocalePrefs? prefs,
+]) {
+  final loc = l10n ?? lookupAppLocalizations(const Locale('en'));
   final d = now.difference(at);
-  if (d.inSeconds < 60) return 'just now';
-  if (d.inMinutes < 60) return '${d.inMinutes} min ago';
-  if (d.inHours < 24) return '${d.inHours} h ago';
-  if (d.inDays < 7) return '${d.inDays} d ago';
-  final l = at.toLocal();
-  return '${l.year}-${l.month.toString().padLeft(2, '0')}-'
-      '${l.day.toString().padLeft(2, '0')}';
+  if (d.inSeconds < 60) return loc.grpMRelJustNow;
+  if (d.inMinutes < 60) return loc.grpMRelMin(d.inMinutes);
+  if (d.inHours < 24) return loc.grpMRelHour(d.inHours);
+  if (d.inDays < 7) return loc.grpMRelDay(d.inDays);
+  return dateOrIso(at.toLocal(), prefs: prefs, l10n: l10n);
 }
 
 /// A heading for the day [at] falls on.
-String dayHeading(DateTime now, DateTime at) {
+String dayHeading(
+  DateTime now,
+  DateTime at, [
+  AppLocalizations? l10n,
+  LocalePrefs? prefs,
+]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
   final a = at.toLocal();
   final n = now.toLocal();
   final days = DateTime(
@@ -88,8 +103,7 @@ String dayHeading(DateTime now, DateTime at) {
     n.month,
     n.day,
   ).difference(DateTime(a.year, a.month, a.day)).inDays;
-  if (days == 0) return 'Today';
-  if (days == 1) return 'Yesterday';
-  return '${a.year}-${a.month.toString().padLeft(2, '0')}-'
-      '${a.day.toString().padLeft(2, '0')}';
+  if (days == 0) return t.grpBToday;
+  if (days == 1) return t.grpBYesterday;
+  return dateOrIso(a, prefs: prefs, l10n: l10n);
 }

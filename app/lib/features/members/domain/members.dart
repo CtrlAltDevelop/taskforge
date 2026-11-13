@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const maxInviteEmails = 20;
 const maxLinkUses = 1000;
@@ -133,40 +136,41 @@ class InviteException implements Exception {
 }
 
 /// What to tell the user about a failed members / invitations call.
-String inviteErrorMessage(Object error) {
-  if (error is! InviteException) return 'Something went wrong. Try again.';
+String inviteErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! InviteException) return t.grpLGeneric;
   return switch (error.failure) {
-    InviteFailure.forbidden => 'You do not have permission to do that.',
-    InviteFailure.denied => error.detail ?? 'You do not have permission.',
-    InviteFailure.ownerProtected => 'A workspace needs at least one owner.',
-    InviteFailure.emailMismatch =>
-      'This invitation is for another email address.',
-    InviteFailure.expired => 'This invitation has expired. Ask for a new one.',
-    InviteFailure.revoked => 'This invitation was revoked.',
-    InviteFailure.beforeRemoval =>
-      'This invitation predates your removal. Ask for a new one.',
-    InviteFailure.usedUp => 'This invitation has already been used up.',
-    InviteFailure.notFound => 'This invitation does not exist.',
-    InviteFailure.rateLimited =>
-      'Too many invitations just now. Wait a while and try again.',
-    InviteFailure.invalid => error.detail ?? 'Check the values and try again.',
-    InviteFailure.exists => 'That person is already invited or a member.',
-    InviteFailure.network =>
-      'Cannot reach the server. Check your connection and try again.',
-    InviteFailure.other => 'Something went wrong. Try again.',
+    InviteFailure.forbidden => t.grpLNoPermDo,
+    InviteFailure.denied => error.detail ?? t.grpLNoPerm,
+    InviteFailure.ownerProtected => t.grpLOwnerNeeded,
+    InviteFailure.emailMismatch => t.grpLInvEmailMismatch,
+    InviteFailure.expired => t.grpLInvExpired,
+    InviteFailure.revoked => t.grpLInvRevoked,
+    InviteFailure.beforeRemoval => t.grpLInvBeforeRemoval,
+    InviteFailure.usedUp => t.grpLInvUsedUp,
+    InviteFailure.notFound => t.grpLInvNotFound,
+    InviteFailure.rateLimited => t.grpLInvRate,
+    InviteFailure.invalid => error.detail ?? t.grpLCheckValues,
+    InviteFailure.exists => t.grpLInvExists,
+    InviteFailure.network => t.grpLNetCheck,
+    InviteFailure.other => t.grpLGeneric,
   };
 }
 
 /// The user-facing line for a non-valid preview state.
-String inviteStateMessage(InviteState state) => switch (state) {
-  InviteState.expired => inviteErrorMessage(
-    const InviteException(InviteFailure.expired),
-  ),
-  InviteState.revoked => inviteErrorMessage(
-    const InviteException(InviteFailure.revoked),
-  ),
-  InviteState.usedUp => inviteErrorMessage(
-    const InviteException(InviteFailure.usedUp),
-  ),
-  InviteState.valid => '',
-};
+String inviteStateMessage(InviteState state, [AppLocalizations? l10n]) =>
+    switch (state) {
+      InviteState.expired => inviteErrorMessage(
+        const InviteException(InviteFailure.expired),
+        l10n,
+      ),
+      InviteState.revoked => inviteErrorMessage(
+        const InviteException(InviteFailure.revoked),
+        l10n,
+      ),
+      InviteState.usedUp => inviteErrorMessage(
+        const InviteException(InviteFailure.usedUp),
+        l10n,
+      ),
+      InviteState.valid => '',
+    };

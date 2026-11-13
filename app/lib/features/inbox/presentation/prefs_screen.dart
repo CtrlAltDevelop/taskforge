@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/application/push.dart';
@@ -26,7 +27,10 @@ class NotificationPrefsScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(inboxErrorMessage(error), key: const Key('prefs-error')),
+                Text(
+                  inboxErrorMessage(error, context.l10n),
+                  key: const Key('prefs-error'),
+                ),
                 TextButton(
                   key: const Key('retry-prefs'),
                   onPressed: () => ref.invalidate(prefsProvider),
@@ -78,7 +82,7 @@ class _BodyState extends ConsumerState<_Body> {
       await action();
       return true;
     } on Object catch (e) {
-      _say(inboxErrorMessage(e));
+      if (mounted) _say(inboxErrorMessage(e, context.l10n));
       return false;
     }
   }
@@ -213,7 +217,10 @@ class _BodyState extends ConsumerState<_Body> {
                             showSelectedIcon: false,
                             segments: [
                               for (final m in EmailMode.values)
-                                ButtonSegment(value: m, label: Text(m.label)),
+                                ButtonSegment(
+                                  value: m,
+                                  label: Text(m.labelIn(context.l10n)),
+                                ),
                             ],
                             selected: {row.email},
                             onSelectionChanged: (s) =>
@@ -243,7 +250,7 @@ class _BodyState extends ConsumerState<_Body> {
                 child: ListTile(
                   key: const Key('quiet-start'),
                   title: Text(context.l10n.grpEFrom),
-                  subtitle: Text(settings.quietStart),
+                  subtitle: Text(context.localDigits(settings.quietStart)),
                   onTap: () => _pickQuiet(start: true),
                 ),
               ),
@@ -251,7 +258,7 @@ class _BodyState extends ConsumerState<_Body> {
                 child: ListTile(
                   key: const Key('quiet-end'),
                   title: Text(context.l10n.grpEUntil),
-                  subtitle: Text(settings.quietEnd),
+                  subtitle: Text(context.localDigits(settings.quietEnd)),
                   onTap: () => _pickQuiet(start: false),
                 ),
               ),

@@ -153,7 +153,10 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                     value: _w.kind,
                     items: [
                       for (final k in WidgetKind.values)
-                        DropdownMenuItem(value: k, child: Text(k.label)),
+                        DropdownMenuItem(
+                          value: k,
+                          child: Text(k.labelIn(context.l10n)),
+                        ),
                     ],
                     onChanged: (k) => k == null ? null : _kind(k),
                   ),
@@ -163,7 +166,10 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                       value: _w.config.measure,
                       items: [
                         for (final m in Measure.values)
-                          DropdownMenuItem(value: m, child: Text(m.label)),
+                          DropdownMenuItem(
+                            value: m,
+                            child: Text(m.labelIn(context.l10n)),
+                          ),
                       ],
                       onChanged: (m) => m == null
                           ? null
@@ -178,7 +184,12 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                       hint: Text(context.l10n.grpIGroupBy),
                       items: [
                         for (final g in groups.entries)
-                          DropdownMenuItem(value: g.key, child: Text(g.value)),
+                          DropdownMenuItem(
+                            value: g.key,
+                            child: Text(
+                              groupingLabelIn(context.l10n, g.key) ?? g.value,
+                            ),
+                          ),
                       ],
                       onChanged: (g) => g == null
                           ? null
@@ -191,7 +202,10 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                       value: _w.config.scope,
                       items: [
                         for (final s in Scope.values)
-                          DropdownMenuItem(value: s, child: Text(s.label)),
+                          DropdownMenuItem(
+                            value: s,
+                            child: Text(s.labelIn(context.l10n)),
+                          ),
                       ],
                       onChanged: (s) => s == null
                           ? null
@@ -221,7 +235,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 child: _error != null
                     ? Center(
                         child: Text(
-                          dashboardErrorMessage(_error!),
+                          dashboardErrorMessage(_error!, context.l10n),
                           key: const Key('preview-error'),
                         ),
                       )

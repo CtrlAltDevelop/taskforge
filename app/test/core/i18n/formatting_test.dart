@@ -4,6 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/i18n/bidi.dart';
 import 'package:taskforge/core/i18n/formatting.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
+import 'package:taskforge/features/audit/domain/activity_lines.dart'
+    as activity;
+import 'package:taskforge/features/comments/presentation/comments_section.dart'
+    show clockOf, dayLabel;
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 void main() {
@@ -109,6 +113,36 @@ void main() {
 
     test('wrapping twice does not nest isolates', () {
       expect(isolateLtr(isolateLtr('WEB-12')), isolateLtr('WEB-12'));
+    });
+  });
+
+  group('dates in domain text', () {
+    const fa = LocalePrefs(
+      language: 'fa',
+      calendar: 'jalali',
+      numerals: 'native',
+    );
+    final at = DateTime(2025, 3, 21, 9, 5);
+    final now = DateTime(2025, 6, 1);
+
+    test('stay plain ISO without preferences', () {
+      expect(dateOrIso(at), '2025-03-21');
+      expect(activity.relativeTime(now, at), '2025-03-21');
+      expect(activity.dayHeading(now, at), '2025-03-21');
+      expect(clockOf(at), '09:05');
+    });
+
+    test('follow the Jalali calendar and native numerals', () {
+      expect(dateOrIso(at, prefs: fa), '۱۴۰۴/۰۱/۰۱');
+      expect(activity.relativeTime(now, at, null, fa), '۱۴۰۴/۰۱/۰۱');
+      expect(activity.dayHeading(now, at, null, fa), '۱۴۰۴/۰۱/۰۱');
+      expect(dayLabel(at, now, prefs: fa), '۱۴۰۴/۰۱/۰۱');
+      expect(clockOf(at, fa), '۰۹:۰۵');
+    });
+
+    test('Gregorian with native numerals only swaps the digits', () {
+      const prefs = LocalePrefs(language: 'ar', numerals: 'native');
+      expect(dateOrIso(at, prefs: prefs), '٢٠٢٥-٠٣-٢١');
     });
   });
 }

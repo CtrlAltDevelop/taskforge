@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -44,8 +45,8 @@ String rangeTitle(
   Day last,
 ) => switch (mode) {
   CalendarMode.month => '${_monthName(context, anchor.month)} ${anchor.year}',
-  CalendarMode.week => '${formatDay(first)} – ${formatDay(last)}',
-  CalendarMode.day => formatDay(anchor),
+  CalendarMode.week => '${context.localIso(first)} – ${context.localIso(last)}',
+  CalendarMode.day => context.localIso(anchor),
 };
 
 /// Previous / next / today, the title, the mode, what bars are coloured by,

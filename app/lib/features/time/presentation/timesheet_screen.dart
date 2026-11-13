@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/weekday_names.dart';
 import 'package:taskforge/core/i18n/directional_icon.dart';
@@ -58,7 +59,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                   onPressed: () => _move(-1),
                 ),
                 Text(
-                  '${isoDate(_week)} – ${isoDate(last)}',
+                  '${context.localIso(_week)} – ${context.localIso(last)}',
                   key: const Key('week-label'),
                 ),
                 IconButton(
@@ -95,7 +96,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(timeErrorMessage(error)),
+                    Text(timeErrorMessage(error, context.l10n)),
                     TextButton(
                       key: const Key('timesheet-retry'),
                       onPressed: () => ref.invalidate(
@@ -147,7 +148,9 @@ class _Grid extends ConsumerWidget {
             DataColumn(
               numeric: true,
               label: Text(
-                '${context.l10n.weekdayShortNames[i]} ${addDays(week, i).day}',
+                context.localDigits(
+                  '${context.l10n.weekdayShortNames[i]} ${addDays(week, i).day}',
+                ),
               ),
             ),
           DataColumn(numeric: true, label: Text(context.l10n.grpATotal)),
@@ -214,7 +217,9 @@ class _CellDialog extends ConsumerWidget {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(timeErrorMessage(e))));
+        ..showSnackBar(
+          SnackBar(content: Text(timeErrorMessage(e, context.l10n))),
+        );
     }
   }
 
@@ -234,7 +239,7 @@ class _CellDialog extends ConsumerWidget {
     final actions = ref.read(timeActionsProvider);
     return AlertDialog(
       key: const Key('cell-dialog'),
-      title: Text('${row.key} · ${isoDate(day)}'),
+      title: Text('${row.key} · ${context.localIso(day)}'),
       content: SizedBox(
         width: 360,
         child: Column(
@@ -436,7 +441,9 @@ class _TotalsState extends ConsumerState<_Totals> {
                     ),
                 ],
               ),
-              AsyncError(:final error) => Text(timeErrorMessage(error)),
+              AsyncError(:final error) => Text(
+                timeErrorMessage(error, context.l10n),
+              ),
               _ => const LinearProgressIndicator(),
             },
         ],

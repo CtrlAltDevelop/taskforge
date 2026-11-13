@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
+import 'package:taskforge/core/i18n/formatting.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart'
     show UploadSource;
 import 'package:taskforge/features/attachments/presentation/comment_attachments.dart';
@@ -18,18 +21,25 @@ import 'package:taskforge/l10n/gen/app_localizations.dart';
 String _two(int n) => n.toString().padLeft(2, '0');
 
 /// "Today", "Yesterday" or the date.
-String dayLabel(DateTime at, DateTime now, {AppLocalizations? l10n}) {
+String dayLabel(
+  DateTime at,
+  DateTime now, {
+  AppLocalizations? l10n,
+  LocalePrefs? prefs,
+}) {
   final l = l10n ?? lookupAppLocalizations(const Locale('en'));
   final d = DateTime(at.year, at.month, at.day);
   final today = DateTime(now.year, now.month, now.day);
   final gap = today.difference(d).inDays;
   if (gap == 0) return l.grpBToday;
   if (gap == 1) return l.grpBYesterday;
-  return '${d.year}-${_two(d.month)}-${_two(d.day)}';
+  return dateOrIso(d, prefs: prefs, l10n: l10n);
 }
 
-String clockOf(DateTime at) =>
-    '${_two(at.toLocal().hour)}:${_two(at.toLocal().minute)}';
+String clockOf(DateTime at, [LocalePrefs? prefs]) {
+  final text = '${_two(at.toLocal().hour)}:${_two(at.toLocal().minute)}';
+  return prefs == null ? text : prefs.digits(text);
+}
 
 /// How long an author may edit (the server's default; it has the last word).
 const commentEditWindow = Duration(hours: 24);
@@ -102,7 +112,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
         // Posted after all (they were added): the composer is done with it.
         if (await _offerGrant(body, parentId, e.people, files)) return;
       } else {
-        _say(commentErrorMessage(e));
+        if (mounted) _say(commentErrorMessage(e, context.l10n));
       }
       rethrow;
     }
@@ -135,7 +145,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       if (mounted && parentId.isNotEmpty) setState(() => _replyingTo = null);
       return true;
     } on CommentException catch (e) {
-      _say(commentErrorMessage(e));
+      if (mounted) _say(commentErrorMessage(e, context.l10n));
       return false;
     }
   }
@@ -161,7 +171,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           }
       }
     } on CommentException catch (e) {
-      _say(commentErrorMessage(e));
+      if (mounted) _say(commentErrorMessage(e, context.l10n));
     }
   }
 
@@ -220,11 +230,12 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       onAction: (a) => _act(a, c),
       onReact: (e) => _guard(() => _notifier.react(c, e)),
       onSaveEdit: (body, _) async {
+        final l10n = context.l10n;
         try {
           await _notifier.edit(c, body);
           if (mounted) setState(() => _editing = null);
         } on CommentException catch (e) {
-          _say(commentErrorMessage(e));
+          if (mounted) _say(commentErrorMessage(e, l10n));
           rethrow;
         }
       },
@@ -247,7 +258,9 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
         if (state.error != null && state.comments.isEmpty)
           Row(
             children: [
-              Expanded(child: Text(commentErrorMessage(state.error!))),
+              Expanded(
+                child: Text(commentErrorMessage(state.error!, context.l10n)),
+              ),
               TextButton(
                 key: const Key('comments-retry'),
                 onPressed: _notifier.load,
@@ -298,7 +311,12 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           const Divider(),
         ],
         for (final c in top) ...[
-          if (dayLabel(c.createdAt.toLocal(), now, l10n: context.l10n) !=
+          if (dayLabel(
+                c.createdAt.toLocal(),
+                now,
+                l10n: context.l10n,
+                prefs: context.localePrefs,
+              ) !=
               lastDay)
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 2),
@@ -307,6 +325,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                   c.createdAt.toLocal(),
                   now,
                   l10n: context.l10n,
+                  prefs: context.localePrefs,
                 ),
                 key: Key('day-$lastDay'),
                 style: Theme.of(context).textTheme.labelSmall,
@@ -358,7 +377,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
     try {
       await call();
     } on CommentException catch (e) {
-      _say(commentErrorMessage(e));
+      if (mounted) _say(commentErrorMessage(e, context.l10n));
     }
   }
 }
@@ -465,7 +484,10 @@ class _CommentTile extends StatelessWidget {
               children: [
                 Text(author, style: theme.textTheme.labelLarge),
                 const SizedBox(width: 8),
-                Text(clockOf(c.createdAt), style: theme.textTheme.labelSmall),
+                Text(
+                  clockOf(c.createdAt, context.localePrefs),
+                  style: theme.textTheme.labelSmall,
+                ),
                 if (c.edited)
                   Tooltip(
                     message: context.l10n.grpBEditedTooltip(c.editCount),

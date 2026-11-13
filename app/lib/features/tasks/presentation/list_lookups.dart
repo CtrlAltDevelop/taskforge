@@ -31,8 +31,12 @@ class ListLookups {
   }
 
   /// The heading of a column: a built-in's name or the custom field's.
-  String columnLabel(String column) =>
-      builtInColumns[column] ?? field(column)?.name ?? '';
+  String columnLabel(String column, [AppLocalizations? l10n]) =>
+      (l10n == null
+          ? builtInColumns[column]
+          : builtInColumnLabelIn(l10n, column)) ??
+      field(column)?.name ??
+      '';
 
   /// Whether the list can be sorted by [column] (a multi-select field cannot).
   bool sortable(String column) {
@@ -57,7 +61,7 @@ class ListLookups {
     }
     return switch (groupBy) {
       'status' => flow?.statusById(key)?.name ?? t.grpFStatus,
-      'priority' => TaskPriority.parse(key).label,
+      'priority' => TaskPriority.parse(key).labelIn(t),
       'assignee' => person(key),
       _ => field(groupBy)?.option(key)?.label ?? t.grpFNoValue,
     };

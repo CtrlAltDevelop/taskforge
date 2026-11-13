@@ -24,6 +24,21 @@ class LocalePrefsNotifier extends Notifier<LocalePrefs> {
 
   bool _touched = false; // the person changed something before the read ended
 
+  // The language the person chose ('' = never). `state.language` shows it, or
+  // the workspace default while it is empty; only this value is ever saved.
+  String _ownLanguage = '';
+  String _workspaceDefault = '';
+
+  LocalePrefs _shown(LocalePrefs own) =>
+      own.language.isEmpty ? own.copyWith(language: _workspaceDefault) : own;
+
+  /// Starts a person who chose no language in the workspace's default; never
+  /// saved as their choice, never overrides one.
+  void applyWorkspaceDefault(String raw) {
+    _workspaceDefault = normalizeLanguage(raw) ?? '';
+    if (_ownLanguage.isEmpty) state = _shown(state.copyWith(language: ''));
+  }
+
   @override
   LocalePrefs build() {
     _load();
@@ -38,7 +53,10 @@ class LocalePrefsNotifier extends Notifier<LocalePrefs> {
       weekStart: await store.read(_keys['weekStart']!),
       numerals: await store.read(_keys['numerals']!),
     );
-    if (ref.mounted && !_touched) state = saved;
+    if (ref.mounted && !_touched) {
+      _ownLanguage = saved.language;
+      state = _shown(saved);
+    }
   }
 
   Future<void> _persist(LocalePrefs prefs) async {
@@ -54,10 +72,12 @@ class LocalePrefsNotifier extends Notifier<LocalePrefs> {
   Future<bool> update(LocalePrefs Function(LocalePrefs) change) async {
     _touched = true;
     final next = change(state);
+    if (next.language != state.language) _ownLanguage = next.language;
     state = next;
-    await _persist(next);
+    final own = next.copyWith(language: _ownLanguage);
+    await _persist(own);
     try {
-      await ref.read(accountClientProvider).updatePreferences(next);
+      await ref.read(accountClientProvider).updatePreferences(own);
       return true;
     } on Object catch (e) {
       debugPrint('locale: not saved to the account ($e)');
@@ -67,11 +87,15 @@ class LocalePrefsNotifier extends Notifier<LocalePrefs> {
 
   /// Takes what the account holds, unless this device already has a choice.
   Future<void> adopt(Account account) async {
-    if (_touched || state != const LocalePrefs()) return;
+    if (_touched ||
+        state.copyWith(language: _ownLanguage) != const LocalePrefs()) {
+      return;
+    }
     final remote = account.prefs;
     if (remote == const LocalePrefs()) return;
     _touched = true;
-    state = remote;
+    _ownLanguage = remote.language;
+    state = _shown(remote);
     await _persist(remote);
   }
 }

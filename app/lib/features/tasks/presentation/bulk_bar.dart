@@ -38,6 +38,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
     final selection = ref.read(taskSelectionProvider(widget.projectId));
     if (selection.isEmpty || _progress != null) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final tasks = ref.read(taskListProvider(widget.projectId));
     final names = {for (final t in tasks.tasks) t.id: t.displayId};
     final ids = selection.toList();
@@ -62,7 +63,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
     } on TaskException catch (e) {
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
     } finally {
       if (mounted) setState(() => _progress = null);
     }
@@ -214,7 +215,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                         PopupMenuItem(
                           key: Key('bulk-priority-${p.wire}'),
                           value: p,
-                          child: Text(p.label),
+                          child: Text(p.labelIn(context.l10n)),
                         ),
                     ],
                     child: _BarLabel(

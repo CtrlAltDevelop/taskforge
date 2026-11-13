@@ -373,7 +373,9 @@ class _TaskListState extends ConsumerState<_TaskList> {
           onPressed: () =>
               ref.read(taskListProvider(project.id).notifier).load(),
           child: Text(
-            context.l10n.grpFErrorRetry(taskErrorMessage(state.error!)),
+            context.l10n.grpFErrorRetry(
+              taskErrorMessage(state.error!, context.l10n),
+            ),
           ),
         ),
       );
@@ -446,8 +448,12 @@ class _TaskListState extends ConsumerState<_TaskList> {
     final doneStatus = lookups.flow?.statuses
         .where((s) => s.category == StatusCategory.done)
         .firstOrNull;
-    String summarize(Task t) =>
-        fieldSummary(t, lookups.fields, userLabel: lookups.person);
+    String summarize(Task t) => fieldSummary(
+      t,
+      lookups.fields,
+      userLabel: lookups.person,
+      l10n: context.l10n,
+    );
     // Rows are built lazily (a list of thousands only builds what is on screen);
     // the inline add field counts as one more entry under its parent.
     final items = <Object>[
@@ -678,6 +684,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
 
   Future<void> _reparent(Task task, String parentId) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       await ref
           .read(taskListProvider(project.id).notifier)
@@ -688,7 +695,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
     } on TaskException catch (e) {
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
     }
   }
 
@@ -718,7 +725,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
                   await list.restore(task, adopt: moved);
                 } on TaskException catch (e) {
                   messenger.showSnackBar(
-                    SnackBar(content: Text(taskErrorMessage(e))),
+                    SnackBar(content: Text(taskErrorMessage(e, l10n))),
                   );
                 }
               },
@@ -726,7 +733,9 @@ class _TaskListState extends ConsumerState<_TaskList> {
           ),
         );
     } on TaskException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(taskErrorMessage(e, l10n))),
+      );
     }
   }
 }
@@ -801,7 +810,9 @@ class TaskTile extends StatelessWidget {
               ? IconButton(
                   key: Key('toggle-${task.id}'),
                   padding: EdgeInsets.zero,
-                  tooltip: expanded ? 'Collapse' : 'Expand',
+                  tooltip: expanded
+                      ? context.l10n.grpBCollapse
+                      : context.l10n.grpBExpand,
                   icon: DirectionalIcon(
                     expanded ? Icons.expand_more : Icons.chevron_right,
                   ),
@@ -816,7 +827,7 @@ class TaskTile extends StatelessWidget {
         Icon(
           priorityIcon(task.priority),
           color: priorityColor(task.priority),
-          semanticLabel: task.priority.label,
+          semanticLabel: task.priority.labelIn(context.l10n),
         ),
       ],
     ),
@@ -949,6 +960,7 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
     final title = value.trim();
     if (title.isEmpty || _busy) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     setState(() => _busy = true);
     try {
       final values = await _requiredValues(title);
@@ -962,7 +974,9 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
         // The field list we hold is stale: read it again and ask next time.
         ref.invalidate(fieldsProvider(widget.projectId));
       }
-      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(taskErrorMessage(e, l10n))),
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }

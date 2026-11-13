@@ -49,7 +49,9 @@ class _TimerChipState extends ConsumerState<TimerChip> {
       if (mounted) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(timeErrorMessage(e))));
+          ..showSnackBar(
+            SnackBar(content: Text(timeErrorMessage(e, context.l10n))),
+          );
       }
     } finally {
       if (mounted) setState(() => _busy = false);

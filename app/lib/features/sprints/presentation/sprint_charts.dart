@@ -38,7 +38,7 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
           children: [
             Expanded(
               child: Text(
-                sprintErrorMessage(error),
+                sprintErrorMessage(error, context.l10n),
                 key: const Key('burndown-error'),
               ),
             ),

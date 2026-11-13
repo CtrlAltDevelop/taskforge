@@ -98,6 +98,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
     Locale('en'),
+    Locale('en', 'XA'),
     Locale('fa'),
     Locale('ps'),
   ];
@@ -8705,6 +8706,2136 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'error: {error}'**
   String grpJPingError(String error);
+
+  /// No description provided for @grpKClosePalette.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the command palette'**
+  String get grpKClosePalette;
+
+  /// No description provided for @grpKGroupGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get grpKGroupGeneral;
+
+  /// No description provided for @grpKGroupGoTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to'**
+  String get grpKGroupGoTo;
+
+  /// No description provided for @grpKGroupProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get grpKGroupProjects;
+
+  /// No description provided for @grpKGroupWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace'**
+  String get grpKGroupWorkspace;
+
+  /// No description provided for @grpKGroupAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get grpKGroupAccount;
+
+  /// No description provided for @grpKGroupThisProject.
+  ///
+  /// In en, this message translates to:
+  /// **'This project'**
+  String get grpKGroupThisProject;
+
+  /// No description provided for @grpKGroupDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'Docs'**
+  String get grpKGroupDocs;
+
+  /// No description provided for @grpKGroupDashboards.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboards'**
+  String get grpKGroupDashboards;
+
+  /// No description provided for @grpKGroupListView.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get grpKGroupListView;
+
+  /// No description provided for @grpKGroupThisTask.
+  ///
+  /// In en, this message translates to:
+  /// **'This task'**
+  String get grpKGroupThisTask;
+
+  /// No description provided for @grpKGoTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to {title}'**
+  String grpKGoTo(String title);
+
+  /// No description provided for @grpKProjectPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} of this project'**
+  String grpKProjectPageOf(String title);
+
+  /// No description provided for @grpKPaletteOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the command palette'**
+  String get grpKPaletteOpen;
+
+  /// No description provided for @grpKSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get grpKSearch;
+
+  /// No description provided for @grpKSearchSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tasks, comments, projects and people'**
+  String get grpKSearchSem;
+
+  /// No description provided for @grpKShortcuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard shortcuts'**
+  String get grpKShortcuts;
+
+  /// No description provided for @grpKShortcutsSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the keyboard shortcuts'**
+  String get grpKShortcutsSem;
+
+  /// No description provided for @grpKTHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get grpKTHome;
+
+  /// No description provided for @grpKTInbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get grpKTInbox;
+
+  /// No description provided for @grpKTCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace calendar'**
+  String get grpKTCalendar;
+
+  /// No description provided for @grpKTDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'Docs'**
+  String get grpKTDocs;
+
+  /// No description provided for @grpKTDashboards.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboards'**
+  String get grpKTDashboards;
+
+  /// No description provided for @grpKTTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet'**
+  String get grpKTTimesheet;
+
+  /// No description provided for @grpKTMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get grpKTMembers;
+
+  /// No description provided for @grpKTArchivedProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived projects'**
+  String get grpKTArchivedProjects;
+
+  /// No description provided for @grpKTPrivateProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Private projects'**
+  String get grpKTPrivateProjects;
+
+  /// No description provided for @grpKTWorkspaceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace settings'**
+  String get grpKTWorkspaceSettings;
+
+  /// No description provided for @grpKAuditLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Audit log'**
+  String get grpKAuditLog;
+
+  /// No description provided for @grpKAuditSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to the audit log'**
+  String get grpKAuditSem;
+
+  /// No description provided for @grpKTRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'Roles and permissions'**
+  String get grpKTRoles;
+
+  /// No description provided for @grpKTCreateWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a workspace'**
+  String get grpKTCreateWorkspace;
+
+  /// No description provided for @grpKTNotifPrefs.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification preferences'**
+  String get grpKTNotifPrefs;
+
+  /// No description provided for @grpKTDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed-in devices'**
+  String get grpKTDevices;
+
+  /// No description provided for @grpKTChangePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get grpKTChangePassword;
+
+  /// No description provided for @grpKTTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get grpKTTasks;
+
+  /// No description provided for @grpKTSprints.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprints'**
+  String get grpKTSprints;
+
+  /// No description provided for @grpKTAutomations.
+  ///
+  /// In en, this message translates to:
+  /// **'Automations'**
+  String get grpKTAutomations;
+
+  /// No description provided for @grpKTWorkflow.
+  ///
+  /// In en, this message translates to:
+  /// **'Workflow'**
+  String get grpKTWorkflow;
+
+  /// No description provided for @grpKTCustomFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields'**
+  String get grpKTCustomFields;
+
+  /// No description provided for @grpKTProjectSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Project settings'**
+  String get grpKTProjectSettings;
+
+  /// No description provided for @grpKSwitchWs.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch workspace'**
+  String get grpKSwitchWs;
+
+  /// No description provided for @grpKSwitchWsSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to another workspace'**
+  String get grpKSwitchWsSem;
+
+  /// No description provided for @grpKToggleDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle dark mode'**
+  String get grpKToggleDark;
+
+  /// No description provided for @grpKToggleDarkSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between the light and the dark theme'**
+  String get grpKToggleDarkSem;
+
+  /// No description provided for @grpKCreateProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a project'**
+  String get grpKCreateProject;
+
+  /// No description provided for @grpKCreateDoc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a doc'**
+  String get grpKCreateDoc;
+
+  /// No description provided for @grpKCreateDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a dashboard'**
+  String get grpKCreateDashboard;
+
+  /// No description provided for @grpKCreateSprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a sprint'**
+  String get grpKCreateSprint;
+
+  /// No description provided for @grpKCreateSprintSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a sprint in this project'**
+  String get grpKCreateSprintSem;
+
+  /// No description provided for @grpKInviteMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite a member'**
+  String get grpKInviteMember;
+
+  /// No description provided for @grpKInviteMemberSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite someone to this workspace'**
+  String get grpKInviteMemberSem;
+
+  /// No description provided for @grpKTImportExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import and export'**
+  String get grpKTImportExport;
+
+  /// No description provided for @grpKTOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline and storage'**
+  String get grpKTOffline;
+
+  /// No description provided for @grpKSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get grpKSignOut;
+
+  /// No description provided for @grpKSignOutSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of this device'**
+  String get grpKSignOutSem;
+
+  /// No description provided for @grpKNewTask.
+  ///
+  /// In en, this message translates to:
+  /// **'New task'**
+  String get grpKNewTask;
+
+  /// No description provided for @grpKNewTaskSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a task in this project'**
+  String get grpKNewTaskSem;
+
+  /// No description provided for @grpKRenameTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename the task under the cursor'**
+  String get grpKRenameTask;
+
+  /// No description provided for @grpKRenameTaskSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename the task the cursor is on in the list'**
+  String get grpKRenameTaskSem;
+
+  /// No description provided for @grpKChangeStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Change status of this task'**
+  String get grpKChangeStatus;
+
+  /// No description provided for @grpKChangeStatusSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the status of the open task'**
+  String get grpKChangeStatusSem;
+
+  /// No description provided for @grpKAssignMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign this task to me'**
+  String get grpKAssignMe;
+
+  /// No description provided for @grpKAssignMeSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign the open task to me'**
+  String get grpKAssignMeSem;
+
+  /// No description provided for @grpKTimerStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start the timer on this task'**
+  String get grpKTimerStart;
+
+  /// No description provided for @grpKTimerStartSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Start the timer on the open task'**
+  String get grpKTimerStartSem;
+
+  /// No description provided for @grpKTimerStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the timer'**
+  String get grpKTimerStop;
+
+  /// No description provided for @grpKTimerStopSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the running timer'**
+  String get grpKTimerStopSem;
+
+  /// No description provided for @grpKViewList.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get grpKViewList;
+
+  /// No description provided for @grpKViewBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Board view'**
+  String get grpKViewBoard;
+
+  /// No description provided for @grpKViewCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar view'**
+  String get grpKViewCalendar;
+
+  /// No description provided for @grpKViewTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline view'**
+  String get grpKViewTimeline;
+
+  /// No description provided for @grpKShowList.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this project as a list'**
+  String get grpKShowList;
+
+  /// No description provided for @grpKShowBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this project as a board'**
+  String get grpKShowBoard;
+
+  /// No description provided for @grpKShowCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this project as a calendar'**
+  String get grpKShowCalendar;
+
+  /// No description provided for @grpKShowTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this project as a timeline'**
+  String get grpKShowTimeline;
+
+  /// No description provided for @grpLGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get grpLGeneric;
+
+  /// No description provided for @grpLNetCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot reach the server. Check your connection and try again.'**
+  String get grpLNetCheck;
+
+  /// No description provided for @grpLNetCheckShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your connection.'**
+  String get grpLNetCheckShort;
+
+  /// No description provided for @grpLNetTry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Try again.'**
+  String get grpLNetTry;
+
+  /// No description provided for @grpLNetOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'This needs a connection to the server. It works again once you are back online.'**
+  String get grpLNetOffline;
+
+  /// No description provided for @grpLNoConn.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection. Check it and try again.'**
+  String get grpLNoConn;
+
+  /// No description provided for @grpLNoPerm.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission.'**
+  String get grpLNoPerm;
+
+  /// No description provided for @grpLNoPermDo.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to do that.'**
+  String get grpLNoPermDo;
+
+  /// No description provided for @grpLNoAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to that.'**
+  String get grpLNoAccess;
+
+  /// No description provided for @grpLCheckValues.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the values and try again.'**
+  String get grpLCheckValues;
+
+  /// No description provided for @grpLNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not valid.'**
+  String get grpLNotValid;
+
+  /// No description provided for @grpLArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'This project is archived. Restore it to make changes.'**
+  String get grpLArchived;
+
+  /// No description provided for @grpLGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That no longer exists.'**
+  String get grpLGone;
+
+  /// No description provided for @grpLTaskConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this task first.'**
+  String get grpLTaskConflict;
+
+  /// No description provided for @grpLTaskTransition.
+  ///
+  /// In en, this message translates to:
+  /// **'The workflow does not allow that move.'**
+  String get grpLTaskTransition;
+
+  /// No description provided for @grpLTaskHasSubtasks.
+  ///
+  /// In en, this message translates to:
+  /// **'This task has subtasks: choose what happens to them.'**
+  String get grpLTaskHasSubtasks;
+
+  /// No description provided for @grpLTaskCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'A task cannot become a subtask of itself or of one of its own subtasks.'**
+  String get grpLTaskCycle;
+
+  /// No description provided for @grpLTaskBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked by {detail}: finish those first.'**
+  String grpLTaskBlocked(String detail);
+
+  /// No description provided for @grpLTaskLinkCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Those tasks would block each other in a loop: {detail}.'**
+  String grpLTaskLinkCycle(String detail);
+
+  /// No description provided for @grpLTaskLinkExists.
+  ///
+  /// In en, this message translates to:
+  /// **'These tasks are already linked that way.'**
+  String get grpLTaskLinkExists;
+
+  /// No description provided for @grpLFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'A required field has no value.'**
+  String get grpLFieldRequired;
+
+  /// No description provided for @grpLTaskGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That task no longer exists.'**
+  String get grpLTaskGone;
+
+  /// No description provided for @grpLCommentConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone changed this comment first.'**
+  String get grpLCommentConflict;
+
+  /// No description provided for @grpLCommentLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'That comment can no longer be edited.'**
+  String get grpLCommentLocked;
+
+  /// No description provided for @grpLMentionNoAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Somebody you mentioned cannot see this task.'**
+  String get grpLMentionNoAccess;
+
+  /// No description provided for @grpLCommentCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the comment and try again.'**
+  String get grpLCommentCheck;
+
+  /// No description provided for @grpLCommentGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That comment no longer exists.'**
+  String get grpLCommentGone;
+
+  /// No description provided for @grpLSlugTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'That URL is taken'**
+  String get grpLSlugTaken;
+
+  /// No description provided for @grpLWsStale.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace was changed elsewhere. Refresh to see the latest version.'**
+  String get grpLWsStale;
+
+  /// No description provided for @grpLWsNotRestorable.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace can no longer be restored.'**
+  String get grpLWsNotRestorable;
+
+  /// No description provided for @grpLOwnerNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'A workspace needs at least one owner.'**
+  String get grpLOwnerNeeded;
+
+  /// No description provided for @grpLInvEmailMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation is for another email address.'**
+  String get grpLInvEmailMismatch;
+
+  /// No description provided for @grpLInvExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation has expired. Ask for a new one.'**
+  String get grpLInvExpired;
+
+  /// No description provided for @grpLInvRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation was revoked.'**
+  String get grpLInvRevoked;
+
+  /// No description provided for @grpLInvBeforeRemoval.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation predates your removal. Ask for a new one.'**
+  String get grpLInvBeforeRemoval;
+
+  /// No description provided for @grpLInvUsedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation has already been used up.'**
+  String get grpLInvUsedUp;
+
+  /// No description provided for @grpLInvNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation does not exist.'**
+  String get grpLInvNotFound;
+
+  /// No description provided for @grpLInvRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many invitations just now. Wait a while and try again.'**
+  String get grpLInvRate;
+
+  /// No description provided for @grpLInvExists.
+  ///
+  /// In en, this message translates to:
+  /// **'That person is already invited or a member.'**
+  String get grpLInvExists;
+
+  /// No description provided for @grpLWfInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The workflow has problems. Fix them to save.'**
+  String get grpLWfInvalid;
+
+  /// No description provided for @grpLWfConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else saved the workflow first. Your changes are still here: review what changed and save again.'**
+  String get grpLWfConflict;
+
+  /// No description provided for @grpLProjectGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That project no longer exists.'**
+  String get grpLProjectGone;
+
+  /// No description provided for @grpLDashDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to do that on this dashboard.'**
+  String get grpLDashDenied;
+
+  /// No description provided for @grpLDashNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'That dashboard or widget is not available.'**
+  String get grpLDashNotFound;
+
+  /// No description provided for @grpLDashHeavy.
+  ///
+  /// In en, this message translates to:
+  /// **'This widget takes too long to compute. Narrow its filter.'**
+  String get grpLDashHeavy;
+
+  /// No description provided for @grpLDashConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this dashboard. Reload it and try again.'**
+  String get grpLDashConflict;
+
+  /// No description provided for @grpLNotifGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That notification no longer exists.'**
+  String get grpLNotifGone;
+
+  /// No description provided for @grpLViewConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this layout first.'**
+  String get grpLViewConflict;
+
+  /// No description provided for @grpLViewInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That layout is not valid.'**
+  String get grpLViewInvalid;
+
+  /// No description provided for @grpLViewNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A layout with that name already exists.'**
+  String get grpLViewNameTaken;
+
+  /// No description provided for @grpLViewLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'That is the most layouts you can keep here.'**
+  String get grpLViewLimit;
+
+  /// No description provided for @grpLViewGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That layout no longer exists.'**
+  String get grpLViewGone;
+
+  /// No description provided for @grpLAutoDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You need the \"manage automations\" permission for that.'**
+  String get grpLAutoDenied;
+
+  /// No description provided for @grpLAutoConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this rule first. Load the latest and retry.'**
+  String get grpLAutoConflict;
+
+  /// No description provided for @grpLImpCannot.
+  ///
+  /// In en, this message translates to:
+  /// **'That cannot be done now.'**
+  String get grpLImpCannot;
+
+  /// No description provided for @grpLImpTooBig.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is larger than this server accepts.'**
+  String get grpLImpTooBig;
+
+  /// No description provided for @grpLImpDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Only admins can import and export data.'**
+  String get grpLImpDenied;
+
+  /// No description provided for @grpLImpNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'That import no longer exists.'**
+  String get grpLImpNotFound;
+
+  /// No description provided for @grpLAuditDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to read the audit log.'**
+  String get grpLAuditDenied;
+
+  /// No description provided for @grpLAuditTaskNA.
+  ///
+  /// In en, this message translates to:
+  /// **'That task is not available.'**
+  String get grpLAuditTaskNA;
+
+  /// No description provided for @grpLAuditFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Those filters are not valid.'**
+  String get grpLAuditFilters;
+
+  /// No description provided for @grpLSprintConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this first. Reload and retry.'**
+  String get grpLSprintConflict;
+
+  /// No description provided for @grpLFieldNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A field with that name already exists.'**
+  String get grpLFieldNameTaken;
+
+  /// No description provided for @grpLFieldLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'A project can have at most {count} active fields.'**
+  String grpLFieldLimit(int count);
+
+  /// No description provided for @grpLFieldNeedsRemap.
+  ///
+  /// In en, this message translates to:
+  /// **'Some removed options are still used: choose what their values become.'**
+  String get grpLFieldNeedsRemap;
+
+  /// No description provided for @grpLFieldConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this field first; reload and try again.'**
+  String get grpLFieldConflict;
+
+  /// No description provided for @grpLFieldGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That field no longer exists.'**
+  String get grpLFieldGone;
+
+  /// No description provided for @grpLFilterInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That filter is not valid.'**
+  String get grpLFilterInvalid;
+
+  /// No description provided for @grpLFilterNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A filter with that name already exists here.'**
+  String get grpLFilterNameTaken;
+
+  /// No description provided for @grpLFilterLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'That is the most filters you can keep here.'**
+  String get grpLFilterLimit;
+
+  /// No description provided for @grpLFilterGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That filter no longer exists.'**
+  String get grpLFilterGone;
+
+  /// No description provided for @grpLFilterConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this filter first.'**
+  String get grpLFilterConflict;
+
+  /// No description provided for @grpLAttTooBig.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is larger than an attachment may be.'**
+  String get grpLAttTooBig;
+
+  /// No description provided for @grpLAttQuota.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace has used all its storage.'**
+  String get grpLAttQuota;
+
+  /// No description provided for @grpLAttTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many uploads are open. Finish or cancel some first.'**
+  String get grpLAttTooMany;
+
+  /// No description provided for @grpLAttUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be checked right now. Try again.'**
+  String get grpLAttUnavailable;
+
+  /// No description provided for @grpLAttChunk.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the file was not taken. Try again.'**
+  String get grpLAttChunk;
+
+  /// No description provided for @grpLAttRefusedPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'That kind of file is not accepted.'**
+  String get grpLAttRefusedPlain;
+
+  /// No description provided for @grpLAttRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is not accepted: {detail}'**
+  String grpLAttRefused(String detail);
+
+  /// No description provided for @grpLAttIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'The upload did not finish. Try again.'**
+  String get grpLAttIncomplete;
+
+  /// No description provided for @grpLAttExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'That upload expired. Try again.'**
+  String get grpLAttExpired;
+
+  /// No description provided for @grpLAttUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read that file.'**
+  String get grpLAttUnreadable;
+
+  /// No description provided for @grpLAttNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to do that.'**
+  String get grpLAttNotAllowed;
+
+  /// No description provided for @grpLAttArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'This project is archived: files are read-only.'**
+  String get grpLAttArchived;
+
+  /// No description provided for @grpLAttGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That is gone: the file, comment or task was removed.'**
+  String get grpLAttGone;
+
+  /// No description provided for @grpLDocNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'That page does not exist or you cannot open it.'**
+  String get grpLDocNotFound;
+
+  /// No description provided for @grpLDocConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed this page first.'**
+  String get grpLDocConflict;
+
+  /// No description provided for @grpLDocArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'That page is archived.'**
+  String get grpLDocArchived;
+
+  /// No description provided for @grpLDocCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'A page cannot go under itself.'**
+  String get grpLDocCycle;
+
+  /// No description provided for @grpLKeyTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'That key is already used by another project.'**
+  String get grpLKeyTaken;
+
+  /// No description provided for @grpLKeyLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The key cannot change once the project has tasks.'**
+  String get grpLKeyLocked;
+
+  /// No description provided for @grpLLastMember.
+  ///
+  /// In en, this message translates to:
+  /// **'A private project needs at least one member.'**
+  String get grpLLastMember;
+
+  /// No description provided for @grpLProjConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'This project changed in the meantime. Reloaded — try again.'**
+  String get grpLProjConflict;
+
+  /// No description provided for @grpLRoleBuiltin.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in roles cannot be changed or deleted.'**
+  String get grpLRoleBuiltin;
+
+  /// No description provided for @grpLRoleNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'A role with that name already exists.'**
+  String get grpLRoleNameTaken;
+
+  /// No description provided for @grpLRoleGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That role no longer exists.'**
+  String get grpLRoleGone;
+
+  /// No description provided for @grpLRoleConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'This role changed in the meantime. Reloaded — try again.'**
+  String get grpLRoleConflict;
+
+  /// No description provided for @grpLRepeatInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That repeat is not valid.'**
+  String get grpLRepeatInvalid;
+
+  /// No description provided for @grpLRepeatDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to change how this repeats.'**
+  String get grpLRepeatDenied;
+
+  /// No description provided for @grpMPriUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get grpMPriUrgent;
+
+  /// No description provided for @grpMPriHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get grpMPriHigh;
+
+  /// No description provided for @grpMPriNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get grpMPriNormal;
+
+  /// No description provided for @grpMPriLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get grpMPriLow;
+
+  /// No description provided for @grpMPriNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get grpMPriNone;
+
+  /// No description provided for @grpMLinkBlocks.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get grpMLinkBlocks;
+
+  /// No description provided for @grpMLinkBlockedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Is blocked by'**
+  String get grpMLinkBlockedBy;
+
+  /// No description provided for @grpMLinkRelates.
+  ///
+  /// In en, this message translates to:
+  /// **'Relates to'**
+  String get grpMLinkRelates;
+
+  /// No description provided for @grpMLinkDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicates'**
+  String get grpMLinkDuplicates;
+
+  /// No description provided for @grpMLinkDuplicatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Is duplicated by'**
+  String get grpMLinkDuplicatedBy;
+
+  /// No description provided for @grpMCatNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started'**
+  String get grpMCatNotStarted;
+
+  /// No description provided for @grpMCatActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get grpMCatActive;
+
+  /// No description provided for @grpMCatDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get grpMCatDone;
+
+  /// No description provided for @grpMCatCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get grpMCatCancelled;
+
+  /// No description provided for @grpMFtypeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get grpMFtypeText;
+
+  /// No description provided for @grpMFtypeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get grpMFtypeNumber;
+
+  /// No description provided for @grpMFtypeSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get grpMFtypeSelect;
+
+  /// No description provided for @grpMFtypeMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-select'**
+  String get grpMFtypeMulti;
+
+  /// No description provided for @grpMFtypeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get grpMFtypeDate;
+
+  /// No description provided for @grpMFtypeCheckbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkbox'**
+  String get grpMFtypeCheckbox;
+
+  /// No description provided for @grpMFtypeUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get grpMFtypeUrl;
+
+  /// No description provided for @grpMFtypeUser.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get grpMFtypeUser;
+
+  /// No description provided for @grpMFtypeMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Money'**
+  String get grpMFtypeMoney;
+
+  /// No description provided for @grpMTrigTaskCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'A task is created'**
+  String get grpMTrigTaskCreated;
+
+  /// No description provided for @grpMTrigStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'A status changes'**
+  String get grpMTrigStatusChanged;
+
+  /// No description provided for @grpMTrigFieldChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'A field changes'**
+  String get grpMTrigFieldChanged;
+
+  /// No description provided for @grpMTrigAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone is assigned'**
+  String get grpMTrigAssigned;
+
+  /// No description provided for @grpMTrigDueDateReached.
+  ///
+  /// In en, this message translates to:
+  /// **'A due date is reached'**
+  String get grpMTrigDueDateReached;
+
+  /// No description provided for @grpMTrigCommentAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'A comment is added'**
+  String get grpMTrigCommentAdded;
+
+  /// No description provided for @grpMActSetField.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a field'**
+  String get grpMActSetField;
+
+  /// No description provided for @grpMActSetStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the status'**
+  String get grpMActSetStatus;
+
+  /// No description provided for @grpMActSetAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Change assignees'**
+  String get grpMActSetAssignee;
+
+  /// No description provided for @grpMActAddComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment'**
+  String get grpMActAddComment;
+
+  /// No description provided for @grpMActCreateSubtask.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a subtask'**
+  String get grpMActCreateSubtask;
+
+  /// No description provided for @grpMActNotify.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify people'**
+  String get grpMActNotify;
+
+  /// No description provided for @grpMActWebhook.
+  ///
+  /// In en, this message translates to:
+  /// **'Call a webhook'**
+  String get grpMActWebhook;
+
+  /// No description provided for @grpMRunSucceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Succeeded'**
+  String get grpMRunSucceeded;
+
+  /// No description provided for @grpMRunFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get grpMRunFailed;
+
+  /// No description provided for @grpMRunSkippedCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped: condition'**
+  String get grpMRunSkippedCondition;
+
+  /// No description provided for @grpMRunSkippedLoop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped: loop'**
+  String get grpMRunSkippedLoop;
+
+  /// No description provided for @grpMRunSkippedRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused: too many runs'**
+  String get grpMRunSkippedRate;
+
+  /// No description provided for @grpMWkNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get grpMWkNumber;
+
+  /// No description provided for @grpMWkBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Bar chart'**
+  String get grpMWkBar;
+
+  /// No description provided for @grpMWkLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line chart'**
+  String get grpMWkLine;
+
+  /// No description provided for @grpMWkPie.
+  ///
+  /// In en, this message translates to:
+  /// **'Pie chart'**
+  String get grpMWkPie;
+
+  /// No description provided for @grpMWkTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Table'**
+  String get grpMWkTable;
+
+  /// No description provided for @grpMWkBurndown.
+  ///
+  /// In en, this message translates to:
+  /// **'Burndown'**
+  String get grpMWkBurndown;
+
+  /// No description provided for @grpMWkWorkload.
+  ///
+  /// In en, this message translates to:
+  /// **'Workload'**
+  String get grpMWkWorkload;
+
+  /// No description provided for @grpMMeasCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Task count'**
+  String get grpMMeasCount;
+
+  /// No description provided for @grpMMeasPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Story points'**
+  String get grpMMeasPoints;
+
+  /// No description provided for @grpMMeasEstimateHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated hours'**
+  String get grpMMeasEstimateHours;
+
+  /// No description provided for @grpMMeasLoggedHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged hours'**
+  String get grpMMeasLoggedHours;
+
+  /// No description provided for @grpMMeasCycleDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle time (days)'**
+  String get grpMMeasCycleDays;
+
+  /// No description provided for @grpMScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All tasks'**
+  String get grpMScopeAll;
+
+  /// No description provided for @grpMScopeOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open tasks'**
+  String get grpMScopeOpen;
+
+  /// No description provided for @grpMScopeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done tasks'**
+  String get grpMScopeDone;
+
+  /// No description provided for @grpMVisPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Only me'**
+  String get grpMVisPersonal;
+
+  /// No description provided for @grpMVisProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone in the project'**
+  String get grpMVisProject;
+
+  /// No description provided for @grpMVisWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone in the workspace'**
+  String get grpMVisWorkspace;
+
+  /// No description provided for @grpMLblStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get grpMLblStatus;
+
+  /// No description provided for @grpMLblStatusCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Status category'**
+  String get grpMLblStatusCategory;
+
+  /// No description provided for @grpMLblPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get grpMLblPerson;
+
+  /// No description provided for @grpMLblPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get grpMLblPriority;
+
+  /// No description provided for @grpMLblProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get grpMLblProject;
+
+  /// No description provided for @grpMLblSprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprint'**
+  String get grpMLblSprint;
+
+  /// No description provided for @grpMLblCreatedDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Created (day)'**
+  String get grpMLblCreatedDay;
+
+  /// No description provided for @grpMLblCreatedWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Created (week)'**
+  String get grpMLblCreatedWeek;
+
+  /// No description provided for @grpMLblDueWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Due (week)'**
+  String get grpMLblDueWeek;
+
+  /// No description provided for @grpMImpJiraCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Jira (CSV export)'**
+  String get grpMImpJiraCsv;
+
+  /// No description provided for @grpMImpJiraJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Jira (JSON)'**
+  String get grpMImpJiraJson;
+
+  /// No description provided for @grpMImpClickupCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'ClickUp (CSV export)'**
+  String get grpMImpClickupCsv;
+
+  /// No description provided for @grpMImpClickupJson.
+  ///
+  /// In en, this message translates to:
+  /// **'ClickUp (JSON)'**
+  String get grpMImpClickupJson;
+
+  /// No description provided for @grpMImpCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Any CSV file'**
+  String get grpMImpCsv;
+
+  /// No description provided for @grpMImpTaskforge.
+  ///
+  /// In en, this message translates to:
+  /// **'TaskForge export (tasks.json)'**
+  String get grpMImpTaskforge;
+
+  /// No description provided for @grpMNkAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to you'**
+  String get grpMNkAssigned;
+
+  /// No description provided for @grpMNkMentioned.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentions'**
+  String get grpMNkMentioned;
+
+  /// No description provided for @grpMNkCommented.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get grpMNkCommented;
+
+  /// No description provided for @grpMNkStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Status changes'**
+  String get grpMNkStatusChanged;
+
+  /// No description provided for @grpMNkDueSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Due soon'**
+  String get grpMNkDueSoon;
+
+  /// No description provided for @grpMNkTimerLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Long timers'**
+  String get grpMNkTimerLong;
+
+  /// No description provided for @grpMNkUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get grpMNkUnknown;
+
+  /// No description provided for @grpMIfAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get grpMIfAll;
+
+  /// No description provided for @grpMIfUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get grpMIfUnread;
+
+  /// No description provided for @grpMIfMentions.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentions'**
+  String get grpMIfMentions;
+
+  /// No description provided for @grpMIfAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get grpMIfAssigned;
+
+  /// No description provided for @grpMIfSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get grpMIfSnoozed;
+
+  /// No description provided for @grpMIfArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get grpMIfArchived;
+
+  /// No description provided for @grpMEmOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get grpMEmOff;
+
+  /// No description provided for @grpMEmInstant.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant'**
+  String get grpMEmInstant;
+
+  /// No description provided for @grpMEmDigest.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily digest'**
+  String get grpMEmDigest;
+
+  /// No description provided for @grpMRkSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'On a schedule'**
+  String get grpMRkSchedule;
+
+  /// No description provided for @grpMRkAfterCompletion.
+  ///
+  /// In en, this message translates to:
+  /// **'After it is completed'**
+  String get grpMRkAfterCompletion;
+
+  /// No description provided for @grpMLblOpEq.
+  ///
+  /// In en, this message translates to:
+  /// **'is'**
+  String get grpMLblOpEq;
+
+  /// No description provided for @grpMLblOpNe.
+  ///
+  /// In en, this message translates to:
+  /// **'is not'**
+  String get grpMLblOpNe;
+
+  /// No description provided for @grpMLblOpLt.
+  ///
+  /// In en, this message translates to:
+  /// **'before / less than'**
+  String get grpMLblOpLt;
+
+  /// No description provided for @grpMLblOpLte.
+  ///
+  /// In en, this message translates to:
+  /// **'on or before / at most'**
+  String get grpMLblOpLte;
+
+  /// No description provided for @grpMLblOpGt.
+  ///
+  /// In en, this message translates to:
+  /// **'after / more than'**
+  String get grpMLblOpGt;
+
+  /// No description provided for @grpMLblOpGte.
+  ///
+  /// In en, this message translates to:
+  /// **'on or after / at least'**
+  String get grpMLblOpGte;
+
+  /// No description provided for @grpMLblOpContains.
+  ///
+  /// In en, this message translates to:
+  /// **'contains'**
+  String get grpMLblOpContains;
+
+  /// No description provided for @grpMLblOpNotContains.
+  ///
+  /// In en, this message translates to:
+  /// **'does not contain'**
+  String get grpMLblOpNotContains;
+
+  /// No description provided for @grpMLblOpIn.
+  ///
+  /// In en, this message translates to:
+  /// **'is any of'**
+  String get grpMLblOpIn;
+
+  /// No description provided for @grpMLblOpNotIn.
+  ///
+  /// In en, this message translates to:
+  /// **'is none of'**
+  String get grpMLblOpNotIn;
+
+  /// No description provided for @grpMLblOpEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'is empty'**
+  String get grpMLblOpEmpty;
+
+  /// No description provided for @grpMLblOpNotEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'is not empty'**
+  String get grpMLblOpNotEmpty;
+
+  /// No description provided for @grpMLblAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignee'**
+  String get grpMLblAssignee;
+
+  /// No description provided for @grpMLblStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get grpMLblStart;
+
+  /// No description provided for @grpMLblDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get grpMLblDue;
+
+  /// No description provided for @grpMLblCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get grpMLblCreated;
+
+  /// No description provided for @grpMLblUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get grpMLblUpdated;
+
+  /// No description provided for @grpMLblDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get grpMLblDueDate;
+
+  /// No description provided for @grpMLblProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtask progress'**
+  String get grpMLblProgress;
+
+  /// No description provided for @grpMLblViewList.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get grpMLblViewList;
+
+  /// No description provided for @grpMLblViewBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Board'**
+  String get grpMLblViewBoard;
+
+  /// No description provided for @grpMLblViewCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get grpMLblViewCalendar;
+
+  /// No description provided for @grpMLblViewTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get grpMLblViewTimeline;
+
+  /// No description provided for @grpMRelNow.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get grpMRelNow;
+
+  /// No description provided for @grpMRelJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get grpMRelJustNow;
+
+  /// No description provided for @grpMRelMin.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} min ago'**
+  String grpMRelMin(int n);
+
+  /// No description provided for @grpMRelHour.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} h ago'**
+  String grpMRelHour(int n);
+
+  /// No description provided for @grpMRelYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'yesterday'**
+  String get grpMRelYesterday;
+
+  /// No description provided for @grpMRelDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} d ago'**
+  String grpMRelDay(int n);
+
+  /// No description provided for @grpMNotifSomeone.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone'**
+  String get grpMNotifSomeone;
+
+  /// No description provided for @grpMNotifAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} assigned you'**
+  String grpMNotifAssigned(String who);
+
+  /// No description provided for @grpMNotifMentioned.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} mentioned you in'**
+  String grpMNotifMentioned(String who);
+
+  /// No description provided for @grpMNotifCommented.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} commented on'**
+  String grpMNotifCommented(String who);
+
+  /// No description provided for @grpMNotifStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} changed the status of'**
+  String grpMNotifStatusChanged(String who);
+
+  /// No description provided for @grpMNotifMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} moved from {fromStatus} to {toStatus}'**
+  String grpMNotifMoved(String who, String fromStatus, String toStatus);
+
+  /// No description provided for @grpMNotifDueSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Due soon:'**
+  String get grpMNotifDueSoon;
+
+  /// No description provided for @grpMNotifTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your timer is still running on'**
+  String get grpMNotifTimer;
+
+  /// No description provided for @grpMNotifNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New activity on'**
+  String get grpMNotifNew;
+
+  /// No description provided for @grpMUnitDay.
+  ///
+  /// In en, this message translates to:
+  /// **'day'**
+  String get grpMUnitDay;
+
+  /// No description provided for @grpMUnitDays.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get grpMUnitDays;
+
+  /// No description provided for @grpMUnitWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'week'**
+  String get grpMUnitWeek;
+
+  /// No description provided for @grpMUnitWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'weeks'**
+  String get grpMUnitWeeks;
+
+  /// No description provided for @grpMUnitMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'month'**
+  String get grpMUnitMonth;
+
+  /// No description provided for @grpMUnitMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'months'**
+  String get grpMUnitMonths;
+
+  /// No description provided for @grpMUnitYear.
+  ///
+  /// In en, this message translates to:
+  /// **'year'**
+  String get grpMUnitYear;
+
+  /// No description provided for @grpMUnitYears.
+  ///
+  /// In en, this message translates to:
+  /// **'years'**
+  String get grpMUnitYears;
+
+  /// No description provided for @grpMSlashText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get grpMSlashText;
+
+  /// No description provided for @grpMSlashH1.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading 1'**
+  String get grpMSlashH1;
+
+  /// No description provided for @grpMSlashH2.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading 2'**
+  String get grpMSlashH2;
+
+  /// No description provided for @grpMSlashH3.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading 3'**
+  String get grpMSlashH3;
+
+  /// No description provided for @grpMSlashBullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulleted list'**
+  String get grpMSlashBullet;
+
+  /// No description provided for @grpMSlashNumbered.
+  ///
+  /// In en, this message translates to:
+  /// **'Numbered list'**
+  String get grpMSlashNumbered;
+
+  /// No description provided for @grpMSlashTodo.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get grpMSlashTodo;
+
+  /// No description provided for @grpMSlashQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'Quote'**
+  String get grpMSlashQuote;
+
+  /// No description provided for @grpMSlashCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get grpMSlashCode;
+
+  /// No description provided for @grpMSlashTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Table'**
+  String get grpMSlashTable;
+
+  /// No description provided for @grpMSlashDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'Divider'**
+  String get grpMSlashDivider;
+
+  /// No description provided for @grpMSlashImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get grpMSlashImage;
+
+  /// No description provided for @grpMSlashCallout.
+  ///
+  /// In en, this message translates to:
+  /// **'Callout'**
+  String get grpMSlashCallout;
+
+  /// No description provided for @grpMSlashTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Task card'**
+  String get grpMSlashTask;
+
+  /// No description provided for @grpMMeanSucceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Every action ran.'**
+  String get grpMMeanSucceeded;
+
+  /// No description provided for @grpMMeanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'An action failed; the ones before it stay done.'**
+  String get grpMMeanFailed;
+
+  /// No description provided for @grpMMeanSkippedCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'The event matched, but the task did not meet the condition.'**
+  String get grpMMeanSkippedCondition;
+
+  /// No description provided for @grpMMeanSkippedLoop.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules triggered rules more than 5 hops deep, so this run was stopped to end a loop.'**
+  String get grpMMeanSkippedLoop;
+
+  /// No description provided for @grpMMeanSkippedRate.
+  ///
+  /// In en, this message translates to:
+  /// **'This rule already ran 30 times in the last minute, so this run was skipped.'**
+  String get grpMMeanSkippedRate;
+
+  /// No description provided for @grpMStepOk.
+  ///
+  /// In en, this message translates to:
+  /// **'ok'**
+  String get grpMStepOk;
+
+  /// No description provided for @grpMStepFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'failed'**
+  String get grpMStepFailed;
+
+  /// No description provided for @grpMStepNotRun.
+  ///
+  /// In en, this message translates to:
+  /// **'not run'**
+  String get grpMStepNotRun;
+
+  /// No description provided for @grpMStepPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'planned'**
+  String get grpMStepPlanned;
+
+  /// No description provided for @grpMStepWouldFail.
+  ///
+  /// In en, this message translates to:
+  /// **'would fail'**
+  String get grpMStepWouldFail;
+
+  /// No description provided for @grp1DropCardHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop a card here'**
+  String get grp1DropCardHere;
+
+  /// No description provided for @grp1NoCards.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards'**
+  String get grp1NoCards;
+
+  /// No description provided for @grp1StopWatchingTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop watching this task'**
+  String get grp1StopWatchingTask;
+
+  /// No description provided for @grp1WatchTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch this task'**
+  String get grp1WatchTask;
+
+  /// No description provided for @grp1SecondFactorRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Second factor required.'**
+  String get grp1SecondFactorRequired;
+
+  /// No description provided for @grp1AnAutomation.
+  ///
+  /// In en, this message translates to:
+  /// **'An automation'**
+  String get grp1AnAutomation;
+
+  /// No description provided for @grp1TheSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'The system'**
+  String get grp1TheSystem;
+
+  /// No description provided for @grp1MemberCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} member(s)'**
+  String grp1MemberCount(int count);
+
+  /// No description provided for @grp1SyncLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get grp1SyncLive;
+
+  /// No description provided for @grp1SyncConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting…'**
+  String get grp1SyncConnecting;
+
+  /// No description provided for @grp1SyncReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting…'**
+  String get grp1SyncReconnecting;
+
+  /// No description provided for @grp1SyncLiveTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes by others appear as they happen'**
+  String get grp1SyncLiveTip;
+
+  /// No description provided for @grp1SyncNotLiveTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Not live: changes by others will appear once reconnected'**
+  String get grp1SyncNotLiveTip;
+
+  /// No description provided for @grp1EnterNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number.'**
+  String get grp1EnterNumber;
+
+  /// No description provided for @grp1EnterAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount.'**
+  String get grp1EnterAmount;
+
+  /// No description provided for @grp1EnterCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 3-letter currency, e.g. USD.'**
+  String get grp1EnterCurrency;
+
+  /// No description provided for @grp1EnterUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a web address starting with http(s)://'**
+  String get grp1EnterUrl;
+
+  /// No description provided for @grp1UseIsoDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Use YYYY-MM-DD.'**
+  String get grp1UseIsoDate;
 }
 
 class _AppLocalizationsDelegate
@@ -8725,6 +10856,18 @@ class _AppLocalizationsDelegate
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+country codes are specified.
+  switch (locale.languageCode) {
+    case 'en':
+      {
+        switch (locale.countryCode) {
+          case 'XA':
+            return AppLocalizationsEnXa();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'ar':

@@ -98,7 +98,7 @@ class WorkflowScreen extends ConsumerWidget {
           onPressed: notifier.load,
           child: Text(
             context.l10n.grpIErrorRetry(
-              workflowErrorMessage(editor.loadError!),
+              workflowErrorMessage(editor.loadError!, context.l10n),
             ),
           ),
         ),
@@ -131,7 +131,7 @@ class WorkflowScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              workflowErrorMessage(editor.saveError!),
+              workflowErrorMessage(editor.saveError!, context.l10n),
               key: const Key('save-error'),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),

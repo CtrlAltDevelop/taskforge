@@ -36,7 +36,9 @@ class CalendarTray extends ConsumerWidget {
           key: const Key('retry-tray'),
           onPressed: () => ref.read(trayProvider(projectId).notifier).load(),
           child: Text(
-            context.l10n.grpFErrorRetry(taskErrorMessage(tray.error!)),
+            context.l10n.grpFErrorRetry(
+              taskErrorMessage(tray.error!, context.l10n),
+            ),
           ),
         ),
       );

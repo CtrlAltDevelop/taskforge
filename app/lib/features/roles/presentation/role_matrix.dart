@@ -178,7 +178,7 @@ class RoleList extends StatelessWidget {
           ExpansionTile(
             key: Key('role-tile-${role.id}'),
             title: _RoleHeader(role: role, all: roles, canManage: canManage),
-            subtitle: Text('${role.memberCount} member(s)'),
+            subtitle: Text(context.l10n.grp1MemberCount(role.memberCount)),
             children: [
               for (final area in catalog.registry) ...[
                 Align(

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What a card can show besides its title and id. A custom field is
 /// `field:<id>` ([fieldColumnPrefix]).
@@ -10,6 +11,16 @@ const builtInCardFields = <String, String>{
   'priority': 'Priority',
   'progress': 'Subtask progress',
 };
+
+/// The label of [key] in the language of [l]; null when unknown.
+String? builtInCardFieldLabelIn(AppLocalizations l, String key) =>
+    switch (key) {
+      'assignee' => l.grpMLblAssignee,
+      'due_date' => l.grpMLblDueDate,
+      'priority' => l.grpMLblPriority,
+      'progress' => l.grpMLblProgress,
+      _ => null,
+    };
 
 const defaultCardFields = ['assignee', 'due_date', 'priority', 'progress'];
 

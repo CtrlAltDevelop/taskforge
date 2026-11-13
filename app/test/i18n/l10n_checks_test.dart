@@ -17,6 +17,10 @@ final _literal = RegExp(
   r'''(?:Text\(\s*|(?:label|labelText|hintText|helperText|tooltip|title|subtitle|semanticLabel|helpText)\s*:\s*(?:const\s+Text\(\s*)?)(?:'([^'\n]*[A-Za-z][^'\n]*)'|"([^"\n]*[A-Za-z][^"\n]*)")''',
 );
 
+// `cond ? 'Capitalized words' : 'Other'`: a ternary choosing between two
+// on-screen strings (tooltip, label, Text and semanticLabel arguments take one).
+final _ternaryLiteral = RegExp(r"\?\s*'([A-Z][a-z]+[^'\n]*)'\s*:\s*'[^'\n]*'");
+
 /// A string that is not words: a key, a route, a file name, interpolation only.
 bool _isUserFacing(String text) =>
     text.contains(RegExp(r'[A-Za-z]{3,}')) &&
@@ -35,10 +39,15 @@ Map<String, int> _scan() {
       .where((f) => !f.path.replaceAll(r'\', '/').contains('lib/l10n/'));
   for (final file in files) {
     final source = file.readAsStringSync();
-    final n = _literal.allMatches(source).where((m) {
-      final text = m.group(1) ?? m.group(2) ?? '';
-      return _isUserFacing(text);
-    }).length;
+    final n =
+        _literal.allMatches(source).where((m) {
+          final text = m.group(1) ?? m.group(2) ?? '';
+          return _isUserFacing(text);
+        }).length +
+        _ternaryLiteral
+            .allMatches(source)
+            .where((m) => _isUserFacing(m.group(1) ?? ''))
+            .length;
     if (n > 0) counts[file.path.replaceAll(r'\', '/')] = n;
   }
   return Map.fromEntries(
@@ -61,6 +70,24 @@ void main() {
         final have = other.keys.where((k) => !k.startsWith('@')).toSet();
         expect(keys.difference(have), isEmpty, reason: 'missing in $code');
         expect(have.difference(keys), isEmpty, reason: 'unknown in $code');
+      });
+
+      test('$code plural messages carry the categories the language needs', () {
+        final other = _arb(code);
+        for (final key in keys) {
+          final text = other[key] as String;
+          if (!text.contains(', plural,')) continue;
+          expect(text, contains('other{'), reason: '$code $key');
+          if (code != 'ar') continue;
+          for (final category in ['few{', 'many{']) {
+            expect(text, contains(category), reason: 'ar $key');
+          }
+          expect(
+            text.contains('two{') || text.contains('=2{'),
+            isTrue,
+            reason: 'ar $key needs two',
+          );
+        }
       });
 
       test('$code has no empty values', () {
@@ -127,6 +154,10 @@ void main() {
         'lib/features/auth/auth_form.dart',
         'lib/features/auth/validators.dart',
         'lib/core/i18n/date_picker.dart',
+        'lib/features/shortcuts/application/builtin_actions.dart',
+        'lib/features/shortcuts/application/more_actions.dart',
+        'lib/features/shortcuts/application/task_level_actions.dart',
+        'lib/features/shortcuts/application/view_actions.dart',
         'lib/features/tasks/presentation/bulk_bar.dart',
         'lib/features/tasks/presentation/links_panel.dart',
         'lib/features/tasks/presentation/list_lookups.dart',

@@ -149,7 +149,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _error = sprintErrorMessage(e);
+        _error = sprintErrorMessage(e, context.l10n);
       });
     }
   }

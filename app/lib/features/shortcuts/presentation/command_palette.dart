@@ -14,6 +14,7 @@ import 'package:taskforge/features/search/domain/search.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// True on Apple platforms, where Cmd is the main modifier.
 bool get isApplePlatform =>
@@ -39,7 +40,7 @@ Future<void> openCommandPalette(BuildContext context) async {
   final from = actionContextOf(context);
   final pick = await showDialog<_Pick>(
     context: context,
-    barrierLabel: 'Close the command palette',
+    barrierLabel: context.l10n.grpKClosePalette,
     builder: (_) => CommandPalette(from: from),
   );
   if (pick == null || !context.mounted) return;
@@ -89,6 +90,7 @@ List<AppAction> rankActions(
   List<AppAction> actions,
   String text, {
   List<String> recent = const [],
+  AppLocalizations? l10n,
 }) {
   if (text.isEmpty) {
     int rank(AppAction a) {
@@ -109,8 +111,10 @@ List<AppAction> rankActions(
   for (final a in actions) {
     final scores = [
       fuzzyScore(text, a.title),
+      if (l10n != null) fuzzyScore(text, a.titleIn(l10n)),
       for (final k in a.keywords) ?_discount(fuzzyScore(text, k)),
       ?_discount(fuzzyScore(text, a.group)),
+      if (l10n != null) ?_discount(fuzzyScore(text, a.groupIn(l10n))),
     ].nonNulls;
     if (scores.isEmpty) continue;
     final best = scores.reduce((x, y) => x > y ? x : y);
@@ -189,6 +193,7 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
       registry.available(_context),
       text,
       recent: ref.read(recentActionsProvider),
+      l10n: context.l10n,
     );
   }
 
@@ -387,7 +392,7 @@ class _ActionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: action.semanticLabel,
+    label: action.semanticLabelIn(context.l10n),
     button: true,
     selected: selected,
     excludeSemantics: true,
@@ -396,8 +401,8 @@ class _ActionRow extends StatelessWidget {
       dense: true,
       selected: selected,
       leading: const Icon(Icons.bolt_outlined),
-      title: Text(action.title),
-      subtitle: Text(action.group),
+      title: Text(action.titleIn(context.l10n)),
+      subtitle: Text(action.groupIn(context.l10n)),
       trailing: keys == null ? null : _Keycap(keys!),
       onTap: onTap,
     ),

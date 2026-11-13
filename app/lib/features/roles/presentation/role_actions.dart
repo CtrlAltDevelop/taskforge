@@ -6,6 +6,7 @@ import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/role_dialogs.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 
 /// Runs [action] against the current workspace; a failure becomes a snackbar.
 /// On success everything a role change can touch is re-read: the matrix, the
@@ -18,10 +19,11 @@ Future<bool> runRoleAction(
   final workspaceId = ref.read(workspaceScopeProvider);
   if (workspaceId == null) return false;
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   try {
     await action(workspaceId);
   } on RoleException catch (e) {
-    messenger.showSnackBar(SnackBar(content: Text(roleErrorMessage(e))));
+    messenger.showSnackBar(SnackBar(content: Text(roleErrorMessage(e, l10n))));
     if (e.failure == RoleFailure.conflict) await _reloadRoles(ref);
     return false;
   }

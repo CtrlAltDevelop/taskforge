@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Where a comment is on its way to the server.
 enum SendState { sent, sending, failed }
@@ -145,22 +148,20 @@ class CommentException implements Exception {
   String toString() => 'CommentException($failure, $detail)';
 }
 
-String commentErrorMessage(Object error) {
-  if (error is! CommentException) return 'Something went wrong. Try again.';
+String commentErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! CommentException) return t.grpLGeneric;
   return switch (error.failure) {
-    CommentFailure.conflict => 'Someone changed this comment first.',
-    CommentFailure.locked => 'That comment can no longer be edited.',
-    CommentFailure.mentionNoAccess =>
-      'Somebody you mentioned cannot see this task.',
-    CommentFailure.denied => error.detail ?? 'You do not have permission.',
-    CommentFailure.forbidden => 'You do not have permission to do that.',
-    CommentFailure.invalid =>
-      error.detail ?? 'Check the comment and try again.',
-    CommentFailure.archived =>
-      'This project is archived. Restore it to make changes.',
-    CommentFailure.notFound => 'That comment no longer exists.',
-    CommentFailure.network => 'This needs a connection to the server. It works again once you are back online.',
-    CommentFailure.other => 'Something went wrong. Try again.',
+    CommentFailure.conflict => t.grpLCommentConflict,
+    CommentFailure.locked => t.grpLCommentLocked,
+    CommentFailure.mentionNoAccess => t.grpLMentionNoAccess,
+    CommentFailure.denied => error.detail ?? t.grpLNoPerm,
+    CommentFailure.forbidden => t.grpLNoPermDo,
+    CommentFailure.invalid => error.detail ?? t.grpLCommentCheck,
+    CommentFailure.archived => t.grpLArchived,
+    CommentFailure.notFound => t.grpLCommentGone,
+    CommentFailure.network => t.grpLNetOffline,
+    CommentFailure.other => t.grpLGeneric,
   };
 }
 

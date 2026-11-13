@@ -136,7 +136,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
       if (mounted) {
         setState(() {
           _busy = false;
-          _error = inviteErrorMessage(e);
+          _error = inviteErrorMessage(e, context.l10n);
         });
       }
     }
@@ -283,7 +283,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
       if (mounted) {
         setState(() {
           _busy = false;
-          _error = inviteErrorMessage(e);
+          _error = inviteErrorMessage(e, context.l10n);
         });
       }
     }

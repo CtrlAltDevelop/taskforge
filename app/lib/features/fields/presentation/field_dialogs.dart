@@ -165,7 +165,10 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
               decoration: InputDecoration(labelText: context.l10n.grpEType),
               items: [
                 for (final t in _types)
-                  DropdownMenuItem(value: t, child: Text(t.label)),
+                  DropdownMenuItem(
+                    value: t,
+                    child: Text(t.labelIn(context.l10n)),
+                  ),
               ],
               onChanged: _types.length == 1
                   ? null
@@ -272,7 +275,9 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 for (final e in hideableViews.entries)
                   FilterChip(
                     key: Key('show-in-${e.key}'),
-                    label: Text(e.value),
+                    label: Text(
+                      hideableViewLabelIn(context.l10n, e.key) ?? e.value,
+                    ),
                     selected: !_hidden.contains(e.key),
                     onSelected: (on) => setState(
                       () => on ? _hidden.remove(e.key) : _hidden.add(e.key),

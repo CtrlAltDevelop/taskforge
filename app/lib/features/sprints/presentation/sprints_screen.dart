@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -96,7 +97,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
     try {
       return await call();
     } on SprintException catch (e) {
-      if (mounted) _say(sprintErrorMessage(e));
+      if (mounted) _say(sprintErrorMessage(e, context.l10n));
       return null;
     }
   }
@@ -222,7 +223,10 @@ class _SprintsState extends ConsumerState<_Sprints> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(sprintErrorMessage(error), key: const Key('sprints-error')),
+            Text(
+              sprintErrorMessage(error, context.l10n),
+              key: const Key('sprints-error'),
+            ),
             TextButton(
               key: const Key('sprints-retry'),
               onPressed: () => ref.invalidate(sprintsProvider(_pid)),
@@ -462,8 +466,8 @@ class _Header extends ConsumerWidget {
                     ),
                     Text(
                       context.l10n.grpADatesRange(
-                        dayText(sprint.startDate),
-                        dayText(sprint.endDate),
+                        context.localIso(sprint.startDate),
+                        context.localIso(sprint.endDate),
                       ),
                       style: theme.textTheme.bodySmall,
                     ),

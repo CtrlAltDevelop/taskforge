@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// One entry of the `/` menu.
 class SlashItem {
@@ -24,12 +25,34 @@ class SlashItem {
   /// Other words that find it.
   final String words;
 
-  bool matches(String query) {
+  /// [label] in the language of [l].
+  String labelIn(AppLocalizations l) => switch (id) {
+    'text' => l.grpMSlashText,
+    'h1' => l.grpMSlashH1,
+    'h2' => l.grpMSlashH2,
+    'h3' => l.grpMSlashH3,
+    'bullet' => l.grpMSlashBullet,
+    'numbered' => l.grpMSlashNumbered,
+    'todo' => l.grpMSlashTodo,
+    'quote' => l.grpMSlashQuote,
+    'code' => l.grpMSlashCode,
+    'table' => l.grpMSlashTable,
+    'divider' => l.grpMSlashDivider,
+    'image' => l.grpMSlashImage,
+    'callout' => l.grpMSlashCallout,
+    'task' => l.grpMSlashTask,
+    _ => label,
+  };
+
+  /// Matches the id, the English label, the other words and, when [l] is
+  /// given, the label in that language.
+  bool matches(String query, [AppLocalizations? l]) {
     final q = query.toLowerCase();
     return q.isEmpty ||
         id.contains(q) ||
         label.toLowerCase().contains(q) ||
-        words.contains(q);
+        words.contains(q) ||
+        (l != null && labelIn(l).toLowerCase().contains(q));
   }
 }
 
@@ -126,14 +149,14 @@ class SlashMenu extends StatelessWidget {
   final String query;
   final void Function(SlashItem item) onPick;
 
-  static List<SlashItem> filter(String query) => [
+  static List<SlashItem> filter(String query, [AppLocalizations? l]) => [
     for (final i in slashItems)
-      if (i.matches(query)) i,
+      if (i.matches(query, l)) i,
   ];
 
   @override
   Widget build(BuildContext context) {
-    final items = filter(query);
+    final items = filter(query, context.l10n);
     return Material(
       key: const Key('slash-menu'),
       elevation: 3,
@@ -153,7 +176,7 @@ class SlashMenu extends StatelessWidget {
                       key: Key('slash-${i.id}'),
                       dense: true,
                       leading: Icon(i.icon, size: 20),
-                      title: Text(i.label),
+                      title: Text(i.labelIn(context.l10n)),
                       onTap: () => onPick(i),
                     ),
                 ],

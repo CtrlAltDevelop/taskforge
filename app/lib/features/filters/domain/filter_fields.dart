@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What a field holds, which decides the operators and the value editor. The
 /// server's `language.KIND_OPS` has the same table.
@@ -62,6 +63,23 @@ const operatorLabels = {
   'not_in': 'is none of',
   'empty': 'is empty',
   'not_empty': 'is not empty',
+};
+
+/// The label of [key] in the language of [l]; null when unknown.
+String? operatorLabelIn(AppLocalizations l, String key) => switch (key) {
+  'eq' => l.grpMLblOpEq,
+  'ne' => l.grpMLblOpNe,
+  'lt' => l.grpMLblOpLt,
+  'lte' => l.grpMLblOpLte,
+  'gt' => l.grpMLblOpGt,
+  'gte' => l.grpMLblOpGte,
+  'contains' => l.grpMLblOpContains,
+  'not_contains' => l.grpMLblOpNotContains,
+  'in' => l.grpMLblOpIn,
+  'not_in' => l.grpMLblOpNotIn,
+  'empty' => l.grpMLblOpEmpty,
+  'not_empty' => l.grpMLblOpNotEmpty,
+  _ => null,
 };
 
 bool takesList(String cmp) => cmp == 'in' || cmp == 'not_in';

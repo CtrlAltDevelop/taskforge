@@ -304,6 +304,7 @@ class GrpcMembersClient implements MembersClient {
       logo: w.logo,
       version: w.version,
       isOwner: w.isOwner,
+      defaultLocale: w.defaultLocale,
     );
   }
 

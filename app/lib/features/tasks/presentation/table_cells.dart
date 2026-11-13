@@ -95,7 +95,10 @@ class TaskCell extends ConsumerWidget {
         ),
         const SizedBox(width: 6),
         Flexible(
-          child: Text(task.priority.label, overflow: TextOverflow.ellipsis),
+          child: Text(
+            task.priority.labelIn(context.l10n),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -111,7 +114,7 @@ class TaskCell extends ConsumerWidget {
           PopupMenuItem(
             key: Key('priority-${p.wire}-${task.id}'),
             value: p,
-            child: Text(p.label),
+            child: Text(p.labelIn(context.l10n)),
           ),
       ],
       child: shown,
@@ -181,7 +184,12 @@ class TaskCell extends ConsumerWidget {
     final shown = Align(
       alignment: AlignmentDirectional.centerStart,
       child: Text(
-        fieldDisplay(field, value, userLabel: lookups.person),
+        fieldDisplay(
+          field,
+          value,
+          userLabel: lookups.person,
+          l10n: context.l10n,
+        ),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),

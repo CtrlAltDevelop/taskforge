@@ -1,4 +1,7 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The project feature switch for time tracking.
 const timeFeature = 'time_tracking';
@@ -148,17 +151,18 @@ class TimeException implements Exception {
   String toString() => 'TimeException($failure)';
 }
 
-String timeErrorMessage(Object error) {
-  if (error is! TimeException) return 'Something went wrong. Try again.';
+String timeErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! TimeException) return t.grpLGeneric;
   return switch (error.failure) {
-    TimeFailure.network => 'Could not reach the server. Check your connection.',
-    TimeFailure.denied => 'You do not have access to that.',
-    TimeFailure.notFound => 'That no longer exists.',
+    TimeFailure.network => t.grpLNetCheckShort,
+    TimeFailure.denied => t.grpLNoAccess,
+    TimeFailure.notFound => t.grpLGone,
     TimeFailure.invalid =>
       error.detail == null || error.detail!.isEmpty
-          ? 'That is not valid.'
+          ? t.grpLNotValid
           : error.detail!,
-    TimeFailure.other => 'Something went wrong. Try again.',
+    TimeFailure.other => t.grpLGeneric,
   };
 }
 

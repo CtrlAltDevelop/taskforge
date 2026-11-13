@@ -1,5 +1,8 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart' show XFile;
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// A file on a task (or on one of its comments). [mime] is what the server
 /// found in the content, not what the uploader called it.
@@ -132,31 +135,29 @@ class AttachmentException implements Exception {
 }
 
 /// What a person is told when something about a file went wrong.
-String attachmentErrorMessage(AttachmentException e) => switch (e.failure) {
-  AttachmentFailure.tooBig => 'That file is larger than an attachment may be.',
-  AttachmentFailure.quota => 'This workspace has used all its storage.',
-  AttachmentFailure.tooManyUploads =>
-    'Too many uploads are open. Finish or cancel some first.',
-  AttachmentFailure.unavailable =>
-    'The file could not be checked right now. Try again.',
-  AttachmentFailure.chunkRejected =>
-    'Part of the file was not taken. Try again.',
-  AttachmentFailure.refused =>
-    e.detail == null || e.detail!.isEmpty
-        ? 'That kind of file is not accepted.'
-        : 'That file is not accepted: ${e.detail}',
-  AttachmentFailure.incomplete => 'The upload did not finish. Try again.',
-  AttachmentFailure.expired => 'That upload expired. Try again.',
-  AttachmentFailure.unreadable => 'Could not read that file.',
-  AttachmentFailure.denied => e.detail ?? 'You are not allowed to do that.',
-  AttachmentFailure.forbidden => 'You are not allowed to do that.',
-  AttachmentFailure.archived =>
-    'This project is archived: files are read-only.',
-  AttachmentFailure.notFound =>
-    'That is gone: the file, comment or task was removed.',
-  AttachmentFailure.network => 'No connection. Check it and try again.',
-  AttachmentFailure.other => 'Something went wrong. Try again.',
-};
+String attachmentErrorMessage(AttachmentException e, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (e.failure) {
+    AttachmentFailure.tooBig => t.grpLAttTooBig,
+    AttachmentFailure.quota => t.grpLAttQuota,
+    AttachmentFailure.tooManyUploads => t.grpLAttTooMany,
+    AttachmentFailure.unavailable => t.grpLAttUnavailable,
+    AttachmentFailure.chunkRejected => t.grpLAttChunk,
+    AttachmentFailure.refused =>
+      e.detail == null || e.detail!.isEmpty
+          ? t.grpLAttRefusedPlain
+          : t.grpLAttRefused(e.detail!),
+    AttachmentFailure.incomplete => t.grpLAttIncomplete,
+    AttachmentFailure.expired => t.grpLAttExpired,
+    AttachmentFailure.unreadable => t.grpLAttUnreadable,
+    AttachmentFailure.denied => e.detail ?? t.grpLAttNotAllowed,
+    AttachmentFailure.forbidden => t.grpLAttNotAllowed,
+    AttachmentFailure.archived => t.grpLAttArchived,
+    AttachmentFailure.notFound => t.grpLAttGone,
+    AttachmentFailure.network => t.grpLNoConn,
+    AttachmentFailure.other => t.grpLGeneric,
+  };
+}
 
 enum UploadState { queued, uploading, done, failed, cancelled }
 

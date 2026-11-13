@@ -75,9 +75,9 @@ class _State extends ConsumerState<CreateProjectDialog> {
       setState(() {
         _busy = false;
         if (e.failure == ProjectFailure.keyTaken) {
-          _keyError = projectErrorMessage(e);
+          _keyError = projectErrorMessage(e, context.l10n);
         } else {
-          _error = projectErrorMessage(e);
+          _error = projectErrorMessage(e, context.l10n);
         }
       });
     }

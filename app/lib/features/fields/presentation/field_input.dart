@@ -157,7 +157,7 @@ class _CommitTextState extends State<_CommitText> {
     final trimmed = text.trim();
     final problem = trimmed.isEmpty && widget.field.required
         ? context.l10n.grpIRequired
-        : validateFieldValue(widget.field.type, trimmed);
+        : validateFieldValue(widget.field.type, trimmed, context.l10n);
     setState(() => _problem = problem);
     if (problem != null || trimmed == _saved) return;
     _saved = trimmed;
@@ -241,7 +241,7 @@ class _MoneyInputState extends State<_MoneyInput> {
     final joined = joinMoney(_amount.text, _currency.text);
     final problem = joined.isEmpty && widget.field.required
         ? context.l10n.grpIRequired
-        : validateFieldValue(FieldType.money, joined);
+        : validateFieldValue(FieldType.money, joined, context.l10n);
     setState(() => _problem = problem);
     if (problem != null || joined == _saved) return;
     _saved = joined;

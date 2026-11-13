@@ -196,7 +196,7 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
       for (final s in slashItems)
         PopupMenuItem(
           value: 'turn:${s.id}',
-          child: Text(context.l10n.grpJTurnInto(s.label)),
+          child: Text(context.l10n.grpJTurnInto(s.labelIn(context.l10n))),
         ),
     ],
   );

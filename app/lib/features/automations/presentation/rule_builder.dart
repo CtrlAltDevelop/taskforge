@@ -150,7 +150,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _error = automationErrorMessage(e);
+        _error = automationErrorMessage(e, context.l10n);
         _conflict = e.failure == AutomationFailure.conflict;
       });
     }

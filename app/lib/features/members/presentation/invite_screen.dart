@@ -74,7 +74,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
             child: preview.when(
               loading: () => const CircularProgressIndicator(),
               error: (e, _) => _Message(
-                text: inviteErrorMessage(e),
+                text: inviteErrorMessage(e, context.l10n),
                 action: TextButton(
                   key: const Key('retry-invite'),
                   onPressed: () =>
@@ -84,11 +84,13 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
               ),
               data: (p) {
                 if (p.state != InviteState.valid) {
-                  return _Message(text: inviteStateMessage(p.state));
+                  return _Message(
+                    text: inviteStateMessage(p.state, context.l10n),
+                  );
                 }
                 final f = _failure;
                 return f != null && _isTerminal(f.failure)
-                    ? _Message(text: inviteErrorMessage(f))
+                    ? _Message(text: inviteErrorMessage(f, context.l10n))
                     : _offer(p);
               },
             ),
@@ -117,7 +119,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
         if (failure != null) ...[
           const SizedBox(height: 16),
           Text(
-            inviteErrorMessage(failure),
+            inviteErrorMessage(failure, context.l10n),
             key: const Key('invite-failure'),
             style: TextStyle(color: Theme.of(context).colorScheme.error),
             textAlign: TextAlign.center,

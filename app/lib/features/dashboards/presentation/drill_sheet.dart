@@ -90,7 +90,7 @@ class DrillDialog extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  dashboardErrorMessage(error),
+                  dashboardErrorMessage(error, context.l10n),
                   key: const Key('drill-error'),
                 ),
                 TextButton(

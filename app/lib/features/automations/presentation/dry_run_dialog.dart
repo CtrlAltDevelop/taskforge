@@ -42,7 +42,9 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
           .dryRun(widget.rule, id);
       if (mounted) setState(() => _result = r);
     } on AutomationException catch (e) {
-      if (mounted) setState(() => _error = automationErrorMessage(e));
+      if (mounted) {
+        setState(() => _error = automationErrorMessage(e, context.l10n));
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }

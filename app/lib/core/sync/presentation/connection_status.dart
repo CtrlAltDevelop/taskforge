@@ -14,16 +14,19 @@ class LiveIndicator extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(syncStateProvider);
     final (color, label) = switch (state) {
-      SyncState.live => (Colors.green, 'Live'),
-      SyncState.connecting => (Colors.amber, 'Connecting…'),
-      SyncState.reconnecting => (Colors.amber, 'Reconnecting…'),
+      SyncState.live => (Colors.green, context.l10n.grp1SyncLive),
+      SyncState.connecting => (Colors.amber, context.l10n.grp1SyncConnecting),
+      SyncState.reconnecting => (
+        Colors.amber,
+        context.l10n.grp1SyncReconnecting,
+      ),
       SyncState.offline => (null, ''),
     };
     if (color == null) return const SizedBox.shrink();
     return Tooltip(
       message: state == SyncState.live
-          ? 'Changes by others appear as they happen'
-          : 'Not live: changes by others will appear once reconnected',
+          ? context.l10n.grp1SyncLiveTip
+          : context.l10n.grp1SyncNotLiveTip,
       child: Row(
         key: Key('live-${state.name}'),
         mainAxisSize: MainAxisSize.min,

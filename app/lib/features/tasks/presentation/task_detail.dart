@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/offline/presentation/offline_banner.dart';
@@ -161,7 +162,7 @@ class TaskDetail extends ConsumerWidget {
                               size: 18,
                             ),
                             const SizedBox(width: 8),
-                            Text(p.label),
+                            Text(p.labelIn(context.l10n)),
                           ],
                         ),
                       ),
@@ -363,6 +364,7 @@ class TaskDetail extends ConsumerWidget {
       return;
     }
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final list = ref.read(taskListProvider(project.id).notifier);
     try {
       try {
@@ -375,7 +377,7 @@ class TaskDetail extends ConsumerWidget {
     } on TaskException catch (e) {
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
     }
   }
 
@@ -452,7 +454,7 @@ class TaskDetail extends ConsumerWidget {
                   await list.restore(task, adopt: moved);
                 } on TaskException catch (e) {
                   messenger.showSnackBar(
-                    SnackBar(content: Text(taskErrorMessage(e))),
+                    SnackBar(content: Text(taskErrorMessage(e, l10n))),
                   );
                 }
               },
@@ -460,7 +462,9 @@ class TaskDetail extends ConsumerWidget {
           ),
         );
     } on TaskException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(taskErrorMessage(e, l10n))),
+      );
     }
   }
 }
@@ -714,7 +718,7 @@ class _TimeField extends StatelessWidget {
                   onPressed: () => onPicked(''),
                 ),
         ),
-        child: Text(local.isEmpty ? '—' : local),
+        child: Text(local.isEmpty ? '—' : context.localDigits(local)),
       ),
     );
   }

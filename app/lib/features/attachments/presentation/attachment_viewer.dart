@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/attachments/data/uploads_client.dart';
@@ -41,7 +42,9 @@ class AttachmentViewer extends ConsumerWidget {
         _say(context, context.l10n.grpHCouldNotOpenFile);
       }
     } on AttachmentException catch (e) {
-      if (context.mounted) _say(context, attachmentErrorMessage(e));
+      if (context.mounted) {
+        _say(context, attachmentErrorMessage(e, context.l10n));
+      }
     } on Object {
       // The platform refused the link (a PlatformException, a bad address).
       if (context.mounted) _say(context, context.l10n.grpHCouldNotOpenFile);
@@ -78,7 +81,7 @@ class AttachmentViewer extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '${file.filename} · ${formatBytes(file.size)}',
+                      '${file.filename} · ${context.localDigits(formatBytes(file.size))}',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -198,7 +201,9 @@ class _TextPreview extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                context.l10n.grpHTextTruncated(formatBytes(textPreviewBytes)),
+                context.l10n.grpHTextTruncated(
+                  context.localDigits(formatBytes(textPreviewBytes)),
+                ),
                 key: const Key('viewer-truncated'),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
