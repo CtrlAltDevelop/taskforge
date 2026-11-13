@@ -63,6 +63,7 @@ PERMISSIONS: Final = (
     ),
     Permission("data.manage", "Import projects from other tools, undo an import, export data"),
     Permission("webhook.manage", "Create, edit and delete webhooks and see what was sent"),
+    Permission("form.manage", "Create, edit and delete intake forms and read their submissions"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 

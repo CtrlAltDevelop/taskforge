@@ -14,7 +14,13 @@ class ActorType:
     USER: Final = "user"
     AUTOMATION: Final = "automation"
     SYSTEM: Final = "system"
-    CHOICES: Final = ((USER, "User"), (AUTOMATION, "Automation"), (SYSTEM, "System"))
+    FORM: Final = "form"
+    CHOICES: Final = (
+        (USER, "User"),
+        (AUTOMATION, "Automation"),
+        (SYSTEM, "System"),
+        (FORM, "Form"),
+    )
 
 
 class AuditQuerySet(models.QuerySet["AuditEntry"]):

@@ -77,6 +77,13 @@
         "router": "infrastructure.developer.rest.manage.webhooks_router",
         "tag": "Webhooks",
         "description": "Signed event deliveries to a URL: manage them, read the delivery log, send a delivery again or a test ping."
+      },
+      {
+        "app_config": "infrastructure.forms.apps.FormsConfig",
+        "prefix": "/public/forms",
+        "router": "infrastructure.forms.rest.public.router",
+        "tag": "Public forms",
+        "description": "Intake forms for people outside the workspace: read a form by its secret token and submit it (multipart, files allowed). No sign-in; also served at /api/public/forms."
       }
     ]
   }

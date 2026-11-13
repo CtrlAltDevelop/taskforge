@@ -10,6 +10,7 @@ from strawberry.django.views import AsyncGraphQLView
 
 from config.api import apis
 from config.graph import schema as graph_schema
+from config.public_api import public_api
 from infrastructure.common.adminlive import anything_live, live_script
 from infrastructure.common.identity import session_csrf_failure
 
@@ -41,6 +42,7 @@ urlpatterns = [
     # under its prefix, and would answer this path with its 404 rather than one
     # naming the version that is missing.
     path("api/<str:version>/redoc", api_redoc, name="api-version-redoc"),
+    path("api/public/", public_api.urls),
     *(path(f"api/{version}/", api.urls) for version, api in apis.items()),
 ]
 

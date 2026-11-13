@@ -191,6 +191,30 @@ TEXT: dict[str, dict[str, str]] = {
         "ar": "للانضمام: {url}",
         "ps": "ګډون: {url}",
     },
+    "forms.confirm.subject": {
+        "en": "We received your request ({reference})",
+        "fa": "درخواست شما دریافت شد ({reference})",
+        "ar": "تم استلام طلبك ({reference})",
+        "ps": "ستاسو غوښتنه ترلاسه شوه ({reference})",
+    },
+    "forms.confirm.body": {
+        "en": "Thank you. Your request \"{title}\" was sent through {form}.\nYour reference is {reference}; quote it if you write to us.",
+        "fa": "سپاسگزاریم. درخواست «{title}» شما از طریق {form} ارسال شد.\nشمارهٔ پیگیری شما {reference} است؛ هنگام تماس آن را ذکر کنید.",
+        "ar": "شكرًا لك. تم إرسال طلبك \"{title}\" عبر {form}.\nرقمك المرجعي {reference}؛ اذكره عند مراسلتنا.",
+        "ps": "مننه. ستاسو غوښتنه «{title}» د {form} له لارې ولېږل شوه.\nستاسو ریفرنس {reference} دی؛ کله چې موږ ته لیکئ یې یاد کړئ.",
+    },
+    "forms.status.subject": {
+        "en": "Update on your request ({reference})",
+        "fa": "به‌روزرسانی درخواست شما ({reference})",
+        "ar": "تحديث بشأن طلبك ({reference})",
+        "ps": "ستاسو د غوښتنې تازه حال ({reference})",
+    },
+    "forms.status.body": {
+        "en": "Your request \"{title}\" is now: {status}.\nReference: {reference}",
+        "fa": "وضعیت درخواست «{title}» شما اکنون: {status}.\nشمارهٔ پیگیری: {reference}",
+        "ar": "أصبحت حالة طلبك \"{title}\": {status}.\nالمرجع: {reference}",
+        "ps": "ستاسو د غوښتنې «{title}» حالت اوس دی: {status}.\nریفرنس: {reference}",
+    },
 }
 
 

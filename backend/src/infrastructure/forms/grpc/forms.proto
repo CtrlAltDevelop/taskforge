@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package config.forms;
+
+service FormController {
+    rpc Create(FormCreateRequest) returns (FormAnswer) {}
+    rpc Delete(FormDeleteRequest) returns (FormDeleted) {}
+    rpc List(FormListRequest) returns (FormList) {}
+    rpc Submissions(SubmissionsRequest) returns (SubmissionList) {}
+    rpc Update(FormUpdateRequest) returns (FormAnswer) {}
+}
+
+message FormAnswer {
+    IntakeForm form = 1;
+}
+
+message FormCreateRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string name = 3;
+    string description = 4;
+    repeated IntakeField form_fields = 5;
+    string status_id = 6;
+    string priority = 7;
+    repeated string assignee_ids = 8;
+    bool enabled = 9;
+    bool require_email = 10;
+    bool send_confirmation = 11;
+    bool notify_status = 12;
+    string brand_color = 13;
+    string logo_url = 14;
+}
+
+message FormDeleteRequest {
+    string workspace_id = 1;
+    string form_id = 2;
+}
+
+message FormDeleted {
+    string id = 1;
+}
+
+message FormList {
+    repeated IntakeForm forms = 1;
+}
+
+message FormListRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+}
+
+message FormUpdateRequest {
+    string workspace_id = 1;
+    string form_id = 2;
+    repeated string changed = 3;
+    int32 expected_version = 4;
+    bool rotate_token = 5;
+    string name = 6;
+    string description = 7;
+    repeated IntakeField form_fields = 8;
+    string status_id = 9;
+    string priority = 10;
+    repeated string assignee_ids = 11;
+    bool enabled = 12;
+    bool require_email = 13;
+    bool send_confirmation = 14;
+    bool notify_status = 15;
+    string brand_color = 16;
+    string logo_url = 17;
+}
+
+message IntakeField {
+    string id = 1;
+    string kind = 2;
+    string label = 3;
+    string help = 4;
+    bool required = 5;
+    string custom_field_id = 6;
+    int32 max_files = 7;
+}
+
+message IntakeForm {
+    string id = 1;
+    string workspace_id = 2;
+    string project_id = 3;
+    string name = 4;
+    string description = 5;
+    string token = 6;
+    repeated IntakeField form_fields = 7;
+    string status_id = 8;
+    string priority = 9;
+    repeated string assignee_ids = 10;
+    bool enabled = 11;
+    bool require_email = 12;
+    bool send_confirmation = 13;
+    bool notify_status = 14;
+    string brand_color = 15;
+    string logo_url = 16;
+    int32 version = 17;
+    int32 submission_count = 18;
+    string problem = 19;
+    string owner_id = 20;
+    string created_at = 21;
+    string updated_at = 22;
+}
+
+message IntakeSubmission {
+    string id = 1;
+    string form_id = 2;
+    string reference = 3;
+    string project_id = 4;
+    string task_id = 5;
+    string task_key = 6;
+    string task_title = 7;
+    string status_name = 8;
+    string submitter_email = 9;
+    string at = 10;
+}
+
+message SubmissionList {
+    repeated IntakeSubmission submissions = 1;
+    string cursor = 2;
+}
+
+message SubmissionsRequest {
+    string workspace_id = 1;
+    string form_id = 2;
+    string before = 3;
+    int32 limit = 4;
+}
+

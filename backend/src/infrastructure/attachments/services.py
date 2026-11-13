@@ -559,3 +559,80 @@ def purge_expired(limit: int | None = None) -> int:
     for session in stale:
         _discard(session)
     return len(stale)
+
+
+# -- one-shot files from outside (intake forms) ----------------------------------------------------
+
+
+def attach_local_file(
+    owner: Any, task: Task, filename: str, path: Path, *, max_bytes: int
+) -> Attachment:
+    """Check and keep a file that is already whole on disk (a form submission's upload) through
+    the same rules as a chunked upload: name, size, content sniffing (never the name), the
+    optional virus scan, thumbnail, de-duplicated storage and the workspace quota. ``owner`` is
+    recorded as the uploader. Refusals are ``ATTACHMENT_REFUSED`` / ``ATTACHMENT_TOO_BIG``."""
+    name = _clean_name(filename)
+    if not name:
+        raise refused("The file needs a name.")
+    size = path.stat().st_size
+    if size <= 0:
+        raise refused("The file is empty.")
+    limit = min(max_bytes, settings.ATTACHMENT_MAX_BYTES or max_bytes)
+    if size > limit:
+        raise ApiError(
+            f"A file can be at most {_human(limit)}.", 413, title=ResponseTitle.ATTACHMENT_TOO_BIG
+        )
+    if not settings.ATTACHMENT_ALLOW_EXECUTABLES and sniff.is_script_name(name):
+        raise refused("Programs and scripts are not accepted.")
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        head = handle.read(sniff.HEAD_BYTES)
+        digest.update(head)
+        while block := handle.read(BLOCK):
+            digest.update(block)
+    found = sniff.sniff(head, name)
+    if found.executable and not settings.ATTACHMENT_ALLOW_EXECUTABLES:
+        raise refused("Programs and scripts are not accepted.")
+    try:
+        verdict = scan.scan(path, settings.ATTACHMENT_CLAMAV_ADDRESS)
+    except scan.ScanTooLarge:
+        raise refused("The file is too large for the virus scanner to check.") from None
+    except scan.ScanUnavailable:
+        logger.warning("virus scanner unavailable; refusing a form upload")
+        raise ApiError(
+            "The file could not be checked for viruses; try again later.",
+            503,
+            title=ResponseTitle.ATTACHMENT_REFUSED,
+        ) from None
+    if verdict:
+        raise refused(f"The virus scanner flagged the file ({verdict}).")
+    sha256 = digest.hexdigest()
+    workspace = task.workspace
+    thumbnail = thumbs.make_isolated(path, found.mime) if found.thumbnailable else None
+    with transaction.atomic():
+        Workspace.objects.select_for_update().filter(pk=workspace.pk).first()
+        quota = settings.ATTACHMENT_WORKSPACE_QUOTA_BYTES
+        if quota and _used_bytes(workspace) + size > quota:
+            raise ApiError(
+                "The workspace has used all its storage.", 409, title=ResponseTitle.ATTACHMENT_QUOTA
+            )
+        with path.open("rb") as handle:
+            stored = _keep(blob_key(workspace.pk, sha256), File(handle), size)
+        kept_thumb = (
+            _keep(thumb_key(workspace.pk, sha256), ContentFile(thumbnail), len(thumbnail))
+            if thumbnail
+            else ""
+        )
+        attachment = Attachment.objects.create(
+            workspace=workspace,
+            task=task,
+            uploader=owner,
+            filename=name,
+            mime=found.mime,
+            size=size,
+            storage_key=stored,
+            sha256=sha256,
+            thumb_key=kept_thumb,
+        )
+        announce(attachment, "added")
+    return attachment

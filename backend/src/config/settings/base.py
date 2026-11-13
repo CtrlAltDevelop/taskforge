@@ -1317,6 +1317,23 @@ DEVELOPER_WEBHOOK_ALLOWLIST = tuple(
 DEVELOPER_MAX_WEBHOOKS = int(os.getenv("DJANGO_DEVELOPER_MAX_WEBHOOKS", "20"))
 DEVELOPER_MAX_TOKENS = int(os.getenv("DJANGO_DEVELOPER_MAX_TOKENS", "20"))
 
+# Phase 33: intake forms. Limits for what an anonymous visitor may send. Rates are "N/period"
+# (second, minute, hour, day); the per-IP one counts a keyed hash of the address. The key signs
+# every stored IP hash (set it in production; it defaults to a value derived from SECRET_KEY).
+FORMS_MAX_FILES = int(os.getenv("DJANGO_FORMS_MAX_FILES", "5"))
+FORMS_MAX_FILE_BYTES = int(os.getenv("DJANGO_FORMS_MAX_FILE_MB", "10")) * 1024 * 1024
+FORMS_MAX_TOTAL_BYTES = int(os.getenv("DJANGO_FORMS_MAX_TOTAL_MB", "25")) * 1024 * 1024
+FORMS_MAX_ANSWER_CHARS = int(os.getenv("DJANGO_FORMS_MAX_ANSWER_CHARS", "20000"))
+FORMS_RATE_PER_FORM = os.getenv("DJANGO_FORMS_RATE_PER_FORM", "120/hour")
+FORMS_RATE_PER_IP = os.getenv("DJANGO_FORMS_RATE_PER_IP", "10/hour")
+FORMS_IP_HASH_KEY = os.getenv("DJANGO_FORMS_IP_HASH_KEY", "") or f"forms-ip|{SECRET_KEY}"
+# A CAPTCHA is asked for only when its keys are set. Cloudflare Turnstile wins over hCaptcha.
+FORMS_TURNSTILE_SITE_KEY = os.getenv("DJANGO_FORMS_TURNSTILE_SITE_KEY", "")
+FORMS_TURNSTILE_SECRET = os.getenv("DJANGO_FORMS_TURNSTILE_SECRET", "")
+FORMS_HCAPTCHA_SITE_KEY = os.getenv("DJANGO_FORMS_HCAPTCHA_SITE_KEY", "")
+FORMS_HCAPTCHA_SECRET = os.getenv("DJANGO_FORMS_HCAPTCHA_SECRET", "")
+FORMS_MAX_PER_PROJECT = int(os.getenv("DJANGO_FORMS_MAX_PER_PROJECT", "20"))
+
 # Celery. Debug and tests run tasks eagerly (see `development.py`); production points the broker
 # and result backend at Redis (`production.py`). Delayed work is database-backed and drained by
 # the due-work registry (`infrastructure/common/dueworkers.py`), which beat runs every minute.

@@ -100,3 +100,16 @@ def as_system() -> Iterator[None]:
         yield
     finally:
         _actor_type.reset(kind)
+
+
+@contextmanager
+def as_form(form_id: object = "") -> Iterator[None]:
+    """Changes made inside are an intake form's (``form_id`` is the "actor"): an anonymous
+    visitor's submission, made with the permissions of the form's owner."""
+    kind = _actor_type.set("form")
+    who = _actor_id.set(str(form_id))
+    try:
+        yield
+    finally:
+        _actor_id.reset(who)
+        _actor_type.reset(kind)

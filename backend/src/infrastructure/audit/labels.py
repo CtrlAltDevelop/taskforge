@@ -64,6 +64,14 @@ def label_ids(workspace: Any, entries: list[Any], *, reader: Any = None) -> dict
             rows = rows.filter(project__in=Project.objects.visible_to(reader, workspace))
         for pk, title in rows.values_list("pk", "title"):
             names[str(pk)] = title
+    forms = {e.actor for e in entries if e.actor_type == "form" and e.actor}
+    if forms:
+        from infrastructure.forms.models import Form
+
+        for pk, name in Form.objects.filter(pk__in=_valid(forms), workspace=workspace).values_list(
+            "pk", "name"
+        ):
+            names[str(pk)] = f"Form: {name}"
     people = _people(entries)
     if people:
         for user in get_user_model().objects.filter(pk__in=_valid(people)):
