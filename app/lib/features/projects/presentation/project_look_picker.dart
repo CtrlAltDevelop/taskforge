@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 
@@ -42,7 +43,7 @@ class ProjectLookPicker extends StatelessWidget {
         children: [
           for (final c in projectColors)
             Semantics(
-              label: 'Color $c',
+              label: context.l10n.grpHColorLabel(c),
               selected: c == color,
               button: true,
               child: InkWell(
@@ -82,16 +83,16 @@ class VisibilityPicker extends StatelessWidget {
     children: [
       SegmentedButton<ProjectVisibility>(
         key: const Key('project-visibility'),
-        segments: const [
+        segments: [
           ButtonSegment(
             value: ProjectVisibility.open,
-            label: Text('Open'),
-            icon: Icon(Icons.public),
+            label: Text(context.l10n.grpHVisOpen),
+            icon: const Icon(Icons.public),
           ),
           ButtonSegment(
             value: ProjectVisibility.private,
-            label: Text('Private'),
-            icon: Icon(Icons.lock),
+            label: Text(context.l10n.grpHVisPrivate),
+            icon: const Icon(Icons.lock),
           ),
         ],
         selected: {value},
@@ -100,8 +101,8 @@ class VisibilityPicker extends StatelessWidget {
       const SizedBox(height: 4),
       Text(
         value == ProjectVisibility.open
-            ? 'Everyone in the workspace can see it.'
-            : 'Only invited members can see it.',
+            ? context.l10n.grpHVisOpenHint
+            : context.l10n.grpHVisPrivateHint,
         style: Theme.of(context).textTheme.bodySmall,
       ),
     ],

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 import 'package:taskforge/features/dashboards/presentation/widget_body.dart';
@@ -129,7 +130,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
         : widget.projectId;
     return AlertDialog(
       key: const Key('widget-editor'),
-      title: const Text('Widget'),
+      title: Text(context.l10n.grpIWidget),
       content: SizedBox(
         width: 640,
         child: SingleChildScrollView(
@@ -140,7 +141,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 key: const Key('widget-title'),
                 controller: _title,
                 maxLength: 80,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(labelText: context.l10n.grpITitle),
                 onChanged: (v) => setState(() => _w = _w.copyWith(title: v)),
               ),
               Wrap(
@@ -174,7 +175,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                       value: groups.containsKey(_w.config.groupBy)
                           ? _w.config.groupBy
                           : null,
-                      hint: const Text('Group by'),
+                      hint: Text(context.l10n.grpIGroupBy),
                       items: [
                         for (final g in groups.entries)
                           DropdownMenuItem(value: g.key, child: Text(g.value)),
@@ -203,15 +204,18 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 TextField(
                   key: const Key('widget-tfql'),
                   controller: _tfql,
-                  decoration: const InputDecoration(
-                    labelText: 'Filter (TFQL, optional)',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpIFilterTfqlOptional,
                     hintText: 'priority = high AND assignee = me',
                   ),
                   onChanged: (v) =>
                       _config(_w.config.copyWith(tfql: v, filterId: '')),
                 ),
               const SizedBox(height: 12),
-              Text('Preview', style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                context.l10n.grpIPreview,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               SizedBox(
                 height: 200,
                 child: _error != null
@@ -232,14 +236,14 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpICancel),
         ),
         FilledButton(
           key: const Key('widget-save'),
           onPressed: _canSave
               ? () => Navigator.of(context).pop(_w.copyWith(title: _title.text))
               : null,
-          child: const Text('Done'),
+          child: Text(context.l10n.grpIDone),
         ),
       ],
     );
@@ -261,7 +265,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
           DropdownButton<String>(
             key: const Key('widget-project'),
             value: projects.any((p) => p.id == chosen) ? chosen : null,
-            hint: const Text('Project'),
+            hint: Text(context.l10n.grpIProject),
             items: [
               for (final p in projects)
                 DropdownMenuItem(value: p.id, child: Text(p.name)),
@@ -274,7 +278,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
           value: sprints?.any((s) => s.id == _w.config.sprintId) == true
               ? _w.config.sprintId
               : null,
-          hint: const Text('Sprint'),
+          hint: Text(context.l10n.grpISprint),
           items: [
             for (final s in sprints ?? const [])
               DropdownMenuItem(value: s.id, child: Text(s.name)),

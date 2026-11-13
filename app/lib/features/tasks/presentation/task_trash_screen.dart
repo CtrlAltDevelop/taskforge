@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -16,10 +17,13 @@ class TaskTrashScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final trash = ref.watch(taskTrashProvider(project.id));
     return Scaffold(
-      appBar: AppBar(title: Text('${project.name} · Trash')),
+      appBar: AppBar(title: Text(context.l10n.grpFTrashTitle(project.name))),
       body: switch (trash) {
-        AsyncData(:final value) when value.isEmpty => const Center(
-          child: Text('The trash is empty.', key: Key('trash-empty')),
+        AsyncData(:final value) when value.isEmpty => Center(
+          child: Text(
+            context.l10n.grpFTrashEmpty,
+            key: const Key('trash-empty'),
+          ),
         ),
         AsyncData(:final value) => ListView(
           key: const Key('trash-list'),
@@ -28,13 +32,13 @@ class TaskTrashScreen extends ConsumerWidget {
               ListTile(
                 key: Key('trashed-${task.id}'),
                 title: Text(task.title),
-                subtitle: Text('${task.displayId} · deleted'),
+                subtitle: Text(context.l10n.grpFTrashedRow(task.displayId)),
                 trailing: TextButton(
                   key: Key('restore-${task.id}'),
                   onPressed: project.isArchived
                       ? null
                       : () => _restore(context, ref, task),
-                  child: const Text('Restore'),
+                  child: Text(context.l10n.grpFRestore),
                 ),
               ),
           ],
@@ -43,7 +47,11 @@ class TaskTrashScreen extends ConsumerWidget {
           child: TextButton(
             key: const Key('retry-trash'),
             onPressed: () => ref.invalidate(taskTrashProvider(project.id)),
-            child: Text('${taskErrorMessage(mapTrashError(error))} Retry'),
+            child: Text(
+              context.l10n.grpFErrorRetry(
+                taskErrorMessage(mapTrashError(error)),
+              ),
+            ),
           ),
         ),
         _ => const Center(child: CircularProgressIndicator()),
@@ -53,11 +61,14 @@ class TaskTrashScreen extends ConsumerWidget {
 
   Future<void> _restore(BuildContext context, WidgetRef ref, Task task) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       await ref.read(taskListProvider(project.id).notifier).restore(task);
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('${task.displayId} restored')));
+        ..showSnackBar(
+          SnackBar(content: Text(l10n.grpFTaskRestored(task.displayId))),
+        );
     } on TaskException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(taskErrorMessage(e))));
     }

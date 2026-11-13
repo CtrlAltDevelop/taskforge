@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
@@ -12,6 +13,7 @@ class DangerZone extends ConsumerWidget {
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
     // Captured before any await: the screen may be gone once this workspace is.
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final notifier = ref.read(workspacesProvider.notifier);
     final typed = await showDialog<String>(
       context: context,
@@ -26,10 +28,10 @@ class DangerZone extends ConsumerWidget {
     }
     messenger.showSnackBar(
       SnackBar(
-        content: Text('"${workspace.name}" deleted. Restorable for 7 days.'),
+        content: Text(l10n.grpJWorkspaceDeleted(workspace.name)),
         duration: const Duration(seconds: 10),
         action: SnackBarAction(
-          label: 'Undo',
+          label: l10n.grpJUndo,
           onPressed: () async {
             try {
               await notifier.restore(workspace.id);
@@ -53,20 +55,18 @@ class DangerZone extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Danger zone',
+            context.l10n.grpJDangerZone,
             style: Theme.of(context).textTheme.titleLarge
                 ?.copyWith(color: color),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Deleting a workspace hides it for everyone. You can restore it for 7 days.',
-          ),
+          Text(context.l10n.grpJDangerZoneBody),
           const SizedBox(height: 16),
           OutlinedButton(
             key: const Key('delete-workspace'),
             style: OutlinedButton.styleFrom(foregroundColor: color),
             onPressed: () => _delete(context, ref),
-            child: const Text('Delete workspace'),
+            child: Text(context.l10n.grpJDeleteWorkspace),
           ),
         ],
       ),
@@ -95,27 +95,27 @@ class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Delete workspace?'),
+      title: Text(context.l10n.grpJDeleteWorkspaceQ),
       content: TextField(
         key: const Key('confirm-name'),
         controller: _typed,
         autofocus: true,
         onChanged: (_) => setState(() {}),
         decoration: InputDecoration(
-          labelText: 'Type "${widget.name}" to confirm',
+          labelText: context.l10n.grpJTypeNameToConfirm(widget.name),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           key: const Key('confirm-delete'),
           onPressed: _typed.text == widget.name
               ? () => Navigator.pop(context, _typed.text)
               : null,
-          child: const Text('Delete'),
+          child: Text(context.l10n.grpJDelete),
         ),
       ],
     );

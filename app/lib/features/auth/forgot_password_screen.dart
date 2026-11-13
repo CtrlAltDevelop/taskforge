@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/auth_form.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
@@ -13,15 +14,15 @@ class ForgotPasswordScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     return AuthForm(
-      title: 'Reset password',
-      submitLabel: 'Send code',
-      fields: const [
+      title: context.l10n.resetPassword,
+      submitLabel: context.l10n.sendCode,
+      fields: [
         AuthField(
-          key: Key('email'),
-          label: 'Email',
+          key: const Key('email'),
+          label: context.l10n.email,
           validator: validateEmail,
           keyboardType: TextInputType.emailAddress,
-          autofillHints: [AutofillHints.email],
+          autofillHints: const [AutofillHints.email],
         ),
       ],
       onSubmit: (values) async {
@@ -32,7 +33,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
       },
       footer: TextButton(
         onPressed: () => context.go('/sign-in'),
-        child: const Text('Back to sign in'),
+        child: Text(context.l10n.backToSignIn),
       ),
     );
   }

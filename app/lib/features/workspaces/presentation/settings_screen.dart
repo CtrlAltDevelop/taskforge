@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
@@ -23,11 +24,11 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-home'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpEBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/'),
         ),
-        title: const Text('Workspace settings'),
+        title: Text(context.l10n.grpEWorkspaceSettingsTitle),
       ),
       body: workspace == null
           ? Center(
@@ -35,9 +36,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   ? TextButton(
                       key: const Key('retry-workspaces'),
                       onPressed: () => ref.invalidate(workspacesProvider),
-                      child: const Text(
-                        'Could not load your workspaces. Retry',
-                      ),
+                      child: Text(context.l10n.grpEWorkspacesLoadRetry),
                     )
                   : const CircularProgressIndicator(),
             )
@@ -59,8 +58,8 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   child: ListTile(
                     key: const Key('open-members'),
                     leading: const Icon(Icons.group),
-                    title: const Text('Members'),
-                    subtitle: const Text('People, invitations and leaving'),
+                    title: Text(context.l10n.grpEMembers),
+                    subtitle: Text(context.l10n.grpEMembersSub),
                     onTap: () => context.push('/members'),
                   ),
                 ),
@@ -69,8 +68,8 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   child: ListTile(
                     key: const Key('open-roles'),
                     leading: const Icon(Icons.admin_panel_settings),
-                    title: const Text('Roles and permissions'),
-                    subtitle: const Text('Who can do what'),
+                    title: Text(context.l10n.grpERolesPerms),
+                    subtitle: Text(context.l10n.grpERolesPermsSub),
                     onTap: () => context.push('/workspaces/roles'),
                   ),
                 ),
@@ -79,8 +78,8 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   child: ListTile(
                     key: const Key('open-audit'),
                     leading: const Icon(Icons.fact_check_outlined),
-                    title: const Text('Audit log'),
-                    subtitle: const Text('Who changed what, and when'),
+                    title: Text(context.l10n.grpEAuditLog),
+                    subtitle: Text(context.l10n.grpEAuditLogSub),
                     onTap: () => context.push('/audit'),
                   ),
                 ),
@@ -89,10 +88,8 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                   child: ListTile(
                     key: const Key('open-import'),
                     leading: const Icon(Icons.swap_vert),
-                    title: const Text('Import and export'),
-                    subtitle: const Text(
-                      'Bring in Jira, ClickUp or CSV data; take it out',
-                    ),
+                    title: Text(context.l10n.grpEImportExport),
+                    subtitle: Text(context.l10n.grpEImportExportSub),
                     onTap: () => context.push('/import'),
                   ),
                 ),
@@ -169,8 +166,9 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
           .then((_) {}),
     );
     if (saved && mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Workspace updated.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.grpEWorkspaceUpdated)),
+      );
     }
   }
 
@@ -198,7 +196,10 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('General', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            context.l10n.grpEGeneral,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -208,7 +209,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
                 OutlinedButton(
                   key: const Key('change-logo'),
                   onPressed: _busy ? null : _changeLogo,
-                  child: const Text('Change logo'),
+                  child: Text(context.l10n.grpEChangeLogo),
                 ),
             ],
           ),
@@ -217,7 +218,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             key: const Key('settings-name'),
             controller: _name,
             enabled: canEdit,
-            decoration: const InputDecoration(labelText: 'Name'),
+            decoration: InputDecoration(labelText: context.l10n.grpEName),
             validator: validateWorkspaceName,
           ),
           const SizedBox(height: 16),
@@ -226,7 +227,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             controller: _slug,
             enabled: canEdit,
             decoration: InputDecoration(
-              labelText: 'URL',
+              labelText: context.l10n.grpEUrl,
               errorText: _slugError,
             ),
             validator: validateSlug,
@@ -243,14 +244,14 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             TextButton(
               key: const Key('refresh-workspace'),
               onPressed: () => ref.read(workspacesProvider.notifier).refresh(),
-              child: const Text('Refresh'),
+              child: Text(context.l10n.grpERefresh),
             ),
           if (canEdit) ...[
             const SizedBox(height: 16),
             FilledButton(
               key: const Key('save-workspace'),
               onPressed: _busy ? null : _save,
-              child: const Text('Save changes'),
+              child: Text(context.l10n.grpESaveChanges),
             ),
           ],
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
@@ -16,7 +17,7 @@ class NotificationPrefsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(prefsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Notification settings')),
+      appBar: AppBar(title: Text(context.l10n.grpENotifSettings)),
       body: switch (prefs) {
         AsyncData(:final value) => _Body(prefs: value),
         AsyncError(:final error) => Center(
@@ -29,7 +30,7 @@ class NotificationPrefsScreen extends ConsumerWidget {
                 TextButton(
                   key: const Key('retry-prefs'),
                   onPressed: () => ref.invalidate(prefsProvider),
-                  child: const Text('Retry'),
+                  child: Text(context.l10n.grpERetry),
                 ),
               ],
             ),
@@ -93,10 +94,7 @@ class _BodyState extends ConsumerState<_Body> {
       final granted = await ref.read(pushPermissionProvider.notifier).ask();
       if (!mounted) return;
       if (!granted) {
-        _say(
-          'Notifications are off for this device. You can allow them in the '
-          'system settings; the choice is saved.',
-        );
+        _say(context.l10n.grpEPushOffNotice);
       }
     }
     await _setRow(row.copyWith(push: on));
@@ -108,7 +106,7 @@ class _BodyState extends ConsumerState<_Body> {
   Future<void> _saveZone(String name) async {
     final zone = name.trim();
     if (!isValidTimezone(zone)) {
-      setState(() => _zoneError = 'Use a name like Europe/Paris or UTC.');
+      setState(() => _zoneError = context.l10n.grpEZoneInvalid);
       return;
     }
     setState(() => _zoneError = null);
@@ -145,7 +143,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   Future<void> _setQuiet(InboxSettings next) async {
     if (next.quietOn && next.quietStart == next.quietEnd) {
-      setState(() => _quietError = 'Start and end must be different times.');
+      setState(() => _quietError = context.l10n.grpEQuietDifferent);
       return;
     }
     setState(() => _quietError = null);
@@ -174,7 +172,10 @@ class _BodyState extends ConsumerState<_Body> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text('What reaches you', style: theme.textTheme.titleMedium),
+        Text(
+          context.l10n.grpEWhatReachesYou,
+          style: theme.textTheme.titleMedium,
+        ),
         const SizedBox(height: 8),
         for (final row in widget.prefs.rows)
           Card(
@@ -185,18 +186,18 @@ class _BodyState extends ConsumerState<_Body> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
                     child: Text(row.label, style: theme.textTheme.titleSmall),
                   ),
                   SwitchListTile(
                     key: Key('pref-inbox-${row.eventType}'),
-                    title: const Text('Inbox'),
+                    title: Text(context.l10n.grpEInbox),
                     value: row.inbox,
                     onChanged: (v) => _setRow(row.copyWith(inbox: v)),
                   ),
                   SwitchListTile(
                     key: Key('pref-push-${row.eventType}'),
-                    title: const Text('Push'),
+                    title: Text(context.l10n.grpEPush),
                     value: row.push,
                     onChanged: (v) => _setPush(row, v),
                   ),
@@ -204,7 +205,7 @@ class _BodyState extends ConsumerState<_Body> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Text('Email'),
+                        Text(context.l10n.grpEEmail),
                         const SizedBox(width: 12),
                         Expanded(
                           child: SegmentedButton<EmailMode>(
@@ -227,11 +228,11 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         const SizedBox(height: 16),
-        Text('Quiet hours', style: theme.textTheme.titleMedium),
+        Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
         SwitchListTile(
           key: const Key('quiet-switch'),
-          title: const Text('Hold push and email during quiet hours'),
-          subtitle: const Text('The inbox always fills; only pings wait.'),
+          title: Text(context.l10n.grpEQuietHold),
+          subtitle: Text(context.l10n.grpEQuietHoldSub),
           value: settings.quietOn,
           onChanged: _toggleQuiet,
         ),
@@ -241,7 +242,7 @@ class _BodyState extends ConsumerState<_Body> {
               Expanded(
                 child: ListTile(
                   key: const Key('quiet-start'),
-                  title: const Text('From'),
+                  title: Text(context.l10n.grpEFrom),
                   subtitle: Text(settings.quietStart),
                   onTap: () => _pickQuiet(start: true),
                 ),
@@ -249,7 +250,7 @@ class _BodyState extends ConsumerState<_Body> {
               Expanded(
                 child: ListTile(
                   key: const Key('quiet-end'),
-                  title: const Text('Until'),
+                  title: Text(context.l10n.grpEUntil),
                   subtitle: Text(settings.quietEnd),
                   onTap: () => _pickQuiet(start: false),
                 ),
@@ -266,7 +267,10 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         const SizedBox(height: 16),
-        Text('Time zone and digest', style: theme.textTheme.titleMedium),
+        Text(
+          context.l10n.grpETimeZoneDigest,
+          style: theme.textTheme.titleMedium,
+        ),
         const SizedBox(height: 8),
         Autocomplete<String>(
           initialValue: TextEditingValue(text: settings.timezone),
@@ -282,8 +286,8 @@ class _BodyState extends ConsumerState<_Body> {
             controller: controller,
             focusNode: focus,
             decoration: InputDecoration(
-              labelText: 'Time zone',
-              helperText: 'Quiet hours and the digest follow this zone.',
+              labelText: context.l10n.grpETimeZone,
+              helperText: context.l10n.grpETimeZoneHelper,
               errorText: _zoneError,
             ),
             onSubmitted: _saveZone,
@@ -291,15 +295,15 @@ class _BodyState extends ConsumerState<_Body> {
           ),
         ),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: TextButton.icon(
             key: const Key('timezone-device'),
             icon: const Icon(Icons.phone_android),
-            label: const Text('Use this device’s time zone'),
+            label: Text(context.l10n.grpEUseDeviceZone),
             onPressed: () {
               final zone = timezoneForOffset(DateTime.now().timeZoneOffset);
               if (zone == null) {
-                _say('Type your time zone instead, e.g. Europe/Paris.');
+                _say(context.l10n.grpETypeZone);
                 return;
               }
               _saveZone(zone);
@@ -310,9 +314,7 @@ class _BodyState extends ConsumerState<_Body> {
         DropdownButtonFormField<int>(
           key: const Key('digest-hour'),
           initialValue: settings.digestHour,
-          decoration: const InputDecoration(
-            labelText: 'Daily digest is sent at',
-          ),
+          decoration: InputDecoration(labelText: context.l10n.grpEDigestAt),
           items: [
             for (var h = 0; h < 24; h++)
               DropdownMenuItem(value: h, child: Text(hhmm(h, 0))),

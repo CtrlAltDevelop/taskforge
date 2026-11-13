@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/weekday_names.dart';
+import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -12,8 +15,6 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 import 'package:taskforge/features/time/presentation/entry_dialog.dart';
-
-const _dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 /// A week of the caller's time: a row per task, a column per day, totals on
 /// both edges. Tapping a cell opens that task's entries for the day.
@@ -42,7 +43,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
     final me = ref.watch(currentUserIdProvider);
     final last = addDays(_week, 6);
     return ShellScaffold(
-      appBar: AppBar(title: const Text('Timesheet')),
+      appBar: AppBar(title: Text(context.l10n.grpATimesheetTitle)),
       body: Column(
         children: [
           Padding(
@@ -52,8 +53,8 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
               children: [
                 IconButton(
                   key: const Key('week-previous'),
-                  tooltip: 'Previous week',
-                  icon: const Icon(Icons.chevron_left),
+                  tooltip: context.l10n.grpAPreviousWeek,
+                  icon: const DirectionalIcon(Icons.chevron_left),
                   onPressed: () => _move(-1),
                 ),
                 Text(
@@ -62,8 +63,8 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                 ),
                 IconButton(
                   key: const Key('week-next'),
-                  tooltip: 'Next week',
-                  icon: const Icon(Icons.chevron_right),
+                  tooltip: context.l10n.grpANextWeek,
+                  icon: const DirectionalIcon(Icons.chevron_right),
                   onPressed: () => _move(1),
                 ),
                 if (permissions.can(Perm.timeEditOthers))
@@ -77,7 +78,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                   onPressed: () => setState(
                     () => _week = weekStartOf(widget.today ?? DateTime.now()),
                   ),
-                  child: const Text('This week'),
+                  child: Text(context.l10n.grpAThisWeek),
                 ),
               ],
             ),
@@ -100,7 +101,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                       onPressed: () => ref.invalidate(
                         timesheetProvider((week: _week, user: _user)),
                       ),
-                      child: const Text('Retry'),
+                      child: Text(context.l10n.grpARetry),
                     ),
                   ],
                 ),
@@ -126,11 +127,11 @@ class _Grid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (sheet.rows.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(24),
+      return Padding(
+        padding: const EdgeInsets.all(24),
         child: Center(
-          key: Key('timesheet-empty'),
-          child: Text('No time logged this week.'),
+          key: const Key('timesheet-empty'),
+          child: Text(context.l10n.grpATimesheetEmpty),
         ),
       );
     }
@@ -141,13 +142,15 @@ class _Grid extends ConsumerWidget {
       child: DataTable(
         columnSpacing: 20,
         columns: [
-          const DataColumn(label: Text('Task')),
+          DataColumn(label: Text(context.l10n.grpATask)),
           for (var i = 0; i < 7; i++)
             DataColumn(
               numeric: true,
-              label: Text('${_dayNames[i]} ${addDays(week, i).day}'),
+              label: Text(
+                '${context.l10n.weekdayShortNames[i]} ${addDays(week, i).day}',
+              ),
             ),
-          const DataColumn(numeric: true, label: Text('Total')),
+          DataColumn(numeric: true, label: Text(context.l10n.grpATotal)),
         ],
         rows: [
           for (final r in sheet.rows)
@@ -172,7 +175,7 @@ class _Grid extends ConsumerWidget {
           DataRow(
             key: const ValueKey('row-total'),
             cells: [
-              const DataCell(Text('Total')),
+              DataCell(Text(context.l10n.grpATotal)),
               for (var i = 0; i < 7; i++)
                 DataCell(Text(cell(sheet.dayTotals[i]))),
               DataCell(
@@ -242,7 +245,9 @@ class _CellDialog extends ConsumerWidget {
                 key: Key('cell-entry-${e.id}'),
                 dense: true,
                 title: Text(
-                  e.running ? 'Running' : durationText(e.durationSec),
+                  e.running
+                      ? context.l10n.grpARunning
+                      : durationText(e.durationSec),
                 ),
                 subtitle: e.note.isEmpty ? null : Text(e.note),
                 trailing: e.running
@@ -253,7 +258,7 @@ class _CellDialog extends ConsumerWidget {
                           IconButton(
                             key: Key('cell-edit-${e.id}'),
                             icon: const Icon(Icons.edit_outlined),
-                            tooltip: 'Edit',
+                            tooltip: context.l10n.grpAEdit,
                             onPressed: () async {
                               final input = await askEntry(
                                 context,
@@ -275,7 +280,7 @@ class _CellDialog extends ConsumerWidget {
                           IconButton(
                             key: Key('cell-delete-${e.id}'),
                             icon: const Icon(Icons.delete_outline),
-                            tooltip: 'Delete',
+                            tooltip: context.l10n.grpADelete,
                             onPressed: () async {
                               if (!await confirmDelete(context)) return;
                               if (!context.mounted) return;
@@ -288,7 +293,7 @@ class _CellDialog extends ConsumerWidget {
             TextButton.icon(
               key: const Key('cell-add'),
               icon: const Icon(Icons.add),
-              label: const Text('Add time'),
+              label: Text(context.l10n.grpAAddTime),
               onPressed: () async {
                 final input = await askEntry(context, day: day);
                 if (input == null) return;
@@ -312,7 +317,7 @@ class _CellDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpAClose),
         ),
       ],
     );
@@ -343,7 +348,7 @@ class _PersonPicker extends ConsumerWidget {
               value: m.userId,
               child: Text(
                 m.userId == me
-                    ? 'You'
+                    ? context.l10n.grpAYou
                     : (m.displayName.isEmpty ? m.email : m.displayName),
               ),
             ),
@@ -390,10 +395,13 @@ class _TotalsState extends ConsumerState<_Totals> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Project totals', style: theme.textTheme.titleMedium),
+          Text(
+            context.l10n.grpAProjectTotals,
+            style: theme.textTheme.titleMedium,
+          ),
           DropdownButton<String>(
             key: const Key('totals-project'),
-            hint: const Text('Choose a project'),
+            hint: Text(context.l10n.grpAChooseProject),
             value: chosen,
             items: [
               for (final p in projects)
@@ -406,9 +414,9 @@ class _TotalsState extends ConsumerState<_Totals> {
           ),
           if (totals != null)
             switch (totals) {
-              AsyncData(:final value) when value.isEmpty => const Text(
-                'No time logged in this project this week.',
-                key: Key('totals-empty'),
+              AsyncData(:final value) when value.isEmpty => Text(
+                context.l10n.grpATotalsEmpty,
+                key: const Key('totals-empty'),
               ),
               AsyncData(:final value) => Column(
                 children: [
@@ -420,7 +428,9 @@ class _TotalsState extends ConsumerState<_Totals> {
                       trailing: Text(
                         durationText(t.seconds) +
                             (t.billable > 0
-                                ? '  (${durationText(t.billable)} billable)'
+                                ? context.l10n.grpABillableAmount(
+                                    durationText(t.billable),
+                                  )
                                 : ''),
                       ),
                     ),

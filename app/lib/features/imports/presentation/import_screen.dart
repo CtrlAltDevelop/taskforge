@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
 import 'package:taskforge/features/imports/presentation/export_dialog.dart';
@@ -19,22 +20,22 @@ class ImportScreen extends ConsumerWidget {
     final allowed = ref.watch(permissionSetProvider).can(Perm.dataManage);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Import and export'),
+        title: Text(context.l10n.grpCImpTitle),
         actions: [
           if (allowed)
             TextButton.icon(
               key: const Key('open-export'),
               onPressed: () => showExportDialog(context),
               icon: const Icon(Icons.download),
-              label: const Text('Export'),
+              label: Text(context.l10n.grpCImpExport),
             ),
         ],
       ),
       body: !allowed
-          ? const Center(
+          ? Center(
               child: Text(
-                'Only admins can import and export data.',
-                key: Key('import-denied'),
+                context.l10n.grpCImpDenied,
+                key: const Key('import-denied'),
               ),
             )
           : ListView(
@@ -77,7 +78,10 @@ class ImportHistory extends ConsumerWidget {
       key: const Key('import-history'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Past imports', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          context.l10n.grpCImpPast,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         jobs.when(
           loading: () => const LinearProgressIndicator(),
           error: (e, _) => Row(
@@ -86,16 +90,16 @@ class ImportHistory extends ConsumerWidget {
               TextButton(
                 key: const Key('history-retry'),
                 onPressed: () => ref.invalidate(importJobsProvider),
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpCRetry),
               ),
             ],
           ),
           data: (list) => list.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    'Nothing imported yet.',
-                    key: Key('history-empty'),
+                    context.l10n.grpCImpNothing,
+                    key: const Key('history-empty'),
                   ),
                 )
               : Column(
@@ -107,7 +111,7 @@ class ImportHistory extends ConsumerWidget {
                         title: Text(job.filename),
                         subtitle: Text(
                           '${job.kind?.label ?? job.source} · ${job.status}'
-                          '${job.stat('tasks') > 0 ? ' · ${job.stat('tasks')} tasks' : ''}'
+                          '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
                           '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
                         ),
                         trailing: Wrap(
@@ -120,7 +124,9 @@ class ImportHistory extends ConsumerWidget {
                                     .read(importWizardProvider.notifier)
                                     .resume(job),
                                 child: Text(
-                                  job.canResume ? 'Resume' : 'Continue',
+                                  job.canResume
+                                      ? context.l10n.grpCImpResume
+                                      : context.l10n.grpCImpContinue,
                                 ),
                               ),
                             if (job.canUndo)
@@ -130,14 +136,14 @@ class ImportHistory extends ConsumerWidget {
                                   context,
                                   () => _run(context, () => actions.undo(job)),
                                 ),
-                                child: const Text('Undo'),
+                                child: Text(context.l10n.grpCUndo),
                               ),
                             if (job.status == 'uploaded' ||
                                 job.status == 'analyzed' ||
                                 job.status == 'undone')
                               IconButton(
                                 key: Key('job-discard-${job.id}'),
-                                tooltip: 'Forget',
+                                tooltip: context.l10n.grpCImpForget,
                                 onPressed: () =>
                                     _run(context, () => actions.discard(job)),
                                 icon: const Icon(Icons.delete_outline),
@@ -160,19 +166,17 @@ class ImportHistory extends ConsumerWidget {
       context: context,
       builder: (dialog) => AlertDialog(
         key: const Key('history-undo-dialog'),
-        title: const Text('Undo this import?'),
-        content: const Text(
-          'This removes what it made. Anything you added by hand is kept.',
-        ),
+        title: Text(dialog.l10n.grpCImpUndoTitle),
+        content: Text(dialog.l10n.grpCImpUndoBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialog, false),
-            child: const Text('Cancel'),
+            child: Text(dialog.l10n.grpCCancel),
           ),
           FilledButton(
             key: const Key('history-undo-confirm'),
             onPressed: () => Navigator.pop(dialog, true),
-            child: const Text('Undo import'),
+            child: Text(dialog.l10n.grpCImpUndoConfirm),
           ),
         ],
       ),
@@ -199,12 +203,12 @@ class PlaceholdersPanel extends ConsumerWidget {
       builder: (dialog) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           key: const Key('claim-dialog'),
-          title: Text('Give ${who.name}\'s tasks to...'),
+          title: Text(context.l10n.grpCImpClaimTitle(who.name)),
           content: DropdownButton<String>(
             key: const Key('claim-member'),
             isExpanded: true,
             value: chosen,
-            hint: const Text('Choose a member'),
+            hint: Text(context.l10n.grpCImpChooseMember),
             items: [
               for (final m in members)
                 DropdownMenuItem(
@@ -217,14 +221,14 @@ class PlaceholdersPanel extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialog, false),
-              child: const Text('Cancel'),
+              child: Text(dialog.l10n.grpCCancel),
             ),
             FilledButton(
               key: const Key('claim-confirm'),
               onPressed: chosen == null
                   ? null
                   : () => Navigator.pop(dialog, true),
-              child: const Text('Assign'),
+              child: Text(context.l10n.grpCImpAssign),
             ),
           ],
         ),
@@ -235,7 +239,7 @@ class PlaceholdersPanel extends ConsumerWidget {
       final n = await ref.read(importActionsProvider).claim(who, chosen!);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Assigned $n task${n == 1 ? '' : 's'}.')),
+          SnackBar(content: Text(context.l10n.grpCImpAssigned(n))),
         );
       }
     } on ImportException catch (e) {
@@ -255,26 +259,25 @@ class PlaceholdersPanel extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'People waiting to join',
+          context.l10n.grpCImpWaiting,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const Text(
-          'Their tasks are assigned automatically when someone joins with the '
-          'same email.',
-        ),
+        Text(context.l10n.grpCImpWaitingBody),
         for (final who in people)
           ListTile(
             key: Key('placeholder-${who.id}'),
             contentPadding: EdgeInsets.zero,
             title: Text(who.name),
             subtitle: Text(
-              '${who.email.isEmpty ? 'no email' : who.email} · '
-              '${who.tasks} task${who.tasks == 1 ? '' : 's'}',
+              context.l10n.grpCImpPersonSub(
+                who.email.isEmpty ? context.l10n.grpCImpNoEmail : who.email,
+                who.tasks,
+              ),
             ),
             trailing: TextButton(
               key: Key('claim-${who.id}'),
               onPressed: () => _claim(context, ref, who),
-              child: const Text('Assign to...'),
+              child: Text(context.l10n.grpCImpAssignTo),
             ),
           ),
       ],

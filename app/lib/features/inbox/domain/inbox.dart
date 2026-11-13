@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The kinds of notification the server sends (its `type` and `event_type`).
 enum NotificationKind {
@@ -345,7 +348,11 @@ String relativeTime(DateTime then, DateTime now) {
 
 /// "Later today" (18:00, or 2 h on when that is under half an hour away),
 /// "Tomorrow" 09:00, "Next week" Monday 09:00 — all in local time.
-List<({String label, DateTime at})> snoozePresets(DateTime now) {
+List<({String label, DateTime at})> snoozePresets(
+  DateTime now, {
+  AppLocalizations? l10n,
+}) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
   final today18 = DateTime(now.year, now.month, now.day, 18);
   final later = now.isBefore(today18.subtract(const Duration(minutes: 30)))
       ? today18
@@ -359,8 +366,8 @@ List<({String label, DateTime at})> snoozePresets(DateTime now) {
     9,
   );
   return [
-    (label: 'Later today', at: later),
-    (label: 'Tomorrow', at: tomorrow),
-    (label: 'Next week', at: monday),
+    (label: l.grpHSnoozeLaterToday, at: later),
+    (label: l.grpHSnoozeTomorrow, at: tomorrow),
+    (label: l.grpHSnoozeNextWeek, at: monday),
   ];
 }

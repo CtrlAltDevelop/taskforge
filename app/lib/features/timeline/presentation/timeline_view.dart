@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart'
     show todayProvider, trayProvider;
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
@@ -120,7 +122,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
           await notifier.shiftDependents(plan);
         case ShiftChoice.keep:
           await notifier.keepDependents(plan);
-          _say('Moved. The links it breaks show in red.');
+          if (mounted) _say(context.l10n.grpIMovedLinksBreak);
         case ShiftChoice.cancel:
           notifier.discard(plan);
           tray?.restore(task);
@@ -132,7 +134,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
   }
 
   Future<void> _schedule(Task task) async {
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: ref.read(todayProvider),
       firstDate: day(2000, 1, 1),
@@ -192,7 +194,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
       bytes: bytes,
       mimeType: 'image/png',
     );
-    if (saved != null) _say('Timeline saved.');
+    if (saved != null && mounted) _say(context.l10n.grpITimelineSaved);
   }
 
   bool Function(Day) _nonWorking(WorkingDays w) {
@@ -254,7 +256,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
                   TextButton(
                     key: const Key('timeline-retry'),
                     onPressed: ref.read(timelineProvider(_id).notifier).refresh,
-                    child: const Text('Retry'),
+                    child: Text(context.l10n.grpIRetry),
                   ),
                 ],
               ),
@@ -283,9 +285,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
     final scheme = Theme.of(context).colorScheme;
     final small = Theme.of(context).textTheme.bodySmall ?? const TextStyle();
     return Semantics(
-      label:
-          'Timeline chart of ${scene.byId.length} tasks. '
-          'Switch to the list view to read them.',
+      label: context.l10n.grpITimelineChartLabel(scene.byId.length),
       child: Column(
         children: [
           SizedBox(
@@ -406,12 +406,9 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
             builder: (context, hover, _) {
               final task = hover.task;
               final text = task == null
-                  ? (canMove
-                        ? 'Drag a bar to move it, an end to resize it. '
-                              'Ctrl + wheel or pinch zooms.'
-                        : '')
-                  : '${task.displayId}  ${task.title} · ${datesText(_shown(task, hover.dates))}'
-                        '${lengthText(_shown(task, hover.dates)).isEmpty ? '' : ' · ${lengthText(_shown(task, hover.dates))}'}';
+                  ? (canMove ? context.l10n.grpITimelineDragHint : '')
+                  : '${task.displayId}  ${task.title} · ${datesText(_shown(task, hover.dates), context.l10n)}'
+                        '${lengthText(_shown(task, hover.dates), context.l10n).isEmpty ? '' : ' · ${lengthText(_shown(task, hover.dates), context.l10n)}'}';
               return Text(
                 text,
                 key: const Key('timeline-info'),
@@ -425,7 +422,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
         TextButton.icon(
           key: const Key('timeline-unscheduled'),
           icon: const Icon(Icons.event_note_outlined),
-          label: const Text('Unscheduled'),
+          label: Text(context.l10n.grpIUnscheduled),
           onPressed: () => _openTray(canMove),
         ),
       ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/recurrence/application/recurrence_providers.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -105,8 +107,8 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
       SnackBar(
         content: Text(
           changed == 0
-              ? 'New tasks will use this one. No open task needed changing.'
-              : 'Updated $changed open later task${changed == 1 ? '' : 's'}.',
+              ? context.l10n.grpDRepeatNothingToUpdate
+              : context.l10n.grpDRepeatUpdatedLater(changed),
         ),
       ),
     );
@@ -121,12 +123,10 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
         : ref.watch(repeatPreviewProvider(_anchor));
     return AlertDialog(
       key: const Key('repeat-editor'),
-      title: const Text('Repeat'),
+      title: Text(context.l10n.grpDRepeat),
       content: unsupported
           ? Text(
-              '"${series.summary}" was set in a way this editor cannot '
-              'show, so it cannot be changed here. You can still pause or '
-              'stop it.',
+              context.l10n.grpDRepeatUnsupported(series.summary),
               key: const Key('repeat-unsupported'),
             )
           : SizedBox(
@@ -159,7 +159,7 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
                     SwitchListTile(
                       key: const Key('repeat-skip-weekends'),
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Skip weekends'),
+                      title: Text(context.l10n.grpDSkipWeekends),
                       value: _draft.skipWeekends,
                       onChanged: (v) => _edit(_draft.copyWith(skipWeekends: v)),
                     ),
@@ -191,7 +191,7 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
                 : () => _run(
                     () => ref.read(repeatActionsProvider).clear(_target),
                   ),
-            child: const Text('Stop repeating'),
+            child: Text(context.l10n.grpDStopRepeating),
           ),
           TextButton(
             key: const Key('repeat-pause'),
@@ -202,23 +202,25 @@ class _RepeatEditorState extends ConsumerState<RepeatEditor> {
                         .read(repeatActionsProvider)
                         .pause(_target, paused: !series.paused),
                   ),
-            child: Text(series.paused ? 'Resume' : 'Pause'),
+            child: Text(
+              series.paused ? context.l10n.grpDResume : context.l10n.grpDPause,
+            ),
           ),
           TextButton(
             key: const Key('repeat-future'),
             onPressed: _busy ? null : _applyToFuture,
-            child: const Text('Use this task for future ones'),
+            child: Text(context.l10n.grpDUseForFuture),
           ),
         ],
         TextButton(
           onPressed: _busy ? null : () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpDCancel),
         ),
         if (!unsupported)
           FilledButton(
             key: const Key('repeat-save'),
             onPressed: _busy ? null : _save,
-            child: const Text('Save'),
+            child: Text(context.l10n.grpDSave),
           ),
       ],
     );
@@ -234,7 +236,7 @@ class _EveryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      const Text('Every'),
+      Text(context.l10n.grpDEvery),
       const SizedBox(width: 8),
       SizedBox(
         width: 64,
@@ -310,18 +312,18 @@ class _Monthly extends StatelessWidget {
         onChanged: (v) {
           if (v != null) onChanged(draft.copyWith(monthlyBy: v));
         },
-        child: const Column(
+        child: Column(
           children: [
             RadioListTile<MonthlyBy>(
-              key: Key('repeat-by-day'),
+              key: const Key('repeat-by-day'),
               contentPadding: EdgeInsets.zero,
-              title: Text('On a day of the month'),
+              title: Text(context.l10n.grpDRepeatByDay),
               value: MonthlyBy.dayOfMonth,
             ),
             RadioListTile<MonthlyBy>(
-              key: Key('repeat-by-weekday'),
+              key: const Key('repeat-by-weekday'),
               contentPadding: EdgeInsets.zero,
-              title: Text('On the nth weekday'),
+              title: Text(context.l10n.grpDRepeatByWeekday),
               value: MonthlyBy.nthWeekday,
             ),
           ],
@@ -333,7 +335,10 @@ class _Monthly extends StatelessWidget {
           value: draft.monthDay,
           items: [
             for (var d = 1; d <= 31; d++)
-              DropdownMenuItem(value: d, child: Text('Day $d')),
+              DropdownMenuItem(
+                value: d,
+                child: Text(context.l10n.grpDDayNumber(d)),
+              ),
           ],
           onChanged: (d) {
             if (d != null) onChanged(draft.copyWith(monthDay: d));
@@ -345,12 +350,15 @@ class _Monthly extends StatelessWidget {
             DropdownButton<int>(
               key: const Key('repeat-nth'),
               value: draft.nth,
-              items: const [
-                DropdownMenuItem(value: 1, child: Text('1st')),
-                DropdownMenuItem(value: 2, child: Text('2nd')),
-                DropdownMenuItem(value: 3, child: Text('3rd')),
-                DropdownMenuItem(value: 4, child: Text('4th')),
-                DropdownMenuItem(value: -1, child: Text('last')),
+              items: [
+                DropdownMenuItem(value: 1, child: Text(context.l10n.grpDNth1)),
+                DropdownMenuItem(value: 2, child: Text(context.l10n.grpDNth2)),
+                DropdownMenuItem(value: 3, child: Text(context.l10n.grpDNth3)),
+                DropdownMenuItem(value: 4, child: Text(context.l10n.grpDNth4)),
+                DropdownMenuItem(
+                  value: -1,
+                  child: Text(context.l10n.grpDNthLast),
+                ),
               ],
               onChanged: (n) {
                 if (n != null) onChanged(draft.copyWith(nth: n));
@@ -382,7 +390,7 @@ class _EndRow extends StatelessWidget {
 
   Future<void> _pick(BuildContext context) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: DateTime.tryParse(draft.until) ?? now,
       firstDate: now,
@@ -398,15 +406,24 @@ class _EndRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      const Text('Ends'),
+      Text(context.l10n.grpDEnds),
       const SizedBox(width: 12),
       DropdownButton<RepeatEnd>(
         key: const Key('repeat-end'),
         value: draft.end,
-        items: const [
-          DropdownMenuItem(value: RepeatEnd.never, child: Text('Never')),
-          DropdownMenuItem(value: RepeatEnd.count, child: Text('After')),
-          DropdownMenuItem(value: RepeatEnd.until, child: Text('On')),
+        items: [
+          DropdownMenuItem(
+            value: RepeatEnd.never,
+            child: Text(context.l10n.grpDEndNever),
+          ),
+          DropdownMenuItem(
+            value: RepeatEnd.count,
+            child: Text(context.l10n.grpDEndAfter),
+          ),
+          DropdownMenuItem(
+            value: RepeatEnd.until,
+            child: Text(context.l10n.grpDEndOn),
+          ),
         ],
         onChanged: (e) {
           if (e != null) onChanged(draft.copyWith(end: e));
@@ -428,13 +445,15 @@ class _EndRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        const Text('tasks'),
+        Text(context.l10n.grpDTasksWord),
       ],
       if (draft.end == RepeatEnd.until)
         TextButton(
           key: const Key('repeat-until'),
           onPressed: () => _pick(context),
-          child: Text(draft.until.isEmpty ? 'Pick a date' : draft.until),
+          child: Text(
+            draft.until.isEmpty ? context.l10n.grpDPickDate : draft.until,
+          ),
         ),
     ],
   );
@@ -452,7 +471,7 @@ class _Timing extends StatelessWidget {
     children: [
       Row(
         children: [
-          const Text('Make it'),
+          Text(context.l10n.grpDMakeIt),
           const SizedBox(width: 8),
           SizedBox(
             width: 56,
@@ -468,7 +487,7 @@ class _Timing extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          const Flexible(child: Text('days ahead of its due date')),
+          Flexible(child: Text(context.l10n.grpDDaysAhead)),
         ],
       ),
       ListTile(
@@ -476,7 +495,7 @@ class _Timing extends StatelessWidget {
         dense: true,
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Icons.schedule),
-        title: Text('At ${draft.atTime}'),
+        title: Text(context.l10n.grpDRepeatAt(draft.atTime)),
         onTap: () async {
           final parts = draft.atTime.split(':');
           final picked = await showTimePicker(
@@ -539,8 +558,8 @@ class _PreviewBox extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   p.dates.isEmpty
-                      ? 'No further dates.'
-                      : 'Next: ${p.dates.join(', ')}',
+                      ? context.l10n.grpDNoFurtherDates
+                      : context.l10n.grpDNextDates(p.dates.join(', ')),
                   key: const Key('repeat-preview'),
                 ),
               ],

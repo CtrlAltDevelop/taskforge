@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart' as d;
 import 'package:taskforge/features/docs/application/docs_providers.dart';
@@ -37,7 +38,8 @@ Future<void> _guarded(ActionContext c, Future<void> Function() act) async {
   try {
     await act();
   } on Object catch (e) {
-    _say(c, 'That did not work ($e).');
+    if (!c.context.mounted) return;
+    _say(c, c.context.l10n.grpDActionFailed(e.toString()));
   }
 }
 
@@ -47,13 +49,17 @@ Future<void> _switchWorkspace(ActionContext c) async {
   final pick = await showDialog<Workspace>(
     context: c.context,
     builder: (dialog) => SimpleDialog(
-      title: const Text('Switch workspace'),
+      title: Text(dialog.l10n.grpDSwitchWorkspace),
       children: [
         for (final w in all)
           SimpleDialogOption(
             key: Key('pick-workspace-${w.id}'),
             onPressed: () => Navigator.of(dialog).pop(w),
-            child: Text(w.id == current?.id ? '${w.name} (here)' : w.name),
+            child: Text(
+              w.id == current?.id
+                  ? dialog.l10n.grpDWorkspaceHere(w.name)
+                  : w.name,
+            ),
           ),
       ],
     ),
@@ -66,9 +72,9 @@ Future<void> _switchWorkspace(ActionContext c) async {
 Future<void> _createDoc(ActionContext c) async {
   final title = await promptText(
     c.context,
-    title: 'New doc',
-    label: 'Title',
-    initial: 'Untitled',
+    title: c.context.l10n.grpDNewDoc,
+    label: c.context.l10n.grpDTitle,
+    initial: c.context.l10n.grpDUntitled,
   );
   if (title == null) return;
   await _guarded(c, () async {
@@ -80,7 +86,10 @@ Future<void> _createDoc(ActionContext c) async {
 }
 
 Future<void> _createDashboard(ActionContext c) async {
-  final name = await promptText(c.context, title: 'New dashboard');
+  final name = await promptText(
+    c.context,
+    title: c.context.l10n.grpDNewDashboard,
+  );
   if (name == null) return;
   await _guarded(c, () async {
     await c.container
@@ -106,7 +115,7 @@ Future<void> _createDashboard(ActionContext c) async {
 Future<void> _createSprint(ActionContext c) async {
   final project = c.projectId;
   if (project == null) return;
-  final name = await promptText(c.context, title: 'New sprint');
+  final name = await promptText(c.context, title: c.context.l10n.grpDNewSprint);
   if (name == null) return;
   await _guarded(c, () async {
     final today = DateTime.now();

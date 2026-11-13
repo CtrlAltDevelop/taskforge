@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
@@ -17,7 +18,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final current = ref.watch(currentWorkspaceProvider);
     final all = ref.watch(workspacesProvider).value ?? const <Workspace>[];
-    if (current == null) return const Text('TaskForge');
+    if (current == null) return Text(context.l10n.appTitle);
     // Unread somewhere else: a dot on the switcher says there is more to see.
     final elsewhere =
         (ref.watch(unreadTotalProvider).value ?? 0) -
@@ -40,7 +41,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
     if (MediaQuery.sizeOf(context).width >= desktopBreakpoint) {
       return PopupMenuButton<String>(
         key: const Key('workspace-switcher'),
-        tooltip: 'Switch workspace',
+        tooltip: context.l10n.grpJSwitchWorkspace,
         onSelected: (id) =>
             id == _newId ? context.push('/workspaces/new') : select(id),
         itemBuilder: (_) => [
@@ -52,10 +53,10 @@ class WorkspaceSwitcher extends ConsumerWidget {
               child: Text(w.name),
             ),
           const PopupMenuDivider(),
-          const PopupMenuItem(
-            key: Key('new-workspace'),
+          PopupMenuItem(
+            key: const Key('new-workspace'),
             value: _newId,
-            child: Text('Create workspace'),
+            child: Text(context.l10n.grpJCreateWorkspace),
           ),
         ],
         child: label,
@@ -82,7 +83,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
               ListTile(
                 key: const Key('new-workspace'),
                 leading: const Icon(Icons.add),
-                title: const Text('Create workspace'),
+                title: Text(context.l10n.grpJCreateWorkspace),
                 onTap: () {
                   Navigator.of(sheet).pop();
                   context.push('/workspaces/new');

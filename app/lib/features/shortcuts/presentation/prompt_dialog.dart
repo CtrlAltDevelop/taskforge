@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 /// Asks for one line of text; null when cancelled or left empty.
 Future<String?> promptText(
   BuildContext context, {
   required String title,
-  String label = 'Name',
+  String? label,
   String initial = '',
 }) async {
   final text = await showDialog<String>(
     context: context,
-    builder: (_) => _PromptDialog(title: title, label: label, initial: initial),
+    builder: (_) => _PromptDialog(
+      title: title,
+      label: label ?? context.l10n.grpGName,
+      initial: initial,
+    ),
   );
   final trimmed = text?.trim() ?? '';
   return trimmed.isEmpty ? null : trimmed;
@@ -52,12 +58,12 @@ class _PromptDialogState extends State<_PromptDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpGCancel),
       ),
       FilledButton(
         key: const Key('prompt-ok'),
         onPressed: () => Navigator.of(context).pop(_controller.text),
-        child: const Text('Create'),
+        child: Text(context.l10n.grpGCreate),
       ),
     ],
   );

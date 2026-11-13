@@ -1,0 +1,4973 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Pushto Pashto (`ps`).
+class AppLocalizationsPs extends AppLocalizations {
+  AppLocalizationsPs([String locale = 'ps']) : super(locale);
+
+  @override
+  String get appTitle => 'ټاسک فورج';
+
+  @override
+  String get retry => 'بیا هڅه وکړئ';
+
+  @override
+  String get cancel => 'لغوه';
+
+  @override
+  String get save => 'خوندي کړئ';
+
+  @override
+  String get close => 'بندول';
+
+  @override
+  String get signOut => 'وتل';
+
+  @override
+  String get inbox => 'راتلونکي';
+
+  @override
+  String get workspaceSettings => 'د کاري ځای تنظیمات';
+
+  @override
+  String get homeLoadWorkspacesFailed =>
+      'ستاسو کاري ځایونه ونه لوستل شول. بیا هڅه وکړئ';
+
+  @override
+  String get homeLoadAccountFailed => 'ستاسو حساب ونه لوستل شو.';
+
+  @override
+  String get calendar => 'کلیز';
+
+  @override
+  String get calendarSubtitle => 'ستاسو په پروژو کې ټول وروستي مهالونه';
+
+  @override
+  String get notificationSettings => 'د خبرتیاوو تنظیمات';
+
+  @override
+  String get notificationSettingsSubtitle =>
+      'څه تاسو ته خبرتیا درکوي، د چوپتیا ساعتونه او لنډیز';
+
+  @override
+  String get offlineAndStorage => 'له شبکې پرته او ذخیره';
+
+  @override
+  String get offlineAndStorageSubtitle => 'له شبکې پرته بدلونونه، ځايي کاپي';
+
+  @override
+  String get sessions => 'ناستې';
+
+  @override
+  String get sessionsSubtitle => 'هغه وسایل چې ستاسو حساب ته ننوتي دي';
+
+  @override
+  String get changePassword => 'پټنوم بدل کړئ';
+
+  @override
+  String get connectivity => 'اړیکه';
+
+  @override
+  String get languageAndRegion => 'ژبه او سیمه';
+
+  @override
+  String get languageAndRegionSubtitle => 'ژبه، کلیز، د اونۍ پیل او شمیرې';
+
+  @override
+  String get signIn => 'ننوتل';
+
+  @override
+  String get createAccount => 'حساب جوړ کړئ';
+
+  @override
+  String get forgotPassword => 'پټنوم مو هیر شوی؟';
+
+  @override
+  String get createAnAccount => 'یو حساب جوړ کړئ';
+
+  @override
+  String get alreadyHaveAccount => 'زه دمخه حساب لرم';
+
+  @override
+  String get resetPassword => 'پټنوم بیا تنظیم کړئ';
+
+  @override
+  String get sendCode => 'کوډ ولېږئ';
+
+  @override
+  String get backToSignIn => 'ننوتلو ته راستنېدل';
+
+  @override
+  String get setNewPassword => 'نوی پټنوم وټاکئ';
+
+  @override
+  String get updatePassword => 'پټنوم نوي کړئ';
+
+  @override
+  String get codeFromEmail => 'له بریښنالیک څخه کوډ';
+
+  @override
+  String get email => 'بریښنالیک';
+
+  @override
+  String get password => 'پټنوم';
+
+  @override
+  String get currentPassword => 'اوسنی پټنوم';
+
+  @override
+  String get newPassword => 'نوی پټنوم';
+
+  @override
+  String get showPassword => 'پټنوم وښایاست';
+
+  @override
+  String get hidePassword => 'پټنوم پټ کړئ';
+
+  @override
+  String get passwordChanged => 'پټنوم بدل شو. بیا ننوځئ.';
+
+  @override
+  String get passwordUpdated => 'پټنوم نوی شو. په هغه ننوځئ.';
+
+  @override
+  String get enterEmail => 'خپل بریښنالیک پته ولیکئ.';
+
+  @override
+  String get enterValidEmail => 'یوه سمه بریښنالیک پته ولیکئ.';
+
+  @override
+  String get enterPassword => 'یو پټنوم ولیکئ.';
+
+  @override
+  String passwordTooShort(int min) {
+    return 'لږ تر لږه $min ټکي وکاروئ.';
+  }
+
+  @override
+  String get enterResetCode => 'هغه کوډ ولیکئ چې بریښنالیک ته درغلی.';
+
+  @override
+  String get enterYourPassword => 'خپل پټنوم ولیکئ.';
+
+  @override
+  String get errWrongCredentials => 'بریښنالیک یا پټنوم ناسم دی.';
+
+  @override
+  String get errTooManyAttempts => 'ډیرې هڅې. څو دقیقې وروسته بیا هڅه وکړئ.';
+
+  @override
+  String get errAccountExists => 'په دې بریښنالیک دمخه یو حساب شته.';
+
+  @override
+  String get errServerProblem =>
+      'په سرور کې ستونزه وه. لږ وروسته بیا هڅه وکړئ.';
+
+  @override
+  String get errNoConnection =>
+      'سرور ته نه شو رسېدلی. خپله اړیکه وګورئ او بیا هڅه وکړئ.';
+
+  @override
+  String get errGeneric => 'یوه ستونزه رامنځته شوه. بیا هڅه وکړئ.';
+
+  @override
+  String get languageLabel => 'ژبه';
+
+  @override
+  String get calendarSystemLabel => 'کلیز';
+
+  @override
+  String get calendarGregorian => 'میلادي';
+
+  @override
+  String get calendarJalali => 'جلالي (لمریز هجري)';
+
+  @override
+  String get weekStartLabel => 'اونۍ پیلیږي له';
+
+  @override
+  String get weekStartDefault => 'د ژبې ډیفالټ';
+
+  @override
+  String get weekSaturday => 'شنبه';
+
+  @override
+  String get weekSunday => 'یکشنبه';
+
+  @override
+  String get weekMonday => 'دوشنبه';
+
+  @override
+  String get numeralsLabel => 'شمیرې';
+
+  @override
+  String get numeralsLatin => 'لوېدیځې (0123)';
+
+  @override
+  String get numeralsNative => 'پښتو (۰۱۲۳)';
+
+  @override
+  String get previewLabel => 'مخکتنه';
+
+  @override
+  String get prefsSaveFailed =>
+      'یوازې پر دې وسیله خوندي شو. سرور ته نه شو رسېدلی.';
+
+  @override
+  String get workspaceDefaultLanguage => 'د نویو غړو ډیفالټ ژبه';
+
+  @override
+  String taskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دندې',
+      one: '۱ دنده',
+      zero: 'هیڅ دنده نشته',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get jalaliMonth1 => 'وری';
+
+  @override
+  String get jalaliMonth2 => 'غويی';
+
+  @override
+  String get jalaliMonth3 => 'غبرګولی';
+
+  @override
+  String get jalaliMonth4 => 'چنګاښ';
+
+  @override
+  String get jalaliMonth5 => 'زمری';
+
+  @override
+  String get jalaliMonth6 => 'وږی';
+
+  @override
+  String get jalaliMonth7 => 'تله';
+
+  @override
+  String get jalaliMonth8 => 'لړم';
+
+  @override
+  String get jalaliMonth9 => 'ليندۍ';
+
+  @override
+  String get jalaliMonth10 => 'مرغومی';
+
+  @override
+  String get jalaliMonth11 => 'سلواغه';
+
+  @override
+  String get jalaliMonth12 => 'کب';
+
+  @override
+  String get pickDateOk => 'سمه ده';
+
+  @override
+  String get pickDateTitle => 'نیټه وټاکئ';
+
+  @override
+  String get previousMonth => 'تیره میاشت';
+
+  @override
+  String get nextMonth => 'راتلونکې میاشت';
+
+  @override
+  String get weekdayShortMon => 'دوشنبه';
+
+  @override
+  String get weekdayShortTue => 'سه‌شنبه';
+
+  @override
+  String get weekdayShortWed => 'چهارشنبه';
+
+  @override
+  String get weekdayShortThu => 'پنجشنبه';
+
+  @override
+  String get weekdayShortFri => 'جمعه';
+
+  @override
+  String get weekdayShortSat => 'شنبه';
+
+  @override
+  String get weekdayShortSun => 'یکشنبه';
+
+  @override
+  String get grpACancel => 'لغوه';
+
+  @override
+  String get grpASave => 'خوندي کړه';
+
+  @override
+  String get grpARetry => 'بیا هڅه وکړه';
+
+  @override
+  String get grpADone => 'ترسره شو';
+
+  @override
+  String get grpAClose => 'بندول';
+
+  @override
+  String get grpAEdit => 'سمول';
+
+  @override
+  String get grpADelete => 'ړنګول';
+
+  @override
+  String get grpANote => 'یادښت';
+
+  @override
+  String get grpATotal => 'ټولیز';
+
+  @override
+  String get grpATask => 'دنده';
+
+  @override
+  String get grpAMerge => 'یوځای کول';
+
+  @override
+  String get grpARemove => 'لیرې کول';
+
+  @override
+  String get grpAOfflineBack => 'شاته';
+
+  @override
+  String get grpAOfflineTitle => 'آفلاین او ذخیره';
+
+  @override
+  String get grpAOfflineChooseWorkspace => 'لومړی یو کاري ځای وټاکئ.';
+
+  @override
+  String get grpAOfflineNeedsAttention => 'ستاسو پام ته اړتیا لري';
+
+  @override
+  String get grpAOfflineNothingToDecide =>
+      'هیڅ نشته. ټول آفلاین بدلونونه واستول شول.';
+
+  @override
+  String grpAOfflineWaiting(int count) {
+    return 'د لیږلو په تمه ($count)';
+  }
+
+  @override
+  String get grpASyncNow => 'همدا اوس همغږي کړه';
+
+  @override
+  String get grpAOfflineNothingWaiting => 'هیڅ شی په تمه نه دی.';
+
+  @override
+  String get grpAEntryATask => 'یوه دنده';
+
+  @override
+  String grpAEntryNewTask(String title) {
+    return 'نوې دنده «$title»';
+  }
+
+  @override
+  String grpAEntryEdit(String name, String fields) {
+    return 'د $name سمون: $fields';
+  }
+
+  @override
+  String grpAEntryDelete(String name) {
+    return 'د $name ړنګول';
+  }
+
+  @override
+  String grpAEntryComment(String name) {
+    return 'په $name نظر';
+  }
+
+  @override
+  String grpAEntryUpload(String file, String name) {
+    return '«$file» د $name ته پورته کول';
+  }
+
+  @override
+  String grpAOfflineClash(String field, String current, String mine) {
+    return 'د هغوی ($field): $current\nستاسو: $mine';
+  }
+
+  @override
+  String get grpAKeepMine => 'زما وساتل';
+
+  @override
+  String get grpATakeTheirs => 'د هغوی ومنل';
+
+  @override
+  String get grpATryAgain => 'بیا هڅه وکړئ';
+
+  @override
+  String get grpADiscard => 'ردول';
+
+  @override
+  String get grpAMergeTitle => 'ستاسو کوم بدلونونه وساتل شي؟';
+
+  @override
+  String get grpAStorage => 'ذخیره';
+
+  @override
+  String get grpAReading => 'لوستل کیږي…';
+
+  @override
+  String grpAStorageUsage(String size, int cap) {
+    return 'پر دې وسیله کاپي $size MB نیولي، له اعظمي $cap MB څخه.';
+  }
+
+  @override
+  String get grpAMostItMayHold => 'اعظمي اندازه';
+
+  @override
+  String grpAMegabytes(int mb) {
+    return '$mb MB';
+  }
+
+  @override
+  String get grpAClearCopy => 'پر دې وسیله کاپي پاکول';
+
+  @override
+  String get grpAStorageNote =>
+      'هغه بدلونونه چې لا د لیږلو په تمه دي ساتل کیږي. کاپي بې کوډ کولو ذخیره کیږي: د خپل وسیلې د ډیسک کوډ کول وکاروئ.';
+
+  @override
+  String get grpAClearTitle => 'پر دې وسیله کاپي پاکه شي؟';
+
+  @override
+  String get grpAClearBody =>
+      'هغه څه چې تاسو لوستلي کله چې آنلاین شئ بیا راوړل کیږي. د لیږلو په تمه بدلونونه نه لیرې کیږي.';
+
+  @override
+  String get grpAClear => 'پاکول';
+
+  @override
+  String get grpAKeepOfflineTitle => 'پروژې آفلاین ساتل';
+
+  @override
+  String get grpAKeepOfflineBody =>
+      'ساتل شوې پروژه بشپړه کاپي کیږي، نو دندې، حالتونه او غړي یې پرته له اړیکې شتون لري. نورې پروژې هغه څه ښیي چې تاسو وروستی ځل لوستي.';
+
+  @override
+  String grpACopying(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'کاپي کیږي… $count دندې',
+      one: 'کاپي کیږي… 1 دنده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpASprintsTitle => 'سپرنټونه';
+
+  @override
+  String grpASprintsTitleProject(String name) {
+    return 'سپرنټونه · $name';
+  }
+
+  @override
+  String get grpASprintsDisabled =>
+      'سپرنټونه د دې پروژې لپاره بند دي. د پروژې په تنظیماتو کې یې فعال کړئ.';
+
+  @override
+  String get grpAProjectNotFound => 'پروژه ونه موندل شوه.';
+
+  @override
+  String grpAAddedAfterStart(int count) {
+    return '$count د سپرنټ له پیل وروسته زیات شول (د حد بدلون په توګه ښودل کیږي).';
+  }
+
+  @override
+  String grpASprintCompleted(String name) {
+    return '$name بشپړ شو.';
+  }
+
+  @override
+  String get grpAPlanning => 'پلان جوړونه';
+
+  @override
+  String get grpAReports => 'راپورونه';
+
+  @override
+  String get grpANewSprint => 'نوی سپرنټ';
+
+  @override
+  String get grpABacklog => 'بیکلاګ';
+
+  @override
+  String get grpABacklogEmpty => 'بیکلاګ تش دی.';
+
+  @override
+  String get grpAAddToSprint => 'سپرنټ ته اضافه کول';
+
+  @override
+  String get grpANoOpenSprint =>
+      'هېڅ پرانیستی سپرنټ نشته. د پلان جوړولو لپاره یو جوړ کړئ.';
+
+  @override
+  String get grpADragHere => 'دندې دلته راکش کړئ، یا په بیکلاګ کې یو څو وټاکئ.';
+
+  @override
+  String grpADatesRange(String start, String end) {
+    return '$start تر $end';
+  }
+
+  @override
+  String grpADaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ورځې پاتې',
+      one: '1 ورځ پاتې',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpASprintGoalText(String goal) {
+    return 'موخه: $goal';
+  }
+
+  @override
+  String get grpAShowOnBoard => 'په بورډ کې ښودل';
+
+  @override
+  String get grpAEditSprint => 'سپرنټ سمول';
+
+  @override
+  String get grpAStartSprint => 'سپرنټ پیلول';
+
+  @override
+  String get grpACompleteSprint => 'سپرنټ بشپړول';
+
+  @override
+  String get grpANoSprintsYet => 'تر اوسه سپرنټ نشته.';
+
+  @override
+  String get grpASprintNameRequired => 'سپرنټ ته یو نوم ورکړئ.';
+
+  @override
+  String get grpASprintDatesFormat => 'نېټې د YYYY-MM-DD په بڼه لیکل کیږي.';
+
+  @override
+  String get grpASprintEndBeforeStart =>
+      'سپرنټ نشي کولی له پیل مخکې پای ته ورسیږي.';
+
+  @override
+  String get grpASprintCapacityNumber =>
+      'ظرفیت یو شمېر دی، یا د نه شتون لپاره تش پریږدئ.';
+
+  @override
+  String get grpASprintSaved => 'سپرنټ خوندي شو';
+
+  @override
+  String get grpASprintName => 'نوم';
+
+  @override
+  String get grpASprintGoal => 'موخه';
+
+  @override
+  String get grpASprintStartLabel => 'پیل (YYYY-MM-DD)';
+
+  @override
+  String get grpASprintEndLabel => 'پای (YYYY-MM-DD)';
+
+  @override
+  String get grpAPickStartDate => 'د پیل نېټه وټاکئ';
+
+  @override
+  String get grpAPickEndDate => 'د پای نېټه وټاکئ';
+
+  @override
+  String get grpACapacityPointsOptional => 'ظرفیت په نمرو (اختیاري)';
+
+  @override
+  String get grpACapacityHoursOptional => 'ظرفیت په ساعتونو (اختیاري)';
+
+  @override
+  String grpASprintOverlap(String names) {
+    return 'دا نېټې له $names سره ټکر لري.';
+  }
+
+  @override
+  String grpACompleteTitle(String name) {
+    return '$name بشپړول';
+  }
+
+  @override
+  String grpACompleteCounts(int done, int open) {
+    return '$done ترسره شوې، $open نیمګړې';
+  }
+
+  @override
+  String get grpACompleteWhatHappens => 'له نیمګړو دندو سره څه وشي؟';
+
+  @override
+  String get grpACompleteMoveNext => 'بل سپرنټ ته لیږدول';
+
+  @override
+  String get grpACompleteNoPlanned => 'د لیږدولو لپاره هېڅ پلان شوی سپرنټ نشته';
+
+  @override
+  String get grpACompleteBackToBacklog => 'بیکلاګ ته ستنول';
+
+  @override
+  String grpAPointsFor(String key) {
+    return 'د $key نمرې';
+  }
+
+  @override
+  String get grpAPointsInvalid =>
+      'یو شمېر وکاروئ، یا د پاکولو لپاره تش پریږدئ.';
+
+  @override
+  String get grpAStoryPoints => 'د کیسې نمرې';
+
+  @override
+  String get grpACapacityInHours => 'ظرفیت په ساعتونو';
+
+  @override
+  String get grpACapacityInPoints => 'ظرفیت په نمرو';
+
+  @override
+  String grpABurndownTitle(String name) {
+    return 'د کار کمیدو چارټ: $name';
+  }
+
+  @override
+  String get grpAPoints => 'نمرې';
+
+  @override
+  String get grpATasks => 'دندې';
+
+  @override
+  String get grpABurndownEmpty =>
+      'د کار کمیدو چارټ د سپرنټ له پیل وروسته پیلیږي.';
+
+  @override
+  String grpABurndownChart(int days, int changes) {
+    return 'د کار کمیدو چارټ، $days ورځې، $changes د حد بدلونونه';
+  }
+
+  @override
+  String grpABurndownBackfilled(int count) {
+    return '، $count ورځې وروسته ډکې شوې';
+  }
+
+  @override
+  String get grpALegendRemaining => 'پاتې';
+
+  @override
+  String get grpALegendIdeal => 'ایډیال';
+
+  @override
+  String get grpALegendScopeChange => 'د حد بدلون';
+
+  @override
+  String get grpALegendBackfilled => 'وروسته ډکه شوې ورځ';
+
+  @override
+  String get grpAVelocityEmpty => 'چټکتیا د لومړي بشپړ شوي سپرنټ وروسته ښکاري.';
+
+  @override
+  String grpAVelocityTitle(int count, String average) {
+    return 'چټکتیا (وروستي $count سپرنټونه): منځنی $average نمرې';
+  }
+
+  @override
+  String grpAVelocityChart(int count) {
+    return 'د چټکتیا چارټ، $count سپرنټونه';
+  }
+
+  @override
+  String get grpALegendCommitted => 'ژمنه شوی';
+
+  @override
+  String get grpALegendCompleted => 'بشپړ شوی';
+
+  @override
+  String get grpATimesheetTitle => 'د وخت پاڼه';
+
+  @override
+  String get grpAPreviousWeek => 'تیره اونۍ';
+
+  @override
+  String get grpANextWeek => 'راتلونکې اونۍ';
+
+  @override
+  String get grpAThisWeek => 'دا اونۍ';
+
+  @override
+  String get grpATimesheetEmpty => 'پدې اونۍ کې هېڅ وخت نه دی ثبت شوی.';
+
+  @override
+  String get grpARunning => 'روان';
+
+  @override
+  String get grpAAddTime => 'وخت زیاتول';
+
+  @override
+  String get grpAYou => 'تاسو';
+
+  @override
+  String get grpAProjectTotals => 'د پروژې ټولټال';
+
+  @override
+  String get grpAChooseProject => 'یوه پروژه وټاکئ';
+
+  @override
+  String get grpATotalsEmpty =>
+      'پدې اونۍ کې په دې پروژه کې هېڅ وخت نه دی ثبت شوی.';
+
+  @override
+  String grpABillableAmount(String duration) {
+    return '  ($duration د بلونې وړ)';
+  }
+
+  @override
+  String get grpAEditTime => 'وخت سمول';
+
+  @override
+  String get grpATimeSpent => 'تیر شوی وخت';
+
+  @override
+  String get grpABillable => 'د بلونې وړ';
+
+  @override
+  String get grpABadDuration => 'داسې وخت ولیکئ لکه 1h 30m، 90m یا 1:30.';
+
+  @override
+  String get grpAEstimate => 'اټکل';
+
+  @override
+  String get grpAEstimatedTime => 'اټکل شوی وخت';
+
+  @override
+  String get grpAEmptyForNone => 'د نشتوالي لپاره تش پریږدئ';
+
+  @override
+  String get grpADeleteTimeTitle => 'دا وخت ړنګ شي؟';
+
+  @override
+  String get grpADeleteTimeBody => 'ثبت شوی وخت د تل لپاره لیرې کیږي.';
+
+  @override
+  String get grpAKeep => 'ساتل';
+
+  @override
+  String get grpBCancel => 'لغوه';
+
+  @override
+  String get grpBOk => 'سمه ده';
+
+  @override
+  String get grpBClose => 'بندول';
+
+  @override
+  String get grpBSave => 'خوندي کول';
+
+  @override
+  String get grpBRetry => 'بیا هڅه';
+
+  @override
+  String get grpBRestore => 'بیرته راوستل';
+
+  @override
+  String get grpBHistory => 'تاریخچه';
+
+  @override
+  String get grpBCopy => 'کاپي';
+
+  @override
+  String get grpBSaveAsFile => 'د فایل په توګه خوندي کړه';
+
+  @override
+  String get grpBReply => 'ځواب';
+
+  @override
+  String get grpBEdit => 'سمون';
+
+  @override
+  String get grpBDelete => 'ړنګول';
+
+  @override
+  String get grpBBack => 'شاته';
+
+  @override
+  String get grpBSomeone => 'یو څوک';
+
+  @override
+  String get grpBYou => 'تاسو';
+
+  @override
+  String get grpBLoading => 'بارېږي…';
+
+  @override
+  String get grpBPages => 'پاڼې';
+
+  @override
+  String get grpBRestricted => 'محدود';
+
+  @override
+  String get grpBLinkTitle => 'تړنه';
+
+  @override
+  String get grpBLinkAddressLabel => 'پته (http، https یا mailto)';
+
+  @override
+  String get grpBLinkInvalid => 'د http، https یا mailto پته وکاروئ.';
+
+  @override
+  String get grpBIconTitle => 'د پاڼې انځورک';
+
+  @override
+  String get grpBIconLabel => 'ایموجي یا لنډ متن (د هېڅ لپاره تش پرېږدئ)';
+
+  @override
+  String get grpBIconInvalid => 'تر څلورو توکو زیات مه کاروئ.';
+
+  @override
+  String get grpBImageTitle => 'انځور';
+
+  @override
+  String get grpBImageAddressLabel => 'د انځور پته (http یا https)';
+
+  @override
+  String get grpBDescription => 'تشریح';
+
+  @override
+  String get grpBImageInvalid => 'د http یا https پته وکاروئ.';
+
+  @override
+  String get grpBEmbedTaskTitle => 'یو کار ځای پر ځای کړئ';
+
+  @override
+  String get grpBTaskSearchLabel => 'کارونه ولټوئ یا د کار تړنه پیسټ کړئ';
+
+  @override
+  String get grpBUsePastedTask => 'پیسټ شوی کار وکاروئ';
+
+  @override
+  String get grpBSnippetRemoved => '(لرې شوی)';
+
+  @override
+  String get grpBConflictTitle => 'یو بل کس دا پاڼه بدله کړه';
+
+  @override
+  String get grpBConflictClean =>
+      'د دوی بدلونونه ستاسو له بدلونونو سره نه ټکرېږي. یوځای به شي.';
+
+  @override
+  String get grpBConflictOverlap =>
+      'تاسو دواړو دا بلاکونه بدل کړي. وټاکئ کوم وساتئ؛ پاتې ټول یوځای کېږي.';
+
+  @override
+  String grpBConflictBlock(String snippet) {
+    return 'بلاک: $snippet';
+  }
+
+  @override
+  String grpBConflictMine(String snippet) {
+    return 'زما: $snippet';
+  }
+
+  @override
+  String grpBConflictTheirs(String snippet) {
+    return 'د دوی: $snippet';
+  }
+
+  @override
+  String get grpBDecideLater => 'وروسته پرېکړه کوم';
+
+  @override
+  String get grpBDiscardMine => 'زما بدلونونه لرې کړه';
+
+  @override
+  String get grpBApplyAndSave => 'پلي کړه او خوندي کړه';
+
+  @override
+  String get grpBShareTitle => 'د پاڼې لاسرسی';
+
+  @override
+  String get grpBShareRestrict => 'دا پاڼه محدوده کړئ';
+
+  @override
+  String get grpBShareRestrictedHint =>
+      'یوازې لاندې کسان، جوړونکی یې او د پاڼې مدیران (د هغې لاندې پاڼو لپاره هم).';
+
+  @override
+  String get grpBShareOpenHint =>
+      'هر څوک چې مورنۍ پاڼه خلاصولی شي، دا هم خلاصولی شي.';
+
+  @override
+  String get grpBShareNeedPermission =>
+      'د دې بدلولو لپاره تاسو ته د \"doc.manage\" اجازه پکار ده.';
+
+  @override
+  String get grpBEmptyPage => '(تشه پاڼه)';
+
+  @override
+  String grpBImageBlock(String alt) {
+    return '[انځور $alt]';
+  }
+
+  @override
+  String get grpBTaskCardBlock => '[د کار کارت]';
+
+  @override
+  String get grpBAllRevisions => 'ټول بیاکتنې';
+
+  @override
+  String get grpBNoRevisions => 'تر اوسه هیڅ بیاکتنه نشته.';
+
+  @override
+  String grpBVersionN(int version) {
+    return 'نسخه $version';
+  }
+
+  @override
+  String grpBVersionShort(int version) {
+    return 'v$version';
+  }
+
+  @override
+  String get grpBRevisionsLoadFailed => 'تاریخچه نه شي بارېدلی. بیا هڅه وکړئ';
+
+  @override
+  String get grpBRevisionLoadFailed => 'دا بیاکتنه نه شي بارېدلی.';
+
+  @override
+  String get grpBRestoreVersion => 'دا نسخه بیرته راوړه';
+
+  @override
+  String grpBLinkedFrom(int count) {
+    return 'تړل شوی له ($count)';
+  }
+
+  @override
+  String get grpBNoBacklinks => 'هیڅ پاڼه دې ته اشاره نه کوي.';
+
+  @override
+  String grpBMarkdownTitle(String title) {
+    return 'مارک‌ډاون: $title';
+  }
+
+  @override
+  String get grpBMarkdownCopied => 'مارک‌ډاون کاپي شو.';
+
+  @override
+  String get grpBSaveSaved => 'خوندي شو';
+
+  @override
+  String get grpBSaveDirty => 'نه خوندي شوي بدلونونه';
+
+  @override
+  String get grpBSaveSaving => 'خوندي کېږي...';
+
+  @override
+  String get grpBSaveError => 'خوندي نه شو';
+
+  @override
+  String get grpBSaveConflict => 'ټکر: وټاکئ څه وساتئ';
+
+  @override
+  String get grpBDocsCrumb => 'اسناد';
+
+  @override
+  String get grpBDocNotFound => 'دا پاڼه نشته، یا تاسو یې نه شئ خلاصولی.';
+
+  @override
+  String get grpBBackToAllPages => 'ټولو پاڼو ته ستنېدل';
+
+  @override
+  String get grpBArchivedBanner =>
+      'دا پاڼه آرشیف شوې ده. یوازې د لوستلو وړ ده.';
+
+  @override
+  String get grpBConflictBanner =>
+      'یو بل کس دا پاڼه بدله کړه. ستاسو بدلونونه تر اوسه نه دي خوندي شوي.';
+
+  @override
+  String get grpBResolve => 'حل کړه';
+
+  @override
+  String get grpBRemoteBanner =>
+      'یوې نوې نسخې یو بل کس خوندي کړې ده. کله چې خوندي کړئ یوځای به شي.';
+
+  @override
+  String grpBIsEditing(String name) {
+    return '$name سمونه کوي';
+  }
+
+  @override
+  String grpBAreEditing(String names) {
+    return '$names سمونه کوي';
+  }
+
+  @override
+  String get grpBChangeIcon => 'انځورک بدل کړئ';
+
+  @override
+  String get grpBUntitled => 'بې سرلیکه';
+
+  @override
+  String get grpBReadOnly => 'یوازې لوستل';
+
+  @override
+  String get grpBAccess => 'لاسرسی';
+
+  @override
+  String get grpBExportMarkdown => 'مارک‌ډاون صادرول';
+
+  @override
+  String grpBMoveUnder(String name) {
+    return '\"$name\" لاندې ته ولېږدوئ';
+  }
+
+  @override
+  String get grpBTopLevel => 'پورتنی کچه';
+
+  @override
+  String get grpBCollapse => 'راټولول';
+
+  @override
+  String get grpBExpand => 'غځول';
+
+  @override
+  String get grpBPageOptions => 'د پاڼې اختیارونه';
+
+  @override
+  String get grpBNewSubpage => 'نوې فرعي پاڼه';
+
+  @override
+  String get grpBMoveUp => 'پورته کول';
+
+  @override
+  String get grpBMoveDown => 'ښکته کول';
+
+  @override
+  String get grpBMoveTo => 'ولېږدوئ...';
+
+  @override
+  String get grpBArchive => 'آرشیف';
+
+  @override
+  String get grpBHideArchived => 'آرشیف شوي پټ کړئ';
+
+  @override
+  String get grpBShowArchived => 'آرشیف شوي ښکاره کړئ';
+
+  @override
+  String get grpBNewPage => 'نوې پاڼه';
+
+  @override
+  String get grpBNoPagesYet => 'تر اوسه هیڅ پاڼه نشته.';
+
+  @override
+  String get grpBPagesLoadFailed => 'پاڼې نه شي بارېدلی. بیا هڅه وکړئ';
+
+  @override
+  String get grpBToday => 'نن';
+
+  @override
+  String get grpBYesterday => 'پرون';
+
+  @override
+  String get grpBSubtaskCreated => 'فرعي کار جوړ شو.';
+
+  @override
+  String get grpBComments => 'نظرونه';
+
+  @override
+  String grpBCommentsCount(int count) {
+    return 'نظرونه ($count)';
+  }
+
+  @override
+  String get grpBNoComments => 'تر اوسه هیڅ نظر نشته.';
+
+  @override
+  String get grpBLoadEarlier => 'پخواني نظرونه راوړئ';
+
+  @override
+  String get grpBPinned => 'ملګری شوي';
+
+  @override
+  String get grpBReplyHint => 'ځواب…';
+
+  @override
+  String get grpBArchivedReadOnly =>
+      'دا پروژه آرشیف شوې ده: نظرونه یوازې د لوستلو وړ دي.';
+
+  @override
+  String get grpBReadOnlyComments => 'تاسو نظرونه لوستلی شئ خو لیکلی یې نه شئ.';
+
+  @override
+  String get grpBCommentRemoved => 'نظر لرې شو';
+
+  @override
+  String get grpBUnpin => 'ملګری لرې کړه';
+
+  @override
+  String get grpBPin => 'ملګری کړه';
+
+  @override
+  String get grpBMakeSubtask => 'فرعي کار جوړ کړه';
+
+  @override
+  String get grpBEditHistory => 'د سمون تاریخچه';
+
+  @override
+  String grpBEditedTooltip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ځله سمون شو: د تاریخچې لیدو لپاره ټک وکړئ',
+      one: 'یو ځل سمون شو: د تاریخچې لیدو لپاره ټک وکړئ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpBEdited => 'سمون شوی';
+
+  @override
+  String get grpBCommentActions => 'د نظر کړنې';
+
+  @override
+  String get grpBWaitingToSend => 'د لېږلو په تمه';
+
+  @override
+  String get grpBSending => 'لیږل کېږي…';
+
+  @override
+  String get grpBNotSent => 'نه دی لیږل شوی';
+
+  @override
+  String get grpBDiscard => 'لرې کړه';
+
+  @override
+  String get grpBAddReaction => 'غبرګون اضافه کړئ';
+
+  @override
+  String get grpBAuditAll => 'ټول';
+
+  @override
+  String get grpBAuditTasks => 'کارونه';
+
+  @override
+  String get grpBAuditFiles => 'فایلونه';
+
+  @override
+  String get grpBAuditProjects => 'پروژې';
+
+  @override
+  String get grpBAuditMembers => 'غړي';
+
+  @override
+  String get grpBAuditRoles => 'رولونه';
+
+  @override
+  String get grpBAuditInvitations => 'بلنې';
+
+  @override
+  String get grpBAuditSignIn => 'ننوتل';
+
+  @override
+  String get grpBAuditTitle => 'د پلټنې ثبت';
+
+  @override
+  String get grpBExportCsv => 'د CSV په توګه صادرول';
+
+  @override
+  String get grpBAuditDenied => 'تاسو ته د پلټنې ثبت لوستلو اجازه نشته.';
+
+  @override
+  String get grpBAuditEmpty => 'د دې فلټرونو لپاره هیڅ نه دي ثبت شوي.';
+
+  @override
+  String get grpBShowOlder => 'زاړه ښکاره کړئ';
+
+  @override
+  String get grpBAnyone => 'هر څوک';
+
+  @override
+  String get grpBAnyProject => 'هره پروژه';
+
+  @override
+  String get grpBAnyTime => 'هر وخت';
+
+  @override
+  String get grpBClearFilters => 'فلټرونه پاک کړئ';
+
+  @override
+  String get grpBBulkChange => 'د یو ډله ییز بدلون برخه';
+
+  @override
+  String grpBCharacters(String size) {
+    return '($size توري)';
+  }
+
+  @override
+  String get grpBNoFieldChanges => 'د ساحو هیڅ بدلون نه دی ثبت شوی.';
+
+  @override
+  String get grpBAuditExportTitle => 'د پلټنې ثبت (CSV)';
+
+  @override
+  String grpBAuditExportNote(int shown, int total) {
+    return 'د $total کربنو لومړي $shown ښودل کېږي. کاپي یا خوندي کول ټول لري.';
+  }
+
+  @override
+  String get grpBCsvCopied => 'CSV کاپي شو.';
+
+  @override
+  String get grpCCancel => 'لغوه کول';
+
+  @override
+  String get grpCDelete => 'ړنګول';
+
+  @override
+  String get grpCRetry => 'بیا هڅه';
+
+  @override
+  String get grpCBack => 'شاته';
+
+  @override
+  String get grpCUndo => 'بیرته کول';
+
+  @override
+  String get grpCField => 'ساحه';
+
+  @override
+  String get grpCStatus => 'حالت';
+
+  @override
+  String get grpCComment => 'نظر';
+
+  @override
+  String get grpCValue => 'ارزښت';
+
+  @override
+  String get grpCDashNew => 'نوی ډشبورډ';
+
+  @override
+  String grpCDashDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get grpCDashDeleteBody =>
+      'ویجټونه یې هم ورسره ځي. دا کار بیرته نه کېږي.';
+
+  @override
+  String get grpCDashTitle => 'ډشبورډونه';
+
+  @override
+  String grpCDashTitleProject(String project) {
+    return 'ډشبورډونه · $project';
+  }
+
+  @override
+  String get grpCDashEmpty => 'تر اوسه ډشبورډ نشته.';
+
+  @override
+  String get grpCDashBlankDashboard => 'تش ډشبورډ';
+
+  @override
+  String get grpCDashProjectOverview => 'د پروژې کتنه';
+
+  @override
+  String get grpCDashMyWork => 'زما کار';
+
+  @override
+  String get grpCDashBlank => 'تش';
+
+  @override
+  String get grpCDashEdit => 'سمول';
+
+  @override
+  String get grpCDashRefresh => 'تازه کول';
+
+  @override
+  String get grpCDashAddWidget => 'ویجټ زیاتول';
+
+  @override
+  String get grpCDashSave => 'ساتل';
+
+  @override
+  String get grpCDashDialogTitle => 'ډشبورډ';
+
+  @override
+  String get grpCDashName => 'نوم';
+
+  @override
+  String get grpCDashShareDenied => 'شریکول د dashboard.manage اجازه غواړي.';
+
+  @override
+  String get grpCDashOk => 'سمه ده';
+
+  @override
+  String get grpCImpTitle => 'واردول او صادرول';
+
+  @override
+  String get grpCImpExport => 'صادرول';
+
+  @override
+  String get grpCImpDenied => 'یوازې مدیران کولی شي معلومات وارد او صادر کړي.';
+
+  @override
+  String get grpCImpPast => 'پخواني واردونه';
+
+  @override
+  String get grpCImpNothing => 'تر اوسه هیڅ نه دي وارد شوي.';
+
+  @override
+  String grpCImpTasksCount(int count) {
+    return '$count دندې';
+  }
+
+  @override
+  String get grpCImpResume => 'بیا پیلول';
+
+  @override
+  String get grpCImpContinue => 'دوام ورکول';
+
+  @override
+  String get grpCImpForget => 'هېرول';
+
+  @override
+  String get grpCImpUndoTitle => 'دا واردول بیرته شي؟';
+
+  @override
+  String get grpCImpUndoBody =>
+      'هغه څه چې جوړ کړي لرې کېږي. هغه څه چې تاسو په لاس زیات کړي ساتل کېږي.';
+
+  @override
+  String get grpCImpUndoConfirm => 'واردول بیرته کول';
+
+  @override
+  String grpCImpClaimTitle(String name) {
+    return 'د $name دندې ورکړه...';
+  }
+
+  @override
+  String get grpCImpChooseMember => 'یو غړی وټاکئ';
+
+  @override
+  String get grpCImpAssign => 'ګمارل';
+
+  @override
+  String grpCImpAssigned(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n دندې وګمارل شوې.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpCImpWaiting => 'هغه خلک چې د یوځای کېدو په تمه دي';
+
+  @override
+  String get grpCImpWaitingBody =>
+      'کله چې یو څوک د همدې بریښنالیک سره یوځای شي، دندې یې په اتوماتيک ډول ورکول کېږي.';
+
+  @override
+  String get grpCImpNoEmail => 'بریښنالیک نشته';
+
+  @override
+  String grpCImpPersonSub(String email, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دندې',
+    );
+    return '$email · $_temp0';
+  }
+
+  @override
+  String get grpCImpAssignTo => 'ګمارل...';
+
+  @override
+  String get grpCImpStepSource => 'سرچینه';
+
+  @override
+  String get grpCImpStepUpload => 'پورته کول';
+
+  @override
+  String get grpCImpStepMap => 'نقشه';
+
+  @override
+  String get grpCImpStepReview => 'کتنه';
+
+  @override
+  String get grpCImpStepImport => 'واردول';
+
+  @override
+  String get grpCImpWhere => 'ستاسو معلومات له کومې راځي؟';
+
+  @override
+  String get grpCImpAuto => 'ډاډه نه یم: له فایل څخه یې معلوم کړه';
+
+  @override
+  String get grpCImpNext => 'بل';
+
+  @override
+  String get grpCImpZipSeveral =>
+      'دا زپ څو د معلوماتو فایلونه لري. کوم یو غواړئ وارد کړئ؟ (د کاري ځای صادرات د هرې پروژې لپاره یو فایل لري.)';
+
+  @override
+  String get grpCImpChooseAFile => 'یو فایل وټاکئ';
+
+  @override
+  String get grpCImpChooseGeneric =>
+      'د واردولو فایل وټاکئ (‎.csv‎، ‎.json‎ یا د هغه ‎.zip‎).';
+
+  @override
+  String grpCImpChooseSource(String source) {
+    return 'خپل د $source فایل وټاکئ (‎.csv‎، ‎.json‎ یا د هغه ‎.zip‎).';
+  }
+
+  @override
+  String get grpCImpSentNote =>
+      'فایل ستاسو د TaskForge سرور ته لېږل کېږي او د جریان په توګه لوستل کېږي، نو لوی فایلونه ستونزه نه لري. تر هغه چې تاسو تایید نه کړئ هیڅ نه بدلېږي.';
+
+  @override
+  String get grpCImpPickFile => 'فایل وټاکئ';
+
+  @override
+  String get grpCImpResumeThis => 'دا واردول بیا پیل کړئ';
+
+  @override
+  String get grpCImpWhatHappens => 'دا هغه څه دي چې به پېښ شي';
+
+  @override
+  String get grpCImpCountTasks => 'دندې';
+
+  @override
+  String get grpCImpCountSubtasks => 'له دې جملې فرعي دندې';
+
+  @override
+  String get grpCImpCountComments => 'نظرونه';
+
+  @override
+  String get grpCImpCountLinks => 'اړیکې';
+
+  @override
+  String get grpCImpCountSprints => 'سپرېنټونه';
+
+  @override
+  String get grpCImpCountLabels => 'نښې';
+
+  @override
+  String get grpCImpCountStatuses => 'نوې حالتونه';
+
+  @override
+  String get grpCImpCountPlaceholders => 'خلک چې انتظار ورته کېږي';
+
+  @override
+  String grpCImpAlready(int count) {
+    return '$count له دې جملې مخکې وارد شوي او پرېښودل کېږي، تکرار نه کېږي.';
+  }
+
+  @override
+  String grpCImpRowErrors(int count) {
+    return '$count قطار(ونه) نه شي وارد کېدای او پرېښودل کېږي.';
+  }
+
+  @override
+  String get grpCImpResumeImport => 'واردول بیا پیل کړئ';
+
+  @override
+  String get grpCImpStart => 'واردول پیل کړئ';
+
+  @override
+  String get grpCImpUndoRunBody =>
+      'دا به هغه دندې، نظرونه، اړیکې، سپرېنټونه او حالتونه لرې کړي چې دې واردولو جوړ کړي. هر هغه څه چې تاسو په لاس ورسره زیات کړي ساتل کېږي.';
+
+  @override
+  String get grpCImpWaitingStart => 'د پیل په تمه...';
+
+  @override
+  String get grpCImpLinking => 'دندې تړل کېږي...';
+
+  @override
+  String grpCImpProgress(int done, int total) {
+    return '$done له $total دندو';
+  }
+
+  @override
+  String get grpCImpCancel => 'واردول لغوه کړئ';
+
+  @override
+  String get grpCImpFinished => 'واردول پای ته ورسېد';
+
+  @override
+  String get grpCImpUndone => 'واردول بیرته شو';
+
+  @override
+  String get grpCImpCancelled => 'واردول لغوه شو';
+
+  @override
+  String get grpCImpStopped => 'واردول ودرېد';
+
+  @override
+  String get grpCImpOpenProject => 'پروژه خلاص کړئ';
+
+  @override
+  String get grpCImpAnother => 'بل فایل وارد کړئ';
+
+  @override
+  String grpCImpRemoved(num tasks) {
+    return '$tasks دندې لرې شوې.';
+  }
+
+  @override
+  String grpCImpRemovedKept(num tasks, num kept) {
+    return '$tasks دندې لرې شوې، $kept هغه ساتل شوې چې ستاسو خپلې فرعي دندې لري.';
+  }
+
+  @override
+  String get grpCImpTheFile => 'فایل';
+
+  @override
+  String grpCImpSummary(int issues, int comments, int links, String file) {
+    return 'په $file کې $issues دندې، $comments نظرونه او $links اړیکې وموندل شوې.';
+  }
+
+  @override
+  String grpCImpSummarySub(
+    int issues,
+    int subtasks,
+    int comments,
+    int links,
+    String file,
+  ) {
+    return 'په $file کې $issues دندې ($subtasks فرعي دندې)، $comments نظرونه او $links اړیکې وموندل شوې.';
+  }
+
+  @override
+  String get grpCImpPriUrgent => 'بېړنی';
+
+  @override
+  String get grpCImpPriHigh => 'لوړ';
+
+  @override
+  String get grpCImpPriNormal => 'عادي';
+
+  @override
+  String get grpCImpPriLow => 'ټیټ';
+
+  @override
+  String get grpCImpPriNone => 'هیڅ';
+
+  @override
+  String get grpCImpFTitle => 'سرلیک *';
+
+  @override
+  String get grpCImpFDescription => 'تشریح';
+
+  @override
+  String get grpCImpFPriority => 'لومړیتوب';
+
+  @override
+  String get grpCImpFAssignee => 'ګمارل شوی';
+
+  @override
+  String get grpCImpFReporter => 'راپور ورکوونکی';
+
+  @override
+  String get grpCImpFCreated => 'جوړ شوی';
+
+  @override
+  String get grpCImpFUpdated => 'تازه شوی';
+
+  @override
+  String get grpCImpFStart => 'د پیل نېټه';
+
+  @override
+  String get grpCImpFDue => 'د پای نېټه';
+
+  @override
+  String get grpCImpFLabels => 'نښې';
+
+  @override
+  String get grpCImpFSprint => 'سپرېنټ';
+
+  @override
+  String get grpCImpFParent => 'مور (پېژند)';
+
+  @override
+  String get grpCImpFId => 'پېژند';
+
+  @override
+  String get grpCImpFKey => 'کلیدي';
+
+  @override
+  String get grpCImpFPoints => 'د کیسې ټکي';
+
+  @override
+  String get grpCImpFEstimate => 'اټکل';
+
+  @override
+  String get grpCImpFType => 'ډول';
+
+  @override
+  String get grpCImpPriorities => 'لومړیتوبونه';
+
+  @override
+  String grpCImpKeepLabels(int count) {
+    return '$count نښې وساتئ';
+  }
+
+  @override
+  String get grpCImpKeepLabelsSub => 'په هره دنده کې د «نښې» ساحې په توګه.';
+
+  @override
+  String grpCImpSprintsCreated(String sprints) {
+    return 'هغه سپرېنټونه چې جوړېږي: $sprints';
+  }
+
+  @override
+  String get grpCImpReview => 'کتنه';
+
+  @override
+  String get grpCImpReadAs => 'لوستل د';
+
+  @override
+  String get grpCImpZipFile => 'په زپ کې فایل';
+
+  @override
+  String get grpCImpChooseOne => 'یو وټاکئ';
+
+  @override
+  String get grpCImpInto => 'واردول ته';
+
+  @override
+  String get grpCImpNewProject => 'نوې پروژه';
+
+  @override
+  String get grpCImpExistingProject => 'موجوده پروژه';
+
+  @override
+  String get grpCImpProjectName => 'د پروژې نوم';
+
+  @override
+  String get grpCImpColumns => 'ستونونه';
+
+  @override
+  String get grpCImpNotInFile => '(په فایل کې نشته)';
+
+  @override
+  String get grpCImpStatuses => 'حالتونه';
+
+  @override
+  String get grpCImpSameName => 'ورته نوم (که نه وي جوړ شي)';
+
+  @override
+  String get grpCImpPeople => 'خلک';
+
+  @override
+  String get grpCImpNotMember => 'لا غړی نه دی (کله چې یوځای شي وګمارل شي)';
+
+  @override
+  String get grpCImpUnassigned => 'ناګمارل شوی پرېږده';
+
+  @override
+  String get grpCImpFirst200 =>
+      'یوازې لومړي ۲۰۰ تنه لیست شوي؛ پاتې د ځایناستو په توګه تمه کوي.';
+
+  @override
+  String grpCAutoDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get grpCAutoDeleteBody =>
+      'قاعده د تل لپاره درېږي. د چلېدو تاریخچه یې هم ړنګېږي.';
+
+  @override
+  String get grpCAutoTitle => 'اتومات کارونه';
+
+  @override
+  String grpCAutoTitleProject(String project) {
+    return 'اتومات کارونه · $project';
+  }
+
+  @override
+  String get grpCAutoMissing => 'پروژه ونه موندل شوه.';
+
+  @override
+  String get grpCAutoRules => 'قاعدې';
+
+  @override
+  String get grpCAutoRunHistory => 'د چلېدو تاریخچه';
+
+  @override
+  String get grpCAutoNew => 'نوی اتومات کار';
+
+  @override
+  String get grpCAutoReadOnly => 'یوازې لوستل';
+
+  @override
+  String grpCAutoLimit(int limit) {
+    return 'د $limit قاعدو حد ته ورسېدئ.';
+  }
+
+  @override
+  String grpCAutoRuleFilter(String name) {
+    return 'قاعده: $name';
+  }
+
+  @override
+  String get grpCAutoEmpty =>
+      'تر اوسه اتومات کار نشته. یوه قاعده وايي: کله چې یو څه پېښ شي، او که سمون ولري، نو دا کارونه وکړه.';
+
+  @override
+  String grpCAutoWhen(String trigger, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عملونه',
+    );
+    return 'کله چې $trigger · $_temp0';
+  }
+
+  @override
+  String get grpCAutoNeverRun => 'هیڅکله نه دی چلېدلی';
+
+  @override
+  String get grpCAutoHistory => 'تاریخچه';
+
+  @override
+  String get grpCAutoDryRun => 'آزموینی چلول';
+
+  @override
+  String get grpCAutoStatusChanges => 'یوه حالت بدلېږي';
+
+  @override
+  String grpCAutoMovesTo(String status) {
+    return 'یوه دنده $status ته ځي';
+  }
+
+  @override
+  String grpCAutoFieldChanges(String field) {
+    return '$field بدلېږي';
+  }
+
+  @override
+  String get grpCAutoSomeoneAssigned => 'یو څوک ګمارل کېږي';
+
+  @override
+  String grpCAutoUserAssigned(String user) {
+    return '$user ګمارل کېږي';
+  }
+
+  @override
+  String get grpCAutoDueReached => 'د پای نېټه راورسېږي';
+
+  @override
+  String grpCAutoDaysBefore(int days) {
+    return 'د پای نېټې څخه $days ورځې مخکې';
+  }
+
+  @override
+  String get grpCAutoDeletedStatus => 'ړنګه شوې حالت';
+
+  @override
+  String get grpCAutoUnknownPerson => 'نامعلوم کس';
+
+  @override
+  String get grpCAutoEvent => 'پېښه';
+
+  @override
+  String get grpCAutoMovesToLabel => 'ځي ته';
+
+  @override
+  String get grpCAutoAnyStatus => 'هر حالت';
+
+  @override
+  String get grpCAutoAssignedPerson => 'ګمارل شوی کس';
+
+  @override
+  String get grpCAutoAnyone => 'هر څوک';
+
+  @override
+  String grpCAutoDaysLabel(int max) {
+    return 'د پای نېټې څخه مخکې ورځې (۰ تر $max)';
+  }
+
+  @override
+  String grpCAutoTokensHelp(String tokens) {
+    return 'تاسو کولی شئ $tokens وکاروئ';
+  }
+
+  @override
+  String get grpCAutoDateHint => 'YYYY-MM-DD';
+
+  @override
+  String grpCAutoUseToken(String token) {
+    return '$token وکاروئ';
+  }
+
+  @override
+  String get grpCAutoHow => 'څنګه';
+
+  @override
+  String get grpCAutoReplaceAssignees => 'ګمارل شوي بدل کړه په';
+
+  @override
+  String get grpCAutoAdd => 'زیاتول';
+
+  @override
+  String get grpCAutoRemoveEveryone => 'ټول لرې کړه';
+
+  @override
+  String get grpCAutoSubtaskTitle => 'د فرعي دندې سرلیک';
+
+  @override
+  String get grpCAutoMessage => 'پیغام';
+
+  @override
+  String get grpCAutoAddress => 'پته';
+
+  @override
+  String get grpCAutoAddressHelp => 'یوازې عامې http(s) پتې؛ شخصي پتې رد کېږي.';
+
+  @override
+  String get grpCAutoMethod => 'طریقه';
+
+  @override
+  String get grpCAutoDoThis => 'دا وکړه';
+
+  @override
+  String grpDActionFailed(String error) {
+    return 'دا کار ونه شو ($error).';
+  }
+
+  @override
+  String get grpDSwitchWorkspace => 'د کارځای بدلول';
+
+  @override
+  String grpDWorkspaceHere(String name) {
+    return '$name (دلته)';
+  }
+
+  @override
+  String get grpDNewDoc => 'نوی سند';
+
+  @override
+  String get grpDTitle => 'سرلیک';
+
+  @override
+  String get grpDUntitled => 'بې سرلیکه';
+
+  @override
+  String get grpDNewDashboard => 'نوی ډشبورډ';
+
+  @override
+  String get grpDNewSprint => 'نوی سپرنټ';
+
+  @override
+  String grpDStatusOf(String id) {
+    return 'د $id حالت';
+  }
+
+  @override
+  String get grpDNewTask => 'نوې دنده';
+
+  @override
+  String get grpDCancel => 'لغوه';
+
+  @override
+  String get grpDCreate => 'جوړول';
+
+  @override
+  String get grpDSort => 'ترتیب';
+
+  @override
+  String get grpDNoSort => 'ترتیب نشته';
+
+  @override
+  String grpDSortBy(String names) {
+    return 'ترتیب: $names';
+  }
+
+  @override
+  String get grpDGroup => 'ډله';
+
+  @override
+  String get grpDNoGrouping => 'ډله‌بندي نشته';
+
+  @override
+  String grpDGroupBy(String name) {
+    return 'ډله: $name';
+  }
+
+  @override
+  String get grpDColumns => 'ستونونه';
+
+  @override
+  String get grpDRefresh => 'تازه کول';
+
+  @override
+  String get grpDLayoutNotSaved =>
+      'ستاسو ترتیب خوندي نشو. په راتلونکي بدلون کې به بیا هڅه وشي.';
+
+  @override
+  String get grpDLayouts => 'ترتیبونه';
+
+  @override
+  String get grpDResetLayout => 'زما ترتیب بیرته تنظیمول';
+
+  @override
+  String get grpDShareLayoutMenu => 'دا ترتیب شریکول…';
+
+  @override
+  String grpDDeleteShared(String name) {
+    return 'شریک شوی «$name» ړنګول';
+  }
+
+  @override
+  String grpDDeleteSharedTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get grpDDeleteSharedBody => 'دا به د دې پروژې د ټولو لپاره ورک شي.';
+
+  @override
+  String get grpDDelete => 'ړنګول';
+
+  @override
+  String grpDDeletedNamed(String name) {
+    return '«$name» ړنګ شو';
+  }
+
+  @override
+  String grpDSharedNamed(String name) {
+    return '«$name» شریک شو';
+  }
+
+  @override
+  String get grpDShareLayoutTitle => 'دا ترتیب شریکول';
+
+  @override
+  String get grpDName => 'نوم';
+
+  @override
+  String get grpDShare => 'شریکول';
+
+  @override
+  String get grpDTaskNotFound => 'دنده ونه موندل شوه.';
+
+  @override
+  String get grpDDeleteTask => 'دنده ړنګول';
+
+  @override
+  String get grpDClose => 'تړل';
+
+  @override
+  String get grpDPriority => 'لومړیتوب';
+
+  @override
+  String get grpDStart => 'پیل';
+
+  @override
+  String get grpDDue => 'وروستۍ نیټه';
+
+  @override
+  String get grpDAssignees => 'مسؤلین';
+
+  @override
+  String get grpDDescription => 'تشریح';
+
+  @override
+  String grpDTaskDeleted(String id) {
+    return '$id ړنګ شو';
+  }
+
+  @override
+  String get grpDUndo => 'بیرته کول';
+
+  @override
+  String get grpDStatus => 'حالت';
+
+  @override
+  String grpDClearField(String label) {
+    return '$label پاکول';
+  }
+
+  @override
+  String get grpDDueTime => 'د پای وخت (ستاسو ساعت)';
+
+  @override
+  String get grpDClearDueTime => 'د پای وخت پاکول';
+
+  @override
+  String get grpDAllOf => 'دا ټول';
+
+  @override
+  String get grpDAnyOf => 'له دې څخه هر یو';
+
+  @override
+  String get grpDNot => 'نه';
+
+  @override
+  String get grpDRemoveGroup => 'ډله لرې کول';
+
+  @override
+  String get grpDCondition => 'شرط';
+
+  @override
+  String get grpDFieldRemoved => 'ساحه (لرې شوې)';
+
+  @override
+  String get grpDRemoveCondition => 'شرط لرې کول';
+
+  @override
+  String get grpDOpBefore => 'مخکې دی له';
+
+  @override
+  String get grpDOpOnOrBefore => 'په یا مخکې له';
+
+  @override
+  String get grpDOpAfter => 'وروسته دی له';
+
+  @override
+  String get grpDOpOnOrAfter => 'په یا وروسته له';
+
+  @override
+  String get grpDOpLessThan => 'له … کم دی';
+
+  @override
+  String get grpDOpAtMost => 'زیات تر زیاته';
+
+  @override
+  String get grpDOpMoreThan => 'له … ډیر دی';
+
+  @override
+  String get grpDOpAtLeast => 'لږ تر لږه';
+
+  @override
+  String get grpDYes => 'هو';
+
+  @override
+  String get grpDNo => 'نه';
+
+  @override
+  String get grpDCurrentSprint => 'اوسنی سپرنټ';
+
+  @override
+  String get grpDMe => 'زه';
+
+  @override
+  String get grpDChoose => 'وټاکئ…';
+
+  @override
+  String get grpDValue => 'ارزښت';
+
+  @override
+  String get grpDPickDate => 'نیټه وټاکئ';
+
+  @override
+  String get grpDOrderByLabel => 'ترتیب د مخې ';
+
+  @override
+  String get grpDAscending => 'پورته';
+
+  @override
+  String get grpDDescending => 'ښکته';
+
+  @override
+  String get grpDRemoveOrdering => 'ترتیب لرې کول';
+
+  @override
+  String get grpDOrderBy => 'ترتیب د مخې';
+
+  @override
+  String get grpDRepeatNothingToUpdate =>
+      'نوې دندې به دا وکاروي. هېڅ پرانیستې دندې بدلون ته اړتیا نه درلوده.';
+
+  @override
+  String grpDRepeatUpdatedLater(int count) {
+    return '$count وروسته پرانیستې دندې تازه شوې.';
+  }
+
+  @override
+  String get grpDRepeat => 'تکرار';
+
+  @override
+  String grpDRepeatUnsupported(String summary) {
+    return '«$summary» په داسې ډول تنظیم شوی چې دا مدیر یې نه شي ښودلی، نو دلته نه شي بدلېدلی. بیا هم کولی شئ یې ځنډوئ یا ودروئ.';
+  }
+
+  @override
+  String get grpDSkipWeekends => 'د اونۍ پای تېرول';
+
+  @override
+  String get grpDStopRepeating => 'تکرار ودرول';
+
+  @override
+  String get grpDResume => 'دوام ورکول';
+
+  @override
+  String get grpDPause => 'ځنډول';
+
+  @override
+  String get grpDUseForFuture => 'دا دنده د راتلونکو لپاره کارول';
+
+  @override
+  String get grpDSave => 'خوندي کول';
+
+  @override
+  String get grpDEvery => 'هر';
+
+  @override
+  String get grpDRepeatByDay => 'د میاشتې په یوه ورځ';
+
+  @override
+  String get grpDRepeatByWeekday => 'د اونۍ په n‌مه ورځ';
+
+  @override
+  String grpDDayNumber(int day) {
+    return 'ورځ $day';
+  }
+
+  @override
+  String get grpDNth1 => 'لومړی';
+
+  @override
+  String get grpDNth2 => 'دوهم';
+
+  @override
+  String get grpDNth3 => 'درېیم';
+
+  @override
+  String get grpDNth4 => 'څلورم';
+
+  @override
+  String get grpDNthLast => 'وروستی';
+
+  @override
+  String get grpDEnds => 'پای';
+
+  @override
+  String get grpDEndNever => 'هېڅکله';
+
+  @override
+  String get grpDEndAfter => 'وروسته';
+
+  @override
+  String get grpDEndOn => 'په';
+
+  @override
+  String get grpDTasksWord => 'دندې';
+
+  @override
+  String get grpDMakeIt => 'جوړه یې کړه';
+
+  @override
+  String get grpDDaysAhead => 'ورځې د پای نیټې څخه مخکې';
+
+  @override
+  String grpDRepeatAt(String time) {
+    return 'په $time';
+  }
+
+  @override
+  String get grpDNoFurtherDates => 'نور نیټې نشته.';
+
+  @override
+  String grpDNextDates(String dates) {
+    return 'راتلونکي: $dates';
+  }
+
+  @override
+  String get grpEBack => 'شاته';
+
+  @override
+  String get grpECancel => 'لغوه';
+
+  @override
+  String get grpEName => 'نوم';
+
+  @override
+  String get grpERetry => 'بیا هڅه';
+
+  @override
+  String get grpEWorkspaceSettingsTitle => 'د کاري space تنظیمات';
+
+  @override
+  String get grpEWorkspacesLoadRetry =>
+      'ستاسو کاري space نه شو پورته کېدی. بیا هڅه';
+
+  @override
+  String get grpEMembers => 'غړي';
+
+  @override
+  String get grpEMembersSub => 'خلک، بلنې او پرېښودل';
+
+  @override
+  String get grpERolesPerms => 'رولونه او اجازې';
+
+  @override
+  String get grpERolesPermsSub => 'څوک څه کولی شي';
+
+  @override
+  String get grpEAuditLog => 'د پلټنې لاګ';
+
+  @override
+  String get grpEAuditLogSub => 'چا څه او کله بدل کړل';
+
+  @override
+  String get grpEImportExport => 'واردول او صادرول';
+
+  @override
+  String get grpEImportExportSub =>
+      'د Jira، ClickUp یا CSV معلومات راوړئ او وباسئ';
+
+  @override
+  String get grpEWorkspaceUpdated => 'کاري space تازه شو.';
+
+  @override
+  String get grpEGeneral => 'عمومي';
+
+  @override
+  String get grpEChangeLogo => 'لوګو بدل کړئ';
+
+  @override
+  String get grpEUrl => 'URL';
+
+  @override
+  String get grpERefresh => 'تازه کړئ';
+
+  @override
+  String get grpESaveChanges => 'بدلونونه خوندي کړئ';
+
+  @override
+  String get grpENotifSettings => 'د خبرتیاوو تنظیمات';
+
+  @override
+  String get grpEPushOffNotice =>
+      'د دې وسیلې لپاره خبرتیاوې بندې دي. تاسو کولی شئ په سیسټم تنظیماتو کې یې اجازه ورکړئ؛ ستاسو انتخاب خوندي دی.';
+
+  @override
+  String get grpEZoneInvalid => 'داسې نوم وکاروئ لکه Europe/Paris یا UTC.';
+
+  @override
+  String get grpEQuietDifferent => 'د پیل او پای وختونه باید توپیر ولري.';
+
+  @override
+  String get grpEWhatReachesYou => 'څه درته رسېږي';
+
+  @override
+  String get grpEInbox => 'ان‌باکس';
+
+  @override
+  String get grpEPush => 'پُش';
+
+  @override
+  String get grpEEmail => 'ایمیل';
+
+  @override
+  String get grpEQuietHours => 'آرام ساعتونه';
+
+  @override
+  String get grpEQuietHold => 'د آرام ساعتونو په جریان کې پُش او ایمیل ودروئ';
+
+  @override
+  String get grpEQuietHoldSub => 'ان‌باکس تل ډکېږي؛ یوازې خبرتیاوې انتظار کوي.';
+
+  @override
+  String get grpEFrom => 'له';
+
+  @override
+  String get grpEUntil => 'تر';
+
+  @override
+  String get grpETimeZoneDigest => 'وخت سیمه او لنډیز';
+
+  @override
+  String get grpETimeZone => 'وخت سیمه';
+
+  @override
+  String get grpETimeZoneHelper => 'آرام ساعتونه او لنډیز د دې سیمې تابع دي.';
+
+  @override
+  String get grpEUseDeviceZone => 'د دې وسیلې وخت سیمه وکاروئ';
+
+  @override
+  String get grpETypeZone => 'پر ځای یې خپله وخت سیمه ولیکئ، لکه Europe/Paris.';
+
+  @override
+  String get grpEDigestAt => 'ورځنی لنډیز لیږل کېږي په';
+
+  @override
+  String get grpEEditField => 'ساحه سمه کړئ';
+
+  @override
+  String get grpENewField => 'نوې ساحه';
+
+  @override
+  String get grpEType => 'ډول';
+
+  @override
+  String get grpEOptions => 'اختیارونه';
+
+  @override
+  String get grpEColour => 'رنګ';
+
+  @override
+  String get grpELabel => 'لیبل';
+
+  @override
+  String get grpERemoveOption => 'اختیار لرې کړئ';
+
+  @override
+  String get grpEAddOption => 'اختیار زیات کړئ';
+
+  @override
+  String get grpERequired => 'اړین';
+
+  @override
+  String get grpERequiredSub => 'نوي دندې باید ارزښت ولري.';
+
+  @override
+  String get grpEDefaultValue => 'تلواله ارزښت';
+
+  @override
+  String get grpEShowIn => 'ښودل په';
+
+  @override
+  String get grpESave => 'خوندي کړئ';
+
+  @override
+  String get grpEAddField => 'ساحه زیاته کړئ';
+
+  @override
+  String get grpEOptionN => 'اختیار ۱';
+
+  @override
+  String get grpEProblemName => 'ساحې ته نوم ورکړئ.';
+
+  @override
+  String get grpEProblemOne => 'لږ تر لږه یو اختیار زیات کړئ.';
+
+  @override
+  String get grpEProblemLabel => 'هر اختیار لیبل ته اړتیا لري.';
+
+  @override
+  String get grpEProblemDup => 'دوه اختیارونه یو شان لیبل لري.';
+
+  @override
+  String get grpEOptionsInUse => 'اختیارونه کارول کېږي';
+
+  @override
+  String get grpERemovedOption => 'لرې شوی اختیار';
+
+  @override
+  String grpERemapLabel(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ارزښتونه',
+      one: '۱ ارزښت',
+    );
+    return '$label ($_temp0) بدلېږي';
+  }
+
+  @override
+  String get grpENothingClear => 'هېڅ (پاک کړئ)';
+
+  @override
+  String get grpEApply => 'پلي کړئ';
+
+  @override
+  String get grpEPrivate => 'خصوصي';
+
+  @override
+  String get grpESprints => 'سپرنټونه';
+
+  @override
+  String get grpEAutomations => 'اتومات کارونه';
+
+  @override
+  String get grpESearch => 'لټون';
+
+  @override
+  String get grpETimesheet => 'د وخت جدول';
+
+  @override
+  String get grpEDashboards => 'ډشبورډونه';
+
+  @override
+  String get grpEDocs => 'اسناد';
+
+  @override
+  String get grpEProjects => 'پروژې';
+
+  @override
+  String get grpENewProject => 'نوې پروژه';
+
+  @override
+  String get grpEFavorites => 'خوښې';
+
+  @override
+  String get grpEProjectsLoadRetry => 'پروژې نه شوې پورته کېدی. بیا هڅه';
+
+  @override
+  String get grpEArchivedProjects => 'آرشیف شوې پروژې';
+
+  @override
+  String get grpEPrivateProjects => 'خصوصي پروژې';
+
+  @override
+  String get grpENoProjects => 'تر اوسه پروژه نشته';
+
+  @override
+  String get grpECreateFirstProject => 'خپله لومړۍ پروژه جوړه کړئ';
+
+  @override
+  String get grpEMonth1 => 'جنوري';
+
+  @override
+  String get grpEMonth2 => 'فبروري';
+
+  @override
+  String get grpEMonth3 => 'مارچ';
+
+  @override
+  String get grpEMonth4 => 'اپریل';
+
+  @override
+  String get grpEMonth5 => 'می';
+
+  @override
+  String get grpEMonth6 => 'جون';
+
+  @override
+  String get grpEMonth7 => 'جولای';
+
+  @override
+  String get grpEMonth8 => 'اګست';
+
+  @override
+  String get grpEMonth9 => 'سپتمبر';
+
+  @override
+  String get grpEMonth10 => 'اکتوبر';
+
+  @override
+  String get grpEMonth11 => 'نومبر';
+
+  @override
+  String get grpEMonth12 => 'دسمبر';
+
+  @override
+  String get grpEWeekLocale => 'د ژبې تلواله';
+
+  @override
+  String get grpEMonday => 'دوشنبه';
+
+  @override
+  String get grpESaturday => 'شنبه';
+
+  @override
+  String get grpESunday => 'یکشنبه';
+
+  @override
+  String get grpEPrevious => 'تېر';
+
+  @override
+  String get grpENext => 'راتلونکی';
+
+  @override
+  String get grpEToday => 'نن';
+
+  @override
+  String get grpEUnscheduled => 'نه مهالویش شوی';
+
+  @override
+  String get grpEMonth => 'میاشت';
+
+  @override
+  String get grpEWeek => 'اونۍ';
+
+  @override
+  String get grpEDay => 'ورځ';
+
+  @override
+  String get grpEColourBy => 'رنګ په اساس';
+
+  @override
+  String get grpEColourByProject => 'د پروژې په اساس رنګ';
+
+  @override
+  String get grpEColourByStatus => 'د حالت په اساس رنګ';
+
+  @override
+  String get grpEColourByPriority => 'د لومړیتوب په اساس رنګ';
+
+  @override
+  String get grpEColourChip => 'رنګ';
+
+  @override
+  String get grpEWeekStartsOn => 'اونۍ پیلېږي له';
+
+  @override
+  String get grpEHideDone => 'بشپړ شوي پټ کړئ';
+
+  @override
+  String get grpELayoutNotSaved =>
+      'ستاسو د کلیزې ترتیب خوندي نه شو. په راتلونکي بدلون کې به بیا هڅه وشي.';
+
+  @override
+  String get grpEEnterName => 'یو نوم ولیکئ.';
+
+  @override
+  String get grpENewRole => 'نوی رول';
+
+  @override
+  String get grpECreate => 'جوړ کړئ';
+
+  @override
+  String get grpERenameRole => 'د رول نوم بدل کړئ';
+
+  @override
+  String get grpERename => 'نوم بدل کړئ';
+
+  @override
+  String grpEDeleteRoleTitle(String name) {
+    return '\"$name\" ړنګ شي؟';
+  }
+
+  @override
+  String get grpERoleNoOne => 'هیڅوک دا رول نه لري.';
+
+  @override
+  String grpERoleMoveMembers(int count) {
+    return '$count غړي دا رول لري. دوی ولېږدوئ ته:';
+  }
+
+  @override
+  String get grpEChooseRole => 'یو رول وټاکئ';
+
+  @override
+  String get grpEDelete => 'ړنګ کړئ';
+
+  @override
+  String grpFBulkDeleted(int count) {
+    return '$count دندې ړنګې شوې';
+  }
+
+  @override
+  String grpFBulkUpdated(int count) {
+    return '$count دندې تازه شوې';
+  }
+
+  @override
+  String grpFBulkPartialDeleted(int done, int total, int failed) {
+    return '$done له $total دندو ړنګې شوې؛ $failed ونه شوای شوې.';
+  }
+
+  @override
+  String grpFBulkPartialUpdated(int done, int total, int failed) {
+    return '$done له $total دندو تازه شوې؛ $failed ونه شوای شوې.';
+  }
+
+  @override
+  String get grpFDetails => 'جزئیات';
+
+  @override
+  String grpFBulkDeleteTitle(int count) {
+    return '$count دندې ړنګې شي؟';
+  }
+
+  @override
+  String get grpFBulkDeleteBody =>
+      'فرعي دندې یې ورسره ځي. تاسو کولی شئ دوی له ډبې بیرته راوګرځوئ.';
+
+  @override
+  String get grpFDelete => 'ړنګول';
+
+  @override
+  String get grpFSetStatus => 'حالت ټاکل';
+
+  @override
+  String get grpFSetPriority => 'لومړیتوب ټاکل';
+
+  @override
+  String get grpFStatus => 'حالت';
+
+  @override
+  String get grpFPriority => 'لومړیتوب';
+
+  @override
+  String get grpFAssign => 'ټاکل';
+
+  @override
+  String get grpFClear => 'پاکول';
+
+  @override
+  String grpFBulkUpdating(int done, int total) {
+    return 'د $total له $done تازه کول…';
+  }
+
+  @override
+  String grpFBulkSelected(int count) {
+    return '$count ټاکل شوي';
+  }
+
+  @override
+  String grpFBulkNotChanged(int count) {
+    return '$count دندې بدلې نشوې';
+  }
+
+  @override
+  String get grpFTask => 'دنده';
+
+  @override
+  String get grpFLinks => 'لینکونه';
+
+  @override
+  String get grpFAddLink => 'لینک زیاتول';
+
+  @override
+  String get grpFNoLinks => 'تر اوسه لینک نشته.';
+
+  @override
+  String get grpFRemoveLink => 'لینک لرې کړئ';
+
+  @override
+  String get grpFLinkSearchHint => 'په هر پروژه کې دندې ولټوئ';
+
+  @override
+  String get grpFCloseDuplicate => 'تکراري وتړئ';
+
+  @override
+  String get grpFLinkAction => 'لینک کول';
+
+  @override
+  String get grpFUnassigned => 'نه ټاکل شوی';
+
+  @override
+  String get grpFNoValue => 'ارزښت نشته';
+
+  @override
+  String get grpFAssignee => 'ټاکل شوی';
+
+  @override
+  String grpFPresenceEditing(String name) {
+    return '$name سمبالوي';
+  }
+
+  @override
+  String grpFPresenceViewing(String name) {
+    return '$name ګوري';
+  }
+
+  @override
+  String grpFEditingOne(String name) {
+    return '$name دا سمبالوي';
+  }
+
+  @override
+  String grpFEditingMany(int count) {
+    return '$count کسان دا سمبالوي';
+  }
+
+  @override
+  String grpFDeleteTaskTitle(String id) {
+    return '$id ړنګ شي؟';
+  }
+
+  @override
+  String grpFDeleteSubtasksExplain(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count فرعي دندې لري. څه به ورسره کيږي؟',
+      one: '۱ فرعي دنده لري. څه به ورسره کيږي؟',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpFKeepSubtasks => 'وساتل شي (یو کچه پورته)';
+
+  @override
+  String get grpFDeleteThemToo => 'دوی هم ړنګ کړئ';
+
+  @override
+  String grpFOpenSubtasksTitle(String id) {
+    return '$id پرانیستې فرعي دندې لري';
+  }
+
+  @override
+  String grpFOpenSubtasksExplain(int count, String status) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count فرعي دندې نه دي بشپړې شوې. دا هم $status ته یوسو؟',
+      one: '۱ فرعي دنده نه ده بشپړه شوې. دا هم $status ته یوسو؟',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpFLeaveOpen => 'پرانیستې پرېږدئ';
+
+  @override
+  String get grpFCompleteAll => 'ټول بشپړ کړئ';
+
+  @override
+  String grpFMoveUnderTitle(String id) {
+    return '$id لاندې ته ولېږدوئ…';
+  }
+
+  @override
+  String get grpFTopLevel => 'لوړه کچه (پلار نشته)';
+
+  @override
+  String get grpFNoOtherParent => 'بله دنده نشته چې لاندې یې کېږدو.';
+
+  @override
+  String get grpFSubtasks => 'فرعي دندې';
+
+  @override
+  String get grpFAddSubtaskHint => 'یوه فرعي دنده زیاته کړئ او Enter ټک کړئ';
+
+  @override
+  String get grpFActionAddSubtask => 'فرعي دنده زیاتول';
+
+  @override
+  String get grpFActionMoveUnder => 'لاندې ته لېږدول…';
+
+  @override
+  String get grpFActionMakeTopLevel => 'لوړې کچې ته اړول';
+
+  @override
+  String get grpFBlockedByPending => 'د هغو دندو له خوا بند چې لا نه دي بشپړې';
+
+  @override
+  String grpFBlockedBy(String names) {
+    return 'د $names له خوا بند';
+  }
+
+  @override
+  String get grpFBlocked => 'بند';
+
+  @override
+  String get grpFBlockedTitle => 'دا دنده بنده ده';
+
+  @override
+  String grpFBlockedTextOne(String blockers) {
+    return 'د $blockers له خوا بنده ده، چې لا نه ده بشپړه شوې.';
+  }
+
+  @override
+  String grpFBlockedTextMany(String blockers) {
+    return 'د $blockers له خوا بنده ده، چې لا نه دي بشپړې شوې.';
+  }
+
+  @override
+  String get grpFOk => 'سمه ده';
+
+  @override
+  String get grpFCompleteAnyway => 'بیا هم بشپړول';
+
+  @override
+  String grpFConflictTitle(String field) {
+    return 'یو چا $field بدل کړ';
+  }
+
+  @override
+  String get grpFTheirs => 'د هغوی';
+
+  @override
+  String get grpFYours => 'ستاسو';
+
+  @override
+  String get grpFEmpty => '(تش)';
+
+  @override
+  String get grpFTakeTheirs => 'د هغوی واخلئ';
+
+  @override
+  String get grpFKeepMine => 'زما وساتئ';
+
+  @override
+  String get grpFFieldTitle => 'سرلیک';
+
+  @override
+  String get grpFFieldDescription => 'تشریح';
+
+  @override
+  String get grpFFieldStatus => 'حالت';
+
+  @override
+  String get grpFFieldPriority => 'لومړیتوب';
+
+  @override
+  String get grpFFieldStartDate => 'د پیل نیټه';
+
+  @override
+  String get grpFFieldDueDate => 'د پای نیټه';
+
+  @override
+  String get grpFFieldAssignees => 'ټاکل شوي کسان';
+
+  @override
+  String get grpFFields => 'ساحې';
+
+  @override
+  String get grpFRequiredFieldsIntro =>
+      'دا ساحې د دندې له جوړولو مخکې ارزښت ته اړتیا لري.';
+
+  @override
+  String get grpFRequired => 'اړین';
+
+  @override
+  String get grpFCreate => 'جوړول';
+
+  @override
+  String get grpFChangeStatus => 'حالت بدلول';
+
+  @override
+  String get grpFChangePriority => 'لومړیتوب بدلول';
+
+  @override
+  String get grpFDate => 'نیټه';
+
+  @override
+  String get grpFPickDay => 'ورځ وټاکئ…';
+
+  @override
+  String get grpFAssignees => 'ټاکل شوي کسان';
+
+  @override
+  String get grpFViewList => 'لیست';
+
+  @override
+  String get grpFViewBoard => 'تخته';
+
+  @override
+  String get grpFViewTimeline => 'مهالویش';
+
+  @override
+  String grpFErrorRetry(String message) {
+    return '$message بیا هڅه وکړئ';
+  }
+
+  @override
+  String get grpFNoTasksYet => 'تر اوسه دنده نشته. لومړۍ پورته زیاته کړئ.';
+
+  @override
+  String get grpFSwipeComplete => 'بشپړول';
+
+  @override
+  String get grpFUndo => 'بیرته کول';
+
+  @override
+  String get grpFMore => 'نور';
+
+  @override
+  String grpFAddSubtaskTo(String id) {
+    return '$id ته فرعي دنده زیاتول';
+  }
+
+  @override
+  String grpFTaskDeleted(String id) {
+    return '$id ړنګ شو';
+  }
+
+  @override
+  String get grpFColTitle => 'سرلیک';
+
+  @override
+  String grpFTrashTitle(String name) {
+    return '$name · ډبه';
+  }
+
+  @override
+  String get grpFTrashEmpty => 'ډبه تشه ده.';
+
+  @override
+  String grpFTrashedRow(String id) {
+    return '$id · ړنګ شوې';
+  }
+
+  @override
+  String get grpFRestore => 'بیرته راوستل';
+
+  @override
+  String grpFTaskRestored(String id) {
+    return '$id بیرته راوړل شو';
+  }
+
+  @override
+  String get grpFMoveTo => '…ته لېږدول';
+
+  @override
+  String grpFMoveToColumn(String name) {
+    return '$name ته لېږدول';
+  }
+
+  @override
+  String grpFPlusCount(int count) {
+    return '+$count';
+  }
+
+  @override
+  String get grpFFoldColumn => 'ستون پټول';
+
+  @override
+  String get grpFColumn => 'ستون';
+
+  @override
+  String get grpFSetWipLimit => 'د روان کار حد ټاکل…';
+
+  @override
+  String get grpFChangeLimit => 'حد بدلول…';
+
+  @override
+  String get grpFAddTask => 'دنده زیاتول';
+
+  @override
+  String get grpFWipTitle => 'د روان کار حد';
+
+  @override
+  String get grpFWipMost => 'په دې ستون کې تر ټولو ډیر کارتونه';
+
+  @override
+  String get grpFColumnsBy => 'ستونونه د مخې';
+
+  @override
+  String grpFColumnsChip(String name) {
+    return 'ستونونه: $name';
+  }
+
+  @override
+  String get grpFSwimlanes => 'لینونه';
+
+  @override
+  String get grpFLanesAssignee => 'لینونه: ټاکل شوی';
+
+  @override
+  String get grpFNoSwimlanes => 'لینونه نشته';
+
+  @override
+  String get grpFByAssignee => 'د ټاکل شوي له مخې';
+
+  @override
+  String get grpFCardFields => 'د کارت ساحې';
+
+  @override
+  String get grpFCurrentSprint => 'اوسنی سپرنټ';
+
+  @override
+  String get grpFRefresh => 'تازه کول';
+
+  @override
+  String get grpFBoardLayoutNotSaved =>
+      'ستاسو د تخته ترتیب خوندي نشو. په راتلونکي بدلون کې به بیا هڅه وشي.';
+
+  @override
+  String get grpFReschedule => 'بیا مهالویش…';
+
+  @override
+  String get grpFSchedule => 'مهالویش…';
+
+  @override
+  String get grpFRepeatsNotMade => 'تکرار: لا نه دی جوړ شوی';
+
+  @override
+  String get grpFEverythingDated => 'هر څه نیټه لري.';
+
+  @override
+  String grpFNothingOn(String day) {
+    return 'په $day کې هیڅ نشته.';
+  }
+
+  @override
+  String get grpFKindTasks => 'دندې';
+
+  @override
+  String get grpFKindComments => 'تبصرې';
+
+  @override
+  String get grpFKindProjects => 'پروژې';
+
+  @override
+  String get grpFKindPeople => 'خلک';
+
+  @override
+  String get grpFKindPages => 'پاڼې';
+
+  @override
+  String get grpFChipAssignedToMe => 'ماته ټاکل شوې';
+
+  @override
+  String get grpFChipOpen => 'پرانیستې';
+
+  @override
+  String get grpFChipDone => 'بشپړې';
+
+  @override
+  String get grpFSearchErrGeneric => 'یوه ستونزه رامنځته شوه. بیا هڅه وکړئ.';
+
+  @override
+  String get grpFSearchErrNetwork => 'سرور ته نه شو رسېدلی. خپل اتصال وګورئ.';
+
+  @override
+  String get grpFSearchErrDenied => 'تاسو دلته د لټون اجازه نه لرئ.';
+
+  @override
+  String get grpFSearchErrRate => 'ډیر لټونونه. یوه شېبه صبر وکړئ.';
+
+  @override
+  String get grpFSearchErrInvalid => 'دا لټون سم نه دی.';
+
+  @override
+  String get grpFSearchHint => 'دندې، تبصرې، پروژې، خلک ولټوئ';
+
+  @override
+  String get grpFSearchClose => 'لټون بندول';
+
+  @override
+  String get grpFSearchNothing =>
+      'څه ونه موندل شول. لږ کلمې هڅه وکړئ یا یو id لکه WEB-12. په in:KEY، assignee:me، status:open ورته محدود کړئ.';
+
+  @override
+  String get grpFSearchTips =>
+      'د لټون لپاره ټایپ کړئ. یو id لکه WEB-12 یا عملګرې in:KEY، assignee:me، status:open هڅه وکړئ.';
+
+  @override
+  String get grpFGoTo => 'ورتګ';
+
+  @override
+  String grpFShowMore(String kind) {
+    return 'نور $kind وښایاست';
+  }
+
+  @override
+  String get grpFRecent => 'وروستي';
+
+  @override
+  String grpFPlusMore(int count) {
+    return '+$count نور';
+  }
+
+  @override
+  String get grpFSubtaskDepthLimit =>
+      'فرعي دندې دلته تر هغه حده چې اپلیکېشن اجازه ورکوي ځای پر ځای شوې دي.';
+
+  @override
+  String get grpFUnscheduled => 'نه مهالویش شوې';
+
+  @override
+  String get grpGCloseShortcuts => 'د کیبورډ شارټکټونه تړل';
+
+  @override
+  String get grpGKeyboardShortcuts => 'د کیبورډ شارټکټونه';
+
+  @override
+  String get grpGClose => 'تړل';
+
+  @override
+  String get grpGChangedByYou => 'ستاسو له خوا بدل شوی';
+
+  @override
+  String get grpGNone => 'هېڅ';
+
+  @override
+  String grpGChangeKeysFor(String title) {
+    return 'د «$title» کیلي بدلول';
+  }
+
+  @override
+  String grpGKeysFor(String title) {
+    return 'د «$title» کیلي';
+  }
+
+  @override
+  String get grpGPressKeys => 'هغه کیلي کېکاږئ چې غواړئ.';
+
+  @override
+  String get grpGUseDefault => 'تلواله کارول';
+
+  @override
+  String get grpGNoKey => 'بې کیلي';
+
+  @override
+  String get grpGCancel => 'لغوه';
+
+  @override
+  String get grpGSave => 'خوندي کول';
+
+  @override
+  String grpGBrowserKeeps(String keys) {
+    return 'براوزر $keys ځان ته ساتي.';
+  }
+
+  @override
+  String grpGAlreadyUsedBy(String title) {
+    return 'مخکې د «$title» له خوا کارول شوی.';
+  }
+
+  @override
+  String get grpGKeysTaken => 'بل عمل دا کیلي کاروي.';
+
+  @override
+  String get grpGKeysInvalid => 'دا کیلي نه شي کارول کېدای.';
+
+  @override
+  String get grpGSaveFailed => 'خوندي نه شو. خپل ارتباط وګورئ.';
+
+  @override
+  String grpGDefaultUsedBy(String title) {
+    return 'تلوالې کیلي د «$title» له خوا کارول کېږي.';
+  }
+
+  @override
+  String get grpGDefaultUsedByOther =>
+      'تلوالې کیلي د بل عمل له خوا کارول کېږي.';
+
+  @override
+  String get grpGPaletteHint => 'یو امر ولیکئ، یا > عملونه  # پروژې  @ خلک';
+
+  @override
+  String get grpGNothingMatches => 'هېڅ برابر نه دی.';
+
+  @override
+  String get grpGSearchUnavailable => 'لټون همدا اوس نشته.';
+
+  @override
+  String get grpGName => 'نوم';
+
+  @override
+  String get grpGCreate => 'جوړول';
+
+  @override
+  String get grpGQuickActions => 'چټک عملونه';
+
+  @override
+  String grpGDryRunTitle(String name) {
+    return 'آزمایښتي چلول: $name';
+  }
+
+  @override
+  String get grpGDryRunIntro =>
+      'ښيي چې په یوه دنده څه پېښېږي. هېڅ نه بدلېږي، نه لېږل کېږي او نه خبرتیا ورکول کېږي.';
+
+  @override
+  String get grpGTask => 'دنده';
+
+  @override
+  String get grpGTasksLoadFailed => 'دندې پورته نه شوې.';
+
+  @override
+  String get grpGWouldRun => 'به چلېږي.';
+
+  @override
+  String get grpGWouldNotRun => 'په دې دنده به ونه چلېږي.';
+
+  @override
+  String get grpGRun => 'چلول';
+
+  @override
+  String get grpGConditionProblem =>
+      'په شرط کې ستونزه ده: د «که» کارت لاندې وګورئ.';
+
+  @override
+  String get grpGRuleGone => 'دا قاعده نور نشته.';
+
+  @override
+  String get grpGRule => 'قاعده';
+
+  @override
+  String get grpGNewAutomation => 'نوې اتومات';
+
+  @override
+  String get grpGEditAutomation => 'اتومات سمول';
+
+  @override
+  String get grpGWhen => 'کله';
+
+  @override
+  String get grpGIfOptional => 'که (اختیاري)';
+
+  @override
+  String get grpGThen => 'نو';
+
+  @override
+  String get grpGAndThen => 'او بیا';
+
+  @override
+  String grpGActionLimit(int max) {
+    return 'د $max عملونو حد ته ورسېدلی';
+  }
+
+  @override
+  String get grpGAddAction => 'عمل زیاتول';
+
+  @override
+  String get grpGLoadLatest => 'وروستی نسخه پورته کول';
+
+  @override
+  String get grpGMoveUp => 'پورته کول';
+
+  @override
+  String get grpGMoveDown => 'ښکته کول';
+
+  @override
+  String get grpGRemoveAction => 'عمل لرې کول';
+
+  @override
+  String grpGSwitchedOff(String reason) {
+    return 'بند شو: $reason\nجوړول: قاعده خلاصه کړئ، په پیل یا عملونو کې یو شی وټاکئ چې لا شتون لري، خوندي یې کړئ او بیا یې چالان کړئ.';
+  }
+
+  @override
+  String get grpGUnknown => 'نامعلوم';
+
+  @override
+  String get grpGEmptyValue => '(تش)';
+
+  @override
+  String get grpGNothingRunYet => 'تر اوسه هېڅ نه دي چلېدلي.';
+
+  @override
+  String get grpGLoadMore => 'نور پورته کول';
+
+  @override
+  String get grpGRetry => 'بیا هڅه';
+
+  @override
+  String grpGWhyNotRun(String explanation) {
+    return 'ولې دا ونه چلېد؟ $explanation';
+  }
+
+  @override
+  String grpGChainDepth(int depth) {
+    return 'د زنځیر ژوروالی $depth';
+  }
+
+  @override
+  String get grpGFilter => 'فلټر';
+
+  @override
+  String grpGFilterCount(int count) {
+    return 'فلټر ($count)';
+  }
+
+  @override
+  String get grpGSavedFilters => 'خوندي شوي فلټرونه';
+
+  @override
+  String get grpGNoSavedFilters => 'تر اوسه خوندي فلټر نشته';
+
+  @override
+  String grpGFieldGoneNamed(String name) {
+    return '$name (یو ساحه ورکه ده)';
+  }
+
+  @override
+  String get grpGManageSaved => 'خوندي فلټرونه سمبالول…';
+
+  @override
+  String grpGConditionCount(int count) {
+    return '$count شرط/شرطونه';
+  }
+
+  @override
+  String get grpGClearFilterTip => 'فلټر پاکول';
+
+  @override
+  String get grpGNothingSaved => 'تر اوسه هېڅ نه دي خوندي شوي.';
+
+  @override
+  String get grpGFieldItUsedGone => 'هغه ساحه چې کارولې یې وه ورکه ده';
+
+  @override
+  String get grpGDelete => 'ړنګول';
+
+  @override
+  String get grpGFinishConditions => 'لومړی شرطونه بشپړ کړئ.';
+
+  @override
+  String get grpGEveryoneWorkspace => 'په کاري ځای کې ټول';
+
+  @override
+  String get grpGEveryoneProject => 'په دې پروژه کې ټول';
+
+  @override
+  String get grpGBuilder => 'جوړوونکی';
+
+  @override
+  String get grpGAdvanced => 'پرمختللی';
+
+  @override
+  String get grpGClearFilter => 'فلټر پاکول';
+
+  @override
+  String get grpGSaveAs => 'د بل نوم سره خوندي کول…';
+
+  @override
+  String get grpGApply => 'پلي کول';
+
+  @override
+  String get grpGSaveThisFilter => 'دا فلټر خوندي کړئ';
+
+  @override
+  String get grpGOnlyMe => 'یوازې زه';
+
+  @override
+  String get grpGExportSaveFailed => 'فایل خوندي نه شو. بیا هڅه وکړئ.';
+
+  @override
+  String get grpGExport => 'صادرول';
+
+  @override
+  String get grpGEveryProject => 'هره پروژه چې خلاصولای شم';
+
+  @override
+  String get grpGOneProject => 'یوه پروژه';
+
+  @override
+  String get grpGExportInfo =>
+      'یو zip چې tasks.json (چې TaskForge یې بیا واردولای شي)، tasks.csv، نظرونه، د ضمیمو لېست او README لري.';
+
+  @override
+  String grpGExportSavedSized(String name, String size) {
+    return '$name خوندي شو ($size).';
+  }
+
+  @override
+  String grpGExportSaved(String name) {
+    return '$name خوندي شو.';
+  }
+
+  @override
+  String grpGNotesAboutFile(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'د دې فایل په اړه $count یادښتونه',
+      one: 'د دې فایل په اړه ۱ یادښت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpGRowNumber(int line) {
+    return 'قطار $line';
+  }
+
+  @override
+  String grpGAndMore(int count) {
+    return '...او $count نور.';
+  }
+
+  @override
+  String get grpGNotesReadFailed => 'د دې واردولو یادښتونه ونه لوستل شول.';
+
+  @override
+  String get grpGDragToOtherList => 'بل لېست ته ورکش کړئ';
+
+  @override
+  String get grpGAddedAfterStart => 'د پیل وروسته زیاته شوې';
+
+  @override
+  String get grpGStoryPoints => 'د کیسې ټکي';
+
+  @override
+  String get grpGUnitHours => 'ساعت';
+
+  @override
+  String get grpGUnitPoints => ' ټکي';
+
+  @override
+  String grpGLoadOf(String load, String unit, String cap) {
+    return 'بار $load$unit له $cap$unit څخه';
+  }
+
+  @override
+  String grpGLoadNoCapacity(String load, String unit) {
+    return 'بار $load$unit (ظرفیت نه دی ټاکل شوی)';
+  }
+
+  @override
+  String get grpGSetCapacity => 'ظرفیت ټاکل';
+
+  @override
+  String get grpGPoints => 'ټکي';
+
+  @override
+  String get grpGHours => 'ساعتونه';
+
+  @override
+  String grpGOverCapacity(String amount, String unit) {
+    return 'له ظرفیت څخه $amount$unit ډېر';
+  }
+
+  @override
+  String grpGTitleWithCount(String title, int count) {
+    return '$title ($count)';
+  }
+
+  @override
+  String get grpHCancel => 'لغوه';
+
+  @override
+  String get grpHArchive => 'آرشیف';
+
+  @override
+  String get grpHRestore => 'بیرته راګرځول';
+
+  @override
+  String get grpHRetry => 'بیا هڅه';
+
+  @override
+  String get grpHCreate => 'جوړول';
+
+  @override
+  String get grpHName => 'نوم';
+
+  @override
+  String get grpHDescription => 'تشریح';
+
+  @override
+  String grpHArchiveTitle(String name) {
+    return '\"$name\" آرشیف شي؟';
+  }
+
+  @override
+  String get grpHArchiveBody =>
+      'یوازې د لوستلو وړ کیږي او له څنګ پټې څخه ورکیږي. تاسو کولای شئ هر وخت یې بیرته راولئ.';
+
+  @override
+  String get grpHDangerZone => 'د خطر سیمه';
+
+  @override
+  String get grpHRestoreProject => 'پروژه بیرته راګرځول';
+
+  @override
+  String get grpHArchiveProject => 'پروژه آرشیف کول';
+
+  @override
+  String get grpHArchivedBanner =>
+      'دا پروژه آرشیف شوې او یوازې د لوستلو وړ ده.';
+
+  @override
+  String get grpHArchivedProjects => 'آرشیف شوې پروژې';
+
+  @override
+  String get grpHNoArchived => 'هیڅ آرشیف شوې پروژه نشته.';
+
+  @override
+  String get grpHLoadProjectsRetry => 'پروژې نه شوې پورته کېدای. بیا هڅه';
+
+  @override
+  String get grpHNewProject => 'نوې پروژه';
+
+  @override
+  String get grpHKey => 'کیلي';
+
+  @override
+  String get grpHKeyHelp => 'د دندو د شمېرو مختاړی، لکه WEB-12';
+
+  @override
+  String get grpHFeatures => 'ځانګړتیاوې';
+
+  @override
+  String get grpHFeaturesHint =>
+      'د یوې ځانګړتیا بندول یې پټوي خو معلومات یې ساتي.';
+
+  @override
+  String get grpHProjectUpdated => 'پروژه تازه شوه.';
+
+  @override
+  String get grpHGeneral => 'عمومي';
+
+  @override
+  String grpHKeyFixed(String taskKey) {
+    return 'کیلي ټاکل شوې ده ځکه چې دندې لا دمخه کاروي ($taskKey).';
+  }
+
+  @override
+  String get grpHSaveChanges => 'بدلونونه خوندي کړئ';
+
+  @override
+  String get grpHAddAMember => 'غړی اضافه کړئ';
+
+  @override
+  String get grpHAllAreMembers => 'د کار ځای ټول کسان لا دمخه غړي دي.';
+
+  @override
+  String get grpHMembers => 'غړي';
+
+  @override
+  String get grpHAddMember => 'غړی اضافه کړئ';
+
+  @override
+  String get grpHRemove => 'لرې کول';
+
+  @override
+  String get grpHLoadMembersRetry => 'غړي نه شول پورته کېدای. بیا هڅه';
+
+  @override
+  String get grpHPrivateProjects => 'خصوصي پروژې';
+
+  @override
+  String get grpHNoPrivate => 'هیڅ خصوصي پروژه نشته.';
+
+  @override
+  String grpHKeyAndMembers(String key, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غړي',
+      one: '۱ غړی',
+    );
+    return '$key · $_temp0';
+  }
+
+  @override
+  String get grpHAddMe => 'ما اضافه کړئ';
+
+  @override
+  String grpHColorLabel(String color) {
+    return 'رنگ $color';
+  }
+
+  @override
+  String get grpHVisOpen => 'خلاص';
+
+  @override
+  String get grpHVisPrivate => 'خصوصي';
+
+  @override
+  String get grpHVisOpenHint => 'د کار ځای ټول کسان یې لیدلای شي.';
+
+  @override
+  String get grpHVisPrivateHint => 'یوازې بلل شوي غړي یې لیدلای شي.';
+
+  @override
+  String get grpHProject => 'پروژه';
+
+  @override
+  String get grpHRemoveFavorite => 'له خوښو لرې کړئ';
+
+  @override
+  String get grpHAddFavorite => 'خوښو ته اضافه کړئ';
+
+  @override
+  String get grpHTrash => 'کثافات';
+
+  @override
+  String get grpHProjectSettings => 'د پروژې تنظیمات';
+
+  @override
+  String get grpHLoadProjectRetry => 'پروژه نه شوه پورته کېدای. بیا هڅه';
+
+  @override
+  String get grpHProjectNotFound => 'پروژه ونه موندل شوه.';
+
+  @override
+  String get grpHBack => 'شاته';
+
+  @override
+  String get grpHWorkflow => 'کاري بهیر';
+
+  @override
+  String get grpHWorkflowHint =>
+      'حالتونه، د هغوی کټګورۍ او کوم لیږدونه اجازه لري.';
+
+  @override
+  String get grpHFields => 'ساحې';
+
+  @override
+  String get grpHFieldsHint =>
+      'دودیز ساحې لکه پیرودونکی، د کیسې ټکي یا چاپیریال.';
+
+  @override
+  String get grpHAdd => 'اضافه کول';
+
+  @override
+  String get grpHAttachFile => 'فایل ضمیمه کړئ';
+
+  @override
+  String get grpHTakePhoto => 'انځور واخلئ';
+
+  @override
+  String get grpHChooseGallery => 'له ګالرۍ وټاکئ';
+
+  @override
+  String get grpHPasteImage => 'انځور پیسټ کړئ';
+
+  @override
+  String get grpHDeleteFileQ => 'دا فایل ړنګ شي؟';
+
+  @override
+  String grpHFileWillBeRemoved(String filename) {
+    return '$filename لرې کیږي.';
+  }
+
+  @override
+  String get grpHDelete => 'ړنګول';
+
+  @override
+  String grpHOpenFile(String filename) {
+    return '$filename پرانیزئ';
+  }
+
+  @override
+  String grpHDeleteFile(String filename) {
+    return '$filename ړنګ کړئ';
+  }
+
+  @override
+  String get grpHWaitingConnection => 'د اړیکې په تمه…';
+
+  @override
+  String get grpHWaiting => 'په تمه…';
+
+  @override
+  String get grpHUploadDone => 'بشپړ شو';
+
+  @override
+  String get grpHUploadCancelled => 'لغوه شو';
+
+  @override
+  String grpHPercentUploaded(String filename, int percent) {
+    return '$filename، $percent سلنه پورته شوه';
+  }
+
+  @override
+  String get grpHWaitingToBeSent => 'د لیږلو په تمه';
+
+  @override
+  String grpHCancelFile(String filename) {
+    return '$filename لغوه کړئ';
+  }
+
+  @override
+  String grpHTryFileAgain(String filename) {
+    return '$filename بیا هڅه وکړئ';
+  }
+
+  @override
+  String grpHDismissFile(String filename) {
+    return '$filename پټ کړئ';
+  }
+
+  @override
+  String get grpHOpen => 'پرانیستل';
+
+  @override
+  String get grpHDownload => 'ډاونلوډ';
+
+  @override
+  String get grpHClose => 'تړل';
+
+  @override
+  String get grpHCouldNotOpenFile => 'فایل ونه پرانیستل شو.';
+
+  @override
+  String get grpHCouldNotLoadPicture => 'انځور نه شو پورته کېدای.';
+
+  @override
+  String get grpHCouldNotReadFileViewer => 'فایل ونه لوستل شو.';
+
+  @override
+  String get grpHCouldNotPlayVideo => 'ویډیو ونه غږول شوه.';
+
+  @override
+  String get grpHPause => 'ځنډول';
+
+  @override
+  String get grpHPlay => 'غږول';
+
+  @override
+  String grpHTextTruncated(String size) {
+    return 'لومړی $size ښودل کیږي. پاتې برخه د لوستلو لپاره فایل ډاونلوډ کړئ.';
+  }
+
+  @override
+  String get grpHAttachments => 'ضمیمې';
+
+  @override
+  String grpHAttachmentsCount(int count) {
+    return 'ضمیمې ($count)';
+  }
+
+  @override
+  String get grpHCouldNotReadFile => 'دا فایل ونه لوستل شو.';
+
+  @override
+  String get grpHDismiss => 'پټول';
+
+  @override
+  String get grpHNoAttachments => 'هیڅ ضمیمه نشته.';
+
+  @override
+  String get grpHDropZoneLabel =>
+      'فایلونه ضمیمه کړئ: دلته یې پرېږدئ یا کلیک وکړئ، بیا انځور پیسټ کړئ';
+
+  @override
+  String get grpHDropToAttach => 'د ضمیمې لپاره پرېږدئ';
+
+  @override
+  String get grpHDropFilesHere => 'فایلونه دلته پرېږدئ ترڅو ضمیمه شي';
+
+  @override
+  String get grpHSnoozeLaterToday => 'نن وروسته';
+
+  @override
+  String get grpHSnoozeTomorrow => 'سبا';
+
+  @override
+  String get grpHSnoozeNextWeek => 'راتلونکې اوونۍ';
+
+  @override
+  String get grpHMarkAllRead => 'ټول لوستل شوي وټاکئ';
+
+  @override
+  String get grpHNotificationSettings => 'د خبرتیاوو تنظیمات';
+
+  @override
+  String get grpHInbox => 'ان‌باکس';
+
+  @override
+  String grpHUnreadCount(int count) {
+    return '$count نالوستل شوي';
+  }
+
+  @override
+  String get grpHLoadMore => 'نور پورته کړئ';
+
+  @override
+  String get grpHEmptyAll => 'دلته هیڅ نشته. تاسو ټول کتلي دي.';
+
+  @override
+  String get grpHEmptyUnread => 'هیڅ نالوستل شوې خبرتیا نشته.';
+
+  @override
+  String get grpHEmptyMentions => 'هیچا تاسو نه دي یاد کړي.';
+
+  @override
+  String get grpHEmptyAssigned => 'دا وروستیو کې تاسو ته هیڅ نه دي سپارل شوي.';
+
+  @override
+  String get grpHEmptySnoozed => 'هیڅ نه دي ځنډول شوي.';
+
+  @override
+  String get grpHEmptyArchived => 'هیڅ نه دي آرشیف شوي.';
+
+  @override
+  String grpHDueDate(String date) {
+    return 'وروستی نیټه $date';
+  }
+
+  @override
+  String grpHUnreadPrefix(String title) {
+    return 'نالوستل شوی. $title';
+  }
+
+  @override
+  String grpHMoreCount(int count) {
+    return '+$count نور';
+  }
+
+  @override
+  String get grpHMore => 'نور';
+
+  @override
+  String get grpHMarkUnread => 'نالوستل وټاکئ';
+
+  @override
+  String get grpHMarkRead => 'لوستل شوی وټاکئ';
+
+  @override
+  String get grpHStopSnoozing => 'ځنډول ودروئ';
+
+  @override
+  String get grpHSnoozeEllipsis => 'ځنډول…';
+
+  @override
+  String get grpHMoveToInbox => 'ان‌باکس ته یې ولېږئ';
+
+  @override
+  String get grpHPushTitle => 'کله چې مهمه وي خبرتیا ترلاسه کړئ';
+
+  @override
+  String get grpHPushBody =>
+      'TaskForge کولای شي کله چې تاسو ته دنده سپارل کیږي، تاسو یادیږئ، یا د دندې وروستۍ نیټه نږدې وي، حتی کله چې اپ په شالید کې وي، خبرتیا وښيي. بیا ستاسو وسیله اجازه غواړي. تاسو غوره کوئ کومې ډولونه خبرتیا درکړي او د خاموشۍ ساعتونه مو له ویښېدو ساتي.';
+
+  @override
+  String get grpHNotNow => 'اوس نه';
+
+  @override
+  String get grpHContinue => 'دوام ورکړئ';
+
+  @override
+  String get grpHPickDateTime => 'نیټه او وخت وټاکئ';
+
+  @override
+  String get grpHRepeatReadError => 'دا نه شو لوستل چې څنګه تکرارېږي.';
+
+  @override
+  String get grpHRepeat => 'تکرار';
+
+  @override
+  String get grpHFirstOfSeries => 'د لړۍ لومړی';
+
+  @override
+  String get grpHRepeatingTask => 'تکراري دنده';
+
+  @override
+  String grpHSeriesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دندې په دې لړۍ کې',
+      one: '$count دنده په دې لړۍ کې',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpHRepeatPaused => 'ځنډول شوی: نوې دندې نه جوړیږي.';
+
+  @override
+  String grpHRepeatPausedBySystem(String reason) {
+    return 'سیستم ځنډولی: $reason';
+  }
+
+  @override
+  String grpHRepeatNext(String dates) {
+    return 'راتلونکی: $dates';
+  }
+
+  @override
+  String get grpHRepeatWaits => 'راتلونکې به کله جوړ شي چې دا بشپړه شي.';
+
+  @override
+  String get grpHRepeatsTitle => 'دا دنده تکرارېږي';
+
+  @override
+  String grpHRepeatsBody(String summary) {
+    return 'دا د \"$summary\" کینه ده. ړنګول یې کولای شي لړۍ ودروي، یا لړۍ کولای شي نوې دندې جوړولو ته دوام ورکړي.';
+  }
+
+  @override
+  String get grpHDeleteKeepRepeating => 'ړنګول، تکرار دوام ورکړي';
+
+  @override
+  String get grpHDeleteAndStop => 'ړنګول او درول';
+
+  @override
+  String get grpHChartGroup => 'ډله';
+
+  @override
+  String get grpHOfflineReview => 'کتنه';
+
+  @override
+  String get grpHOfflineSyncing => 'همغږي کیږي…';
+
+  @override
+  String get grpHOfflineSyncNow => 'اوس همغږي کړئ';
+
+  @override
+  String get grpHOfflineSaved =>
+      'تاسو آفلاین یاست. بدلونونه په دې وسیله کې خوندي کیږي.';
+
+  @override
+  String grpHOfflineWaitsOnline(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count بدلونونه د لیږلو په تمه دي.',
+      one: '$count بدلون د لیږلو په تمه دی.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpHOfflineWaitsOffline(int count) {
+    return '$count د لیږلو په تمه.';
+  }
+
+  @override
+  String grpHOfflineAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count بدلونونه ستاسو پاملرنې ته اړتیا لري.',
+      one: '$count بدلون ستاسو پاملرنې ته اړتیا لري.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpHReconnecting =>
+      'بیا نښلول کیږي… هغه څه چې تاسو یې وینئ به له بیرته راستنېدو وروسته تازه شي.';
+
+  @override
+  String get grpICancel => 'لغوه کړه';
+
+  @override
+  String get grpIDone => 'بشپړ شو';
+
+  @override
+  String get grpIRetry => 'بیا هڅه وکړه';
+
+  @override
+  String get grpIClose => 'تړل';
+
+  @override
+  String get grpIBack => 'شاته';
+
+  @override
+  String get grpIEdit => 'سمول';
+
+  @override
+  String get grpISave => 'خوندي کړه';
+
+  @override
+  String get grpISaving => 'خوندي کیږي…';
+
+  @override
+  String get grpIDelete => 'ړنګول';
+
+  @override
+  String get grpICopy => 'کاپي';
+
+  @override
+  String get grpIUndo => 'بیرته کول';
+
+  @override
+  String get grpIRestore => 'بیرته راوستل';
+
+  @override
+  String get grpIUnnamed => '(بې نومه)';
+
+  @override
+  String grpIErrorRetry(String message) {
+    return '$message بیا هڅه وکړه';
+  }
+
+  @override
+  String get grpIMergeTitle => 'بل چا لومړی کاري بهیر خوندي کړ';
+
+  @override
+  String get grpIMergeBody =>
+      'ستاسو سمونونه وساتل شول او د هغوی کار نه دی بدل شوی. دا هغه دي چې ستاسو په مسوده کې بدل شول:';
+
+  @override
+  String get grpIMergeKeep => 'ما دا ولوستل، زما مسوده وساته';
+
+  @override
+  String get grpIMergeReload => 'زما مسوده لرې کړه';
+
+  @override
+  String get grpINoProblems => 'هیڅ ستونزه نشته';
+
+  @override
+  String get grpIEveryTaskValid => 'هر کار یو معتبر حالت لري.';
+
+  @override
+  String grpIProblemsToFix(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ستونزې د خوندي کولو دمخه حل کړئ',
+      one: '۱ ستونزه د خوندي کولو دمخه حل کړئ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIAnyStatusMoves => 'هر حالت کولی شي بل هر حالت ته ولاړ شي.';
+
+  @override
+  String grpIWorkflowGraphLabel(int statuses, int moves) {
+    return 'کاري بهیر د $statuses حالتونو او $moves اجازه شوو لیږدونو سره';
+  }
+
+  @override
+  String get grpINeedsAssignee => 'مسئول ته اړتیا لري';
+
+  @override
+  String get grpINeedsSubtasksDone => 'د ټولو فرعي کارونو بشپړیدو ته اړتیا لري';
+
+  @override
+  String grpIOnlyRoleLower(String role) {
+    return 'یوازې $role';
+  }
+
+  @override
+  String get grpIOneRole => 'یو رول';
+
+  @override
+  String get grpIDragToReorder => 'د ترتیب لپاره کش کړئ';
+
+  @override
+  String get grpIColour => 'رنګ';
+
+  @override
+  String get grpINewTasksStartHere => 'نوي کارونه دلته پیل کیږي';
+
+  @override
+  String get grpIMakeDefaultStatus => 'دا د نوو کارونو د پیل حالت کړئ';
+
+  @override
+  String get grpIDeleteStatus => 'حالت ړنګ کړئ';
+
+  @override
+  String grpITaskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کارونه',
+      one: '۱ کار',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpICanMoveTo => 'کولی شي ولاړ شي';
+
+  @override
+  String get grpIConditionsForMove => 'د دې لیږد شرطونه';
+
+  @override
+  String get grpIName => 'نوم';
+
+  @override
+  String grpIDeleteStatusTitle(String name) {
+    return '$name ړنګ شي؟';
+  }
+
+  @override
+  String grpITasksInStatus(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کارونه په دې حالت کې دي. غوره کړئ چیرې ولاړ شي.',
+      one: '۱ کار په دې حالت کې دی. غوره کړئ چیرې ولاړ شي.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIMoveTasksTo => 'کارونه ولېږدوئ';
+
+  @override
+  String get grpIMoveTasksAndDelete => 'کارونه ولېږدوئ او ړنګ کړئ';
+
+  @override
+  String get grpIWhoMayMove => 'څوک کولی شي دا لیږد وکړي';
+
+  @override
+  String get grpIAnyRole => 'هر رول';
+
+  @override
+  String grpIOnlyRole(String name) {
+    return 'یوازې $name';
+  }
+
+  @override
+  String get grpITaskNeedsAssignee => 'کار مسئول ته اړتیا لري';
+
+  @override
+  String get grpIAllSubtasksDone => 'ټول فرعي کارونه باید بشپړ وي';
+
+  @override
+  String get grpIDoneOrCancelledDepth => 'بشپړ یا لغوه شوي، په هر ژوروالي کې.';
+
+  @override
+  String get grpIWorkflow => 'کاري بهیر';
+
+  @override
+  String get grpIDiscard => 'لرې کول';
+
+  @override
+  String get grpIWorkflowSaved => 'کاري بهیر خوندي شو';
+
+  @override
+  String get grpIRestrictTransitions => 'لیږدونه محدودول';
+
+  @override
+  String get grpIRestrictTransitionsHint =>
+      'بند: هر حالت کولی شي بل هر حالت ته ولاړ شي. چالان: یوازې هغه غشي چې تاسو اجازه ورکوئ.';
+
+  @override
+  String get grpIRestrictCreation =>
+      'نوي کارونه یوازې په ډیفالټ حالت کې پیل شي';
+
+  @override
+  String get grpIRestrictCreationHint =>
+      'بند: کار په هر حالت کې جوړیدای شي. چالان: دا په ستوری لرونکي حالت کې پیل کیږي او نورو ته په لیږدولو رسیږي.';
+
+  @override
+  String get grpIAddStatus => 'حالت اضافه کړئ';
+
+  @override
+  String get grpINewStatus => 'نوی حالت';
+
+  @override
+  String get grpIMigrationNeedsPlace =>
+      'هغه کارونه چې تاسو دلته د لیږدولو لپاره غوره کړي نوې ځای ته اړتیا لري.';
+
+  @override
+  String grpIMoveArrow(String from, String to) {
+    return '$from ← $to';
+  }
+
+  @override
+  String grpIDeletedStillHasTasks(String name) {
+    return '$name ړنګ شو خو لا هم کارونه لري.';
+  }
+
+  @override
+  String get grpIMoveItsTasksTo => 'د دې کارونه ولېږدوئ';
+
+  @override
+  String grpIDrillTitle(String title, int count, String more) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'کارونه',
+      one: 'کار',
+    );
+    return '$title · $count$more $_temp0';
+  }
+
+  @override
+  String get grpINoTasks => 'کار نشته.';
+
+  @override
+  String get grpIDrillTruncated =>
+      'یوازې لومړني کارونه لیست شوي؛ د پاتې لیدلو لپاره فلټر محدود کړئ.';
+
+  @override
+  String grpIDueOn(String date) {
+    return 'سرچېن $date';
+  }
+
+  @override
+  String get grpINothingToShow => 'تر اوسه د ښودلو لپاره څه نشته.';
+
+  @override
+  String get grpIRefresh => 'تازه کول';
+
+  @override
+  String get grpIWidgetMenu => 'د ویجټ مینو';
+
+  @override
+  String get grpIExportCsv => 'CSV صادرول';
+
+  @override
+  String get grpIRemove => 'لرې کول';
+
+  @override
+  String get grpISaveToSeeNumbers => 'د شمیرو لیدلو لپاره خوندي کړئ.';
+
+  @override
+  String grpICsvTitle(String title) {
+    return '$title (CSV)';
+  }
+
+  @override
+  String get grpICsvCopied => 'CSV کاپي شو.';
+
+  @override
+  String get grpISaveAsFile => 'د فایل په توګه خوندي کړئ';
+
+  @override
+  String grpILatestPoints(int limit) {
+    return 'وروستي $limit ټکي ښودل کیږي؛ د ټولو لیدلو لپاره حد لنډ کړئ.';
+  }
+
+  @override
+  String grpITopLimit(int limit) {
+    return 'پورتنی $limit ښودل کیږي؛ د پاتې لیدلو لپاره فلټر محدود کړئ.';
+  }
+
+  @override
+  String get grpIWidget => 'ویجټ';
+
+  @override
+  String get grpITitle => 'سرلیک';
+
+  @override
+  String get grpIGroupBy => 'ډلبندي د مخې';
+
+  @override
+  String get grpIFilterTfqlOptional => 'فلټر (TFQL، اختیاري)';
+
+  @override
+  String get grpIPreview => 'مخکتنه';
+
+  @override
+  String get grpIProject => 'پروژه';
+
+  @override
+  String get grpISprint => 'سپرنټ';
+
+  @override
+  String grpIDateRange(String start, String end) {
+    return '$start ← $end';
+  }
+
+  @override
+  String grpIFromDate(String date) {
+    return 'له $date';
+  }
+
+  @override
+  String get grpINoDates => 'نیټې نشته';
+
+  @override
+  String grpIDaysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ورځې',
+      one: '۱ ورځ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpINothingScheduled => 'په دې حد کې هیڅ شی مهالویش شوی نه دی.';
+
+  @override
+  String get grpIOnCriticalPath => 'په انتقادي لار کې';
+
+  @override
+  String get grpIBlocked => 'بند شوی';
+
+  @override
+  String grpIMovingPushes(String id, int count) {
+    return 'د $id لیږدول $count وړاندې کوي';
+  }
+
+  @override
+  String grpIRangeShift(String from, String to) {
+    return '$from  ←  $to';
+  }
+
+  @override
+  String get grpIKeepThem => 'وساتل شي (تضاد وښایاست)';
+
+  @override
+  String get grpIShiftDependents => 'تابع کارونه وښوروئ';
+
+  @override
+  String get grpIWeekdayMon => 'دوشنبه';
+
+  @override
+  String get grpIWeekdayTue => 'سه‌شنبه';
+
+  @override
+  String get grpIWeekdayWed => 'چهارشنبه';
+
+  @override
+  String get grpIWeekdayThu => 'پنجشنبه';
+
+  @override
+  String get grpIWeekdayFri => 'جمعه';
+
+  @override
+  String get grpIWeekdaySat => 'شنبه';
+
+  @override
+  String get grpIWeekdaySun => 'یکشنبه';
+
+  @override
+  String get grpIWorkingDays => 'کاري ورځې';
+
+  @override
+  String get grpIWorkingDaysHint => 'یو کار د بل څخه تېرول رخصتۍ ورځې پرېږدي.';
+
+  @override
+  String get grpIHolidays => 'رخصتۍ';
+
+  @override
+  String get grpIHolidaysHint => 'نیټې لکه 2026-12-25، د کومو په واسطه جلا شوې';
+
+  @override
+  String grpITimelineChartLabel(int count) {
+    return 'د $count کارونو مهالویش چارټ. د لوستلو لپاره لیست لید ته لاړ شئ.';
+  }
+
+  @override
+  String get grpITimelineDragHint =>
+      'د خوځولو لپاره یو بار کش کړئ، د اندازې بدلولو لپاره یو سر. Ctrl + ویل یا پنچ زوم کوي.';
+
+  @override
+  String get grpIUnscheduled => 'بې مهالویشه';
+
+  @override
+  String get grpIMovedLinksBreak =>
+      'ولېږدول شو. هغه لینکونه چې ماتیږي په سور ښودل کیږي.';
+
+  @override
+  String get grpITimelineSaved => 'مهالویش خوندي شو.';
+
+  @override
+  String get grpIDay => 'ورځ';
+
+  @override
+  String get grpIWeek => 'اونۍ';
+
+  @override
+  String get grpIMonth => 'میاشت';
+
+  @override
+  String get grpIQuarter => 'ربع';
+
+  @override
+  String get grpITaskTree => 'د کارونو ونه';
+
+  @override
+  String get grpIByAssignee => 'د مسئول له مخې';
+
+  @override
+  String get grpIByStatus => 'د حالت له مخې';
+
+  @override
+  String get grpIEarlier => 'مخکینی';
+
+  @override
+  String get grpIToday => 'نن';
+
+  @override
+  String get grpILater => 'وروسته';
+
+  @override
+  String get grpICriticalPath => 'انتقادي لار';
+
+  @override
+  String get grpIHideDone => 'بشپړ شوي پټ کړئ';
+
+  @override
+  String get grpIShowChart => 'چارټ وښایاست';
+
+  @override
+  String get grpIShowList => 'د لیست په توګه وښایاست';
+
+  @override
+  String get grpIExportImage => 'د انځور په توګه صادرول';
+
+  @override
+  String get grpICurrency => 'اسعار';
+
+  @override
+  String get grpIClear => 'پاکول';
+
+  @override
+  String get grpINone => 'هیڅ';
+
+  @override
+  String grpIFieldArchived(String name) {
+    return '$name آرشیف شو. ارزښتونه ۳۰ ورځې ساتل کیږي.';
+  }
+
+  @override
+  String get grpIFields => 'ساحې';
+
+  @override
+  String get grpIAddField => 'ساحه اضافه کړئ';
+
+  @override
+  String get grpINoCustomFields =>
+      'تر اوسه دودیز ساحې نشته. د مشتري یا د کیسې ټکو په څیر شیانو لپاره یوه اضافه کړئ.';
+
+  @override
+  String get grpIArchivedRestorable =>
+      'آرشیف شوي (د ۳۰ ورځو لپاره د بیرته راوستلو وړ)';
+
+  @override
+  String get grpIRequired => 'اړین';
+
+  @override
+  String grpIOptionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count انتخابونه',
+      one: '۱ انتخاب',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIArchive => 'آرشیف';
+
+  @override
+  String get grpIWriteComment => 'یو نظر ولیکئ… (@ د یادولو لپاره)';
+
+  @override
+  String get grpIComment => 'نظر';
+
+  @override
+  String get grpIBulletList => 'د ټکو لیست';
+
+  @override
+  String get grpIQuote => 'نقل قول';
+
+  @override
+  String get grpICodeBlock => 'د کوډ بلاک';
+
+  @override
+  String get grpILink => 'لینک';
+
+  @override
+  String get grpICouldNotReadFile => 'دا فایل ولوستل نشو.';
+
+  @override
+  String get grpICtrlEnterToSend => 'د لیږلو لپاره Ctrl+Enter';
+
+  @override
+  String get grpIDeleteCommentTitle => 'دا نظر ړنګ شي؟';
+
+  @override
+  String get grpIDeleteCommentBody =>
+      'دا به د «نظر لرې شو» په توګه وښودل شي. د دې منځپانګه او د سمون تاریخ ړنګیږي.';
+
+  @override
+  String get grpICannotSeeTask => 'دوی دا کار نشي لیدلی';
+
+  @override
+  String grpICannotSeeGrant(String names) {
+    return '$names دا کار نشي لیدلی. دوی پروژې ته اضافه کړئ او نظر ولیږئ، یا یادونه لرې کړئ.';
+  }
+
+  @override
+  String grpICannotSeeRefuse(String names) {
+    return '$names دا کار نشي لیدلی، نو یادونه یې نشي کیدلی. یادونه لرې کړئ، یا له هغه چا وغواړئ چې پروژه اداره کوي چې دوی اضافه کړي.';
+  }
+
+  @override
+  String get grpIOk => 'سمه ده';
+
+  @override
+  String get grpIAddThemAndSend => 'اضافه یې کړئ او ولیږئ';
+
+  @override
+  String grpIEditHistory(String author) {
+    return 'د سمون تاریخ · $author';
+  }
+
+  @override
+  String grpIRevisionCurrent(String stamp) {
+    return '$stamp · اوسنی';
+  }
+
+  @override
+  String get grpISessions => 'ناستې';
+
+  @override
+  String get grpISignOutOthers => 'له نورو وسایلو وزئ';
+
+  @override
+  String get grpIUnknownDevice => 'نامعلوم وسیله';
+
+  @override
+  String get grpIThisDevice => 'دا وسیله';
+
+  @override
+  String get grpISignOutThis => 'له دې وسیلې وزئ';
+
+  @override
+  String get grpJLink => 'لینک';
+
+  @override
+  String get grpJInviteEmails => 'د بريښنالیک پتې';
+
+  @override
+  String grpJInviteEmailsHelp(int max) {
+    return 'څو پتې په کوما سره جلا کړئ. تر $max پورې.';
+  }
+
+  @override
+  String get grpJAdd => 'زیاتول';
+
+  @override
+  String grpJInviteInvalidEmail(String email) {
+    return '«$email» د بريښنالیک سمه پته نه ده.';
+  }
+
+  @override
+  String grpJInviteTooMany(int max) {
+    return 'تاسو په یوه وخت کې تر $max کسانو پورې بلنه ورکولی شئ.';
+  }
+
+  @override
+  String get grpJInviteSendAll => 'بلنې ولېږئ';
+
+  @override
+  String grpJInviteSendCount(int count) {
+    return '$count ولېږئ';
+  }
+
+  @override
+  String grpJInvited(int count) {
+    return '$count کسان وبلل شول.';
+  }
+
+  @override
+  String grpJInviteSkipped(String emails) {
+    return 'لا دمخه غړي دي، پریښودل شول: $emails';
+  }
+
+  @override
+  String get grpJExpiresAfter => 'د پای ته رسېدو وروسته';
+
+  @override
+  String grpJDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ورځې',
+      one: '$count ورځ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpJMaxUses => 'تر ټولو ډېر کارونه';
+
+  @override
+  String get grpJMaxUsesHelp => 'د بې حدودو لپاره خالي پرېږدئ.';
+
+  @override
+  String grpJMaxUsesInvalid(int max) {
+    return 'له ۱ څخه تر $max پورې شمېره ولیکئ یا خالي یې پرېږدئ.';
+  }
+
+  @override
+  String get grpJCreateLink => 'لینک جوړ کړئ';
+
+  @override
+  String get grpJCopyLink => 'لینک کاپي کړئ';
+
+  @override
+  String get grpJRole => 'رول';
+
+  @override
+  String get grpJInvitationTitle => 'بلنه';
+
+  @override
+  String get grpJJoin => 'یوځای شئ';
+
+  @override
+  String get grpJDecline => 'ردول';
+
+  @override
+  String get grpJGoToTaskForge => 'TaskForge ته لاړ شئ';
+
+  @override
+  String get grpJInvitedToJoin => 'تاسو یوځای کېدو ته بلل شوي یاست';
+
+  @override
+  String grpJInviterInvitedYou(String name) {
+    return '$name تاسو یوځای کېدو ته وبلئ';
+  }
+
+  @override
+  String get grpJBack => 'شاته';
+
+  @override
+  String get grpJMembers => 'غړي';
+
+  @override
+  String get grpJInvite => 'بلنه';
+
+  @override
+  String get grpJPending => 'په تمه';
+
+  @override
+  String grpJJoined(String date) {
+    return '$date یوځای شو';
+  }
+
+  @override
+  String get grpJRemoveFromWorkspace => 'له کاري ځای څخه لرې کړئ';
+
+  @override
+  String get grpJSearchMembers => 'غړي ولټوئ';
+
+  @override
+  String grpJRemoveMember(String name) {
+    return '$name لرې کړئ';
+  }
+
+  @override
+  String get grpJOwnerCannotLeave =>
+      'تاسو د دې کاري ځای مالک یاست، نو نه شئ کولی ترې ووځئ. مالکیت لا نه شي لېږدول کېدای.';
+
+  @override
+  String get grpJLeaveWorkspace => 'کاري ځای پرېږدئ';
+
+  @override
+  String grpJRemoveMemberTitle(String name) {
+    return '$name لرې شي؟';
+  }
+
+  @override
+  String get grpJRemoveMemberBody =>
+      'دوی به د دې کاري ځای لاسرسی له لاسه ورکړي. تاسو وروسته بیا بلنه ورکولی شئ.';
+
+  @override
+  String get grpJRemove => 'لرې کړئ';
+
+  @override
+  String grpJLeaveTitle(String name) {
+    return '$name پرېښودل شي؟';
+  }
+
+  @override
+  String get grpJLeaveBody =>
+      'تر هغه چې څوک بیا تاسو ته بلنه ورکړي، به د دې کاري ځای لاسرسی له لاسه ورکړئ.';
+
+  @override
+  String get grpJLeave => 'پرېښودل';
+
+  @override
+  String grpJErrorRetry(String error) {
+    return '$error بیا هڅه وکړئ';
+  }
+
+  @override
+  String get grpJLinkCopied => 'لینک کاپي شو.';
+
+  @override
+  String get grpJNoInvitations => 'تر اوسه هېڅ بلنه نشته.';
+
+  @override
+  String get grpJInvitationResent => 'بلنه بیا ولېږل شوه.';
+
+  @override
+  String get grpJResend => 'بیا ولېږئ';
+
+  @override
+  String get grpJRevoke => 'لغوه کړئ';
+
+  @override
+  String get grpJStatePending => 'په تمه';
+
+  @override
+  String get grpJStateExpired => 'پای ته رسېدلی';
+
+  @override
+  String get grpJStateRevoked => 'لغوه شوی';
+
+  @override
+  String get grpJStateUsedUp => 'کارول شوی';
+
+  @override
+  String grpJUsesCount(int count) {
+    return '$count ځله کارول';
+  }
+
+  @override
+  String grpJUsesOfMax(int uses, int max) {
+    return '$uses/$max ځله کارول';
+  }
+
+  @override
+  String get grpJInviteLink => 'د بلنې لینک';
+
+  @override
+  String grpJInvitationMeta(String name, String date) {
+    return 'د $name لخوا · $date پای ته رسېږي';
+  }
+
+  @override
+  String get grpJChangeRole => 'رول بدل کړئ';
+
+  @override
+  String get grpJBlockOptions => 'د بلاک اختیارونه';
+
+  @override
+  String get grpJMoveUp => 'پورته یې کړئ';
+
+  @override
+  String get grpJMoveDown => 'ښکته یې کړئ';
+
+  @override
+  String get grpJAddBlockBelow => 'لاندې بلاک زیات کړئ';
+
+  @override
+  String get grpJDelete => 'ړنګ کړئ';
+
+  @override
+  String grpJTurnInto(String label) {
+    return 'په $label واړوئ';
+  }
+
+  @override
+  String get grpJClickToWrite => 'د لیکلو پیلولو لپاره دلته کلیک وکړئ';
+
+  @override
+  String get grpJAddBlock => 'بلاک زیات کړئ';
+
+  @override
+  String get grpJDocs => 'اسناد';
+
+  @override
+  String get grpJPickPage => 'یو پاڼه وټاکئ یا نوې جوړه کړئ.';
+
+  @override
+  String get grpJNoMatchingBlocks => 'هېڅ برابر بلاک ونه موندل شو';
+
+  @override
+  String get grpJNoMatchingPages => 'هېڅ برابره پاڼه ونه موندل شوه';
+
+  @override
+  String get grpJTableRow => 'قطار';
+
+  @override
+  String get grpJTableColumn => 'ستون';
+
+  @override
+  String get grpJNoImageAddress => 'تر اوسه د انځور پته نشته';
+
+  @override
+  String get grpJImageLoadFailed => 'انځور نه شو پورته کېدای';
+
+  @override
+  String get grpJEditImage => 'انځور سم کړئ';
+
+  @override
+  String get grpJLoadingTask => 'دنده بارېږي...';
+
+  @override
+  String get grpJNoAccessTask => 'دې دندې ته لاسرسی نشته';
+
+  @override
+  String grpJUnknownBlock(String type) {
+    return 'دا بلاک ($type) د TaskForge نوې نسخې ته اړتیا لري. لکه څنګه چې دی همداسې ساتل کېږي.';
+  }
+
+  @override
+  String get grpJLinkAPage => 'یوه پاڼه وتړئ';
+
+  @override
+  String get grpJNoPagesYetLong => 'تر اوسه هېڅ پاڼه نشته.';
+
+  @override
+  String get grpJRelatedDocs => 'اړوند اسناد';
+
+  @override
+  String get grpJNoPagesYet => 'تر اوسه پاڼې نشته.';
+
+  @override
+  String get grpJLinked => 'تړل شوی';
+
+  @override
+  String get grpJEmbedded => 'ځای پر ځای شوی';
+
+  @override
+  String get grpJUnlink => 'جدا کړئ';
+
+  @override
+  String grpJChangeTone(String tone) {
+    return 'لهجه بدله کړئ ($tone)';
+  }
+
+  @override
+  String get grpJBold => 'پنډ';
+
+  @override
+  String get grpJItalic => 'سوی';
+
+  @override
+  String get grpJStrikethrough => 'کرښه پرې';
+
+  @override
+  String get grpJCode => 'کوډ';
+
+  @override
+  String get grpJHintParagraph =>
+      'د بلاکونو لپاره \'/\' او د پاڼې یادولو لپاره \'[[\' ولیکئ';
+
+  @override
+  String grpJHintHeading(int level) {
+    return 'سرلیک $level';
+  }
+
+  @override
+  String get grpJCodeLanguageHint => 'ژبه';
+
+  @override
+  String get grpJUndo => 'بیرته';
+
+  @override
+  String get grpJRestore => 'بیا ځای پر ځای کړئ';
+
+  @override
+  String get grpJName => 'نوم';
+
+  @override
+  String grpJWorkspaceDeleted(String name) {
+    return '«$name» ړنګ شو. تر ۷ ورځو پورې بیا ځای پر ځای کېدای شي.';
+  }
+
+  @override
+  String get grpJDangerZone => 'د خطر سیمه';
+
+  @override
+  String get grpJDangerZoneBody =>
+      'د کاري ځای ړنګول یې له ټولو پټوي. تاسو یې تر ۷ ورځو پورې بیا ځای پر ځای کولی شئ.';
+
+  @override
+  String get grpJDeleteWorkspace => 'کاري ځای ړنګ کړئ';
+
+  @override
+  String get grpJDeleteWorkspaceQ => 'کاري ځای ړنګ شي؟';
+
+  @override
+  String grpJTypeNameToConfirm(String name) {
+    return 'د تایید لپاره «$name» ولیکئ';
+  }
+
+  @override
+  String get grpJNewWorkspace => 'نوی کاري ځای';
+
+  @override
+  String get grpJCreateYourWorkspace => 'خپل کاري ځای جوړ کړئ';
+
+  @override
+  String get grpJWorkspaceHolds =>
+      'کاري ځای ستاسو د ټیم پروژې او دندې ځان کې ساتي.';
+
+  @override
+  String get grpJUrl => 'URL';
+
+  @override
+  String get grpJCreateWorkspace => 'کاري ځای جوړ کړئ';
+
+  @override
+  String get grpJRecentlyDeleted => 'وروستی ړنګ شوي';
+
+  @override
+  String get grpJSwitchWorkspace => 'کاري ځای بدل کړئ';
+
+  @override
+  String get grpJTimerRunning => 'ټایمر روان دی';
+
+  @override
+  String grpJTimerStoppedOn(String key, String title) {
+    return 'په $key $title ټایمر ودرول شو';
+  }
+
+  @override
+  String get grpJTime => 'وخت';
+
+  @override
+  String get grpJStop => 'ودروئ';
+
+  @override
+  String get grpJStartTimer => 'ټایمر پیل کړئ';
+
+  @override
+  String get grpJAddTime => 'وخت زیات کړئ';
+
+  @override
+  String grpJTimeOfEstimate(String logged, String estimate) {
+    return '$logged له $estimate څخه';
+  }
+
+  @override
+  String grpJTimeLogged(String logged) {
+    return '$logged ثبت شو';
+  }
+
+  @override
+  String grpJTimeBillable(String duration) {
+    return '$duration د بل وړ';
+  }
+
+  @override
+  String get grpJChangeEstimate => 'اټکل بدل کړئ';
+
+  @override
+  String get grpJSetEstimate => 'اټکل وټاکئ';
+
+  @override
+  String get grpJRunning => 'روان';
+
+  @override
+  String get grpJLoggedLabel => 'ثبت شوی';
+
+  @override
+  String get grpJYou => 'تاسو';
+
+  @override
+  String get grpJBillableSuffix => 'د بل وړ';
+
+  @override
+  String get grpJOverlapsEntry => 'له بل ثبت سره سمون لري';
+
+  @override
+  String get grpJOver24h => 'له ۲۴ ساعتو ډېر: وګورئ';
+
+  @override
+  String get grpJEdit => 'سمول';
+
+  @override
+  String get grpJStopTheTimer => 'ټایمر ودروئ';
+
+  @override
+  String get grpJRoleActions => 'د رول کړنې';
+
+  @override
+  String get grpJRename => 'نوم بدل کړئ';
+
+  @override
+  String get grpJBuiltInReadOnly => 'جوړ شوی، یوازې د لوستلو';
+
+  @override
+  String get grpJRolesAndPermissions => 'رولونه او اجازې';
+
+  @override
+  String get grpJNewRole => 'نوی رول';
+
+  @override
+  String get grpJActivity => 'فعالیت';
+
+  @override
+  String get grpJNoActivity => 'تر اوسه هېڅ فعالیت نشته.';
+
+  @override
+  String get grpJDebugTitle => 'TaskForge — اړیکه';
+
+  @override
+  String grpJPingLabel(String label) {
+    return '$label پینګ';
+  }
+
+  @override
+  String grpJPingError(String error) {
+    return 'تېروتنه: $error';
+  }
+}

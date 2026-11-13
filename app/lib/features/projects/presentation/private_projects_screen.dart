@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
@@ -23,10 +24,13 @@ class PrivateProjectsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ref.watch(privateProjectsProvider);
     return ShellScaffold(
-      appBar: AppBar(title: const Text('Private projects')),
+      appBar: AppBar(title: Text(context.l10n.grpHPrivateProjects)),
       body: switch (list) {
-        AsyncData(:final value) when value.isEmpty => const Center(
-          child: Text('No private projects.', key: Key('private-empty')),
+        AsyncData(:final value) when value.isEmpty => Center(
+          child: Text(
+            context.l10n.grpHNoPrivate,
+            key: const Key('private-empty'),
+          ),
         ),
         AsyncData(:final value) => ListView(
           children: [
@@ -35,14 +39,16 @@ class PrivateProjectsScreen extends ConsumerWidget {
                 key: Key('private-project-${p.id}'),
                 leading: ProjectAvatar(project: p),
                 title: Text(p.name),
-                subtitle: Text('${p.key} · ${p.memberCount} members'),
+                subtitle: Text(
+                  context.l10n.grpHKeyAndMembers(p.key, p.memberCount),
+                ),
                 onTap: p.canOpen ? () => context.go('/projects/${p.id}') : null,
                 trailing: p.canOpen
                     ? null
                     : OutlinedButton(
                         key: Key('add-me-${p.id}'),
                         onPressed: () => _addMe(context, ref, p),
-                        child: const Text('Add me'),
+                        child: Text(context.l10n.grpHAddMe),
                       ),
               ),
           ],
@@ -50,7 +56,7 @@ class PrivateProjectsScreen extends ConsumerWidget {
         AsyncError() => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(privateProjectsProvider),
-            child: const Text('Could not load projects. Retry'),
+            child: Text(context.l10n.grpHLoadProjectsRetry),
           ),
         ),
         _ => const Center(child: CircularProgressIndicator()),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/credentials_form.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
@@ -16,8 +17,8 @@ class SignInScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     return CredentialsForm(
-      title: 'Sign in',
-      submitLabel: 'Sign in',
+      title: context.l10n.signIn,
+      submitLabel: context.l10n.signIn,
       passwordValidator: validateSignInPassword,
       onSubmit: session.signIn,
       footer: Column(
@@ -25,7 +26,7 @@ class SignInScreen extends ConsumerWidget {
           TextButton(
             key: const Key('go-forgot'),
             onPressed: () => context.go('/forgot-password'),
-            child: const Text('Forgot your password?'),
+            child: Text(context.l10n.forgotPassword),
           ),
           TextButton(
             key: const Key('go-sign-up'),
@@ -34,7 +35,7 @@ class SignInScreen extends ConsumerWidget {
                   ? '/sign-up'
                   : '/sign-up?from=${Uri.encodeComponent(from!)}',
             ),
-            child: const Text('Create an account'),
+            child: Text(context.l10n.createAnAccount),
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
@@ -75,7 +77,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
 
   Future<void> _pick(TextEditingController c) async {
     final now = parseDay(c.text) ?? _today;
-    final d = await showDatePicker(
+    final d = await showAppDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(now.year - 2),
@@ -85,24 +87,25 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
   }
 
   Future<void> _save() async {
+    final l = context.l10n;
     final start = parseDay(_start.text);
     final end = parseDay(_end.text);
     if (_name.text.trim().isEmpty) {
-      setState(() => _error = 'Give the sprint a name.');
+      setState(() => _error = l.grpASprintNameRequired);
       return;
     }
     if (start == null || end == null) {
-      setState(() => _error = 'Dates are written YYYY-MM-DD.');
+      setState(() => _error = l.grpASprintDatesFormat);
       return;
     }
     if (end.isBefore(start)) {
-      setState(() => _error = 'The sprint cannot end before it starts.');
+      setState(() => _error = l.grpASprintEndBeforeStart);
       return;
     }
     final points = _capacity(_capacityPoints.text);
     final hours = _capacity(_capacityHours.text);
     if (points == _badCapacity || hours == _badCapacity) {
-      setState(() => _error = 'Capacity is a number, or empty for none.');
+      setState(() => _error = l.grpASprintCapacityNumber);
       return;
     }
     final capacityPoints = points == null ? '' : decimalText(points);
@@ -156,7 +159,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
     final saved = _saved;
     if (saved != null) {
       return AlertDialog(
-        title: const Text('Sprint saved'),
+        title: Text(context.l10n.grpASprintSaved),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +171,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
           FilledButton(
             key: const Key('sprint-done'),
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Done'),
+            child: Text(context.l10n.grpADone),
           ),
         ],
       );
@@ -184,7 +187,11 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
             exceptId: widget.sprint?.id ?? '',
           );
     return AlertDialog(
-      title: Text(widget.sprint == null ? 'New sprint' : 'Edit sprint'),
+      title: Text(
+        widget.sprint == null
+            ? context.l10n.grpANewSprint
+            : context.l10n.grpAEditSprint,
+      ),
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(
@@ -195,21 +202,25 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 key: const Key('sprint-name'),
                 controller: _name,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.grpASprintName,
+                ),
               ),
               TextField(
                 key: const Key('sprint-goal'),
                 controller: _goal,
-                decoration: const InputDecoration(labelText: 'Goal'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.grpASprintGoal,
+                ),
               ),
               TextField(
                 key: const Key('sprint-start'),
                 controller: _start,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: 'Start (YYYY-MM-DD)',
+                  labelText: context.l10n.grpASprintStartLabel,
                   suffixIcon: IconButton(
-                    tooltip: 'Pick start date',
+                    tooltip: context.l10n.grpAPickStartDate,
                     icon: const Icon(Icons.calendar_today),
                     onPressed: () => _pick(_start),
                   ),
@@ -220,9 +231,9 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 controller: _end,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: 'End (YYYY-MM-DD)',
+                  labelText: context.l10n.grpASprintEndLabel,
                   suffixIcon: IconButton(
-                    tooltip: 'Pick end date',
+                    tooltip: context.l10n.grpAPickEndDate,
                     icon: const Icon(Icons.calendar_today),
                     onPressed: () => _pick(_end),
                   ),
@@ -234,8 +245,8 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(
-                  labelText: 'Capacity in points (optional)',
+                decoration: InputDecoration(
+                  labelText: context.l10n.grpACapacityPointsOptional,
                 ),
               ),
               TextField(
@@ -244,15 +255,17 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(
-                  labelText: 'Capacity in hours (optional)',
+                decoration: InputDecoration(
+                  labelText: context.l10n.grpACapacityHoursOptional,
                 ),
               ),
               if (clash.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    'These dates overlap ${clash.map((s) => s.name).join(', ')}.',
+                    context.l10n.grpASprintOverlap(
+                      clash.map((s) => s.name).join(', '),
+                    ),
                     key: const Key('sprint-overlap'),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.tertiary,
@@ -277,12 +290,12 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
       actions: [
         TextButton(
           onPressed: _busy ? null : () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpACancel),
         ),
         FilledButton(
           key: const Key('sprint-save'),
           onPressed: _busy ? null : _save,
-          child: const Text('Save'),
+          child: Text(context.l10n.grpASave),
         ),
       ],
     );
@@ -317,18 +330,18 @@ class _CompleteState extends State<CompleteSprintDialog> {
     final s = widget.sprint;
     final open = s.openTasks;
     return AlertDialog(
-      title: Text('Complete ${s.name}'),
+      title: Text(context.l10n.grpACompleteTitle(s.name)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${s.doneTasks} done, $open unfinished',
+            context.l10n.grpACompleteCounts(s.doneTasks, open),
             key: const Key('complete-counts'),
           ),
           if (open > 0) ...[
             const SizedBox(height: 8),
-            const Text('What happens to the unfinished tasks?'),
+            Text(context.l10n.grpACompleteWhatHappens),
             RadioGroup<String>(
               groupValue: _carry,
               onChanged: (v) => setState(() => _carry = v ?? _carry),
@@ -338,15 +351,15 @@ class _CompleteState extends State<CompleteSprintDialog> {
                     key: const Key('carry-next'),
                     value: 'next',
                     enabled: widget.planned.isNotEmpty,
-                    title: const Text('Move to the next sprint'),
+                    title: Text(context.l10n.grpACompleteMoveNext),
                     subtitle: widget.planned.isEmpty
-                        ? const Text('No planned sprint to move them to')
+                        ? Text(context.l10n.grpACompleteNoPlanned)
                         : null,
                   ),
-                  const RadioListTile<String>(
-                    key: Key('carry-backlog'),
+                  RadioListTile<String>(
+                    key: const Key('carry-backlog'),
                     value: 'backlog',
-                    title: Text('Back to the backlog'),
+                    title: Text(context.l10n.grpACompleteBackToBacklog),
                   ),
                 ],
               ),
@@ -368,7 +381,7 @@ class _CompleteState extends State<CompleteSprintDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpACancel),
         ),
         FilledButton(
           key: const Key('complete-confirm'),
@@ -376,7 +389,7 @@ class _CompleteState extends State<CompleteSprintDialog> {
             carryOver: open == 0 ? 'backlog' : _carry,
             nextSprintId: open > 0 && _carry == 'next' ? _next : '',
           )),
-          child: const Text('Complete sprint'),
+          child: Text(context.l10n.grpACompleteSprint),
         ),
       ],
     );
@@ -410,7 +423,7 @@ class _PointsState extends State<PointsDialog> {
     if (t.isNotEmpty) {
       final v = double.tryParse(t);
       if (v == null || v < 0) {
-        setState(() => _error = 'Use a number, or leave empty to clear.');
+        setState(() => _error = context.l10n.grpAPointsInvalid);
         return;
       }
     }
@@ -419,24 +432,27 @@ class _PointsState extends State<PointsDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text('Points for ${widget.task.key}'),
+    title: Text(context.l10n.grpAPointsFor(widget.task.key)),
     content: TextField(
       key: const Key('points-field'),
       controller: _c,
       autofocus: true,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      decoration: InputDecoration(labelText: 'Story points', errorText: _error),
+      decoration: InputDecoration(
+        labelText: context.l10n.grpAStoryPoints,
+        errorText: _error,
+      ),
       onSubmitted: (_) => _ok(),
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpACancel),
       ),
       FilledButton(
         key: const Key('points-save'),
         onPressed: _ok,
-        child: const Text('Save'),
+        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -444,9 +460,9 @@ class _PointsState extends State<PointsDialog> {
 
 /// Asks for the sprint's capacity; returns the text ('' clears it).
 class CapacityDialog extends StatefulWidget {
-  const CapacityDialog({super.key, required this.unit, this.value});
+  const CapacityDialog({super.key, required this.hours, this.value});
 
-  final String unit;
+  final bool hours;
   final double? value;
 
   @override
@@ -466,7 +482,11 @@ class _CapacityState extends State<CapacityDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text('Capacity in ${widget.unit}'),
+    title: Text(
+      widget.hours
+          ? context.l10n.grpACapacityInHours
+          : context.l10n.grpACapacityInPoints,
+    ),
     content: TextField(
       key: const Key('capacity-field'),
       controller: _c,
@@ -476,12 +496,12 @@ class _CapacityState extends State<CapacityDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpACancel),
       ),
       FilledButton(
         key: const Key('capacity-save'),
         onPressed: () => Navigator.of(context).pop(_c.text.trim()),
-        child: const Text('Save'),
+        child: Text(context.l10n.grpASave),
       ),
     ],
   );

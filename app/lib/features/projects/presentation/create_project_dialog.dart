@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_look_picker.dart';
@@ -84,7 +85,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('New project'),
+    title: Text(context.l10n.grpHNewProject),
     content: SizedBox(
       width: 420,
       child: Form(
@@ -98,7 +99,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
                 key: const Key('project-name'),
                 controller: _name,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: context.l10n.grpHName),
                 validator: validateProjectName,
                 onChanged: _nameChanged,
               ),
@@ -112,8 +113,8 @@ class _State extends ConsumerState<CreateProjectDialog> {
                   ),
                 ],
                 decoration: InputDecoration(
-                  labelText: 'Key',
-                  helperText: 'Prefix of task numbers, e.g. WEB-12',
+                  labelText: context.l10n.grpHKey,
+                  helperText: context.l10n.grpHKeyHelp,
                   errorText: _keyError,
                 ),
                 validator: validateProjectKey,
@@ -126,7 +127,9 @@ class _State extends ConsumerState<CreateProjectDialog> {
                 key: const Key('project-description'),
                 controller: _description,
                 maxLines: 2,
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.grpHDescription,
+                ),
               ),
               const SizedBox(height: 16),
               ProjectLookPicker(
@@ -159,12 +162,12 @@ class _State extends ConsumerState<CreateProjectDialog> {
     actions: [
       TextButton(
         onPressed: _busy ? null : () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpHCancel),
       ),
       FilledButton(
         key: const Key('create-project'),
         onPressed: _busy ? null : _submit,
-        child: const Text('Create'),
+        child: Text(context.l10n.grpHCreate),
       ),
     ],
   );

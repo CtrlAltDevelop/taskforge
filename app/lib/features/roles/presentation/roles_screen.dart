@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
@@ -22,18 +23,18 @@ class RolesScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-settings'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpJBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/workspaces/settings'),
         ),
-        title: const Text('Roles and permissions'),
+        title: Text(context.l10n.grpJRolesAndPermissions),
         actions: [
           PermissionGate(
             permission: Perm.roleManage,
             child: TextButton.icon(
               key: const Key('new-role'),
               icon: const Icon(Icons.add),
-              label: const Text('New role'),
+              label: Text(context.l10n.grpJNewRole),
               onPressed: roles.hasValue
                   ? () => createRoleFlow(context, ref, roles.requireValue)
                   : null,
@@ -47,7 +48,7 @@ class RolesScreen extends ConsumerWidget {
           child: TextButton(
             key: const Key('retry-roles'),
             onPressed: () => ref.invalidate(rolesProvider),
-            child: Text('${roleErrorMessage(e)} Retry'),
+            child: Text(context.l10n.grpJErrorRetry(roleErrorMessage(e))),
           ),
         ),
         data: (catalog) => LayoutBuilder(

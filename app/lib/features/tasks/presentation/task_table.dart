@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/i18n/directional_icon.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/presentation/live_flash.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -278,7 +280,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
           ),
           _HeaderCell(
             columnKey: 'title',
-            label: 'Title',
+            label: context.l10n.grpFColTitle,
             width: layout.widthOf('title'),
             sort: _sortOf('title'),
             sortable: true,
@@ -355,16 +357,18 @@ class _TaskTableState extends ConsumerState<TaskTable> {
         },
         child: Container(
           foregroundDecoration: focused ? _focusBorder(context) : null,
-          padding: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsetsDirectional.only(start: 8),
           child: Row(
             children: [
-              Icon(group.collapsed ? Icons.chevron_right : Icons.expand_more),
+              DirectionalIcon(
+                group.collapsed ? Icons.chevron_right : Icons.expand_more,
+              ),
               if (color != null) ...[
                 Icon(Icons.circle, size: 10, color: color),
                 const SizedBox(width: 6),
               ],
               Text(
-                widget.lookups.groupLabel(groupBy, group.key),
+                widget.lookups.groupLabel(groupBy, group.key, context.l10n),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(width: 8),
@@ -423,7 +427,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
                 SizedBox(
                   width: layout.widthOf(c),
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsetsDirectional.only(end: 8),
                     child: TaskCell(
                       column: c,
                       task: task,
@@ -438,14 +442,14 @@ class _TaskTableState extends ConsumerState<TaskTable> {
                     ? null
                     : PopupMenuButton<TaskAction>(
                         key: Key('task-menu-${task.id}'),
-                        tooltip: 'More',
+                        tooltip: context.l10n.grpFMore,
                         onSelected: (a) => widget.onAction(a, task),
                         itemBuilder: (_) => [
                           for (final a in actions)
                             PopupMenuItem(
                               key: Key('${a.name}-${task.id}'),
                               value: a,
-                              child: Text(a.label),
+                              child: Text(a.labelIn(context.l10n)),
                             ),
                         ],
                       ),
@@ -485,7 +489,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
                 key: Key('toggle-${task.id}'),
                 padding: EdgeInsets.zero,
                 tooltip: entry.expanded ? 'Collapse' : 'Expand',
-                icon: Icon(
+                icon: DirectionalIcon(
                   entry.expanded ? Icons.expand_more : Icons.chevron_right,
                 ),
                 onPressed: () => ref

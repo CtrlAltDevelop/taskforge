@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/account/language_menu.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
 /// One text field of an [AuthForm].
@@ -15,7 +17,7 @@ class AuthField {
 
   final Key key;
   final String label;
-  final FormFieldValidator<String>? validator;
+  final AuthValidator? validator;
 
   /// Hide the text, with a show/hide toggle.
   final bool secret;
@@ -71,13 +73,14 @@ class _AuthFormState extends State<AuthForm> {
       _busy = true;
       _error = null;
     });
+    final l10n = context.l10n;
     String? error;
     try {
       await widget.onSubmit([for (final c in _controllers) c.text]);
     } on AuthApiException catch (e) {
-      error = authErrorMessage(e);
+      error = authErrorMessage(e, l10n);
     } on NetworkUnavailable catch (e) {
-      error = authErrorMessage(e);
+      error = authErrorMessage(e, l10n);
     }
     if (!mounted) return;
     setState(() {
@@ -96,7 +99,9 @@ class _AuthFormState extends State<AuthForm> {
         labelText: spec.label,
         suffixIcon: spec.secret
             ? IconButton(
-                tooltip: _hidden[index] ? 'Show password' : 'Hide password',
+                tooltip: _hidden[index]
+                    ? context.l10n.showPassword
+                    : context.l10n.hidePassword,
                 icon: Icon(
                   _hidden[index] ? Icons.visibility : Icons.visibility_off,
                 ),
@@ -109,7 +114,9 @@ class _AuthFormState extends State<AuthForm> {
       keyboardType: spec.keyboardType,
       autofillHints: spec.autofillHints,
       textInputAction: last ? TextInputAction.done : TextInputAction.next,
-      validator: spec.validator,
+      validator: spec.validator == null
+          ? null
+          : (value) => spec.validator!(value, context.l10n),
       onFieldSubmitted: last ? (_) => _submit() : null,
     );
   }
@@ -118,7 +125,10 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: const [LanguageMenuButton()],
+      ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),

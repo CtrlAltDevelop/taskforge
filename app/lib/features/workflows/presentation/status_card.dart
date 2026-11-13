@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
@@ -40,11 +41,14 @@ class StatusCard extends StatelessWidget {
   final void Function(DraftStatus target) onToggleMove;
   final void Function(DraftStatus target) onConditions;
 
-  String _summary(WorkflowTransition t) => [
-    if (t.requireAssignee) 'needs an assignee',
-    if (t.requireSubtasksDone) 'needs all subtasks done',
+  String _summary(BuildContext context, WorkflowTransition t) => [
+    if (t.requireAssignee) context.l10n.grpINeedsAssignee,
+    if (t.requireSubtasksDone) context.l10n.grpINeedsSubtasksDone,
     if (t.requiredRoleId.isNotEmpty)
-      'only ${roles.where((r) => r.id == t.requiredRoleId).firstOrNull?.name ?? 'one role'}',
+      context.l10n.grpIOnlyRoleLower(
+        roles.where((r) => r.id == t.requiredRoleId).firstOrNull?.name ??
+            context.l10n.grpIOneRole,
+      ),
   ].join(', ');
 
   @override
@@ -73,14 +77,14 @@ class StatusCard extends StatelessWidget {
                     child: Icon(
                       Icons.drag_handle,
                       key: Key('status-handle-$key'),
-                      semanticLabel: 'Drag to reorder',
+                      semanticLabel: context.l10n.grpIDragToReorder,
                     ),
                   ),
                 ),
                 PopupMenuButton<String>(
                   key: Key('status-color-$key'),
                   enabled: canEdit,
-                  tooltip: 'Colour',
+                  tooltip: context.l10n.grpIColour,
                   onSelected: onRecolor,
                   itemBuilder: (_) => [
                     for (final c in statusColors)
@@ -114,21 +118,21 @@ class StatusCard extends StatelessWidget {
                 IconButton(
                   key: Key('status-default-$key'),
                   tooltip: status.isDefault
-                      ? 'New tasks start here'
-                      : 'Make this the status new tasks start in',
+                      ? context.l10n.grpINewTasksStartHere
+                      : context.l10n.grpIMakeDefaultStatus,
                   icon: Icon(status.isDefault ? Icons.star : Icons.star_border),
                   onPressed: canEdit && !status.isDefault ? onDefault : null,
                 ),
                 IconButton(
                   key: Key('status-delete-$key'),
-                  tooltip: 'Delete status',
+                  tooltip: context.l10n.grpIDeleteStatus,
                   icon: const Icon(Icons.delete_outline),
                   onPressed: canEdit ? onDelete : null,
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsetsDirectional.only(start: 8),
               child: DropdownButton<StatusCategory>(
                 key: Key('status-category-$key'),
                 value: status.category,
@@ -145,17 +149,15 @@ class StatusCard extends StatelessWidget {
             ),
             if (status.taskCount > 0 && !status.isNew)
               Padding(
-                padding: const EdgeInsets.only(left: 8, top: 4),
+                padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
                 child: Text(
-                  status.taskCount == 1
-                      ? '1 task'
-                      : '${status.taskCount} tasks',
+                  context.l10n.grpITaskCount(status.taskCount),
                   style: theme.textTheme.bodySmall,
                 ),
               ),
             for (final p in problems)
               Padding(
-                padding: const EdgeInsets.only(left: 8, top: 4),
+                padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
                 child: Text(
                   p.message,
                   key: Key('problem-${p.code}-$key'),
@@ -164,7 +166,10 @@ class StatusCard extends StatelessWidget {
               ),
             if (draft.restrict) ...[
               const Divider(),
-              Text('Can move to', style: theme.textTheme.labelMedium),
+              Text(
+                context.l10n.grpICanMoveTo,
+                style: theme.textTheme.labelMedium,
+              ),
               const SizedBox(height: 4),
               Wrap(
                 spacing: 8,
@@ -178,6 +183,7 @@ class StatusCard extends StatelessWidget {
                       canEdit: canEdit,
                       summary: draft.allows(key, other.key)
                           ? _summary(
+                              context,
                               draft.transitions.firstWhere(
                                 (t) => t.from == key && t.to == other.key,
                               ),
@@ -223,18 +229,17 @@ class _MoveChip extends StatelessWidget {
       children: [
         FilterChip(
           key: Key('move-${from.key}-${to.key}'),
-          label: Text(
-            summary.isEmpty
-                ? (to.name.isEmpty ? '(unnamed)' : to.name)
-                : '${to.name.isEmpty ? '(unnamed)' : to.name} · $summary',
-          ),
+          label: Text(() {
+            final name = to.name.isEmpty ? context.l10n.grpIUnnamed : to.name;
+            return summary.isEmpty ? name : '$name · $summary';
+          }()),
           selected: allowed,
           onSelected: canEdit ? (_) => onToggle() : null,
         ),
         if (allowed && canEdit)
           IconButton(
             key: Key('conditions-${from.key}-${to.key}'),
-            tooltip: 'Conditions for this move',
+            tooltip: context.l10n.grpIConditionsForMove,
             visualDensity: VisualDensity.compact,
             icon: const Icon(Icons.tune, size: 18),
             onPressed: onConditions,
@@ -289,8 +294,8 @@ class _NameFieldState extends State<_NameField> {
     controller: _controller,
     enabled: widget.enabled,
     maxLength: maxStatusNameLength,
-    decoration: const InputDecoration(
-      labelText: 'Name',
+    decoration: InputDecoration(
+      labelText: context.l10n.grpIName,
       counterText: '',
       isDense: true,
     ),

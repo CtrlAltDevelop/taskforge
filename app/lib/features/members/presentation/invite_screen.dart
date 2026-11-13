@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -64,7 +65,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   Widget build(BuildContext context) {
     final preview = ref.watch(invitePreviewProvider(widget.token));
     return Scaffold(
-      appBar: AppBar(title: const Text('Invitation')),
+      appBar: AppBar(title: Text(context.l10n.grpJInvitationTitle)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
@@ -78,7 +79,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
                   key: const Key('retry-invite'),
                   onPressed: () =>
                       ref.invalidate(invitePreviewProvider(widget.token)),
-                  child: const Text('Retry'),
+                  child: Text(context.l10n.retry),
                 ),
               ),
               data: (p) {
@@ -100,8 +101,8 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   Widget _offer(InvitePreview p) {
     final failure = _failure;
     final inviter = p.inviterName.isEmpty
-        ? 'You have been invited to join'
-        : '${p.inviterName} invited you to join';
+        ? context.l10n.grpJInvitedToJoin
+        : context.l10n.grpJInviterInvitedYou(p.inviterName);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -126,12 +127,12 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
         FilledButton(
           key: const Key('join-workspace'),
           onPressed: _busy ? null : _accept,
-          child: const Text('Join'),
+          child: Text(context.l10n.grpJJoin),
         ),
         TextButton(
           key: const Key('decline-invite'),
           onPressed: _busy ? null : _decline,
-          child: const Text('Decline'),
+          child: Text(context.l10n.grpJDecline),
         ),
       ],
     );
@@ -159,7 +160,7 @@ class _Message extends StatelessWidget {
           TextButton(
             key: const Key('invite-home'),
             onPressed: () => context.go('/'),
-            child: const Text('Go to TaskForge'),
+            child: Text(context.l10n.grpJGoToTaskForge),
           ),
     ],
   );

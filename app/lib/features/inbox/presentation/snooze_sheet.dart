@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 
 /// Asks until when to hide a notification: a preset or a date and time of the
@@ -12,7 +14,7 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final (i, p) in snoozePresets(now).indexed)
+          for (final (i, p) in snoozePresets(now, l10n: sheet.l10n).indexed)
             ListTile(
               key: Key('snooze-preset-$i'),
               leading: const Icon(Icons.snooze),
@@ -23,7 +25,7 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
           ListTile(
             key: const Key('snooze-custom'),
             leading: const Icon(Icons.edit_calendar_outlined),
-            title: const Text('Pick date and time'),
+            title: Text(sheet.l10n.grpHPickDateTime),
             onTap: () async {
               final custom = await _pickDateTime(sheet, now);
               if (sheet.mounted) Navigator.of(sheet).pop(custom);
@@ -37,7 +39,7 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
 }
 
 Future<DateTime?> _pickDateTime(BuildContext context, DateTime now) async {
-  final day = await showDatePicker(
+  final day = await showAppDatePicker(
     context: context,
     initialDate: now,
     firstDate: now,

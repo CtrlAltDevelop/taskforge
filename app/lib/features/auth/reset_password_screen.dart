@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/auth_form.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
@@ -15,23 +16,24 @@ class ResetPasswordScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     final messenger = ScaffoldMessenger.of(context);
+    final updated = context.l10n.passwordUpdated;
     return AuthForm(
-      title: 'Set a new password',
-      submitLabel: 'Update password',
-      fields: const [
+      title: context.l10n.setNewPassword,
+      submitLabel: context.l10n.updatePassword,
+      fields: [
         AuthField(
-          key: Key('reset-code'),
-          label: 'Code from your email',
+          key: const Key('reset-code'),
+          label: context.l10n.codeFromEmail,
           validator: validateResetCode,
           keyboardType: TextInputType.number,
-          autofillHints: [AutofillHints.oneTimeCode],
+          autofillHints: const [AutofillHints.oneTimeCode],
         ),
         AuthField(
-          key: Key('new-password'),
-          label: 'New password',
+          key: const Key('new-password'),
+          label: context.l10n.newPassword,
           validator: validatePassword,
           secret: true,
-          autofillHints: [AutofillHints.newPassword],
+          autofillHints: const [AutofillHints.newPassword],
         ),
       ],
       onSubmit: (values) async {
@@ -40,9 +42,7 @@ class ResetPasswordScreen extends ConsumerWidget {
           code: values[0].trim(),
           newPassword: values[1],
         );
-        messenger.showSnackBar(
-          const SnackBar(content: Text('Password updated. Sign in with it.')),
-        );
+        messenger.showSnackBar(SnackBar(content: Text(updated)));
         if (context.mounted) context.go('/sign-in');
       },
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/fields/presentation/field_dialogs.dart';
@@ -126,9 +127,9 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text('Archived ${field.name}. Values are kept 30 days.'),
+            content: Text(context.l10n.grpIFieldArchived(field.name)),
             action: SnackBarAction(
-              label: 'Undo',
+              label: context.l10n.grpIUndo,
               onPressed: () => _restore(archived),
             ),
           ),
@@ -182,18 +183,18 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-to-settings'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpIBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/projects/${widget.projectId}/settings'),
         ),
-        title: const Text('Fields'),
+        title: Text(context.l10n.grpIFields),
       ),
       floatingActionButton: canEdit
           ? FloatingActionButton.extended(
               key: const Key('add-field'),
               onPressed: _add,
               icon: const Icon(Icons.add),
-              label: const Text('Add field'),
+              label: Text(context.l10n.grpIAddField),
             )
           : null,
       body: fields.when(
@@ -202,20 +203,20 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           child: TextButton(
             key: const Key('fields-retry'),
             onPressed: () => ref.invalidate(fieldsProvider(widget.projectId)),
-            child: Text('${fieldErrorMessage(e)} Retry'),
+            child: Text(context.l10n.grpIErrorRetry(fieldErrorMessage(e))),
           ),
         ),
         data: (loaded) {
           final shown = _reordered ?? loaded;
           return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 96),
             children: [
               if (shown.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(24),
+                Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Text(
-                    'No custom fields yet. Add one for things like Customer or Story points.',
-                    key: Key('fields-empty'),
+                    context.l10n.grpINoCustomFields,
+                    key: const Key('fields-empty'),
                   ),
                 ),
               ReorderableListView(
@@ -237,7 +238,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
               if (archived.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 Text(
-                  'Archived (restorable for 30 days)',
+                  context.l10n.grpIArchivedRestorable,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 for (final f in archived)
@@ -248,7 +249,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                     trailing: TextButton(
                       key: Key('restore-${f.id}'),
                       onPressed: () => _restore(f),
-                      child: const Text('Restore'),
+                      child: Text(context.l10n.grpIRestore),
                     ),
                   ),
               ],
@@ -286,8 +287,9 @@ class _FieldTile extends StatelessWidget {
       subtitle: Text(
         [
           field.type.label,
-          if (field.required) 'Required',
-          if (field.type.hasOptions) '${field.options.length} options',
+          if (field.required) context.l10n.grpIRequired,
+          if (field.type.hasOptions)
+            context.l10n.grpIOptionsCount(field.options.length),
         ].join(' · '),
       ),
       onTap: canEdit ? onEdit : null,
@@ -297,13 +299,13 @@ class _FieldTile extends StatelessWidget {
               children: [
                 IconButton(
                   key: Key('edit-${field.id}'),
-                  tooltip: 'Edit',
+                  tooltip: context.l10n.grpIEdit,
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: onEdit,
                 ),
                 IconButton(
                   key: Key('archive-${field.id}'),
-                  tooltip: 'Archive',
+                  tooltip: context.l10n.grpIArchive,
                   icon: const Icon(Icons.archive_outlined),
                   onPressed: onArchive,
                 ),

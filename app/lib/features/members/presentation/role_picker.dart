@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
@@ -45,7 +46,7 @@ class RolePicker extends ConsumerWidget {
     final roles = ref.watch(rolesProvider).value?.roles;
     if (!canSet || roles == null) return chip;
     return PopupMenuButton<Role>(
-      tooltip: 'Change role',
+      tooltip: context.l10n.grpJChangeRole,
       onSelected: (role) => _assign(context, ref, role),
       itemBuilder: (_) => [
         for (final role in roles)

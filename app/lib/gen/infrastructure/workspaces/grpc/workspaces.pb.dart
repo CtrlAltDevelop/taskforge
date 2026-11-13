@@ -2283,6 +2283,7 @@ class Workspace extends $pb.GeneratedMessage {
     $core.String? deletedAt,
     $core.int? version,
     $core.bool? isOwner,
+    $core.String? defaultLocale,
   }) {
     final result = Workspace._();
     if (id != null) result.id = id;
@@ -2294,6 +2295,7 @@ class Workspace extends $pb.GeneratedMessage {
     if (deletedAt != null) result.deletedAt = deletedAt;
     if (version != null) result.version = version;
     if (isOwner != null) result.isOwner = isOwner;
+    if (defaultLocale != null) result.defaultLocale = defaultLocale;
     return result;
   }
 
@@ -2320,6 +2322,7 @@ class Workspace extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'deletedAt')
     ..aI(8, _omitFieldNames ? '' : 'version')
     ..aOB(9, _omitFieldNames ? '' : 'isOwner')
+    ..aOS(10, _omitFieldNames ? '' : 'defaultLocale')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2422,6 +2425,15 @@ class Workspace extends $pb.GeneratedMessage {
   $core.bool hasIsOwner() => $_has(8);
   @$pb.TagNumber(9)
   void clearIsOwner() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get defaultLocale => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set defaultLocale($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasDefaultLocale() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearDefaultLocale() => $_clearField(10);
 }
 
 class WorkspaceCreateRequest extends $pb.GeneratedMessage {
@@ -2687,12 +2699,14 @@ class WorkspaceUpdateRequest extends $pb.GeneratedMessage {
     $core.int? expectedVersion,
     $core.String? name,
     $core.String? slug,
+    $core.String? defaultLocale,
   }) {
     final result = WorkspaceUpdateRequest._();
     if (id != null) result.id = id;
     if (expectedVersion != null) result.expectedVersion = expectedVersion;
     if (name != null) result.name = name;
     if (slug != null) result.slug = slug;
+    if (defaultLocale != null) result.defaultLocale = defaultLocale;
     return result;
   }
 
@@ -2714,6 +2728,7 @@ class WorkspaceUpdateRequest extends $pb.GeneratedMessage {
     ..aI(2, _omitFieldNames ? '' : 'expectedVersion')
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'slug')
+    ..aOS(5, _omitFieldNames ? '' : 'defaultLocale')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2775,6 +2790,15 @@ class WorkspaceUpdateRequest extends $pb.GeneratedMessage {
   $core.bool hasSlug() => $_has(3);
   @$pb.TagNumber(4)
   void clearSlug() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get defaultLocale => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set defaultLocale($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDefaultLocale() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDefaultLocale() => $_clearField(5);
 }
 
 const $core.bool _omitFieldNames =

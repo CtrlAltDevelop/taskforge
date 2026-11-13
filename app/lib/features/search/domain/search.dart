@@ -1,5 +1,9 @@
+import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What can be found. [wire] is what the server calls it.
 enum SearchKind {
@@ -12,8 +16,18 @@ enum SearchKind {
   const SearchKind(this.wire, this.label, this.icon);
 
   final String wire;
+
+  /// The English name; [labelIn] gives it in the language on screen.
   final String label;
   final IconData icon;
+
+  String labelIn(AppLocalizations l10n) => switch (this) {
+    task => l10n.grpFKindTasks,
+    comment => l10n.grpFKindComments,
+    project => l10n.grpFKindProjects,
+    member => l10n.grpFKindPeople,
+    doc => l10n.grpFKindPages,
+  };
 
   static SearchKind? of(String wire) {
     for (final k in values) {
@@ -111,27 +125,31 @@ class SearchException implements Exception {
   String toString() => 'SearchException($failure)';
 }
 
-String searchErrorMessage(Object error) {
-  if (error is! SearchException) return 'Something went wrong. Try again.';
+String searchErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (error is! SearchException) return t.grpFSearchErrGeneric;
   return switch (error.failure) {
-    SearchFailure.network =>
-      'Could not reach the server. Check your connection.',
-    SearchFailure.denied => 'You do not have access to search here.',
-    SearchFailure.rateLimited => 'Too many searches. Wait a moment.',
+    SearchFailure.network => t.grpFSearchErrNetwork,
+    SearchFailure.denied => t.grpFSearchErrDenied,
+    SearchFailure.rateLimited => t.grpFSearchErrRate,
     SearchFailure.invalid =>
       error.detail == null || error.detail!.isEmpty
-          ? 'That search is not valid.'
+          ? t.grpFSearchErrInvalid
           : error.detail!,
-    SearchFailure.other => 'Something went wrong. Try again.',
+    SearchFailure.other => t.grpFSearchErrGeneric,
   };
 }
 
 /// Operators the filter chips add to (or take from) the text.
-const operatorChips = <({String label, String operator})>[
-  (label: 'Assigned to me', operator: 'assignee:me'),
-  (label: 'Open', operator: 'status:open'),
-  (label: 'Done', operator: 'status:done'),
-];
+const operatorChips = <String>['assignee:me', 'status:open', 'status:done'];
+
+/// The name on the chip for one of the [operatorChips].
+String operatorChipLabel(String operator, AppLocalizations l10n) =>
+    switch (operator) {
+      'assignee:me' => l10n.grpFChipAssignedToMe,
+      'status:open' => l10n.grpFChipOpen,
+      _ => l10n.grpFChipDone,
+    };
 
 bool hasOperator(String text, String operator) =>
     text.split(RegExp(r'\s+')).contains(operator);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/presentation/live_flash.dart';
 
 import 'package:taskforge/features/fields/domain/field.dart';
@@ -162,7 +163,7 @@ class _MoveMenu extends StatelessWidget {
     height: 28,
     child: PopupMenuButton<String>(
       key: Key('card-menu-$taskId'),
-      tooltip: 'Move to…',
+      tooltip: context.l10n.grpFMoveTo,
       padding: EdgeInsets.zero,
       iconSize: 18,
       icon: const Icon(Icons.more_vert),
@@ -172,7 +173,7 @@ class _MoveMenu extends StatelessWidget {
           PopupMenuItem(
             key: Key('move-to-$taskId-${c.key}'),
             value: c.key,
-            child: Text('Move to ${c.label}'),
+            child: Text(context.l10n.grpFMoveToColumn(c.label)),
           ),
       ],
     ),
@@ -225,7 +226,8 @@ class _Avatars extends StatelessWidget {
               ),
             ),
           ),
-        if (names.length > 3) Text('+${names.length - 3}'),
+        if (names.length > 3)
+          Text(context.l10n.grpFPlusCount(names.length - 3)),
       ],
     ),
   );

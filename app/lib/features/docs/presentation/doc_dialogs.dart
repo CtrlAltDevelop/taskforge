@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/doc_ops.dart';
@@ -21,15 +22,15 @@ bool _okAddress(String v, {bool mail = true}) {
 Future<String?> askLink(BuildContext context, String current) =>
     showDialog<String>(
       context: context,
-      builder: (_) => _TextDialog(
-        title: 'Link',
-        label: 'Address (http, https or mailto)',
+      builder: (ctx) => _TextDialog(
+        title: ctx.l10n.grpBLinkTitle,
+        label: ctx.l10n.grpBLinkAddressLabel,
         fieldKey: 'link-field',
         okKey: 'link-ok',
         initial: current,
         allowEmpty: true,
         valid: (v) => v.isEmpty || _okAddress(v),
-        invalid: 'Use an http, https or mailto address.',
+        invalid: ctx.l10n.grpBLinkInvalid,
       ),
     );
 
@@ -38,15 +39,15 @@ Future<String?> askLink(BuildContext context, String current) =>
 Future<String?> askIcon(BuildContext context, String current) =>
     showDialog<String>(
       context: context,
-      builder: (_) => _TextDialog(
-        title: 'Page icon',
-        label: 'Emoji or short text (empty for none)',
+      builder: (ctx) => _TextDialog(
+        title: ctx.l10n.grpBIconTitle,
+        label: ctx.l10n.grpBIconLabel,
         fieldKey: 'icon-field',
         okKey: 'icon-ok',
         initial: current,
         allowEmpty: true,
         valid: (v) => v.characters.length <= 4,
-        invalid: 'Use at most four characters.',
+        invalid: ctx.l10n.grpBIconInvalid,
       ),
     );
 
@@ -116,12 +117,12 @@ class _TextDialogState extends State<_TextDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpBCancel),
       ),
       FilledButton(
         key: Key(widget.okKey),
         onPressed: _ok,
-        child: const Text('OK'),
+        child: Text(context.l10n.grpBOk),
       ),
     ],
   );
@@ -150,7 +151,7 @@ class _ImageDialogState extends State<_ImageDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Image'),
+    title: Text(context.l10n.grpBImageTitle),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -159,33 +160,33 @@ class _ImageDialogState extends State<_ImageDialog> {
           controller: _src,
           autofocus: true,
           decoration: InputDecoration(
-            labelText: 'Image address (http or https)',
+            labelText: context.l10n.grpBImageAddressLabel,
             errorText: _error,
           ),
         ),
         TextField(
           key: const Key('image-alt'),
           controller: _alt,
-          decoration: const InputDecoration(labelText: 'Description'),
+          decoration: InputDecoration(labelText: context.l10n.grpBDescription),
         ),
       ],
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpBCancel),
       ),
       FilledButton(
         key: const Key('image-ok'),
         onPressed: () {
           final src = _src.text.trim();
           if (!_okAddress(src, mail: false)) {
-            setState(() => _error = 'Use an http or https address.');
+            setState(() => _error = context.l10n.grpBImageInvalid);
             return;
           }
           Navigator.pop(context, {'src': src, 'alt': _alt.text.trim()});
         },
-        child: const Text('OK'),
+        child: Text(context.l10n.grpBOk),
       ),
     ],
   );
@@ -235,7 +236,7 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
   Widget build(BuildContext context) {
     final pasted = taskIdFromText(_c.text);
     return AlertDialog(
-      title: const Text('Embed a task'),
+      title: Text(context.l10n.grpBEmbedTaskTitle),
       content: SizedBox(
         width: 360,
         child: Column(
@@ -245,8 +246,8 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
               key: const Key('task-picker-field'),
               controller: _c,
               autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Search tasks or paste a task link',
+              decoration: InputDecoration(
+                labelText: context.l10n.grpBTaskSearchLabel,
               ),
               onChanged: (v) {
                 setState(() {});
@@ -258,7 +259,7 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
                 key: const Key('task-use-pasted'),
                 dense: true,
                 leading: const Icon(Icons.link),
-                title: const Text('Use the pasted task'),
+                title: Text(context.l10n.grpBUsePastedTask),
                 onTap: () => Navigator.pop(context, pasted),
               ),
             Flexible(
@@ -282,15 +283,15 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpBCancel),
         ),
       ],
     );
   }
 }
 
-String snippetOf(DocBlock? b) {
-  if (b == null) return '(removed)';
+String snippetOf(DocBlock? b, {String removed = '(removed)'}) {
+  if (b == null) return removed;
   final t = b.plain.trim();
   if (t.isEmpty) return '(${b.type})';
   return t.length > 80 ? '${t.substring(0, 80)}...' : t;
@@ -319,7 +320,7 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
     final merge = mergeFor(s, takeTheirs: _theirs);
     return AlertDialog(
       key: const Key('conflict-dialog'),
-      title: const Text('Someone else changed this page'),
+      title: Text(context.l10n.grpBConflictTitle),
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
@@ -329,15 +330,18 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
             children: [
               Text(
                 merge.clean
-                    ? 'Their changes do not overlap with yours. '
-                          'They will be merged.'
-                    : 'Both of you changed these blocks. Choose which to keep; '
-                          'everything else is merged.',
+                    ? context.l10n.grpBConflictClean
+                    : context.l10n.grpBConflictOverlap,
               ),
               for (final c in merge.conflicts) ...[
                 const Divider(),
                 Text(
-                  'Block: ${snippetOf(c.mine ?? c.theirs)}',
+                  context.l10n.grpBConflictBlock(
+                    snippetOf(
+                      c.mine ?? c.theirs,
+                      removed: context.l10n.grpBSnippetRemoved,
+                    ),
+                  ),
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 RadioGroup<bool>(
@@ -355,13 +359,27 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
                         key: Key('conflict-mine-${c.id}'),
                         dense: true,
                         value: false,
-                        title: Text('Mine: ${snippetOf(c.mine)}'),
+                        title: Text(
+                          context.l10n.grpBConflictMine(
+                            snippetOf(
+                              c.mine,
+                              removed: context.l10n.grpBSnippetRemoved,
+                            ),
+                          ),
+                        ),
                       ),
                       RadioListTile<bool>(
                         key: Key('conflict-theirs-${c.id}'),
                         dense: true,
                         value: true,
-                        title: Text('Theirs: ${snippetOf(c.theirs)}'),
+                        title: Text(
+                          context.l10n.grpBConflictTheirs(
+                            snippetOf(
+                              c.theirs,
+                              removed: context.l10n.grpBSnippetRemoved,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -375,7 +393,7 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
         TextButton(
           key: const Key('conflict-later'),
           onPressed: () => Navigator.pop(context),
-          child: const Text('Decide later'),
+          child: Text(context.l10n.grpBDecideLater),
         ),
         TextButton(
           key: const Key('conflict-take-theirs'),
@@ -383,7 +401,7 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
             notifier.takeTheirs();
             Navigator.pop(context);
           },
-          child: const Text('Discard mine'),
+          child: Text(context.l10n.grpBDiscardMine),
         ),
         FilledButton(
           key: const Key('conflict-apply'),
@@ -391,7 +409,7 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
             Navigator.pop(context);
             notifier.resolveConflict(merge.blocks);
           },
-          child: const Text('Apply and save'),
+          child: Text(context.l10n.grpBApplyAndSave),
         ),
       ],
     );
@@ -454,7 +472,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
     final canManage = s.canManage;
     return AlertDialog(
       key: const Key('share-dialog'),
-      title: const Text('Page access'),
+      title: Text(context.l10n.grpBShareTitle),
       content: SizedBox(
         width: 400,
         child: SingleChildScrollView(
@@ -463,12 +481,11 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
             children: [
               SwitchListTile(
                 key: const Key('share-restricted'),
-                title: const Text('Restrict this page'),
+                title: Text(context.l10n.grpBShareRestrict),
                 subtitle: Text(
                   _restricted
-                      ? 'Only the people below, its creator and page managers '
-                            '(also for the pages under it).'
-                      : 'Everyone who can open the parent can open it.',
+                      ? context.l10n.grpBShareRestrictedHint
+                      : context.l10n.grpBShareOpenHint,
                 ),
                 value: _restricted,
                 onChanged: canManage && !_busy
@@ -493,11 +510,9 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
                         : null,
                   ),
               if (!canManage)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Text(
-                    'You need permission "doc.manage" to change this.',
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(context.l10n.grpBShareNeedPermission),
                 ),
               if (_error != null)
                 Text(
@@ -512,13 +527,13 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpBClose),
         ),
         if (canManage)
           FilledButton(
             key: const Key('share-save'),
             onPressed: _busy ? null : _save,
-            child: const Text('Save'),
+            child: Text(context.l10n.grpBSave),
           ),
       ],
     );

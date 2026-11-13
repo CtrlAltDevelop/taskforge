@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart'
     show UploadSource;
 import 'package:taskforge/features/attachments/presentation/comment_attachments.dart';
@@ -12,16 +13,18 @@ import 'package:taskforge/features/comments/presentation/comment_dialogs.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 String _two(int n) => n.toString().padLeft(2, '0');
 
 /// "Today", "Yesterday" or the date.
-String dayLabel(DateTime at, DateTime now) {
+String dayLabel(DateTime at, DateTime now, {AppLocalizations? l10n}) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
   final d = DateTime(at.year, at.month, at.day);
   final today = DateTime(now.year, now.month, now.day);
   final gap = today.difference(d).inDays;
-  if (gap == 0) return 'Today';
-  if (gap == 1) return 'Yesterday';
+  if (gap == 0) return l.grpBToday;
+  if (gap == 1) return l.grpBYesterday;
   return '${d.year}-${_two(d.month)}-${_two(d.day)}';
 }
 
@@ -72,14 +75,14 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
   }
 
   String _nameOf(String id) {
-    if (id == ref.read(currentUserIdProvider)) return 'You';
+    if (id == ref.read(currentUserIdProvider)) return context.l10n.grpBYou;
     final members = ref.read(membersProvider).value ?? const [];
     for (final m in members) {
       if (m.userId == id) {
         return m.displayName.isEmpty ? m.email : m.displayName;
       }
     }
-    return 'Someone';
+    return context.l10n.grpBSomeone;
   }
 
   /// Sends and says what went wrong. A mention of somebody who cannot see the
@@ -150,7 +153,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           await _notifier.pin(c, pinned: !c.pinned);
         case _Action.subtask:
           await _notifier.toSubtask(c);
-          _say('Subtask created.');
+          if (mounted) _say(context.l10n.grpBSubtaskCreated);
         case _Action.history:
           final revisions = await _notifier.history(c);
           if (mounted) {
@@ -235,7 +238,9 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Comments${state.comments.isEmpty ? '' : ' (${state.comments.length})'}',
+          state.comments.isEmpty
+              ? context.l10n.grpBComments
+              : context.l10n.grpBCommentsCount(state.comments.length),
           style: Theme.of(context).textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
@@ -246,30 +251,38 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
               TextButton(
                 key: const Key('comments-retry'),
                 onPressed: _notifier.load,
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpBRetry),
               ),
             ],
           )
         else if (state.loading && state.comments.isEmpty)
           const _Skeleton(key: Key('comments-loading'))
         else if (state.comments.isEmpty)
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Text('No comments yet.', key: Key('no-comments')),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              context.l10n.grpBNoComments,
+              key: const Key('no-comments'),
+            ),
           ),
         if (state.hasEarlier)
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: TextButton(
               key: const Key('load-earlier'),
               onPressed: state.loadingEarlier ? null : _notifier.loadEarlier,
               child: Text(
-                state.loadingEarlier ? 'Loading…' : 'Load earlier comments',
+                state.loadingEarlier
+                    ? context.l10n.grpBLoading
+                    : context.l10n.grpBLoadEarlier,
               ),
             ),
           ),
         if (pinned.isNotEmpty) ...[
-          Text('Pinned', style: Theme.of(context).textTheme.labelMedium),
+          Text(
+            context.l10n.grpBPinned,
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
           for (final c in pinned)
             Padding(
               key: Key('pinned-${c.id}'),
@@ -285,11 +298,16 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           const Divider(),
         ],
         for (final c in top) ...[
-          if (dayLabel(c.createdAt.toLocal(), now) != lastDay)
+          if (dayLabel(c.createdAt.toLocal(), now, l10n: context.l10n) !=
+              lastDay)
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 2),
               child: Text(
-                lastDay = dayLabel(c.createdAt.toLocal(), now),
+                lastDay = dayLabel(
+                  c.createdAt.toLocal(),
+                  now,
+                  l10n: context.l10n,
+                ),
                 key: Key('day-$lastDay'),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
@@ -307,8 +325,8 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                 key: const Key('reply-composer'),
                 task: _ref,
                 autofocus: true,
-                hint: 'Reply…',
-                sendLabel: 'Reply',
+                hint: context.l10n.grpBReplyHint,
+                sendLabel: context.l10n.grpBReply,
                 onCancel: () => setState(() => _replyingTo = null),
                 allowFiles: !widget.archived,
                 onSend: (body, _, files) =>
@@ -327,8 +345,8 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
         else
           Text(
             widget.archived
-                ? 'This project is archived: comments are read-only.'
-                : 'You can read comments but not write them.',
+                ? context.l10n.grpBArchivedReadOnly
+                : context.l10n.grpBReadOnlyComments,
             key: const Key('comments-readonly'),
             style: Theme.of(context).textTheme.bodySmall,
           ),
@@ -399,7 +417,7 @@ class _CommentTile extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Text(
-          'Comment removed',
+          context.l10n.grpBCommentRemoved,
           key: Key('removed-${c.id}'),
           style: theme.textTheme.bodySmall?.copyWith(
             fontStyle: FontStyle.italic,
@@ -409,26 +427,32 @@ class _CommentTile extends StatelessWidget {
     }
     final menu = <PopupMenuEntry<_Action>>[
       if (canReply)
-        const PopupMenuItem(value: _Action.reply, child: Text('Reply')),
+        PopupMenuItem(
+          value: _Action.reply,
+          child: Text(context.l10n.grpBReply),
+        ),
       if (canEdit)
-        const PopupMenuItem(value: _Action.edit, child: Text('Edit')),
+        PopupMenuItem(value: _Action.edit, child: Text(context.l10n.grpBEdit)),
       if (canPin)
         PopupMenuItem(
           value: _Action.pin,
-          child: Text(c.pinned ? 'Unpin' : 'Pin'),
+          child: Text(c.pinned ? context.l10n.grpBUnpin : context.l10n.grpBPin),
         ),
       if (canSubtask)
-        const PopupMenuItem(
+        PopupMenuItem(
           value: _Action.subtask,
-          child: Text('Make a subtask'),
+          child: Text(context.l10n.grpBMakeSubtask),
         ),
       if (c.edited)
-        const PopupMenuItem(
+        PopupMenuItem(
           value: _Action.history,
-          child: Text('Edit history'),
+          child: Text(context.l10n.grpBEditHistory),
         ),
       if (canDelete)
-        const PopupMenuItem(value: _Action.delete, child: Text('Delete')),
+        PopupMenuItem(
+          value: _Action.delete,
+          child: Text(context.l10n.grpBDelete),
+        ),
     ];
     return Opacity(
       opacity: c.sendState == SendState.sending ? 0.6 : 1,
@@ -444,15 +468,14 @@ class _CommentTile extends StatelessWidget {
                 Text(clockOf(c.createdAt), style: theme.textTheme.labelSmall),
                 if (c.edited)
                   Tooltip(
-                    message:
-                        'Edited ${c.editCount == 1 ? 'once' : '${c.editCount} times'}: tap to see the history',
+                    message: context.l10n.grpBEditedTooltip(c.editCount),
                     child: InkWell(
                       key: Key('edited-${c.id}'),
                       onTap: () => onAction(_Action.history),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: Text(
-                          'edited',
+                          context.l10n.grpBEdited,
                           style: theme.textTheme.labelSmall,
                         ),
                       ),
@@ -464,7 +487,7 @@ class _CommentTile extends StatelessWidget {
                   PopupMenuButton<_Action>(
                     key: Key('menu-${c.id}'),
                     icon: const Icon(Icons.more_horiz, size: 18),
-                    tooltip: 'Comment actions',
+                    tooltip: context.l10n.grpBCommentActions,
                     onSelected: onAction,
                     itemBuilder: (_) => menu,
                   ),
@@ -476,7 +499,7 @@ class _CommentTile extends StatelessWidget {
                 task: task,
                 initialText: composerTextOf(c.body),
                 initialPicks: picksOf(c.body),
-                sendLabel: 'Save',
+                sendLabel: context.l10n.grpBSave,
                 autofocus: true,
                 onCancel: onCancelEdit,
                 onSend: (body, picks, _) => onSaveEdit(body, picks),
@@ -493,14 +516,14 @@ class _CommentTile extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.schedule,
                     size: 12,
-                    semanticLabel: 'Waiting to be sent',
+                    semanticLabel: context.l10n.grpBWaitingToSend,
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Sending…',
+                    context.l10n.grpBSending,
                     key: Key('sending-${c.id}'),
                     style: theme.textTheme.labelSmall,
                   ),
@@ -517,18 +540,18 @@ class _CommentTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Not sent',
+                    context.l10n.grpBNotSent,
                     style: TextStyle(color: theme.colorScheme.error),
                   ),
                   TextButton(
                     key: Key('retry-${c.id}'),
                     onPressed: onRetry,
-                    child: const Text('Retry'),
+                    child: Text(context.l10n.grpBRetry),
                   ),
                   TextButton(
                     key: Key('discard-${c.id}'),
                     onPressed: onDiscard,
-                    child: const Text('Discard'),
+                    child: Text(context.l10n.grpBDiscard),
                   ),
                 ],
               ),
@@ -585,7 +608,7 @@ class _Reactions extends StatelessWidget {
           PopupMenuButton<String>(
             key: Key('react-${comment.id}'),
             icon: const Icon(Icons.add_reaction_outlined, size: 18),
-            tooltip: 'Add a reaction',
+            tooltip: context.l10n.grpBAddReaction,
             onSelected: onReact,
             itemBuilder: (_) => [
               for (final e in quickReactions)

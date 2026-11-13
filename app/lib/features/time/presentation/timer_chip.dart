@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
@@ -68,15 +69,15 @@ class _TimerChipState extends ConsumerState<TimerChip> {
       elevation: 4,
       borderRadius: BorderRadius.circular(32),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 4, 4, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 4, 4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.fiber_manual_record,
               size: 12,
               color: Colors.redAccent,
-              semanticLabel: 'Timer running',
+              semanticLabel: context.l10n.grpJTimerRunning,
             ),
             const SizedBox(width: 8),
             InkWell(
@@ -104,7 +105,11 @@ class _TimerChipState extends ConsumerState<TimerChip> {
             ),
             IconButton(
               key: const Key('timer-stop'),
-              tooltip: withShortcut(ref, 'Stop the timer', 'timer.stop'),
+              tooltip: withShortcut(
+                ref,
+                context.l10n.grpJStopTheTimer,
+                'timer.stop',
+              ),
               color: theme.colorScheme.onInverseSurface,
               icon: const Icon(Icons.stop_circle_outlined),
               onPressed: _busy ? null : _stop,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -48,8 +49,11 @@ class _FeaturesSectionState extends ConsumerState<FeaturesSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Features', style: Theme.of(context).textTheme.titleLarge),
-        const Text('Switching a feature off hides it but keeps its data.'),
+        Text(
+          context.l10n.grpHFeatures,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        Text(context.l10n.grpHFeaturesHint),
         for (final f in widget.info)
           SwitchListTile(
             key: Key('feature-${f.key}'),

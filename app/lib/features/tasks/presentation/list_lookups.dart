@@ -6,6 +6,7 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What the list needs to put names to ids: the workflow's statuses, the
 /// project's members and its custom fields.
@@ -46,18 +47,19 @@ class ListLookups {
       builtInColumns.containsKey(column) || field(column) != null;
 
   /// The name of a group on its header.
-  String groupLabel(String groupBy, String key) {
+  String groupLabel(String groupBy, String key, [AppLocalizations? l10n]) {
+    final t = l10n ?? lookupAppLocalizations(const Locale('en'));
     if (key.isEmpty) {
       return switch (groupBy) {
-        'assignee' => 'Unassigned',
-        _ => 'No value',
+        'assignee' => t.grpFUnassigned,
+        _ => t.grpFNoValue,
       };
     }
     return switch (groupBy) {
-      'status' => flow?.statusById(key)?.name ?? 'Status',
+      'status' => flow?.statusById(key)?.name ?? t.grpFStatus,
       'priority' => TaskPriority.parse(key).label,
       'assignee' => person(key),
-      _ => field(groupBy)?.option(key)?.label ?? 'No value',
+      _ => field(groupBy)?.option(key)?.label ?? t.grpFNoValue,
     };
   }
 
@@ -70,10 +72,14 @@ class ListLookups {
   }
 
   /// What the group-by menu offers: the fixed ones and each select field.
-  List<({String key, String label})> get groupChoices => [
-    (key: 'status', label: 'Status'),
-    (key: 'assignee', label: 'Assignee'),
-    (key: 'priority', label: 'Priority'),
+  List<({String key, String label})> get groupChoices =>
+      groupChoicesFor(lookupAppLocalizations(const Locale('en')));
+
+  /// [groupChoices] with the built-in names in the language on screen.
+  List<({String key, String label})> groupChoicesFor(AppLocalizations l10n) => [
+    (key: 'status', label: l10n.grpFStatus),
+    (key: 'assignee', label: l10n.grpFAssignee),
+    (key: 'priority', label: l10n.grpFPriority),
     for (final f in fields)
       if (f.type == FieldType.select)
         (key: '$fieldColumnPrefix${f.id}', label: f.name),

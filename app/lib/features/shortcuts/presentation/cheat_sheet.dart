@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/actions/chord.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/shortcuts/data/shortcuts_client.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
@@ -11,7 +12,7 @@ import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
 /// Opens the list of every shortcut, where a key can also be changed.
 Future<void> openCheatSheet(BuildContext context) => showDialog<void>(
   context: context,
-  barrierLabel: 'Close the keyboard shortcuts',
+  barrierLabel: context.l10n.grpGCloseShortcuts,
   builder: (_) => const CheatSheet(),
 );
 
@@ -40,18 +41,18 @@ class CheatSheet extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 8, 8),
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 20, 8, 8),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      'Keyboard shortcuts',
+                      context.l10n.grpGKeyboardShortcuts,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   IconButton(
                     key: const Key('cheat-close'),
-                    tooltip: 'Close',
+                    tooltip: context.l10n.grpGClose,
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
@@ -66,7 +67,12 @@ class CheatSheet extends ConsumerWidget {
                   for (final MapEntry(key: group, value: actions)
                       in groups.entries) ...[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 12, 24, 4),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        24,
+                        12,
+                        24,
+                        4,
+                      ),
                       child: Text(
                         group,
                         style: Theme.of(context).textTheme.titleSmall,
@@ -105,17 +111,20 @@ class _Row extends ConsumerWidget {
     key: Key('cheat-${action.id}'),
     dense: true,
     title: Text(action.title),
-    subtitle: changed ? const Text('Changed by you') : null,
+    subtitle: changed ? Text(context.l10n.grpGChangedByYou) : null,
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (chord == null)
-          Text('none', style: Theme.of(context).textTheme.labelSmall)
+          Text(
+            context.l10n.grpGNone,
+            style: Theme.of(context).textTheme.labelSmall,
+          )
         else
           Keycap(chord!.label(isMac: isApplePlatform)),
         IconButton(
           key: Key('rebind-${action.id}'),
-          tooltip: 'Change the keys for ${action.title}',
+          tooltip: context.l10n.grpGChangeKeysFor(action.title),
           icon: const Icon(Icons.edit_outlined, size: 18),
           onPressed: () => showDialog<void>(
             context: context,
@@ -156,10 +165,10 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
     setState(() {
       _chord = chord;
       _problem = chord.isBrowserReserved
-          ? 'The browser keeps ${chord.label(isMac: isApplePlatform)}.'
+          ? context.l10n.grpGBrowserKeeps(chord.label(isMac: isApplePlatform))
           : clash == null
           ? null
-          : 'Already used by "${clash.title}".';
+          : context.l10n.grpGAlreadyUsedBy(clash.title);
     });
     return KeyEventResult.handled;
   }
@@ -178,10 +187,10 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
       setState(() {
         _saving = false;
         _problem = switch (e.failure) {
-          ShortcutFailure.conflict => 'Another action already uses those keys.',
+          ShortcutFailure.conflict => context.l10n.grpGKeysTaken,
           ShortcutFailure.invalid =>
-            e.detail.isEmpty ? 'Those keys cannot be used.' : e.detail,
-          _ => 'Could not save. Check your connection.',
+            e.detail.isEmpty ? context.l10n.grpGKeysInvalid : e.detail,
+          _ => context.l10n.grpGSaveFailed,
         };
       });
     }
@@ -194,9 +203,7 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
         ? null
         : ref.read(bindingsProvider).conflict(widget.action.id, home);
     if (clash != null) {
-      setState(
-        () => _problem = 'The default keys are used by "${clash.title}".',
-      );
+      setState(() => _problem = context.l10n.grpGDefaultUsedBy(clash.title));
       return;
     }
     setState(() => _saving = true);
@@ -210,8 +217,8 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
       setState(() {
         _saving = false;
         _problem = e.failure == ShortcutFailure.conflict
-            ? 'The default keys are used by another action.'
-            : 'Could not save. Check your connection.';
+            ? context.l10n.grpGDefaultUsedByOther
+            : context.l10n.grpGSaveFailed;
       });
     }
   }
@@ -227,7 +234,7 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
       if (!mounted) return;
       setState(() {
         _saving = false;
-        _problem = 'Could not save. Check your connection.';
+        _problem = context.l10n.grpGSaveFailed;
       });
     }
   }
@@ -239,7 +246,7 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
         .overrides
         .containsKey(widget.action.id);
     return AlertDialog(
-      title: Text('Keys for ${widget.action.title}'),
+      title: Text(context.l10n.grpGKeysFor(widget.action.title)),
       content: Focus(
         autofocus: true,
         onKeyEvent: _key,
@@ -247,7 +254,7 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Press the keys you want.'),
+            Text(context.l10n.grpGPressKeys),
             const SizedBox(height: 12),
             Text(
               _chord == null ? '…' : _chord!.label(isMac: isApplePlatform),
@@ -270,23 +277,23 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
           TextButton(
             key: const Key('rebind-reset'),
             onPressed: _saving ? null : _reset,
-            child: const Text('Use default'),
+            child: Text(context.l10n.grpGUseDefault),
           ),
         TextButton(
           key: const Key('rebind-unbind'),
           onPressed: _saving ? null : _unbind,
-          child: const Text('No key'),
+          child: Text(context.l10n.grpGNoKey),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpGCancel),
         ),
         FilledButton(
           key: const Key('rebind-save'),
           onPressed: _saving || _chord == null || _problem != null
               ? null
               : _save,
-          child: const Text('Save'),
+          child: Text(context.l10n.grpGSave),
         ),
       ],
     );

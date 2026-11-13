@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 
@@ -36,26 +37,31 @@ class DrillDialog extends ConsumerWidget {
       key: const Key('drill-dialog'),
       title: Text(
         tasks.hasValue
-            ? '$title · ${tasks.requireValue.tasks.length}'
-                  '${tasks.requireValue.truncated ? '+' : ''} '
-                  'task${tasks.requireValue.tasks.length == 1 ? '' : 's'}'
+            ? context.l10n.grpIDrillTitle(
+                title,
+                tasks.requireValue.tasks.length,
+                tasks.requireValue.truncated ? '+' : '',
+              )
             : title,
       ),
       content: SizedBox(
         width: 480,
         height: 360,
         child: switch (tasks) {
-          AsyncData(:final value) when value.tasks.isEmpty => const Center(
-            child: Text('No tasks.', key: Key('drill-empty')),
+          AsyncData(:final value) when value.tasks.isEmpty => Center(
+            child: Text(
+              context.l10n.grpINoTasks,
+              key: const Key('drill-empty'),
+            ),
           ),
           AsyncData(:final value) => ListView(
             children: [
               if (value.truncated)
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    'Only the first tasks are listed; narrow the filter to see the rest.',
-                    key: Key('drill-truncated'),
+                    context.l10n.grpIDrillTruncated,
+                    key: const Key('drill-truncated'),
                   ),
                 ),
               for (final t in value.tasks)
@@ -68,7 +74,8 @@ class DrillDialog extends ConsumerWidget {
                       t.statusName,
                       if (t.priority.isNotEmpty && t.priority != 'none')
                         t.priority,
-                      if (t.dueDate.isNotEmpty) 'due ${t.dueDate}',
+                      if (t.dueDate.isNotEmpty)
+                        context.l10n.grpIDueOn(t.dueDate),
                     ].join(' · '),
                   ),
                   onTap: () {
@@ -89,7 +96,7 @@ class DrillDialog extends ConsumerWidget {
                 TextButton(
                   key: const Key('drill-retry'),
                   onPressed: () => ref.invalidate(drilldownProvider(key)),
-                  child: const Text('Retry'),
+                  child: Text(context.l10n.grpIRetry),
                 ),
               ],
             ),
@@ -100,7 +107,7 @@ class DrillDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpIClose),
         ),
       ],
     );

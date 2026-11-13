@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -38,7 +39,7 @@ class ProjectSidebar extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
           child: Text(title, style: theme.textTheme.labelLarge),
         ),
         for (final p in items) ...[
@@ -54,7 +55,7 @@ class ProjectSidebar extends ConsumerWidget {
                     Icons.lock,
                     key: Key('private-${p.id}'),
                     size: 16,
-                    semanticLabel: 'Private',
+                    semanticLabel: context.l10n.grpEPrivate,
                   )
                 : null,
             onTap: () => _go(context, '/projects/${p.id}'),
@@ -64,20 +65,26 @@ class ProjectSidebar extends ConsumerWidget {
             ListTile(
               key: Key('open-sprints-${p.id}'),
               dense: true,
-              contentPadding: const EdgeInsets.only(left: 40, right: 16),
+              contentPadding: const EdgeInsetsDirectional.only(
+                start: 40,
+                end: 16,
+              ),
               selected: current == '/projects/${p.id}/sprints',
               leading: const Icon(Icons.timelapse, size: 20),
-              title: const Text('Sprints'),
+              title: Text(context.l10n.grpESprints),
               onTap: () => _go(context, '/projects/${p.id}/sprints'),
             ),
           if (current.startsWith('/projects/${p.id}'))
             ListTile(
               key: Key('open-automations-${p.id}'),
               dense: true,
-              contentPadding: const EdgeInsets.only(left: 40, right: 16),
+              contentPadding: const EdgeInsetsDirectional.only(
+                start: 40,
+                end: 16,
+              ),
               selected: current == '/projects/${p.id}/automations',
               leading: const Icon(Icons.bolt, size: 20),
-              title: const Text('Automations'),
+              title: Text(context.l10n.grpEAutomations),
               onTap: () => _go(context, '/projects/${p.id}/automations'),
             ),
         ],
@@ -90,7 +97,7 @@ class ProjectSidebar extends ConsumerWidget {
           key: const Key('open-search'),
           dense: true,
           leading: const Icon(Icons.search),
-          title: const Text('Search'),
+          title: Text(context.l10n.grpESearch),
           trailing: const ShortcutHint('search.open'),
           onTap: () {
             onNavigate?.call();
@@ -102,7 +109,7 @@ class ProjectSidebar extends ConsumerWidget {
           dense: true,
           selected: current.startsWith('/inbox'),
           leading: const InboxBadge(child: Icon(Icons.inbox_outlined)),
-          title: const Text('Inbox'),
+          title: Text(context.l10n.grpEInbox),
           trailing: const ShortcutHint('nav.inbox'),
           onTap: () => _go(context, '/inbox'),
         ),
@@ -111,7 +118,7 @@ class ProjectSidebar extends ConsumerWidget {
           dense: true,
           selected: current.startsWith('/timesheet'),
           leading: const Icon(Icons.schedule),
-          title: const Text('Timesheet'),
+          title: Text(context.l10n.grpETimesheet),
           trailing: const ShortcutHint('nav.timesheet'),
           onTap: () => _go(context, '/timesheet'),
         ),
@@ -120,7 +127,7 @@ class ProjectSidebar extends ConsumerWidget {
           dense: true,
           selected: current.startsWith('/dashboards'),
           leading: const Icon(Icons.dashboard_outlined),
-          title: const Text('Dashboards'),
+          title: Text(context.l10n.grpEDashboards),
           trailing: const ShortcutHint('nav.dashboards'),
           onTap: () => _go(context, '/dashboards'),
         ),
@@ -129,23 +136,26 @@ class ProjectSidebar extends ConsumerWidget {
           dense: true,
           selected: current.startsWith('/docs'),
           leading: const Icon(Icons.description_outlined),
-          title: const Text('Docs'),
+          title: Text(context.l10n.grpEDocs),
           trailing: const ShortcutHint('nav.docs'),
           onTap: () => _go(context, '/docs'),
         ),
         const Divider(height: 1),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 0),
           child: Row(
             children: [
               Expanded(
-                child: Text('Projects', style: theme.textTheme.titleMedium),
+                child: Text(
+                  context.l10n.grpEProjects,
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
               PermissionGate(
                 permission: Perm.projectCreate,
                 child: IconButton(
                   key: const Key('new-project'),
-                  tooltip: 'New project',
+                  tooltip: context.l10n.grpENewProject,
                   icon: const Icon(Icons.add),
                   onPressed: () => createProject(context),
                 ),
@@ -160,15 +170,17 @@ class ProjectSidebar extends ConsumerWidget {
             ),
             AsyncData() => ListView(
               children: [
-                if (favorites.isNotEmpty) section('Favorites', favorites),
-                if (others.isNotEmpty) section('Projects', others),
+                if (favorites.isNotEmpty)
+                  section(context.l10n.grpEFavorites, favorites),
+                if (others.isNotEmpty)
+                  section(context.l10n.grpEProjects, others),
               ],
             ),
             AsyncError() => Center(
               child: TextButton(
                 key: const Key('retry-projects'),
                 onPressed: () => ref.invalidate(projectsProvider),
-                child: const Text('Could not load projects. Retry'),
+                child: Text(context.l10n.grpEProjectsLoadRetry),
               ),
             ),
             _ => const Center(child: CircularProgressIndicator()),
@@ -179,7 +191,7 @@ class ProjectSidebar extends ConsumerWidget {
           key: const Key('open-archived'),
           dense: true,
           leading: const Icon(Icons.archive_outlined),
-          title: const Text('Archived projects'),
+          title: Text(context.l10n.grpEArchivedProjects),
           onTap: () => _go(context, '/projects/archived'),
         ),
         PermissionGate(
@@ -188,7 +200,7 @@ class ProjectSidebar extends ConsumerWidget {
             key: const Key('open-private-projects'),
             dense: true,
             leading: const Icon(Icons.lock_outline),
-            title: const Text('Private projects'),
+            title: Text(context.l10n.grpEPrivateProjects),
             onTap: () => _go(context, '/projects/private'),
           ),
         ),
@@ -208,7 +220,7 @@ class _Empty extends StatelessWidget {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('No projects yet', key: Key('projects-empty')),
+        Text(context.l10n.grpENoProjects, key: Key('projects-empty')),
         PermissionGate(
           permission: Perm.projectCreate,
           child: Padding(
@@ -216,7 +228,7 @@ class _Empty extends StatelessWidget {
             child: FilledButton(
               key: const Key('create-first-project'),
               onPressed: onCreate,
-              child: const Text('Create your first project'),
+              child: Text(context.l10n.grpECreateFirstProject),
             ),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
@@ -24,6 +25,7 @@ class ListToolbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final state = ref.watch(listLayoutProvider(projectId));
     final layout = state.layout;
     final notifier = ref.read(listLayoutProvider(projectId).notifier);
@@ -34,19 +36,19 @@ class ListToolbar extends ConsumerWidget {
         children: [
           PopupMenuButton<String>(
             key: const Key('sort-menu'),
-            tooltip: 'Sort',
+            tooltip: l10n.grpDSort,
             onSelected: (key) => key.isEmpty
                 ? notifier.update((l) => l.copyWith(sort: const []))
                 : notifier.update((l) => l.sortedBy(key)),
             itemBuilder: (_) => [
-              const PopupMenuItem(value: '', child: Text('No sort')),
+              PopupMenuItem(value: '', child: Text(l10n.grpDNoSort)),
               for (final key in ['title', ...layout.columns])
                 if (lookups.sortable(key))
                   PopupMenuItem(
                     key: Key('sort-$key'),
                     value: key,
                     child: Text(
-                      '${key == 'title' ? 'Title' : lookups.columnLabel(key)}'
+                      '${key == 'title' ? l10n.grpDTitle : lookups.columnLabel(key)}'
                       '${_arrow(layout, key)}',
                     ),
                   ),
@@ -54,22 +56,26 @@ class ListToolbar extends ConsumerWidget {
             child: _Chip(
               icon: Icons.sort,
               label: layout.sort.isEmpty
-                  ? 'Sort'
-                  : 'Sort: ${layout.sort.map((s) => _name(lookups, s.key)).join(', ')}',
+                  ? l10n.grpDSort
+                  : l10n.grpDSortBy(
+                      layout.sort
+                          .map((s) => _name(lookups, s.key, l10n.grpDTitle))
+                          .join(', '),
+                    ),
             ),
           ),
           PopupMenuButton<String>(
             key: const Key('group-menu'),
-            tooltip: 'Group',
+            tooltip: l10n.grpDGroup,
             onSelected: (key) => notifier.update((l) => l.groupedBy(key)),
             itemBuilder: (_) => [
               CheckedPopupMenuItem(
                 key: const Key('group-by-none'),
                 value: '',
                 checked: layout.groupBy.isEmpty,
-                child: const Text('No grouping'),
+                child: Text(l10n.grpDNoGrouping),
               ),
-              for (final g in lookups.groupChoices)
+              for (final g in lookups.groupChoicesFor(context.l10n))
                 CheckedPopupMenuItem(
                   key: Key('group-by-${g.key}'),
                   value: g.key,
@@ -80,13 +86,13 @@ class ListToolbar extends ConsumerWidget {
             child: _Chip(
               icon: Icons.view_agenda_outlined,
               label: layout.groupBy.isEmpty
-                  ? 'Group'
-                  : 'Group: ${_groupName(lookups, layout.groupBy)}',
+                  ? l10n.grpDGroup
+                  : l10n.grpDGroupBy(_groupName(lookups, layout.groupBy)),
             ),
           ),
           PopupMenuButton<String>(
             key: const Key('columns-menu'),
-            tooltip: 'Columns',
+            tooltip: l10n.grpDColumns,
             onSelected: (key) => notifier.update(
               (l) => l.withColumn(key, shown: !l.columns.contains(key)),
             ),
@@ -102,25 +108,23 @@ class ListToolbar extends ConsumerWidget {
                   child: Text(lookups.columnLabel(key)),
                 ),
             ],
-            child: const _Chip(
+            child: _Chip(
               icon: Icons.view_column_outlined,
-              label: 'Columns',
+              label: l10n.grpDColumns,
             ),
           ),
           _LayoutsMenu(projectId: projectId, state: state, canShare: canShare),
           IconButton(
             key: const Key('refresh-tasks'),
-            tooltip: 'Refresh',
+            tooltip: l10n.grpDRefresh,
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(taskListProvider(projectId).notifier).refresh(),
           ),
           if (state.saveFailed)
-            const Tooltip(
-              message:
-                  'Your layout could not be saved. It will be tried again '
-                  'on your next change.',
-              child: Icon(
+            Tooltip(
+              message: l10n.grpDLayoutNotSaved,
+              child: const Icon(
                 Icons.warning_amber,
                 key: Key('layout-not-saved'),
                 color: Colors.orange,
@@ -137,8 +141,8 @@ class ListToolbar extends ConsumerWidget {
     return layout.sort[i].desc ? '  ↓' : '  ↑';
   }
 
-  static String _name(ListLookups lookups, String key) =>
-      key == 'title' ? 'Title' : lookups.columnLabel(key);
+  static String _name(ListLookups lookups, String key, String titleLabel) =>
+      key == 'title' ? titleLabel : lookups.columnLabel(key);
 
   static String _groupName(ListLookups lookups, String key) =>
       lookups.groupChoices.where((g) => g.key == key).firstOrNull?.label ?? '';
@@ -183,10 +187,11 @@ class _LayoutsMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final notifier = ref.read(listLayoutProvider(projectId).notifier);
     return PopupMenuButton<Object>(
       key: const Key('layouts-menu'),
-      tooltip: 'Layouts',
+      tooltip: l10n.grpDLayouts,
       onSelected: (choice) async {
         switch (choice) {
           case _LayoutAction.reset:
@@ -213,26 +218,26 @@ class _LayoutsMenu extends ConsumerWidget {
             ),
           ),
         if (state.shared.isNotEmpty) const PopupMenuDivider(),
-        const PopupMenuItem<Object>(
-          key: Key('layout-reset'),
+        PopupMenuItem<Object>(
+          key: const Key('layout-reset'),
           value: _LayoutAction.reset,
-          child: Text('Reset my layout'),
+          child: Text(l10n.grpDResetLayout),
         ),
         if (canShare)
-          const PopupMenuItem<Object>(
-            key: Key('layout-share'),
+          PopupMenuItem<Object>(
+            key: const Key('layout-share'),
             value: _LayoutAction.shareNew,
-            child: Text('Share this layout…'),
+            child: Text(l10n.grpDShareLayoutMenu),
           ),
         if (canShare)
           for (final v in state.shared)
             PopupMenuItem<Object>(
               key: Key('shared-delete-${v.id}'),
               value: _DeleteShared(v),
-              child: Text('Delete shared “${v.name}”'),
+              child: Text(l10n.grpDDeleteShared(v.name)),
             ),
       ],
-      child: const _Chip(icon: Icons.bookmarks_outlined, label: 'Layouts'),
+      child: _Chip(icon: Icons.bookmarks_outlined, label: l10n.grpDLayouts),
     );
   }
 
@@ -241,21 +246,22 @@ class _LayoutsMenu extends ConsumerWidget {
     ListLayoutNotifier notifier,
     SavedView view,
   ) async {
+    final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     final sure = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Delete “${view.name}”?'),
-        content: const Text('It disappears for everyone on this project.'),
+        title: Text(l10n.grpDDeleteSharedTitle(view.name)),
+        content: Text(l10n.grpDDeleteSharedBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(l10n.grpDCancel),
           ),
           FilledButton(
             key: const Key('layout-delete-confirm'),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(l10n.grpDDelete),
           ),
         ],
       ),
@@ -263,13 +269,16 @@ class _LayoutsMenu extends ConsumerWidget {
     if (sure != true) return;
     try {
       await notifier.deleteShared(view);
-      messenger.showSnackBar(SnackBar(content: Text('Deleted “${view.name}”')));
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.grpDDeletedNamed(view.name))),
+      );
     } on ViewException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(viewErrorMessage(e))));
     }
   }
 
   Future<void> _share(BuildContext context, ListLayoutNotifier notifier) async {
+    final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     final name = await showDialog<String>(
       context: context,
@@ -278,7 +287,9 @@ class _LayoutsMenu extends ConsumerWidget {
     if (name == null) return;
     try {
       await notifier.shareCurrent(name);
-      messenger.showSnackBar(SnackBar(content: Text('Shared “$name”')));
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.grpDSharedNamed(name))),
+      );
     } on ViewException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(viewErrorMessage(e))));
     }
@@ -308,24 +319,24 @@ class _NameDialogState extends State<_NameDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Share this layout'),
+    title: Text(context.l10n.grpDShareLayoutTitle),
     content: TextField(
       key: const Key('layout-name'),
       controller: _controller,
       autofocus: true,
       maxLength: 60,
-      decoration: const InputDecoration(labelText: 'Name'),
+      decoration: InputDecoration(labelText: context.l10n.grpDName),
       onSubmitted: (_) => _done(),
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpDCancel),
       ),
       FilledButton(
         key: const Key('layout-share-confirm'),
         onPressed: _done,
-        child: const Text('Share'),
+        child: Text(context.l10n.grpDShare),
       ),
     ],
   );

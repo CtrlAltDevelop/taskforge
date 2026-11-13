@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/runs_panel.dart';
@@ -53,7 +54,7 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
     final scheme = Theme.of(context).colorScheme;
     final result = _result;
     return AlertDialog(
-      title: Text('Dry run: ${widget.rule.name}'),
+      title: Text(context.l10n.grpGDryRunTitle(widget.rule.name)),
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
@@ -61,19 +62,16 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Shows what would happen on a task. Nothing is changed, '
-                'sent or notified.',
-              ),
+              Text(context.l10n.grpGDryRunIntro),
               const SizedBox(height: 12),
               switch (tasks) {
                 AsyncData(:final value) => DropdownButtonFormField<String>(
                   key: const Key('dry-task'),
                   initialValue: _task,
                   isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Task',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpGTask,
+                    border: const OutlineInputBorder(),
                   ),
                   items: [
                     for (final t in value)
@@ -90,7 +88,7 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
                     _result = null;
                   }),
                 ),
-                AsyncError() => const Text('Could not load the tasks.'),
+                AsyncError() => Text(context.l10n.grpGTasksLoadFailed),
                 _ => const LinearProgressIndicator(),
               },
               if (_error != null)
@@ -106,8 +104,8 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
                 const Divider(height: 24),
                 Text(
                   result.wouldRun
-                      ? 'It would run.'
-                      : 'It would not run on this task.',
+                      ? context.l10n.grpGWouldRun
+                      : context.l10n.grpGWouldNotRun,
                   key: const Key('dry-verdict'),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
@@ -138,12 +136,12 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpGClose),
         ),
         FilledButton(
           key: const Key('dry-run'),
           onPressed: _task == null || _busy ? null : _run,
-          child: const Text('Run'),
+          child: Text(context.l10n.grpGRun),
         ),
       ],
     );

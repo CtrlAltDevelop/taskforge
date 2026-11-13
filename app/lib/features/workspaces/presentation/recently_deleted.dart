@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
@@ -27,7 +28,7 @@ class RecentlyDeleted extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recently deleted',
+            context.l10n.grpJRecentlyDeleted,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           for (final w in deleted)
@@ -38,7 +39,7 @@ class RecentlyDeleted extends ConsumerWidget {
               trailing: OutlinedButton(
                 key: Key('restore-${w.id}'),
                 onPressed: () => _restore(context, ref, w.id),
-                child: const Text('Restore'),
+                child: Text(context.l10n.grpJRestore),
               ),
             ),
         ],

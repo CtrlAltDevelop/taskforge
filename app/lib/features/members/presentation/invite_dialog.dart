@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/config.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/validators.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -23,10 +24,16 @@ class InviteDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TabBar(
+              TabBar(
                 tabs: [
-                  Tab(key: Key('invite-tab-email'), text: 'Email'),
-                  Tab(key: Key('invite-tab-link'), text: 'Link'),
+                  Tab(
+                    key: const Key('invite-tab-email'),
+                    text: context.l10n.email,
+                  ),
+                  Tab(
+                    key: const Key('invite-tab-link'),
+                    text: context.l10n.grpJLink,
+                  ),
                 ],
               ),
               const Flexible(
@@ -35,11 +42,11 @@ class InviteDialog extends StatelessWidget {
                 ),
               ),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
                   key: const Key('close-invite'),
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Close'),
+                  child: Text(context.l10n.close),
                 ),
               ),
             ],
@@ -82,13 +89,14 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
     for (final email in parts) {
       final problem = validateEmail(email);
       if (problem != null) {
-        setState(() => _fieldError = '"$email" is not a valid email address.');
+        setState(
+          () => _fieldError = context.l10n.grpJInviteInvalidEmail(email),
+        );
         return;
       }
       if (next.length >= maxInviteEmails) {
         setState(
-          () => _fieldError =
-              'You can invite at most $maxInviteEmails people at once.',
+          () => _fieldError = context.l10n.grpJInviteTooMany(maxInviteEmails),
         );
         return;
       }
@@ -146,12 +154,12 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
           controller: _input,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'Email addresses',
-            helperText: 'Separate several with commas. Up to $maxInviteEmails.',
+            labelText: context.l10n.grpJInviteEmails,
+            helperText: context.l10n.grpJInviteEmailsHelp(maxInviteEmails),
             errorText: _fieldError,
             suffixIcon: IconButton(
               key: const Key('add-email'),
-              tooltip: 'Add',
+              tooltip: context.l10n.grpJAdd,
               icon: const Icon(Icons.add),
               onPressed: _add,
             ),
@@ -193,18 +201,20 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
           key: const Key('send-invites'),
           onPressed: _busy || _emails.isEmpty ? null : _send,
           child: Text(
-            _emails.isEmpty ? 'Send invitations' : 'Send ${_emails.length}',
+            _emails.isEmpty
+                ? context.l10n.grpJInviteSendAll
+                : context.l10n.grpJInviteSendCount(_emails.length),
           ),
         ),
         if (result != null) ...[
           const SizedBox(height: 12),
           Text(
-            'Invited ${result.invitations.length}.',
+            context.l10n.grpJInvited(result.invitations.length),
             key: const Key('invite-sent'),
           ),
           if (result.skippedEmails.isNotEmpty)
             Text(
-              'Already members, skipped: ${result.skippedEmails.join(', ')}',
+              context.l10n.grpJInviteSkipped(result.skippedEmails.join(', ')),
               key: const Key('invite-skipped'),
             ),
         ],
@@ -214,7 +224,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
 }
 
 const _dayInSeconds = 86400;
-const _expiryChoices = {'1 day': 1, '7 days': 7, '30 days': 30};
+const _expiryDays = [1, 7, 30];
 
 class LinkInviteTab extends ConsumerStatefulWidget {
   const LinkInviteTab({super.key});
@@ -244,10 +254,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
     final text = _maxUses.text.trim();
     final uses = text.isEmpty ? 0 : int.tryParse(text);
     if (uses == null || uses < 0 || uses > maxLinkUses) {
-      setState(
-        () => _usesError =
-            'Enter a number from 1 to $maxLinkUses, or leave empty.',
-      );
+      setState(() => _usesError = context.l10n.grpJMaxUsesInvalid(maxLinkUses));
       return;
     }
     setState(() {
@@ -292,10 +299,10 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
         DropdownButtonFormField<int>(
           key: const Key('link-expiry'),
           initialValue: _days,
-          decoration: const InputDecoration(labelText: 'Expires after'),
+          decoration: InputDecoration(labelText: context.l10n.grpJExpiresAfter),
           items: [
-            for (final e in _expiryChoices.entries)
-              DropdownMenuItem(value: e.value, child: Text(e.key)),
+            for (final d in _expiryDays)
+              DropdownMenuItem(value: d, child: Text(context.l10n.grpJDays(d))),
           ],
           onChanged: (v) => setState(() => _days = v ?? _days),
         ),
@@ -305,8 +312,8 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
           controller: _maxUses,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: 'Max uses',
-            helperText: 'Leave empty for unlimited.',
+            labelText: context.l10n.grpJMaxUses,
+            helperText: context.l10n.grpJMaxUsesHelp,
             errorText: _usesError,
           ),
         ),
@@ -328,7 +335,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
         FilledButton(
           key: const Key('create-link'),
           onPressed: _busy ? null : _create,
-          child: const Text('Create link'),
+          child: Text(context.l10n.grpJCreateLink),
         ),
         if (token != null && token.isNotEmpty)
           ListTile(
@@ -339,7 +346,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             ),
             trailing: IconButton(
               key: const Key('copy-link'),
-              tooltip: 'Copy link',
+              tooltip: context.l10n.grpJCopyLink,
               icon: const Icon(Icons.copy),
               onPressed: () => copyInviteLink(context, token),
             ),
@@ -379,7 +386,7 @@ class InviteRoleField extends ConsumerWidget {
       child: DropdownButtonFormField<String>(
         key: Key(name),
         initialValue: values.contains(roleId) ? roleId : null,
-        decoration: const InputDecoration(labelText: 'Role'),
+        decoration: InputDecoration(labelText: context.l10n.grpJRole),
         items: [
           for (final r in roles)
             DropdownMenuItem(

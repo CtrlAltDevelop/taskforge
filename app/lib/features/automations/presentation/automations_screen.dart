@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/action_cards.dart';
@@ -11,6 +12,7 @@ import 'package:taskforge/features/projects/application/projects_providers.dart'
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// A project's rules and their run history.
 class AutomationsScreen extends ConsumerStatefulWidget {
@@ -42,19 +44,17 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text('Delete "${rule.name}"?'),
-        content: const Text(
-          'The rule stops for good. Its run history is deleted too.',
-        ),
+        title: Text(c.l10n.grpCAutoDeleteTitle(rule.name)),
+        content: Text(c.l10n.grpCAutoDeleteBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(c).pop(false),
-            child: const Text('Cancel'),
+            child: Text(c.l10n.grpCCancel),
           ),
           FilledButton(
             key: const Key('confirm-delete'),
             onPressed: () => Navigator.of(c).pop(true),
-            child: const Text('Delete'),
+            child: Text(c.l10n.grpCDelete),
           ),
         ],
       ),
@@ -70,12 +70,17 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     return ShellScaffold(
       appBar: AppBar(
         title: Text(
-          'Automations${project == null ? '' : ' · ${project.name}'}',
+          project == null
+              ? context.l10n.grpCAutoTitle
+              : context.l10n.grpCAutoTitleProject(project.name),
         ),
       ),
       body: switch (project) {
-        null when catalog.hasValue => const Center(
-          child: Text('Project not found.', key: Key('automations-missing')),
+        null when catalog.hasValue => Center(
+          child: Text(
+            context.l10n.grpCAutoMissing,
+            key: const Key('automations-missing'),
+          ),
         ),
         null => const Center(child: CircularProgressIndicator()),
         _ => _body(context),
@@ -102,9 +107,15 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
               SegmentedButton<bool>(
                 key: const Key('automations-tabs'),
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: false, label: Text('Rules')),
-                  ButtonSegment(value: true, label: Text('Run history')),
+                segments: [
+                  ButtonSegment(
+                    value: false,
+                    label: Text(context.l10n.grpCAutoRules),
+                  ),
+                  ButtonSegment(
+                    value: true,
+                    label: Text(context.l10n.grpCAutoRunHistory),
+                  ),
                 ],
                 selected: {_history},
                 onSelectionChanged: (s) => setState(() => _history = s.first),
@@ -113,7 +124,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
                 FilledButton.icon(
                   key: const Key('new-rule'),
                   icon: const Icon(Icons.add),
-                  label: const Text('New automation'),
+                  label: Text(context.l10n.grpCAutoNew),
                   onPressed: full
                       ? null
                       : () => showRuleBuilder(
@@ -122,14 +133,14 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
                         ),
                 ),
               if (!canManage)
-                const Chip(
-                  key: Key('read-only'),
-                  avatar: Icon(Icons.lock_outline, size: 16),
-                  label: Text('Read only'),
+                Chip(
+                  key: const Key('read-only'),
+                  avatar: const Icon(Icons.lock_outline, size: 16),
+                  label: Text(context.l10n.grpCAutoReadOnly),
                 ),
               if (full && !_history)
                 Text(
-                  'Limit of $maxRulesPerProject rules reached.',
+                  context.l10n.grpCAutoLimit(maxRulesPerProject),
                   key: const Key('rule-limit'),
                 ),
             ],
@@ -139,10 +150,10 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: InputChip(
                 key: const Key('history-filter'),
-                label: Text('Rule: ${_filter!.name}'),
+                label: Text(context.l10n.grpCAutoRuleFilter(_filter!.name)),
                 onDeleted: () => setState(() => _filter = null),
               ),
             ),
@@ -164,13 +175,12 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     AsyncValue<List<Automation>> rules,
     bool canManage,
   ) => switch (rules) {
-    AsyncData(:final value) when value.isEmpty => const Center(
+    AsyncData(:final value) when value.isEmpty => Center(
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         child: Text(
-          'No automations yet. A rule says: when something happens, and '
-          'if it matches, then do these things.',
-          key: Key('automations-empty'),
+          context.l10n.grpCAutoEmpty,
+          key: const Key('automations-empty'),
           textAlign: TextAlign.center,
         ),
       ),
@@ -209,7 +219,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
           ),
           TextButton(
             onPressed: () => ref.invalidate(automationsProvider),
-            child: const Text('Retry'),
+            child: Text(context.l10n.grpCRetry),
           ),
         ],
       ),
@@ -267,9 +277,14 @@ class RuleTile extends ConsumerWidget {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
-                          'When ${describeTrigger(rule.trigger, lookups)}'
-                          ' · ${rule.actions.length} '
-                          '${rule.actions.length == 1 ? 'action' : 'actions'}',
+                          context.l10n.grpCAutoWhen(
+                            describeTrigger(
+                              rule.trigger,
+                              lookups,
+                              context.l10n,
+                            ),
+                            rule.actions.length,
+                          ),
                         ),
                       ],
                     ),
@@ -287,7 +302,10 @@ class RuleTile extends ConsumerWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (rule.lastRunStatus.isEmpty)
-                  const Text('Never run', key: Key('never-run'))
+                  Text(
+                    context.l10n.grpCAutoNeverRun,
+                    key: const Key('never-run'),
+                  )
                 else
                   KeyedSubtree(
                     key: Key('last-${rule.id}'),
@@ -297,17 +315,17 @@ class RuleTile extends ConsumerWidget {
                 TextButton(
                   key: Key('history-${rule.id}'),
                   onPressed: onHistory,
-                  child: const Text('History'),
+                  child: Text(context.l10n.grpCAutoHistory),
                 ),
                 if (canManage) ...[
                   TextButton(
                     key: Key('dry-${rule.id}'),
                     onPressed: onDryRun,
-                    child: const Text('Dry run'),
+                    child: Text(context.l10n.grpCAutoDryRun),
                   ),
                   IconButton(
                     key: Key('delete-${rule.id}'),
-                    tooltip: 'Delete',
+                    tooltip: context.l10n.grpCDelete,
                     icon: const Icon(Icons.delete_outline),
                     onPressed: onDelete,
                   ),
@@ -322,20 +340,26 @@ class RuleTile extends ConsumerWidget {
 }
 
 /// A short phrase for the trigger.
-String describeTrigger(Trigger t, Lookups l) => switch (t.type) {
-  TriggerType.statusChanged =>
-    t.toStatus.isEmpty
-        ? 'a status changes'
-        : 'a task moves to ${l.status(t.toStatus)}',
-  TriggerType.fieldChanged =>
-    '${watchableFields[t.field] ?? l.fields[t.field] ?? t.field} changes',
-  TriggerType.assigned =>
-    t.userId.isEmpty
-        ? 'someone is assigned'
-        : '${l.user(t.userId)} is assigned',
-  TriggerType.dueDateReached =>
-    t.daysBefore == 0
-        ? 'a due date is reached'
-        : '${t.daysBefore} days before a due date',
-  _ => t.type.label.toLowerCase(),
-};
+///
+/// [loc] is the language to describe it in; English when left out.
+String describeTrigger(Trigger t, Lookups l, [AppLocalizations? loc]) {
+  final s = loc ?? lookupAppLocalizations(const Locale('en'));
+  return switch (t.type) {
+    TriggerType.statusChanged =>
+      t.toStatus.isEmpty
+          ? s.grpCAutoStatusChanges
+          : s.grpCAutoMovesTo(l.status(t.toStatus, s)),
+    TriggerType.fieldChanged => s.grpCAutoFieldChanges(
+      watchableFields[t.field] ?? l.fields[t.field] ?? t.field,
+    ),
+    TriggerType.assigned =>
+      t.userId.isEmpty
+          ? s.grpCAutoSomeoneAssigned
+          : s.grpCAutoUserAssigned(l.user(t.userId, s)),
+    TriggerType.dueDateReached =>
+      t.daysBefore == 0
+          ? s.grpCAutoDueReached
+          : s.grpCAutoDaysBefore(t.daysBefore),
+    _ => t.type.label.toLowerCase(),
+  };
+}

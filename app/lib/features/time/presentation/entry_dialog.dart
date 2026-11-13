@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 
 /// What the dialog gives back. When editing, [startedAt] and [durationSec] are
@@ -64,7 +66,7 @@ class _EntryDialogState extends State<_EntryDialog> {
   }
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2000),
@@ -78,7 +80,7 @@ class _EntryDialogState extends State<_EntryDialog> {
     final editingRunning = existing != null && existing.running;
     final seconds = editingRunning ? null : parseDuration(_duration.text);
     if (!editingRunning && seconds == null) {
-      setState(() => _problem = 'Enter a time like 1h 30m, 90m or 1:30.');
+      setState(() => _problem = context.l10n.grpABadDuration);
       return;
     }
     DateTime? started;
@@ -120,7 +122,11 @@ class _EntryDialogState extends State<_EntryDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.existing == null ? 'Add time' : 'Edit time'),
+    title: Text(
+      widget.existing == null
+          ? context.l10n.grpAAddTime
+          : context.l10n.grpAEditTime,
+    ),
     content: SizedBox(
       width: 360,
       child: Column(
@@ -132,7 +138,7 @@ class _EntryDialogState extends State<_EntryDialog> {
               controller: _duration,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: 'Time spent',
+                labelText: context.l10n.grpATimeSpent,
                 hintText: '1h 30m',
                 errorText: _problem,
               ),
@@ -150,12 +156,12 @@ class _EntryDialogState extends State<_EntryDialog> {
             key: const Key('entry-note'),
             controller: _note,
             maxLength: 500,
-            decoration: const InputDecoration(labelText: 'Note'),
+            decoration: InputDecoration(labelText: context.l10n.grpANote),
           ),
           SwitchListTile(
             key: const Key('entry-billable'),
             contentPadding: EdgeInsets.zero,
-            title: const Text('Billable'),
+            title: Text(context.l10n.grpABillable),
             value: _billable,
             onChanged: (v) => setState(() => _billable = v),
           ),
@@ -165,12 +171,12 @@ class _EntryDialogState extends State<_EntryDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpACancel),
       ),
       FilledButton(
         key: const Key('entry-save'),
         onPressed: _save,
-        child: const Text('Save'),
+        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -211,7 +217,7 @@ class _EstimateDialogState extends State<_EstimateDialog> {
     }
     final seconds = parseDuration(_text.text);
     if (seconds == null) {
-      setState(() => _problem = 'Enter a time like 1h 30m, 90m or 1:30.');
+      setState(() => _problem = context.l10n.grpABadDuration);
       return;
     }
     Navigator.of(context).pop(seconds);
@@ -219,14 +225,14 @@ class _EstimateDialogState extends State<_EstimateDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Estimate'),
+    title: Text(context.l10n.grpAEstimate),
     content: TextField(
       key: const Key('estimate-field'),
       controller: _text,
       autofocus: true,
       decoration: InputDecoration(
-        labelText: 'Estimated time',
-        hintText: 'Empty for none',
+        labelText: context.l10n.grpAEstimatedTime,
+        hintText: context.l10n.grpAEmptyForNone,
         errorText: _problem,
       ),
       onSubmitted: (_) => _save(),
@@ -234,12 +240,12 @@ class _EstimateDialogState extends State<_EstimateDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpACancel),
       ),
       FilledButton(
         key: const Key('estimate-save'),
         onPressed: _save,
-        child: const Text('Save'),
+        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -250,17 +256,17 @@ Future<bool> confirmDelete(BuildContext context) async =>
     await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete this time?'),
-        content: const Text('The logged time is removed for good.'),
+        title: Text(context.l10n.grpADeleteTimeTitle),
+        content: Text(context.l10n.grpADeleteTimeBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Keep'),
+            child: Text(context.l10n.grpAKeep),
           ),
           FilledButton(
             key: const Key('confirm-delete'),
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete'),
+            child: Text(context.l10n.grpADelete),
           ),
         ],
       ),

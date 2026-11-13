@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
 /// One task of the backlog or a sprint: a checkbox for multi-select, a handle
@@ -29,7 +30,7 @@ class PlanningTaskRow extends StatelessWidget {
     final points = task.points;
     return ListTile(
       dense: true,
-      contentPadding: const EdgeInsets.only(left: 4, right: 8),
+      contentPadding: const EdgeInsetsDirectional.only(start: 4, end: 8),
       leading: canDrag
           ? Row(
               mainAxisSize: MainAxisSize.min,
@@ -57,9 +58,9 @@ class PlanningTaskRow extends StatelessWidget {
                     opacity: 0.3,
                     child: Icon(Icons.drag_indicator),
                   ),
-                  child: const Tooltip(
-                    message: 'Drag to the other list',
-                    child: Icon(Icons.drag_indicator),
+                  child: Tooltip(
+                    message: context.l10n.grpGDragToOtherList,
+                    child: const Icon(Icons.drag_indicator),
                   ),
                 ),
               ],
@@ -76,7 +77,7 @@ class PlanningTaskRow extends StatelessWidget {
         [
           task.key,
           if (task.statusName.isNotEmpty) task.statusName,
-          if (task.late) 'added after start',
+          if (task.late) context.l10n.grpGAddedAfterStart,
         ].join(' · '),
         key: task.late ? Key('late-${task.id}') : null,
         style: task.late
@@ -86,7 +87,7 @@ class PlanningTaskRow extends StatelessWidget {
       trailing: ActionChip(
         key: Key('points-${task.id}'),
         label: Text(points == null ? '—' : pointsText(points)),
-        tooltip: 'Story points',
+        tooltip: context.l10n.grpGStoryPoints,
         onPressed: onPoints,
       ),
     );
@@ -144,7 +145,9 @@ class CapacityBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final unit = hours ? 'h' : ' pts';
+    final unit = hours
+        ? context.l10n.grpGUnitHours
+        : context.l10n.grpGUnitPoints;
     final load = pointsText(double.parse(capacity.load.toStringAsFixed(1)));
     final cap = capacity.capacity;
     return Padding(
@@ -157,8 +160,8 @@ class CapacityBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   capacity.known
-                      ? 'Load $load$unit of ${decimalText(cap!)}$unit'
-                      : 'Load $load$unit (no capacity set)',
+                      ? context.l10n.grpGLoadOf(load, unit, decimalText(cap!))
+                      : context.l10n.grpGLoadNoCapacity(load, unit),
                   key: const Key('capacity-text'),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: capacity.over ? theme.colorScheme.error : null,
@@ -168,7 +171,7 @@ class CapacityBar extends StatelessWidget {
               if (onEdit != null)
                 IconButton(
                   key: const Key('capacity-edit'),
-                  tooltip: 'Set capacity',
+                  tooltip: context.l10n.grpGSetCapacity,
                   icon: const Icon(Icons.tune, size: 18),
                   onPressed: onEdit,
                 ),
@@ -176,9 +179,15 @@ class CapacityBar extends StatelessWidget {
                 key: const Key('capacity-unit'),
                 showSelectedIcon: false,
                 style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                segments: const [
-                  ButtonSegment(value: false, label: Text('Points')),
-                  ButtonSegment(value: true, label: Text('Hours')),
+                segments: [
+                  ButtonSegment(
+                    value: false,
+                    label: Text(context.l10n.grpGPoints),
+                  ),
+                  ButtonSegment(
+                    value: true,
+                    label: Text(context.l10n.grpGHours),
+                  ),
                 ],
                 selected: {hours},
                 onSelectionChanged: (s) => onHours(s.first),
@@ -193,9 +202,12 @@ class CapacityBar extends StatelessWidget {
           ),
           if (capacity.over)
             Text(
-              'Over capacity by '
-              '${pointsText(double.parse((-capacity.remaining).toStringAsFixed(1)))}'
-              '$unit',
+              context.l10n.grpGOverCapacity(
+                pointsText(
+                  double.parse((-capacity.remaining).toStringAsFixed(1)),
+                ),
+                unit,
+              ),
               key: const Key('capacity-over'),
               style: TextStyle(color: theme.colorScheme.error),
             ),
@@ -232,12 +244,14 @@ class TaskListPane extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 8, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 8, 0),
           child: Row(
             children: [
               Expanded(
                 child: Text(
-                  list == null ? title : '$title (${list.length})',
+                  list == null
+                      ? title
+                      : context.l10n.grpGTitleWithCount(title, list.length),
                   style: theme.textTheme.titleMedium,
                 ),
               ),

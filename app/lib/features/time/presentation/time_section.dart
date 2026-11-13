@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -61,7 +62,7 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
           SnackBar(
             key: const Key('timer-replaced'),
             content: Text(
-              'Stopped the timer on ${stopped.key} ${stopped.title}',
+              context.l10n.grpJTimerStoppedOn(stopped.key, stopped.title),
             ),
           ),
         );
@@ -130,7 +131,7 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
       children: [
         Row(
           children: [
-            Text('Time', style: theme.textTheme.titleMedium),
+            Text(context.l10n.grpJTime, style: theme.textTheme.titleMedium),
             const Spacer(),
             if (canLog)
               runningHere
@@ -139,18 +140,18 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
                       onPressed: () =>
                           _do(() async => ref.read(timeActionsProvider).stop()),
                       icon: const Icon(Icons.stop),
-                      label: const Text('Stop'),
+                      label: Text(context.l10n.grpJStop),
                     )
                   : FilledButton.tonalIcon(
                       key: const Key('time-start'),
                       onPressed: _busy ? null : _start,
                       icon: const Icon(Icons.play_arrow),
-                      label: const Text('Start timer'),
+                      label: Text(context.l10n.grpJStartTimer),
                     ),
             if (canLog)
               IconButton(
                 key: const Key('time-add'),
-                tooltip: 'Add time',
+                tooltip: context.l10n.grpJAddTime,
                 icon: const Icon(Icons.add),
                 onPressed: _add,
               ),
@@ -193,8 +194,11 @@ class _SummaryLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final text = summary.hasEstimate
-        ? '${durationText(summary.loggedSec)} of ${durationText(summary.estimateSec)}'
-        : '${durationText(summary.loggedSec)} logged';
+        ? context.l10n.grpJTimeOfEstimate(
+            durationText(summary.loggedSec),
+            durationText(summary.estimateSec),
+          )
+        : context.l10n.grpJTimeLogged(durationText(summary.loggedSec));
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -211,13 +215,18 @@ class _SummaryLine extends StatelessWidget {
                     : null,
               ),
               if (summary.billableSec > 0)
-                Text('  ·  ${durationText(summary.billableSec)} billable'),
+                Text(
+                  '  ·  '
+                  '${context.l10n.grpJTimeBillable(durationText(summary.billableSec))}',
+                ),
               if (canEstimate)
                 TextButton(
                   key: const Key('time-estimate'),
                   onPressed: () => onEstimate(summary),
                   child: Text(
-                    summary.hasEstimate ? 'Change estimate' : 'Set estimate',
+                    summary.hasEstimate
+                        ? context.l10n.grpJChangeEstimate
+                        : context.l10n.grpJSetEstimate,
                   ),
                 ),
             ],
@@ -257,12 +266,14 @@ class _EntryTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(
         entry.running ? Icons.timer : Icons.schedule,
-        semanticLabel: entry.running ? 'Running' : 'Logged',
+        semanticLabel: entry.running
+            ? context.l10n.grpJRunning
+            : context.l10n.grpJLoggedLabel,
       ),
       title: Text(
-        '${entry.running ? 'Running' : durationText(entry.durationSec)}'
-        ' · ${mine ? 'you' : entry.userName} · $when'
-        '${entry.billable ? ' · billable' : ''}',
+        '${entry.running ? context.l10n.grpJRunning : durationText(entry.durationSec)}'
+        ' · ${mine ? context.l10n.grpJYou : entry.userName} · $when'
+        '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
       ),
       subtitle: Wrap(
         spacing: 8,
@@ -271,13 +282,13 @@ class _EntryTile extends StatelessWidget {
           if (entry.overlaps)
             Chip(
               key: Key('overlap-${entry.id}'),
-              label: const Text('Overlaps another entry'),
+              label: Text(context.l10n.grpJOverlapsEntry),
               visualDensity: VisualDensity.compact,
             ),
           if (entry.isLong)
             Chip(
               key: Key('long-${entry.id}'),
-              label: const Text('Over 24 h: check it'),
+              label: Text(context.l10n.grpJOver24h),
               visualDensity: VisualDensity.compact,
             ),
         ],
@@ -288,13 +299,13 @@ class _EntryTile extends StatelessWidget {
               children: [
                 IconButton(
                   key: Key('edit-${entry.id}'),
-                  tooltip: 'Edit',
+                  tooltip: context.l10n.grpJEdit,
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: onEdit,
                 ),
                 IconButton(
                   key: Key('delete-${entry.id}'),
-                  tooltip: 'Delete',
+                  tooltip: context.l10n.grpJDelete,
                   icon: const Icon(Icons.delete_outline),
                   onPressed: onDelete,
                 ),

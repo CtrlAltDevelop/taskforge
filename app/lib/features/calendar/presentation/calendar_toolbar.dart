@@ -1,37 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 
-const _months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+String _monthName(BuildContext context, int month) {
+  final l = context.l10n;
+  return switch (month) {
+    1 => l.grpEMonth1,
+    2 => l.grpEMonth2,
+    3 => l.grpEMonth3,
+    4 => l.grpEMonth4,
+    5 => l.grpEMonth5,
+    6 => l.grpEMonth6,
+    7 => l.grpEMonth7,
+    8 => l.grpEMonth8,
+    9 => l.grpEMonth9,
+    10 => l.grpEMonth10,
+    11 => l.grpEMonth11,
+    _ => l.grpEMonth12,
+  };
+}
 
-const _weekdays = {
-  0: 'Locale default',
-  1: 'Monday',
-  6: 'Saturday',
-  7: 'Sunday',
+String _weekdayName(BuildContext context, int day) {
+  final l = context.l10n;
+  return switch (day) {
+    0 => l.grpEWeekLocale,
+    1 => l.grpEMonday,
+    6 => l.grpESaturday,
+    _ => l.grpESunday,
+  };
+}
+
+const _weekdayKeys = [0, 1, 6, 7];
+
+String rangeTitle(
+  BuildContext context,
+  CalendarMode mode,
+  Day anchor,
+  Day first,
+  Day last,
+) => switch (mode) {
+  CalendarMode.month => '${_monthName(context, anchor.month)} ${anchor.year}',
+  CalendarMode.week => '${formatDay(first)} – ${formatDay(last)}',
+  CalendarMode.day => formatDay(anchor),
 };
-
-String rangeTitle(CalendarMode mode, Day anchor, Day first, Day last) =>
-    switch (mode) {
-      CalendarMode.month => '${_months[anchor.month - 1]} ${anchor.year}',
-      CalendarMode.week => '${formatDay(first)} – ${formatDay(last)}',
-      CalendarMode.day => formatDay(anchor),
-    };
 
 /// Previous / next / today, the title, the mode, what bars are coloured by,
 /// the first weekday and whether finished tasks show.
@@ -72,32 +87,32 @@ class CalendarToolbar extends ConsumerWidget {
         children: [
           IconButton(
             key: const Key('cal-prev'),
-            tooltip: 'Previous',
-            icon: const Icon(Icons.chevron_left),
+            tooltip: context.l10n.grpEPrevious,
+            icon: const DirectionalIcon(Icons.chevron_left),
             onPressed: () => cursor.shift(mode, -1),
           ),
           IconButton(
             key: const Key('cal-next'),
-            tooltip: 'Next',
-            icon: const Icon(Icons.chevron_right),
+            tooltip: context.l10n.grpENext,
+            icon: const DirectionalIcon(Icons.chevron_right),
             onPressed: () => cursor.shift(mode, 1),
           ),
           TextButton(
             key: const Key('cal-today'),
             onPressed: cursor.today,
-            child: const Text('Today'),
+            child: Text(context.l10n.grpEToday),
           ),
           if (onTray != null)
             IconButton(
               key: const Key('cal-tray-button'),
               onPressed: onTray,
-              tooltip: 'Unscheduled',
+              tooltip: context.l10n.grpEUnscheduled,
               icon: const Icon(Icons.inbox_outlined),
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              rangeTitle(mode, anchor, range.first, range.last),
+              rangeTitle(context, mode, anchor, range.first, range.last),
               key: const Key('cal-title'),
               style: Theme.of(context).textTheme.titleMedium,
             ),
@@ -106,10 +121,19 @@ class CalendarToolbar extends ConsumerWidget {
             SegmentedButton<CalendarMode>(
               key: const Key('cal-mode'),
               showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: CalendarMode.month, label: Text('Month')),
-                ButtonSegment(value: CalendarMode.week, label: Text('Week')),
-                ButtonSegment(value: CalendarMode.day, label: Text('Day')),
+              segments: [
+                ButtonSegment(
+                  value: CalendarMode.month,
+                  label: Text(context.l10n.grpEMonth),
+                ),
+                ButtonSegment(
+                  value: CalendarMode.week,
+                  label: Text(context.l10n.grpEWeek),
+                ),
+                ButtonSegment(
+                  value: CalendarMode.day,
+                  label: Text(context.l10n.grpEDay),
+                ),
               ],
               selected: {mode},
               onSelectionChanged: (v) =>
@@ -117,7 +141,7 @@ class CalendarToolbar extends ConsumerWidget {
             ),
             PopupMenuButton<String>(
               key: const Key('cal-color-menu'),
-              tooltip: 'Colour by',
+              tooltip: context.l10n.grpEColourBy,
               onSelected: (v) => notifier.update((l) => l.copyWith(colorBy: v)),
               itemBuilder: (_) => [
                 for (final c in [
@@ -129,49 +153,55 @@ class CalendarToolbar extends ConsumerWidget {
                     key: Key('cal-color-$c'),
                     value: c,
                     checked: layout.colorBy == c,
-                    child: Text(
-                      c == 'status' ? 'Colour by status' : 'Colour by priority',
-                    ),
+                    child: Text(switch (c) {
+                      'project' => context.l10n.grpEColourByProject,
+                      'status' => context.l10n.grpEColourByStatus,
+                      _ => context.l10n.grpEColourByPriority,
+                    }),
                   ),
               ],
-              child: const _Chip(icon: Icons.palette_outlined, label: 'Colour'),
+              child: _Chip(
+                icon: Icons.palette_outlined,
+                label: context.l10n.grpEColourChip,
+              ),
             ),
             PopupMenuButton<int>(
               key: const Key('cal-week-menu'),
-              tooltip: 'Week starts on',
+              tooltip: context.l10n.grpEWeekStartsOn,
               onSelected: (v) =>
                   notifier.update((l) => l.copyWith(weekStart: v)),
               itemBuilder: (_) => [
-                for (final e in _weekdays.entries)
+                for (final d in _weekdayKeys)
                   CheckedPopupMenuItem(
-                    key: Key('cal-week-${e.key}'),
-                    value: e.key,
-                    checked: layout.weekStart == e.key,
-                    child: Text(e.value),
+                    key: Key('cal-week-$d'),
+                    value: d,
+                    checked: layout.weekStart == d,
+                    child: Text(_weekdayName(context, d)),
                   ),
               ],
-              child: const _Chip(icon: Icons.view_week_outlined, label: 'Week'),
+              child: _Chip(
+                icon: Icons.view_week_outlined,
+                label: context.l10n.grpEWeek,
+              ),
             ),
           ],
           FilterChip(
             key: const Key('cal-hide-done'),
-            label: const Text('Hide done'),
+            label: Text(context.l10n.grpEHideDone),
             selected: layout.hideDone,
             onSelected: (v) => notifier.update((l) => l.copyWith(hideDone: v)),
           ),
           IconButton(
             key: const Key('cal-refresh'),
-            tooltip: 'Refresh',
+            tooltip: context.l10n.grpERefresh,
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(calendarProvider(projectId).notifier).refresh(),
           ),
           if (state.saveFailed)
-            const Tooltip(
-              message:
-                  'Your calendar layout could not be saved. It will be tried '
-                  'again on your next change.',
-              child: Icon(
+            Tooltip(
+              message: context.l10n.grpELayoutNotSaved,
+              child: const Icon(
                 Icons.warning_amber,
                 key: Key('cal-layout-not-saved'),
                 color: Colors.orange,

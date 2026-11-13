@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 
@@ -29,12 +30,12 @@ class RelatedDocsPanel extends ConsumerWidget {
       context: context,
       builder: (context) => SimpleDialog(
         key: const Key('related-pick-dialog'),
-        title: const Text('Link a page'),
+        title: Text(context.l10n.grpJLinkAPage),
         children: [
           if (all.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('There are no pages yet.'),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(context.l10n.grpJNoPagesYetLong),
             ),
           for (final d in all)
             SimpleDialogOption(
@@ -75,19 +76,22 @@ class RelatedDocsPanel extends ConsumerWidget {
       children: [
         Row(
           children: [
-            Text('Related docs', style: theme.textTheme.titleSmall),
+            Text(
+              context.l10n.grpJRelatedDocs,
+              style: theme.textTheme.titleSmall,
+            ),
             const Spacer(),
             if (canEdit)
               IconButton(
                 key: const Key('add-related-doc'),
-                tooltip: 'Link a page',
+                tooltip: context.l10n.grpJLinkAPage,
                 icon: const Icon(Icons.post_add),
                 onPressed: () => _add(context, ref),
               ),
           ],
         ),
         if (docs.isEmpty)
-          Text('No pages yet.', style: theme.textTheme.bodySmall),
+          Text(context.l10n.grpJNoPagesYet, style: theme.textTheme.bodySmall),
         for (final r in docs)
           ListTile(
             key: Key('related-doc-${r.doc.id}'),
@@ -95,11 +99,15 @@ class RelatedDocsPanel extends ConsumerWidget {
             contentPadding: EdgeInsets.zero,
             leading: Text(r.doc.icon.isEmpty ? '📄' : r.doc.icon),
             title: Text(r.doc.label),
-            subtitle: Text(r.kind == 'link' ? 'Linked' : 'Embedded'),
+            subtitle: Text(
+              r.kind == 'link'
+                  ? context.l10n.grpJLinked
+                  : context.l10n.grpJEmbedded,
+            ),
             trailing: canEdit && r.kind == 'link'
                 ? IconButton(
                     key: Key('unlink-doc-${r.doc.id}'),
-                    tooltip: 'Unlink',
+                    tooltip: context.l10n.grpJUnlink,
                     icon: const Icon(Icons.link_off, size: 18),
                     onPressed: () => _unlink(context, ref, r.doc.id),
                   )

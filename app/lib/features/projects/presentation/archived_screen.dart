@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
@@ -21,10 +22,13 @@ class ArchivedProjectsScreen extends ConsumerWidget {
         if (p.isArchived) p,
     ];
     return ShellScaffold(
-      appBar: AppBar(title: const Text('Archived projects')),
+      appBar: AppBar(title: Text(context.l10n.grpHArchivedProjects)),
       body: switch (catalog) {
-        AsyncData() when archived.isEmpty => const Center(
-          child: Text('No archived projects.', key: Key('archived-empty')),
+        AsyncData() when archived.isEmpty => Center(
+          child: Text(
+            context.l10n.grpHNoArchived,
+            key: const Key('archived-empty'),
+          ),
         ),
         AsyncData() => ListView(
           children: [
@@ -43,7 +47,7 @@ class ArchivedProjectsScreen extends ConsumerWidget {
                       context,
                       () => ref.read(projectsControllerProvider).restore(p),
                     ),
-                    child: const Text('Restore'),
+                    child: Text(context.l10n.grpHRestore),
                   ),
                 ),
               ),
@@ -52,7 +56,7 @@ class ArchivedProjectsScreen extends ConsumerWidget {
         AsyncError() => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(projectsProvider),
-            child: const Text('Could not load projects. Retry'),
+            child: Text(context.l10n.grpHLoadProjectsRetry),
           ),
         ),
         _ => const Center(child: CircularProgressIndicator()),

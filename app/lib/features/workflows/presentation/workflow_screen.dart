@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -39,11 +40,11 @@ class WorkflowScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-to-settings'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpIBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/projects/$projectId/settings'),
         ),
-        title: const Text('Workflow'),
+        title: Text(context.l10n.grpIWorkflow),
         actions: [
           if (canEdit) ...[
             TextButton(
@@ -51,7 +52,7 @@ class WorkflowScreen extends ConsumerWidget {
               onPressed: editor.dirty && !editor.saving
                   ? notifier.discard
                   : null,
-              child: const Text('Discard'),
+              child: Text(context.l10n.grpIDiscard),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -60,16 +61,19 @@ class WorkflowScreen extends ConsumerWidget {
                 onPressed: editor.canSave
                     ? () async {
                         final messenger = ScaffoldMessenger.of(context);
+                        final saved = context.l10n.grpIWorkflowSaved;
                         if (await notifier.save()) {
                           messenger
                             ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              const SnackBar(content: Text('Workflow saved')),
-                            );
+                            ..showSnackBar(SnackBar(content: Text(saved)));
                         }
                       }
                     : null,
-                child: Text(editor.saving ? 'Saving…' : 'Save'),
+                child: Text(
+                  editor.saving
+                      ? context.l10n.grpISaving
+                      : context.l10n.grpISave,
+                ),
               ),
             ),
           ],
@@ -92,7 +96,11 @@ class WorkflowScreen extends ConsumerWidget {
         child: TextButton(
           key: const Key('retry-workflow'),
           onPressed: notifier.load,
-          child: Text('${workflowErrorMessage(editor.loadError!)} Retry'),
+          child: Text(
+            context.l10n.grpIErrorRetry(
+              workflowErrorMessage(editor.loadError!),
+            ),
+          ),
         ),
       );
     }
@@ -174,21 +182,16 @@ List<Widget> _listChildren(
   SwitchListTile(
     key: const Key('restrict-switch'),
     contentPadding: EdgeInsets.zero,
-    title: const Text('Restrict transitions'),
-    subtitle: const Text(
-      'Off: any status can move to any other. On: only the arrows you allow.',
-    ),
+    title: Text(context.l10n.grpIRestrictTransitions),
+    subtitle: Text(context.l10n.grpIRestrictTransitionsHint),
     value: editor.draft!.restrict,
     onChanged: canEdit ? (v) => notifier.edit((d) => d.setRestrict(v)) : null,
   ),
   SwitchListTile(
     key: const Key('restrict-creation-switch'),
     contentPadding: EdgeInsets.zero,
-    title: const Text('New tasks start in the default status only'),
-    subtitle: const Text(
-      'Off: a task can be created in any status. On: it starts in the status '
-      'marked with the star and reaches the others by being moved.',
-    ),
+    title: Text(context.l10n.grpIRestrictCreation),
+    subtitle: Text(context.l10n.grpIRestrictCreationHint),
     value: editor.draft!.restrictCreation,
     onChanged: canEdit
         ? (v) => notifier.edit((d) => d.setRestrictCreation(v))
@@ -235,15 +238,15 @@ List<Widget> _listChildren(
     Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: OutlinedButton.icon(
           key: const Key('add-status'),
           icon: const Icon(Icons.add),
-          label: const Text('Add status'),
+          label: Text(context.l10n.grpIAddStatus),
           onPressed: () => notifier.edit(
             (d) => d.add(
               notifier.newKey(),
-              name: 'New status',
+              name: context.l10n.grpINewStatus,
               color: statusColors[d.statuses.length % statusColors.length],
             ),
           ),
@@ -274,7 +277,7 @@ Future<void> _delete(
     status,
     others,
     message: status.taskCount == 0 || status.isNew
-        ? 'Tasks you chose to move here need a new place.'
+        ? context.l10n.grpIMigrationNeedsPlace
         : null,
   );
   if (target == null) return;
@@ -295,7 +298,7 @@ Future<void> _conditions(
   final result = await editConditions(
     context,
     transition: transition,
-    title: '${from.name} → ${to.name}',
+    title: context.l10n.grpIMoveArrow(from.name, to.name),
     roles: roles,
   );
   if (result == null) return;
@@ -333,17 +336,21 @@ class _NeedsTarget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${gone.name} was deleted but still has tasks.'),
+          Text(context.l10n.grpIDeletedStillHasTasks(gone.name)),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             key: Key('migrate-${gone.key}'),
             isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Move its tasks to'),
+            decoration: InputDecoration(
+              labelText: context.l10n.grpIMoveItsTasksTo,
+            ),
             items: [
               for (final s in others)
                 DropdownMenuItem(
                   value: s.key,
-                  child: Text(s.name.isEmpty ? '(unnamed)' : s.name),
+                  child: Text(
+                    s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
+                  ),
                 ),
             ],
             onChanged: canEdit

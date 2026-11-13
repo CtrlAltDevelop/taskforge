@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -18,20 +19,17 @@ class ArchiveZone extends ConsumerWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (dialog) => AlertDialog(
-        title: Text('Archive "${project.name}"?'),
-        content: const Text(
-          'It becomes read-only and disappears from the sidebar. '
-          'You can restore it at any time.',
-        ),
+        title: Text(dialog.l10n.grpHArchiveTitle(project.name)),
+        content: Text(dialog.l10n.grpHArchiveBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialog).pop(false),
-            child: const Text('Cancel'),
+            child: Text(dialog.l10n.grpHCancel),
           ),
           FilledButton(
             key: const Key('confirm-archive'),
             onPressed: () => Navigator.of(dialog).pop(true),
-            child: const Text('Archive'),
+            child: Text(dialog.l10n.grpHArchive),
           ),
         ],
       ),
@@ -58,7 +56,7 @@ class ArchiveZone extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Danger zone',
+            context.l10n.grpHDangerZone,
             style: Theme.of(context).textTheme.titleLarge
                 ?.copyWith(color: color),
           ),
@@ -70,14 +68,14 @@ class ArchiveZone extends ConsumerWidget {
                 context,
                 () => ref.read(projectsControllerProvider).restore(project),
               ),
-              child: const Text('Restore project'),
+              child: Text(context.l10n.grpHRestoreProject),
             )
           else
             OutlinedButton(
               key: const Key('archive-project'),
               style: OutlinedButton.styleFrom(foregroundColor: color),
               onPressed: () => _archive(context, ref),
-              child: const Text('Archive project'),
+              child: Text(context.l10n.grpHArchiveProject),
             ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/fields/presentation/field_input.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -45,7 +47,7 @@ class TaskCell extends ConsumerWidget {
       iso.length >= 10 ? iso.substring(0, 10) : '';
 
   Widget _text(String value) => Align(
-    alignment: Alignment.centerLeft,
+    alignment: AlignmentDirectional.centerStart,
     child: Text(value, overflow: TextOverflow.ellipsis, maxLines: 1),
   );
 
@@ -67,7 +69,7 @@ class TaskCell extends ConsumerWidget {
     if (!canEdit || statuses.isEmpty) return chip;
     return PopupMenuButton<WorkflowStatus>(
       key: Key('cell-status-${task.id}'),
-      tooltip: 'Change status',
+      tooltip: context.l10n.grpFChangeStatus,
       onSelected: (s) {
         if (s.id != task.statusId) _save(context, ref, TaskPatch(status: s));
       },
@@ -100,7 +102,7 @@ class TaskCell extends ConsumerWidget {
     if (!canEdit) return shown;
     return PopupMenuButton<TaskPriority>(
       key: Key('cell-priority-${task.id}'),
-      tooltip: 'Change priority',
+      tooltip: context.l10n.grpFChangePriority,
       onSelected: (p) {
         if (p != task.priority) _save(context, ref, TaskPatch(priority: p));
       },
@@ -119,7 +121,7 @@ class TaskCell extends ConsumerWidget {
   Widget _assignee(BuildContext context, WidgetRef ref) {
     final names = [for (final id in task.assigneeIds) lookups.person(id)];
     final shown = Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Text(
         names.isEmpty ? '—' : names.join(', '),
         overflow: TextOverflow.ellipsis,
@@ -152,7 +154,7 @@ class TaskCell extends ConsumerWidget {
     required bool start,
   }) {
     final shown = Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Text(value.isEmpty ? '—' : value, maxLines: 1),
     );
     if (!canEdit) return shown;
@@ -177,7 +179,7 @@ class TaskCell extends ConsumerWidget {
     if (field == null) return const SizedBox.shrink();
     final value = task.fieldValues[field.id] ?? '';
     final shown = Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Text(
         fieldDisplay(field, value, userLabel: lookups.person),
         overflow: TextOverflow.ellipsis,
@@ -223,12 +225,12 @@ Future<String?> pickTaskDate(BuildContext context, String current) async {
   final choice = await showDialog<String>(
     context: context,
     builder: (dialog) => SimpleDialog(
-      title: const Text('Date'),
+      title: Text(dialog.l10n.grpFDate),
       children: [
         SimpleDialogOption(
           key: const Key('date-pick'),
           onPressed: () async {
-            final day = await showDatePicker(
+            final day = await showAppDatePicker(
               context: dialog,
               initialDate: initial,
               firstDate: DateTime(2000),
@@ -237,13 +239,13 @@ Future<String?> pickTaskDate(BuildContext context, String current) async {
             if (!dialog.mounted) return;
             Navigator.pop(dialog, day?.toIso8601String().substring(0, 10));
           },
-          child: const Text('Pick a day…'),
+          child: Text(dialog.l10n.grpFPickDay),
         ),
         if (current.isNotEmpty)
           SimpleDialogOption(
             key: const Key('date-clear'),
             onPressed: () => Navigator.pop(dialog, ''),
-            child: const Text('Clear'),
+            child: Text(dialog.l10n.grpFClear),
           ),
       ],
     ),
@@ -271,7 +273,7 @@ class _AssigneeDialogState extends State<AssigneeDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Assignees'),
+    title: Text(context.l10n.grpFAssignees),
     content: SizedBox(
       width: 320,
       child: ListView(
@@ -294,12 +296,12 @@ class _AssigneeDialogState extends State<AssigneeDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       FilledButton(
         key: const Key('assign-save'),
         onPressed: () => Navigator.pop(context, _picked.toList()),
-        child: const Text('Save'),
+        child: Text(context.l10n.save),
       ),
     ],
   );
@@ -340,12 +342,12 @@ class _FieldValueDialogState extends State<FieldValueDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       FilledButton(
         key: const Key('field-value-save'),
         onPressed: () => Navigator.pop(context, _value),
-        child: const Text('Save'),
+        child: Text(context.l10n.save),
       ),
     ],
   );

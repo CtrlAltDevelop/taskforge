@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/presentation/board_card.dart';
@@ -185,7 +186,10 @@ class _BoardViewState extends ConsumerState<BoardView> {
     final lanes = state.lanes;
     final choices = <MoveChoice>[
       for (final c in lanes.firstOrNull?.columns ?? const <BoardColumn>[])
-        (key: c.key, label: lookups.groupLabel(layout.groupBy, c.key)),
+        (
+          key: c.key,
+          label: lookups.groupLabel(layout.groupBy, c.key, context.l10n),
+        ),
     ];
     Widget columns(BoardLane lane) => Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -195,7 +199,7 @@ class _BoardViewState extends ConsumerState<BoardView> {
             key: ValueKey('${lane.key}|${column.key}'),
             laneKey: lane.key,
             column: column,
-            title: lookups.groupLabel(layout.groupBy, column.key),
+            title: lookups.groupLabel(layout.groupBy, column.key, context.l10n),
             color: lookups.groupColor(layout.groupBy, column.key),
             limit: layout.limits[column.key],
             collapsed: collapsed.contains(column.key),

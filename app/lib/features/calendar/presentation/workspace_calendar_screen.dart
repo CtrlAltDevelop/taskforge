@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_view.dart';
 import 'package:taskforge/features/filters/presentation/filter_bar.dart';
@@ -49,7 +50,7 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
     final colors = projectColors(projects);
     final hidden = ref.watch(hiddenProjectsProvider);
     return ShellScaffold(
-      appBar: AppBar(title: const Text('Calendar')),
+      appBar: AppBar(title: Text(context.l10n.calendar)),
       body: CalendarView(
         scope: '',
         projectColor: (t) => colors[t.projectId] ?? Colors.blueGrey,

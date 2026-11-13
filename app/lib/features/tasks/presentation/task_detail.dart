@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/offline/presentation/offline_banner.dart';
 import 'package:taskforge/features/audit/presentation/activity_section.dart';
 import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
@@ -60,7 +62,9 @@ class TaskDetail extends ConsumerWidget {
       if (ref.watch(taskListProvider(project.id)).loading) {
         return const Center(child: CircularProgressIndicator());
       }
-      return const Center(child: Text('Task not found.', key: Key('no-task')));
+      return Center(
+        child: Text(context.l10n.grpDTaskNotFound, key: const Key('no-task')),
+      );
     }
     final permissions = ref.watch(permissionSetProvider);
     final canEdit = !project.isArchived && permissions.can(Perm.taskUpdate);
@@ -88,14 +92,14 @@ class TaskDetail extends ConsumerWidget {
             if (canDelete)
               IconButton(
                 key: const Key('delete-task'),
-                tooltip: 'Delete task',
+                tooltip: context.l10n.grpDDeleteTask,
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () => _delete(context, ref, task),
               ),
             if (onClose != null)
               IconButton(
                 key: const Key('close-detail'),
-                tooltip: 'Close',
+                tooltip: context.l10n.grpDClose,
                 icon: const Icon(Icons.close),
                 onPressed: onClose,
               ),
@@ -110,7 +114,7 @@ class TaskDetail extends ConsumerWidget {
           value: task.title,
           enabled: canEdit,
           maxLength: maxTitleLength,
-          label: 'Title',
+          label: context.l10n.grpDTitle,
           allowEmpty: false,
           onSave: (v) {
             final title = v.trim();
@@ -142,7 +146,9 @@ class TaskDetail extends ConsumerWidget {
                   key: const Key('detail-priority'),
                   isExpanded: true,
                   initialValue: task.priority,
-                  decoration: const InputDecoration(labelText: 'Priority'),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpDPriority,
+                  ),
                   items: [
                     for (final p in TaskPriority.values)
                       DropdownMenuItem(
@@ -183,7 +189,7 @@ class TaskDetail extends ConsumerWidget {
             Expanded(
               child: _DateField(
                 fieldKey: const Key('detail-start'),
-                label: 'Start',
+                label: context.l10n.grpDStart,
                 value: task.startDate,
                 enabled: canEdit,
                 onPicked: (v) =>
@@ -194,7 +200,7 @@ class TaskDetail extends ConsumerWidget {
             Expanded(
               child: _DateField(
                 fieldKey: const Key('detail-due'),
-                label: 'Due',
+                label: context.l10n.grpDDue,
                 value: task.dueDate,
                 enabled: canEdit,
                 onPicked: (v) =>
@@ -215,7 +221,10 @@ class TaskDetail extends ConsumerWidget {
         const SizedBox(height: 12),
         RepeatSection(task: task, canEdit: canEdit),
         const SizedBox(height: 16),
-        Text('Assignees', style: Theme.of(context).textTheme.labelLarge),
+        Text(
+          context.l10n.grpDAssignees,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
@@ -239,7 +248,7 @@ class TaskDetail extends ConsumerWidget {
           fieldKey: const Key('detail-description'),
           value: docToMarkdown(task.description),
           enabled: canEdit,
-          label: 'Description',
+          label: context.l10n.grpDDescription,
           multiline: true,
           onFocusChanged: (focused) =>
               ref.read(presenceReporterProvider).setEditing(focused),
@@ -414,6 +423,7 @@ class TaskDetail extends ConsumerWidget {
   }
 
   Future<void> _delete(BuildContext context, WidgetRef ref, Task task) async {
+    final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
     final list = ref.read(taskListProvider(project.id).notifier);
     final below =
@@ -434,9 +444,9 @@ class TaskDetail extends ConsumerWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text('${task.displayId} deleted'),
+            content: Text(l10n.grpDTaskDeleted(task.displayId)),
             action: SnackBarAction(
-              label: 'Undo',
+              label: l10n.grpDUndo,
               onPressed: () async {
                 try {
                   await list.restore(task, adopt: moved);
@@ -492,7 +502,7 @@ class _StatusPicker extends StatelessWidget {
       key: const Key('detail-status'),
       isExpanded: true,
       initialValue: task.statusId,
-      decoration: const InputDecoration(labelText: 'Status'),
+      decoration: InputDecoration(labelText: context.l10n.grpDStatus),
       items: [
         for (final s in options)
           DropdownMenuItem(
@@ -630,7 +640,7 @@ class _DateField extends StatelessWidget {
         ? null
         : () async {
             final now = DateTime.now();
-            final picked = await showDatePicker(
+            final picked = await showAppDatePicker(
               context: context,
               initialDate: DateTime.tryParse(value) ?? now,
               firstDate: DateTime(2000),
@@ -646,7 +656,7 @@ class _DateField extends StatelessWidget {
         suffixIcon: value.isEmpty || !enabled
             ? const Icon(Icons.calendar_today, size: 18)
             : IconButton(
-                tooltip: 'Clear $label',
+                tooltip: context.l10n.grpDClearField(label),
                 icon: const Icon(Icons.clear, size: 18),
                 onPressed: () => onPicked(''),
               ),
@@ -693,13 +703,13 @@ class _TimeField extends StatelessWidget {
             },
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'Due time (your clock)',
+          labelText: context.l10n.grpDDueTime,
           border: const OutlineInputBorder(),
           suffixIcon: local.isEmpty || !enabled
               ? const Icon(Icons.schedule, size: 18)
               : IconButton(
                   key: const Key('clear-due-time'),
-                  tooltip: 'Clear due time',
+                  tooltip: context.l10n.grpDClearDueTime,
                   icon: const Icon(Icons.clear, size: 18),
                   onPressed: () => onPicked(''),
                 ),

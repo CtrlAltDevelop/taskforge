@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Names for the ids a rule holds: statuses, custom fields and people.
 class Lookups {
@@ -24,8 +26,15 @@ class Lookups {
   final Set<String> dateFields;
   final Map<String, String> users;
 
-  String status(String id) => statuses[id] ?? 'Deleted status';
-  String user(String id) => users[id] ?? 'Unknown person';
+  /// The name of status [id]; [loc] is the language for a missing one
+  /// (English when left out).
+  String status(String id, [AppLocalizations? loc]) =>
+      statuses[id] ??
+      (loc ?? lookupAppLocalizations(const Locale('en'))).grpCAutoDeletedStatus;
+
+  String user(String id, [AppLocalizations? loc]) =>
+      users[id] ??
+      (loc ?? lookupAppLocalizations(const Locale('en'))).grpCAutoUnknownPerson;
 }
 
 /// Statuses, custom fields and members of one project, from the existing
@@ -113,7 +122,7 @@ class TriggerEditor extends StatelessWidget {
     children: [
       Choice(
         key: const Key('trigger-type'),
-        label: 'Event',
+        label: context.l10n.grpCAutoEvent,
         value: trigger.type.wire,
         items: {for (final t in TriggerType.values) t.wire: t.label},
         enabled: enabled,
@@ -125,10 +134,10 @@ class TriggerEditor extends StatelessWidget {
         TriggerType.statusChanged => [
           Choice(
             key: const Key('trigger-status'),
-            label: 'Moves to',
+            label: context.l10n.grpCAutoMovesToLabel,
             value: trigger.toStatus,
             items: lookups.statuses,
-            emptyLabel: 'Any status',
+            emptyLabel: context.l10n.grpCAutoAnyStatus,
             enabled: enabled,
             onChanged: (v) => onChanged(trigger.copyWith(toStatus: v)),
           ),
@@ -136,7 +145,7 @@ class TriggerEditor extends StatelessWidget {
         TriggerType.fieldChanged => [
           Choice(
             key: const Key('trigger-field'),
-            label: 'Field',
+            label: context.l10n.grpCField,
             value: trigger.field,
             items: {...watchableFields, ...lookups.fields},
             enabled: enabled,
@@ -146,10 +155,10 @@ class TriggerEditor extends StatelessWidget {
         TriggerType.assigned => [
           Choice(
             key: const Key('trigger-user'),
-            label: 'Assigned person',
+            label: context.l10n.grpCAutoAssignedPerson,
             value: trigger.userId,
             items: lookups.users,
-            emptyLabel: 'Anyone',
+            emptyLabel: context.l10n.grpCAutoAnyone,
             enabled: enabled,
             onChanged: (v) => onChanged(trigger.copyWith(userId: v)),
           ),
@@ -161,7 +170,7 @@ class TriggerEditor extends StatelessWidget {
             enabled: enabled,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Days before the due date (0 to $maxDaysBefore)',
+              labelText: context.l10n.grpCAutoDaysLabel(maxDaysBefore),
               border: const OutlineInputBorder(),
             ),
             onChanged: (v) =>
@@ -244,7 +253,9 @@ class _ActionEditorState extends State<ActionEditor> {
     decoration: InputDecoration(
       labelText: label,
       border: const OutlineInputBorder(),
-      helperText: 'You may use {title} {key} {status} {today} {automation}',
+      helperText: context.l10n.grpCAutoTokensHelp(
+        '{title} {key} {status} {today} {automation}',
+      ),
     ),
   );
 
@@ -294,7 +305,7 @@ class _ActionEditorState extends State<ActionEditor> {
       children: [
         Choice(
           key: const Key('action-field'),
-          label: 'Field',
+          label: context.l10n.grpCField,
           value: _a.field,
           items: {...settableFields, ...widget.lookups.fields},
           enabled: widget.enabled,
@@ -307,7 +318,7 @@ class _ActionEditorState extends State<ActionEditor> {
         if (_a.field == 'priority')
           Choice(
             key: const Key('action-priority'),
-            label: 'Value',
+            label: context.l10n.grpCValue,
             value: _a.value,
             items: {
               for (final p in TaskPriority.values)
@@ -324,19 +335,19 @@ class _ActionEditorState extends State<ActionEditor> {
             readOnly: !widget.enabled,
             onChanged: (_) => sync(),
             decoration: InputDecoration(
-              labelText: 'Value',
-              hintText: isDate ? 'YYYY-MM-DD' : null,
+              labelText: context.l10n.grpCValue,
+              hintText: isDate ? context.l10n.grpCAutoDateHint : null,
               border: const OutlineInputBorder(),
             ),
           ),
         if (isDate || custom)
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: Padding(
               padding: const EdgeInsets.only(top: 6),
               child: ActionChip(
                 key: const Key('use-today'),
-                label: const Text('Use {today}'),
+                label: Text(context.l10n.grpCAutoUseToken(todayToken)),
                 onPressed: widget.enabled && isDate
                     ? () {
                         _value.text = todayToken;
@@ -356,7 +367,7 @@ class _ActionEditorState extends State<ActionEditor> {
       ActionType.setField => _setField(),
       ActionType.setStatus => Choice(
         key: const Key('action-status'),
-        label: 'Status',
+        label: context.l10n.grpCStatus,
         value: _a.status,
         items: widget.lookups.statuses,
         enabled: widget.enabled,
@@ -367,12 +378,12 @@ class _ActionEditorState extends State<ActionEditor> {
         children: [
           Choice(
             key: const Key('action-mode'),
-            label: 'How',
+            label: context.l10n.grpCAutoHow,
             value: _a.mode,
-            items: const {
-              'set': 'Replace assignees with',
-              'add': 'Add',
-              'clear': 'Remove everyone',
+            items: {
+              'set': context.l10n.grpCAutoReplaceAssignees,
+              'add': context.l10n.grpCAutoAdd,
+              'clear': context.l10n.grpCAutoRemoveEveryone,
             },
             enabled: widget.enabled,
             onChanged: (v) => _set(_a.copyWith(mode: v)),
@@ -386,14 +397,14 @@ class _ActionEditorState extends State<ActionEditor> {
       ActionType.addComment => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _textBox('Comment', maxCommentText),
+          _textBox(context.l10n.grpCComment, maxCommentText),
           _hints(_text, () => _set(_a.copyWith(text: _text.text))),
         ],
       ),
       ActionType.createSubtask => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _textBox('Subtask title', maxTitleText, lines: 2),
+          _textBox(context.l10n.grpCAutoSubtaskTitle, maxTitleText, lines: 2),
           _hints(_text, () => _set(_a.copyWith(text: _text.text))),
         ],
       ),
@@ -402,7 +413,7 @@ class _ActionEditorState extends State<ActionEditor> {
         children: [
           _people(_a.to, recipients: true),
           const SizedBox(height: 8),
-          _textBox('Message', maxTitleText, lines: 2),
+          _textBox(context.l10n.grpCAutoMessage, maxTitleText, lines: 2),
           _hints(_text, () => _set(_a.copyWith(text: _text.text))),
         ],
       ),
@@ -414,18 +425,17 @@ class _ActionEditorState extends State<ActionEditor> {
             controller: _url,
             readOnly: !widget.enabled,
             onChanged: (v) => _set(_a.copyWith(url: v)),
-            decoration: const InputDecoration(
-              labelText: 'Address',
+            decoration: InputDecoration(
+              labelText: context.l10n.grpCAutoAddress,
               hintText: 'https://example.com/hook',
-              helperText:
-                  'Public http(s) addresses only; private ones are refused.',
-              border: OutlineInputBorder(),
+              helperText: context.l10n.grpCAutoAddressHelp,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 8),
           Choice(
             key: const Key('action-method'),
-            label: 'Method',
+            label: context.l10n.grpCAutoMethod,
             value: _a.method,
             items: const {'POST': 'POST', 'PUT': 'PUT'},
             enabled: widget.enabled,
@@ -440,7 +450,7 @@ class _ActionEditorState extends State<ActionEditor> {
       children: [
         Choice(
           key: const Key('action-type'),
-          label: 'Do this',
+          label: context.l10n.grpCAutoDoThis,
           value: _a.type.wire,
           items: {for (final t in ActionType.values) t.wire: t.label},
           enabled: widget.enabled,

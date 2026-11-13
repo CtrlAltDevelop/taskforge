@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
@@ -28,24 +29,29 @@ class SprintsScreen extends ConsumerWidget {
     final catalog = ref.watch(projectCatalogProvider(true));
     return ShellScaffold(
       appBar: AppBar(
-        title: Text('Sprints${project == null ? '' : ' · ${project.name}'}'),
+        title: Text(
+          project == null
+              ? context.l10n.grpASprintsTitle
+              : context.l10n.grpASprintsTitleProject(project.name),
+        ),
       ),
       body: switch (project) {
-        final p? when !p.enabledFeatures.contains(sprintsFeature) =>
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Text(
-                'Sprints are switched off for this project. '
-                'Turn them on in the project settings.',
-                key: Key('sprints-disabled'),
-                textAlign: TextAlign.center,
-              ),
+        final p? when !p.enabledFeatures.contains(sprintsFeature) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              context.l10n.grpASprintsDisabled,
+              key: const Key('sprints-disabled'),
+              textAlign: TextAlign.center,
             ),
           ),
+        ),
         final p? => _Sprints(project: p),
-        null when catalog.hasValue => const Center(
-          child: Text('Project not found.', key: Key('sprints-missing')),
+        null when catalog.hasValue => Center(
+          child: Text(
+            context.l10n.grpAProjectNotFound,
+            key: const Key('sprints-missing'),
+          ),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },
@@ -110,10 +116,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
     if (result == null || !mounted) return;
     setState(_selected.clear);
     if (result.addedAfterStart > 0) {
-      _say(
-        '${result.addedAfterStart} added after the sprint started '
-        '(shows as a scope change).',
-      );
+      _say(context.l10n.grpAAddedAfterStart(result.addedAfterStart));
     }
   }
 
@@ -126,10 +129,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
     if (result == null || !mounted) return;
     setState(_selected.clear);
     if (result.addedAfterStart > 0) {
-      _say(
-        '${result.addedAfterStart} added after the sprint started '
-        '(shows as a scope change).',
-      );
+      _say(context.l10n.grpAAddedAfterStart(result.addedAfterStart));
     }
   }
 
@@ -183,7 +183,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
     setState(
       () => _picked = choice.nextSprintId.isEmpty ? null : choice.nextSprintId,
     );
-    _say('${done.sprint.name} completed.');
+    _say(context.l10n.grpASprintCompleted(done.sprint.name));
   }
 
   Future<void> _points(SprintTask task) async {
@@ -201,7 +201,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
     final text = await showDialog<String>(
       context: context,
       builder: (_) => CapacityDialog(
-        unit: _hours ? 'hours' : 'points',
+        hours: _hours,
         value: sprint.capacityIn(hours: _hours),
       ),
     );
@@ -226,7 +226,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
             TextButton(
               key: const Key('sprints-retry'),
               onPressed: () => ref.invalidate(sprintsProvider(_pid)),
-              child: const Text('Retry'),
+              child: Text(context.l10n.grpARetry),
             ),
           ],
         ),
@@ -250,9 +250,15 @@ class _SprintsState extends ConsumerState<_Sprints> {
               SegmentedButton<bool>(
                 key: const Key('sprints-tabs'),
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: false, label: Text('Planning')),
-                  ButtonSegment(value: true, label: Text('Reports')),
+                segments: [
+                  ButtonSegment(
+                    value: false,
+                    label: Text(context.l10n.grpAPlanning),
+                  ),
+                  ButtonSegment(
+                    value: true,
+                    label: Text(context.l10n.grpAReports),
+                  ),
                 ],
                 selected: {_reports},
                 onSelectionChanged: (s) => setState(() => _reports = s.first),
@@ -274,7 +280,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
                 FilledButton.tonalIcon(
                   key: const Key('new-sprint'),
                   icon: const Icon(Icons.add),
-                  label: const Text('New sprint'),
+                  label: Text(context.l10n.grpANewSprint),
                   onPressed: () => _form(all),
                 ),
             ],
@@ -325,9 +331,9 @@ class _SprintsState extends ConsumerState<_Sprints> {
         if (sprint != null) _move(sprint, t, into: false);
       },
       child: TaskListPane(
-        title: 'Backlog',
+        title: context.l10n.grpABacklog,
         tasks: backlog,
-        emptyText: 'The backlog is empty.',
+        emptyText: context.l10n.grpABacklogEmpty,
         rowBuilder: (t) => row(t, backlogSide: true),
         actions: [
           if (canPlan)
@@ -336,19 +342,19 @@ class _SprintsState extends ConsumerState<_Sprints> {
               onPressed: _selected.any((id) => !sprintIds.contains(id))
                   ? () => _addSelected(sprint)
                   : null,
-              child: const Text('Add to sprint'),
+              child: Text(context.l10n.grpAAddToSprint),
             ),
         ],
       ),
     );
 
     final sprintPane = sprint == null
-        ? const Center(
+        ? Center(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
-                'No open sprint. Create one to start planning.',
-                key: Key('no-sprint'),
+                context.l10n.grpANoOpenSprint,
+                key: const Key('no-sprint'),
               ),
             ),
           )
@@ -359,7 +365,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
             child: TaskListPane(
               title: sprint.name,
               tasks: inSprint,
-              emptyText: 'Drag tasks here, or select some in the backlog.',
+              emptyText: context.l10n.grpADragHere,
               header: _capacityBar(sprint, canManage),
               rowBuilder: (t) => row(t, backlogSide: false),
               actions: [
@@ -369,7 +375,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
                     onPressed: _selected.any(sprintIds.contains)
                         ? () => _removeSelected(sprint, sprintIds)
                         : null,
-                    child: const Text('Remove'),
+                    child: Text(context.l10n.grpARemove),
                   ),
               ],
             ),
@@ -455,12 +461,15 @@ class _Header extends ConsumerWidget {
                       visualDensity: VisualDensity.compact,
                     ),
                     Text(
-                      '${dayText(sprint.startDate)} to ${dayText(sprint.endDate)}',
+                      context.l10n.grpADatesRange(
+                        dayText(sprint.startDate),
+                        dayText(sprint.endDate),
+                      ),
                       style: theme.textTheme.bodySmall,
                     ),
                     if (sprint.isActive)
                       Text(
-                        left == 1 ? '1 day left' : '$left days left',
+                        context.l10n.grpADaysLeft(left),
                         key: const Key('days-left'),
                         style: theme.textTheme.labelLarge,
                       ),
@@ -468,7 +477,7 @@ class _Header extends ConsumerWidget {
                 ),
                 if (sprint.goal.isNotEmpty)
                   Text(
-                    'Goal: ${sprint.goal}',
+                    context.l10n.grpASprintGoalText(sprint.goal),
                     key: const Key('sprint-goal-text'),
                   ),
               ],
@@ -478,7 +487,7 @@ class _Header extends ConsumerWidget {
             TextButton.icon(
               key: const Key('sprint-on-board'),
               icon: const Icon(Icons.view_kanban_outlined),
-              label: const Text('Show on board'),
+              label: Text(context.l10n.grpAShowOnBoard),
               onPressed: () {
                 ref
                     .read(boardCurrentSprintProvider(sprint.projectId).notifier)
@@ -489,7 +498,7 @@ class _Header extends ConsumerWidget {
           if (canManage) ...[
             IconButton(
               key: const Key('edit-sprint'),
-              tooltip: 'Edit sprint',
+              tooltip: context.l10n.grpAEditSprint,
               icon: const Icon(Icons.edit_outlined),
               onPressed: onEdit,
             ),
@@ -497,13 +506,13 @@ class _Header extends ConsumerWidget {
               FilledButton(
                 key: const Key('start-sprint'),
                 onPressed: onStart,
-                child: const Text('Start sprint'),
+                child: Text(context.l10n.grpAStartSprint),
               ),
             if (sprint.isActive)
               FilledButton(
                 key: const Key('complete-sprint'),
                 onPressed: onComplete,
-                child: const Text('Complete sprint'),
+                child: Text(context.l10n.grpACompleteSprint),
               ),
           ],
         ],
@@ -522,8 +531,11 @@ class _Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = sprint;
     if (s == null) {
-      return const Center(
-        child: Text('No sprints yet.', key: Key('reports-empty')),
+      return Center(
+        child: Text(
+          context.l10n.grpANoSprintsYet,
+          key: const Key('reports-empty'),
+        ),
       );
     }
     return ListView(

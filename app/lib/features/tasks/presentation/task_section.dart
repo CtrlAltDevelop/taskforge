@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/bidi.dart';
+import 'package:taskforge/core/i18n/directional_icon.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/presentation/board_view.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -144,7 +147,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     await Navigator.of(context).push<void>(
       MaterialPageRoute(
         builder: (_) => Scaffold(
-          appBar: AppBar(title: Text(task.displayId)),
+          appBar: AppBar(title: Text(isolateLtr(task.displayId))),
           body: TaskDetail(
             project: widget.project,
             taskId: task.id,
@@ -220,26 +223,26 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
               SegmentedButton<_TaskView>(
                 key: const Key('view-switch'),
                 showSelectedIcon: false,
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: _TaskView.list,
-                    icon: Icon(Icons.table_rows_outlined),
-                    label: Text('List'),
+                    icon: const Icon(Icons.table_rows_outlined),
+                    label: Text(context.l10n.grpFViewList),
                   ),
                   ButtonSegment(
                     value: _TaskView.board,
-                    icon: Icon(Icons.view_kanban_outlined),
-                    label: Text('Board'),
+                    icon: const Icon(Icons.view_kanban_outlined),
+                    label: Text(context.l10n.grpFViewBoard),
                   ),
                   ButtonSegment(
                     value: _TaskView.calendar,
-                    icon: Icon(Icons.calendar_month_outlined),
-                    label: Text('Calendar'),
+                    icon: const Icon(Icons.calendar_month_outlined),
+                    label: Text(context.l10n.calendar),
                   ),
                   ButtonSegment(
                     value: _TaskView.timeline,
-                    icon: Icon(Icons.stacked_bar_chart),
-                    label: Text('Timeline'),
+                    icon: const Icon(Icons.stacked_bar_chart),
+                    label: Text(context.l10n.grpFViewTimeline),
                   ),
                 ],
                 selected: {_view},
@@ -369,17 +372,16 @@ class _TaskListState extends ConsumerState<_TaskList> {
           key: const Key('retry-tasks'),
           onPressed: () =>
               ref.read(taskListProvider(project.id).notifier).load(),
-          child: Text('${taskErrorMessage(state.error!)} Retry'),
+          child: Text(
+            context.l10n.grpFErrorRetry(taskErrorMessage(state.error!)),
+          ),
         ),
       );
     }
     if (state.loading && state.tasks.isEmpty) return const _Skeleton();
     if (state.tasks.isEmpty) {
-      return const Center(
-        child: Text(
-          'No tasks yet. Add the first one above.',
-          key: Key('no-tasks'),
-        ),
+      return Center(
+        child: Text(context.l10n.grpFNoTasksYet, key: const Key('no-tasks')),
       );
     }
     final layout = ref.watch(listLayoutProvider(project.id)).layout;
@@ -511,13 +513,15 @@ class _TaskListState extends ConsumerState<_TaskList> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           child: Row(
             children: [
-              Icon(group.collapsed ? Icons.chevron_right : Icons.expand_more),
+              DirectionalIcon(
+                group.collapsed ? Icons.chevron_right : Icons.expand_more,
+              ),
               if (color != null) ...[
                 Icon(Icons.circle, size: 10, color: color),
                 const SizedBox(width: 6),
               ],
               Text(
-                lookups.groupLabel(layout.groupBy, group.key),
+                lookups.groupLabel(layout.groupBy, group.key, context.l10n),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(width: 8),
@@ -555,15 +559,15 @@ class _TaskListState extends ConsumerState<_TaskList> {
           : complete
           ? DismissDirection.startToEnd
           : DismissDirection.endToStart,
-      background: const _SwipeBackground(
+      background: _SwipeBackground(
         icon: Icons.check,
-        label: 'Complete',
-        alignment: Alignment.centerLeft,
+        label: context.l10n.grpFSwipeComplete,
+        alignment: AlignmentDirectional.centerStart,
       ),
-      secondaryBackground: const _SwipeBackground(
+      secondaryBackground: _SwipeBackground(
         icon: Icons.delete_outline,
-        label: 'Delete',
-        alignment: Alignment.centerRight,
+        label: context.l10n.grpFDelete,
+        alignment: AlignmentDirectional.centerEnd,
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
@@ -580,7 +584,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
   Widget _inlineAdd(TaskTree tree, String parentId) {
     final parent = tree.task(parentId);
     return Padding(
-      padding: EdgeInsets.fromLTRB(
+      padding: EdgeInsetsDirectional.fromSTEB(
         56.0 + ((parent?.depth ?? 0) + 1) * 20,
         0,
         12,
@@ -606,7 +610,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
         constraints: const BoxConstraints(maxWidth: 320),
         child: ListTile(
           title: Text(task.title, overflow: TextOverflow.ellipsis),
-          subtitle: Text(task.displayId),
+          subtitle: Text(isolateLtr(task.displayId)),
         ),
       ),
     ),
@@ -647,7 +651,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
           await showDialog<void>(
             context: context,
             builder: (dialog) => AlertDialog(
-              title: Text('Add a subtask to ${task.displayId}'),
+              title: Text(dialog.l10n.grpFAddSubtaskTo(task.displayId)),
               content: SizedBox(
                 width: 360,
                 child: AddSubtaskField(
@@ -690,6 +694,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
 
   Future<void> _delete(TaskTree tree, Task task) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final list = ref.read(taskListProvider(project.id).notifier);
     final below = tree.subtreeIds(task.id).length - 1;
     DeleteMode? mode;
@@ -705,9 +710,9 @@ class _TaskListState extends ConsumerState<_TaskList> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text('${task.displayId} deleted'),
+            content: Text(l10n.grpFTaskDeleted(task.displayId)),
             action: SnackBarAction(
-              label: 'Undo',
+              label: l10n.grpFUndo,
               onPressed: () async {
                 try {
                   await list.restore(task, adopt: moved);
@@ -780,7 +785,7 @@ class TaskTile extends StatelessWidget {
     selected: selected || picked == true,
     onTap: onTap,
     onLongPress: onLongPress,
-    contentPadding: EdgeInsets.only(left: 8.0 + depth * 20, right: 8),
+    contentPadding: EdgeInsetsDirectional.only(start: 8.0 + depth * 20, end: 8),
     leading: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -797,7 +802,7 @@ class TaskTile extends StatelessWidget {
                   key: Key('toggle-${task.id}'),
                   padding: EdgeInsets.zero,
                   tooltip: expanded ? 'Collapse' : 'Expand',
-                  icon: Icon(
+                  icon: DirectionalIcon(
                     expanded ? Icons.expand_more : Icons.chevron_right,
                   ),
                   onPressed: onToggle,
@@ -854,20 +859,20 @@ class TaskTile extends StatelessWidget {
           ),
         if (task.assigneeIds.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsetsDirectional.only(start: 8),
             child: Chip(label: Text('${task.assigneeIds.length}')),
           ),
         if (actions.isNotEmpty)
           PopupMenuButton<TaskAction>(
             key: Key('task-menu-${task.id}'),
-            tooltip: 'More',
+            tooltip: context.l10n.grpFMore,
             onSelected: onAction,
             itemBuilder: (_) => [
               for (final a in actions)
                 PopupMenuItem(
                   key: Key('${a.name}-${task.id}'),
                   value: a,
-                  child: Text(a.label),
+                  child: Text(a.labelIn(context.l10n)),
                 ),
             ],
           ),
@@ -885,7 +890,7 @@ class _SwipeBackground extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final Alignment alignment;
+  final AlignmentGeometry alignment;
 
   @override
   Widget build(BuildContext context) => Container(

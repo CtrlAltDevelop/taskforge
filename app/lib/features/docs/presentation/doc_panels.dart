@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 
-String _memberName(WidgetRef ref, String userId) {
+String _memberName(WidgetRef ref, String userId, String someone) {
   for (final m in ref.watch(membersProvider).value ?? const []) {
     if (m.userId == userId) return m.label;
   }
-  return userId.isEmpty ? 'Someone' : 'Someone';
+  return someone;
 }
 
 /// A quick read-only look at blocks (a revision's body).
@@ -26,21 +27,27 @@ class BlockPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    if (blocks.isEmpty) return const Text('(empty page)');
+    if (blocks.isEmpty) return Text(context.l10n.grpBEmptyPage);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final b in blocks)
           switch (b.type) {
             BlockType.divider => const Divider(),
-            BlockType.image => Text('[Image ${b.alt}]'),
-            BlockType.taskCard => const Text('[Task card]'),
+            BlockType.image => Text(context.l10n.grpBImageBlock(b.alt)),
+            BlockType.taskCard => Text(context.l10n.grpBTaskCardBlock),
             BlockType.heading => Text(
               b.plain,
               style: t.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-            BlockType.bullet => Text('•  ${b.plain}'),
-            BlockType.numbered => Text('-  ${b.plain}'),
+            BlockType.bullet => Text(
+              '•  '
+              '${b.plain}',
+            ),
+            BlockType.numbered => Text(
+              '-  '
+              '${b.plain}',
+            ),
             BlockType.checklist => Text(
               '${b.checked ? '[x]' : '[ ]'}  ${b.plain}',
             ),
@@ -48,7 +55,11 @@ class BlockPreview extends StatelessWidget {
               b.plain,
               style: const TextStyle(fontFamily: 'monospace'),
             ),
-            _ when !b.isKnown => Text('[${b.type}]'),
+            _ when !b.isKnown => Text(
+              '['
+              '${b.type}'
+              ']',
+            ),
             _ => Text(b.plain),
           },
       ],
@@ -103,13 +114,13 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: const Text('History'),
+              title: Text(context.l10n.grpBHistory),
               trailing: picked == null
                   ? null
                   : TextButton(
                       key: const Key('revision-back'),
                       onPressed: () => setState(() => _picked = null),
-                      child: const Text('All revisions'),
+                      child: Text(context.l10n.grpBAllRevisions),
                     ),
             ),
             const Divider(height: 1),
@@ -123,8 +134,11 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
   Widget _list() {
     final revisions = ref.watch(docRevisionsProvider(widget.docId));
     return switch (revisions) {
-      AsyncData(:final value) when value.isEmpty => const Center(
-        child: Text('No revisions yet.', key: Key('no-revisions')),
+      AsyncData(:final value) when value.isEmpty => Center(
+        child: Text(
+          context.l10n.grpBNoRevisions,
+          key: const Key('no-revisions'),
+        ),
       ),
       AsyncData(:final value) => ListView(
         children: [
@@ -132,11 +146,15 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             ListTile(
               key: Key('revision-${r.id}'),
               dense: true,
-              title: Text(r.title.isEmpty ? 'Version ${r.version}' : r.title),
-              subtitle: Text(
-                '${_memberName(ref, r.authorId)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
+              title: Text(
+                r.title.isEmpty
+                    ? context.l10n.grpBVersionN(r.version)
+                    : r.title,
               ),
-              trailing: Text('v${r.version}'),
+              subtitle: Text(
+                '${_memberName(ref, r.authorId, context.l10n.grpBSomeone)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
+              ),
+              trailing: Text(context.l10n.grpBVersionShort(r.version)),
               onTap: () => setState(() => _picked = r.id),
             ),
         ],
@@ -144,7 +162,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
       AsyncError() => Center(
         child: TextButton(
           onPressed: () => ref.invalidate(docRevisionsProvider(widget.docId)),
-          child: const Text('Could not load history. Retry'),
+          child: Text(context.l10n.grpBRevisionsLoadFailed),
         ),
       ),
       _ => const Center(child: CircularProgressIndicator()),
@@ -163,7 +181,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             key: const Key('revision-preview'),
             child: switch (body) {
               AsyncData(:final value) => BlockPreview(blocks: value),
-              AsyncError() => const Text('Could not load this revision.'),
+              AsyncError() => Text(context.l10n.grpBRevisionLoadFailed),
               _ => const Center(child: CircularProgressIndicator()),
             },
           ),
@@ -183,7 +201,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             child: FilledButton.icon(
               key: const Key('revision-restore'),
               icon: const Icon(Icons.restore),
-              label: const Text('Restore this version'),
+              label: Text(context.l10n.grpBRestoreVersion),
               onPressed: _busy || !body.hasValue ? null : () => _restore(id),
             ),
           ),
@@ -204,13 +222,10 @@ class BacklinksPanel extends ConsumerWidget {
     final links = ref.watch(docBacklinksProvider(docId)).value ?? const [];
     return ExpansionTile(
       key: const Key('backlinks-panel'),
-      title: Text('Linked from (${links.length})'),
+      title: Text(context.l10n.grpBLinkedFrom(links.length)),
       children: [
         if (links.isEmpty)
-          const ListTile(
-            dense: true,
-            title: Text('No page mentions this one.'),
-          ),
+          ListTile(dense: true, title: Text(context.l10n.grpBNoBacklinks)),
         for (final d in links)
           ListTile(
             key: Key('backlink-${d.id}'),
@@ -238,7 +253,7 @@ Future<void> exportMarkdown(
       context: context,
       builder: (context) => AlertDialog(
         key: const Key('export-dialog'),
-        title: Text('Markdown: ${out.title}'),
+        title: Text(context.l10n.grpBMarkdownTitle(out.title)),
         content: SizedBox(
           width: 520,
           child: SingleChildScrollView(
@@ -253,13 +268,12 @@ Future<void> exportMarkdown(
           TextButton(
             key: const Key('export-copy'),
             onPressed: () async {
+              final copied = context.l10n.grpBMarkdownCopied;
               await Clipboard.setData(ClipboardData(text: out.markdown));
-              messenger.showSnackBar(
-                const SnackBar(content: Text('Markdown copied.')),
-              );
+              messenger.showSnackBar(SnackBar(content: Text(copied)));
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('Copy'),
+            child: Text(context.l10n.grpBCopy),
           ),
           TextButton(
             key: const Key('export-save'),
@@ -272,11 +286,11 @@ Future<void> exportMarkdown(
               );
               if (context.mounted) Navigator.pop(context);
             },
-            child: const Text('Save as file'),
+            child: Text(context.l10n.grpBSaveAsFile),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: Text(context.l10n.grpBClose),
           ),
         ],
       ),

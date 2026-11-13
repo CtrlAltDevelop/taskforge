@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
@@ -31,12 +32,12 @@ class MembersSection extends ConsumerWidget {
     final picked = await showDialog<Member>(
       context: context,
       builder: (dialog) => SimpleDialog(
-        title: const Text('Add a member'),
+        title: Text(dialog.l10n.grpHAddAMember),
         children: [
           if (candidates.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(24),
-              child: Text('Everyone in the workspace is already a member.'),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(dialog.l10n.grpHAllAreMembers),
             ),
           for (final m in candidates)
             SimpleDialogOption(
@@ -71,7 +72,7 @@ class MembersSection extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                'Members',
+                context.l10n.grpHMembers,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -80,7 +81,7 @@ class MembersSection extends ConsumerWidget {
                 key: const Key('add-project-member'),
                 onPressed: canManage ? () => _add(context, ref) : null,
                 icon: const Icon(Icons.person_add),
-                label: const Text('Add member'),
+                label: Text(context.l10n.grpHAddMember),
               ),
           ],
         ),
@@ -96,7 +97,7 @@ class MembersSection extends ConsumerWidget {
                   trailing: allowed
                       ? IconButton(
                           key: Key('remove-project-member-${m.userId}'),
-                          tooltip: 'Remove',
+                          tooltip: context.l10n.grpHRemove,
                           icon: const Icon(Icons.person_remove),
                           onPressed: canManage
                               ? () => runProjectAction(
@@ -113,7 +114,7 @@ class MembersSection extends ConsumerWidget {
           ),
           AsyncError() => TextButton(
             onPressed: () => ref.invalidate(projectMembersProvider),
-            child: const Text('Could not load members. Retry'),
+            child: Text(context.l10n.grpHLoadMembersRetry),
           ),
           _ => const LinearProgressIndicator(),
         },

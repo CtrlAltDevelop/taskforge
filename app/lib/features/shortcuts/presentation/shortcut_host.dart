@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/actions/chord.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
 
@@ -76,7 +77,7 @@ class QuickActionsButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) =>
       FloatingActionButton.small(
         key: const Key('quick-actions'),
-        tooltip: 'Quick actions',
+        tooltip: context.l10n.grpGQuickActions,
         heroTag: 'quick-actions',
         onPressed: () => showModalBottomSheet<void>(
           context: context,

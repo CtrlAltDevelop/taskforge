@@ -1,0 +1,9 @@
+# gen_l10n: ARB files in, typed AppLocalizations out. The generated Dart is committed
+# (like the Drift and gRPC code), so tests and CI need no extra step; run
+# "flutter gen-l10n" after editing an .arb file.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/l10n/gen
+nullable-getter: false

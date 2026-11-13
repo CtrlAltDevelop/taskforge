@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 
@@ -65,10 +66,10 @@ class _CodeBlockViewState extends State<CodeBlockView> {
               controller: _lang,
               readOnly: widget.readOnly,
               style: Theme.of(context).textTheme.bodySmall,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: 'language',
+                hintText: context.l10n.grpJCodeLanguageHint,
               ),
               onChanged: (v) =>
                   widget.onChanged(widget.block.withAttrs({'language': v})),
@@ -162,7 +163,7 @@ class TableBlockView extends StatelessWidget {
               TextButton.icon(
                 key: Key('table-add-row-${block.id}'),
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Row'),
+                label: Text(context.l10n.grpJTableRow),
                 onPressed: () => onChanged(
                   block.withRows([
                     ...padded(),
@@ -173,7 +174,7 @@ class TableBlockView extends StatelessWidget {
               TextButton.icon(
                 key: Key('table-add-column-${block.id}'),
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Column'),
+                label: Text(context.l10n.grpJTableColumn),
                 onPressed: columns >= 20
                     ? null
                     : () => onChanged(
@@ -185,7 +186,7 @@ class TableBlockView extends StatelessWidget {
               TextButton.icon(
                 key: Key('table-remove-row-${block.id}'),
                 icon: const Icon(Icons.remove, size: 16),
-                label: const Text('Row'),
+                label: Text(context.l10n.grpJTableRow),
                 onPressed: rows.length <= 1
                     ? null
                     : () => onChanged(
@@ -195,7 +196,7 @@ class TableBlockView extends StatelessWidget {
               TextButton.icon(
                 key: Key('table-remove-column-${block.id}'),
                 icon: const Icon(Icons.remove, size: 16),
-                label: const Text('Column'),
+                label: Text(context.l10n.grpJTableColumn),
                 onPressed: columns <= 1
                     ? null
                     : () => onChanged(
@@ -295,7 +296,10 @@ class ImageBlockView extends StatelessWidget {
       children: [
         Flexible(
           child: empty
-              ? const Text('No image address yet', key: Key('image-empty'))
+              ? Text(
+                  context.l10n.grpJNoImageAddress,
+                  key: const Key('image-empty'),
+                )
               : Image.network(
                   src,
                   width: width,
@@ -304,7 +308,9 @@ class ImageBlockView extends StatelessWidget {
                     key: const Key('image-broken'),
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      block.alt.isEmpty ? 'Image could not load' : block.alt,
+                      block.alt.isEmpty
+                          ? context.l10n.grpJImageLoadFailed
+                          : block.alt,
                     ),
                   ),
                 ),
@@ -312,7 +318,7 @@ class ImageBlockView extends StatelessWidget {
         if (!readOnly)
           IconButton(
             key: Key('edit-image-${block.id}'),
-            tooltip: 'Edit image',
+            tooltip: context.l10n.grpJEditImage,
             icon: const Icon(Icons.edit_outlined, size: 18),
             onPressed: onEdit,
           ),
@@ -341,19 +347,19 @@ class TaskCardView extends StatelessWidget {
     final theme = Theme.of(context);
     final c = card;
     if (c == null) {
-      return const Card(
-        key: Key('task-card-loading'),
-        child: ListTile(dense: true, title: Text('Loading task...')),
+      return Card(
+        key: const Key('task-card-loading'),
+        child: ListTile(dense: true, title: Text(context.l10n.grpJLoadingTask)),
       );
     }
     if (c.hidden) {
       return Card(
         key: Key('task-card-hidden-${c.taskId}'),
         color: theme.colorScheme.surfaceContainerHighest,
-        child: const ListTile(
+        child: ListTile(
           dense: true,
-          leading: Icon(Icons.lock_outline),
-          title: Text('No access to this task'),
+          leading: const Icon(Icons.lock_outline),
+          title: Text(context.l10n.grpJNoAccessTask),
         ),
       );
     }
@@ -397,12 +403,7 @@ class UnknownBlockView extends StatelessWidget {
       children: [
         const Icon(Icons.extension_outlined, size: 18),
         const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            'This block (${block.type}) needs a newer version of TaskForge. '
-            'It is kept as it is.',
-          ),
-        ),
+        Expanded(child: Text(context.l10n.grpJUnknownBlock(block.type))),
       ],
     ),
   );

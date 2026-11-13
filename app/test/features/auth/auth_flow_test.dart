@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/app.dart';
@@ -88,6 +89,9 @@ class _FakeApi implements AuthApi {
 }
 
 class _FakeAccounts implements AccountClient {
+  @override
+  Future<void> updatePreferences(LocalePrefs prefs) async {}
+
   @override
   Future<Account> me() async =>
       const Account(email: 'zoe@example.com', displayName: 'Zoe');

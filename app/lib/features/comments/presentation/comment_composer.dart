@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attach_buttons.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
@@ -40,8 +41,8 @@ class CommentComposer extends ConsumerStatefulWidget {
     required this.onSend,
     this.initialText = '',
     this.initialPicks = const [],
-    this.hint = 'Write a comment… (@ to mention)',
-    this.sendLabel = 'Comment',
+    this.hint,
+    this.sendLabel,
     this.onCancel,
     this.autofocus = false,
     this.allowFiles = false,
@@ -51,8 +52,12 @@ class CommentComposer extends ConsumerStatefulWidget {
   final ComposerSend onSend;
   final String initialText;
   final List<MentionPick> initialPicks;
-  final String hint;
-  final String sendLabel;
+
+  /// Null for the usual "Write a comment…" prompt.
+  final String? hint;
+
+  /// Null for the usual "Comment" button text.
+  final String? sendLabel;
   final VoidCallback? onCancel;
   final bool autofocus;
 
@@ -148,20 +153,25 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
             (
               'bullet',
               Icons.format_list_bulleted,
-              'Bullet list',
+              context.l10n.grpIBulletList,
               () => _linePrefix('- '),
             ),
-            ('quote', Icons.format_quote, 'Quote', () => _linePrefix('> ')),
+            (
+              'quote',
+              Icons.format_quote,
+              context.l10n.grpIQuote,
+              () => _linePrefix('> '),
+            ),
             (
               'code',
               Icons.code,
-              'Code block',
+              context.l10n.grpICodeBlock,
               () => _wrapSelection('```\n', '\n```'),
             ),
             (
               'link',
               Icons.link,
-              'Link',
+              context.l10n.grpILink,
               () => _wrapSelection('[', '](https://)'),
             ),
           ])
@@ -255,7 +265,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
             maxLines: 8,
             textInputAction: TextInputAction.newline,
             decoration: InputDecoration(
-              hintText: widget.hint,
+              hintText: widget.hint ?? context.l10n.grpIWriteComment,
               border: const OutlineInputBorder(),
             ),
           ),
@@ -303,8 +313,8 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
                         onError: () => ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
-                            const SnackBar(
-                              content: Text('Could not read that file.'),
+                            SnackBar(
+                              content: Text(context.l10n.grpICouldNotReadFile),
                             ),
                           ),
                       ),
@@ -316,14 +326,14 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
               TextButton(
                 key: const Key('comment-cancel'),
                 onPressed: widget.onCancel,
-                child: const Text('Cancel'),
+                child: Text(context.l10n.grpICancel),
               ),
             Tooltip(
-              message: 'Ctrl+Enter to send',
+              message: context.l10n.grpICtrlEnterToSend,
               child: FilledButton(
                 key: const Key('comment-send'),
                 onPressed: _sending ? null : _send,
-                child: Text(widget.sendLabel),
+                child: Text(widget.sendLabel ?? context.l10n.grpIComment),
               ),
             ),
           ],

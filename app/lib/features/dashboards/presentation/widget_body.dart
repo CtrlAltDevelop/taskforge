@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/charts/dashboard_charts.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 
 /// A widget's numbers drawn the way its kind asks. [onBucket] gets the bucket
@@ -92,7 +93,7 @@ class _Empty extends StatelessWidget {
   const _Empty();
 
   @override
-  Widget build(BuildContext context) => const Center(
-    child: Text('Nothing to show yet.', key: Key('widget-empty')),
+  Widget build(BuildContext context) => Center(
+    child: Text(context.l10n.grpINothingToShow, key: const Key('widget-empty')),
   );
 }

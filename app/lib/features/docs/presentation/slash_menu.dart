@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 
@@ -140,9 +141,9 @@ class SlashMenu extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.all(12),
-                child: Text('No matching blocks'),
+            ? Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(context.l10n.grpJNoMatchingBlocks),
               )
             : ListView(
                 shrinkWrap: true,
@@ -190,9 +191,9 @@ class PagePicker extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.all(12),
-                child: Text('No matching pages'),
+            ? Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(context.l10n.grpJNoMatchingPages),
               )
             : ListView(
                 shrinkWrap: true,

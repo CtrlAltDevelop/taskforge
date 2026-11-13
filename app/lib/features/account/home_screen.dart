@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
@@ -22,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
           child: TextButton(
             key: const Key('retry-workspaces'),
             onPressed: () => ref.invalidate(workspacesProvider),
-            child: const Text('Could not load your workspaces. Retry'),
+            child: Text(context.l10n.homeLoadWorkspacesFailed),
           ),
         ),
       );
@@ -36,19 +37,19 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             key: const Key('open-inbox-bell'),
-            tooltip: 'Inbox',
+            tooltip: context.l10n.inbox,
             icon: const InboxBadge(child: Icon(Icons.notifications_outlined)),
             onPressed: () => context.go('/inbox'),
           ),
           IconButton(
             key: const Key('open-workspace-settings'),
-            tooltip: 'Workspace settings',
+            tooltip: context.l10n.workspaceSettings,
             icon: const Icon(Icons.settings),
             onPressed: () => context.push('/workspaces/settings'),
           ),
           IconButton(
             key: const Key('sign-out'),
-            tooltip: 'Sign out',
+            tooltip: context.l10n.signOut,
             icon: const Icon(Icons.logout),
             onPressed: ref.read(authSessionProvider).signOut,
           ),
@@ -65,50 +66,57 @@ class HomeScreen extends ConsumerWidget {
             ),
             loading: () => const ListTile(title: LinearProgressIndicator()),
             error: (e, _) => ListTile(
-              title: const Text('Could not load your account.'),
+              title: Text(context.l10n.homeLoadAccountFailed),
               trailing: TextButton(
                 onPressed: () => ref.invalidate(accountProvider),
-                child: const Text('Retry'),
+                child: Text(context.l10n.retry),
               ),
             ),
           ),
           ListTile(
             key: const Key('open-calendar'),
             leading: const Icon(Icons.calendar_month_outlined),
-            title: const Text('Calendar'),
-            subtitle: const Text('Everything due, across your projects'),
+            title: Text(context.l10n.calendar),
+            subtitle: Text(context.l10n.calendarSubtitle),
             onTap: () => context.go('/calendar'),
           ),
           ListTile(
             key: const Key('open-notification-settings'),
             leading: const Icon(Icons.tune),
-            title: const Text('Notification settings'),
-            subtitle: const Text('What pings you, quiet hours and the digest'),
+            title: Text(context.l10n.notificationSettings),
+            subtitle: Text(context.l10n.notificationSettingsSubtitle),
             onTap: () => context.push('/inbox/preferences'),
           ),
           ListTile(
             key: const Key('open-offline'),
             leading: const Icon(Icons.cloud_off_outlined),
-            title: const Text('Offline and storage'),
-            subtitle: const Text('Changes made offline, the local copy'),
+            title: Text(context.l10n.offlineAndStorage),
+            subtitle: Text(context.l10n.offlineAndStorageSubtitle),
             onTap: () => context.push('/offline'),
+          ),
+          ListTile(
+            key: const Key('open-language'),
+            leading: const Icon(Icons.language),
+            title: Text(context.l10n.languageAndRegion),
+            subtitle: Text(context.l10n.languageAndRegionSubtitle),
+            onTap: () => context.push('/settings/language'),
           ),
           ListTile(
             key: const Key('open-sessions'),
             leading: const Icon(Icons.devices),
-            title: const Text('Sessions'),
-            subtitle: const Text('Devices signed in to your account'),
+            title: Text(context.l10n.sessions),
+            subtitle: Text(context.l10n.sessionsSubtitle),
             onTap: () => context.go('/sessions'),
           ),
           ListTile(
             key: const Key('open-change-password'),
             leading: const Icon(Icons.lock_reset),
-            title: const Text('Change password'),
+            title: Text(context.l10n.changePassword),
             onTap: () => context.push('/change-password'),
           ),
           ListTile(
             leading: const Icon(Icons.network_check),
-            title: const Text('Connectivity'),
+            title: Text(context.l10n.connectivity),
             onTap: () => context.go('/debug'),
           ),
         ],

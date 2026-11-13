@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/fields/presentation/field_input.dart';
@@ -33,7 +34,10 @@ class TaskFieldsPanel extends ConsumerWidget {
       key: const Key('task-fields'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Fields', style: Theme.of(context).textTheme.labelLarge),
+        Text(
+          context.l10n.grpFFields,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const SizedBox(height: 8),
         for (final f in fields)
           Padding(
@@ -128,7 +132,7 @@ class _RequiredFieldsDialogState extends State<RequiredFieldsDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('These fields need a value before the task is created.'),
+            Text(context.l10n.grpFRequiredFieldsIntro),
             const SizedBox(height: 12),
             for (final f in widget.fields)
               Padding(
@@ -137,7 +141,9 @@ class _RequiredFieldsDialogState extends State<RequiredFieldsDialog> {
                   field: f,
                   value: _values[f.id] ?? '',
                   members: widget.members,
-                  errorText: _tried && _missing(f) ? 'Required' : null,
+                  errorText: _tried && _missing(f)
+                      ? context.l10n.grpFRequired
+                      : null,
                   onChanged: (v) => setState(() => _values[f.id] = v),
                 ),
               ),
@@ -149,12 +155,12 @@ class _RequiredFieldsDialogState extends State<RequiredFieldsDialog> {
       TextButton(
         key: const Key('required-cancel'),
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       FilledButton(
         key: const Key('required-create'),
         onPressed: _create,
-        child: const Text('Create'),
+        child: Text(context.l10n.grpFCreate),
       ),
     ],
   );

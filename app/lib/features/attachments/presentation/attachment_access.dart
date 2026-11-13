@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -24,18 +25,18 @@ Future<bool> confirmDeleteAttachment(
     context: context,
     builder: (dialog) => AlertDialog(
       key: const Key('delete-attachment-dialog'),
-      title: const Text('Delete this file?'),
-      content: Text('$filename will be removed.'),
+      title: Text(dialog.l10n.grpHDeleteFileQ),
+      content: Text(dialog.l10n.grpHFileWillBeRemoved(filename)),
       actions: [
         TextButton(
           key: const Key('delete-attachment-cancel'),
           onPressed: () => Navigator.pop(dialog, false),
-          child: const Text('Cancel'),
+          child: Text(dialog.l10n.grpHCancel),
         ),
         FilledButton(
           key: const Key('delete-attachment-confirm'),
           onPressed: () => Navigator.pop(dialog, true),
-          child: const Text('Delete'),
+          child: Text(dialog.l10n.grpHDelete),
         ),
       ],
     ),

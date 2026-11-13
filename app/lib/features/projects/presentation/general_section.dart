@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -44,6 +45,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
     if (!_form.currentState!.validate()) return;
     final p = widget.project;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     final name = _name.text.trim();
     final description = _description.text.trim();
     setState(() {
@@ -63,7 +65,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             color: _color == p.color ? null : _color,
             visibility: _visibility == p.visibility ? null : _visibility,
           );
-      messenger.showSnackBar(const SnackBar(content: Text('Project updated.')));
+      messenger.showSnackBar(SnackBar(content: Text(l10n.grpHProjectUpdated)));
     } on ProjectException catch (e) {
       if (e.failure == ProjectFailure.conflict) {
         // The refreshed project rebuilds this form, so say it out of band.
@@ -98,12 +100,15 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('General', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            context.l10n.grpHGeneral,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           TextFormField(
             key: const Key('settings-name'),
             controller: _name,
             enabled: canEdit,
-            decoration: const InputDecoration(labelText: 'Name'),
+            decoration: InputDecoration(labelText: context.l10n.grpHName),
             validator: validateProjectName,
           ),
           TextFormField(
@@ -116,11 +121,10 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
               ),
             ],
             decoration: InputDecoration(
-              labelText: 'Key',
+              labelText: context.l10n.grpHKey,
               helperText: p.keyLocked
-                  ? 'The key is fixed because tasks already use it '
-                        '(${p.key}-${p.taskCounter}).'
-                  : 'Prefix of task numbers, e.g. WEB-12',
+                  ? context.l10n.grpHKeyFixed('${p.key}-${p.taskCounter}')
+                  : context.l10n.grpHKeyHelp,
               errorText: _keyError,
             ),
             validator: validateProjectKey,
@@ -130,7 +134,9 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             controller: _description,
             enabled: canEdit,
             maxLines: 3,
-            decoration: const InputDecoration(labelText: 'Description'),
+            decoration: InputDecoration(
+              labelText: context.l10n.grpHDescription,
+            ),
           ),
           const SizedBox(height: 16),
           ProjectLookPicker(
@@ -159,7 +165,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             FilledButton(
               key: const Key('save-project'),
               onPressed: _busy ? null : _save,
-              child: const Text('Save changes'),
+              child: Text(context.l10n.grpHSaveChanges),
             ),
           ],
         ],

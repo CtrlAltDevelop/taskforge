@@ -58,6 +58,9 @@ const Profile$json = {
     {'1': 'timezone', '3': 5, '4': 1, '5': 9, '10': 'timezone'},
     {'1': 'date_of_birth', '3': 6, '4': 1, '5': 9, '10': 'dateOfBirth'},
     {'1': 'marketing_opt_in', '3': 7, '4': 1, '5': 8, '10': 'marketingOptIn'},
+    {'1': 'calendar_system', '3': 8, '4': 1, '5': 9, '10': 'calendarSystem'},
+    {'1': 'week_start', '3': 9, '4': 1, '5': 9, '10': 'weekStart'},
+    {'1': 'numerals', '3': 10, '4': 1, '5': 9, '10': 'numerals'},
   ],
 };
 
@@ -67,7 +70,8 @@ final $typed_data.Uint8List profileDescriptor = $convert.base64Decode(
     'VybBgCIAEoCVIJYXZhdGFyVXJsEhAKA2JpbxgDIAEoCVIDYmlvEhYKBmxvY2FsZRgEIAEoCVIG'
     'bG9jYWxlEhoKCHRpbWV6b25lGAUgASgJUgh0aW1lem9uZRIiCg1kYXRlX29mX2JpcnRoGAYgAS'
     'gJUgtkYXRlT2ZCaXJ0aBIoChBtYXJrZXRpbmdfb3B0X2luGAcgASgIUg5tYXJrZXRpbmdPcHRJ'
-    'bg==');
+    'bhInCg9jYWxlbmRhcl9zeXN0ZW0YCCABKAlSDmNhbGVuZGFyU3lzdGVtEh0KCndlZWtfc3Rhcn'
+    'QYCSABKAlSCXdlZWtTdGFydBIaCghudW1lcmFscxgKIAEoCVIIbnVtZXJhbHM=');
 
 @$core.Deprecated('Use profileUpdateDescriptor instead')
 const ProfileUpdate$json = {
@@ -120,6 +124,33 @@ const ProfileUpdate$json = {
       '10': 'marketingOptIn',
       '17': true
     },
+    {
+      '1': 'calendar_system',
+      '3': 8,
+      '4': 1,
+      '5': 9,
+      '9': 7,
+      '10': 'calendarSystem',
+      '17': true
+    },
+    {
+      '1': 'week_start',
+      '3': 9,
+      '4': 1,
+      '5': 9,
+      '9': 8,
+      '10': 'weekStart',
+      '17': true
+    },
+    {
+      '1': 'numerals',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '9': 9,
+      '10': 'numerals',
+      '17': true
+    },
   ],
   '8': [
     {'1': '_display_name'},
@@ -129,6 +160,9 @@ const ProfileUpdate$json = {
     {'1': '_timezone'},
     {'1': '_date_of_birth'},
     {'1': '_marketing_opt_in'},
+    {'1': '_calendar_system'},
+    {'1': '_week_start'},
+    {'1': '_numerals'},
   ],
 };
 
@@ -138,6 +172,9 @@ final $typed_data.Uint8List profileUpdateDescriptor = $convert.base64Decode(
     'IiCgphdmF0YXJfdXJsGAIgASgJSAFSCWF2YXRhclVybIgBARIVCgNiaW8YAyABKAlIAlIDYmlv'
     'iAEBEhsKBmxvY2FsZRgEIAEoCUgDUgZsb2NhbGWIAQESHwoIdGltZXpvbmUYBSABKAlIBFIIdG'
     'ltZXpvbmWIAQESJwoNZGF0ZV9vZl9iaXJ0aBgGIAEoCUgFUgtkYXRlT2ZCaXJ0aIgBARItChBt'
-    'YXJrZXRpbmdfb3B0X2luGAcgASgISAZSDm1hcmtldGluZ09wdEluiAEBQg8KDV9kaXNwbGF5X2'
-    '5hbWVCDQoLX2F2YXRhcl91cmxCBgoEX2Jpb0IJCgdfbG9jYWxlQgsKCV90aW1lem9uZUIQCg5f'
-    'ZGF0ZV9vZl9iaXJ0aEITChFfbWFya2V0aW5nX29wdF9pbg==');
+    'YXJrZXRpbmdfb3B0X2luGAcgASgISAZSDm1hcmtldGluZ09wdEluiAEBEiwKD2NhbGVuZGFyX3'
+    'N5c3RlbRgIIAEoCUgHUg5jYWxlbmRhclN5c3RlbYgBARIiCgp3ZWVrX3N0YXJ0GAkgASgJSAhS'
+    'CXdlZWtTdGFydIgBARIfCghudW1lcmFscxgKIAEoCUgJUghudW1lcmFsc4gBAUIPCg1fZGlzcG'
+    'xheV9uYW1lQg0KC19hdmF0YXJfdXJsQgYKBF9iaW9CCQoHX2xvY2FsZUILCglfdGltZXpvbmVC'
+    'EAoOX2RhdGVfb2ZfYmlydGhCEwoRX21hcmtldGluZ19vcHRfaW5CEgoQX2NhbGVuZGFyX3N5c3'
+    'RlbUINCgtfd2Vla19zdGFydEILCglfbnVtZXJhbHM=');

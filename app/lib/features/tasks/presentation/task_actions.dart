@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What a row's menu can do.
 enum TaskAction {
@@ -15,7 +17,15 @@ enum TaskAction {
 
   const TaskAction(this.label);
 
+  /// The English name; [labelIn] gives it in the language on screen.
   final String label;
+
+  String labelIn(AppLocalizations l10n) => switch (this) {
+    addSubtask => l10n.grpFActionAddSubtask,
+    moveUnder => l10n.grpFActionMoveUnder,
+    makeTopLevel => l10n.grpFActionMakeTopLevel,
+    delete => l10n.grpFDelete,
+  };
 }
 
 IconData priorityIcon(TaskPriority priority) => switch (priority) {
@@ -41,19 +51,21 @@ class BlockedBadge extends StatelessWidget {
 
   final List<String> blockedBy;
 
-  String get message => blockedBy.isEmpty
-      ? 'Blocked by tasks that are not done yet'
-      : 'Blocked by ${blockedBy.join(', ')}';
+  String get message => messageIn(lookupAppLocalizations(const Locale('en')));
+
+  String messageIn(AppLocalizations l10n) => blockedBy.isEmpty
+      ? l10n.grpFBlockedByPending
+      : l10n.grpFBlockedBy(blockedBy.join(', '));
 
   @override
   Widget build(BuildContext context) => Tooltip(
-    message: message,
-    child: const Icon(
+    message: messageIn(context.l10n),
+    child: Icon(
       Icons.lock,
-      key: Key('blocked-badge'),
+      key: const Key('blocked-badge'),
       size: 18,
       color: Colors.red,
-      semanticLabel: 'Blocked',
+      semanticLabel: context.l10n.grpFBlocked,
     ),
   );
 }
@@ -134,23 +146,24 @@ class BlockedDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('This task is blocked'),
+    title: Text(context.l10n.grpFBlockedTitle),
     content: Text(
-      'It is blocked by $blockers, which ${blockers.contains(',') ? 'are' : 'is'} '
-      'not done yet.',
+      blockers.contains(',')
+          ? context.l10n.grpFBlockedTextMany(blockers)
+          : context.l10n.grpFBlockedTextOne(blockers),
       key: const Key('blocked-text'),
     ),
     actions: [
       TextButton(
         key: const Key('blocked-cancel'),
         onPressed: () => Navigator.pop(context, false),
-        child: Text(canOverride ? 'Cancel' : 'OK'),
+        child: Text(canOverride ? context.l10n.cancel : context.l10n.grpFOk),
       ),
       if (canOverride)
         FilledButton(
           key: const Key('complete-anyway'),
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Complete anyway'),
+          child: Text(context.l10n.grpFCompleteAnyway),
         ),
     ],
   );
@@ -200,16 +213,19 @@ Future<void> _resolveConflict(
   }
 }
 
-String fieldLabel(String field) => switch (field) {
-  'title' => 'title',
-  'description' => 'description',
-  'status' => 'status',
-  'priority' => 'priority',
-  'start_date' => 'start date',
-  'due_date' => 'due date',
-  'assignee_ids' => 'assignees',
-  _ => field,
-};
+String fieldLabel(String field, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (field) {
+    'title' => t.grpFFieldTitle,
+    'description' => t.grpFFieldDescription,
+    'status' => t.grpFFieldStatus,
+    'priority' => t.grpFFieldPriority,
+    'start_date' => t.grpFFieldStartDate,
+    'due_date' => t.grpFFieldDueDate,
+    'assignee_ids' => t.grpFFieldAssignees,
+    _ => field,
+  };
+}
 
 /// Someone else changed the same field: pick whose value stays.
 class ConflictDialog extends StatelessWidget {
@@ -226,28 +242,36 @@ class ConflictDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text('Someone changed the ${fieldLabel(field)}'),
+    title: Text(
+      context.l10n.grpFConflictTitle(fieldLabel(field, context.l10n)),
+    ),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Theirs'),
-        Text(theirs.isEmpty ? '(empty)' : theirs, key: const Key('theirs')),
+        Text(context.l10n.grpFTheirs),
+        Text(
+          theirs.isEmpty ? context.l10n.grpFEmpty : theirs,
+          key: const Key('theirs'),
+        ),
         const SizedBox(height: 12),
-        const Text('Yours'),
-        Text(mine.isEmpty ? '(empty)' : mine, key: const Key('mine')),
+        Text(context.l10n.grpFYours),
+        Text(
+          mine.isEmpty ? context.l10n.grpFEmpty : mine,
+          key: const Key('mine'),
+        ),
       ],
     ),
     actions: [
       TextButton(
         key: const Key('take-theirs'),
         onPressed: () => Navigator.pop(context, false),
-        child: const Text('Take theirs'),
+        child: Text(context.l10n.grpFTakeTheirs),
       ),
       FilledButton(
         key: const Key('keep-mine'),
         onPressed: () => Navigator.pop(context, true),
-        child: const Text('Keep mine'),
+        child: Text(context.l10n.grpFKeepMine),
       ),
     ],
   );

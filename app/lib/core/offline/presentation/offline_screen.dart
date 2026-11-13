@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/offline/codecs.dart';
 import 'package:taskforge/core/offline/keep_offline.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
@@ -11,6 +12,7 @@ import 'package:taskforge/core/offline/outbox.dart';
 import 'package:taskforge/core/offline/outbox_worker.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The cache sizes to choose from, in megabytes.
 const cacheCapChoicesMb = [25, 50, 100, 250, 500];
@@ -57,14 +59,14 @@ class OfflineScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-home'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpAOfflineBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
-        title: const Text('Offline and storage'),
+        title: Text(context.l10n.grpAOfflineTitle),
       ),
       body: workspace == null
-          ? const Center(child: Text('Choose a workspace first.'))
+          ? Center(child: Text(context.l10n.grpAOfflineChooseWorkspace))
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -99,12 +101,15 @@ class _Changes extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Needs your attention', style: theme.textTheme.titleMedium),
+        Text(
+          context.l10n.grpAOfflineNeedsAttention,
+          style: theme.textTheme.titleMedium,
+        ),
         const SizedBox(height: 8),
         if (attention.isEmpty)
-          const Text(
-            'Nothing. Every change made offline was sent.',
-            key: Key('nothing-to-decide'),
+          Text(
+            context.l10n.grpAOfflineNothingToDecide,
+            key: const Key('nothing-to-decide'),
           ),
         for (final e in attention)
           _AttentionCard(key: Key('attention-${e.id}'), entry: e),
@@ -113,7 +118,7 @@ class _Changes extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                'Waiting to be sent (${waiting.length})',
+                context.l10n.grpAOfflineWaiting(waiting.length),
                 style: theme.textTheme.titleMedium,
               ),
             ),
@@ -121,11 +126,11 @@ class _Changes extends ConsumerWidget {
               key: const Key('sync-now'),
               onPressed: () => ref.read(offlineSyncProvider.notifier).syncNow(),
               icon: const Icon(Icons.sync),
-              label: const Text('Sync now'),
+              label: Text(context.l10n.grpASyncNow),
             ),
           ],
         ),
-        if (waiting.isEmpty) const Text('Nothing is waiting.'),
+        if (waiting.isEmpty) Text(context.l10n.grpAOfflineNothingWaiting),
         for (final e in waiting)
           ListTile(
             key: Key('waiting-${e.id}'),
@@ -159,22 +164,32 @@ class _Summary extends ConsumerWidget {
             )
             .value ??
         '';
-    return Text(describeEntry(entry, title));
+    return Text(describeEntry(entry, title, context.l10n));
   }
 }
 
 /// What [entry] does, for a list: "Edit “Fix login”: title, dueDate".
-String describeEntry(OutboxEntry entry, String taskTitle) {
-  final name = taskTitle.isEmpty ? 'a task' : '“$taskTitle”';
+String describeEntry(
+  OutboxEntry entry,
+  String taskTitle, [
+  AppLocalizations? l10n,
+]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  final name = taskTitle.isEmpty ? l.grpAEntryATask : '“$taskTitle”';
   return switch ((entry.entity, entry.op)) {
-    (OutboxEntity.task, OutboxOp.create) =>
-      'New task “${entry.payload['title'] ?? ''}”',
-    (OutboxEntity.task, OutboxOp.update) =>
-      'Edit $name: ${entry.payload.keys.join(', ')}',
-    (OutboxEntity.task, OutboxOp.delete) => 'Delete $name',
-    (OutboxEntity.comment, _) => 'Comment on $name',
-    (OutboxEntity.attachment, _) =>
-      'Upload “${entry.payload['name'] ?? ''}” to $name',
+    (OutboxEntity.task, OutboxOp.create) => l.grpAEntryNewTask(
+      '${entry.payload['title'] ?? ''}',
+    ),
+    (OutboxEntity.task, OutboxOp.update) => l.grpAEntryEdit(
+      name,
+      entry.payload.keys.join(', '),
+    ),
+    (OutboxEntity.task, OutboxOp.delete) => l.grpAEntryDelete(name),
+    (OutboxEntity.comment, _) => l.grpAEntryComment(name),
+    (OutboxEntity.attachment, _) => l.grpAEntryUpload(
+      '${entry.payload['name'] ?? ''}',
+      name,
+    ),
   };
 }
 
@@ -204,8 +219,11 @@ class _AttentionCard extends ConsumerWidget {
             if (conflict && info.field.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(
-                'Theirs (${info.field}): ${info.current}\n'
-                'Yours: ${entry.payload[info.field] ?? ''}',
+                context.l10n.grpAOfflineClash(
+                  info.field,
+                  info.current,
+                  '${entry.payload[info.field] ?? ''}',
+                ),
                 key: Key('clash-${entry.id}'),
               ),
             ],
@@ -220,18 +238,18 @@ class _AttentionCard extends ConsumerWidget {
                       await worker.keepMine(entry);
                       await sync.syncNow();
                     },
-                    child: const Text('Keep mine'),
+                    child: Text(context.l10n.grpAKeepMine),
                   ),
                   OutlinedButton(
                     key: Key('take-theirs-${entry.id}'),
                     onPressed: () => worker.takeTheirs(entry),
-                    child: const Text('Take theirs'),
+                    child: Text(context.l10n.grpATakeTheirs),
                   ),
                   if (entry.payload.length > 1)
                     OutlinedButton(
                       key: Key('merge-${entry.id}'),
                       onPressed: () => _merge(context, worker, sync),
-                      child: const Text('Merge'),
+                      child: Text(context.l10n.grpAMerge),
                     ),
                 ] else ...[
                   FilledButton(
@@ -240,12 +258,12 @@ class _AttentionCard extends ConsumerWidget {
                       await worker.retry(entry);
                       await sync.syncNow();
                     },
-                    child: const Text('Try again'),
+                    child: Text(context.l10n.grpATryAgain),
                   ),
                   OutlinedButton(
                     key: Key('discard-${entry.id}'),
                     onPressed: () => worker.discard(entry),
-                    child: const Text('Discard'),
+                    child: Text(context.l10n.grpADiscard),
                   ),
                 ],
               ],
@@ -285,7 +303,7 @@ class _MergeDialogState extends State<_MergeDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Which of your changes to keep?'),
+    title: Text(context.l10n.grpAMergeTitle),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -304,12 +322,12 @@ class _MergeDialogState extends State<_MergeDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpACancel),
       ),
       FilledButton(
         key: const Key('merge-confirm'),
         onPressed: () => Navigator.pop(context, _mine),
-        child: const Text('Merge'),
+        child: Text(context.l10n.grpAMerge),
       ),
     ],
   );
@@ -326,26 +344,33 @@ class _Storage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Storage', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          context.l10n.grpAStorage,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         const SizedBox(height: 8),
         Text(
           usage == null
-              ? 'Reading…'
-              : 'The copy on this device holds '
-                    '${(usage.size / _mb).toStringAsFixed(1)} MB '
-                    'of at most $capMb MB.',
+              ? context.l10n.grpAReading
+              : context.l10n.grpAStorageUsage(
+                  (usage.size / _mb).toStringAsFixed(1),
+                  capMb!,
+                ),
           key: const Key('cache-usage'),
         ),
         Row(
           children: [
-            const Expanded(child: Text('Most it may hold')),
+            Expanded(child: Text(context.l10n.grpAMostItMayHold)),
             const SizedBox(width: 12),
             DropdownButton<int>(
               key: const Key('cache-cap'),
               value: cacheCapChoicesMb.contains(capMb) ? capMb : null,
               items: [
                 for (final mb in cacheCapChoicesMb)
-                  DropdownMenuItem(value: mb, child: Text('$mb MB')),
+                  DropdownMenuItem(
+                    value: mb,
+                    child: Text(context.l10n.grpAMegabytes(mb)),
+                  ),
               ],
               onChanged: (mb) async {
                 final store = await ref.read(offlineStoreFutureProvider);
@@ -358,19 +383,18 @@ class _Storage extends ConsumerWidget {
           ],
         ),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: OutlinedButton(
             key: const Key('clear-cache'),
             onPressed: workspace == null
                 ? null
                 : () => _clear(context, ref, workspace),
-            child: const Text('Clear the copy on this device'),
+            child: Text(context.l10n.grpAClearCopy),
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          'Changes still waiting to be sent are kept. The copy is stored '
-          'unencrypted: use your device\'s disk encryption.',
+          context.l10n.grpAStorageNote,
           style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
@@ -385,20 +409,17 @@ class _Storage extends ConsumerWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Clear the copy on this device?'),
-        content: const Text(
-          'What you read is fetched again when you are online. Changes '
-          'waiting to be sent are not removed.',
-        ),
+        title: Text(ctx.l10n.grpAClearTitle),
+        content: Text(ctx.l10n.grpAClearBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.grpACancel),
           ),
           FilledButton(
             key: const Key('clear-cache-confirm'),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Clear'),
+            child: Text(ctx.l10n.grpAClear),
           ),
         ],
       ),
@@ -426,15 +447,11 @@ class _KeptProjects extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Keep projects offline',
+          context.l10n.grpAKeepOfflineTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 4),
-        const Text(
-          'A kept project is copied whole, so its tasks, statuses and '
-          'members are there without a connection. Other projects show '
-          'what you read last.',
-        ),
+        Text(context.l10n.grpAKeepOfflineBody),
         for (final p in projects)
           Builder(
             builder: (context) {
@@ -449,7 +466,7 @@ class _KeptProjects extends ConsumerWidget {
                     ? null
                     : working.error != null
                     ? Text(working.error!)
-                    : Text('Copying… ${working.fetched} tasks'),
+                    : Text(context.l10n.grpACopying(working.fetched)),
                 onChanged: working != null && working.error == null
                     ? null
                     : (on) => on ? keeper.keep(p.id) : keeper.forget(p.id),

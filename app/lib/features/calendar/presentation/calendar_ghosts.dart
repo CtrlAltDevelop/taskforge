@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 
@@ -52,7 +53,7 @@ class GhostTile extends StatelessWidget {
         ghost.title,
         style: TextStyle(color: faded, fontStyle: FontStyle.italic),
       ),
-      subtitle: const Text('Repeats: not made yet'),
+      subtitle: Text(context.l10n.grpFRepeatsNotMade),
     );
   }
 }
@@ -85,7 +86,7 @@ class GhostRow extends StatelessWidget {
                   GhostTile(ghost: g, dense: true),
                 if (day.length > _perDay)
                   Text(
-                    '+${day.length - _perDay} more',
+                    context.l10n.grpFPlusMore(day.length - _perDay),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
               ],

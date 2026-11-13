@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
@@ -41,12 +42,12 @@ class LinksPanel extends ConsumerWidget {
       children: [
         Row(
           children: [
-            Text('Links', style: theme.textTheme.titleSmall),
+            Text(context.l10n.grpFLinks, style: theme.textTheme.titleSmall),
             const Spacer(),
             if (canEdit)
               IconButton(
                 key: const Key('add-link'),
-                tooltip: 'Add a link',
+                tooltip: context.l10n.grpFAddLink,
                 icon: const Icon(Icons.add_link),
                 onPressed: () => showDialog<void>(
                   context: context,
@@ -63,12 +64,12 @@ class LinksPanel extends ConsumerWidget {
               TextButton(
                 key: const Key('retry-links'),
                 onPressed: () => ref.invalidate(taskLinksProvider(task.id)),
-                child: const Text('Retry'),
+                child: Text(context.l10n.retry),
               ),
             ],
           ),
           data: (items) => items.isEmpty
-              ? const Text('No links yet.', key: Key('no-links'))
+              ? Text(context.l10n.grpFNoLinks, key: const Key('no-links'))
               : _Groups(
                   items: items,
                   canEdit: canEdit,
@@ -149,7 +150,7 @@ class _Groups extends StatelessWidget {
                 trailing: canEdit
                     ? IconButton(
                         key: Key('remove-link-${link.id}'),
-                        tooltip: 'Remove link',
+                        tooltip: context.l10n.grpFRemoveLink,
                         icon: const Icon(Icons.close, size: 18),
                         onPressed: () => onRemove(link),
                       )
@@ -254,7 +255,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add a link'),
+      title: Text(context.l10n.grpFAddLink),
       content: SizedBox(
         width: 420,
         child: Column(
@@ -273,9 +274,9 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
             ),
             TextField(
               key: const Key('link-search'),
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Search tasks in any project',
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: context.l10n.grpFLinkSearchHint,
               ),
               onChanged: _search,
             ),
@@ -302,7 +303,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
                 key: const Key('close-duplicate'),
                 dense: true,
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Close the duplicate'),
+                title: Text(context.l10n.grpFCloseDuplicate),
                 value: _closeDuplicate,
                 onChanged: (v) => setState(() => _closeDuplicate = v ?? false),
               ),
@@ -321,12 +322,12 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
       actions: [
         TextButton(
           onPressed: _busy ? null : () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           key: const Key('link-submit'),
           onPressed: _picked == null || _busy ? null : _submit,
-          child: const Text('Link'),
+          child: Text(context.l10n.grpFLinkAction),
         ),
       ],
     );

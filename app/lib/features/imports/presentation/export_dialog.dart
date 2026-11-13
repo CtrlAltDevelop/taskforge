@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
 import 'package:taskforge/features/imports/presentation/import_io.dart';
@@ -41,7 +42,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
       // The chooser failed or the file could not be written: say so, the zip
       // can be asked for again.
       if (mounted) {
-        setState(() => _saveError = 'The file could not be saved. Try again.');
+        setState(() => _saveError = context.l10n.grpGExportSaveFailed);
       }
     }
   }
@@ -58,7 +59,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
     }
     return AlertDialog(
       key: const Key('export-dialog'),
-      title: const Text('Export'),
+      title: Text(context.l10n.grpGExport),
       content: SizedBox(
         width: 420,
         child: Column(
@@ -73,13 +74,13 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                   RadioListTile<bool>(
                     key: const Key('export-scope-all'),
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Every project I can open'),
+                    title: Text(context.l10n.grpGEveryProject),
                     value: true,
                   ),
                   RadioListTile<bool>(
                     key: const Key('export-scope-project'),
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('One project'),
+                    title: Text(context.l10n.grpGOneProject),
                     value: false,
                   ),
                 ],
@@ -102,10 +103,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                 onChanged: (id) => setState(() => _projectId = id ?? ''),
               ),
             const SizedBox(height: 8),
-            const Text(
-              'A zip with tasks.json (which TaskForge can import again), '
-              'tasks.csv, comments, an attachments manifest and a README.',
-            ),
+            Text(context.l10n.grpGExportInfo),
             if (state.busy)
               const Padding(
                 padding: EdgeInsets.only(top: 12),
@@ -115,8 +113,12 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(
-                  'Saved ${state.saved}'
-                  '${state.job != null ? ' (${humanSize(state.job!.size)})' : ''}.',
+                  state.job != null
+                      ? context.l10n.grpGExportSavedSized(
+                          '${state.saved}',
+                          humanSize(state.job!.size),
+                        )
+                      : context.l10n.grpGExportSaved('${state.saved}'),
                   key: const Key('export-done'),
                 ),
               ),
@@ -144,14 +146,14 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpGClose),
         ),
         FilledButton(
           key: const Key('export-go'),
           onPressed: state.busy || (!_everything && _projectId.isEmpty)
               ? null
               : _go,
-          child: const Text('Export'),
+          child: Text(context.l10n.grpGExport),
         ),
       ],
     );

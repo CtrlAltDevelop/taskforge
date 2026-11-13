@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 
@@ -69,8 +70,9 @@ class _PresenceStripState extends ConsumerState<PresenceStrip> {
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 4),
             child: Tooltip(
-              message:
-                  '${_nameOf(ref, u.id)}${u.editing ? ' is editing' : ' is viewing'}',
+              message: u.editing
+                  ? context.l10n.grpFPresenceEditing(_nameOf(ref, u.id))
+                  : context.l10n.grpFPresenceViewing(_nameOf(ref, u.id)),
               child: CircleAvatar(
                 key: Key('viewer-${u.id}'),
                 radius: 12,
@@ -84,7 +86,8 @@ class _PresenceStripState extends ConsumerState<PresenceStrip> {
               ),
             ),
           ),
-        if (others.length > 4) Text('+${others.length - 4}'),
+        if (others.length > 4)
+          Text(context.l10n.grpFPlusCount(others.length - 4)),
       ],
     );
   }
@@ -105,7 +108,7 @@ class EditingHint extends ConsumerWidget {
     ];
     if (editing.isEmpty) return const SizedBox.shrink();
     final names = editing.map((u) => _nameOf(ref, u.id)).toSet().toList();
-    final who = names.length == 1 ? names.single : '${names.length} people';
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Row(
@@ -119,7 +122,9 @@ class EditingHint extends ConsumerWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              '$who ${names.length == 1 ? 'is' : 'are'} editing this',
+              names.length == 1
+                  ? l10n.grpFEditingOne(names.single)
+                  : l10n.grpFEditingMany(names.length),
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),

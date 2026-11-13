@@ -9,6 +9,7 @@ import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dar
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
 import 'package:taskforge/features/imports/presentation/import_screen.dart';
 import 'package:taskforge/features/account/home_screen.dart';
+import 'package:taskforge/features/account/language_screen.dart';
 import 'package:taskforge/features/account/sessions_screen.dart';
 import 'package:taskforge/features/auth/change_password_screen.dart';
 import 'package:taskforge/features/auth/forgot_password_screen.dart';
@@ -208,6 +209,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             InviteScreen(token: state.pathParameters['token']!),
       ),
       GoRoute(path: '/sessions', builder: (_, _) => const SessionsScreen()),
+      GoRoute(
+        path: '/settings/language',
+        builder: (_, _) => const LanguageScreen(),
+      ),
       GoRoute(
         path: '/change-password',
         builder: (_, _) => const ChangePasswordScreen(),

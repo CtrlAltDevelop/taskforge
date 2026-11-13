@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
@@ -43,16 +44,13 @@ class _MigrationDialogState extends State<_MigrationDialog> {
   Widget build(BuildContext context) {
     final count = widget.status.taskCount;
     return AlertDialog(
-      title: Text('Delete ${widget.status.name}?'),
+      title: Text(context.l10n.grpIDeleteStatusTitle(widget.status.name)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.message ??
-                (count == 1
-                    ? '1 task is in this status. Choose where it goes.'
-                    : '$count tasks are in this status. Choose where they go.'),
+            widget.message ?? context.l10n.grpITasksInStatus(count),
             key: const Key('migration-explain'),
           ),
           const SizedBox(height: 16),
@@ -60,12 +58,16 @@ class _MigrationDialogState extends State<_MigrationDialog> {
             key: const Key('migrate-target'),
             initialValue: _target,
             isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Move tasks to'),
+            decoration: InputDecoration(
+              labelText: context.l10n.grpIMoveTasksTo,
+            ),
             items: [
               for (final s in widget.others)
                 DropdownMenuItem(
                   value: s.key,
-                  child: Text(s.name.isEmpty ? '(unnamed)' : s.name),
+                  child: Text(
+                    s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
+                  ),
                 ),
             ],
             onChanged: (v) => setState(() => _target = v ?? _target),
@@ -76,12 +78,12 @@ class _MigrationDialogState extends State<_MigrationDialog> {
         TextButton(
           key: const Key('cancel-delete-status'),
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpICancel),
         ),
         FilledButton(
           key: const Key('confirm-delete-status'),
           onPressed: () => Navigator.pop(context, _target),
-          child: const Text('Move tasks and delete'),
+          child: Text(context.l10n.grpIMoveTasksAndDelete),
         ),
       ],
     );
@@ -147,28 +149,29 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
           key: const Key('condition-role'),
           initialValue: _role,
           isExpanded: true,
-          decoration: const InputDecoration(
-            labelText: 'Who may make this move',
-          ),
+          decoration: InputDecoration(labelText: context.l10n.grpIWhoMayMove),
           items: [
-            const DropdownMenuItem(value: '', child: Text('Any role')),
+            DropdownMenuItem(value: '', child: Text(context.l10n.grpIAnyRole)),
             for (final r in widget.roles)
-              DropdownMenuItem(value: r.id, child: Text('Only ${r.name}')),
+              DropdownMenuItem(
+                value: r.id,
+                child: Text(context.l10n.grpIOnlyRole(r.name)),
+              ),
           ],
           onChanged: (v) => setState(() => _role = v ?? ''),
         ),
         SwitchListTile(
           key: const Key('condition-assignee'),
           contentPadding: EdgeInsets.zero,
-          title: const Text('The task needs an assignee'),
+          title: Text(context.l10n.grpITaskNeedsAssignee),
           value: _assignee,
           onChanged: (v) => setState(() => _assignee = v),
         ),
         SwitchListTile(
           key: const Key('condition-subtasks'),
           contentPadding: EdgeInsets.zero,
-          title: const Text('All subtasks must be done'),
-          subtitle: const Text('Done or cancelled, at any depth.'),
+          title: Text(context.l10n.grpIAllSubtasksDone),
+          subtitle: Text(context.l10n.grpIDoneOrCancelledDepth),
           value: _subtasks,
           onChanged: (v) => setState(() => _subtasks = v),
         ),
@@ -177,7 +180,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpICancel),
       ),
       FilledButton(
         key: const Key('save-conditions'),
@@ -189,7 +192,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
             requireSubtasksDone: _subtasks,
           ),
         ),
-        child: const Text('Done'),
+        child: Text(context.l10n.grpIDone),
       ),
     ],
   );

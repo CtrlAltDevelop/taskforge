@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/doc_ops.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
@@ -273,11 +274,11 @@ class _TextBlockViewState extends State<TextBlockView> {
 
   Widget _prefix(BuildContext context) => switch (_block.type) {
     BlockType.bullet => const Padding(
-      padding: EdgeInsets.only(right: 8, top: 2),
+      padding: EdgeInsetsDirectional.only(end: 8, top: 2),
       child: Text('•'),
     ),
     BlockType.numbered => Padding(
-      padding: const EdgeInsets.only(right: 8, top: 2),
+      padding: const EdgeInsetsDirectional.only(end: 8, top: 2),
       child: Text('${widget.number}.', key: Key('number-${_block.id}')),
     ),
     BlockType.checklist => SizedBox(
@@ -303,10 +304,15 @@ class _TextBlockViewState extends State<TextBlockView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (final (id, icon, tip, mark) in [
-          ('bold', Icons.format_bold, 'Bold', boldMark),
-          ('italic', Icons.format_italic, 'Italic', italicMark),
-          ('strike', Icons.strikethrough_s, 'Strikethrough', strikeMark),
-          ('code', Icons.code, 'Code', codeMark),
+          ('bold', Icons.format_bold, context.l10n.grpJBold, boldMark),
+          ('italic', Icons.format_italic, context.l10n.grpJItalic, italicMark),
+          (
+            'strike',
+            Icons.strikethrough_s,
+            context.l10n.grpJStrikethrough,
+            strikeMark,
+          ),
+          ('code', Icons.code, context.l10n.grpJCode, codeMark),
         ])
           IconButton(
             key: Key('tb-$id'),
@@ -316,7 +322,7 @@ class _TextBlockViewState extends State<TextBlockView> {
           ),
         IconButton(
           key: const Key('tb-link'),
-          tooltip: 'Link',
+          tooltip: context.l10n.grpJLink,
           icon: const Icon(Icons.link, size: 18),
           onPressed: _link,
         ),
@@ -370,9 +376,9 @@ class _TextBlockViewState extends State<TextBlockView> {
             hintText: widget.readOnly
                 ? null
                 : _block.type == BlockType.paragraph
-                ? "Type '/' for blocks, '[[' to mention a page"
+                ? context.l10n.grpJHintParagraph
                 : _block.type == BlockType.heading
-                ? 'Heading ${_block.level}'
+                ? context.l10n.grpJHintHeading(_block.level)
                 : null,
           ),
         ),
@@ -380,7 +386,7 @@ class _TextBlockViewState extends State<TextBlockView> {
     );
     if (_block.type == BlockType.quote) {
       field = Container(
-        padding: const EdgeInsets.only(left: 12),
+        padding: const EdgeInsetsDirectional.only(start: 12),
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(color: theme.colorScheme.outline, width: 3),
@@ -402,7 +408,7 @@ class _TextBlockViewState extends State<TextBlockView> {
         children: [
           IconButton(
             key: Key('callout-tone-${_block.id}'),
-            tooltip: 'Change tone (${_block.tone})',
+            tooltip: context.l10n.grpJChangeTone(_block.tone),
             icon: Icon(_toneIcon(_block.tone), color: tone),
             onPressed: widget.readOnly
                 ? null
@@ -444,7 +450,7 @@ class _TextBlockViewState extends State<TextBlockView> {
       });
     }
     return Padding(
-      padding: EdgeInsets.only(left: _block.indent * 24.0),
+      padding: EdgeInsetsDirectional.only(start: _block.indent * 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

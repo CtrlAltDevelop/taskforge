@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
 
@@ -15,19 +17,20 @@ class WorkflowGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!draft.restrict) {
-      return const Card(
-        key: Key('graph-unrestricted'),
+      return Card(
+        key: const Key('graph-unrestricted'),
         child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text('Any status can move to any other.'),
+          padding: const EdgeInsets.all(16),
+          child: Text(context.l10n.grpIAnyStatusMoves),
         ),
       );
     }
     final scheme = Theme.of(context).colorScheme;
     return Semantics(
-      label:
-          'Workflow with ${draft.statuses.length} statuses and '
-          '${draft.transitions.length} allowed moves',
+      label: context.l10n.grpIWorkflowGraphLabel(
+        draft.statuses.length,
+        draft.transitions.length,
+      ),
       child: Card(
         child: AspectRatio(
           aspectRatio: 1.1,

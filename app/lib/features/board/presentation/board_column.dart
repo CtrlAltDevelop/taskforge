@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/presentation/board_card.dart';
 import 'package:taskforge/features/board/presentation/edge_scroll.dart';
@@ -218,7 +219,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
         children: [
           IconButton(
             key: Key('collapse-$key'),
-            tooltip: 'Fold the column',
+            tooltip: context.l10n.grpFFoldColumn,
             iconSize: 18,
             visualDensity: VisualDensity.compact,
             icon: const Icon(Icons.unfold_less),
@@ -254,7 +255,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
           ),
           PopupMenuButton<String>(
             key: Key('column-menu-$key'),
-            tooltip: 'Column',
+            tooltip: context.l10n.grpFColumn,
             onSelected: (_) => _askLimit(),
             itemBuilder: (_) => [
               PopupMenuItem(
@@ -262,8 +263,8 @@ class _BoardColumnViewState extends State<BoardColumnView> {
                 value: 'limit',
                 child: Text(
                   limit == null
-                      ? 'Set a work-in-progress limit…'
-                      : 'Change the limit…',
+                      ? context.l10n.grpFSetWipLimit
+                      : context.l10n.grpFChangeLimit,
                 ),
               ),
             ],
@@ -515,10 +516,10 @@ class _AddFieldState extends State<_AddField> {
       controller: _controller,
       enabled: !_busy,
       textInputAction: TextInputAction.done,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         isDense: true,
-        hintText: 'Add a task',
-        prefixIcon: Icon(Icons.add, size: 18),
+        hintText: context.l10n.grpFAddTask,
+        prefixIcon: const Icon(Icons.add, size: 18),
       ),
       onSubmitted: _submit,
     ),
@@ -552,32 +553,30 @@ class _LimitDialogState extends State<_LimitDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Work-in-progress limit'),
+    title: Text(context.l10n.grpFWipTitle),
     content: TextField(
       key: const Key('wip-input'),
       controller: _controller,
       autofocus: true,
       keyboardType: TextInputType.number,
-      decoration: const InputDecoration(
-        labelText: 'Most cards this column should hold',
-      ),
+      decoration: InputDecoration(labelText: context.l10n.grpFWipMost),
       onSubmitted: (_) => _save(),
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       if (widget.current != null)
         TextButton(
           key: const Key('wip-clear'),
           onPressed: () => Navigator.pop(context, 0),
-          child: const Text('Clear'),
+          child: Text(context.l10n.grpFClear),
         ),
       FilledButton(
         key: const Key('wip-save'),
         onPressed: _save,
-        child: const Text('Save'),
+        child: Text(context.l10n.save),
       ),
     ],
   );

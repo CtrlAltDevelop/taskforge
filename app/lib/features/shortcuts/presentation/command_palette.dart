@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/actions/fuzzy.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
@@ -313,8 +314,7 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
                   focusNode: _focus,
                   autofocus: true,
                   decoration: InputDecoration(
-                    hintText:
-                        'Type a command, or > actions  # projects  @ people',
+                    hintText: context.l10n.grpGPaletteHint,
                     prefixIcon: const Icon(Icons.keyboard_command_key),
                     suffixIcon: _searching
                         ? const Padding(
@@ -333,10 +333,10 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
             const Divider(height: 1),
             Flexible(
               child: count == 0 && !_searching
-                  ? const Padding(
-                      key: Key('palette-empty'),
-                      padding: EdgeInsets.all(24),
-                      child: Text('Nothing matches.'),
+                  ? Padding(
+                      key: const Key('palette-empty'),
+                      padding: const EdgeInsets.all(24),
+                      child: Text(context.l10n.grpGNothingMatches),
                     )
                   : ListView(
                       shrinkWrap: true,
@@ -357,10 +357,10 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
                             onTap: () => _choose(actions, actions.length + i),
                           ),
                         if (_searchError != null)
-                          const Padding(
-                            key: Key('palette-search-error'),
-                            padding: EdgeInsets.all(16),
-                            child: Text('Search is not available right now.'),
+                          Padding(
+                            key: const Key('palette-search-error'),
+                            padding: const EdgeInsets.all(16),
+                            child: Text(context.l10n.grpGSearchUnavailable),
                           ),
                       ],
                     ),

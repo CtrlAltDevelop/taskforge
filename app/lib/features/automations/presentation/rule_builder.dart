@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/action_cards.dart';
@@ -132,7 +133,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _error = 'The condition has a problem: see under the If card.';
+        _error = context.l10n.grpGConditionProblem;
       });
       return;
     }
@@ -163,7 +164,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
     final fresh = list.where((r) => r.id == id).firstOrNull;
     setState(() {
       if (fresh == null) {
-        _error = 'That rule no longer exists.';
+        _error = context.l10n.grpGRuleGone;
         _conflict = false;
       } else {
         _load(fresh);
@@ -178,19 +179,21 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
     final lookups = ref.watch(lookupsProvider(widget.projectId));
     final theme = Theme.of(context);
     final title = _ro
-        ? 'Rule'
-        : (_rule == null ? 'New automation' : 'Edit automation');
+        ? context.l10n.grpGRule
+        : (_rule == null
+              ? context.l10n.grpGNewAutomation
+              : context.l10n.grpGEditAutomation);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 8, 0),
           child: Row(
             children: [
               Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
               IconButton(
                 key: const Key('rule-close'),
-                tooltip: 'Close',
+                tooltip: context.l10n.grpGClose,
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(false),
               ),
@@ -211,14 +214,14 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                   controller: _name,
                   readOnly: _ro,
                   maxLength: maxAutomationName,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpGName,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 _Section(
                   keyName: 'when',
-                  label: 'When',
+                  label: context.l10n.grpGWhen,
                   child: TriggerEditor(
                     trigger: _trigger,
                     lookups: lookups,
@@ -229,7 +232,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                 const _Arrow(),
                 _Section(
                   keyName: 'if',
-                  label: 'If (optional)',
+                  label: context.l10n.grpGIfOptional,
                   child: ConditionEditor(
                     key: _conditionEditor,
                     projectId: widget.projectId,
@@ -243,7 +246,9 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                   _Section(
                     key: ValueKey('card-${_ids[i]}'),
                     keyName: 'then-$i',
-                    label: i == 0 ? 'Then' : 'And then',
+                    label: i == 0
+                        ? context.l10n.grpGThen
+                        : context.l10n.grpGAndThen,
                     trailing: _ro
                         ? null
                         : _CardTools(
@@ -263,14 +268,14 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                 ],
                 if (!_ro)
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: OutlinedButton.icon(
                       key: const Key('add-action'),
                       icon: const Icon(Icons.add),
                       label: Text(
                         _actions.length >= maxActionsPerRule
-                            ? 'Limit of $maxActionsPerRule actions reached'
-                            : 'Add action',
+                            ? context.l10n.grpGActionLimit(maxActionsPerRule)
+                            : context.l10n.grpGAddAction,
                       ),
                       onPressed: _actions.length >= maxActionsPerRule
                           ? null
@@ -288,11 +293,11 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                   ),
                 if (_conflict)
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: TextButton(
                       key: const Key('rule-reload'),
                       onPressed: _reload,
-                      child: const Text('Load the latest version'),
+                      child: Text(context.l10n.grpGLoadLatest),
                     ),
                   ),
               ],
@@ -301,7 +306,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
         ),
         if (!_ro)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -309,13 +314,17 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                   onPressed: _busy
                       ? null
                       : () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.grpGCancel),
                 ),
                 const SizedBox(width: 8),
                 FilledButton(
                   key: const Key('rule-save'),
                   onPressed: _busy ? null : _save,
-                  child: Text(_rule == null ? 'Create' : 'Save'),
+                  child: Text(
+                    _rule == null
+                        ? context.l10n.grpGCreate
+                        : context.l10n.grpGSave,
+                  ),
                 ),
               ],
             ),
@@ -391,19 +400,19 @@ class _CardTools extends StatelessWidget {
     children: [
       IconButton(
         key: Key('action-up-$index'),
-        tooltip: 'Move up',
+        tooltip: context.l10n.grpGMoveUp,
         icon: const Icon(Icons.arrow_upward, size: 18),
         onPressed: index == 0 ? null : () => onMove(-1),
       ),
       IconButton(
         key: Key('action-down-$index'),
-        tooltip: 'Move down',
+        tooltip: context.l10n.grpGMoveDown,
         icon: const Icon(Icons.arrow_downward, size: 18),
         onPressed: index >= count - 1 ? null : () => onMove(1),
       ),
       IconButton(
         key: Key('action-remove-$index'),
-        tooltip: 'Remove action',
+        tooltip: context.l10n.grpGRemoveAction,
         icon: const Icon(Icons.delete_outline, size: 18),
         onPressed: onRemove,
       ),
@@ -439,9 +448,7 @@ class DisabledBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        'Switched off: $reason\n'
-        'Fix it: open the rule, pick something that still exists in the '
-        'trigger or actions, save, then switch it on again.',
+        context.l10n.grpGSwitchedOff(reason),
         style: TextStyle(color: scheme.onErrorContainer),
       ),
     );

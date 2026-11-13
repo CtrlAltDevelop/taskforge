@@ -1,3 +1,5 @@
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -504,7 +506,7 @@ class TableChartView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
-              Expanded(child: Text('Group', style: head)),
+              Expanded(child: Text(context.l10n.grpHChartGroup, style: head)),
               Text(valueHeader, style: head),
             ],
           ),

@@ -533,6 +533,7 @@ const Workspace$json = {
     {'1': 'deleted_at', '3': 7, '4': 1, '5': 9, '10': 'deletedAt'},
     {'1': 'version', '3': 8, '4': 1, '5': 5, '10': 'version'},
     {'1': 'is_owner', '3': 9, '4': 1, '5': 8, '10': 'isOwner'},
+    {'1': 'default_locale', '3': 10, '4': 1, '5': 9, '10': 'defaultLocale'},
   ],
 };
 
@@ -542,7 +543,7 @@ final $typed_data.Uint8List workspaceDescriptor = $convert.base64Decode(
     'gDIAEoCVIEc2x1ZxISCgRsb2dvGAQgASgJUgRsb2dvEh0KCmNyZWF0ZWRfYnkYBSABKAlSCWNy'
     'ZWF0ZWRCeRIdCgpjcmVhdGVkX2F0GAYgASgJUgljcmVhdGVkQXQSHQoKZGVsZXRlZF9hdBgHIA'
     'EoCVIJZGVsZXRlZEF0EhgKB3ZlcnNpb24YCCABKAVSB3ZlcnNpb24SGQoIaXNfb3duZXIYCSAB'
-    'KAhSB2lzT3duZXI=');
+    'KAhSB2lzT3duZXISJQoOZGVmYXVsdF9sb2NhbGUYCiABKAlSDWRlZmF1bHRMb2NhbGU=');
 
 @$core.Deprecated('Use workspaceCreateRequestDescriptor instead')
 const WorkspaceCreateRequest$json = {
@@ -614,10 +615,20 @@ const WorkspaceUpdateRequest$json = {
     {'1': 'expected_version', '3': 2, '4': 1, '5': 5, '10': 'expectedVersion'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
     {'1': 'slug', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'slug', '17': true},
+    {
+      '1': 'default_locale',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '9': 2,
+      '10': 'defaultLocale',
+      '17': true
+    },
   ],
   '8': [
     {'1': '_name'},
     {'1': '_slug'},
+    {'1': '_default_locale'},
   ],
 };
 
@@ -625,4 +636,5 @@ const WorkspaceUpdateRequest$json = {
 final $typed_data.Uint8List workspaceUpdateRequestDescriptor = $convert.base64Decode(
     'ChZXb3Jrc3BhY2VVcGRhdGVSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIpChBleHBlY3RlZF92ZX'
     'JzaW9uGAIgASgFUg9leHBlY3RlZFZlcnNpb24SFwoEbmFtZRgDIAEoCUgAUgRuYW1liAEBEhcK'
-    'BHNsdWcYBCABKAlIAVIEc2x1Z4gBAUIHCgVfbmFtZUIHCgVfc2x1Zw==');
+    'BHNsdWcYBCABKAlIAVIEc2x1Z4gBARIqCg5kZWZhdWx0X2xvY2FsZRgFIAEoCUgCUg1kZWZhdW'
+    'x0TG9jYWxliAEBQgcKBV9uYW1lQgcKBV9zbHVnQhEKD19kZWZhdWx0X2xvY2FsZQ==');

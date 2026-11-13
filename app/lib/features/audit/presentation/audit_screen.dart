@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/audit/application/audit_providers.dart';
 import 'package:taskforge/features/audit/domain/activity_lines.dart';
 import 'package:taskforge/features/audit/domain/audit.dart';
@@ -28,6 +29,20 @@ const auditAreas = <(String, String)>[
   ('Invitations', 'invitation.'),
   ('Sign-in', 'auth.'),
 ];
+
+String _areaLabel(BuildContext context, String prefix, String fallback) =>
+    switch (prefix) {
+      '' => context.l10n.grpBAuditAll,
+      'task.' => context.l10n.grpBAuditTasks,
+      'comment.' => context.l10n.grpBComments,
+      'attachment.' => context.l10n.grpBAuditFiles,
+      'project.' => context.l10n.grpBAuditProjects,
+      'member.' => context.l10n.grpBAuditMembers,
+      'role.' => context.l10n.grpBAuditRoles,
+      'invitation.' => context.l10n.grpBAuditInvitations,
+      'auth.' => context.l10n.grpBAuditSignIn,
+      _ => fallback,
+    };
 
 /// Who changed what, workspace-wide: filter chips, a row per change, a
 /// before/after view, and CSV export. For people holding `audit.view`.
@@ -86,16 +101,16 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-home'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpBBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
-        title: const Text('Audit log'),
+        title: Text(context.l10n.grpBAuditTitle),
         actions: [
           if (allowed)
             IconButton(
               key: const Key('audit-export'),
-              tooltip: 'Export as CSV',
+              tooltip: context.l10n.grpBExportCsv,
               icon: const Icon(Icons.download),
               onPressed: _exporting ? null : _export,
             ),
@@ -103,10 +118,10 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
       ),
       body: allowed
           ? _Body(filters: _filters, onFilters: _set, onPickDates: _pickDates)
-          : const Center(
+          : Center(
               child: Text(
-                'You are not allowed to read the audit log.',
-                key: Key('audit-denied'),
+                context.l10n.grpBAuditDenied,
+                key: const Key('audit-denied'),
               ),
             ),
     );
@@ -153,16 +168,16 @@ class _Body extends ConsumerWidget {
               TextButton(
                 key: const Key('audit-retry'),
                 onPressed: notifier.refresh,
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpBRetry),
               ),
             ],
           )
         else if (state.entries.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: Text(
-              'Nothing recorded for these filters.',
-              key: Key('audit-empty'),
+              context.l10n.grpBAuditEmpty,
+              key: const Key('audit-empty'),
             ),
           )
         else ...[
@@ -177,7 +192,11 @@ class _Body extends ConsumerWidget {
             TextButton(
               key: const Key('audit-more'),
               onPressed: state.loadingMore ? null : notifier.more,
-              child: Text(state.loadingMore ? 'Loading…' : 'Show older'),
+              child: Text(
+                state.loadingMore
+                    ? context.l10n.grpBLoading
+                    : context.l10n.grpBShowOlder,
+              ),
             ),
         ],
       ],
@@ -209,7 +228,7 @@ class _Filters extends ConsumerWidget {
         for (final (label, prefix) in auditAreas)
           ChoiceChip(
             key: Key('area-${prefix.isEmpty ? 'all' : prefix}'),
-            label: Text(label),
+            label: Text(_areaLabel(context, prefix, label)),
             selected: filters.action == prefix,
             onSelected: (_) => onFilters(filters.copyWith(action: prefix)),
           ),
@@ -218,9 +237,9 @@ class _Filters extends ConsumerWidget {
           value: members.any((m) => m.userId == filters.actor)
               ? filters.actor
               : '',
-          hint: const Text('Anyone'),
+          hint: Text(context.l10n.grpBAnyone),
           items: [
-            const DropdownMenuItem(value: '', child: Text('Anyone')),
+            DropdownMenuItem(value: '', child: Text(context.l10n.grpBAnyone)),
             for (final m in members)
               DropdownMenuItem(value: m.userId, child: Text(m.displayName)),
           ],
@@ -232,7 +251,10 @@ class _Filters extends ConsumerWidget {
               ? filters.projectId
               : '',
           items: [
-            const DropdownMenuItem(value: '', child: Text('Any project')),
+            DropdownMenuItem(
+              value: '',
+              child: Text(context.l10n.grpBAnyProject),
+            ),
             for (final p in projects)
               DropdownMenuItem(value: p.id, child: Text(p.name)),
           ],
@@ -241,14 +263,16 @@ class _Filters extends ConsumerWidget {
         OutlinedButton.icon(
           key: const Key('filter-dates'),
           icon: const Icon(Icons.date_range),
-          label: Text(filters.since == null ? 'Any time' : _range(filters)),
+          label: Text(
+            filters.since == null ? context.l10n.grpBAnyTime : _range(filters),
+          ),
           onPressed: onPickDates,
         ),
         if (!filters.isEmpty)
           TextButton(
             key: const Key('filters-clear'),
             onPressed: () => onFilters(const AuditFilters()),
-            child: const Text('Clear filters'),
+            child: Text(context.l10n.grpBClearFilters),
           ),
       ],
     );
@@ -281,9 +305,9 @@ class _Row extends StatelessWidget {
     ),
     trailing: entry.batchId.isEmpty
         ? null
-        : const Tooltip(
-            message: 'Part of a bulk change',
-            child: Icon(Icons.layers, size: 16),
+        : Tooltip(
+            message: context.l10n.grpBBulkChange,
+            child: const Icon(Icons.layers, size: 16),
           ),
     onTap: () => showDialog<void>(
       context: context,
@@ -299,10 +323,12 @@ class DiffDialog extends StatelessWidget {
   final AuditEntry entry;
   final Map<String, String> labels;
 
-  String _name(String field, Object? v) {
+  String _name(BuildContext context, String field, Object? v) {
     if (v == null || v == '') return '—';
-    if (v is List) return v.map((e) => _name(field, e)).join(', ');
-    if (v is Map && v.containsKey('size')) return '(${v['size']} characters)';
+    if (v is List) return v.map((e) => _name(context, field, e)).join(', ');
+    if (v is Map && v.containsKey('size')) {
+      return context.l10n.grpBCharacters('${v['size']}');
+    }
     if (field.endsWith('_id') || field == 'assignees') {
       return labels[v.toString()] ?? v.toString();
     }
@@ -325,7 +351,7 @@ class DiffDialog extends StatelessWidget {
               if (entry.ip.isNotEmpty || entry.userAgent.isNotEmpty)
                 Text('${entry.ip} ${entry.userAgent}'.trim()),
               const Divider(),
-              if (changes.isEmpty) const Text('No field changes recorded.'),
+              if (changes.isEmpty) Text(context.l10n.grpBNoFieldChanges),
               for (final c in changes)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
@@ -340,19 +366,19 @@ class DiffDialog extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: _name(c.name, c.before),
+                                text: _name(context, c.name, c.before),
                                 style: const TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                 ),
                               ),
                               const TextSpan(text: '  →  '),
-                              TextSpan(text: _name(c.name, c.after)),
+                              TextSpan(text: _name(context, c.name, c.after)),
                             ],
                           ),
                           key: Key('diff-${c.name}'),
                         )
                       : Text(
-                          '${fieldLabel(c.name)}: ${_name(c.name, c.after)}',
+                          '${fieldLabel(c.name)}: ${_name(context, c.name, c.after)}',
                           key: Key('diff-${c.name}'),
                         ),
                 ),
@@ -363,7 +389,7 @@ class DiffDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpBClose),
         ),
       ],
     );
@@ -389,7 +415,7 @@ class _ExportDialog extends StatelessWidget {
 
   Widget _dialog(BuildContext context, String shown, int total) => AlertDialog(
     key: const Key('audit-export-dialog'),
-    title: const Text('Audit log (CSV)'),
+    title: Text(context.l10n.grpBAuditExportTitle),
     content: SizedBox(
       width: 520,
       child: SingleChildScrollView(
@@ -398,8 +424,7 @@ class _ExportDialog extends StatelessWidget {
           children: [
             if (total > previewLines)
               Text(
-                'Showing the first $previewLines of $total lines. '
-                'Copy or Save has all of them.',
+                context.l10n.grpBAuditExportNote(previewLines, total),
                 key: const Key('audit-export-note'),
               ),
             SelectableText(
@@ -415,11 +440,12 @@ class _ExportDialog extends StatelessWidget {
       TextButton(
         key: const Key('audit-export-copy'),
         onPressed: () async {
+          final copied = context.l10n.grpBCsvCopied;
           await Clipboard.setData(ClipboardData(text: csv));
-          messenger.showSnackBar(const SnackBar(content: Text('CSV copied.')));
+          messenger.showSnackBar(SnackBar(content: Text(copied)));
           if (context.mounted) Navigator.pop(context);
         },
-        child: const Text('Copy'),
+        child: Text(context.l10n.grpBCopy),
       ),
       TextButton(
         key: const Key('audit-export-save'),
@@ -431,11 +457,11 @@ class _ExportDialog extends StatelessWidget {
           );
           if (context.mounted) Navigator.pop(context);
         },
-        child: const Text('Save as file'),
+        child: Text(context.l10n.grpBSaveAsFile),
       ),
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Close'),
+        child: Text(context.l10n.grpBClose),
       ),
     ],
   );

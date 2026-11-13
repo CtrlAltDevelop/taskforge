@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/auth/validators.dart';
@@ -17,14 +18,19 @@ class SessionsScreen extends ConsumerWidget {
     List<String> ids,
   ) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       for (final id in ids) {
         await ref.read(authSessionProvider).revokeSession(id);
       }
     } on AuthApiException catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(authErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(authErrorMessage(e, l10n))),
+      );
     } on NetworkUnavailable catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(authErrorMessage(e))));
+      messenger.showSnackBar(
+        SnackBar(content: Text(authErrorMessage(e, l10n))),
+      );
     }
     ref.invalidate(sessionsProvider);
   }
@@ -39,18 +45,18 @@ class SessionsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-home'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpIBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/'),
         ),
-        title: const Text('Sessions'),
+        title: Text(context.l10n.grpISessions),
         actions: [
           if (others.isNotEmpty)
             TextButton(
               key: const Key('revoke-others'),
               onPressed: () =>
                   _revoke(context, ref, [for (final s in others) s.id]),
-              child: const Text('Sign out other devices'),
+              child: Text(context.l10n.grpISignOutOthers),
             ),
         ],
       ),
@@ -61,14 +67,18 @@ class SessionsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.devices),
                 title: Text(
-                  s.userAgent.isEmpty ? 'Unknown device' : s.userAgent,
+                  s.userAgent.isEmpty
+                      ? context.l10n.grpIUnknownDevice
+                      : s.userAgent,
                 ),
-                subtitle: Text(s.current ? 'This device' : s.ipAddress),
+                subtitle: Text(
+                  s.current ? context.l10n.grpIThisDevice : s.ipAddress,
+                ),
                 trailing: s.current
                     ? null
                     : IconButton(
                         key: Key('revoke-${s.id}'),
-                        tooltip: 'Sign out this device',
+                        tooltip: context.l10n.grpISignOutThis,
                         icon: const Icon(Icons.close),
                         onPressed: () => _revoke(context, ref, [s.id]),
                       ),
@@ -79,7 +89,7 @@ class SessionsScreen extends ConsumerWidget {
         error: (e, _) => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(sessionsProvider),
-            child: const Text('Retry'),
+            child: Text(context.l10n.grpIRetry),
           ),
         ),
       ),

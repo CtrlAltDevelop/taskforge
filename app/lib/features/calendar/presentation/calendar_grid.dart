@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/weekday_names.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
-
-const _dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const _headerHeight = 24.0;
 const _laneHeight = 24.0;
@@ -59,8 +59,9 @@ class CalendarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dayNames = context.l10n.weekdayShortNames;
     final names = [
-      for (var i = 0; i < 7; i++) _dayNames[(weekStart - 1 + i) % 7],
+      for (var i = 0; i < 7; i++) dayNames[(weekStart - 1 + i) % 7],
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -215,7 +216,7 @@ class _DayCell extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Text(
-                    '+$hidden more',
+                    context.l10n.grpFPlusMore(hidden),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),

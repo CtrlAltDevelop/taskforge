@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -67,12 +70,17 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     super.didChangeDependencies();
     // 0 is Sunday in the locale's own numbering; ISO weekdays have Sunday = 7.
     final index = MaterialLocalizations.of(context).firstDayOfWeekIndex;
+    final chosen = ref.read(localePrefsProvider);
     Future.microtask(() {
-      if (mounted) {
-        ref
-            .read(localeWeekStartProvider.notifier)
-            .set(index == 0 ? DateTime.sunday : index);
-      }
+      if (!mounted) return;
+      // The person's own week start (Language and region) beats the language's.
+      ref
+          .read(localeWeekStartProvider.notifier)
+          .set(
+            chosen.weekStart.isNotEmpty
+                ? chosen.weekStartDay
+                : (index == 0 ? DateTime.sunday : index),
+          );
     });
   }
 
@@ -129,7 +137,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final today = ref.read(todayProvider);
     final span = spanOf(task);
     final initial = span?.first ?? today;
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: initial,
       firstDate: day(2000, 1, 1),
@@ -310,7 +318,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                   TextButton(
                     key: const Key('retry-calendar'),
                     onPressed: ref.read(calendarProvider(_id).notifier).refresh,
-                    child: const Text('Retry'),
+                    child: Text(context.l10n.retry),
                   ),
                 ],
               ),

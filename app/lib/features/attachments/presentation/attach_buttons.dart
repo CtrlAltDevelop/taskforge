@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_io.dart';
 
@@ -54,25 +55,25 @@ class AttachButtons extends ConsumerWidget {
           key: Key('$keyPrefix-add'),
           onPressed: () => _pick(ref, ref.read(filePickerProvider)),
           icon: const Icon(Icons.attach_file, size: 18),
-          label: const Text('Add'),
+          label: Text(context.l10n.grpHAdd),
         )
       else
         IconButton(
           key: Key('$keyPrefix-add'),
-          tooltip: 'Attach a file',
+          tooltip: context.l10n.grpHAttachFile,
           onPressed: () => _pick(ref, ref.read(filePickerProvider)),
           icon: const Icon(Icons.attach_file, size: 20),
         ),
       if (isPhoneOrTablet) ...[
         IconButton(
           key: Key('$keyPrefix-camera'),
-          tooltip: 'Take a photo',
+          tooltip: context.l10n.grpHTakePhoto,
           onPressed: () => _pick(ref, ref.read(cameraPickerProvider)),
           icon: const Icon(Icons.photo_camera_outlined, size: 20),
         ),
         IconButton(
           key: Key('$keyPrefix-gallery'),
-          tooltip: 'Choose from gallery',
+          tooltip: context.l10n.grpHChooseGallery,
           onPressed: () => _pick(ref, ref.read(galleryPickerProvider)),
           icon: const Icon(Icons.photo_library_outlined, size: 20),
         ),
@@ -80,7 +81,7 @@ class AttachButtons extends ConsumerWidget {
       if (canReadClipboardImage)
         IconButton(
           key: Key('$keyPrefix-paste'),
-          tooltip: 'Paste an image',
+          tooltip: context.l10n.grpHPasteImage,
           onPressed: () => _paste(ref),
           icon: const Icon(Icons.content_paste, size: 20),
         ),

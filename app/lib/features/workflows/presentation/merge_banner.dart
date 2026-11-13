@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 /// Shown after someone else saved first and the editor merged their work with
 /// the draft: everything that was taken, kept or given up, in words. Saving is
 /// off until the person says they have read it, so nothing changes silently.
@@ -31,14 +33,11 @@ class MergeBanner extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Someone else saved the workflow first',
+              context.l10n.grpIMergeTitle,
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Your edits are kept, and their work was not overwritten. '
-              'This is what changed in your draft:',
-            ),
+            Text(context.l10n.grpIMergeBody),
             const SizedBox(height: 8),
             for (final (i, note) in notes.indexed)
               Padding(
@@ -60,12 +59,12 @@ class MergeBanner extends StatelessWidget {
                 FilledButton(
                   key: const Key('merge-acknowledge'),
                   onPressed: onKeep,
-                  child: const Text('I have read this, keep my draft'),
+                  child: Text(context.l10n.grpIMergeKeep),
                 ),
                 OutlinedButton(
                   key: const Key('merge-reload'),
                   onPressed: onReload,
-                  child: const Text('Throw my draft away'),
+                  child: Text(context.l10n.grpIMergeReload),
                 ),
               ],
             ),

@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:taskforge/features/inbox/application/push.dart'
     show localNotifierProvider;
 import 'package:taskforge/features/time/application/time_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The id of the one notification the timer keeps.
 const timerNotificationId = 7021;
@@ -31,10 +33,11 @@ final timerNotificationProvider = Provider<void>((ref) {
     final since = state.receivedAt.subtract(
       Duration(seconds: entry.durationSec),
     );
+    final l10n = lookupAppLocalizations(ref.read(localePrefsProvider).locale);
     later(
       () => notifier.showOngoing(
         id: timerNotificationId,
-        title: 'Timer running',
+        title: l10n.grpJTimerRunning,
         body: '${entry.key} ${entry.title}',
         since: since,
         payload: '${entry.projectId}|${entry.taskId}',

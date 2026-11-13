@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
 import 'package:taskforge/features/imports/presentation/import_io.dart';
 import 'package:taskforge/features/imports/presentation/mapping_step.dart';
 import 'package:taskforge/features/imports/presentation/problems_list.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
-const _stepNames = {
-  ImportStep.source: 'Source',
-  ImportStep.upload: 'Upload',
-  ImportStep.map: 'Map',
-  ImportStep.review: 'Review',
-  ImportStep.run: 'Import',
+String _stepName(AppLocalizations l, ImportStep step) => switch (step) {
+  ImportStep.source => l.grpCImpStepSource,
+  ImportStep.upload => l.grpCImpStepUpload,
+  ImportStep.map => l.grpCImpStepMap,
+  ImportStep.review => l.grpCImpStepReview,
+  ImportStep.run => l.grpCImpStepImport,
 };
 
 /// Source, Upload, Map, Review, Import: one step on screen at a time, each
@@ -37,7 +39,9 @@ class ImportWizardCard extends ConsumerWidget {
                 for (final step in ImportStep.values)
                   ChoiceChip(
                     key: Key('step-${step.name}'),
-                    label: Text('${step.index + 1}. ${_stepNames[step]}'),
+                    label: Text(
+                      '${step.index + 1}. ${_stepName(context.l10n, step)}',
+                    ),
                     selected: step == wizard.step,
                     onSelected: null,
                   ),
@@ -83,7 +87,7 @@ class _SourceStep extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Where is your data coming from?',
+          context.l10n.grpCImpWhere,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         RadioGroup<ImportSource?>(
@@ -91,9 +95,9 @@ class _SourceStep extends ConsumerWidget {
           onChanged: (s) => ref.read(importWizardProvider.notifier).select(s),
           child: Column(
             children: [
-              const RadioListTile<ImportSource?>(
-                key: Key('source-auto'),
-                title: Text('I am not sure: work it out from the file'),
+              RadioListTile<ImportSource?>(
+                key: const Key('source-auto'),
+                title: Text(context.l10n.grpCImpAuto),
                 value: null,
               ),
               for (final s in ImportSource.values)
@@ -107,11 +111,11 @@ class _SourceStep extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Align(
-          alignment: Alignment.centerRight,
+          alignment: AlignmentDirectional.centerEnd,
           child: FilledButton(
             key: const Key('source-next'),
             onPressed: () => wizard.chooseSource(chosen),
-            child: const Text('Next'),
+            child: Text(context.l10n.grpCImpNext),
           ),
         ),
       ],
@@ -143,14 +147,11 @@ class _UploadStep extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'This zip holds several data files. Which one do you want to '
-            'import? (A workspace export has one per project.)',
-          ),
+          Text(context.l10n.grpCImpZipSeveral),
           DropdownButton<String>(
             key: const Key('upload-member'),
             isExpanded: true,
-            hint: const Text('Choose a file'),
+            hint: Text(context.l10n.grpCImpChooseAFile),
             items: [
               for (final m in choices)
                 DropdownMenuItem(value: m, child: Text(m)),
@@ -171,13 +172,12 @@ class _UploadStep extends ConsumerWidget {
       children: [
         Text(
           source == null
-              ? 'Choose the file to import (.csv, .json, or a .zip of one).'
-              : 'Choose your ${source.label} file (.csv, .json, or a .zip of one).',
+              ? context.l10n.grpCImpChooseGeneric
+              : context.l10n.grpCImpChooseSource(source.label),
         ),
         const SizedBox(height: 4),
         Text(
-          'The file is sent to your TaskForge server and read as a stream, so '
-          'large exports are fine. Nothing is changed until you confirm.',
+          context.l10n.grpCImpSentNote,
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 12),
@@ -188,14 +188,14 @@ class _UploadStep extends ConsumerWidget {
               onPressed: busy
                   ? null
                   : ref.read(importWizardProvider.notifier).back,
-              child: const Text('Back'),
+              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
             FilledButton.icon(
               key: const Key('import-pick'),
               onPressed: busy ? null : () => _pick(ref),
               icon: const Icon(Icons.upload_file),
-              label: const Text('Choose file'),
+              label: Text(context.l10n.grpCImpPickFile),
             ),
           ],
         ),
@@ -217,7 +217,9 @@ class _ReviewStep extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          resuming ? 'Resume this import' : 'This is what will happen',
+          resuming
+              ? context.l10n.grpCImpResumeThis
+              : context.l10n.grpCImpWhatHappens,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         if (report != null) ...[
@@ -227,7 +229,7 @@ class _ReviewStep extends ConsumerWidget {
             runSpacing: 4,
             key: const Key('review-counts'),
             children: [
-              for (final e in _countLabels.entries)
+              for (final e in _countLabels(context.l10n).entries)
                 if (report.count(e.key) > 0)
                   Text('${report.count(e.key)} ${e.value}'),
             ],
@@ -236,8 +238,7 @@ class _ReviewStep extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                '${report.alreadyImported} of these were imported before and '
-                'will be skipped, not duplicated.',
+                context.l10n.grpCImpAlready(report.alreadyImported),
                 key: const Key('review-already'),
               ),
             ),
@@ -245,8 +246,7 @@ class _ReviewStep extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                '${report.errors} row(s) cannot be imported and will be left '
-                'out.',
+                context.l10n.grpCImpRowErrors(report.errors),
                 key: const Key('review-errors'),
               ),
             ),
@@ -262,13 +262,17 @@ class _ReviewStep extends ConsumerWidget {
             TextButton(
               key: const Key('review-back'),
               onPressed: wizard.busy ? null : notifier.back,
-              child: const Text('Back'),
+              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
             FilledButton(
               key: const Key('import-start'),
               onPressed: wizard.busy ? null : notifier.start,
-              child: Text(resuming ? 'Resume import' : 'Start import'),
+              child: Text(
+                resuming
+                    ? context.l10n.grpCImpResumeImport
+                    : context.l10n.grpCImpStart,
+              ),
             ),
           ],
         ),
@@ -277,15 +281,15 @@ class _ReviewStep extends ConsumerWidget {
   }
 }
 
-const _countLabels = {
-  'tasks': 'tasks',
-  'subtasks': 'of them sub-tasks',
-  'comments': 'comments',
-  'links': 'links',
-  'sprints': 'sprints',
-  'labels': 'labels',
-  'new_statuses': 'new statuses',
-  'placeholders': 'people to wait for',
+Map<String, String> _countLabels(AppLocalizations l) => {
+  'tasks': l.grpCImpCountTasks,
+  'subtasks': l.grpCImpCountSubtasks,
+  'comments': l.grpCImpCountComments,
+  'links': l.grpCImpCountLinks,
+  'sprints': l.grpCImpCountSprints,
+  'labels': l.grpCImpCountLabels,
+  'new_statuses': l.grpCImpCountStatuses,
+  'placeholders': l.grpCImpCountPlaceholders,
 };
 
 class _RunStep extends ConsumerWidget {
@@ -316,20 +320,17 @@ class _Run extends ConsumerWidget {
       context: context,
       builder: (dialog) => AlertDialog(
         key: const Key('undo-dialog'),
-        title: const Text('Undo this import?'),
-        content: const Text(
-          'This removes the tasks, comments, links, sprints and statuses '
-          'this import made. Anything you added to them by hand is kept.',
-        ),
+        title: Text(dialog.l10n.grpCImpUndoTitle),
+        content: Text(dialog.l10n.grpCImpUndoRunBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialog, false),
-            child: const Text('Cancel'),
+            child: Text(dialog.l10n.grpCCancel),
           ),
           FilledButton(
             key: const Key('undo-confirm'),
             onPressed: () => Navigator.pop(dialog, true),
-            child: const Text('Undo import'),
+            child: Text(dialog.l10n.grpCImpUndoConfirm),
           ),
         ],
       ),
@@ -356,28 +357,28 @@ class _Run extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             job.status == 'queued'
-                ? 'Waiting to start...'
+                ? context.l10n.grpCImpWaitingStart
                 : job.phase == 'links'
-                ? 'Linking tasks...'
-                : '${job.done} of ${job.total} tasks',
+                ? context.l10n.grpCImpLinking
+                : context.l10n.grpCImpProgress(job.done, job.total),
             key: const Key('import-progress-text'),
           ),
           const SizedBox(height: 8),
           Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerEnd,
             child: OutlinedButton(
               key: const Key('import-cancel'),
               onPressed: notifier.cancel,
-              child: const Text('Cancel import'),
+              child: Text(context.l10n.grpCImpCancel),
             ),
           ),
         ] else ...[
           Text(
             switch (job.status) {
-              'done' => 'Import finished',
-              'undone' => 'Import undone',
-              'cancelled' => 'Import cancelled',
-              _ => 'Import stopped',
+              'done' => context.l10n.grpCImpFinished,
+              'undone' => context.l10n.grpCImpUndone,
+              'cancelled' => context.l10n.grpCImpCancelled,
+              _ => context.l10n.grpCImpStopped,
             },
             key: const Key('import-result'),
             style: Theme.of(context).textTheme.titleMedium,
@@ -401,24 +402,24 @@ class _Run extends ConsumerWidget {
                 FilledButton(
                   key: const Key('import-open-project'),
                   onPressed: () => context.go('/projects/${job.projectId}'),
-                  child: const Text('Open the project'),
+                  child: Text(context.l10n.grpCImpOpenProject),
                 ),
               if (job.canResume)
                 FilledButton(
                   key: const Key('import-resume'),
                   onPressed: notifier.start,
-                  child: const Text('Resume'),
+                  child: Text(context.l10n.grpCImpResume),
                 ),
               if (job.canUndo)
                 OutlinedButton(
                   key: const Key('import-undo'),
                   onPressed: () => _undo(context, ref),
-                  child: const Text('Undo'),
+                  child: Text(context.l10n.grpCUndo),
                 ),
               TextButton(
                 key: const Key('import-another'),
                 onPressed: notifier.restart,
-                child: const Text('Import another file'),
+                child: Text(context.l10n.grpCImpAnother),
               ),
             ],
           ),
@@ -436,12 +437,17 @@ class _Stats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final undone = job.stats['undone'];
+    final l10n = context.l10n;
     final lines = <String>[
       if (undone is Map<String, dynamic>)
-        'Removed ${(undone['tasks'] as num?) ?? 0} tasks'
-            '${((undone['kept'] as num?) ?? 0) > 0 ? ', kept ${undone['kept']} that have your own sub-tasks' : ''}.'
+        ((undone['kept'] as num?) ?? 0) > 0
+            ? l10n.grpCImpRemovedKept(
+                (undone['tasks'] as num?) ?? 0,
+                undone['kept'] as num,
+              )
+            : l10n.grpCImpRemoved((undone['tasks'] as num?) ?? 0)
       else ...[
-        for (final e in _countLabels.entries)
+        for (final e in _countLabels(l10n).entries)
           if (job.stat(e.key) > 0 && e.key != 'subtasks')
             '${job.stat(e.key)} ${e.value}',
       ],

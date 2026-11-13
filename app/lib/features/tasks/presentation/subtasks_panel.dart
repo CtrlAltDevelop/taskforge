@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/bidi.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
@@ -28,7 +30,7 @@ class Breadcrumb extends StatelessWidget {
         for (final (i, t) in chain.indexed) ...[
           if (i > 0) const Text(' › '),
           if (i == chain.length - 1)
-            Text(t.displayId, style: theme.textTheme.labelLarge)
+            Text(isolateLtr(t.displayId), style: theme.textTheme.labelLarge)
           else
             InkWell(
               key: Key('crumb-${t.id}'),
@@ -107,7 +109,10 @@ class SubtasksPanel extends ConsumerWidget {
       children: [
         Row(
           children: [
-            Text('Subtasks', style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              context.l10n.grpFSubtasks,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const SizedBox(width: 8),
             if (!progress.isEmpty)
               Text(
@@ -148,11 +153,11 @@ class SubtasksPanel extends ConsumerWidget {
           ),
         if (canCreate && !project.isArchived)
           tooDeep
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 4),
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Subtasks are nested as deep as the app allows here.',
-                    key: Key('subtask-depth-limit'),
+                    context.l10n.grpFSubtaskDepthLimit,
+                    key: const Key('subtask-depth-limit'),
                   ),
                 )
               : AddSubtaskField(projectId: project.id, parentId: task.id),
@@ -248,12 +253,12 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
       autofocus: widget.autofocus,
       maxLength: maxTitleLength,
       textInputAction: TextInputAction.done,
-      decoration: const InputDecoration(
-        hintText: 'Add a subtask and press Enter',
-        prefixIcon: Icon(Icons.subdirectory_arrow_right),
+      decoration: InputDecoration(
+        hintText: context.l10n.grpFAddSubtaskHint,
+        prefixIcon: const Icon(Icons.subdirectory_arrow_right),
         counterText: '',
         isDense: true,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
       onSubmitted: _submit,
     ),

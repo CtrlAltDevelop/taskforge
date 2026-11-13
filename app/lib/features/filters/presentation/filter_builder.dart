@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/filters/domain/filter_fields.dart';
 import 'package:taskforge/features/filters/domain/filter_query.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const _maxDepth = 3;
 
@@ -126,9 +129,15 @@ class _GroupView extends StatelessWidget {
               SegmentedButton<String>(
                 key: Key('group-op-$_id'),
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: 'and', label: Text('All of')),
-                  ButtonSegment(value: 'or', label: Text('Any of')),
+                segments: [
+                  ButtonSegment(
+                    value: 'and',
+                    label: Text(context.l10n.grpDAllOf),
+                  ),
+                  ButtonSegment(
+                    value: 'or',
+                    label: Text(context.l10n.grpDAnyOf),
+                  ),
                 ],
                 selected: {group.op},
                 onSelectionChanged: (v) =>
@@ -136,7 +145,7 @@ class _GroupView extends StatelessWidget {
               ),
               FilterChip(
                 key: Key('group-not-$_id'),
-                label: const Text('NOT'),
+                label: Text(context.l10n.grpDNot),
                 selected: group.negated,
                 onSelected: (v) =>
                     edit(path, (n) => (n as FilterGroup).copyWith(negated: v)),
@@ -144,7 +153,7 @@ class _GroupView extends StatelessWidget {
               if (!_root)
                 IconButton(
                   key: Key('remove-group-$_id'),
-                  tooltip: 'Remove group',
+                  tooltip: context.l10n.grpDRemoveGroup,
                   icon: const Icon(Icons.close),
                   onPressed: () => edit(path, (_) => null),
                 ),
@@ -181,7 +190,7 @@ class _GroupView extends StatelessWidget {
               TextButton.icon(
                 key: Key('add-condition-$_id'),
                 icon: const Icon(Icons.add),
-                label: const Text('Condition'),
+                label: Text(context.l10n.grpDCondition),
                 onPressed: () => edit(
                   path,
                   (n) => (n as FilterGroup).copyWith(
@@ -193,7 +202,7 @@ class _GroupView extends StatelessWidget {
                 TextButton.icon(
                   key: Key('add-group-$_id'),
                   icon: const Icon(Icons.account_tree_outlined),
-                  label: const Text('Group'),
+                  label: Text(context.l10n.grpDGroup),
                   onPressed: () => edit(
                     path,
                     (n) => (n as FilterGroup).copyWith(
@@ -265,7 +274,7 @@ class _ConditionRow extends StatelessWidget {
         DropdownButton<String>(
           key: Key('field-$id'),
           value: spec?.ref,
-          hint: const Text('Field (removed)'),
+          hint: Text(context.l10n.grpDFieldRemoved),
           items: [
             for (final f in fields)
               DropdownMenuItem(value: f.ref, child: Text(f.label)),
@@ -280,7 +289,10 @@ class _ConditionRow extends StatelessWidget {
                 : spec.operators.first,
             items: [
               for (final op in spec.operators)
-                DropdownMenuItem(value: op, child: Text(_label(spec, op))),
+                DropdownMenuItem(
+                  value: op,
+                  child: Text(_label(context.l10n, spec, op)),
+                ),
             ],
             onChanged: (v) => v == null ? null : _pickOperator(v),
           ),
@@ -293,7 +305,7 @@ class _ConditionRow extends StatelessWidget {
           ),
         IconButton(
           key: Key('remove-row-$id'),
-          tooltip: 'Remove condition',
+          tooltip: context.l10n.grpDRemoveCondition,
           icon: const Icon(Icons.delete_outline),
           onPressed: onRemove,
         ),
@@ -301,18 +313,18 @@ class _ConditionRow extends StatelessWidget {
     );
   }
 
-  static String _label(FilterField field, String op) {
+  static String _label(AppLocalizations l10n, FilterField field, String op) {
     final dated =
         field.kind == FilterKind.date || field.kind == FilterKind.datetime;
     return switch (op) {
-      'lt' when dated => 'is before',
-      'lte' when dated => 'is on or before',
-      'gt' when dated => 'is after',
-      'gte' when dated => 'is on or after',
-      'lt' => 'is less than',
-      'lte' => 'is at most',
-      'gt' => 'is more than',
-      'gte' => 'is at least',
+      'lt' when dated => l10n.grpDOpBefore,
+      'lte' when dated => l10n.grpDOpOnOrBefore,
+      'gt' when dated => l10n.grpDOpAfter,
+      'gte' when dated => l10n.grpDOpOnOrAfter,
+      'lt' => l10n.grpDOpLessThan,
+      'lte' => l10n.grpDOpAtMost,
+      'gt' => l10n.grpDOpMoreThan,
+      'gte' => l10n.grpDOpAtLeast,
       _ => operatorLabels[op]!,
     };
   }
@@ -344,21 +356,21 @@ class ConditionValue extends StatelessWidget {
         return DropdownButton<bool>(
           key: Key('value-$id'),
           value: condition.values.firstOrNull?.value == false ? false : true,
-          items: const [
-            DropdownMenuItem(value: true, child: Text('Yes')),
-            DropdownMenuItem(value: false, child: Text('No')),
+          items: [
+            DropdownMenuItem(value: true, child: Text(context.l10n.grpDYes)),
+            DropdownMenuItem(value: false, child: Text(context.l10n.grpDNo)),
           ],
           onChanged: (v) => _set([FilterValue.flag(on: v ?? true)]),
         );
       case FilterKind.sprint:
-        return const Text('the current sprint');
+        return Text(context.l10n.grpDCurrentSprint);
       case FilterKind.status ||
           FilterKind.category ||
           FilterKind.priority ||
           FilterKind.select ||
           FilterKind.multiselect ||
           FilterKind.user:
-        return list ? _choiceChips(context) : _choiceDropdown();
+        return list ? _choiceChips(context) : _choiceDropdown(context);
       case FilterKind.date || FilterKind.datetime:
         return _DateValue(
           key: Key('value-$id'),
@@ -370,8 +382,8 @@ class ConditionValue extends StatelessWidget {
     }
   }
 
-  List<FilterChoice> get _choices => [
-    if (field.kind == FilterKind.user) const FilterChoice('me', 'Me'),
+  List<FilterChoice> _choicesFor(BuildContext context) => [
+    if (field.kind == FilterKind.user) FilterChoice('me', context.l10n.grpDMe),
     ...field.choices,
   ];
 
@@ -382,38 +394,40 @@ class ConditionValue extends StatelessWidget {
 
   String _idOf(FilterValue v) => v.kind == 'me' ? 'me' : '${v.value}';
 
-  Widget _choiceDropdown() {
+  Widget _choiceDropdown(BuildContext context) {
+    final choices = _choicesFor(context);
     final current = condition.values.firstOrNull;
-    final ids = _choices.map((c) => c.id).toSet();
+    final ids = choices.map((c) => c.id).toSet();
     return DropdownButton<String>(
       key: Key('value-$id'),
       value: current != null && ids.contains(_idOf(current))
           ? _idOf(current)
           : null,
-      hint: const Text('Choose…'),
+      hint: Text(context.l10n.grpDChoose),
       items: [
-        for (final c in _choices)
+        for (final c in choices)
           DropdownMenuItem(value: c.id, child: Text(c.label)),
       ],
       onChanged: (v) => v == null
           ? null
-          : _set([_asValue(_choices.firstWhere((c) => c.id == v))]),
+          : _set([_asValue(choices.firstWhere((c) => c.id == v))]),
     );
   }
 
   Widget _choiceChips(BuildContext context) {
     final chosen = {for (final v in condition.values) _idOf(v)};
+    final choices = _choicesFor(context);
     return Wrap(
       key: Key('value-$id'),
       spacing: 4,
       children: [
-        for (final c in _choices)
+        for (final c in choices)
           FilterChip(
             key: Key('choice-$id-${c.id}'),
             label: Text(c.label),
             selected: chosen.contains(c.id),
             onSelected: (on) => _set([
-              for (final other in _choices)
+              for (final other in choices)
                 if (other.id == c.id ? on : chosen.contains(other.id))
                   _asValue(other),
             ]),
@@ -450,12 +464,12 @@ class _TextValue extends StatefulWidget {
     required this.initial,
     required this.onChanged,
     this.numeric = false,
-    this.hint = 'Value',
+    this.hint,
   });
 
   final String initial;
   final bool numeric;
-  final String hint;
+  final String? hint;
   final void Function(String) onChanged;
 
   @override
@@ -477,7 +491,10 @@ class _TextValueState extends State<_TextValue> {
     child: TextField(
       controller: _controller,
       keyboardType: widget.numeric ? TextInputType.number : null,
-      decoration: InputDecoration(isDense: true, hintText: widget.hint),
+      decoration: InputDecoration(
+        isDense: true,
+        hintText: widget.hint ?? context.l10n.grpDValue,
+      ),
       onChanged: widget.onChanged,
     ),
   );
@@ -518,7 +535,7 @@ class _DateValueState extends State<_DateValue> {
   }
 
   Future<void> _pick() async {
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
@@ -539,7 +556,7 @@ class _DateValueState extends State<_DateValue> {
         isDense: true,
         hintText: 'today, +7d, 2026-11-05',
         suffixIcon: IconButton(
-          tooltip: 'Pick a date',
+          tooltip: context.l10n.grpDPickDate,
           icon: const Icon(Icons.calendar_today, size: 16),
           onPressed: _pick,
         ),
@@ -570,7 +587,7 @@ class _OrderView extends StatelessWidget {
       for (var i = 0; i < order.length; i++)
         Row(
           children: [
-            const Text('Order by '),
+            Text(context.l10n.grpDOrderByLabel),
             DropdownButton<String>(
               key: Key('order-field-$i'),
               value: fields.any((f) => f.ref == order[i].field)
@@ -591,9 +608,15 @@ class _OrderView extends StatelessWidget {
             SegmentedButton<bool>(
               key: Key('order-dir-$i'),
               showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: false, label: Text('Ascending')),
-                ButtonSegment(value: true, label: Text('Descending')),
+              segments: [
+                ButtonSegment(
+                  value: false,
+                  label: Text(context.l10n.grpDAscending),
+                ),
+                ButtonSegment(
+                  value: true,
+                  label: Text(context.l10n.grpDDescending),
+                ),
               ],
               selected: {order[i].desc},
               onSelectionChanged: (v) => onChanged([
@@ -605,7 +628,7 @@ class _OrderView extends StatelessWidget {
             ),
             IconButton(
               key: Key('remove-order-$i'),
-              tooltip: 'Remove ordering',
+              tooltip: context.l10n.grpDRemoveOrdering,
               icon: const Icon(Icons.close),
               onPressed: () => onChanged([
                 for (var k = 0; k < order.length; k++)
@@ -618,7 +641,7 @@ class _OrderView extends StatelessWidget {
         TextButton.icon(
           key: const Key('add-order'),
           icon: const Icon(Icons.sort),
-          label: const Text('Order by'),
+          label: Text(context.l10n.grpDOrderBy),
           onPressed: () => onChanged([...order, FilterOrder(fields.first.ref)]),
         ),
     ],

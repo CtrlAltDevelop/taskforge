@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attachment_access.dart';
@@ -56,11 +58,11 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
     super.dispose();
   }
 
-  void _say(String text) {
+  void _say(String Function(AppLocalizations l10n) text) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(text)));
+      ..showSnackBar(SnackBar(content: Text(text(context.l10n))));
   }
 
   /// Runs [action], saying so rather than throwing when a dialog, the
@@ -69,7 +71,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
     try {
       await action();
     } on Object {
-      _say('Could not read that file.');
+      _say((l10n) => l10n.grpHCouldNotReadFile);
     }
   }
 
@@ -107,7 +109,9 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           children: [
             Expanded(
               child: Text(
-                'Attachments${files.isEmpty ? '' : ' (${files.length})'}',
+                files.isEmpty
+                    ? context.l10n.grpHAttachments
+                    : context.l10n.grpHAttachmentsCount(files.length),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
@@ -115,7 +119,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
               AttachButtons(
                 keyPrefix: 'attachment',
                 onPicked: _notifier.add,
-                onError: () => _say('Could not read that file.'),
+                onError: () => _say((l10n) => l10n.grpHCouldNotReadFile),
               ),
           ],
         ),
@@ -138,7 +142,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
                 ),
                 IconButton(
                   key: const Key('attachment-error-dismiss'),
-                  tooltip: 'Dismiss',
+                  tooltip: context.l10n.grpHDismiss,
                   onPressed: _notifier.clearError,
                   icon: const Icon(Icons.close, size: 18),
                 ),
@@ -155,9 +159,12 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
             onDismiss: () => _notifier.dismiss(u.localId),
           ),
         if (files.isEmpty && uploads.isEmpty && !state.loading && !canAdd)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Text('No attachments.', key: Key('no-attachments')),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              context.l10n.grpHNoAttachments,
+              key: const Key('no-attachments'),
+            ),
           ),
         if (files.isNotEmpty)
           Padding(
@@ -234,7 +241,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           },
           child: Semantics(
             button: true,
-            label: 'Attach files: drop them here or click, then paste an image',
+            label: context.l10n.grpHDropZoneLabel,
             excludeSemantics: true,
             child: InkWell(
               key: const Key('drop-zone'),
@@ -256,8 +263,8 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
                 ),
                 child: Text(
                   _dragging
-                      ? 'Drop to attach'
-                      : 'Drop files here to attach them',
+                      ? context.l10n.grpHDropToAttach
+                      : context.l10n.grpHDropFilesHere,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),

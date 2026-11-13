@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/recurrence/application/recurrence_providers.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/recurrence/presentation/repeat_editor.dart';
@@ -26,11 +27,11 @@ class RepeatSection extends ConsumerWidget {
       return Row(
         key: const Key('repeat-read-error'),
         children: [
-          const Flexible(child: Text('Could not read how this repeats.')),
+          Flexible(child: Text(context.l10n.grpHRepeatReadError)),
           TextButton(
             key: const Key('repeat-retry'),
             onPressed: () => ref.invalidate(repeatProvider(target)),
-            child: const Text('Retry'),
+            child: Text(context.l10n.grpHRetry),
           ),
         ],
       );
@@ -40,11 +41,11 @@ class RepeatSection extends ConsumerWidget {
       // Unknown yet or not repeating: offer to start one.
       if (!canEdit) return const SizedBox.shrink();
       return Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: ActionChip(
           key: const Key('repeat-chip'),
           avatar: const Icon(Icons.repeat, size: 18),
-          label: const Text('Repeat'),
+          label: Text(context.l10n.grpHRepeat),
           onPressed: () => showRepeatEditor(context, task: task),
         ),
       );
@@ -73,12 +74,13 @@ class RepeatSection extends ConsumerWidget {
               key: const Key('series-badge'),
               visualDensity: VisualDensity.compact,
               label: Text(
-                found.index == 0 ? 'First of a series' : 'Repeating task',
+                found.index == 0
+                    ? context.l10n.grpHFirstOfSeries
+                    : context.l10n.grpHRepeatingTask,
               ),
             ),
             Text(
-              '${found.instanceCount} '
-              '${found.instanceCount == 1 ? 'task' : 'tasks'} in this series',
+              context.l10n.grpHSeriesCount(found.instanceCount),
               key: const Key('series-count'),
               style: Theme.of(context).textTheme.bodySmall,
             ),
@@ -89,8 +91,8 @@ class RepeatSection extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               found.pauseReason.isEmpty
-                  ? 'Paused: no new tasks are made.'
-                  : 'Paused by the system: ${found.pauseReason}',
+                  ? context.l10n.grpHRepeatPaused
+                  : context.l10n.grpHRepeatPausedBySystem(found.pauseReason),
               key: const Key('repeat-paused'),
               style: TextStyle(color: scheme.error),
             ),
@@ -99,7 +101,7 @@ class RepeatSection extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              'Next: ${found.nextDates.join(', ')}',
+              context.l10n.grpHRepeatNext(found.nextDates.join(', ')),
               key: const Key('repeat-next'),
               style: Theme.of(context).textTheme.bodySmall,
             ),
@@ -108,7 +110,7 @@ class RepeatSection extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              'The next one is made when this is completed.',
+              context.l10n.grpHRepeatWaits,
               key: const Key('repeat-waits'),
               style: Theme.of(context).textTheme.bodySmall,
             ),
@@ -137,25 +139,22 @@ Future<bool> confirmDeleteTemplate(
     context: context,
     builder: (dialog) => AlertDialog(
       key: const Key('delete-template-dialog'),
-      title: const Text('This task repeats'),
-      content: Text(
-        'It is the template of "${series!.summary}". Deleting it can '
-        'stop the series, or the series can keep making new tasks.',
-      ),
+      title: Text(dialog.l10n.grpHRepeatsTitle),
+      content: Text(dialog.l10n.grpHRepeatsBody(series!.summary)),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(dialog),
-          child: const Text('Cancel'),
+          child: Text(dialog.l10n.grpHCancel),
         ),
         TextButton(
           key: const Key('keep-repeating'),
           onPressed: () => Navigator.pop(dialog, 'keep'),
-          child: const Text('Delete, keep repeating'),
+          child: Text(dialog.l10n.grpHDeleteKeepRepeating),
         ),
         FilledButton(
           key: const Key('stop-series'),
           onPressed: () => Navigator.pop(dialog, 'stop'),
-          child: const Text('Delete and stop'),
+          child: Text(dialog.l10n.grpHDeleteAndStop),
         ),
       ],
     ),

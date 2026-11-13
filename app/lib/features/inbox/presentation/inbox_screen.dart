@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/inbox/presentation/snooze_sheet.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 enum NotificationMenu { toggleRead, snooze, unsnooze, archive, unarchive }
 
@@ -85,7 +87,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         actions: [
           IconButton(
             key: const Key('mark-all-read'),
-            tooltip: 'Mark all read',
+            tooltip: context.l10n.grpHMarkAllRead,
             icon: const Icon(Icons.done_all),
             onPressed: state.unread == 0
                 ? null
@@ -93,7 +95,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
           ),
           IconButton(
             key: const Key('open-notification-prefs'),
-            tooltip: 'Notification settings',
+            tooltip: context.l10n.grpHNotificationSettings,
             icon: const Icon(Icons.tune),
             onPressed: () => context.push('/inbox/preferences'),
           ),
@@ -103,15 +105,18 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
             child: Row(
               children: [
-                Text('Inbox', style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  context.l10n.grpHInbox,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 if (state.unread > 0) ...[
                   const SizedBox(width: 8),
                   Chip(
                     key: const Key('unread-total'),
-                    label: Text('${state.unread} unread'),
+                    label: Text(context.l10n.grpHUnreadCount(state.unread)),
                   ),
                 ],
               ],
@@ -160,7 +165,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
               TextButton(
                 key: const Key('retry-inbox'),
                 onPressed: _notifier.load,
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpHRetry),
               ),
             ],
           ),
@@ -169,7 +174,10 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
     }
     if (state.items.isEmpty) {
       return Center(
-        child: Text(_empty(_filter), key: const Key('inbox-empty')),
+        child: Text(
+          _empty(context.l10n, _filter),
+          key: const Key('inbox-empty'),
+        ),
       );
     }
     return RefreshIndicator(
@@ -187,7 +195,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                     : TextButton(
                         key: const Key('load-more'),
                         onPressed: _notifier.loadMore,
-                        child: const Text('Load more'),
+                        child: Text(context.l10n.grpHLoadMore),
                       ),
               ),
             );
@@ -207,13 +215,13 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
   }
 }
 
-String _empty(InboxFilter f) => switch (f) {
-  InboxFilter.all => 'Nothing here. You are all caught up.',
-  InboxFilter.unread => 'No unread notifications.',
-  InboxFilter.mentions => 'Nobody has mentioned you.',
-  InboxFilter.assigned => 'Nothing assigned to you lately.',
-  InboxFilter.snoozed => 'Nothing is snoozed.',
-  InboxFilter.archived => 'Nothing is archived.',
+String _empty(AppLocalizations l10n, InboxFilter f) => switch (f) {
+  InboxFilter.all => l10n.grpHEmptyAll,
+  InboxFilter.unread => l10n.grpHEmptyUnread,
+  InboxFilter.mentions => l10n.grpHEmptyMentions,
+  InboxFilter.assigned => l10n.grpHEmptyAssigned,
+  InboxFilter.snoozed => l10n.grpHEmptySnoozed,
+  InboxFilter.archived => l10n.grpHEmptyArchived,
 };
 
 /// One row: who did what to which task, when, and a menu of what to do next.
@@ -242,10 +250,10 @@ class NotificationTile extends StatelessWidget {
     final detail = n.excerpt.isNotEmpty
         ? n.excerpt
         : n.dueDate.isNotEmpty
-        ? 'Due ${n.dueDate}'
+        ? context.l10n.grpHDueDate(n.dueDate)
         : null;
     return Semantics(
-      label: '${unread ? 'Unread. ' : ''}$title',
+      label: unread ? context.l10n.grpHUnreadPrefix(title) : title,
       container: true,
       child: ListTile(
         onTap: onTap,
@@ -291,7 +299,7 @@ class NotificationTile extends StatelessWidget {
                   Chip(
                     key: Key('count-${n.id}'),
                     visualDensity: VisualDensity.compact,
-                    label: Text('+${n.count - 1} more'),
+                    label: Text(context.l10n.grpHMoreCount(n.count - 1)),
                   ),
                 ],
               ],
@@ -300,37 +308,41 @@ class NotificationTile extends StatelessWidget {
         ),
         trailing: PopupMenuButton<NotificationMenu>(
           key: Key('menu-${n.id}'),
-          tooltip: 'More',
+          tooltip: context.l10n.grpHMore,
           onSelected: onMenu,
           itemBuilder: (_) => [
             PopupMenuItem(
               key: const Key('menu-toggle-read'),
               value: NotificationMenu.toggleRead,
-              child: Text(n.isRead ? 'Mark unread' : 'Mark read'),
+              child: Text(
+                n.isRead
+                    ? context.l10n.grpHMarkUnread
+                    : context.l10n.grpHMarkRead,
+              ),
             ),
             if (n.isSnoozed(now))
-              const PopupMenuItem(
-                key: Key('menu-unsnooze'),
+              PopupMenuItem(
+                key: const Key('menu-unsnooze'),
                 value: NotificationMenu.unsnooze,
-                child: Text('Stop snoozing'),
+                child: Text(context.l10n.grpHStopSnoozing),
               )
             else
-              const PopupMenuItem(
-                key: Key('menu-snooze'),
+              PopupMenuItem(
+                key: const Key('menu-snooze'),
                 value: NotificationMenu.snooze,
-                child: Text('Snooze…'),
+                child: Text(context.l10n.grpHSnoozeEllipsis),
               ),
             if (n.isArchived)
-              const PopupMenuItem(
-                key: Key('menu-unarchive'),
+              PopupMenuItem(
+                key: const Key('menu-unarchive'),
                 value: NotificationMenu.unarchive,
-                child: Text('Move to inbox'),
+                child: Text(context.l10n.grpHMoveToInbox),
               )
             else
-              const PopupMenuItem(
-                key: Key('menu-archive'),
+              PopupMenuItem(
+                key: const Key('menu-archive'),
                 value: NotificationMenu.archive,
-                child: Text('Archive'),
+                child: Text(context.l10n.grpHArchive),
               ),
           ],
         ),

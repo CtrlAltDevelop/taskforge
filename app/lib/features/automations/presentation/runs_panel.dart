@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -25,7 +26,9 @@ class RunStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Chip(
-    label: Text(status?.label ?? (raw.isEmpty ? 'Unknown' : raw)),
+    label: Text(
+      status?.label ?? (raw.isEmpty ? context.l10n.grpGUnknown : raw),
+    ),
     visualDensity: VisualDensity.compact,
     side: BorderSide(color: statusColor(context, status)),
     labelStyle: TextStyle(color: statusColor(context, status)),
@@ -61,8 +64,8 @@ class StepsView extends StatelessWidget {
                 ),
                 for (final c in s.changes)
                   Text(
-                    '${c.field}: ${c.from.isEmpty ? '(empty)' : c.from}'
-                    ' -> ${c.to.isEmpty ? '(empty)' : c.to}',
+                    '${c.field}: ${c.from.isEmpty ? context.l10n.grpGEmptyValue : c.from}'
+                    ' -> ${c.to.isEmpty ? context.l10n.grpGEmptyValue : c.to}',
                     key: Key('change-${c.field}'),
                   ),
                 if (s.detail.isNotEmpty) Text(s.detail),
@@ -149,8 +152,11 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
     });
     final runs = ref.watch(automationRunsProvider(_key));
     return switch (runs) {
-      AsyncData(:final value) when value.isEmpty => const Center(
-        child: Text('Nothing has run yet.', key: Key('runs-empty')),
+      AsyncData(:final value) when value.isEmpty => Center(
+        child: Text(
+          context.l10n.grpGNothingRunYet,
+          key: const Key('runs-empty'),
+        ),
       ),
       AsyncData(:final value) => ListView(
         key: const Key('runs-list'),
@@ -174,7 +180,7 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
                     : TextButton(
                         key: const Key('runs-load-more'),
                         onPressed: () => _loadMore(value),
-                        child: const Text('Load more'),
+                        child: Text(context.l10n.grpGLoadMore),
                       ),
               ),
             ),
@@ -187,7 +193,7 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
             Text(automationErrorMessage(error), key: const Key('runs-error')),
             TextButton(
               onPressed: () => ref.invalidate(automationRunsProvider),
-              child: const Text('Retry'),
+              child: Text(context.l10n.grpGRetry),
             ),
           ],
         ),
@@ -219,7 +225,7 @@ class RunTile extends StatelessWidget {
       ),
       trailing: RunStatusChip(status: status, raw: run.rawStatus),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      childrenPadding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
       children: [
         if (status != null &&
             status != RunStatus.succeeded &&
@@ -235,8 +241,11 @@ class RunTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              "Why didn't this run? "
-              '${run.explanation.isEmpty ? status?.meaning ?? '' : run.explanation}',
+              context.l10n.grpGWhyNotRun(
+                run.explanation.isEmpty
+                    ? status?.meaning ?? ''
+                    : run.explanation,
+              ),
             ),
           ),
         if (run.error.isNotEmpty)
@@ -248,7 +257,7 @@ class RunTile extends StatelessWidget {
               style: TextStyle(color: theme.colorScheme.error),
             ),
           ),
-        if (run.depth > 0) Text('Chain depth ${run.depth}'),
+        if (run.depth > 0) Text(context.l10n.grpGChainDepth(run.depth)),
         StepsView(steps: run.steps),
       ],
     );

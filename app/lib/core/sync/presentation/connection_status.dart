@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 
@@ -49,21 +50,17 @@ class ConnectionBanner extends ConsumerWidget {
     return Material(
       key: const Key('reconnecting-banner'),
       color: Theme.of(context).colorScheme.secondaryContainer,
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 14,
               height: 14,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Reconnecting… what you see will catch up once you are back.',
-              ),
-            ),
+            const SizedBox(width: 10),
+            Expanded(child: Text(context.l10n.grpHReconnecting)),
           ],
         ),
       ),

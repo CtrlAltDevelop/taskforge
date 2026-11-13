@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -17,7 +18,7 @@ class ArchivedBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialBanner(
     key: const Key('archived-banner'),
-    content: const Text('This project is archived and read-only.'),
+    content: Text(context.l10n.grpHArchivedBanner),
     actions: [
       if (canManageProject(
         ref.watch(permissionSetProvider),
@@ -29,7 +30,7 @@ class ArchivedBanner extends ConsumerWidget {
             context,
             () => ref.read(projectsControllerProvider).restore(project),
           ),
-          child: const Text('Restore'),
+          child: Text(context.l10n.grpHRestore),
         ),
     ],
   );

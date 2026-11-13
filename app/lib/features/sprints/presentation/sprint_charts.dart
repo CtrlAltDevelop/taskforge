@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/charts/chart_paint.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 
@@ -44,7 +45,7 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
             TextButton(
               key: const Key('burndown-retry'),
               onPressed: () => ref.invalidate(burndownProvider(key)),
-              child: const Text('Retry'),
+              child: Text(context.l10n.grpARetry),
             ),
           ],
         ),
@@ -66,21 +67,27 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
           children: [
             Expanded(
               child: Text(
-                'Burndown: ${widget.sprint.name}',
+                context.l10n.grpABurndownTitle(widget.sprint.name),
                 style: theme.textTheme.titleMedium,
               ),
             ),
             SegmentedButton<BurndownMetric>(
               key: const Key('burndown-metric'),
               showSelectedIcon: false,
-              segments: const [
+              segments: [
                 ButtonSegment(
                   value: BurndownMetric.points,
-                  label: Text('Points', key: Key('metric-points')),
+                  label: Text(
+                    context.l10n.grpAPoints,
+                    key: const Key('metric-points'),
+                  ),
                 ),
                 ButtonSegment(
                   value: BurndownMetric.tasks,
-                  label: Text('Tasks', key: Key('metric-tasks')),
+                  label: Text(
+                    context.l10n.grpATasks,
+                    key: const Key('metric-tasks'),
+                  ),
                 ),
               ],
               selected: {_metric},
@@ -90,11 +97,11 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
         ),
         const SizedBox(height: 8),
         if (chart.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: Text(
-              'The burndown starts once the sprint is started.',
-              key: Key('burndown-empty'),
+              context.l10n.grpABurndownEmpty,
+              key: const Key('burndown-empty'),
             ),
           )
         else
@@ -102,9 +109,15 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
             height: 220,
             child: Semantics(
               label:
-                  'Burndown chart, ${chart.points.length} days, '
-                  '${chart.steps.length} scope changes'
-                  '${chart.backfilledDays == 0 ? '' : ', ${chart.backfilledDays} back-filled days'}',
+                  context.l10n.grpABurndownChart(
+                    chart.points.length,
+                    chart.steps.length,
+                  ) +
+                  (chart.backfilledDays == 0
+                      ? ''
+                      : context.l10n.grpABurndownBackfilled(
+                          chart.backfilledDays,
+                        )),
               child: CustomPaint(
                 key: const Key('burndown-chart'),
                 size: Size.infinite,
@@ -122,9 +135,18 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
         Wrap(
           spacing: 16,
           children: [
-            _Legend(color: theme.colorScheme.primary, label: 'Remaining'),
-            _Legend(color: theme.colorScheme.outline, label: 'Ideal'),
-            _Legend(color: theme.colorScheme.error, label: 'Scope change'),
+            _Legend(
+              color: theme.colorScheme.primary,
+              label: context.l10n.grpALegendRemaining,
+            ),
+            _Legend(
+              color: theme.colorScheme.outline,
+              label: context.l10n.grpALegendIdeal,
+            ),
+            _Legend(
+              color: theme.colorScheme.error,
+              label: context.l10n.grpALegendScopeChange,
+            ),
             if (chart.backfilledDays > 0)
               Row(
                 key: const Key('legend-backfilled'),
@@ -136,7 +158,10 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 4),
-                  Text('Back-filled day', style: theme.textTheme.bodySmall),
+                  Text(
+                    context.l10n.grpALegendBackfilled,
+                    style: theme.textTheme.bodySmall,
+                  ),
                 ],
               ),
           ],
@@ -311,6 +336,7 @@ class VelocityPanel extends ConsumerWidget {
     final theme = Theme.of(context);
     return switch (ref.watch(burndownProvider(key))) {
       AsyncData(:final value) => _body(
+        context,
         theme,
         lastVelocity(value.velocity),
         value,
@@ -320,13 +346,18 @@ class VelocityPanel extends ConsumerWidget {
     };
   }
 
-  Widget _body(ThemeData theme, List<VelocityItem> items, Burndown b) {
+  Widget _body(
+    BuildContext context,
+    ThemeData theme,
+    List<VelocityItem> items,
+    Burndown b,
+  ) {
     if (items.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(16),
+      return Padding(
+        padding: const EdgeInsets.all(16),
         child: Text(
-          'Velocity appears after the first completed sprint.',
-          key: Key('velocity-empty'),
+          context.l10n.grpAVelocityEmpty,
+          key: const Key('velocity-empty'),
         ),
       );
     }
@@ -334,8 +365,10 @@ class VelocityPanel extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Velocity (last ${items.length} sprints): '
-          'average ${pointsText(b.averageVelocity)} points',
+          context.l10n.grpAVelocityTitle(
+            items.length,
+            pointsText(b.averageVelocity),
+          ),
           key: const Key('velocity-title'),
           style: theme.textTheme.titleMedium,
         ),
@@ -343,7 +376,7 @@ class VelocityPanel extends ConsumerWidget {
         SizedBox(
           height: 160,
           child: Semantics(
-            label: 'Velocity chart, ${items.length} sprints',
+            label: context.l10n.grpAVelocityChart(items.length),
             child: CustomPaint(
               key: const Key('velocity-chart'),
               size: Size.infinite,
@@ -359,8 +392,14 @@ class VelocityPanel extends ConsumerWidget {
         Wrap(
           spacing: 16,
           children: [
-            _Legend(color: theme.colorScheme.outline, label: 'Committed'),
-            _Legend(color: theme.colorScheme.primary, label: 'Completed'),
+            _Legend(
+              color: theme.colorScheme.outline,
+              label: context.l10n.grpALegendCommitted,
+            ),
+            _Legend(
+              color: theme.colorScheme.primary,
+              label: context.l10n.grpALegendCompleted,
+            ),
           ],
         ),
       ],

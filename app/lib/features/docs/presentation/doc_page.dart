@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/directional_icon.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/data/docs_client.dart';
@@ -14,15 +16,19 @@ import 'package:taskforge/features/docs/presentation/block_editor.dart';
 import 'package:taskforge/features/docs/presentation/doc_dialogs.dart';
 import 'package:taskforge/features/docs/presentation/doc_panels.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What the save indicator says.
-String saveLabel(SaveState s) => switch (s) {
-  SaveState.saved => 'Saved',
-  SaveState.dirty => 'Unsaved changes',
-  SaveState.saving => 'Saving...',
-  SaveState.error => 'Could not save',
-  SaveState.conflict => 'Conflict: choose what to keep',
-};
+String saveLabel(SaveState s, {AppLocalizations? l10n}) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (s) {
+    SaveState.saved => l.grpBSaveSaved,
+    SaveState.dirty => l.grpBSaveDirty,
+    SaveState.saving => l.grpBSaveSaving,
+    SaveState.error => l.grpBSaveError,
+    SaveState.conflict => l.grpBSaveConflict,
+  };
+}
 
 /// One open page: title, text, and everything around it.
 class DocPageView extends ConsumerStatefulWidget {
@@ -117,7 +123,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
     for (final m in ref.read(membersProvider).value ?? const []) {
       if (m.userId == id) return m.label;
     }
-    return 'Someone';
+    return context.l10n.grpBSomeone;
   }
 
   Widget _banner(String key, String text, {Widget? action, Color? color}) =>
@@ -147,10 +153,10 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
         onPressed: () => context.go(
           widget.project.isEmpty ? '/docs' : '/docs?project=${widget.project}',
         ),
-        child: const Text('Docs'),
+        child: Text(context.l10n.grpBDocsCrumb),
       ),
       for (final d in trail) ...[
-        const Icon(Icons.chevron_right, size: 16),
+        const DirectionalIcon(Icons.chevron_right, size: 16),
         TextButton(
           key: Key('crumb-${d.id}'),
           onPressed: d.id == widget.docId
@@ -191,9 +197,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              missing
-                  ? 'This page does not exist, or you cannot open it.'
-                  : docErrorMessage(error),
+              missing ? context.l10n.grpBDocNotFound : docErrorMessage(error),
               key: Key(missing ? 'doc-not-found' : 'doc-error'),
             ),
             const SizedBox(height: 8),
@@ -201,13 +205,13 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
               TextButton(
                 key: const Key('back-to-docs'),
                 onPressed: () => context.go('/docs'),
-                child: const Text('Back to all pages'),
+                child: Text(context.l10n.grpBBackToAllPages),
               )
             else
               TextButton(
                 key: const Key('retry-doc'),
                 onPressed: notifier.load,
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpBRetry),
               ),
           ],
         ),
@@ -241,7 +245,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                 if (s.archived)
                   _banner(
                     'archived-banner',
-                    'This page is archived. It is read-only.',
+                    context.l10n.grpBArchivedBanner,
                     action: page.canEdit
                         ? TextButton(
                             key: const Key('restore-page'),
@@ -256,27 +260,23 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                                 }
                               }
                             },
-                            child: const Text('Restore'),
+                            child: Text(context.l10n.grpBRestore),
                           )
                         : null,
                   ),
                 if (s.conflict != null)
                   _banner(
                     'conflict-banner',
-                    'Someone else changed this page. Your changes are not saved yet.',
+                    context.l10n.grpBConflictBanner,
                     color: Theme.of(context).colorScheme.errorContainer,
                     action: TextButton(
                       key: const Key('open-conflict'),
                       onPressed: _openConflict,
-                      child: const Text('Resolve'),
+                      child: Text(context.l10n.grpBResolve),
                     ),
                   ),
                 if (s.remoteChanged && s.conflict == null)
-                  _banner(
-                    'remote-banner',
-                    'A newer version was saved by someone else. '
-                        'It will be merged when you save.',
-                  ),
+                  _banner('remote-banner', context.l10n.grpBRemoteBanner),
                 if (others.isNotEmpty)
                   Padding(
                     key: const Key('editing-hint'),
@@ -287,8 +287,8 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                         const SizedBox(width: 4),
                         Text(
                           others.length == 1
-                              ? '${others.first} is editing'
-                              : '${others.join(', ')} are editing',
+                              ? context.l10n.grpBIsEditing(others.first)
+                              : context.l10n.grpBAreEditing(others.join(', ')),
                         ),
                       ],
                     ),
@@ -299,13 +299,13 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     if (widget.onOpenTree != null)
                       IconButton(
                         key: const Key('open-page-tree'),
-                        tooltip: 'Pages',
+                        tooltip: context.l10n.grpBPages,
                         icon: const Icon(Icons.account_tree_outlined),
                         onPressed: widget.onOpenTree,
                       ),
                     IconButton(
                       key: const Key('doc-icon'),
-                      tooltip: 'Change icon',
+                      tooltip: context.l10n.grpBChangeIcon,
                       icon: Text(
                         s.icon.isEmpty ? '📄' : s.icon,
                         style: const TextStyle(fontSize: 24),
@@ -324,9 +324,9 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                         focusNode: _titleFocus,
                         readOnly: !canEdit,
                         style: Theme.of(context).textTheme.headlineMedium,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Untitled',
+                          hintText: context.l10n.grpBUntitled,
                         ),
                         onChanged: (v) => notifier.edit(title: v),
                       ),
@@ -339,7 +339,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                   children: [
                     Text(
                       key: const Key('save-state'),
-                      saveLabel(s.save),
+                      saveLabel(s.save, l10n: context.l10n),
                       style: TextStyle(
                         color:
                             s.save == SaveState.error ||
@@ -352,30 +352,30 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                       TextButton(
                         key: const Key('retry-save'),
                         onPressed: notifier.saveNow,
-                        child: const Text('Retry'),
+                        child: Text(context.l10n.grpBRetry),
                       ),
                     if (!page.canEdit && !s.archived)
-                      const Chip(
-                        key: Key('read-only-badge'),
-                        label: Text('Read only'),
+                      Chip(
+                        key: const Key('read-only-badge'),
+                        label: Text(context.l10n.grpBReadOnly),
                         visualDensity: VisualDensity.compact,
                       ),
                     if (page.node.restricted)
-                      const Chip(
-                        key: Key('restricted-badge'),
-                        avatar: Icon(Icons.lock_outline, size: 14),
-                        label: Text('Restricted'),
+                      Chip(
+                        key: const Key('restricted-badge'),
+                        avatar: const Icon(Icons.lock_outline, size: 14),
+                        label: Text(context.l10n.grpBRestricted),
                         visualDensity: VisualDensity.compact,
                       ),
                     IconButton(
                       key: const Key('open-revisions'),
-                      tooltip: 'History',
+                      tooltip: context.l10n.grpBHistory,
                       icon: const Icon(Icons.history),
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                     ),
                     IconButton(
                       key: const Key('open-share'),
-                      tooltip: 'Access',
+                      tooltip: context.l10n.grpBAccess,
                       icon: const Icon(Icons.lock_person_outlined),
                       onPressed: () => showDialog<void>(
                         context: context,
@@ -384,7 +384,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     ),
                     IconButton(
                       key: const Key('export-md'),
-                      tooltip: 'Export Markdown',
+                      tooltip: context.l10n.grpBExportMarkdown,
                       icon: const Icon(Icons.ios_share),
                       onPressed: () => exportMarkdown(context, ref, id),
                     ),

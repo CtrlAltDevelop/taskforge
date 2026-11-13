@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
 
@@ -30,7 +31,7 @@ class ProblemsList extends StatelessWidget {
       child: ExpansionTile(
         key: const Key('problems-tile'),
         tilePadding: EdgeInsets.zero,
-        title: Text('$total note${total == 1 ? '' : 's'} about this file'),
+        title: Text(context.l10n.grpGNotesAboutFile(total)),
         children: [
           for (final p in shown)
             ListTile(
@@ -40,12 +41,14 @@ class ProblemsList extends StatelessWidget {
                 color: p.isError ? scheme.error : scheme.tertiary,
               ),
               title: Text(p.message),
-              subtitle: p.line > 0 ? Text('Row ${p.line}') : null,
+              subtitle: p.line > 0
+                  ? Text(context.l10n.grpGRowNumber(p.line))
+                  : null,
             ),
           if (total > shown.length)
             Padding(
               padding: const EdgeInsets.all(8),
-              child: Text('...and ${total - shown.length} more.'),
+              child: Text(context.l10n.grpGAndMore(total - shown.length)),
             ),
         ],
       ),
@@ -66,8 +69,7 @@ class ImportProblems extends ConsumerWidget {
     final detail = ref.watch(importDetailProvider(jobId));
     return detail.when(
       loading: () => const LinearProgressIndicator(),
-      error: (_, _) =>
-          const Text('Could not read the notes about this import.'),
+      error: (_, _) => Text(context.l10n.grpGNotesReadFailed),
       data: (d) => ProblemsList(problems: d.problems, total: count),
     );
   }

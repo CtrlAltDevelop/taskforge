@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 
 typedef RoleDraft = ({String name, Set<String> permissions});
 
-String? _validateName(String? value) =>
-    (value ?? '').trim().isEmpty ? 'Enter a name.' : null;
+String? _validateName(BuildContext context, String? value) =>
+    (value ?? '').trim().isEmpty ? context.l10n.grpEEnterName : null;
 
 /// Name plus a checklist of every registry permission.
 Future<RoleDraft?> showCreateRoleDialog(
@@ -43,7 +44,7 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('New role'),
+      title: Text(context.l10n.grpENewRole),
       content: SizedBox(
         width: 400,
         child: Form(
@@ -57,8 +58,8 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
                   key: const Key('role-name'),
                   controller: _name,
                   autofocus: true,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  validator: _validateName,
+                  decoration: InputDecoration(labelText: context.l10n.grpEName),
+                  validator: (v) => _validateName(context, v),
                 ),
                 for (final area in widget.registry) ...[
                   Padding(
@@ -86,7 +87,7 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpECancel),
         ),
         FilledButton(
           key: const Key('create-role-submit'),
@@ -95,7 +96,7 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
             Navigator.of(context)
                 .pop((name: _name.text.trim(), permissions: _granted));
           },
-          child: const Text('Create'),
+          child: Text(context.l10n.grpECreate),
         ),
       ],
     );
@@ -130,21 +131,21 @@ class _RenameRoleDialogState extends State<_RenameRoleDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Rename role'),
+      title: Text(context.l10n.grpERenameRole),
       content: Form(
         key: _form,
         child: TextFormField(
           key: const Key('role-name'),
           controller: _name,
           autofocus: true,
-          decoration: const InputDecoration(labelText: 'Name'),
-          validator: _validateName,
+          decoration: InputDecoration(labelText: context.l10n.grpEName),
+          validator: (v) => _validateName(context, v),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpECancel),
         ),
         FilledButton(
           key: const Key('rename-role-submit'),
@@ -153,7 +154,7 @@ class _RenameRoleDialogState extends State<_RenameRoleDialog> {
               Navigator.of(context).pop(_name.text.trim());
             }
           },
-          child: const Text('Rename'),
+          child: Text(context.l10n.grpERename),
         ),
       ],
     );
@@ -189,19 +190,19 @@ class _DeleteRoleDialogState extends State<_DeleteRoleDialog> {
     final role = widget.role;
     final needsTarget = role.memberCount > 0;
     return AlertDialog(
-      title: Text('Delete "${role.name}"?'),
+      title: Text(context.l10n.grpEDeleteRoleTitle(role.name)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!needsTarget) const Text('No one has this role.'),
+          if (!needsTarget) Text(context.l10n.grpERoleNoOne),
           if (needsTarget) ...[
-            Text('${role.memberCount} member(s) have this role. Move them to:'),
+            Text(context.l10n.grpERoleMoveMembers(role.memberCount)),
             const SizedBox(height: 8),
             DropdownButton<String>(
               key: const Key('reassign-to'),
               isExpanded: true,
-              hint: const Text('Choose a role'),
+              hint: Text(context.l10n.grpEChooseRole),
               value: _target,
               items: [
                 for (final r in widget.others)
@@ -219,14 +220,14 @@ class _DeleteRoleDialogState extends State<_DeleteRoleDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpECancel),
         ),
         FilledButton(
           key: const Key('delete-role-submit'),
           onPressed: needsTarget && _target == null
               ? null
               : () => Navigator.of(context).pop(_target ?? ''),
-          child: const Text('Delete'),
+          child: Text(context.l10n.grpEDelete),
         ),
       ],
     );

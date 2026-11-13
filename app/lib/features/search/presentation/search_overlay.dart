@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
 
@@ -12,7 +13,7 @@ Future<void> openSearch(BuildContext context) async {
   final router = GoRouter.of(context);
   final hit = await showDialog<SearchHit>(
     context: context,
-    barrierLabel: 'Close search',
+    barrierLabel: context.l10n.grpFSearchClose,
     builder: (_) => const SearchOverlay(),
   );
   if (hit != null) router.go(hit.location);
@@ -108,7 +109,7 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                   autofocus: true,
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'Search tasks, comments, projects, people',
+                    hintText: context.l10n.grpFSearchHint,
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: state.loading
                         ? const Padding(
@@ -132,11 +133,11 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                 children: [
                   for (final chip in operatorChips)
                     FilterChip(
-                      key: Key('chip-${chip.operator}'),
-                      label: Text(chip.label),
-                      selected: hasOperator(state.text, chip.operator),
+                      key: Key('chip-$chip'),
+                      label: Text(operatorChipLabel(chip, context.l10n)),
+                      selected: hasOperator(state.text, chip),
                       onSelected: (_) =>
-                          _setText(toggleOperator(state.text, chip.operator)),
+                          _setText(toggleOperator(state.text, chip)),
                     ),
                 ],
               ),
@@ -153,22 +154,20 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
     if (state.error != null && results == null) {
       return _Message(
         key: const Key('search-error'),
-        text: searchErrorMessage(state.error!),
+        text: searchErrorMessage(state.error!, context.l10n),
         action: TextButton(
           key: const Key('search-retry'),
           onPressed: ref.read(searchBoxProvider.notifier).retry,
-          child: const Text('Retry'),
+          child: Text(context.l10n.retry),
         ),
       );
     }
     if (state.text.trim().isEmpty) return _Recent(state.recent, _setText);
     if (results == null) return const SizedBox(height: 72);
     if (results.isEmpty) {
-      return const _Message(
-        key: Key('search-empty'),
-        text:
-            'Nothing found. Try fewer words, or an id like WEB-12. '
-            'Narrow with in:KEY, assignee:me, status:open.',
+      return _Message(
+        key: const Key('search-empty'),
+        text: context.l10n.grpFSearchNothing,
       );
     }
     final rows = results.ordered;
@@ -178,15 +177,18 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
         if (state.error != null)
           Padding(
             key: const Key('search-more-error'),
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-            child: Text(searchErrorMessage(state.error!)),
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 4),
+            child: Text(searchErrorMessage(state.error!, context.l10n)),
           ),
         if (results.jump != null)
-          _Section(title: 'Go to', children: [_row(results.jump!, rows, 0)]),
+          _Section(
+            title: context.l10n.grpFGoTo,
+            children: [_row(results.jump!, rows, 0)],
+          ),
         for (final kind in SearchKind.values)
           if (results.of(kind).isNotEmpty)
             _Section(
-              title: kind.label,
+              title: kind.labelIn(context.l10n),
               children: [
                 for (final hit in results.of(kind))
                   _row(hit, rows, rows.indexOf(hit)),
@@ -196,7 +198,11 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                     onPressed: state.loadingMore.contains(kind)
                         ? null
                         : () => ref.read(searchBoxProvider.notifier).more(kind),
-                    child: Text('Show more ${kind.label.toLowerCase()}'),
+                    child: Text(
+                      context.l10n.grpFShowMore(
+                        kind.labelIn(context.l10n).toLowerCase(),
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -222,7 +228,7 @@ class _Section extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 4),
         child: Text(title, style: Theme.of(context).textTheme.labelLarge),
       ),
       ...children,
@@ -310,19 +316,17 @@ class _Recent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (recent.isEmpty) {
-      return const _Message(
-        key: Key('search-tips'),
-        text:
-            'Type to search. Try an id like WEB-12, or operators: '
-            'in:KEY, assignee:me, status:open.',
+      return _Message(
+        key: const Key('search-tips'),
+        text: context.l10n.grpFSearchTips,
       );
     }
     return ListView(
       shrinkWrap: true,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 4),
-          child: Text('Recent'),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 4),
+          child: Text(context.l10n.grpFRecent),
         ),
         for (final q in recent)
           ListTile(

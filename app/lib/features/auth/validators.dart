@@ -1,42 +1,52 @@
+import 'package:flutter/widgets.dart' show Locale;
+
 import 'package:taskforge/core/auth/auth_api.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 const minPasswordLength = 10;
 
 final _email = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
-String? validateEmail(String? value) {
+/// A form field's check; the strings come in the language on screen.
+typedef AuthValidator = String? Function(String? value, AppLocalizations l10n);
+
+AppLocalizations _english() => lookupAppLocalizations(const Locale('en'));
+
+String? validateEmail(String? value, [AppLocalizations? l10n]) {
+  final t = l10n ?? _english();
   final text = value?.trim() ?? '';
-  if (text.isEmpty) return 'Enter your email address.';
-  return _email.hasMatch(text) ? null : 'Enter a valid email address.';
+  if (text.isEmpty) return t.enterEmail;
+  return _email.hasMatch(text) ? null : t.enterValidEmail;
 }
 
-String? validatePassword(String? value) {
+String? validatePassword(String? value, [AppLocalizations? l10n]) {
+  final t = l10n ?? _english();
   final text = value ?? '';
-  if (text.isEmpty) return 'Enter a password.';
+  if (text.isEmpty) return t.enterPassword;
   return text.length >= minPasswordLength
       ? null
-      : 'Use at least $minPasswordLength characters.';
+      : t.passwordTooShort(minPasswordLength);
 }
 
-String? validateResetCode(String? value) =>
-    (value ?? '').trim().isEmpty ? 'Enter the code from your email.' : null;
+String? validateResetCode(String? value, [AppLocalizations? l10n]) =>
+    (value ?? '').trim().isEmpty ? (l10n ?? _english()).enterResetCode : null;
 
 /// Signing in only needs *something* typed: an older account may have a shorter
 /// password than today's sign-up rule, and the server is the judge of correctness.
-String? validateSignInPassword(String? value) =>
-    (value ?? '').isEmpty ? 'Enter your password.' : null;
+String? validateSignInPassword(String? value, [AppLocalizations? l10n]) =>
+    (value ?? '').isEmpty ? (l10n ?? _english()).enterYourPassword : null;
 
 /// What to tell the user about a failed sign-in or sign-up.
-String authErrorMessage(Object error) => switch (error) {
-  AuthApiException(title: 'INVALID_CREDENTIALS') => 'Wrong email or password.',
-  AuthApiException(title: 'RATE_LIMITED' || 'TOO_MANY_ATTEMPTS') =>
-    'Too many attempts. Try again in a few minutes.',
-  AuthApiException(title: 'ACCOUNT_EXISTS') =>
-    'An account with that email already exists.',
-  AuthApiException(title: 'BAD_RESPONSE') =>
-    'The server had a problem. Try again in a moment.',
-  AuthApiException(:final message) => message,
-  NetworkUnavailable() =>
-    'Cannot reach the server. Check your connection and try again.',
-  _ => 'Something went wrong. Try again.',
-};
+String authErrorMessage(Object error, [AppLocalizations? l10n]) {
+  final t = l10n ?? _english();
+  return switch (error) {
+    AuthApiException(title: 'INVALID_CREDENTIALS') => t.errWrongCredentials,
+    AuthApiException(title: 'RATE_LIMITED' || 'TOO_MANY_ATTEMPTS') =>
+      t.errTooManyAttempts,
+    AuthApiException(title: 'ACCOUNT_EXISTS') => t.errAccountExists,
+    AuthApiException(title: 'BAD_RESPONSE') => t.errServerProblem,
+    AuthApiException(:final message) => message,
+    NetworkUnavailable() => t.errNoConnection,
+    _ => t.errGeneric,
+  };
+}

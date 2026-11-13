@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/presentation/doc_page.dart';
 import 'package:taskforge/features/docs/presentation/doc_panels.dart';
 import 'package:taskforge/features/docs/presentation/page_tree.dart';
@@ -44,15 +45,15 @@ class DocsScreen extends ConsumerWidget {
         ? false
         : ref.watch(docSessionProvider(id).select((s) => s.canEdit));
     return ShellScaffold(
-      appBar: AppBar(title: const Text('Docs')),
+      appBar: AppBar(title: Text(context.l10n.grpJDocs)),
       body: LayoutBuilder(
         builder: (context, box) {
           final wide = box.maxWidth >= docsTreeBreakpoint;
           Widget page(BuildContext inner) => id == null
-              ? const Center(
+              ? Center(
                   child: Text(
-                    'Pick a page, or create one.',
-                    key: Key('no-page-open'),
+                    context.l10n.grpJPickPage,
+                    key: const Key('no-page-open'),
                   ),
                 )
               : DocPageView(

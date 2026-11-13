@@ -5,12 +5,21 @@ import 'package:grpc/service_api.dart' show CallOptions;
 import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart';
 
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/gen/infrastructure/accounts/grpc/accounts.pbgrpc.dart';
 import 'package:taskforge/gen/infrastructure/oauth/rotation/grpc/oauth_rotation.pbgrpc.dart';
 
 @immutable
 class Account {
-  const Account({required this.email, required this.displayName, this.id = ''});
+  const Account({
+    required this.email,
+    required this.displayName,
+    this.id = '',
+    this.prefs = const LocalePrefs(),
+  });
+
+  /// Language, calendar, week start and digits saved on the server.
+  final LocalePrefs prefs;
 
   /// The account's id (what the server calls this person in comments, members...).
   final String id;
@@ -37,6 +46,9 @@ class SessionInfo {
 
 abstract interface class AccountClient {
   Future<Account> me();
+
+  /// Saves language, calendar, week start and digits to the account.
+  Future<void> updatePreferences(LocalePrefs prefs);
   Future<List<SessionInfo>> sessions();
 }
 
@@ -82,6 +94,27 @@ class GrpcAccountClient implements AccountClient {
       id: account.id,
       email: account.email,
       displayName: account.profile.displayName,
+      prefs: LocalePrefs.fromStored(
+        language: account.profile.locale,
+        calendar: account.profile.calendarSystem,
+        weekStart: account.profile.weekStart,
+        numerals: account.profile.numerals,
+      ),
+    );
+  }
+
+  @override
+  Future<void> updatePreferences(LocalePrefs prefs) async {
+    await _withRefresh(
+      () => _accounts.updateProfile(
+        ProfileUpdate(
+          locale: prefs.language,
+          calendarSystem: prefs.calendar,
+          weekStart: prefs.weekStart,
+          numerals: prefs.numerals,
+        ),
+        options: _auth,
+      ),
     );
   }
 

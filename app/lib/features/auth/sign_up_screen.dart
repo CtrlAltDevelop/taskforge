@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/credentials_form.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
@@ -15,8 +16,8 @@ class SignUpScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     return CredentialsForm(
-      title: 'Create account',
-      submitLabel: 'Create account',
+      title: context.l10n.createAccount,
+      submitLabel: context.l10n.createAccount,
       passwordValidator: validatePassword,
       onSubmit: session.signUp,
       footer: TextButton(
@@ -26,7 +27,7 @@ class SignUpScreen extends ConsumerWidget {
               ? '/sign-in'
               : '/sign-in?from=${Uri.encodeComponent(from!)}',
         ),
-        child: const Text('I already have an account'),
+        child: Text(context.l10n.alreadyHaveAccount),
       ),
     );
   }

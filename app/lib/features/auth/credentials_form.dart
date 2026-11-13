@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskforge/features/auth/auth_form.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/validators.dart';
 
 /// Email + password form shared by sign-in and sign-up.
@@ -15,7 +16,7 @@ class CredentialsForm extends StatelessWidget {
 
   final String title;
   final String submitLabel;
-  final FormFieldValidator<String> passwordValidator;
+  final AuthValidator passwordValidator;
   final Future<void> Function(String email, String password) onSubmit;
   final Widget footer;
 
@@ -25,16 +26,16 @@ class CredentialsForm extends StatelessWidget {
       title: title,
       submitLabel: submitLabel,
       fields: [
-        const AuthField(
-          key: Key('email'),
-          label: 'Email',
+        AuthField(
+          key: const Key('email'),
+          label: context.l10n.email,
           validator: validateEmail,
           keyboardType: TextInputType.emailAddress,
-          autofillHints: [AutofillHints.email],
+          autofillHints: const [AutofillHints.email],
         ),
         AuthField(
           key: const Key('password'),
-          label: 'Password',
+          label: context.l10n.password,
           validator: passwordValidator,
           secret: true,
           autofillHints: const [AutofillHints.password],

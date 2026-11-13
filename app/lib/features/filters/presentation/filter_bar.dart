@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
 import 'package:taskforge/features/filters/presentation/filter_panel.dart';
@@ -34,12 +35,16 @@ class FilterBar extends ConsumerWidget {
         OutlinedButton.icon(
           key: const Key('filter-button'),
           icon: const Icon(Icons.filter_list, size: 18),
-          label: Text(active.isEmpty ? 'Filter' : 'Filter ($count)'),
+          label: Text(
+            active.isEmpty
+                ? context.l10n.grpGFilter
+                : context.l10n.grpGFilterCount(count),
+          ),
           onPressed: () => _open(context),
         ),
         PopupMenuButton<Object>(
           key: const Key('saved-filters-menu'),
-          tooltip: 'Saved filters',
+          tooltip: context.l10n.grpGSavedFilters,
           icon: const Icon(Icons.bookmarks_outlined),
           onSelected: (choice) {
             if (choice is SavedFilter) {
@@ -51,11 +56,11 @@ class FilterBar extends ConsumerWidget {
               );
             }
           },
-          itemBuilder: (_) => [
+          itemBuilder: (menu) => [
             if (saved.isEmpty)
-              const PopupMenuItem<Object>(
+              PopupMenuItem<Object>(
                 enabled: false,
-                child: Text('No saved filters yet'),
+                child: Text(menu.l10n.grpGNoSavedFilters),
               ),
             for (final f in saved)
               PopupMenuItem<Object>(
@@ -71,17 +76,19 @@ class FilterBar extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        f.isBroken ? '${f.name} (a field is gone)' : f.name,
+                        f.isBroken
+                            ? menu.l10n.grpGFieldGoneNamed(f.name)
+                            : f.name,
                       ),
                     ),
                   ],
                 ),
               ),
             if (saved.isNotEmpty) const PopupMenuDivider(),
-            const PopupMenuItem<Object>(
-              key: Key('manage-filters'),
+            PopupMenuItem<Object>(
+              key: const Key('manage-filters'),
               value: 'manage',
-              child: Text('Manage saved filters…'),
+              child: Text(menu.l10n.grpGManageSaved),
             ),
           ],
         ),
@@ -91,13 +98,15 @@ class FilterBar extends ConsumerWidget {
             label: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 320),
               child: Text(
-                state.text.isEmpty ? '$count condition(s)' : state.text,
+                state.text.isEmpty
+                    ? context.l10n.grpGConditionCount(count)
+                    : state.text,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             onPressed: () => _open(context),
             onDeleted: notifier.clear,
-            deleteButtonTooltipMessage: 'Clear the filter',
+            deleteButtonTooltipMessage: context.l10n.grpGClearFilterTip,
           ),
       ],
     );
@@ -114,11 +123,14 @@ class _ManageDialog extends ConsumerWidget {
     final saved = ref.watch(savedFiltersProvider(projectId)).value ?? const [];
     final messenger = ScaffoldMessenger.of(context);
     return AlertDialog(
-      title: const Text('Saved filters'),
+      title: Text(context.l10n.grpGSavedFilters),
       content: SizedBox(
         width: 420,
         child: saved.isEmpty
-            ? const Text('Nothing saved yet.', key: Key('no-saved-filters'))
+            ? Text(
+                context.l10n.grpGNothingSaved,
+                key: const Key('no-saved-filters'),
+              )
             : ListView(
                 shrinkWrap: true,
                 children: [
@@ -132,13 +144,13 @@ class _ManageDialog extends ConsumerWidget {
                       ),
                       title: Text(f.name),
                       subtitle: Text(
-                        f.isBroken ? 'A field it used is gone' : f.tfql,
+                        f.isBroken ? context.l10n.grpGFieldItUsedGone : f.tfql,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       trailing: IconButton(
                         key: Key('delete-filter-${f.id}'),
-                        tooltip: 'Delete',
+                        tooltip: context.l10n.grpGDelete,
                         icon: const Icon(Icons.delete_outline),
                         onPressed: () async {
                           final workspace = ref.read(workspaceScopeProvider);
@@ -172,7 +184,7 @@ class _ManageDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.grpGClose),
         ),
       ],
     );

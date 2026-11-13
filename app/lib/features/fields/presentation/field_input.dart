@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/date_picker.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 
@@ -154,7 +156,7 @@ class _CommitTextState extends State<_CommitText> {
   void _commit(String text) {
     final trimmed = text.trim();
     final problem = trimmed.isEmpty && widget.field.required
-        ? 'Required'
+        ? context.l10n.grpIRequired
         : validateFieldValue(widget.field.type, trimmed);
     setState(() => _problem = problem);
     if (problem != null || trimmed == _saved) return;
@@ -238,7 +240,7 @@ class _MoneyInputState extends State<_MoneyInput> {
   void _commit() {
     final joined = joinMoney(_amount.text, _currency.text);
     final problem = joined.isEmpty && widget.field.required
-        ? 'Required'
+        ? context.l10n.grpIRequired
         : validateFieldValue(FieldType.money, joined);
     setState(() => _problem = problem);
     if (problem != null || joined == _saved) return;
@@ -296,10 +298,10 @@ class _MoneyInputState extends State<_MoneyInput> {
           enabled: widget.enabled,
           maxLength: 3,
           textCapitalization: TextCapitalization.characters,
-          decoration: const InputDecoration(
-            labelText: 'Currency',
+          decoration: InputDecoration(
+            labelText: context.l10n.grpICurrency,
             counterText: '',
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
           ),
           onSubmitted: (_) => _commit(),
         ),
@@ -334,7 +336,7 @@ class _DateInput extends StatelessWidget {
     onTap: enabled
         ? () async {
             final now = DateTime.now();
-            final picked = await showDatePicker(
+            final picked = await showAppDatePicker(
               context: context,
               initialDate: DateTime.tryParse(value) ?? now,
               firstDate: DateTime(2000),
@@ -350,7 +352,7 @@ class _DateInput extends StatelessWidget {
         border: const OutlineInputBorder(),
         suffixIcon: clearable && value.isNotEmpty && enabled
             ? IconButton(
-                tooltip: 'Clear',
+                tooltip: context.l10n.grpIClear,
                 icon: const Icon(Icons.clear),
                 onPressed: () => onChanged(''),
               )
@@ -396,7 +398,7 @@ class _Choice<T> extends StatelessWidget {
       if (allowNone)
         DropdownMenuItem<T>(
           child: Text(
-            'None',
+            context.l10n.grpINone,
             style: TextStyle(color: Theme.of(context).hintColor),
           ),
         ),

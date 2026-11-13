@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
@@ -39,12 +41,14 @@ class OfflineBanner extends ConsumerWidget {
           children: [
             Icon(online ? Icons.sync : Icons.cloud_off_outlined, size: 16),
             const SizedBox(width: 10),
-            Expanded(child: Text(_message(online, waiting, attention))),
+            Expanded(
+              child: Text(_message(context.l10n, online, waiting, attention)),
+            ),
             if (attention > 0)
               TextButton(
                 key: const Key('offline-review'),
                 onPressed: () => context.push('/offline'),
-                child: const Text('Review'),
+                child: Text(context.l10n.grpHOfflineReview),
               ),
             if (waiting > 0 && online)
               TextButton(
@@ -52,7 +56,11 @@ class OfflineBanner extends ConsumerWidget {
                 onPressed: syncing
                     ? null
                     : () => ref.read(offlineSyncProvider.notifier).syncNow(),
-                child: Text(syncing ? 'Syncing…' : 'Sync now'),
+                child: Text(
+                  syncing
+                      ? context.l10n.grpHOfflineSyncing
+                      : context.l10n.grpHOfflineSyncNow,
+                ),
               ),
           ],
         ),
@@ -60,17 +68,19 @@ class OfflineBanner extends ConsumerWidget {
     );
   }
 
-  static String _message(bool online, int waiting, int attention) {
+  static String _message(
+    AppLocalizations l10n,
+    bool online,
+    int waiting,
+    int attention,
+  ) {
     final parts = [
-      if (!online) 'You are offline. Changes are saved on this device.',
+      if (!online) l10n.grpHOfflineSaved,
       if (waiting > 0)
         online
-            ? '$waiting ${waiting == 1 ? 'change waits' : 'changes wait'} '
-                  'to be sent.'
-            : '$waiting waiting to be sent.',
-      if (attention > 0)
-        '$attention ${attention == 1 ? 'change needs' : 'changes need'} '
-            'your attention.',
+            ? l10n.grpHOfflineWaitsOnline(waiting)
+            : l10n.grpHOfflineWaitsOffline(waiting),
+      if (attention > 0) l10n.grpHOfflineAttention(attention),
     ];
     return parts.join(' ');
   }
@@ -92,12 +102,12 @@ class PendingMark extends ConsumerWidget {
     );
     if (pending != true) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(right: 6),
+      padding: const EdgeInsetsDirectional.only(end: 6),
       child: Icon(
         Icons.schedule,
         key: Key('pending-$id'),
         size: 14,
-        semanticLabel: 'Waiting to be sent',
+        semanticLabel: context.l10n.grpHWaitingToBeSent,
       ),
     );
   }

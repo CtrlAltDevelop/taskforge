@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 
 Future<bool> confirmDeleteComment(BuildContext context) async =>
     await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         key: const Key('delete-comment-dialog'),
-        title: const Text('Delete this comment?'),
-        content: const Text(
-          'It will show as "Comment removed". Its content and edit history are deleted.',
-        ),
+        title: Text(ctx.l10n.grpIDeleteCommentTitle),
+        content: Text(ctx.l10n.grpIDeleteCommentBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.grpICancel),
           ),
           FilledButton(
             key: const Key('confirm-delete-comment'),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(ctx.l10n.grpIDelete),
           ),
         ],
       ),
@@ -35,25 +34,25 @@ Future<bool?> askGrantAccess(
   required bool canGrant,
 }) => showDialog<bool>(
   context: context,
-  builder: (_) => AlertDialog(
+  builder: (ctx) => AlertDialog(
     key: const Key('grant-dialog'),
-    title: const Text('They cannot see this task'),
+    title: Text(ctx.l10n.grpICannotSeeTask),
     content: Text(
       canGrant
-          ? '$names cannot see this task. Add them to the project and send the comment, or take the mention out.'
-          : '$names cannot see this task, so they cannot be mentioned. Take the mention out, or ask someone who manages the project to add them.',
+          ? ctx.l10n.grpICannotSeeGrant(names)
+          : ctx.l10n.grpICannotSeeRefuse(names),
     ),
     actions: [
       TextButton(
         key: const Key('grant-cancel'),
         onPressed: () => Navigator.pop(context, false),
-        child: Text(canGrant ? 'Cancel' : 'OK'),
+        child: Text(canGrant ? ctx.l10n.grpICancel : ctx.l10n.grpIOk),
       ),
       if (canGrant)
         FilledButton(
           key: const Key('grant-add'),
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Add them and send'),
+          child: Text(ctx.l10n.grpIAddThemAndSend),
         ),
     ],
   ),
@@ -66,9 +65,9 @@ Future<void> showHistory(
   String author,
 ) => showDialog<void>(
   context: context,
-  builder: (_) => AlertDialog(
+  builder: (ctx) => AlertDialog(
     key: const Key('history-dialog'),
-    title: Text('Edit history · $author'),
+    title: Text(ctx.l10n.grpIEditHistory(author)),
     content: SizedBox(
       width: 420,
       child: ListView(
@@ -78,10 +77,14 @@ Future<void> showHistory(
             ListTile(
               dense: true,
               title: Text(plainTextOf(r.body)),
-              subtitle: Text(
-                '${r.at.toLocal().toIso8601String().substring(0, 16).replaceFirst('T', ' ')}'
-                '${r.current ? ' · current' : ''}',
-              ),
+              subtitle: Text(() {
+                final stamp = r.at
+                    .toLocal()
+                    .toIso8601String()
+                    .substring(0, 16)
+                    .replaceFirst('T', ' ');
+                return r.current ? ctx.l10n.grpIRevisionCurrent(stamp) : stamp;
+              }()),
             ),
         ],
       ),
@@ -89,7 +92,7 @@ Future<void> showHistory(
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Close'),
+        child: Text(ctx.l10n.grpIClose),
       ),
     ],
   ),

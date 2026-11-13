@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/archive_zone.dart';
@@ -23,11 +25,11 @@ class ProjectSettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           key: const Key('back-to-project'),
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpHBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/projects/$projectId'),
         ),
-        title: const Text('Project settings'),
+        title: Text(context.l10n.grpHProjectSettings),
       ),
       body: switch (project) {
         final p? => _Sections(
@@ -37,11 +39,14 @@ class ProjectSettingsScreen extends ConsumerWidget {
         null when catalog.hasError => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(projectsProvider),
-            child: const Text('Could not load the project. Retry'),
+            child: Text(context.l10n.grpHLoadProjectRetry),
           ),
         ),
-        null when catalog.hasValue => const Center(
-          child: Text('Project not found.', key: Key('project-missing')),
+        null when catalog.hasValue => Center(
+          child: Text(
+            context.l10n.grpHProjectNotFound,
+            key: const Key('project-missing'),
+          ),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },
@@ -73,11 +78,9 @@ class _Sections extends StatelessWidget {
               child: ListTile(
                 key: const Key('open-workflow'),
                 leading: const Icon(Icons.account_tree_outlined),
-                title: const Text('Workflow'),
-                subtitle: const Text(
-                  'Statuses, their categories and which moves are allowed.',
-                ),
-                trailing: const Icon(Icons.chevron_right),
+                title: Text(context.l10n.grpHWorkflow),
+                subtitle: Text(context.l10n.grpHWorkflowHint),
+                trailing: const DirectionalIcon(Icons.chevron_right),
                 onTap: () => context.go('/projects/${project.id}/workflow'),
               ),
             ),
@@ -86,11 +89,9 @@ class _Sections extends StatelessWidget {
               child: ListTile(
                 key: const Key('open-fields'),
                 leading: const Icon(Icons.tune),
-                title: const Text('Fields'),
-                subtitle: const Text(
-                  'Custom fields such as Customer, Story points or Environment.',
-                ),
-                trailing: const Icon(Icons.chevron_right),
+                title: Text(context.l10n.grpHFields),
+                subtitle: Text(context.l10n.grpHFieldsHint),
+                trailing: const DirectionalIcon(Icons.chevron_right),
                 onTap: () => context.go('/projects/${project.id}/fields'),
               ),
             ),

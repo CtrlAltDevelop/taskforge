@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/features/attachments/presentation/signed_image.dart';
 
 IconData iconFor(Attachment a) {
@@ -47,7 +49,7 @@ class AttachmentTile extends StatelessWidget {
         children: [
           Semantics(
             button: true,
-            label: 'Open ${file.filename}',
+            label: context.l10n.grpHOpenFile(file.filename),
             excludeSemantics: true,
             child: InkWell(
               key: Key('open-${file.id}'),
@@ -86,7 +88,7 @@ class AttachmentTile extends StatelessWidget {
               right: 0,
               child: IconButton(
                 key: Key('attachment-delete-${file.id}'),
-                tooltip: 'Delete ${file.filename}',
+                tooltip: context.l10n.grpHDeleteFile(file.filename),
                 onPressed: onDelete,
                 icon: const Icon(Icons.delete_outline, size: 18),
               ),
@@ -123,7 +125,7 @@ class AttachmentChip extends StatelessWidget {
         children: [
           Semantics(
             button: true,
-            label: 'Open ${file.filename}',
+            label: context.l10n.grpHOpenFile(file.filename),
             excludeSemantics: true,
             child: InkWell(
               key: Key('open-${file.id}'),
@@ -171,7 +173,7 @@ class AttachmentChip extends StatelessWidget {
           if (onDelete != null)
             IconButton(
               key: Key('attachment-delete-${file.id}'),
-              tooltip: 'Delete ${file.filename}',
+              tooltip: context.l10n.grpHDeleteFile(file.filename),
               onPressed: onDelete,
               icon: const Icon(Icons.delete_outline, size: 18),
             ),
@@ -196,11 +198,12 @@ class UploadRow extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onDismiss;
 
-  String get _status => switch (item.state) {
-    UploadState.queued => item.kept ? 'Waiting for a connection…' : 'Waiting…',
+  String _status(AppLocalizations l10n) => switch (item.state) {
+    UploadState.queued =>
+      item.kept ? l10n.grpHWaitingConnection : l10n.grpHWaiting,
     UploadState.uploading => '${(item.progress * 100).floor()}%',
-    UploadState.done => 'Done',
-    UploadState.cancelled => 'Cancelled',
+    UploadState.done => l10n.grpHUploadDone,
+    UploadState.cancelled => l10n.grpHUploadCancelled,
     UploadState.failed => attachmentErrorMessage(
       AttachmentException(
         item.error ?? AttachmentFailure.other,
@@ -228,14 +231,16 @@ class UploadRow extends StatelessWidget {
                 if (item.active && !item.kept)
                   LinearProgressIndicator(
                     key: Key('upload-progress-$id'),
-                    semanticsLabel:
-                        '${item.filename}, ${(item.progress * 100).floor()} percent uploaded',
+                    semanticsLabel: context.l10n.grpHPercentUploaded(
+                      item.filename,
+                      (item.progress * 100).floor(),
+                    ),
                     value: item.state == UploadState.queued ? 0 : item.progress,
                   ),
                 Semantics(
                   liveRegion: failed,
                   child: Text(
-                    _status,
+                    _status(context.l10n),
                     key: Key('upload-status-$id'),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: failed
@@ -252,26 +257,26 @@ class UploadRow extends StatelessWidget {
               Icons.schedule,
               key: Key('upload-pending-$id'),
               size: 18,
-              semanticLabel: 'Waiting to be sent',
+              semanticLabel: context.l10n.grpHWaitingToBeSent,
             )
           else if (item.active)
             IconButton(
               key: Key('upload-cancel-$id'),
-              tooltip: 'Cancel ${item.filename}',
+              tooltip: context.l10n.grpHCancelFile(item.filename),
               onPressed: onCancel,
               icon: const Icon(Icons.close, size: 18),
             ),
           if (item.canRetry)
             IconButton(
               key: Key('upload-retry-$id'),
-              tooltip: 'Try ${item.filename} again',
+              tooltip: context.l10n.grpHTryFileAgain(item.filename),
               onPressed: onRetry,
               icon: const Icon(Icons.refresh, size: 18),
             ),
           if (!item.active)
             IconButton(
               key: Key('upload-dismiss-$id'),
-              tooltip: 'Dismiss ${item.filename}',
+              tooltip: context.l10n.grpHDismissFile(item.filename),
               onPressed: onDismiss,
               icon: const Icon(Icons.delete_outline, size: 18),
             ),

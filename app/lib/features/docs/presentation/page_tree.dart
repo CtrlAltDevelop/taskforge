@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/directional_icon.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 
@@ -84,12 +86,12 @@ class _PageTreeState extends ConsumerState<PageTree> {
       context: context,
       builder: (context) => SimpleDialog(
         key: const Key('move-to-dialog'),
-        title: Text('Move "${doc.label}" under'),
+        title: Text(context.l10n.grpBMoveUnder(doc.label)),
         children: [
           SimpleDialogOption(
             key: const Key('move-to-top'),
             onPressed: () => Navigator.pop(context, ''),
-            child: const Text('Top level'),
+            child: Text(context.l10n.grpBTopLevel),
           ),
           for (final d in tree.docs)
             if (!blocked.contains(d.id))
@@ -149,7 +151,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
       child: InkWell(
         onTap: () => widget.onOpen(doc.id),
         child: Padding(
-          padding: EdgeInsets.only(left: 4.0 + depth * 16, right: 0),
+          padding: EdgeInsetsDirectional.only(start: 4.0 + depth * 16, end: 0),
           child: Row(
             children: [
               SizedBox(
@@ -159,8 +161,10 @@ class _PageTreeState extends ConsumerState<PageTree> {
                         key: Key('toggle-${doc.id}'),
                         padding: EdgeInsets.zero,
                         iconSize: 18,
-                        tooltip: open ? 'Collapse' : 'Expand',
-                        icon: Icon(
+                        tooltip: open
+                            ? context.l10n.grpBCollapse
+                            : context.l10n.grpBExpand,
+                        icon: DirectionalIcon(
                           open ? Icons.expand_more : Icons.chevron_right,
                         ),
                         onPressed: () => setState(() {
@@ -191,39 +195,42 @@ class _PageTreeState extends ConsumerState<PageTree> {
                   Icons.lock_outline,
                   key: Key('restricted-${doc.id}'),
                   size: 14,
-                  semanticLabel: 'Restricted',
+                  semanticLabel: context.l10n.grpBRestricted,
                 ),
               if (widget.canEdit)
                 PopupMenuButton<String>(
                   key: Key('page-menu-${doc.id}'),
-                  tooltip: 'Page options',
+                  tooltip: context.l10n.grpBPageOptions,
                   iconSize: 18,
                   padding: EdgeInsets.zero,
                   onSelected: (a) => _menu(tree, doc, a),
-                  itemBuilder: (_) => doc.archived
-                      ? const [
+                  itemBuilder: (ctx) => doc.archived
+                      ? [
                           PopupMenuItem(
                             value: 'restore',
-                            child: Text('Restore'),
+                            child: Text(ctx.l10n.grpBRestore),
                           ),
                         ]
-                      : const [
+                      : [
                           PopupMenuItem(
                             value: 'child',
-                            child: Text('New subpage'),
+                            child: Text(ctx.l10n.grpBNewSubpage),
                           ),
-                          PopupMenuItem(value: 'up', child: Text('Move up')),
+                          PopupMenuItem(
+                            value: 'up',
+                            child: Text(ctx.l10n.grpBMoveUp),
+                          ),
                           PopupMenuItem(
                             value: 'down',
-                            child: Text('Move down'),
+                            child: Text(ctx.l10n.grpBMoveDown),
                           ),
                           PopupMenuItem(
                             value: 'move',
-                            child: Text('Move to...'),
+                            child: Text(ctx.l10n.grpBMoveTo),
                           ),
                           PopupMenuItem(
                             value: 'archive',
-                            child: Text('Archive'),
+                            child: Text(ctx.l10n.grpBArchive),
                           ),
                         ],
                 ),
@@ -302,18 +309,20 @@ class _PageTreeState extends ConsumerState<PageTree> {
       key: const Key('page-tree'),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 0),
           child: Row(
             children: [
               Expanded(
                 child: Text(
-                  'Pages',
+                  context.l10n.grpBPages,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               IconButton(
                 key: const Key('show-archived'),
-                tooltip: showArchived ? 'Hide archived' : 'Show archived',
+                tooltip: showArchived
+                    ? context.l10n.grpBHideArchived
+                    : context.l10n.grpBShowArchived,
                 isSelected: showArchived,
                 icon: const Icon(Icons.inventory_2_outlined),
                 selectedIcon: const Icon(Icons.inventory_2),
@@ -324,7 +333,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
               if (widget.canEdit)
                 IconButton(
                   key: const Key('new-page'),
-                  tooltip: 'New page',
+                  tooltip: context.l10n.grpBNewPage,
                   icon: const Icon(Icons.add),
                   onPressed: () => _create(''),
                 ),
@@ -333,10 +342,13 @@ class _PageTreeState extends ConsumerState<PageTree> {
         ),
         Expanded(
           child: switch (tree) {
-            AsyncData(:final value) when value.isEmpty => const Center(
+            AsyncData(:final value) when value.isEmpty => Center(
               child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Text('No pages yet.', key: Key('tree-empty')),
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  context.l10n.grpBNoPagesYet,
+                  key: const Key('tree-empty'),
+                ),
               ),
             ),
             AsyncData(:final value) => ListView(
@@ -346,7 +358,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
               child: TextButton(
                 key: const Key('retry-tree'),
                 onPressed: () => ref.invalidate(docTreeProvider),
-                child: const Text('Could not load pages. Retry'),
+                child: Text(context.l10n.grpBPagesLoadFailed),
               ),
             ),
             _ => const Center(child: CircularProgressIndicator()),

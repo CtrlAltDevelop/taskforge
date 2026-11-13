@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart' as d;
 import 'package:taskforge/features/dashboards/presentation/dashboard_grid.dart';
@@ -101,7 +102,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
   Future<void> _newBlank() async {
     final dash = d.Dashboard(
       id: '',
-      name: 'New dashboard',
+      name: context.l10n.grpCDashNew,
       visibility: d.DashVisibility.personal,
       projectId: widget.projectId,
       widgets: const [],
@@ -124,17 +125,17 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete “${dash.name}”?'),
-        content: const Text('Its widgets go with it. This cannot be undone.'),
+        title: Text(context.l10n.grpCDashDeleteTitle(dash.name)),
+        content: Text(context.l10n.grpCDashDeleteBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.grpCCancel),
           ),
           FilledButton(
             key: const Key('confirm-delete-dashboard'),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(context.l10n.grpCDelete),
           ),
         ],
       ),
@@ -238,7 +239,11 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
     final list = ref.watch(dashboardsProvider(widget.projectId));
     return ShellScaffold(
       appBar: AppBar(
-        title: Text('Dashboards${project == null ? '' : ' · ${project.name}'}'),
+        title: Text(
+          project == null
+              ? context.l10n.grpCDashTitle
+              : context.l10n.grpCDashTitleProject(project.name),
+        ),
       ),
       body: switch (list) {
         AsyncData(:final value) => _body(context, value),
@@ -254,7 +259,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
                 key: const Key('dashboards-retry'),
                 onPressed: () =>
                     ref.invalidate(dashboardsProvider(widget.projectId)),
-                child: const Text('Retry'),
+                child: Text(context.l10n.grpCRetry),
               ),
             ],
           ),
@@ -294,7 +299,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('No dashboards yet.', key: Key('dashboards-empty')),
+        Text(context.l10n.grpCDashEmpty, key: const Key('dashboards-empty')),
         const SizedBox(height: 8),
         Wrap(spacing: 8, children: _newButtons()),
       ],
@@ -305,18 +310,18 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
     OutlinedButton(
       key: const Key('new-blank'),
       onPressed: _busy ? null : _newBlank,
-      child: const Text('Blank dashboard'),
+      child: Text(context.l10n.grpCDashBlankDashboard),
     ),
     if (widget.projectId.isNotEmpty)
       OutlinedButton(
         key: const Key('template-project_overview'),
         onPressed: _busy ? null : () => _fromTemplate('project_overview'),
-        child: const Text('Project overview'),
+        child: Text(context.l10n.grpCDashProjectOverview),
       ),
     OutlinedButton(
       key: const Key('template-my_work'),
       onPressed: _busy ? null : () => _fromTemplate('my_work'),
-      child: const Text('My work'),
+      child: Text(context.l10n.grpCDashMyWork),
     ),
   ];
 
@@ -350,30 +355,36 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         if (!_editing)
           PopupMenuButton<String>(
             key: const Key('new-dashboard'),
-            tooltip: 'New dashboard',
+            tooltip: context.l10n.grpCDashNew,
             icon: const Icon(Icons.add),
             onSelected: (v) => v == 'blank' ? _newBlank() : _fromTemplate(v),
             itemBuilder: (_) => [
-              const PopupMenuItem(value: 'blank', child: Text('Blank')),
+              PopupMenuItem(
+                value: 'blank',
+                child: Text(context.l10n.grpCDashBlank),
+              ),
               if (widget.projectId.isNotEmpty)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'project_overview',
-                  child: Text('Project overview'),
+                  child: Text(context.l10n.grpCDashProjectOverview),
                 ),
-              const PopupMenuItem(value: 'my_work', child: Text('My work')),
+              PopupMenuItem(
+                value: 'my_work',
+                child: Text(context.l10n.grpCDashMyWork),
+              ),
             ],
           ),
         if (!_editing && current != null && current.canEdit)
           OutlinedButton.icon(
             key: const Key('edit-dashboard'),
             icon: const Icon(Icons.edit),
-            label: const Text('Edit'),
+            label: Text(context.l10n.grpCDashEdit),
             onPressed: () => _startEditing(current),
           ),
         if (!_editing && current != null)
           IconButton(
             key: const Key('refresh-all'),
-            tooltip: 'Refresh',
+            tooltip: context.l10n.grpCDashRefresh,
             icon: const Icon(Icons.refresh),
             onPressed: () => ref.read(dashboardActionsProvider).refreshWidgets([
               for (final w in current.widgets)
@@ -383,7 +394,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         if (!_editing && current != null && current.canEdit)
           IconButton(
             key: const Key('delete-dashboard'),
-            tooltip: 'Delete',
+            tooltip: context.l10n.grpCDelete,
             icon: const Icon(Icons.delete_outline),
             onPressed: _busy ? null : () => _delete(current),
           ),
@@ -391,7 +402,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           OutlinedButton.icon(
             key: const Key('add-widget'),
             icon: const Icon(Icons.add_chart),
-            label: const Text('Add widget'),
+            label: Text(context.l10n.grpCDashAddWidget),
             onPressed: _draft!.widgets.length >= d.maxWidgets
                 ? null
                 : _addWidget,
@@ -405,12 +416,12 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           FilledButton(
             key: const Key('save-dashboard'),
             onPressed: _busy ? null : _save,
-            child: const Text('Save'),
+            child: Text(context.l10n.grpCDashSave),
           ),
           TextButton(
             key: const Key('cancel-edit'),
             onPressed: _busy ? null : _cancel,
-            child: const Text('Cancel'),
+            child: Text(context.l10n.grpCCancel),
           ),
         ],
       ],
@@ -450,7 +461,7 @@ class _ShareDialogState extends State<_ShareDialog> {
   @override
   Widget build(BuildContext context) => AlertDialog(
     key: const Key('share-dialog'),
-    title: const Text('Dashboard'),
+    title: Text(context.l10n.grpCDashDialogTitle),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -458,7 +469,7 @@ class _ShareDialogState extends State<_ShareDialog> {
           key: const Key('dashboard-name'),
           controller: _name,
           maxLength: 80,
-          decoration: const InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(labelText: context.l10n.grpCDashName),
         ),
         RadioGroup<d.DashVisibility>(
           groupValue: _visibility,
@@ -478,16 +489,16 @@ class _ShareDialogState extends State<_ShareDialog> {
           ),
         ),
         if (!widget.canShare)
-          const Text(
-            'Sharing needs the dashboard.manage permission.',
-            key: Key('share-denied'),
+          Text(
+            context.l10n.grpCDashShareDenied,
+            key: const Key('share-denied'),
           ),
       ],
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpCCancel),
       ),
       FilledButton(
         key: const Key('share-ok'),
@@ -495,7 +506,7 @@ class _ShareDialogState extends State<_ShareDialog> {
           name: _name.text.trim(),
           visibility: _visibility,
         )),
-        child: const Text('OK'),
+        child: Text(context.l10n.grpCDashOk),
       ),
     ],
   );

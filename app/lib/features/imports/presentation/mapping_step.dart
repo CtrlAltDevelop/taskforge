@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -8,37 +9,38 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Our priorities, for the priority table.
-const _priorities = {
-  'urgent': 'Urgent',
-  'high': 'High',
-  'normal': 'Normal',
-  'low': 'Low',
-  'none': 'None',
+Map<String, String> _priorities(AppLocalizations l) => {
+  'urgent': l.grpCImpPriUrgent,
+  'high': l.grpCImpPriHigh,
+  'normal': l.grpCImpPriNormal,
+  'low': l.grpCImpPriLow,
+  'none': l.grpCImpPriNone,
 };
 
 /// The fields a CSV column can fill (the server's names).
-const csvFieldLabels = {
-  'title': 'Title *',
-  'description': 'Description',
-  'status': 'Status',
-  'priority': 'Priority',
-  'assignee': 'Assignee',
-  'reporter': 'Reporter',
-  'created': 'Created',
-  'updated': 'Updated',
-  'start': 'Start date',
-  'due': 'Due date',
-  'labels': 'Labels',
-  'sprint': 'Sprint',
-  'parent': 'Parent (id)',
-  'id': 'Id',
-  'key': 'Key',
-  'points': 'Story points',
-  'estimate': 'Estimate',
-  'comment': 'Comment',
-  'type': 'Type',
+Map<String, String> csvFieldLabels(AppLocalizations l) => {
+  'title': l.grpCImpFTitle,
+  'description': l.grpCImpFDescription,
+  'status': l.grpCStatus,
+  'priority': l.grpCImpFPriority,
+  'assignee': l.grpCImpFAssignee,
+  'reporter': l.grpCImpFReporter,
+  'created': l.grpCImpFCreated,
+  'updated': l.grpCImpFUpdated,
+  'start': l.grpCImpFStart,
+  'due': l.grpCImpFDue,
+  'labels': l.grpCImpFLabels,
+  'sprint': l.grpCImpFSprint,
+  'parent': l.grpCImpFParent,
+  'id': l.grpCImpFId,
+  'key': l.grpCImpFKey,
+  'points': l.grpCImpFPoints,
+  'estimate': l.grpCImpFEstimate,
+  'comment': l.grpCComment,
+  'type': l.grpCImpFType,
 };
 
 /// Where it goes and how each part of the file maps, with everything proposed
@@ -58,10 +60,20 @@ class MappingStep extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${analysis.issues} tasks'
-          '${analysis.subtasks > 0 ? ' (${analysis.subtasks} sub-tasks)' : ''}, '
-          '${analysis.comments} comments, ${analysis.links} links found in '
-          '${wizard.job?.filename ?? 'the file'}.',
+          analysis.subtasks > 0
+              ? context.l10n.grpCImpSummarySub(
+                  analysis.issues,
+                  analysis.subtasks,
+                  analysis.comments,
+                  analysis.links,
+                  wizard.job?.filename ?? context.l10n.grpCImpTheFile,
+                )
+              : context.l10n.grpCImpSummary(
+                  analysis.issues,
+                  analysis.comments,
+                  analysis.links,
+                  wizard.job?.filename ?? context.l10n.grpCImpTheFile,
+                ),
           key: const Key('import-summary'),
           style: Theme.of(context).textTheme.titleMedium,
         ),
@@ -89,14 +101,14 @@ class MappingStep extends ConsumerWidget {
         if (analysis.priorities.isNotEmpty) ...[
           const Divider(height: 32),
           _Table(
-            title: 'Priorities',
+            title: context.l10n.grpCImpPriorities,
             rows: [
               for (final e in analysis.priorities.entries)
                 _Row(
                   keyName: 'map-priority-${e.key}',
                   label: '${e.key} (${e.value})',
                   value: mapping.priorities[e.key] ?? 'none',
-                  options: _priorities,
+                  options: _priorities(context.l10n),
                   onChanged: (v) => notifier.edit(
                     mapping.copyWith(
                       priorities: {...mapping.priorities, e.key: v},
@@ -119,8 +131,8 @@ class MappingStep extends ConsumerWidget {
           SwitchListTile(
             key: const Key('map-labels'),
             contentPadding: EdgeInsets.zero,
-            title: Text('Keep ${analysis.labels} labels'),
-            subtitle: const Text('As a "Labels" field on every task.'),
+            title: Text(context.l10n.grpCImpKeepLabels(analysis.labels)),
+            subtitle: Text(context.l10n.grpCImpKeepLabelsSub),
             value: mapping.labels,
             onChanged: (v) => notifier.edit(mapping.copyWith(labels: v)),
           ),
@@ -129,7 +141,7 @@ class MappingStep extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              'Sprints that will be created: ${analysis.sprints.join(', ')}',
+              context.l10n.grpCImpSprintsCreated(analysis.sprints.join(', ')),
               key: const Key('map-sprints'),
             ),
           ),
@@ -139,13 +151,13 @@ class MappingStep extends ConsumerWidget {
             TextButton(
               key: const Key('map-back'),
               onPressed: wizard.busy ? null : notifier.back,
-              child: const Text('Back'),
+              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
             FilledButton(
               key: const Key('map-next'),
               onPressed: wizard.busy ? null : notifier.review,
-              child: const Text('Review'),
+              child: Text(context.l10n.grpCImpReview),
             ),
           ],
         ),
@@ -165,7 +177,7 @@ class _Source extends StatelessWidget {
     final current = wizard.detected;
     return Row(
       children: [
-        const Text('Read as'),
+        Text(context.l10n.grpCImpReadAs),
         const SizedBox(width: 12),
         DropdownButton<ImportSource>(
           key: const Key('import-source'),
@@ -195,13 +207,13 @@ class _Members extends ConsumerWidget {
     padding: const EdgeInsets.only(top: 8),
     child: Row(
       children: [
-        const Text('File inside the zip'),
+        Text(context.l10n.grpCImpZipFile),
         const SizedBox(width: 12),
         Flexible(
           child: DropdownButton<String>(
             key: const Key('import-member'),
             isExpanded: true,
-            hint: const Text('Choose one'),
+            hint: Text(context.l10n.grpCImpChooseOne),
             items: [
               for (final m in proposal.members)
                 DropdownMenuItem(value: m, child: Text(m)),
@@ -234,7 +246,10 @@ class _Target extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Import into', style: Theme.of(context).textTheme.titleSmall),
+        Text(
+          context.l10n.grpCImpInto,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
         RadioGroup<bool>(
           groupValue: existing,
           onChanged: (v) {
@@ -249,14 +264,14 @@ class _Target extends ConsumerWidget {
               RadioListTile<bool>(
                 key: const Key('map-target-new'),
                 contentPadding: EdgeInsets.zero,
-                title: const Text('A new project'),
+                title: Text(context.l10n.grpCImpNewProject),
                 value: false,
               ),
               if (projects.isNotEmpty)
                 RadioListTile<bool>(
                   key: const Key('map-target-existing'),
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('An existing project'),
+                  title: Text(context.l10n.grpCImpExistingProject),
                   value: true,
                 ),
             ],
@@ -286,7 +301,9 @@ class _Target extends ConsumerWidget {
                 child: TextFormField(
                   key: const Key('map-new-name'),
                   initialValue: mapping.newName,
-                  decoration: const InputDecoration(labelText: 'Project name'),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpCImpProjectName,
+                  ),
                   onChanged: (v) => onChanged(mapping.copyWith(newName: v)),
                 ),
               ),
@@ -296,7 +313,9 @@ class _Target extends ConsumerWidget {
                 child: TextFormField(
                   key: const Key('map-new-key'),
                   initialValue: mapping.newKey,
-                  decoration: const InputDecoration(labelText: 'Key'),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpCImpFKey,
+                  ),
                   textCapitalization: TextCapitalization.characters,
                   onChanged: (v) => onChanged(mapping.copyWith(newKey: v)),
                 ),
@@ -321,9 +340,9 @@ class _Columns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => _Table(
-    title: 'Columns',
+    title: context.l10n.grpCImpColumns,
     rows: [
-      for (final e in csvFieldLabels.entries)
+      for (final e in csvFieldLabels(context.l10n).entries)
         _Row(
           keyName: 'map-col-${e.key}',
           label: e.value,
@@ -331,7 +350,7 @@ class _Columns extends StatelessWidget {
               ? mapping.columns[e.key]!
               : '',
           options: {
-            '': '(not in the file)',
+            '': context.l10n.grpCImpNotInFile,
             for (final c in columns.toSet()) c: c,
           },
           onChanged: (v) => onChanged(
@@ -360,7 +379,7 @@ class _Statuses extends ConsumerWidget {
         : (ref.watch(workflowProvider(mapping.projectId)).value?.statuses ??
               const []);
     return _Table(
-      title: 'Statuses',
+      title: context.l10n.grpCImpStatuses,
       rows: [
         for (final e in counts.entries)
           _Row(
@@ -368,7 +387,7 @@ class _Statuses extends ConsumerWidget {
             label: '${e.key} (${e.value})',
             value: _statusValue(mapping.statuses[e.key], statuses),
             options: {
-              'new': 'Same name (create if missing)',
+              'new': context.l10n.grpCImpSameName,
               for (final s in statuses) 'id:${s.id}': s.name,
             },
             onChanged: (v) => onChanged(
@@ -400,13 +419,13 @@ class _People extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final members = ref.watch(membersProvider).value ?? const <Member>[];
     final options = {
-      'placeholder': 'Not a member yet (assign when they join)',
-      'skip': 'Leave unassigned',
+      'placeholder': context.l10n.grpCImpNotMember,
+      'skip': context.l10n.grpCImpUnassigned,
       for (final m in members)
         m.userId: m.displayName.isEmpty ? m.email : m.displayName,
     };
     return _Table(
-      title: 'People',
+      title: context.l10n.grpCImpPeople,
       rows: [
         for (final e in people.entries.take(200))
           _Row(
@@ -420,10 +439,7 @@ class _People extends ConsumerWidget {
               mapping.copyWith(users: {...mapping.users, e.key: v}),
             ),
           ),
-        if (people.length > 200)
-          const _Note(
-            'Only the first 200 people are listed; the rest wait as placeholders.',
-          ),
+        if (people.length > 200) _Note(context.l10n.grpCImpFirst200),
       ],
     );
   }

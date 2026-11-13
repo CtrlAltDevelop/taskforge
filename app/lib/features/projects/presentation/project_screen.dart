@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
@@ -36,12 +37,14 @@ class ProjectScreen extends ConsumerWidget {
     final project = ref.watch(projectProvider(projectId));
     return ShellScaffold(
       appBar: AppBar(
-        title: Text(project?.name ?? 'Project'),
+        title: Text(project?.name ?? context.l10n.grpHProject),
         actions: [
           if (project != null) ...[
             IconButton(
               key: const Key('favorite-toggle'),
-              tooltip: project.isFavorite ? 'Remove favorite' : 'Add favorite',
+              tooltip: project.isFavorite
+                  ? context.l10n.grpHRemoveFavorite
+                  : context.l10n.grpHAddFavorite,
               icon: Icon(project.isFavorite ? Icons.star : Icons.star_border),
               // The server refuses starring an archived project.
               onPressed: project.isArchived
@@ -56,7 +59,7 @@ class ProjectScreen extends ConsumerWidget {
             if (ref.watch(permissionSetProvider).can(Perm.taskDelete))
               IconButton(
                 key: const Key('open-task-trash'),
-                tooltip: 'Trash',
+                tooltip: context.l10n.grpHTrash,
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () => Navigator.of(context).push<void>(
                   MaterialPageRoute(
@@ -66,7 +69,7 @@ class ProjectScreen extends ConsumerWidget {
               ),
             IconButton(
               key: const Key('open-project-settings'),
-              tooltip: 'Project settings',
+              tooltip: context.l10n.grpHProjectSettings,
               icon: const Icon(Icons.settings),
               onPressed: () => context.push('/projects/${project.id}/settings'),
             ),
@@ -79,11 +82,14 @@ class ProjectScreen extends ConsumerWidget {
           child: TextButton(
             key: const Key('retry-projects'),
             onPressed: () => ref.invalidate(projectsProvider),
-            child: const Text('Could not load the project. Retry'),
+            child: Text(context.l10n.grpHLoadProjectRetry),
           ),
         ),
-        null when catalog.hasValue => const Center(
-          child: Text('Project not found.', key: Key('project-missing')),
+        null when catalog.hasValue => Center(
+          child: Text(
+            context.l10n.grpHProjectNotFound,
+            key: const Key('project-missing'),
+          ),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/recurrence/presentation/repeat_section.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/bulk.dart';
@@ -72,20 +73,34 @@ class _BulkBarState extends ConsumerState<BulkBar> {
     Map<String, String> names,
     bool deleted,
   ) {
-    final verb = deleted ? 'deleted' : 'updated';
+    final l10n = context.l10n;
     if (summary.allOk) {
-      return SnackBar(content: Text('${summary.succeeded.length} tasks $verb'));
+      final count = summary.succeeded.length;
+      return SnackBar(
+        content: Text(
+          deleted ? l10n.grpFBulkDeleted(count) : l10n.grpFBulkUpdated(count),
+        ),
+      );
     }
     return SnackBar(
       key: const Key('bulk-partial'),
       duration: const Duration(seconds: 10),
       content: Text(
-        '${summary.succeeded.length} of ${summary.total} tasks $verb; '
-        '${summary.failed.length} could not be.',
+        deleted
+            ? l10n.grpFBulkPartialDeleted(
+                summary.succeeded.length,
+                summary.total,
+                summary.failed.length,
+              )
+            : l10n.grpFBulkPartialUpdated(
+                summary.succeeded.length,
+                summary.total,
+                summary.failed.length,
+              ),
       ),
       action: SnackBarAction(
         key: const Key('bulk-details'),
-        label: 'Details',
+        label: l10n.grpFDetails,
         onPressed: () => showDialog<void>(
           context: context,
           builder: (_) =>
@@ -108,19 +123,17 @@ class _BulkBarState extends ConsumerState<BulkBar> {
     final sure = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Delete $count tasks?'),
-        content: const Text(
-          'Their subtasks go with them. You can restore them from the trash.',
-        ),
+        title: Text(context.l10n.grpFBulkDeleteTitle(count)),
+        content: Text(context.l10n.grpFBulkDeleteBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             key: const Key('bulk-delete-confirm'),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(context.l10n.grpFDelete),
           ),
         ],
       ),
@@ -163,8 +176,11 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                 const SizedBox(width: 12),
                 Text(
                   busy
-                      ? 'Updating ${progress!.done} of ${progress.total}…'
-                      : '${selection.length} selected',
+                      ? context.l10n.grpFBulkUpdating(
+                          progress!.done,
+                          progress.total,
+                        )
+                      : context.l10n.grpFBulkSelected(selection.length),
                   key: const Key('bulk-count'),
                 ),
                 const SizedBox(width: 8),
@@ -172,7 +188,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                   PopupMenuButton<WorkflowStatus>(
                     key: const Key('bulk-status'),
                     enabled: !busy,
-                    tooltip: 'Set status',
+                    tooltip: context.l10n.grpFSetStatus,
                     onSelected: (s) => _run(BulkChange(status: s)),
                     itemBuilder: (_) => [
                       for (final s in statuses)
@@ -182,13 +198,16 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                           child: Text(s.name),
                         ),
                     ],
-                    child: const _BarLabel(Icons.flag_outlined, 'Status'),
+                    child: _BarLabel(
+                      Icons.flag_outlined,
+                      context.l10n.grpFStatus,
+                    ),
                   ),
                 if (widget.canUpdate)
                   PopupMenuButton<TaskPriority>(
                     key: const Key('bulk-priority'),
                     enabled: !busy,
-                    tooltip: 'Set priority',
+                    tooltip: context.l10n.grpFSetPriority,
                     onSelected: (p) => _run(BulkChange(priority: p)),
                     itemBuilder: (_) => [
                       for (final p in TaskPriority.values)
@@ -198,21 +217,24 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                           child: Text(p.label),
                         ),
                     ],
-                    child: const _BarLabel(Icons.low_priority, 'Priority'),
+                    child: _BarLabel(
+                      Icons.low_priority,
+                      context.l10n.grpFPriority,
+                    ),
                   ),
                 if (widget.canUpdate)
                   TextButton.icon(
                     key: const Key('bulk-assign'),
                     onPressed: busy ? null : _assign,
                     icon: const Icon(Icons.person_add_alt),
-                    label: const Text('Assign'),
+                    label: Text(context.l10n.grpFAssign),
                   ),
                 if (widget.canDelete)
                   TextButton.icon(
                     key: const Key('bulk-delete'),
                     onPressed: busy ? null : () => _delete(selection.length),
                     icon: const Icon(Icons.delete_outline),
-                    label: const Text('Delete'),
+                    label: Text(context.l10n.grpFDelete),
                   ),
                 TextButton(
                   key: const Key('bulk-clear'),
@@ -223,7 +245,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                               taskSelectionProvider(widget.projectId).notifier,
                             )
                             .clear,
-                  child: const Text('Clear'),
+                  child: Text(context.l10n.grpFClear),
                 ),
               ],
             ),
@@ -263,7 +285,7 @@ class BulkFailuresDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text('${failed.length} tasks not changed'),
+    title: Text(context.l10n.grpFBulkNotChanged(failed.length)),
     content: SizedBox(
       width: 420,
       child: ListView(
@@ -272,7 +294,7 @@ class BulkFailuresDialog extends StatelessWidget {
           for (final f in failed)
             ListTile(
               dense: true,
-              title: Text(names[f.id] ?? 'Task'),
+              title: Text(names[f.id] ?? context.l10n.grpFTask),
               subtitle: Text(f.message),
             ),
         ],
@@ -281,7 +303,7 @@ class BulkFailuresDialog extends StatelessWidget {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Close'),
+        child: Text(context.l10n.close),
       ),
     ],
   );

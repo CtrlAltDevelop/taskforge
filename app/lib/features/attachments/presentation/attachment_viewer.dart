@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/attachments/data/uploads_client.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
@@ -36,12 +37,14 @@ class AttachmentViewer extends ConsumerWidget {
       final link = await ref.read(uploadsClientProvider).link(file.id);
       final uri = Uri.tryParse(link.url);
       final opened = uri != null && await ref.read(urlOpenerProvider)(uri);
-      if (!opened && context.mounted) _say(context, 'Could not open the file.');
+      if (!opened && context.mounted) {
+        _say(context, context.l10n.grpHCouldNotOpenFile);
+      }
     } on AttachmentException catch (e) {
       if (context.mounted) _say(context, attachmentErrorMessage(e));
     } on Object {
       // The platform refused the link (a PlatformException, a bad address).
-      if (context.mounted) _say(context, 'Could not open the file.');
+      if (context.mounted) _say(context, context.l10n.grpHCouldNotOpenFile);
     }
   }
 
@@ -70,7 +73,7 @@ class AttachmentViewer extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 8, 0),
               child: Row(
                 children: [
                   Expanded(
@@ -84,24 +87,24 @@ class AttachmentViewer extends ConsumerWidget {
                     TextButton(
                       key: const Key('viewer-open'),
                       onPressed: () => _open(context, ref),
-                      child: const Text('Open'),
+                      child: Text(context.l10n.grpHOpen),
                     ),
                   IconButton(
                     key: const Key('viewer-download'),
-                    tooltip: 'Download',
+                    tooltip: context.l10n.grpHDownload,
                     onPressed: () => _open(context, ref),
                     icon: const Icon(Icons.download),
                   ),
                   if (onDelete != null)
                     IconButton(
                       key: const Key('viewer-delete'),
-                      tooltip: 'Delete',
+                      tooltip: context.l10n.grpHDelete,
                       onPressed: () => _delete(context),
                       icon: const Icon(Icons.delete_outline),
                     ),
                   IconButton(
                     key: const Key('viewer-close'),
-                    tooltip: 'Close',
+                    tooltip: context.l10n.grpHClose,
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.close),
                   ),
@@ -162,7 +165,7 @@ class _ImagePreview extends StatelessWidget {
       fileId: file.id,
       fit: BoxFit.contain,
       semanticLabel: file.filename,
-      fallback: const _Broken('Could not load the picture.'),
+      fallback: _Broken(context.l10n.grpHCouldNotLoadPicture),
     ),
   );
 }
@@ -177,7 +180,7 @@ class _TextPreview extends ConsumerWidget {
     final text = ref.watch(_textProvider(file.id));
     return text.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, _) => const _Broken('Could not read the file.'),
+      error: (_, _) => _Broken(context.l10n.grpHCouldNotReadFileViewer),
       data: (preview) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -195,7 +198,7 @@ class _TextPreview extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                'Showing the first ${formatBytes(textPreviewBytes)}. Download the file to read the rest.',
+                context.l10n.grpHTextTruncated(formatBytes(textPreviewBytes)),
                 key: const Key('viewer-truncated'),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
@@ -311,7 +314,7 @@ class _VideoPreviewState extends ConsumerState<_VideoPreview> {
   @override
   Widget build(BuildContext context) {
     final c = _controller;
-    if (_failed) return const _Broken('Could not play the video.');
+    if (_failed) return _Broken(context.l10n.grpHCouldNotPlayVideo);
     if (c == null || !c.value.isInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -327,7 +330,7 @@ class _VideoPreviewState extends ConsumerState<_VideoPreview> {
         ),
         IconButton(
           key: const Key('video-toggle'),
-          tooltip: playing ? 'Pause' : 'Play',
+          tooltip: playing ? context.l10n.grpHPause : context.l10n.grpHPlay,
           onPressed: () => playing ? c.pause() : c.play(),
           icon: Icon(playing ? Icons.pause : Icons.play_arrow),
         ),

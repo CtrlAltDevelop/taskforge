@@ -180,6 +180,9 @@ class Profile extends $pb.GeneratedMessage {
     $core.String? timezone,
     $core.String? dateOfBirth,
     $core.bool? marketingOptIn,
+    $core.String? calendarSystem,
+    $core.String? weekStart,
+    $core.String? numerals,
   }) {
     final result = Profile._();
     if (displayName != null) result.displayName = displayName;
@@ -189,6 +192,9 @@ class Profile extends $pb.GeneratedMessage {
     if (timezone != null) result.timezone = timezone;
     if (dateOfBirth != null) result.dateOfBirth = dateOfBirth;
     if (marketingOptIn != null) result.marketingOptIn = marketingOptIn;
+    if (calendarSystem != null) result.calendarSystem = calendarSystem;
+    if (weekStart != null) result.weekStart = weekStart;
+    if (numerals != null) result.numerals = numerals;
     return result;
   }
 
@@ -213,6 +219,9 @@ class Profile extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'timezone')
     ..aOS(6, _omitFieldNames ? '' : 'dateOfBirth')
     ..aOB(7, _omitFieldNames ? '' : 'marketingOptIn')
+    ..aOS(8, _omitFieldNames ? '' : 'calendarSystem')
+    ..aOS(9, _omitFieldNames ? '' : 'weekStart')
+    ..aOS(10, _omitFieldNames ? '' : 'numerals')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -297,6 +306,33 @@ class Profile extends $pb.GeneratedMessage {
   $core.bool hasMarketingOptIn() => $_has(6);
   @$pb.TagNumber(7)
   void clearMarketingOptIn() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get calendarSystem => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set calendarSystem($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCalendarSystem() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCalendarSystem() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get weekStart => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set weekStart($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasWeekStart() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearWeekStart() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get numerals => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set numerals($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasNumerals() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNumerals() => $_clearField(10);
 }
 
 class ProfileUpdate extends $pb.GeneratedMessage {
@@ -308,6 +344,9 @@ class ProfileUpdate extends $pb.GeneratedMessage {
     $core.String? timezone,
     $core.String? dateOfBirth,
     $core.bool? marketingOptIn,
+    $core.String? calendarSystem,
+    $core.String? weekStart,
+    $core.String? numerals,
   }) {
     final result = ProfileUpdate._();
     if (displayName != null) result.displayName = displayName;
@@ -317,6 +356,9 @@ class ProfileUpdate extends $pb.GeneratedMessage {
     if (timezone != null) result.timezone = timezone;
     if (dateOfBirth != null) result.dateOfBirth = dateOfBirth;
     if (marketingOptIn != null) result.marketingOptIn = marketingOptIn;
+    if (calendarSystem != null) result.calendarSystem = calendarSystem;
+    if (weekStart != null) result.weekStart = weekStart;
+    if (numerals != null) result.numerals = numerals;
     return result;
   }
 
@@ -341,6 +383,9 @@ class ProfileUpdate extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'timezone')
     ..aOS(6, _omitFieldNames ? '' : 'dateOfBirth')
     ..aOB(7, _omitFieldNames ? '' : 'marketingOptIn')
+    ..aOS(8, _omitFieldNames ? '' : 'calendarSystem')
+    ..aOS(9, _omitFieldNames ? '' : 'weekStart')
+    ..aOS(10, _omitFieldNames ? '' : 'numerals')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -427,6 +472,33 @@ class ProfileUpdate extends $pb.GeneratedMessage {
   $core.bool hasMarketingOptIn() => $_has(6);
   @$pb.TagNumber(7)
   void clearMarketingOptIn() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get calendarSystem => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set calendarSystem($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCalendarSystem() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCalendarSystem() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get weekStart => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set weekStart($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasWeekStart() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearWeekStart() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get numerals => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set numerals($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasNumerals() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNumerals() => $_clearField(10);
 }
 
 const $core.bool _omitFieldNames =

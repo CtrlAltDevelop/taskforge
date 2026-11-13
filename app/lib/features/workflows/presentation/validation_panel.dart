@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
 /// What is wrong with the workflow being edited, in words, or that it is ready.
@@ -16,8 +18,8 @@ class ValidationPanel extends StatelessWidget {
         key: const Key('validation-ok'),
         child: ListTile(
           leading: const Icon(Icons.check_circle, color: Colors.green),
-          title: const Text('No problems'),
-          subtitle: const Text('Every task keeps a valid status.'),
+          title: Text(context.l10n.grpINoProblems),
+          subtitle: Text(context.l10n.grpIEveryTaskValid),
         ),
       );
     }
@@ -30,9 +32,7 @@ class ValidationPanel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              problems.length == 1
-                  ? '1 problem to fix before saving'
-                  : '${problems.length} problems to fix before saving',
+              context.l10n.grpIProblemsToFix(problems.length),
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(height: 8),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:flutter/material.dart';
 
 /// Says why before the system asks: nobody should meet a permission box
@@ -7,23 +8,18 @@ Future<bool> explainPush(BuildContext context) async {
     context: context,
     builder: (dialog) => AlertDialog(
       key: const Key('push-explainer'),
-      title: const Text('Get a ping when it matters'),
-      content: const Text(
-        'TaskForge can show a notification when you are assigned a task, '
-        'mentioned, or a task is due soon, even when the app is in the '
-        'background. Next your device will ask for permission. You choose '
-        'which kinds ping you, and quiet hours keep them from waking you.',
-      ),
+      title: Text(dialog.l10n.grpHPushTitle),
+      content: Text(dialog.l10n.grpHPushBody),
       actions: [
         TextButton(
           key: const Key('push-explainer-cancel'),
           onPressed: () => Navigator.of(dialog).pop(false),
-          child: const Text('Not now'),
+          child: Text(dialog.l10n.grpHNotNow),
         ),
         FilledButton(
           key: const Key('push-explainer-continue'),
           onPressed: () => Navigator.of(dialog).pop(true),
-          child: const Text('Continue'),
+          child: Text(dialog.l10n.grpHContinue),
         ),
       ],
     ),

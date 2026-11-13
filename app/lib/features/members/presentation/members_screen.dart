@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/invite_dialog.dart';
@@ -44,11 +45,11 @@ class MembersScreen extends ConsumerWidget {
         appBar: AppBar(
           leading: IconButton(
             key: const Key('back-home'),
-            tooltip: 'Back',
-            icon: const Icon(Icons.arrow_back),
+            tooltip: context.l10n.grpJBack,
+            icon: const BackButtonIcon(),
             onPressed: () => context.go('/'),
           ),
-          title: const Text('Members'),
+          title: Text(context.l10n.grpJMembers),
           actions: [
             PermissionGate(
               permission: Perm.memberInvite,
@@ -56,7 +57,7 @@ class MembersScreen extends ConsumerWidget {
               child: TextButton.icon(
                 key: const Key('open-invite'),
                 icon: const Icon(Icons.person_add),
-                label: const Text('Invite'),
+                label: Text(context.l10n.grpJInvite),
                 onPressed: () => showDialog<void>(
                   context: context,
                   builder: (_) => const InviteDialog(),
@@ -64,10 +65,16 @@ class MembersScreen extends ConsumerWidget {
               ),
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
-              Tab(key: Key('tab-members'), text: 'Members'),
-              Tab(key: Key('tab-pending'), text: 'Pending'),
+              Tab(
+                key: const Key('tab-members'),
+                text: context.l10n.grpJMembers,
+              ),
+              Tab(
+                key: const Key('tab-pending'),
+                text: context.l10n.grpJPending,
+              ),
             ],
           ),
         ),
@@ -96,7 +103,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialog).pop(false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               key: const Key('confirm-action'),
@@ -110,9 +117,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
 
   Future<void> _remove(String workspaceId, Member member) async {
     final ok = await _confirm(
-      'Remove ${member.label}?',
-      'They lose access to this workspace. You can invite them again later.',
-      'Remove',
+      context.l10n.grpJRemoveMemberTitle(member.label),
+      context.l10n.grpJRemoveMemberBody,
+      context.l10n.grpJRemove,
     );
     if (!ok || !mounted) return;
     final removed = await runWithFeedback(
@@ -131,7 +138,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
       builder: (sheet) => SafeArea(
         child: Padding(
           key: const Key('member-profile'),
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -139,7 +146,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
               const SizedBox(height: 12),
               Text(m.label, style: Theme.of(sheet).textTheme.titleLarge),
               Text(m.email),
-              Text('Joined ${formatDate(m.joinedAt)}'),
+              Text(context.l10n.grpJJoined(formatDate(m.joinedAt))),
               const SizedBox(height: 8),
               RolePicker(
                 key: const Key('profile-role'),
@@ -152,7 +159,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                   child: TextButton.icon(
                     key: const Key('profile-remove'),
                     icon: const Icon(Icons.person_remove),
-                    label: const Text('Remove from workspace'),
+                    label: Text(context.l10n.grpJRemoveFromWorkspace),
                     onPressed: () {
                       Navigator.of(sheet).pop();
                       _remove(workspaceId, m);
@@ -168,9 +175,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
 
   Future<void> _leave(String workspaceId, String name) async {
     final ok = await _confirm(
-      'Leave $name?',
-      'You will lose access to this workspace until someone invites you again.',
-      'Leave',
+      context.l10n.grpJLeaveTitle(name),
+      context.l10n.grpJLeaveBody,
+      context.l10n.grpJLeave,
     );
     if (!ok || !mounted) return;
     final left = await runWithFeedback(
@@ -194,7 +201,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
         child: TextButton(
           key: const Key('retry-members'),
           onPressed: () => ref.invalidate(membersProvider),
-          child: Text('${inviteErrorMessage(e)} Retry'),
+          child: Text(context.l10n.grpJErrorRetry(inviteErrorMessage(e))),
         ),
       ),
       data: (all) {
@@ -211,9 +218,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
           children: [
             TextField(
               key: const Key('member-search'),
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                labelText: 'Search members',
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                labelText: context.l10n.grpJSearchMembers,
               ),
               onChanged: (v) => setState(() => _query = v),
             ),
@@ -225,7 +232,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                 leading: CircleAvatar(child: Text(m.initials)),
                 title: Text(m.label),
                 subtitle: Text(
-                  'Joined ${formatDate(m.joinedAt)}'
+                  '${context.l10n.grpJJoined(formatDate(m.joinedAt))}'
                   '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
                 ),
                 trailing: Row(
@@ -237,7 +244,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                         permission: Perm.memberRemove,
                         child: IconButton(
                           key: Key('remove-${m.userId}'),
-                          tooltip: 'Remove ${m.label}',
+                          tooltip: context.l10n.grpJRemoveMember(m.label),
                           icon: const Icon(Icons.person_remove),
                           onPressed: () => _remove(workspace.id, m),
                         ),
@@ -247,19 +254,16 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
               ),
             const Divider(),
             if (workspace.isOwner)
-              const ListTile(
-                key: Key('owner-cannot-leave'),
-                leading: Icon(Icons.info_outline),
-                title: Text(
-                  'You own this workspace, so you cannot leave it. '
-                  'Ownership cannot be transferred yet.',
-                ),
+              ListTile(
+                key: const Key('owner-cannot-leave'),
+                leading: const Icon(Icons.info_outline),
+                title: Text(context.l10n.grpJOwnerCannotLeave),
               )
             else
               OutlinedButton(
                 key: const Key('leave-workspace'),
                 onPressed: () => _leave(workspace.id, workspace.name),
-                child: const Text('Leave workspace'),
+                child: Text(context.l10n.grpJLeaveWorkspace),
               ),
           ],
         );

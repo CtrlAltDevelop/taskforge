@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
@@ -27,7 +28,7 @@ class BoardToolbar extends ConsumerWidget {
     final state = ref.watch(boardLayoutProvider(projectId));
     final layout = state.layout;
     final notifier = ref.read(boardLayoutProvider(projectId).notifier);
-    final choices = lookups.groupChoices;
+    final choices = lookups.groupChoicesFor(context.l10n);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -35,7 +36,7 @@ class BoardToolbar extends ConsumerWidget {
         children: [
           PopupMenuButton<String>(
             key: const Key('board-group-menu'),
-            tooltip: 'Columns by',
+            tooltip: context.l10n.grpFColumnsBy,
             onSelected: (key) =>
                 notifier.update((l) => l.copyWith(groupBy: key)),
             itemBuilder: (_) => [
@@ -49,13 +50,18 @@ class BoardToolbar extends ConsumerWidget {
             ],
             child: _Chip(
               icon: Icons.view_column_outlined,
-              label:
-                  'Columns: ${choices.where((g) => g.key == layout.groupBy).firstOrNull?.label ?? 'Status'}',
+              label: context.l10n.grpFColumnsChip(
+                choices
+                        .where((g) => g.key == layout.groupBy)
+                        .firstOrNull
+                        ?.label ??
+                    context.l10n.grpFStatus,
+              ),
             ),
           ),
           PopupMenuButton<String>(
             key: const Key('board-lane-menu'),
-            tooltip: 'Swimlanes',
+            tooltip: context.l10n.grpFSwimlanes,
             onSelected: (key) =>
                 notifier.update((l) => l.copyWith(swimlane: key)),
             itemBuilder: (_) => [
@@ -63,23 +69,25 @@ class BoardToolbar extends ConsumerWidget {
                 key: const Key('board-lane-none'),
                 value: '',
                 checked: layout.swimlane.isEmpty,
-                child: const Text('No swimlanes'),
+                child: Text(context.l10n.grpFNoSwimlanes),
               ),
               CheckedPopupMenuItem(
                 key: const Key('board-lane-assignee'),
                 value: 'assignee',
                 checked: layout.swimlane == 'assignee',
-                child: const Text('By assignee'),
+                child: Text(context.l10n.grpFByAssignee),
               ),
             ],
             child: _Chip(
               icon: Icons.table_rows_outlined,
-              label: layout.swimlane.isEmpty ? 'Swimlanes' : 'Lanes: assignee',
+              label: layout.swimlane.isEmpty
+                  ? context.l10n.grpFSwimlanes
+                  : context.l10n.grpFLanesAssignee,
             ),
           ),
           PopupMenuButton<String>(
             key: const Key('board-fields-menu'),
-            tooltip: 'Card fields',
+            tooltip: context.l10n.grpFCardFields,
             onSelected: (key) => notifier.update(
               (l) => l.withCardField(key, shown: !l.cardFields.contains(key)),
             ),
@@ -97,7 +105,7 @@ class BoardToolbar extends ConsumerWidget {
                   ),
                 ),
             ],
-            child: const _Chip(icon: Icons.tune, label: 'Card fields'),
+            child: _Chip(icon: Icons.tune, label: context.l10n.grpFCardFields),
           ),
           if (sprintFilter)
             Padding(
@@ -105,7 +113,7 @@ class BoardToolbar extends ConsumerWidget {
               child: FilterChip(
                 key: const Key('board-sprint-filter'),
                 avatar: const Icon(Icons.timelapse, size: 18),
-                label: const Text('Current sprint'),
+                label: Text(context.l10n.grpFCurrentSprint),
                 selected: ref.watch(boardCurrentSprintProvider(projectId)),
                 onSelected: (on) => ref
                     .read(boardCurrentSprintProvider(projectId).notifier)
@@ -114,17 +122,15 @@ class BoardToolbar extends ConsumerWidget {
             ),
           IconButton(
             key: const Key('board-refresh'),
-            tooltip: 'Refresh',
+            tooltip: context.l10n.grpFRefresh,
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(boardProvider(projectId).notifier).refresh(),
           ),
           if (state.saveFailed)
-            const Tooltip(
-              message:
-                  'Your board layout could not be saved. It will be tried '
-                  'again on your next change.',
-              child: Icon(
+            Tooltip(
+              message: context.l10n.grpFBoardLayoutNotSaved,
+              child: const Icon(
                 Icons.warning_amber,
                 key: Key('board-layout-not-saved'),
                 color: Colors.orange,

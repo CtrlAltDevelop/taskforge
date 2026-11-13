@@ -1,0 +1,4981 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Persian (`fa`).
+class AppLocalizationsFa extends AppLocalizations {
+  AppLocalizationsFa([String locale = 'fa']) : super(locale);
+
+  @override
+  String get appTitle => 'تسک‌فورج';
+
+  @override
+  String get retry => 'تلاش دوباره';
+
+  @override
+  String get cancel => 'لغو';
+
+  @override
+  String get save => 'ذخیره';
+
+  @override
+  String get close => 'بستن';
+
+  @override
+  String get signOut => 'خروج';
+
+  @override
+  String get inbox => 'صندوق ورودی';
+
+  @override
+  String get workspaceSettings => 'تنظیمات فضای کاری';
+
+  @override
+  String get homeLoadWorkspacesFailed =>
+      'بارگذاری فضاهای کاری ممکن نشد. تلاش دوباره';
+
+  @override
+  String get homeLoadAccountFailed => 'بارگذاری حساب شما ممکن نشد.';
+
+  @override
+  String get calendar => 'تقویم';
+
+  @override
+  String get calendarSubtitle => 'همهٔ موعدها در پروژه‌های شما';
+
+  @override
+  String get notificationSettings => 'تنظیمات اعلان‌ها';
+
+  @override
+  String get notificationSettingsSubtitle =>
+      'چه چیزی به شما اطلاع می‌دهد، ساعت‌های سکوت و خلاصه';
+
+  @override
+  String get offlineAndStorage => 'آفلاین و حافظه';
+
+  @override
+  String get offlineAndStorageSubtitle => 'تغییرات آفلاین، نسخهٔ محلی';
+
+  @override
+  String get sessions => 'نشست‌ها';
+
+  @override
+  String get sessionsSubtitle => 'دستگاه‌هایی که وارد حساب شما شده‌اند';
+
+  @override
+  String get changePassword => 'تغییر گذرواژه';
+
+  @override
+  String get connectivity => 'اتصال';
+
+  @override
+  String get languageAndRegion => 'زبان و منطقه';
+
+  @override
+  String get languageAndRegionSubtitle => 'زبان، تقویم، آغاز هفته و ارقام';
+
+  @override
+  String get signIn => 'ورود';
+
+  @override
+  String get createAccount => 'ایجاد حساب';
+
+  @override
+  String get forgotPassword => 'گذرواژه را فراموش کرده‌اید؟';
+
+  @override
+  String get createAnAccount => 'ایجاد حساب کاربری';
+
+  @override
+  String get alreadyHaveAccount => 'از قبل حساب دارم';
+
+  @override
+  String get resetPassword => 'بازنشانی گذرواژه';
+
+  @override
+  String get sendCode => 'ارسال کد';
+
+  @override
+  String get backToSignIn => 'بازگشت به ورود';
+
+  @override
+  String get setNewPassword => 'تعیین گذرواژهٔ جدید';
+
+  @override
+  String get updatePassword => 'به‌روزرسانی گذرواژه';
+
+  @override
+  String get codeFromEmail => 'کد دریافتی از ایمیل';
+
+  @override
+  String get email => 'ایمیل';
+
+  @override
+  String get password => 'گذرواژه';
+
+  @override
+  String get currentPassword => 'گذرواژهٔ فعلی';
+
+  @override
+  String get newPassword => 'گذرواژهٔ جدید';
+
+  @override
+  String get showPassword => 'نمایش گذرواژه';
+
+  @override
+  String get hidePassword => 'پنهان کردن گذرواژه';
+
+  @override
+  String get passwordChanged => 'گذرواژه تغییر کرد. دوباره وارد شوید.';
+
+  @override
+  String get passwordUpdated => 'گذرواژه به‌روز شد. با آن وارد شوید.';
+
+  @override
+  String get enterEmail => 'نشانی ایمیل خود را وارد کنید.';
+
+  @override
+  String get enterValidEmail => 'یک نشانی ایمیل معتبر وارد کنید.';
+
+  @override
+  String get enterPassword => 'یک گذرواژه وارد کنید.';
+
+  @override
+  String passwordTooShort(int min) {
+    return 'دست‌کم $min نویسه استفاده کنید.';
+  }
+
+  @override
+  String get enterResetCode => 'کدی را که به ایمیل شما آمده وارد کنید.';
+
+  @override
+  String get enterYourPassword => 'گذرواژهٔ خود را وارد کنید.';
+
+  @override
+  String get errWrongCredentials => 'ایمیل یا گذرواژه نادرست است.';
+
+  @override
+  String get errTooManyAttempts =>
+      'تلاش‌های بیش از حد. چند دقیقه بعد دوباره امتحان کنید.';
+
+  @override
+  String get errAccountExists => 'حسابی با این ایمیل از قبل وجود دارد.';
+
+  @override
+  String get errServerProblem => 'سرور مشکل داشت. کمی بعد دوباره امتحان کنید.';
+
+  @override
+  String get errNoConnection =>
+      'اتصال به سرور برقرار نشد. اتصال خود را بررسی کنید و دوباره امتحان کنید.';
+
+  @override
+  String get errGeneric => 'مشکلی پیش آمد. دوباره امتحان کنید.';
+
+  @override
+  String get languageLabel => 'زبان';
+
+  @override
+  String get calendarSystemLabel => 'تقویم';
+
+  @override
+  String get calendarGregorian => 'میلادی';
+
+  @override
+  String get calendarJalali => 'جلالی (هجری شمسی)';
+
+  @override
+  String get weekStartLabel => 'هفته شروع می‌شود از';
+
+  @override
+  String get weekStartDefault => 'پیش‌فرض زبان';
+
+  @override
+  String get weekSaturday => 'شنبه';
+
+  @override
+  String get weekSunday => 'یکشنبه';
+
+  @override
+  String get weekMonday => 'دوشنبه';
+
+  @override
+  String get numeralsLabel => 'ارقام';
+
+  @override
+  String get numeralsLatin => 'لاتین (0123)';
+
+  @override
+  String get numeralsNative => 'ارقام فارسی (۰۱۲۳)';
+
+  @override
+  String get previewLabel => 'پیش‌نمایش';
+
+  @override
+  String get prefsSaveFailed =>
+      'فقط روی این دستگاه ذخیره شد. به سرور دسترسی نداشتیم.';
+
+  @override
+  String get workspaceDefaultLanguage => 'زبان پیش‌فرض اعضای جدید';
+
+  @override
+  String taskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه',
+      one: '۱ وظیفه',
+      zero: 'بدون وظیفه',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get jalaliMonth1 => 'فروردین';
+
+  @override
+  String get jalaliMonth2 => 'اردیبهشت';
+
+  @override
+  String get jalaliMonth3 => 'خرداد';
+
+  @override
+  String get jalaliMonth4 => 'تیر';
+
+  @override
+  String get jalaliMonth5 => 'مرداد';
+
+  @override
+  String get jalaliMonth6 => 'شهریور';
+
+  @override
+  String get jalaliMonth7 => 'مهر';
+
+  @override
+  String get jalaliMonth8 => 'آبان';
+
+  @override
+  String get jalaliMonth9 => 'آذر';
+
+  @override
+  String get jalaliMonth10 => 'دی';
+
+  @override
+  String get jalaliMonth11 => 'بهمن';
+
+  @override
+  String get jalaliMonth12 => 'اسفند';
+
+  @override
+  String get pickDateOk => 'تأیید';
+
+  @override
+  String get pickDateTitle => 'انتخاب تاریخ';
+
+  @override
+  String get previousMonth => 'ماه قبل';
+
+  @override
+  String get nextMonth => 'ماه بعد';
+
+  @override
+  String get weekdayShortMon => 'دوشنبه';
+
+  @override
+  String get weekdayShortTue => 'سه‌شنبه';
+
+  @override
+  String get weekdayShortWed => 'چهارشنبه';
+
+  @override
+  String get weekdayShortThu => 'پنجشنبه';
+
+  @override
+  String get weekdayShortFri => 'جمعه';
+
+  @override
+  String get weekdayShortSat => 'شنبه';
+
+  @override
+  String get weekdayShortSun => 'یکشنبه';
+
+  @override
+  String get grpACancel => 'انصراف';
+
+  @override
+  String get grpASave => 'ذخیره';
+
+  @override
+  String get grpARetry => 'تلاش مجدد';
+
+  @override
+  String get grpADone => 'انجام شد';
+
+  @override
+  String get grpAClose => 'بستن';
+
+  @override
+  String get grpAEdit => 'ویرایش';
+
+  @override
+  String get grpADelete => 'حذف';
+
+  @override
+  String get grpANote => 'یادداشت';
+
+  @override
+  String get grpATotal => 'مجموع';
+
+  @override
+  String get grpATask => 'وظیفه';
+
+  @override
+  String get grpAMerge => 'ادغام';
+
+  @override
+  String get grpARemove => 'حذف';
+
+  @override
+  String get grpAOfflineBack => 'بازگشت';
+
+  @override
+  String get grpAOfflineTitle => 'آفلاین و فضای ذخیره';
+
+  @override
+  String get grpAOfflineChooseWorkspace => 'ابتدا یک فضای کار انتخاب کنید.';
+
+  @override
+  String get grpAOfflineNeedsAttention => 'نیازمند توجه شما';
+
+  @override
+  String get grpAOfflineNothingToDecide =>
+      'هیچ. همه تغییرات آفلاین ارسال شدند.';
+
+  @override
+  String grpAOfflineWaiting(int count) {
+    return 'در انتظار ارسال ($count)';
+  }
+
+  @override
+  String get grpASyncNow => 'همگام‌سازی اکنون';
+
+  @override
+  String get grpAOfflineNothingWaiting => 'چیزی در انتظار نیست.';
+
+  @override
+  String get grpAEntryATask => 'یک وظیفه';
+
+  @override
+  String grpAEntryNewTask(String title) {
+    return 'وظیفه جدید «$title»';
+  }
+
+  @override
+  String grpAEntryEdit(String name, String fields) {
+    return 'ویرایش $name: $fields';
+  }
+
+  @override
+  String grpAEntryDelete(String name) {
+    return 'حذف $name';
+  }
+
+  @override
+  String grpAEntryComment(String name) {
+    return 'نظر درباره $name';
+  }
+
+  @override
+  String grpAEntryUpload(String file, String name) {
+    return 'بارگذاری «$file» در $name';
+  }
+
+  @override
+  String grpAOfflineClash(String field, String current, String mine) {
+    return 'آنها ($field): $current\nشما: $mine';
+  }
+
+  @override
+  String get grpAKeepMine => 'نگه داشتن مال من';
+
+  @override
+  String get grpATakeTheirs => 'گرفتن مال آنها';
+
+  @override
+  String get grpATryAgain => 'دوباره تلاش کنید';
+
+  @override
+  String get grpADiscard => 'دور انداختن';
+
+  @override
+  String get grpAMergeTitle => 'کدام تغییرات شما حفظ شود؟';
+
+  @override
+  String get grpAStorage => 'فضای ذخیره';
+
+  @override
+  String get grpAReading => 'در حال خواندن…';
+
+  @override
+  String grpAStorageUsage(String size, int cap) {
+    return 'نسخه روی این دستگاه $size مگابایت از حداکثر $cap مگابایت را اشغال کرده است.';
+  }
+
+  @override
+  String get grpAMostItMayHold => 'حداکثر مقدار مجاز';
+
+  @override
+  String grpAMegabytes(int mb) {
+    return '$mb مگابایت';
+  }
+
+  @override
+  String get grpAClearCopy => 'پاک کردن نسخه روی این دستگاه';
+
+  @override
+  String get grpAStorageNote =>
+      'تغییراتی که هنوز در انتظار ارسال هستند حفظ می‌شوند. نسخه بدون رمزگذاری ذخیره می‌شود: از رمزگذاری دیسک دستگاه خود استفاده کنید.';
+
+  @override
+  String get grpAClearTitle => 'نسخه روی این دستگاه پاک شود؟';
+
+  @override
+  String get grpAClearBody =>
+      'آنچه خوانده‌اید هنگام آنلاین بودن دوباره دریافت می‌شود. تغییرات در انتظار ارسال حذف نمی‌شوند.';
+
+  @override
+  String get grpAClear => 'پاک کردن';
+
+  @override
+  String get grpAKeepOfflineTitle => 'نگه داشتن پروژه‌ها به صورت آفلاین';
+
+  @override
+  String get grpAKeepOfflineBody =>
+      'پروژه نگه‌داشته‌شده کامل کپی می‌شود، پس وظایف، وضعیت‌ها و اعضای آن بدون اتصال در دسترس‌اند. پروژه‌های دیگر آخرین چیزی را که خوانده‌اید نشان می‌دهند.';
+
+  @override
+  String grpACopying(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'در حال کپی… $count وظیفه',
+      one: 'در حال کپی… ۱ وظیفه',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpASprintsTitle => 'اسپرینت‌ها';
+
+  @override
+  String grpASprintsTitleProject(String name) {
+    return 'اسپرینت‌ها · $name';
+  }
+
+  @override
+  String get grpASprintsDisabled =>
+      'اسپرینت‌ها برای این پروژه خاموش هستند. آن‌ها را در تنظیمات پروژه روشن کنید.';
+
+  @override
+  String get grpAProjectNotFound => 'پروژه پیدا نشد.';
+
+  @override
+  String grpAAddedAfterStart(int count) {
+    return '$count مورد پس از شروع اسپرینت اضافه شد (به‌عنوان تغییر دامنه نمایش داده می‌شود).';
+  }
+
+  @override
+  String grpASprintCompleted(String name) {
+    return '$name تکمیل شد.';
+  }
+
+  @override
+  String get grpAPlanning => 'برنامه‌ریزی';
+
+  @override
+  String get grpAReports => 'گزارش‌ها';
+
+  @override
+  String get grpANewSprint => 'اسپرینت جدید';
+
+  @override
+  String get grpABacklog => 'بک‌لاگ';
+
+  @override
+  String get grpABacklogEmpty => 'بک‌لاگ خالی است.';
+
+  @override
+  String get grpAAddToSprint => 'افزودن به اسپرینت';
+
+  @override
+  String get grpANoOpenSprint =>
+      'اسپرینت بازی وجود ندارد. برای شروع برنامه‌ریزی یکی بسازید.';
+
+  @override
+  String get grpADragHere =>
+      'وظایف را به اینجا بکشید یا چند مورد را در بک‌لاگ انتخاب کنید.';
+
+  @override
+  String grpADatesRange(String start, String end) {
+    return '$start تا $end';
+  }
+
+  @override
+  String grpADaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count روز مانده',
+      one: '۱ روز مانده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpASprintGoalText(String goal) {
+    return 'هدف: $goal';
+  }
+
+  @override
+  String get grpAShowOnBoard => 'نمایش روی برد';
+
+  @override
+  String get grpAEditSprint => 'ویرایش اسپرینت';
+
+  @override
+  String get grpAStartSprint => 'شروع اسپرینت';
+
+  @override
+  String get grpACompleteSprint => 'تکمیل اسپرینت';
+
+  @override
+  String get grpANoSprintsYet => 'هنوز اسپرینتی وجود ندارد.';
+
+  @override
+  String get grpASprintNameRequired => 'برای اسپرینت یک نام بگذارید.';
+
+  @override
+  String get grpASprintDatesFormat =>
+      'تاریخ‌ها به صورت YYYY-MM-DD نوشته می‌شوند.';
+
+  @override
+  String get grpASprintEndBeforeStart =>
+      'اسپرینت نمی‌تواند پیش از شروع خود پایان یابد.';
+
+  @override
+  String get grpASprintCapacityNumber =>
+      'ظرفیت یک عدد است، یا برای نداشتن خالی بگذارید.';
+
+  @override
+  String get grpASprintSaved => 'اسپرینت ذخیره شد';
+
+  @override
+  String get grpASprintName => 'نام';
+
+  @override
+  String get grpASprintGoal => 'هدف';
+
+  @override
+  String get grpASprintStartLabel => 'شروع (YYYY-MM-DD)';
+
+  @override
+  String get grpASprintEndLabel => 'پایان (YYYY-MM-DD)';
+
+  @override
+  String get grpAPickStartDate => 'انتخاب تاریخ شروع';
+
+  @override
+  String get grpAPickEndDate => 'انتخاب تاریخ پایان';
+
+  @override
+  String get grpACapacityPointsOptional => 'ظرفیت بر حسب امتیاز (اختیاری)';
+
+  @override
+  String get grpACapacityHoursOptional => 'ظرفیت بر حسب ساعت (اختیاری)';
+
+  @override
+  String grpASprintOverlap(String names) {
+    return 'این تاریخ‌ها با $names همپوشانی دارند.';
+  }
+
+  @override
+  String grpACompleteTitle(String name) {
+    return 'تکمیل $name';
+  }
+
+  @override
+  String grpACompleteCounts(int done, int open) {
+    return '$done انجام‌شده، $open ناتمام';
+  }
+
+  @override
+  String get grpACompleteWhatHappens => 'با وظایف ناتمام چه شود؟';
+
+  @override
+  String get grpACompleteMoveNext => 'انتقال به اسپرینت بعدی';
+
+  @override
+  String get grpACompleteNoPlanned =>
+      'اسپرینت برنامه‌ریزی‌شده‌ای برای انتقال وجود ندارد';
+
+  @override
+  String get grpACompleteBackToBacklog => 'بازگشت به بک‌لاگ';
+
+  @override
+  String grpAPointsFor(String key) {
+    return 'امتیاز برای $key';
+  }
+
+  @override
+  String get grpAPointsInvalid =>
+      'یک عدد وارد کنید یا برای پاک کردن خالی بگذارید.';
+
+  @override
+  String get grpAStoryPoints => 'امتیاز داستان';
+
+  @override
+  String get grpACapacityInHours => 'ظرفیت بر حسب ساعت';
+
+  @override
+  String get grpACapacityInPoints => 'ظرفیت بر حسب امتیاز';
+
+  @override
+  String grpABurndownTitle(String name) {
+    return 'نمودار سوخت: $name';
+  }
+
+  @override
+  String get grpAPoints => 'امتیاز';
+
+  @override
+  String get grpATasks => 'وظایف';
+
+  @override
+  String get grpABurndownEmpty => 'نمودار سوخت پس از شروع اسپرینت آغاز می‌شود.';
+
+  @override
+  String grpABurndownChart(int days, int changes) {
+    return 'نمودار سوخت، $days روز، $changes تغییر دامنه';
+  }
+
+  @override
+  String grpABurndownBackfilled(int count) {
+    return '، $count روز تکمیل‌شده با تأخیر';
+  }
+
+  @override
+  String get grpALegendRemaining => 'باقی‌مانده';
+
+  @override
+  String get grpALegendIdeal => 'ایده‌آل';
+
+  @override
+  String get grpALegendScopeChange => 'تغییر دامنه';
+
+  @override
+  String get grpALegendBackfilled => 'روز تکمیل‌شده با تأخیر';
+
+  @override
+  String get grpAVelocityEmpty =>
+      'سرعت پس از اولین اسپرینت تکمیل‌شده نمایش داده می‌شود.';
+
+  @override
+  String grpAVelocityTitle(int count, String average) {
+    return 'سرعت ($count اسپرینت اخیر): میانگین $average امتیاز';
+  }
+
+  @override
+  String grpAVelocityChart(int count) {
+    return 'نمودار سرعت، $count اسپرینت';
+  }
+
+  @override
+  String get grpALegendCommitted => 'متعهد‌شده';
+
+  @override
+  String get grpALegendCompleted => 'تکمیل‌شده';
+
+  @override
+  String get grpATimesheetTitle => 'برگه زمان';
+
+  @override
+  String get grpAPreviousWeek => 'هفته قبل';
+
+  @override
+  String get grpANextWeek => 'هفته بعد';
+
+  @override
+  String get grpAThisWeek => 'این هفته';
+
+  @override
+  String get grpATimesheetEmpty => 'این هفته زمانی ثبت نشده است.';
+
+  @override
+  String get grpARunning => 'در حال اجرا';
+
+  @override
+  String get grpAAddTime => 'افزودن زمان';
+
+  @override
+  String get grpAYou => 'شما';
+
+  @override
+  String get grpAProjectTotals => 'مجموع پروژه';
+
+  @override
+  String get grpAChooseProject => 'یک پروژه انتخاب کنید';
+
+  @override
+  String get grpATotalsEmpty => 'این هفته زمانی در این پروژه ثبت نشده است.';
+
+  @override
+  String grpABillableAmount(String duration) {
+    return '  ($duration قابل صورتحساب)';
+  }
+
+  @override
+  String get grpAEditTime => 'ویرایش زمان';
+
+  @override
+  String get grpATimeSpent => 'زمان صرف‌شده';
+
+  @override
+  String get grpABillable => 'قابل صورتحساب';
+
+  @override
+  String get grpABadDuration => 'زمانی مانند 1h 30m، 90m یا 1:30 وارد کنید.';
+
+  @override
+  String get grpAEstimate => 'برآورد';
+
+  @override
+  String get grpAEstimatedTime => 'زمان برآوردشده';
+
+  @override
+  String get grpAEmptyForNone => 'برای نداشتن خالی بگذارید';
+
+  @override
+  String get grpADeleteTimeTitle => 'این زمان حذف شود؟';
+
+  @override
+  String get grpADeleteTimeBody => 'زمان ثبت‌شده برای همیشه حذف می‌شود.';
+
+  @override
+  String get grpAKeep => 'نگه داشتن';
+
+  @override
+  String get grpBCancel => 'انصراف';
+
+  @override
+  String get grpBOk => 'تأیید';
+
+  @override
+  String get grpBClose => 'بستن';
+
+  @override
+  String get grpBSave => 'ذخیره';
+
+  @override
+  String get grpBRetry => 'تلاش دوباره';
+
+  @override
+  String get grpBRestore => 'بازیابی';
+
+  @override
+  String get grpBHistory => 'تاریخچه';
+
+  @override
+  String get grpBCopy => 'کپی';
+
+  @override
+  String get grpBSaveAsFile => 'ذخیره به‌عنوان فایل';
+
+  @override
+  String get grpBReply => 'پاسخ';
+
+  @override
+  String get grpBEdit => 'ویرایش';
+
+  @override
+  String get grpBDelete => 'حذف';
+
+  @override
+  String get grpBBack => 'بازگشت';
+
+  @override
+  String get grpBSomeone => 'یک نفر';
+
+  @override
+  String get grpBYou => 'شما';
+
+  @override
+  String get grpBLoading => 'در حال بارگذاری…';
+
+  @override
+  String get grpBPages => 'صفحه‌ها';
+
+  @override
+  String get grpBRestricted => 'محدود';
+
+  @override
+  String get grpBLinkTitle => 'پیوند';
+
+  @override
+  String get grpBLinkAddressLabel => 'نشانی (http، https یا mailto)';
+
+  @override
+  String get grpBLinkInvalid => 'از نشانی http، https یا mailto استفاده کنید.';
+
+  @override
+  String get grpBIconTitle => 'نماد صفحه';
+
+  @override
+  String get grpBIconLabel => 'ایموجی یا متن کوتاه (برای هیچ، خالی بگذارید)';
+
+  @override
+  String get grpBIconInvalid => 'حداکثر چهار نویسه استفاده کنید.';
+
+  @override
+  String get grpBImageTitle => 'تصویر';
+
+  @override
+  String get grpBImageAddressLabel => 'نشانی تصویر (http یا https)';
+
+  @override
+  String get grpBDescription => 'توضیح';
+
+  @override
+  String get grpBImageInvalid => 'از نشانی http یا https استفاده کنید.';
+
+  @override
+  String get grpBEmbedTaskTitle => 'جاسازی یک وظیفه';
+
+  @override
+  String get grpBTaskSearchLabel => 'جستجوی وظایف یا چسباندن پیوند وظیفه';
+
+  @override
+  String get grpBUsePastedTask => 'استفاده از وظیفه چسبانده‌شده';
+
+  @override
+  String get grpBSnippetRemoved => '(حذف‌شده)';
+
+  @override
+  String get grpBConflictTitle => 'شخص دیگری این صفحه را تغییر داد';
+
+  @override
+  String get grpBConflictClean =>
+      'تغییرات آن‌ها با تغییرات شما همپوشانی ندارد. ادغام خواهند شد.';
+
+  @override
+  String get grpBConflictOverlap =>
+      'هر دوی این بلوک‌ها را تغییر داده‌اید. انتخاب کنید کدام بماند؛ بقیه ادغام می‌شود.';
+
+  @override
+  String grpBConflictBlock(String snippet) {
+    return 'بلوک: $snippet';
+  }
+
+  @override
+  String grpBConflictMine(String snippet) {
+    return 'من: $snippet';
+  }
+
+  @override
+  String grpBConflictTheirs(String snippet) {
+    return 'آن‌ها: $snippet';
+  }
+
+  @override
+  String get grpBDecideLater => 'بعداً تصمیم می‌گیرم';
+
+  @override
+  String get grpBDiscardMine => 'دور انداختن تغییرات من';
+
+  @override
+  String get grpBApplyAndSave => 'اعمال و ذخیره';
+
+  @override
+  String get grpBShareTitle => 'دسترسی به صفحه';
+
+  @override
+  String get grpBShareRestrict => 'محدود کردن این صفحه';
+
+  @override
+  String get grpBShareRestrictedHint =>
+      'فقط افراد زیر، سازنده و مدیران صفحه (برای صفحه‌های زیرمجموعه نیز).';
+
+  @override
+  String get grpBShareOpenHint =>
+      'هر کسی که بتواند صفحه والد را باز کند می‌تواند این را هم باز کند.';
+
+  @override
+  String get grpBShareNeedPermission =>
+      'برای تغییر این مورد به مجوز «doc.manage» نیاز دارید.';
+
+  @override
+  String get grpBEmptyPage => '(صفحه خالی)';
+
+  @override
+  String grpBImageBlock(String alt) {
+    return '[تصویر $alt]';
+  }
+
+  @override
+  String get grpBTaskCardBlock => '[کارت وظیفه]';
+
+  @override
+  String get grpBAllRevisions => 'همه نسخه‌ها';
+
+  @override
+  String get grpBNoRevisions => 'هنوز نسخه‌ای وجود ندارد.';
+
+  @override
+  String grpBVersionN(int version) {
+    return 'نسخه $version';
+  }
+
+  @override
+  String grpBVersionShort(int version) {
+    return 'v$version';
+  }
+
+  @override
+  String get grpBRevisionsLoadFailed =>
+      'بارگذاری تاریخچه ممکن نشد. تلاش دوباره';
+
+  @override
+  String get grpBRevisionLoadFailed => 'بارگذاری این نسخه ممکن نشد.';
+
+  @override
+  String get grpBRestoreVersion => 'بازیابی این نسخه';
+
+  @override
+  String grpBLinkedFrom(int count) {
+    return 'پیوند شده از ($count)';
+  }
+
+  @override
+  String get grpBNoBacklinks => 'هیچ صفحه‌ای به این صفحه اشاره نکرده است.';
+
+  @override
+  String grpBMarkdownTitle(String title) {
+    return 'مارک‌داون: $title';
+  }
+
+  @override
+  String get grpBMarkdownCopied => 'مارک‌داون کپی شد.';
+
+  @override
+  String get grpBSaveSaved => 'ذخیره شد';
+
+  @override
+  String get grpBSaveDirty => 'تغییرات ذخیره‌نشده';
+
+  @override
+  String get grpBSaveSaving => 'در حال ذخیره...';
+
+  @override
+  String get grpBSaveError => 'ذخیره ممکن نشد';
+
+  @override
+  String get grpBSaveConflict => 'تعارض: انتخاب کنید چه چیزی بماند';
+
+  @override
+  String get grpBDocsCrumb => 'اسناد';
+
+  @override
+  String get grpBDocNotFound =>
+      'این صفحه وجود ندارد یا نمی‌توانید آن را باز کنید.';
+
+  @override
+  String get grpBBackToAllPages => 'بازگشت به همه صفحه‌ها';
+
+  @override
+  String get grpBArchivedBanner =>
+      'این صفحه بایگانی شده است و فقط خواندنی است.';
+
+  @override
+  String get grpBConflictBanner =>
+      'شخص دیگری این صفحه را تغییر داد. تغییرات شما هنوز ذخیره نشده است.';
+
+  @override
+  String get grpBResolve => 'حل';
+
+  @override
+  String get grpBRemoteBanner =>
+      'نسخه جدیدتری توسط شخص دیگری ذخیره شده است. هنگام ذخیره ادغام خواهد شد.';
+
+  @override
+  String grpBIsEditing(String name) {
+    return '$name در حال ویرایش است';
+  }
+
+  @override
+  String grpBAreEditing(String names) {
+    return '$names در حال ویرایش هستند';
+  }
+
+  @override
+  String get grpBChangeIcon => 'تغییر نماد';
+
+  @override
+  String get grpBUntitled => 'بدون عنوان';
+
+  @override
+  String get grpBReadOnly => 'فقط خواندنی';
+
+  @override
+  String get grpBAccess => 'دسترسی';
+
+  @override
+  String get grpBExportMarkdown => 'صدور مارک‌داون';
+
+  @override
+  String grpBMoveUnder(String name) {
+    return 'انتقال «$name» به زیر';
+  }
+
+  @override
+  String get grpBTopLevel => 'سطح بالا';
+
+  @override
+  String get grpBCollapse => 'بستن';
+
+  @override
+  String get grpBExpand => 'باز کردن';
+
+  @override
+  String get grpBPageOptions => 'گزینه‌های صفحه';
+
+  @override
+  String get grpBNewSubpage => 'زیرصفحه جدید';
+
+  @override
+  String get grpBMoveUp => 'انتقال به بالا';
+
+  @override
+  String get grpBMoveDown => 'انتقال به پایین';
+
+  @override
+  String get grpBMoveTo => 'انتقال به...';
+
+  @override
+  String get grpBArchive => 'بایگانی';
+
+  @override
+  String get grpBHideArchived => 'پنهان کردن بایگانی‌شده‌ها';
+
+  @override
+  String get grpBShowArchived => 'نمایش بایگانی‌شده‌ها';
+
+  @override
+  String get grpBNewPage => 'صفحه جدید';
+
+  @override
+  String get grpBNoPagesYet => 'هنوز صفحه‌ای وجود ندارد.';
+
+  @override
+  String get grpBPagesLoadFailed => 'بارگذاری صفحه‌ها ممکن نشد. تلاش دوباره';
+
+  @override
+  String get grpBToday => 'امروز';
+
+  @override
+  String get grpBYesterday => 'دیروز';
+
+  @override
+  String get grpBSubtaskCreated => 'زیروظیفه ایجاد شد.';
+
+  @override
+  String get grpBComments => 'نظرها';
+
+  @override
+  String grpBCommentsCount(int count) {
+    return 'نظرها ($count)';
+  }
+
+  @override
+  String get grpBNoComments => 'هنوز نظری وجود ندارد.';
+
+  @override
+  String get grpBLoadEarlier => 'بارگذاری نظرهای قبلی';
+
+  @override
+  String get grpBPinned => 'سنجاق‌شده';
+
+  @override
+  String get grpBReplyHint => 'پاسخ…';
+
+  @override
+  String get grpBArchivedReadOnly =>
+      'این پروژه بایگانی شده است: نظرها فقط خواندنی هستند.';
+
+  @override
+  String get grpBReadOnlyComments =>
+      'می‌توانید نظرها را بخوانید اما نمی‌توانید بنویسید.';
+
+  @override
+  String get grpBCommentRemoved => 'نظر حذف شد';
+
+  @override
+  String get grpBUnpin => 'برداشتن سنجاق';
+
+  @override
+  String get grpBPin => 'سنجاق کردن';
+
+  @override
+  String get grpBMakeSubtask => 'تبدیل به زیروظیفه';
+
+  @override
+  String get grpBEditHistory => 'تاریخچه ویرایش';
+
+  @override
+  String grpBEditedTooltip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count بار ویرایش شد: برای دیدن تاریخچه ضربه بزنید',
+      one: 'یک بار ویرایش شد: برای دیدن تاریخچه ضربه بزنید',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpBEdited => 'ویرایش‌شده';
+
+  @override
+  String get grpBCommentActions => 'عملیات نظر';
+
+  @override
+  String get grpBWaitingToSend => 'در انتظار ارسال';
+
+  @override
+  String get grpBSending => 'در حال ارسال…';
+
+  @override
+  String get grpBNotSent => 'ارسال نشد';
+
+  @override
+  String get grpBDiscard => 'دور انداختن';
+
+  @override
+  String get grpBAddReaction => 'افزودن واکنش';
+
+  @override
+  String get grpBAuditAll => 'همه';
+
+  @override
+  String get grpBAuditTasks => 'وظایف';
+
+  @override
+  String get grpBAuditFiles => 'فایل‌ها';
+
+  @override
+  String get grpBAuditProjects => 'پروژه‌ها';
+
+  @override
+  String get grpBAuditMembers => 'اعضا';
+
+  @override
+  String get grpBAuditRoles => 'نقش‌ها';
+
+  @override
+  String get grpBAuditInvitations => 'دعوت‌ها';
+
+  @override
+  String get grpBAuditSignIn => 'ورود';
+
+  @override
+  String get grpBAuditTitle => 'گزارش ممیزی';
+
+  @override
+  String get grpBExportCsv => 'صدور به‌صورت CSV';
+
+  @override
+  String get grpBAuditDenied => 'اجازه خواندن گزارش ممیزی را ندارید.';
+
+  @override
+  String get grpBAuditEmpty => 'برای این فیلترها چیزی ثبت نشده است.';
+
+  @override
+  String get grpBShowOlder => 'نمایش قدیمی‌تر';
+
+  @override
+  String get grpBAnyone => 'هر کس';
+
+  @override
+  String get grpBAnyProject => 'هر پروژه';
+
+  @override
+  String get grpBAnyTime => 'هر زمان';
+
+  @override
+  String get grpBClearFilters => 'پاک کردن فیلترها';
+
+  @override
+  String get grpBBulkChange => 'بخشی از یک تغییر گروهی';
+
+  @override
+  String grpBCharacters(String size) {
+    return '($size نویسه)';
+  }
+
+  @override
+  String get grpBNoFieldChanges => 'هیچ تغییر فیلدی ثبت نشده است.';
+
+  @override
+  String get grpBAuditExportTitle => 'گزارش ممیزی (CSV)';
+
+  @override
+  String grpBAuditExportNote(int shown, int total) {
+    return 'نمایش $shown خط اول از $total خط. کپی یا ذخیره همه را شامل می‌شود.';
+  }
+
+  @override
+  String get grpBCsvCopied => 'CSV کپی شد.';
+
+  @override
+  String get grpCCancel => 'انصراف';
+
+  @override
+  String get grpCDelete => 'حذف';
+
+  @override
+  String get grpCRetry => 'تلاش مجدد';
+
+  @override
+  String get grpCBack => 'بازگشت';
+
+  @override
+  String get grpCUndo => 'بازگردانی';
+
+  @override
+  String get grpCField => 'فیلد';
+
+  @override
+  String get grpCStatus => 'وضعیت';
+
+  @override
+  String get grpCComment => 'نظر';
+
+  @override
+  String get grpCValue => 'مقدار';
+
+  @override
+  String get grpCDashNew => 'داشبورد جدید';
+
+  @override
+  String grpCDashDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get grpCDashDeleteBody =>
+      'ویجت‌های آن هم حذف می‌شوند. این کار قابل بازگشت نیست.';
+
+  @override
+  String get grpCDashTitle => 'داشبوردها';
+
+  @override
+  String grpCDashTitleProject(String project) {
+    return 'داشبوردها · $project';
+  }
+
+  @override
+  String get grpCDashEmpty => 'هنوز داشبوردی وجود ندارد.';
+
+  @override
+  String get grpCDashBlankDashboard => 'داشبورد خالی';
+
+  @override
+  String get grpCDashProjectOverview => 'نمای کلی پروژه';
+
+  @override
+  String get grpCDashMyWork => 'کارهای من';
+
+  @override
+  String get grpCDashBlank => 'خالی';
+
+  @override
+  String get grpCDashEdit => 'ویرایش';
+
+  @override
+  String get grpCDashRefresh => 'تازه‌سازی';
+
+  @override
+  String get grpCDashAddWidget => 'افزودن ویجت';
+
+  @override
+  String get grpCDashSave => 'ذخیره';
+
+  @override
+  String get grpCDashDialogTitle => 'داشبورد';
+
+  @override
+  String get grpCDashName => 'نام';
+
+  @override
+  String get grpCDashShareDenied =>
+      'اشتراک‌گذاری به مجوز dashboard.manage نیاز دارد.';
+
+  @override
+  String get grpCDashOk => 'تأیید';
+
+  @override
+  String get grpCImpTitle => 'درون‌ریزی و برون‌بری';
+
+  @override
+  String get grpCImpExport => 'برون‌بری';
+
+  @override
+  String get grpCImpDenied =>
+      'فقط مدیران می‌توانند داده‌ها را درون‌ریزی و برون‌بری کنند.';
+
+  @override
+  String get grpCImpPast => 'درون‌ریزی‌های قبلی';
+
+  @override
+  String get grpCImpNothing => 'هنوز چیزی درون‌ریزی نشده است.';
+
+  @override
+  String grpCImpTasksCount(int count) {
+    return '$count وظیفه';
+  }
+
+  @override
+  String get grpCImpResume => 'ادامه';
+
+  @override
+  String get grpCImpContinue => 'ادامه';
+
+  @override
+  String get grpCImpForget => 'فراموش کن';
+
+  @override
+  String get grpCImpUndoTitle => 'این درون‌ریزی بازگردانی شود؟';
+
+  @override
+  String get grpCImpUndoBody =>
+      'آنچه ساخته بود حذف می‌شود. هر چه دستی افزوده‌اید حفظ می‌شود.';
+
+  @override
+  String get grpCImpUndoConfirm => 'بازگردانی درون‌ریزی';
+
+  @override
+  String grpCImpClaimTitle(String name) {
+    return 'وظایف $name را بده به...';
+  }
+
+  @override
+  String get grpCImpChooseMember => 'یک عضو را انتخاب کنید';
+
+  @override
+  String get grpCImpAssign => 'واگذاری';
+
+  @override
+  String grpCImpAssigned(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n وظیفه واگذار شد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpCImpWaiting => 'افراد در انتظار پیوستن';
+
+  @override
+  String get grpCImpWaitingBody =>
+      'وقتی کسی با همان ایمیل بپیوندد، وظایفش خودکار واگذار می‌شود.';
+
+  @override
+  String get grpCImpNoEmail => 'بدون ایمیل';
+
+  @override
+  String grpCImpPersonSub(String email, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه',
+    );
+    return '$email · $_temp0';
+  }
+
+  @override
+  String get grpCImpAssignTo => 'واگذاری به...';
+
+  @override
+  String get grpCImpStepSource => 'منبع';
+
+  @override
+  String get grpCImpStepUpload => 'بارگذاری';
+
+  @override
+  String get grpCImpStepMap => 'نگاشت';
+
+  @override
+  String get grpCImpStepReview => 'بازبینی';
+
+  @override
+  String get grpCImpStepImport => 'درون‌ریزی';
+
+  @override
+  String get grpCImpWhere => 'داده‌های شما از کجا می‌آیند؟';
+
+  @override
+  String get grpCImpAuto => 'مطمئن نیستم: از روی فایل تشخیص بده';
+
+  @override
+  String get grpCImpNext => 'بعدی';
+
+  @override
+  String get grpCImpZipSeveral =>
+      'این فایل زیپ چند فایل داده دارد. کدام را می‌خواهید درون‌ریزی کنید؟ (خروجی فضای کار برای هر پروژه یک فایل دارد.)';
+
+  @override
+  String get grpCImpChooseAFile => 'یک فایل را انتخاب کنید';
+
+  @override
+  String get grpCImpChooseGeneric =>
+      'فایل مورد نظر برای درون‌ریزی را انتخاب کنید (‎.csv‎، ‎.json‎ یا یک ‎.zip‎ از آن).';
+
+  @override
+  String grpCImpChooseSource(String source) {
+    return 'فایل $source خود را انتخاب کنید (‎.csv‎، ‎.json‎ یا یک ‎.zip‎ از آن).';
+  }
+
+  @override
+  String get grpCImpSentNote =>
+      'فایل به سرور TaskForge شما ارسال و به‌صورت جریانی خوانده می‌شود، پس خروجی‌های بزرگ مشکلی ندارند. تا تأیید نکنید چیزی تغییر نمی‌کند.';
+
+  @override
+  String get grpCImpPickFile => 'انتخاب فایل';
+
+  @override
+  String get grpCImpResumeThis => 'ادامه این درون‌ریزی';
+
+  @override
+  String get grpCImpWhatHappens => 'این اتفاق خواهد افتاد';
+
+  @override
+  String get grpCImpCountTasks => 'وظیفه';
+
+  @override
+  String get grpCImpCountSubtasks => 'از آن‌ها زیروظیفه';
+
+  @override
+  String get grpCImpCountComments => 'نظر';
+
+  @override
+  String get grpCImpCountLinks => 'پیوند';
+
+  @override
+  String get grpCImpCountSprints => 'اسپرینت';
+
+  @override
+  String get grpCImpCountLabels => 'برچسب';
+
+  @override
+  String get grpCImpCountStatuses => 'وضعیت جدید';
+
+  @override
+  String get grpCImpCountPlaceholders => 'فرد در انتظار';
+
+  @override
+  String grpCImpAlready(int count) {
+    return '$count مورد از این‌ها قبلاً درون‌ریزی شده‌اند و تکراری نمی‌شوند و رد می‌شوند.';
+  }
+
+  @override
+  String grpCImpRowErrors(int count) {
+    return '$count ردیف قابل درون‌ریزی نیست و کنار گذاشته می‌شود.';
+  }
+
+  @override
+  String get grpCImpResumeImport => 'ادامه درون‌ریزی';
+
+  @override
+  String get grpCImpStart => 'شروع درون‌ریزی';
+
+  @override
+  String get grpCImpUndoRunBody =>
+      'وظایف، نظرها، پیوندها، اسپرینت‌ها و وضعیت‌هایی که این درون‌ریزی ساخته حذف می‌شوند. هر چه دستی به آن‌ها افزوده‌اید حفظ می‌شود.';
+
+  @override
+  String get grpCImpWaitingStart => 'در انتظار شروع...';
+
+  @override
+  String get grpCImpLinking => 'در حال پیوند وظایف...';
+
+  @override
+  String grpCImpProgress(int done, int total) {
+    return '$done از $total وظیفه';
+  }
+
+  @override
+  String get grpCImpCancel => 'لغو درون‌ریزی';
+
+  @override
+  String get grpCImpFinished => 'درون‌ریزی تمام شد';
+
+  @override
+  String get grpCImpUndone => 'درون‌ریزی بازگردانی شد';
+
+  @override
+  String get grpCImpCancelled => 'درون‌ریزی لغو شد';
+
+  @override
+  String get grpCImpStopped => 'درون‌ریزی متوقف شد';
+
+  @override
+  String get grpCImpOpenProject => 'باز کردن پروژه';
+
+  @override
+  String get grpCImpAnother => 'درون‌ریزی فایل دیگر';
+
+  @override
+  String grpCImpRemoved(num tasks) {
+    return '$tasks وظیفه حذف شد.';
+  }
+
+  @override
+  String grpCImpRemovedKept(num tasks, num kept) {
+    return '$tasks وظیفه حذف شد، $kept وظیفه که زیروظایف خودتان را دارند حفظ شد.';
+  }
+
+  @override
+  String get grpCImpTheFile => 'فایل';
+
+  @override
+  String grpCImpSummary(int issues, int comments, int links, String file) {
+    return '$issues وظیفه، $comments نظر و $links پیوند در $file یافت شد.';
+  }
+
+  @override
+  String grpCImpSummarySub(
+    int issues,
+    int subtasks,
+    int comments,
+    int links,
+    String file,
+  ) {
+    return '$issues وظیفه ($subtasks زیروظیفه)، $comments نظر و $links پیوند در $file یافت شد.';
+  }
+
+  @override
+  String get grpCImpPriUrgent => 'فوری';
+
+  @override
+  String get grpCImpPriHigh => 'بالا';
+
+  @override
+  String get grpCImpPriNormal => 'عادی';
+
+  @override
+  String get grpCImpPriLow => 'پایین';
+
+  @override
+  String get grpCImpPriNone => 'هیچ';
+
+  @override
+  String get grpCImpFTitle => 'عنوان *';
+
+  @override
+  String get grpCImpFDescription => 'توضیحات';
+
+  @override
+  String get grpCImpFPriority => 'اولویت';
+
+  @override
+  String get grpCImpFAssignee => 'مسئول';
+
+  @override
+  String get grpCImpFReporter => 'گزارش‌دهنده';
+
+  @override
+  String get grpCImpFCreated => 'ایجاد شده';
+
+  @override
+  String get grpCImpFUpdated => 'به‌روزرسانی شده';
+
+  @override
+  String get grpCImpFStart => 'تاریخ شروع';
+
+  @override
+  String get grpCImpFDue => 'سررسید';
+
+  @override
+  String get grpCImpFLabels => 'برچسب‌ها';
+
+  @override
+  String get grpCImpFSprint => 'اسپرینت';
+
+  @override
+  String get grpCImpFParent => 'والد (شناسه)';
+
+  @override
+  String get grpCImpFId => 'شناسه';
+
+  @override
+  String get grpCImpFKey => 'کلید';
+
+  @override
+  String get grpCImpFPoints => 'امتیاز داستان';
+
+  @override
+  String get grpCImpFEstimate => 'برآورد';
+
+  @override
+  String get grpCImpFType => 'نوع';
+
+  @override
+  String get grpCImpPriorities => 'اولویت‌ها';
+
+  @override
+  String grpCImpKeepLabels(int count) {
+    return 'نگه داشتن $count برچسب';
+  }
+
+  @override
+  String get grpCImpKeepLabelsSub => 'به‌صورت فیلد «برچسب‌ها» روی هر وظیفه.';
+
+  @override
+  String grpCImpSprintsCreated(String sprints) {
+    return 'اسپرینت‌هایی که ساخته می‌شوند: $sprints';
+  }
+
+  @override
+  String get grpCImpReview => 'بازبینی';
+
+  @override
+  String get grpCImpReadAs => 'خواندن به‌عنوان';
+
+  @override
+  String get grpCImpZipFile => 'فایل داخل زیپ';
+
+  @override
+  String get grpCImpChooseOne => 'یکی را انتخاب کنید';
+
+  @override
+  String get grpCImpInto => 'درون‌ریزی به';
+
+  @override
+  String get grpCImpNewProject => 'یک پروژه جدید';
+
+  @override
+  String get grpCImpExistingProject => 'یک پروژه موجود';
+
+  @override
+  String get grpCImpProjectName => 'نام پروژه';
+
+  @override
+  String get grpCImpColumns => 'ستون‌ها';
+
+  @override
+  String get grpCImpNotInFile => '(در فایل نیست)';
+
+  @override
+  String get grpCImpStatuses => 'وضعیت‌ها';
+
+  @override
+  String get grpCImpSameName => 'همان نام (در صورت نبود ایجاد شود)';
+
+  @override
+  String get grpCImpPeople => 'افراد';
+
+  @override
+  String get grpCImpNotMember => 'هنوز عضو نیست (هنگام پیوستن واگذار شود)';
+
+  @override
+  String get grpCImpUnassigned => 'بدون مسئول بگذار';
+
+  @override
+  String get grpCImpFirst200 =>
+      'فقط ۲۰۰ نفر اول فهرست شده‌اند؛ بقیه به‌صورت جانشین منتظر می‌مانند.';
+
+  @override
+  String grpCAutoDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get grpCAutoDeleteBody =>
+      'قانون برای همیشه متوقف می‌شود. تاریخچه اجرای آن هم حذف می‌شود.';
+
+  @override
+  String get grpCAutoTitle => 'خودکارسازی‌ها';
+
+  @override
+  String grpCAutoTitleProject(String project) {
+    return 'خودکارسازی‌ها · $project';
+  }
+
+  @override
+  String get grpCAutoMissing => 'پروژه یافت نشد.';
+
+  @override
+  String get grpCAutoRules => 'قوانین';
+
+  @override
+  String get grpCAutoRunHistory => 'تاریخچه اجرا';
+
+  @override
+  String get grpCAutoNew => 'خودکارسازی جدید';
+
+  @override
+  String get grpCAutoReadOnly => 'فقط خواندنی';
+
+  @override
+  String grpCAutoLimit(int limit) {
+    return 'به سقف $limit قانون رسیده‌اید.';
+  }
+
+  @override
+  String grpCAutoRuleFilter(String name) {
+    return 'قانون: $name';
+  }
+
+  @override
+  String get grpCAutoEmpty =>
+      'هنوز خودکارسازی‌ای وجود ندارد. یک قانون می‌گوید: وقتی چیزی رخ داد و اگر مطابقت داشت، این کارها را انجام بده.';
+
+  @override
+  String grpCAutoWhen(String trigger, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اقدام',
+    );
+    return 'وقتی $trigger · $_temp0';
+  }
+
+  @override
+  String get grpCAutoNeverRun => 'هرگز اجرا نشده';
+
+  @override
+  String get grpCAutoHistory => 'تاریخچه';
+
+  @override
+  String get grpCAutoDryRun => 'اجرای آزمایشی';
+
+  @override
+  String get grpCAutoStatusChanges => 'وضعیتی تغییر می‌کند';
+
+  @override
+  String grpCAutoMovesTo(String status) {
+    return 'وظیفه‌ای به $status منتقل می‌شود';
+  }
+
+  @override
+  String grpCAutoFieldChanges(String field) {
+    return '$field تغییر می‌کند';
+  }
+
+  @override
+  String get grpCAutoSomeoneAssigned => 'کسی واگذار می‌شود';
+
+  @override
+  String grpCAutoUserAssigned(String user) {
+    return '$user واگذار می‌شود';
+  }
+
+  @override
+  String get grpCAutoDueReached => 'سررسید فرا می‌رسد';
+
+  @override
+  String grpCAutoDaysBefore(int days) {
+    return '$days روز پیش از سررسید';
+  }
+
+  @override
+  String get grpCAutoDeletedStatus => 'وضعیت حذف‌شده';
+
+  @override
+  String get grpCAutoUnknownPerson => 'فرد ناشناس';
+
+  @override
+  String get grpCAutoEvent => 'رویداد';
+
+  @override
+  String get grpCAutoMovesToLabel => 'منتقل می‌شود به';
+
+  @override
+  String get grpCAutoAnyStatus => 'هر وضعیت';
+
+  @override
+  String get grpCAutoAssignedPerson => 'فرد واگذارشده';
+
+  @override
+  String get grpCAutoAnyone => 'هر کسی';
+
+  @override
+  String grpCAutoDaysLabel(int max) {
+    return 'روز پیش از سررسید (۰ تا $max)';
+  }
+
+  @override
+  String grpCAutoTokensHelp(String tokens) {
+    return 'می‌توانید از $tokens استفاده کنید';
+  }
+
+  @override
+  String get grpCAutoDateHint => 'YYYY-MM-DD';
+
+  @override
+  String grpCAutoUseToken(String token) {
+    return 'استفاده از $token';
+  }
+
+  @override
+  String get grpCAutoHow => 'چگونه';
+
+  @override
+  String get grpCAutoReplaceAssignees => 'جایگزینی مسئولان با';
+
+  @override
+  String get grpCAutoAdd => 'افزودن';
+
+  @override
+  String get grpCAutoRemoveEveryone => 'حذف همه';
+
+  @override
+  String get grpCAutoSubtaskTitle => 'عنوان زیروظیفه';
+
+  @override
+  String get grpCAutoMessage => 'پیام';
+
+  @override
+  String get grpCAutoAddress => 'نشانی';
+
+  @override
+  String get grpCAutoAddressHelp =>
+      'فقط نشانی‌های عمومی http(s)؛ نشانی‌های خصوصی رد می‌شوند.';
+
+  @override
+  String get grpCAutoMethod => 'روش';
+
+  @override
+  String get grpCAutoDoThis => 'این کار را انجام بده';
+
+  @override
+  String grpDActionFailed(String error) {
+    return 'این کار انجام نشد ($error).';
+  }
+
+  @override
+  String get grpDSwitchWorkspace => 'تغییر فضای کار';
+
+  @override
+  String grpDWorkspaceHere(String name) {
+    return '$name (اینجا)';
+  }
+
+  @override
+  String get grpDNewDoc => 'سند جدید';
+
+  @override
+  String get grpDTitle => 'عنوان';
+
+  @override
+  String get grpDUntitled => 'بدون عنوان';
+
+  @override
+  String get grpDNewDashboard => 'داشبورد جدید';
+
+  @override
+  String get grpDNewSprint => 'اسپرینت جدید';
+
+  @override
+  String grpDStatusOf(String id) {
+    return 'وضعیت $id';
+  }
+
+  @override
+  String get grpDNewTask => 'وظیفه جدید';
+
+  @override
+  String get grpDCancel => 'لغو';
+
+  @override
+  String get grpDCreate => 'ایجاد';
+
+  @override
+  String get grpDSort => 'مرتب‌سازی';
+
+  @override
+  String get grpDNoSort => 'بدون مرتب‌سازی';
+
+  @override
+  String grpDSortBy(String names) {
+    return 'مرتب‌سازی: $names';
+  }
+
+  @override
+  String get grpDGroup => 'گروه';
+
+  @override
+  String get grpDNoGrouping => 'بدون گروه‌بندی';
+
+  @override
+  String grpDGroupBy(String name) {
+    return 'گروه: $name';
+  }
+
+  @override
+  String get grpDColumns => 'ستون‌ها';
+
+  @override
+  String get grpDRefresh => 'تازه‌سازی';
+
+  @override
+  String get grpDLayoutNotSaved =>
+      'چیدمان شما ذخیره نشد. در تغییر بعدی دوباره تلاش می‌شود.';
+
+  @override
+  String get grpDLayouts => 'چیدمان‌ها';
+
+  @override
+  String get grpDResetLayout => 'بازنشانی چیدمان من';
+
+  @override
+  String get grpDShareLayoutMenu => 'اشتراک‌گذاری این چیدمان…';
+
+  @override
+  String grpDDeleteShared(String name) {
+    return 'حذف «$name» اشتراکی';
+  }
+
+  @override
+  String grpDDeleteSharedTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get grpDDeleteSharedBody => 'برای همه در این پروژه ناپدید می‌شود.';
+
+  @override
+  String get grpDDelete => 'حذف';
+
+  @override
+  String grpDDeletedNamed(String name) {
+    return '«$name» حذف شد';
+  }
+
+  @override
+  String grpDSharedNamed(String name) {
+    return '«$name» به اشتراک گذاشته شد';
+  }
+
+  @override
+  String get grpDShareLayoutTitle => 'اشتراک‌گذاری این چیدمان';
+
+  @override
+  String get grpDName => 'نام';
+
+  @override
+  String get grpDShare => 'اشتراک‌گذاری';
+
+  @override
+  String get grpDTaskNotFound => 'وظیفه پیدا نشد.';
+
+  @override
+  String get grpDDeleteTask => 'حذف وظیفه';
+
+  @override
+  String get grpDClose => 'بستن';
+
+  @override
+  String get grpDPriority => 'اولویت';
+
+  @override
+  String get grpDStart => 'شروع';
+
+  @override
+  String get grpDDue => 'سررسید';
+
+  @override
+  String get grpDAssignees => 'مسئولان';
+
+  @override
+  String get grpDDescription => 'توضیحات';
+
+  @override
+  String grpDTaskDeleted(String id) {
+    return '$id حذف شد';
+  }
+
+  @override
+  String get grpDUndo => 'واگرد';
+
+  @override
+  String get grpDStatus => 'وضعیت';
+
+  @override
+  String grpDClearField(String label) {
+    return 'پاک کردن $label';
+  }
+
+  @override
+  String get grpDDueTime => 'زمان سررسید (ساعت شما)';
+
+  @override
+  String get grpDClearDueTime => 'پاک کردن زمان سررسید';
+
+  @override
+  String get grpDAllOf => 'همه این‌ها';
+
+  @override
+  String get grpDAnyOf => 'هر یک از این‌ها';
+
+  @override
+  String get grpDNot => 'نه';
+
+  @override
+  String get grpDRemoveGroup => 'حذف گروه';
+
+  @override
+  String get grpDCondition => 'شرط';
+
+  @override
+  String get grpDFieldRemoved => 'فیلد (حذف شده)';
+
+  @override
+  String get grpDRemoveCondition => 'حذف شرط';
+
+  @override
+  String get grpDOpBefore => 'قبل از';
+
+  @override
+  String get grpDOpOnOrBefore => 'در یا قبل از';
+
+  @override
+  String get grpDOpAfter => 'بعد از';
+
+  @override
+  String get grpDOpOnOrAfter => 'در یا بعد از';
+
+  @override
+  String get grpDOpLessThan => 'کمتر از';
+
+  @override
+  String get grpDOpAtMost => 'حداکثر';
+
+  @override
+  String get grpDOpMoreThan => 'بیشتر از';
+
+  @override
+  String get grpDOpAtLeast => 'حداقل';
+
+  @override
+  String get grpDYes => 'بله';
+
+  @override
+  String get grpDNo => 'خیر';
+
+  @override
+  String get grpDCurrentSprint => 'اسپرینت فعلی';
+
+  @override
+  String get grpDMe => 'من';
+
+  @override
+  String get grpDChoose => 'انتخاب کنید…';
+
+  @override
+  String get grpDValue => 'مقدار';
+
+  @override
+  String get grpDPickDate => 'انتخاب تاریخ';
+
+  @override
+  String get grpDOrderByLabel => 'مرتب‌سازی بر اساس ';
+
+  @override
+  String get grpDAscending => 'صعودی';
+
+  @override
+  String get grpDDescending => 'نزولی';
+
+  @override
+  String get grpDRemoveOrdering => 'حذف مرتب‌سازی';
+
+  @override
+  String get grpDOrderBy => 'مرتب‌سازی بر اساس';
+
+  @override
+  String get grpDRepeatNothingToUpdate =>
+      'وظایف جدید از این وظیفه استفاده می‌کنند. هیچ وظیفه بازی نیاز به تغییر نداشت.';
+
+  @override
+  String grpDRepeatUpdatedLater(int count) {
+    return '$count وظیفه باز بعدی به‌روزرسانی شد.';
+  }
+
+  @override
+  String get grpDRepeat => 'تکرار';
+
+  @override
+  String grpDRepeatUnsupported(String summary) {
+    return '«$summary» به روشی تنظیم شده که این ویرایشگر نمی‌تواند نشان دهد، پس اینجا قابل تغییر نیست. همچنان می‌توانید آن را متوقف یا قطع کنید.';
+  }
+
+  @override
+  String get grpDSkipWeekends => 'رد شدن از آخر هفته‌ها';
+
+  @override
+  String get grpDStopRepeating => 'توقف تکرار';
+
+  @override
+  String get grpDResume => 'ادامه';
+
+  @override
+  String get grpDPause => 'توقف موقت';
+
+  @override
+  String get grpDUseForFuture => 'استفاده از این وظیفه برای وظایف آینده';
+
+  @override
+  String get grpDSave => 'ذخیره';
+
+  @override
+  String get grpDEvery => 'هر';
+
+  @override
+  String get grpDRepeatByDay => 'در یک روز از ماه';
+
+  @override
+  String get grpDRepeatByWeekday => 'در n‌امین روز هفته';
+
+  @override
+  String grpDDayNumber(int day) {
+    return 'روز $day';
+  }
+
+  @override
+  String get grpDNth1 => 'اول';
+
+  @override
+  String get grpDNth2 => 'دوم';
+
+  @override
+  String get grpDNth3 => 'سوم';
+
+  @override
+  String get grpDNth4 => 'چهارم';
+
+  @override
+  String get grpDNthLast => 'آخر';
+
+  @override
+  String get grpDEnds => 'پایان';
+
+  @override
+  String get grpDEndNever => 'هرگز';
+
+  @override
+  String get grpDEndAfter => 'پس از';
+
+  @override
+  String get grpDEndOn => 'در';
+
+  @override
+  String get grpDTasksWord => 'وظیفه';
+
+  @override
+  String get grpDMakeIt => 'ایجاد شود';
+
+  @override
+  String get grpDDaysAhead => 'روز پیش از سررسید';
+
+  @override
+  String grpDRepeatAt(String time) {
+    return 'در ساعت $time';
+  }
+
+  @override
+  String get grpDNoFurtherDates => 'تاریخ دیگری وجود ندارد.';
+
+  @override
+  String grpDNextDates(String dates) {
+    return 'بعدی: $dates';
+  }
+
+  @override
+  String get grpEBack => 'بازگشت';
+
+  @override
+  String get grpECancel => 'لغو';
+
+  @override
+  String get grpEName => 'نام';
+
+  @override
+  String get grpERetry => 'تلاش دوباره';
+
+  @override
+  String get grpEWorkspaceSettingsTitle => 'تنظیمات فضای کار';
+
+  @override
+  String get grpEWorkspacesLoadRetry =>
+      'فضاهای کار شما بارگذاری نشد. تلاش دوباره';
+
+  @override
+  String get grpEMembers => 'اعضا';
+
+  @override
+  String get grpEMembersSub => 'افراد، دعوت‌ها و ترک کردن';
+
+  @override
+  String get grpERolesPerms => 'نقش‌ها و دسترسی‌ها';
+
+  @override
+  String get grpERolesPermsSub => 'چه کسی چه کاری می‌تواند بکند';
+
+  @override
+  String get grpEAuditLog => 'گزارش ممیزی';
+
+  @override
+  String get grpEAuditLogSub => 'چه کسی چه چیزی را و چه زمانی تغییر داد';
+
+  @override
+  String get grpEImportExport => 'درون‌ریزی و برون‌بری';
+
+  @override
+  String get grpEImportExportSub =>
+      'داده‌های Jira، ClickUp یا CSV را وارد کنید؛ و خارج کنید';
+
+  @override
+  String get grpEWorkspaceUpdated => 'فضای کار به‌روزرسانی شد.';
+
+  @override
+  String get grpEGeneral => 'عمومی';
+
+  @override
+  String get grpEChangeLogo => 'تغییر نشان';
+
+  @override
+  String get grpEUrl => 'نشانی';
+
+  @override
+  String get grpERefresh => 'تازه‌سازی';
+
+  @override
+  String get grpESaveChanges => 'ذخیره تغییرات';
+
+  @override
+  String get grpENotifSettings => 'تنظیمات اعلان‌ها';
+
+  @override
+  String get grpEPushOffNotice =>
+      'اعلان‌ها برای این دستگاه خاموش است. می‌توانید آن‌ها را در تنظیمات سیستم مجاز کنید؛ انتخاب شما ذخیره شده است.';
+
+  @override
+  String get grpEZoneInvalid =>
+      'از نامی مانند Europe/Paris یا UTC استفاده کنید.';
+
+  @override
+  String get grpEQuietDifferent => 'زمان شروع و پایان باید متفاوت باشند.';
+
+  @override
+  String get grpEWhatReachesYou => 'آنچه به شما می‌رسد';
+
+  @override
+  String get grpEInbox => 'صندوق ورودی';
+
+  @override
+  String get grpEPush => 'اعلان فوری';
+
+  @override
+  String get grpEEmail => 'ایمیل';
+
+  @override
+  String get grpEQuietHours => 'ساعات سکوت';
+
+  @override
+  String get grpEQuietHold => 'نگه داشتن اعلان فوری و ایمیل در ساعات سکوت';
+
+  @override
+  String get grpEQuietHoldSub =>
+      'صندوق ورودی همیشه پر می‌شود؛ فقط اعلان‌ها منتظر می‌مانند.';
+
+  @override
+  String get grpEFrom => 'از';
+
+  @override
+  String get grpEUntil => 'تا';
+
+  @override
+  String get grpETimeZoneDigest => 'منطقه زمانی و خلاصه';
+
+  @override
+  String get grpETimeZone => 'منطقه زمانی';
+
+  @override
+  String get grpETimeZoneHelper =>
+      'ساعات سکوت و خلاصه از این منطقه پیروی می‌کنند.';
+
+  @override
+  String get grpEUseDeviceZone => 'استفاده از منطقه زمانی این دستگاه';
+
+  @override
+  String get grpETypeZone =>
+      'به جای آن منطقه زمانی خود را بنویسید، مثلاً Europe/Paris.';
+
+  @override
+  String get grpEDigestAt => 'خلاصه روزانه ارسال می‌شود در';
+
+  @override
+  String get grpEEditField => 'ویرایش فیلد';
+
+  @override
+  String get grpENewField => 'فیلد جدید';
+
+  @override
+  String get grpEType => 'نوع';
+
+  @override
+  String get grpEOptions => 'گزینه‌ها';
+
+  @override
+  String get grpEColour => 'رنگ';
+
+  @override
+  String get grpELabel => 'برچسب';
+
+  @override
+  String get grpERemoveOption => 'حذف گزینه';
+
+  @override
+  String get grpEAddOption => 'افزودن گزینه';
+
+  @override
+  String get grpERequired => 'الزامی';
+
+  @override
+  String get grpERequiredSub => 'وظایف جدید باید مقدار داشته باشند.';
+
+  @override
+  String get grpEDefaultValue => 'مقدار پیش‌فرض';
+
+  @override
+  String get grpEShowIn => 'نمایش در';
+
+  @override
+  String get grpESave => 'ذخیره';
+
+  @override
+  String get grpEAddField => 'افزودن فیلد';
+
+  @override
+  String get grpEOptionN => 'گزینه ۱';
+
+  @override
+  String get grpEProblemName => 'برای فیلد نامی بگذارید.';
+
+  @override
+  String get grpEProblemOne => 'دست‌کم یک گزینه اضافه کنید.';
+
+  @override
+  String get grpEProblemLabel => 'هر گزینه به برچسب نیاز دارد.';
+
+  @override
+  String get grpEProblemDup => 'دو گزینه برچسب یکسان دارند.';
+
+  @override
+  String get grpEOptionsInUse => 'گزینه‌ها در حال استفاده هستند';
+
+  @override
+  String get grpERemovedOption => 'گزینه حذف‌شده';
+
+  @override
+  String grpERemapLabel(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مقدار',
+      one: '۱ مقدار',
+    );
+    return '$label ($_temp0) تبدیل می‌شود به';
+  }
+
+  @override
+  String get grpENothingClear => 'هیچ (پاک کردن)';
+
+  @override
+  String get grpEApply => 'اعمال';
+
+  @override
+  String get grpEPrivate => 'خصوصی';
+
+  @override
+  String get grpESprints => 'اسپرینت‌ها';
+
+  @override
+  String get grpEAutomations => 'خودکارسازی‌ها';
+
+  @override
+  String get grpESearch => 'جستجو';
+
+  @override
+  String get grpETimesheet => 'جدول زمانی';
+
+  @override
+  String get grpEDashboards => 'داشبوردها';
+
+  @override
+  String get grpEDocs => 'اسناد';
+
+  @override
+  String get grpEProjects => 'پروژه‌ها';
+
+  @override
+  String get grpENewProject => 'پروژه جدید';
+
+  @override
+  String get grpEFavorites => 'علاقه‌مندی‌ها';
+
+  @override
+  String get grpEProjectsLoadRetry => 'پروژه‌ها بارگذاری نشدند. تلاش دوباره';
+
+  @override
+  String get grpEArchivedProjects => 'پروژه‌های بایگانی‌شده';
+
+  @override
+  String get grpEPrivateProjects => 'پروژه‌های خصوصی';
+
+  @override
+  String get grpENoProjects => 'هنوز پروژه‌ای نیست';
+
+  @override
+  String get grpECreateFirstProject => 'اولین پروژه خود را بسازید';
+
+  @override
+  String get grpEMonth1 => 'ژانویه';
+
+  @override
+  String get grpEMonth2 => 'فوریه';
+
+  @override
+  String get grpEMonth3 => 'مارس';
+
+  @override
+  String get grpEMonth4 => 'آوریل';
+
+  @override
+  String get grpEMonth5 => 'مه';
+
+  @override
+  String get grpEMonth6 => 'ژوئن';
+
+  @override
+  String get grpEMonth7 => 'ژوئیه';
+
+  @override
+  String get grpEMonth8 => 'اوت';
+
+  @override
+  String get grpEMonth9 => 'سپتامبر';
+
+  @override
+  String get grpEMonth10 => 'اکتبر';
+
+  @override
+  String get grpEMonth11 => 'نوامبر';
+
+  @override
+  String get grpEMonth12 => 'دسامبر';
+
+  @override
+  String get grpEWeekLocale => 'پیش‌فرض زبان';
+
+  @override
+  String get grpEMonday => 'دوشنبه';
+
+  @override
+  String get grpESaturday => 'شنبه';
+
+  @override
+  String get grpESunday => 'یکشنبه';
+
+  @override
+  String get grpEPrevious => 'قبلی';
+
+  @override
+  String get grpENext => 'بعدی';
+
+  @override
+  String get grpEToday => 'امروز';
+
+  @override
+  String get grpEUnscheduled => 'برنامه‌ریزی‌نشده';
+
+  @override
+  String get grpEMonth => 'ماه';
+
+  @override
+  String get grpEWeek => 'هفته';
+
+  @override
+  String get grpEDay => 'روز';
+
+  @override
+  String get grpEColourBy => 'رنگ بر اساس';
+
+  @override
+  String get grpEColourByProject => 'رنگ بر اساس پروژه';
+
+  @override
+  String get grpEColourByStatus => 'رنگ بر اساس وضعیت';
+
+  @override
+  String get grpEColourByPriority => 'رنگ بر اساس اولویت';
+
+  @override
+  String get grpEColourChip => 'رنگ';
+
+  @override
+  String get grpEWeekStartsOn => 'هفته شروع می‌شود از';
+
+  @override
+  String get grpEHideDone => 'پنهان کردن انجام‌شده‌ها';
+
+  @override
+  String get grpELayoutNotSaved =>
+      'چیدمان تقویم شما ذخیره نشد. در تغییر بعدی دوباره تلاش می‌شود.';
+
+  @override
+  String get grpEEnterName => 'یک نام وارد کنید.';
+
+  @override
+  String get grpENewRole => 'نقش جدید';
+
+  @override
+  String get grpECreate => 'ایجاد';
+
+  @override
+  String get grpERenameRole => 'تغییر نام نقش';
+
+  @override
+  String get grpERename => 'تغییر نام';
+
+  @override
+  String grpEDeleteRoleTitle(String name) {
+    return '\"$name\" حذف شود؟';
+  }
+
+  @override
+  String get grpERoleNoOne => 'هیچ‌کس این نقش را ندارد.';
+
+  @override
+  String grpERoleMoveMembers(int count) {
+    return '$count عضو این نقش را دارند. آن‌ها را منتقل کنید به:';
+  }
+
+  @override
+  String get grpEChooseRole => 'یک نقش انتخاب کنید';
+
+  @override
+  String get grpEDelete => 'حذف';
+
+  @override
+  String grpFBulkDeleted(int count) {
+    return '$count وظیفه حذف شد';
+  }
+
+  @override
+  String grpFBulkUpdated(int count) {
+    return '$count وظیفه به‌روزرسانی شد';
+  }
+
+  @override
+  String grpFBulkPartialDeleted(int done, int total, int failed) {
+    return '$done از $total وظیفه حذف شد؛ $failed حذف نشد.';
+  }
+
+  @override
+  String grpFBulkPartialUpdated(int done, int total, int failed) {
+    return '$done از $total وظیفه به‌روزرسانی شد؛ $failed نشد.';
+  }
+
+  @override
+  String get grpFDetails => 'جزئیات';
+
+  @override
+  String grpFBulkDeleteTitle(int count) {
+    return '$count وظیفه حذف شود؟';
+  }
+
+  @override
+  String get grpFBulkDeleteBody =>
+      'زیروظیفه‌های آن‌ها هم حذف می‌شود. می‌توانید از سطل زباله بازیابی کنید.';
+
+  @override
+  String get grpFDelete => 'حذف';
+
+  @override
+  String get grpFSetStatus => 'تنظیم وضعیت';
+
+  @override
+  String get grpFSetPriority => 'تنظیم اولویت';
+
+  @override
+  String get grpFStatus => 'وضعیت';
+
+  @override
+  String get grpFPriority => 'اولویت';
+
+  @override
+  String get grpFAssign => 'واگذاری';
+
+  @override
+  String get grpFClear => 'پاک کردن';
+
+  @override
+  String grpFBulkUpdating(int done, int total) {
+    return 'به‌روزرسانی $done از $total…';
+  }
+
+  @override
+  String grpFBulkSelected(int count) {
+    return '$count انتخاب شد';
+  }
+
+  @override
+  String grpFBulkNotChanged(int count) {
+    return '$count وظیفه تغییر نکرد';
+  }
+
+  @override
+  String get grpFTask => 'وظیفه';
+
+  @override
+  String get grpFLinks => 'پیوندها';
+
+  @override
+  String get grpFAddLink => 'افزودن پیوند';
+
+  @override
+  String get grpFNoLinks => 'هنوز پیوندی نیست.';
+
+  @override
+  String get grpFRemoveLink => 'حذف پیوند';
+
+  @override
+  String get grpFLinkSearchHint => 'جستجوی وظایف در هر پروژه';
+
+  @override
+  String get grpFCloseDuplicate => 'بستن مورد تکراری';
+
+  @override
+  String get grpFLinkAction => 'پیوند زدن';
+
+  @override
+  String get grpFUnassigned => 'بدون مسئول';
+
+  @override
+  String get grpFNoValue => 'بدون مقدار';
+
+  @override
+  String get grpFAssignee => 'مسئول';
+
+  @override
+  String grpFPresenceEditing(String name) {
+    return '$name در حال ویرایش است';
+  }
+
+  @override
+  String grpFPresenceViewing(String name) {
+    return '$name در حال مشاهده است';
+  }
+
+  @override
+  String grpFEditingOne(String name) {
+    return '$name در حال ویرایش این است';
+  }
+
+  @override
+  String grpFEditingMany(int count) {
+    return '$count نفر در حال ویرایش این هستند';
+  }
+
+  @override
+  String grpFDeleteTaskTitle(String id) {
+    return '$id حذف شود؟';
+  }
+
+  @override
+  String grpFDeleteSubtasksExplain(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count زیروظیفه دارد. با آن‌ها چه شود؟',
+      one: '۱ زیروظیفه دارد. با آن چه شود؟',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpFKeepSubtasks => 'نگه داشتن (یک سطح بالا)';
+
+  @override
+  String get grpFDeleteThemToo => 'آن‌ها هم حذف شوند';
+
+  @override
+  String grpFOpenSubtasksTitle(String id) {
+    return '$id زیروظیفه‌های باز دارد';
+  }
+
+  @override
+  String grpFOpenSubtasksExplain(int count, String status) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count زیروظیفه تمام نشده است. آن‌ها را هم به $status ببریم؟',
+      one: '۱ زیروظیفه تمام نشده است. آن را هم به $status ببریم؟',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpFLeaveOpen => 'پرانیستاه بگذار';
+
+  @override
+  String get grpFCompleteAll => 'تکمیل همه';
+
+  @override
+  String grpFMoveUnderTitle(String id) {
+    return 'انتقال $id به زیر…';
+  }
+
+  @override
+  String get grpFTopLevel => 'سطح بالا (بدون والد)';
+
+  @override
+  String get grpFNoOtherParent => 'وظیفهٔ دیگری برای قرار دادن زیر آن نیست.';
+
+  @override
+  String get grpFSubtasks => 'زیروظیفه‌ها';
+
+  @override
+  String get grpFAddSubtaskHint => 'زیروظیفه‌ای بیفزایید و Enter بزنید';
+
+  @override
+  String get grpFActionAddSubtask => 'افزودن زیروظیفه';
+
+  @override
+  String get grpFActionMoveUnder => 'انتقال به زیر…';
+
+  @override
+  String get grpFActionMakeTopLevel => 'تبدیل به سطح بالا';
+
+  @override
+  String get grpFBlockedByPending => 'مسدود با وظایفی که هنوز انجام نشده‌اند';
+
+  @override
+  String grpFBlockedBy(String names) {
+    return 'مسدود توسط $names';
+  }
+
+  @override
+  String get grpFBlocked => 'مسدود';
+
+  @override
+  String get grpFBlockedTitle => 'این وظیفه مسدود است';
+
+  @override
+  String grpFBlockedTextOne(String blockers) {
+    return 'با $blockers مسدود شده که هنوز انجام نشده است.';
+  }
+
+  @override
+  String grpFBlockedTextMany(String blockers) {
+    return 'با $blockers مسدود شده که هنوز انجام نشده‌اند.';
+  }
+
+  @override
+  String get grpFOk => 'تأیید';
+
+  @override
+  String get grpFCompleteAnyway => 'به هر حال تکمیل شود';
+
+  @override
+  String grpFConflictTitle(String field) {
+    return 'کسی $field را تغییر داد';
+  }
+
+  @override
+  String get grpFTheirs => 'مقدار آن‌ها';
+
+  @override
+  String get grpFYours => 'مقدار شما';
+
+  @override
+  String get grpFEmpty => '(خالی)';
+
+  @override
+  String get grpFTakeTheirs => 'مقدار آن‌ها را بگیر';
+
+  @override
+  String get grpFKeepMine => 'مقدار من بماند';
+
+  @override
+  String get grpFFieldTitle => 'عنوان';
+
+  @override
+  String get grpFFieldDescription => 'توضیحات';
+
+  @override
+  String get grpFFieldStatus => 'وضعیت';
+
+  @override
+  String get grpFFieldPriority => 'اولویت';
+
+  @override
+  String get grpFFieldStartDate => 'تاریخ شروع';
+
+  @override
+  String get grpFFieldDueDate => 'تاریخ سررسید';
+
+  @override
+  String get grpFFieldAssignees => 'مسئولان';
+
+  @override
+  String get grpFFields => 'فیلدها';
+
+  @override
+  String get grpFRequiredFieldsIntro =>
+      'این فیلدها پیش از ایجاد وظیفه به مقدار نیاز دارند.';
+
+  @override
+  String get grpFRequired => 'الزامی';
+
+  @override
+  String get grpFCreate => 'ایجاد';
+
+  @override
+  String get grpFChangeStatus => 'تغییر وضعیت';
+
+  @override
+  String get grpFChangePriority => 'تغییر اولویت';
+
+  @override
+  String get grpFDate => 'تاریخ';
+
+  @override
+  String get grpFPickDay => 'انتخاب روز…';
+
+  @override
+  String get grpFAssignees => 'مسئولان';
+
+  @override
+  String get grpFViewList => 'فهرست';
+
+  @override
+  String get grpFViewBoard => 'تابلو';
+
+  @override
+  String get grpFViewTimeline => 'خط زمانی';
+
+  @override
+  String grpFErrorRetry(String message) {
+    return '$message تلاش دوباره';
+  }
+
+  @override
+  String get grpFNoTasksYet => 'هنوز وظیفه‌ای نیست. اولین را بالا اضافه کنید.';
+
+  @override
+  String get grpFSwipeComplete => 'تکمیل';
+
+  @override
+  String get grpFUndo => 'واگرد';
+
+  @override
+  String get grpFMore => 'بیشتر';
+
+  @override
+  String grpFAddSubtaskTo(String id) {
+    return 'افزودن زیروظیفه به $id';
+  }
+
+  @override
+  String grpFTaskDeleted(String id) {
+    return '$id حذف شد';
+  }
+
+  @override
+  String get grpFColTitle => 'عنوان';
+
+  @override
+  String grpFTrashTitle(String name) {
+    return '$name · سطل زباله';
+  }
+
+  @override
+  String get grpFTrashEmpty => 'سطل زباله خالی است.';
+
+  @override
+  String grpFTrashedRow(String id) {
+    return '$id · حذف‌شده';
+  }
+
+  @override
+  String get grpFRestore => 'بازیابی';
+
+  @override
+  String grpFTaskRestored(String id) {
+    return '$id بازیابی شد';
+  }
+
+  @override
+  String get grpFMoveTo => 'انتقال به…';
+
+  @override
+  String grpFMoveToColumn(String name) {
+    return 'انتقال به $name';
+  }
+
+  @override
+  String grpFPlusCount(int count) {
+    return '+$count';
+  }
+
+  @override
+  String get grpFFoldColumn => 'جمع کردن ستون';
+
+  @override
+  String get grpFColumn => 'ستون';
+
+  @override
+  String get grpFSetWipLimit => 'تعیین سقف کار در جریان…';
+
+  @override
+  String get grpFChangeLimit => 'تغییر سقف…';
+
+  @override
+  String get grpFAddTask => 'افزودن وظیفه';
+
+  @override
+  String get grpFWipTitle => 'سقف کار در جریان';
+
+  @override
+  String get grpFWipMost => 'بیشترین تعداد کارت در این ستون';
+
+  @override
+  String get grpFColumnsBy => 'ستون‌ها بر اساس';
+
+  @override
+  String grpFColumnsChip(String name) {
+    return 'ستون‌ها: $name';
+  }
+
+  @override
+  String get grpFSwimlanes => 'مسیرها';
+
+  @override
+  String get grpFLanesAssignee => 'مسیرها: مسئول';
+
+  @override
+  String get grpFNoSwimlanes => 'بدون مسیر';
+
+  @override
+  String get grpFByAssignee => 'بر اساس مسئول';
+
+  @override
+  String get grpFCardFields => 'فیلدهای کارت';
+
+  @override
+  String get grpFCurrentSprint => 'اسپرینت جاری';
+
+  @override
+  String get grpFRefresh => 'تازه‌سازی';
+
+  @override
+  String get grpFBoardLayoutNotSaved =>
+      'چیدمان تابلوی شما ذخیره نشد. در تغییر بعدی دوباره تلاش می‌شود.';
+
+  @override
+  String get grpFReschedule => 'زمان‌بندی مجدد…';
+
+  @override
+  String get grpFSchedule => 'زمان‌بندی…';
+
+  @override
+  String get grpFRepeatsNotMade => 'تکرار: هنوز ساخته نشده';
+
+  @override
+  String get grpFEverythingDated => 'همه چیز تاریخ دارد.';
+
+  @override
+  String grpFNothingOn(String day) {
+    return 'در $day چیزی نیست.';
+  }
+
+  @override
+  String get grpFKindTasks => 'وظایف';
+
+  @override
+  String get grpFKindComments => 'نظرات';
+
+  @override
+  String get grpFKindProjects => 'پروژه‌ها';
+
+  @override
+  String get grpFKindPeople => 'افراد';
+
+  @override
+  String get grpFKindPages => 'صفحات';
+
+  @override
+  String get grpFChipAssignedToMe => 'محول‌شده به من';
+
+  @override
+  String get grpFChipOpen => 'باز';
+
+  @override
+  String get grpFChipDone => 'انجام‌شده';
+
+  @override
+  String get grpFSearchErrGeneric => 'مشکلی پیش آمد. دوباره تلاش کنید.';
+
+  @override
+  String get grpFSearchErrNetwork =>
+      'اتصال به سرور برقرار نشد. اتصال خود را بررسی کنید.';
+
+  @override
+  String get grpFSearchErrDenied => 'اجازهٔ جستجو در اینجا را ندارید.';
+
+  @override
+  String get grpFSearchErrRate => 'جستجوهای زیاد. لحظه‌ای صبر کنید.';
+
+  @override
+  String get grpFSearchErrInvalid => 'این جستجو معتبر نیست.';
+
+  @override
+  String get grpFSearchHint => 'جستجوی وظایف، نظرات، پروژه‌ها، افراد';
+
+  @override
+  String get grpFSearchClose => 'بستن جستجو';
+
+  @override
+  String get grpFSearchNothing =>
+      'چیزی پیدا نشد. کلمات کمتری امتحان کنید یا شناسه‌ای مانند WEB-12. با in:KEY، assignee:me، status:open محدود کنید.';
+
+  @override
+  String get grpFSearchTips =>
+      'برای جستجو تایپ کنید. شناسه‌ای مانند WEB-12 یا عملگرهای in:KEY، assignee:me، status:open را امتحان کنید.';
+
+  @override
+  String get grpFGoTo => 'برو به';
+
+  @override
+  String grpFShowMore(String kind) {
+    return 'نمایش $kind بیشتر';
+  }
+
+  @override
+  String get grpFRecent => 'اخیر';
+
+  @override
+  String grpFPlusMore(int count) {
+    return '+$count مورد دیگر';
+  }
+
+  @override
+  String get grpFSubtaskDepthLimit =>
+      'زیروظیفه‌ها تا حد مجاز برنامه در اینجا تو در تو شده‌اند.';
+
+  @override
+  String get grpFUnscheduled => 'برنامه‌ریزی‌نشده';
+
+  @override
+  String get grpGCloseShortcuts => 'بستن میانبرهای صفحه‌کلید';
+
+  @override
+  String get grpGKeyboardShortcuts => 'میانبرهای صفحه‌کلید';
+
+  @override
+  String get grpGClose => 'بستن';
+
+  @override
+  String get grpGChangedByYou => 'تغییر داده‌شده توسط شما';
+
+  @override
+  String get grpGNone => 'هیچ';
+
+  @override
+  String grpGChangeKeysFor(String title) {
+    return 'تغییر کلیدهای «$title»';
+  }
+
+  @override
+  String grpGKeysFor(String title) {
+    return 'کلیدهای «$title»';
+  }
+
+  @override
+  String get grpGPressKeys => 'کلیدهای دلخواه را فشار دهید.';
+
+  @override
+  String get grpGUseDefault => 'استفاده از پیش‌فرض';
+
+  @override
+  String get grpGNoKey => 'بدون کلید';
+
+  @override
+  String get grpGCancel => 'لغو';
+
+  @override
+  String get grpGSave => 'ذخیره';
+
+  @override
+  String grpGBrowserKeeps(String keys) {
+    return 'مرورگر $keys را برای خود نگه می‌دارد.';
+  }
+
+  @override
+  String grpGAlreadyUsedBy(String title) {
+    return 'قبلاً توسط «$title» استفاده شده است.';
+  }
+
+  @override
+  String get grpGKeysTaken => 'عمل دیگری از این کلیدها استفاده می‌کند.';
+
+  @override
+  String get grpGKeysInvalid => 'این کلیدها قابل استفاده نیستند.';
+
+  @override
+  String get grpGSaveFailed => 'ذخیره نشد. اتصال خود را بررسی کنید.';
+
+  @override
+  String grpGDefaultUsedBy(String title) {
+    return 'کلیدهای پیش‌فرض توسط «$title» استفاده می‌شوند.';
+  }
+
+  @override
+  String get grpGDefaultUsedByOther =>
+      'کلیدهای پیش‌فرض توسط عمل دیگری استفاده می‌شوند.';
+
+  @override
+  String get grpGPaletteHint =>
+      'یک فرمان بنویسید، یا > عمل‌ها  # پروژه‌ها  @ افراد';
+
+  @override
+  String get grpGNothingMatches => 'موردی مطابقت ندارد.';
+
+  @override
+  String get grpGSearchUnavailable => 'جستجو اکنون در دسترس نیست.';
+
+  @override
+  String get grpGName => 'نام';
+
+  @override
+  String get grpGCreate => 'ایجاد';
+
+  @override
+  String get grpGQuickActions => 'عمل‌های سریع';
+
+  @override
+  String grpGDryRunTitle(String name) {
+    return 'اجرای آزمایشی: $name';
+  }
+
+  @override
+  String get grpGDryRunIntro =>
+      'نشان می‌دهد روی یک وظیفه چه اتفاقی می‌افتد. چیزی تغییر نمی‌کند، ارسال نمی‌شود و اطلاع‌رسانی نمی‌شود.';
+
+  @override
+  String get grpGTask => 'وظیفه';
+
+  @override
+  String get grpGTasksLoadFailed => 'بارگذاری وظایف ممکن نشد.';
+
+  @override
+  String get grpGWouldRun => 'اجرا می‌شود.';
+
+  @override
+  String get grpGWouldNotRun => 'روی این وظیفه اجرا نمی‌شود.';
+
+  @override
+  String get grpGRun => 'اجرا';
+
+  @override
+  String get grpGConditionProblem => 'شرط مشکل دارد: زیر کارت «اگر» را ببینید.';
+
+  @override
+  String get grpGRuleGone => 'آن قانون دیگر وجود ندارد.';
+
+  @override
+  String get grpGRule => 'قانون';
+
+  @override
+  String get grpGNewAutomation => 'خودکارسازی جدید';
+
+  @override
+  String get grpGEditAutomation => 'ویرایش خودکارسازی';
+
+  @override
+  String get grpGWhen => 'وقتی';
+
+  @override
+  String get grpGIfOptional => 'اگر (اختیاری)';
+
+  @override
+  String get grpGThen => 'آنگاه';
+
+  @override
+  String get grpGAndThen => 'و سپس';
+
+  @override
+  String grpGActionLimit(int max) {
+    return 'به حد مجاز $max عمل رسیده است';
+  }
+
+  @override
+  String get grpGAddAction => 'افزودن عمل';
+
+  @override
+  String get grpGLoadLatest => 'بارگذاری آخرین نسخه';
+
+  @override
+  String get grpGMoveUp => 'انتقال به بالا';
+
+  @override
+  String get grpGMoveDown => 'انتقال به پایین';
+
+  @override
+  String get grpGRemoveAction => 'حذف عمل';
+
+  @override
+  String grpGSwitchedOff(String reason) {
+    return 'خاموش شد: $reason\nرفع مشکل: قانون را باز کنید، موردی را که هنوز وجود دارد در محرک یا عمل‌ها انتخاب کنید، ذخیره کنید و دوباره روشن کنید.';
+  }
+
+  @override
+  String get grpGUnknown => 'نامشخص';
+
+  @override
+  String get grpGEmptyValue => '(خالی)';
+
+  @override
+  String get grpGNothingRunYet => 'هنوز چیزی اجرا نشده است.';
+
+  @override
+  String get grpGLoadMore => 'بارگذاری بیشتر';
+
+  @override
+  String get grpGRetry => 'تلاش دوباره';
+
+  @override
+  String grpGWhyNotRun(String explanation) {
+    return 'چرا اجرا نشد؟ $explanation';
+  }
+
+  @override
+  String grpGChainDepth(int depth) {
+    return 'عمق زنجیره $depth';
+  }
+
+  @override
+  String get grpGFilter => 'فیلتر';
+
+  @override
+  String grpGFilterCount(int count) {
+    return 'فیلتر ($count)';
+  }
+
+  @override
+  String get grpGSavedFilters => 'فیلترهای ذخیره‌شده';
+
+  @override
+  String get grpGNoSavedFilters => 'هنوز فیلتر ذخیره‌شده‌ای نیست';
+
+  @override
+  String grpGFieldGoneNamed(String name) {
+    return '$name (یک فیلد حذف شده است)';
+  }
+
+  @override
+  String get grpGManageSaved => 'مدیریت فیلترهای ذخیره‌شده…';
+
+  @override
+  String grpGConditionCount(int count) {
+    return '$count شرط';
+  }
+
+  @override
+  String get grpGClearFilterTip => 'پاک کردن فیلتر';
+
+  @override
+  String get grpGNothingSaved => 'هنوز چیزی ذخیره نشده است.';
+
+  @override
+  String get grpGFieldItUsedGone => 'فیلدی که استفاده می‌کرد حذف شده است';
+
+  @override
+  String get grpGDelete => 'حذف';
+
+  @override
+  String get grpGFinishConditions => 'ابتدا شرط‌ها را کامل کنید.';
+
+  @override
+  String get grpGEveryoneWorkspace => 'همه در فضای کار';
+
+  @override
+  String get grpGEveryoneProject => 'همه در این پروژه';
+
+  @override
+  String get grpGBuilder => 'سازنده';
+
+  @override
+  String get grpGAdvanced => 'پیشرفته';
+
+  @override
+  String get grpGClearFilter => 'پاک کردن فیلتر';
+
+  @override
+  String get grpGSaveAs => 'ذخیره به عنوان…';
+
+  @override
+  String get grpGApply => 'اعمال';
+
+  @override
+  String get grpGSaveThisFilter => 'ذخیره این فیلتر';
+
+  @override
+  String get grpGOnlyMe => 'فقط من';
+
+  @override
+  String get grpGExportSaveFailed => 'فایل ذخیره نشد. دوباره تلاش کنید.';
+
+  @override
+  String get grpGExport => 'برون‌بری';
+
+  @override
+  String get grpGEveryProject => 'همه پروژه‌هایی که می‌توانم باز کنم';
+
+  @override
+  String get grpGOneProject => 'یک پروژه';
+
+  @override
+  String get grpGExportInfo =>
+      'یک فایل zip شامل tasks.json (که TaskForge دوباره می‌تواند وارد کند)، tasks.csv، نظرها، فهرست پیوست‌ها و یک README.';
+
+  @override
+  String grpGExportSavedSized(String name, String size) {
+    return '$name ذخیره شد ($size).';
+  }
+
+  @override
+  String grpGExportSaved(String name) {
+    return '$name ذخیره شد.';
+  }
+
+  @override
+  String grpGNotesAboutFile(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count یادداشت درباره این فایل',
+      one: '۱ یادداشت درباره این فایل',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpGRowNumber(int line) {
+    return 'ردیف $line';
+  }
+
+  @override
+  String grpGAndMore(int count) {
+    return '...و $count مورد دیگر.';
+  }
+
+  @override
+  String get grpGNotesReadFailed =>
+      'خواندن یادداشت‌های این درون‌ریزی ممکن نشد.';
+
+  @override
+  String get grpGDragToOtherList => 'به فهرست دیگر بکشید';
+
+  @override
+  String get grpGAddedAfterStart => 'پس از شروع افزوده شد';
+
+  @override
+  String get grpGStoryPoints => 'امتیاز داستان';
+
+  @override
+  String get grpGUnitHours => 'س';
+
+  @override
+  String get grpGUnitPoints => ' امتیاز';
+
+  @override
+  String grpGLoadOf(String load, String unit, String cap) {
+    return 'بار $load$unit از $cap$unit';
+  }
+
+  @override
+  String grpGLoadNoCapacity(String load, String unit) {
+    return 'بار $load$unit (ظرفیت تعیین نشده)';
+  }
+
+  @override
+  String get grpGSetCapacity => 'تعیین ظرفیت';
+
+  @override
+  String get grpGPoints => 'امتیاز';
+
+  @override
+  String get grpGHours => 'ساعت';
+
+  @override
+  String grpGOverCapacity(String amount, String unit) {
+    return 'بیش از ظرفیت به اندازه $amount$unit';
+  }
+
+  @override
+  String grpGTitleWithCount(String title, int count) {
+    return '$title ($count)';
+  }
+
+  @override
+  String get grpHCancel => 'انصراف';
+
+  @override
+  String get grpHArchive => 'بایگانی';
+
+  @override
+  String get grpHRestore => 'بازیابی';
+
+  @override
+  String get grpHRetry => 'تلاش دوباره';
+
+  @override
+  String get grpHCreate => 'ایجاد';
+
+  @override
+  String get grpHName => 'نام';
+
+  @override
+  String get grpHDescription => 'توضیحات';
+
+  @override
+  String grpHArchiveTitle(String name) {
+    return '«$name» بایگانی شود؟';
+  }
+
+  @override
+  String get grpHArchiveBody =>
+      'فقط‌خواندنی می‌شود و از نوار کناری ناپدید می‌شود. هر زمان می‌توانید آن را بازیابی کنید.';
+
+  @override
+  String get grpHDangerZone => 'ناحیه خطر';
+
+  @override
+  String get grpHRestoreProject => 'بازیابی پروژه';
+
+  @override
+  String get grpHArchiveProject => 'بایگانی پروژه';
+
+  @override
+  String get grpHArchivedBanner => 'این پروژه بایگانی شده و فقط‌خواندنی است.';
+
+  @override
+  String get grpHArchivedProjects => 'پروژه‌های بایگانی‌شده';
+
+  @override
+  String get grpHNoArchived => 'پروژه بایگانی‌شده‌ای وجود ندارد.';
+
+  @override
+  String get grpHLoadProjectsRetry => 'بارگذاری پروژه‌ها ممکن نشد. تلاش دوباره';
+
+  @override
+  String get grpHNewProject => 'پروژه جدید';
+
+  @override
+  String get grpHKey => 'کلید';
+
+  @override
+  String get grpHKeyHelp => 'پیشوند شماره وظایف، مثلاً WEB-12';
+
+  @override
+  String get grpHFeatures => 'ویژگی‌ها';
+
+  @override
+  String get grpHFeaturesHint =>
+      'خاموش کردن یک ویژگی آن را پنهان می‌کند اما داده‌هایش حفظ می‌شود.';
+
+  @override
+  String get grpHProjectUpdated => 'پروژه به‌روز شد.';
+
+  @override
+  String get grpHGeneral => 'عمومی';
+
+  @override
+  String grpHKeyFixed(String taskKey) {
+    return 'کلید ثابت است زیرا وظایف از قبل از آن استفاده می‌کنند ($taskKey).';
+  }
+
+  @override
+  String get grpHSaveChanges => 'ذخیره تغییرات';
+
+  @override
+  String get grpHAddAMember => 'افزودن عضو';
+
+  @override
+  String get grpHAllAreMembers => 'همه اعضای فضای کاری از قبل عضو هستند.';
+
+  @override
+  String get grpHMembers => 'اعضا';
+
+  @override
+  String get grpHAddMember => 'افزودن عضو';
+
+  @override
+  String get grpHRemove => 'حذف';
+
+  @override
+  String get grpHLoadMembersRetry => 'بارگذاری اعضا ممکن نشد. تلاش دوباره';
+
+  @override
+  String get grpHPrivateProjects => 'پروژه‌های خصوصی';
+
+  @override
+  String get grpHNoPrivate => 'پروژه خصوصی وجود ندارد.';
+
+  @override
+  String grpHKeyAndMembers(String key, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عضو',
+      one: '۱ عضو',
+    );
+    return '$key · $_temp0';
+  }
+
+  @override
+  String get grpHAddMe => 'مرا اضافه کن';
+
+  @override
+  String grpHColorLabel(String color) {
+    return 'رنگ $color';
+  }
+
+  @override
+  String get grpHVisOpen => 'باز';
+
+  @override
+  String get grpHVisPrivate => 'خصوصی';
+
+  @override
+  String get grpHVisOpenHint => 'همه اعضای فضای کاری آن را می‌بینند.';
+
+  @override
+  String get grpHVisPrivateHint => 'فقط اعضای دعوت‌شده آن را می‌بینند.';
+
+  @override
+  String get grpHProject => 'پروژه';
+
+  @override
+  String get grpHRemoveFavorite => 'حذف از علاقه‌مندی‌ها';
+
+  @override
+  String get grpHAddFavorite => 'افزودن به علاقه‌مندی‌ها';
+
+  @override
+  String get grpHTrash => 'سطل زباله';
+
+  @override
+  String get grpHProjectSettings => 'تنظیمات پروژه';
+
+  @override
+  String get grpHLoadProjectRetry => 'بارگذاری پروژه ممکن نشد. تلاش دوباره';
+
+  @override
+  String get grpHProjectNotFound => 'پروژه پیدا نشد.';
+
+  @override
+  String get grpHBack => 'بازگشت';
+
+  @override
+  String get grpHWorkflow => 'گردش کار';
+
+  @override
+  String get grpHWorkflowHint =>
+      'وضعیت‌ها، دسته‌بندی آن‌ها و جابه‌جایی‌های مجاز.';
+
+  @override
+  String get grpHFields => 'فیلدها';
+
+  @override
+  String get grpHFieldsHint =>
+      'فیلدهای سفارشی مانند مشتری، امتیاز داستان یا محیط.';
+
+  @override
+  String get grpHAdd => 'افزودن';
+
+  @override
+  String get grpHAttachFile => 'پیوست فایل';
+
+  @override
+  String get grpHTakePhoto => 'گرفتن عکس';
+
+  @override
+  String get grpHChooseGallery => 'انتخاب از گالری';
+
+  @override
+  String get grpHPasteImage => 'چسباندن تصویر';
+
+  @override
+  String get grpHDeleteFileQ => 'این فایل حذف شود؟';
+
+  @override
+  String grpHFileWillBeRemoved(String filename) {
+    return '$filename حذف خواهد شد.';
+  }
+
+  @override
+  String get grpHDelete => 'حذف';
+
+  @override
+  String grpHOpenFile(String filename) {
+    return 'باز کردن $filename';
+  }
+
+  @override
+  String grpHDeleteFile(String filename) {
+    return 'حذف $filename';
+  }
+
+  @override
+  String get grpHWaitingConnection => 'در انتظار اتصال…';
+
+  @override
+  String get grpHWaiting => 'در انتظار…';
+
+  @override
+  String get grpHUploadDone => 'انجام شد';
+
+  @override
+  String get grpHUploadCancelled => 'لغو شد';
+
+  @override
+  String grpHPercentUploaded(String filename, int percent) {
+    return '$filename، $percent درصد بارگذاری شد';
+  }
+
+  @override
+  String get grpHWaitingToBeSent => 'در انتظار ارسال';
+
+  @override
+  String grpHCancelFile(String filename) {
+    return 'لغو $filename';
+  }
+
+  @override
+  String grpHTryFileAgain(String filename) {
+    return 'تلاش دوباره برای $filename';
+  }
+
+  @override
+  String grpHDismissFile(String filename) {
+    return 'بستن $filename';
+  }
+
+  @override
+  String get grpHOpen => 'باز کردن';
+
+  @override
+  String get grpHDownload => 'دانلود';
+
+  @override
+  String get grpHClose => 'بستن';
+
+  @override
+  String get grpHCouldNotOpenFile => 'فایل باز نشد.';
+
+  @override
+  String get grpHCouldNotLoadPicture => 'تصویر بارگذاری نشد.';
+
+  @override
+  String get grpHCouldNotReadFileViewer => 'فایل خوانده نشد.';
+
+  @override
+  String get grpHCouldNotPlayVideo => 'ویدیو پخش نشد.';
+
+  @override
+  String get grpHPause => 'توقف';
+
+  @override
+  String get grpHPlay => 'پخش';
+
+  @override
+  String grpHTextTruncated(String size) {
+    return '$size نخست نمایش داده می‌شود. برای خواندن بقیه فایل را دانلود کنید.';
+  }
+
+  @override
+  String get grpHAttachments => 'پیوست‌ها';
+
+  @override
+  String grpHAttachmentsCount(int count) {
+    return 'پیوست‌ها ($count)';
+  }
+
+  @override
+  String get grpHCouldNotReadFile => 'آن فایل خوانده نشد.';
+
+  @override
+  String get grpHDismiss => 'بستن';
+
+  @override
+  String get grpHNoAttachments => 'پیوستی وجود ندارد.';
+
+  @override
+  String get grpHDropZoneLabel =>
+      'پیوست فایل‌ها: آن‌ها را اینجا رها کنید یا کلیک کنید، سپس تصویر را بچسبانید';
+
+  @override
+  String get grpHDropToAttach => 'برای پیوست رها کنید';
+
+  @override
+  String get grpHDropFilesHere => 'فایل‌ها را برای پیوست اینجا رها کنید';
+
+  @override
+  String get grpHSnoozeLaterToday => 'امروز، بعداً';
+
+  @override
+  String get grpHSnoozeTomorrow => 'فردا';
+
+  @override
+  String get grpHSnoozeNextWeek => 'هفته آینده';
+
+  @override
+  String get grpHMarkAllRead => 'علامت‌گذاری همه به‌عنوان خوانده‌شده';
+
+  @override
+  String get grpHNotificationSettings => 'تنظیمات اعلان‌ها';
+
+  @override
+  String get grpHInbox => 'صندوق ورودی';
+
+  @override
+  String grpHUnreadCount(int count) {
+    return '$count خوانده‌نشده';
+  }
+
+  @override
+  String get grpHLoadMore => 'بارگذاری بیشتر';
+
+  @override
+  String get grpHEmptyAll => 'اینجا چیزی نیست. همه چیز را دیده‌اید.';
+
+  @override
+  String get grpHEmptyUnread => 'اعلان خوانده‌نشده‌ای وجود ندارد.';
+
+  @override
+  String get grpHEmptyMentions => 'هیچ‌کس شما را اشاره نکرده است.';
+
+  @override
+  String get grpHEmptyAssigned => 'اخیراً چیزی به شما واگذار نشده است.';
+
+  @override
+  String get grpHEmptySnoozed => 'چیزی به تعویق نیفتاده است.';
+
+  @override
+  String get grpHEmptyArchived => 'چیزی بایگانی نشده است.';
+
+  @override
+  String grpHDueDate(String date) {
+    return 'سررسید $date';
+  }
+
+  @override
+  String grpHUnreadPrefix(String title) {
+    return 'خوانده‌نشده. $title';
+  }
+
+  @override
+  String grpHMoreCount(int count) {
+    return '+$count مورد دیگر';
+  }
+
+  @override
+  String get grpHMore => 'بیشتر';
+
+  @override
+  String get grpHMarkUnread => 'علامت به‌عنوان خوانده‌نشده';
+
+  @override
+  String get grpHMarkRead => 'علامت به‌عنوان خوانده‌شده';
+
+  @override
+  String get grpHStopSnoozing => 'پایان تعویق';
+
+  @override
+  String get grpHSnoozeEllipsis => 'به تعویق انداختن…';
+
+  @override
+  String get grpHMoveToInbox => 'انتقال به صندوق ورودی';
+
+  @override
+  String get grpHPushTitle => 'هنگام اهمیت اعلان بگیرید';
+
+  @override
+  String get grpHPushBody =>
+      'TaskForge می‌تواند هنگامی که وظیفه‌ای به شما واگذار می‌شود، از شما نام برده می‌شود یا سررسید وظیفه‌ای نزدیک است، حتی وقتی برنامه در پس‌زمینه است، اعلان نشان دهد. سپس دستگاه شما اجازه می‌خواهد. شما انتخاب می‌کنید کدام نوع اعلان‌ها برسند و ساعات سکوت مانع بیدار شدن شما می‌شود.';
+
+  @override
+  String get grpHNotNow => 'فعلاً نه';
+
+  @override
+  String get grpHContinue => 'ادامه';
+
+  @override
+  String get grpHPickDateTime => 'انتخاب تاریخ و زمان';
+
+  @override
+  String get grpHRepeatReadError => 'نحوه تکرار این مورد خوانده نشد.';
+
+  @override
+  String get grpHRepeat => 'تکرار';
+
+  @override
+  String get grpHFirstOfSeries => 'نخستین مورد یک سری';
+
+  @override
+  String get grpHRepeatingTask => 'وظیفه تکراری';
+
+  @override
+  String grpHSeriesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه در این سری',
+      one: '$count وظیفه در این سری',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpHRepeatPaused => 'متوقف شد: وظیفه جدیدی ساخته نمی‌شود.';
+
+  @override
+  String grpHRepeatPausedBySystem(String reason) {
+    return 'توسط سیستم متوقف شد: $reason';
+  }
+
+  @override
+  String grpHRepeatNext(String dates) {
+    return 'بعدی: $dates';
+  }
+
+  @override
+  String get grpHRepeatWaits => 'مورد بعدی پس از تکمیل این مورد ساخته می‌شود.';
+
+  @override
+  String get grpHRepeatsTitle => 'این وظیفه تکرار می‌شود';
+
+  @override
+  String grpHRepeatsBody(String summary) {
+    return 'این الگوی «$summary» است. با حذف آن می‌توان سری را متوقف کرد یا سری می‌تواند به ساخت وظایف جدید ادامه دهد.';
+  }
+
+  @override
+  String get grpHDeleteKeepRepeating => 'حذف، ادامه تکرار';
+
+  @override
+  String get grpHDeleteAndStop => 'حذف و توقف';
+
+  @override
+  String get grpHChartGroup => 'گروه';
+
+  @override
+  String get grpHOfflineReview => 'بررسی';
+
+  @override
+  String get grpHOfflineSyncing => 'در حال همگام‌سازی…';
+
+  @override
+  String get grpHOfflineSyncNow => 'همگام‌سازی اکنون';
+
+  @override
+  String get grpHOfflineSaved =>
+      'شما آفلاین هستید. تغییرات در این دستگاه ذخیره می‌شوند.';
+
+  @override
+  String grpHOfflineWaitsOnline(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تغییر منتظر ارسال هستند.',
+      one: '$count تغییر منتظر ارسال است.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String grpHOfflineWaitsOffline(int count) {
+    return '$count در انتظار ارسال.';
+  }
+
+  @override
+  String grpHOfflineAttention(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تغییر به توجه شما نیاز دارند.',
+      one: '$count تغییر به توجه شما نیاز دارد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpHReconnecting =>
+      'در حال اتصال مجدد… آنچه می‌بینید پس از بازگشت به‌روز می‌شود.';
+
+  @override
+  String get grpICancel => 'لغو';
+
+  @override
+  String get grpIDone => 'انجام شد';
+
+  @override
+  String get grpIRetry => 'تلاش دوباره';
+
+  @override
+  String get grpIClose => 'بستن';
+
+  @override
+  String get grpIBack => 'بازگشت';
+
+  @override
+  String get grpIEdit => 'ویرایش';
+
+  @override
+  String get grpISave => 'ذخیره';
+
+  @override
+  String get grpISaving => 'در حال ذخیره…';
+
+  @override
+  String get grpIDelete => 'حذف';
+
+  @override
+  String get grpICopy => 'کپی';
+
+  @override
+  String get grpIUndo => 'واگرد';
+
+  @override
+  String get grpIRestore => 'بازیابی';
+
+  @override
+  String get grpIUnnamed => '(بدون نام)';
+
+  @override
+  String grpIErrorRetry(String message) {
+    return '$message تلاش دوباره';
+  }
+
+  @override
+  String get grpIMergeTitle => 'شخص دیگری ابتدا گردش کار را ذخیره کرد';
+
+  @override
+  String get grpIMergeBody =>
+      'ویرایش‌های شما حفظ شد و کار آن‌ها بازنویسی نشد. این موارد در پیش‌نویس شما تغییر کرد:';
+
+  @override
+  String get grpIMergeKeep => 'این را خواندم، پیش‌نویسم را نگه دار';
+
+  @override
+  String get grpIMergeReload => 'پیش‌نویسم را دور بینداز';
+
+  @override
+  String get grpINoProblems => 'مشکلی نیست';
+
+  @override
+  String get grpIEveryTaskValid => 'هر وظیفه وضعیت معتبر دارد.';
+
+  @override
+  String grpIProblemsToFix(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مشکل برای رفع پیش از ذخیره',
+      one: '۱ مشکل برای رفع پیش از ذخیره',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIAnyStatusMoves => 'هر وضعیت می‌تواند به هر وضعیت دیگر برود.';
+
+  @override
+  String grpIWorkflowGraphLabel(int statuses, int moves) {
+    return 'گردش کار با $statuses وضعیت و $moves انتقال مجاز';
+  }
+
+  @override
+  String get grpINeedsAssignee => 'نیاز به مسئول دارد';
+
+  @override
+  String get grpINeedsSubtasksDone => 'نیاز به انجام همه زیروظیفه‌ها دارد';
+
+  @override
+  String grpIOnlyRoleLower(String role) {
+    return 'فقط $role';
+  }
+
+  @override
+  String get grpIOneRole => 'یک نقش';
+
+  @override
+  String get grpIDragToReorder => 'برای ترتیب‌دهی بکشید';
+
+  @override
+  String get grpIColour => 'رنگ';
+
+  @override
+  String get grpINewTasksStartHere => 'وظایف جدید از اینجا شروع می‌شوند';
+
+  @override
+  String get grpIMakeDefaultStatus => 'این را وضعیت آغازین وظایف جدید کن';
+
+  @override
+  String get grpIDeleteStatus => 'حذف وضعیت';
+
+  @override
+  String grpITaskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه',
+      one: '۱ وظیفه',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpICanMoveTo => 'می‌تواند برود به';
+
+  @override
+  String get grpIConditionsForMove => 'شرایط این انتقال';
+
+  @override
+  String get grpIName => 'نام';
+
+  @override
+  String grpIDeleteStatusTitle(String name) {
+    return '$name حذف شود؟';
+  }
+
+  @override
+  String grpITasksInStatus(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه در این وضعیت است. انتخاب کنید به کجا بروند.',
+      one: '۱ وظیفه در این وضعیت است. انتخاب کنید به کجا برود.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIMoveTasksTo => 'انتقال وظایف به';
+
+  @override
+  String get grpIMoveTasksAndDelete => 'انتقال وظایف و حذف';
+
+  @override
+  String get grpIWhoMayMove => 'چه کسی می‌تواند این انتقال را انجام دهد';
+
+  @override
+  String get grpIAnyRole => 'هر نقش';
+
+  @override
+  String grpIOnlyRole(String name) {
+    return 'فقط $name';
+  }
+
+  @override
+  String get grpITaskNeedsAssignee => 'وظیفه نیاز به مسئول دارد';
+
+  @override
+  String get grpIAllSubtasksDone => 'همه زیروظیفه‌ها باید انجام شده باشند';
+
+  @override
+  String get grpIDoneOrCancelledDepth => 'انجام‌شده یا لغوشده، در هر عمق.';
+
+  @override
+  String get grpIWorkflow => 'گردش کار';
+
+  @override
+  String get grpIDiscard => 'دور انداختن';
+
+  @override
+  String get grpIWorkflowSaved => 'گردش کار ذخیره شد';
+
+  @override
+  String get grpIRestrictTransitions => 'محدود کردن انتقال‌ها';
+
+  @override
+  String get grpIRestrictTransitionsHint =>
+      'خاموش: هر وضعیت می‌تواند به هر وضعیت دیگر برود. روشن: فقط پیکان‌هایی که اجازه می‌دهید.';
+
+  @override
+  String get grpIRestrictCreation =>
+      'وظایف جدید فقط در وضعیت پیش‌فرض شروع شوند';
+
+  @override
+  String get grpIRestrictCreationHint =>
+      'خاموش: وظیفه را می‌توان در هر وضعیتی ساخت. روشن: در وضعیت ستاره‌دار شروع می‌شود و با انتقال به بقیه می‌رسد.';
+
+  @override
+  String get grpIAddStatus => 'افزودن وضعیت';
+
+  @override
+  String get grpINewStatus => 'وضعیت جدید';
+
+  @override
+  String get grpIMigrationNeedsPlace =>
+      'وظایفی که انتخاب کردید به اینجا منتقل شوند به جای جدید نیاز دارند.';
+
+  @override
+  String grpIMoveArrow(String from, String to) {
+    return '$from ← $to';
+  }
+
+  @override
+  String grpIDeletedStillHasTasks(String name) {
+    return '$name حذف شد اما هنوز وظیفه دارد.';
+  }
+
+  @override
+  String get grpIMoveItsTasksTo => 'انتقال وظایف آن به';
+
+  @override
+  String grpIDrillTitle(String title, int count, String more) {
+    return '$title · $count$more وظیفه';
+  }
+
+  @override
+  String get grpINoTasks => 'وظیفه‌ای نیست.';
+
+  @override
+  String get grpIDrillTruncated =>
+      'فقط نخستین وظایف فهرست شده‌اند؛ برای دیدن بقیه فیلتر را محدودتر کنید.';
+
+  @override
+  String grpIDueOn(String date) {
+    return 'سررسید $date';
+  }
+
+  @override
+  String get grpINothingToShow => 'هنوز چیزی برای نمایش نیست.';
+
+  @override
+  String get grpIRefresh => 'تازه‌سازی';
+
+  @override
+  String get grpIWidgetMenu => 'منوی ویجت';
+
+  @override
+  String get grpIExportCsv => 'خروجی CSV';
+
+  @override
+  String get grpIRemove => 'حذف';
+
+  @override
+  String get grpISaveToSeeNumbers => 'برای دیدن اعداد ذخیره کنید.';
+
+  @override
+  String grpICsvTitle(String title) {
+    return '$title (CSV)';
+  }
+
+  @override
+  String get grpICsvCopied => 'CSV کپی شد.';
+
+  @override
+  String get grpISaveAsFile => 'ذخیره به صورت فایل';
+
+  @override
+  String grpILatestPoints(int limit) {
+    return 'آخرین $limit نقطه نمایش داده می‌شود؛ برای دیدن همه بازه را کوتاه‌تر کنید.';
+  }
+
+  @override
+  String grpITopLimit(int limit) {
+    return '$limit مورد برتر نمایش داده می‌شود؛ برای دیدن بقیه فیلتر را محدودتر کنید.';
+  }
+
+  @override
+  String get grpIWidget => 'ویجت';
+
+  @override
+  String get grpITitle => 'عنوان';
+
+  @override
+  String get grpIGroupBy => 'گروه‌بندی بر اساس';
+
+  @override
+  String get grpIFilterTfqlOptional => 'فیلتر (TFQL، اختیاری)';
+
+  @override
+  String get grpIPreview => 'پیش‌نمایش';
+
+  @override
+  String get grpIProject => 'پروژه';
+
+  @override
+  String get grpISprint => 'اسپرینت';
+
+  @override
+  String grpIDateRange(String start, String end) {
+    return '$start ← $end';
+  }
+
+  @override
+  String grpIFromDate(String date) {
+    return 'از $date';
+  }
+
+  @override
+  String get grpINoDates => 'بدون تاریخ';
+
+  @override
+  String grpIDaysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count روز',
+      one: '۱ روز',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpINothingScheduled => 'در این بازه چیزی برنامه‌ریزی نشده است.';
+
+  @override
+  String get grpIOnCriticalPath => 'در مسیر بحرانی';
+
+  @override
+  String get grpIBlocked => 'مسدود';
+
+  @override
+  String grpIMovingPushes(String id, int count) {
+    return 'انتقال $id تعداد $count را جابه‌جا می‌کند';
+  }
+
+  @override
+  String grpIRangeShift(String from, String to) {
+    return '$from  ←  $to';
+  }
+
+  @override
+  String get grpIKeepThem => 'نگه‌دار (نمایش تداخل)';
+
+  @override
+  String get grpIShiftDependents => 'جابه‌جایی وابسته‌ها';
+
+  @override
+  String get grpIWeekdayMon => 'دوشنبه';
+
+  @override
+  String get grpIWeekdayTue => 'سه‌شنبه';
+
+  @override
+  String get grpIWeekdayWed => 'چهارشنبه';
+
+  @override
+  String get grpIWeekdayThu => 'پنجشنبه';
+
+  @override
+  String get grpIWeekdayFri => 'جمعه';
+
+  @override
+  String get grpIWeekdaySat => 'شنبه';
+
+  @override
+  String get grpIWeekdaySun => 'یکشنبه';
+
+  @override
+  String get grpIWorkingDays => 'روزهای کاری';
+
+  @override
+  String get grpIWorkingDaysHint =>
+      'انتقال یک وظیفه از کنار دیگری روزهای تعطیل را رد می‌کند.';
+
+  @override
+  String get grpIHolidays => 'تعطیلات';
+
+  @override
+  String get grpIHolidaysHint =>
+      'تاریخ‌هایی مانند 2026-12-25، جداشده با ویرگول';
+
+  @override
+  String grpITimelineChartLabel(int count) {
+    return 'نمودار زمانی $count وظیفه. برای خواندن آن‌ها به نمای فهرست بروید.';
+  }
+
+  @override
+  String get grpITimelineDragHint =>
+      'برای جابه‌جایی یک نوار را بکشید، برای تغییر اندازه یک سر آن را. Ctrl + چرخ یا حرکت دو انگشتی بزرگ‌نمایی می‌کند.';
+
+  @override
+  String get grpIUnscheduled => 'برنامه‌ریزی‌نشده';
+
+  @override
+  String get grpIMovedLinksBreak =>
+      'منتقل شد. پیوندهایی که می‌شکند قرمز نشان داده می‌شوند.';
+
+  @override
+  String get grpITimelineSaved => 'خط زمانی ذخیره شد.';
+
+  @override
+  String get grpIDay => 'روز';
+
+  @override
+  String get grpIWeek => 'هفته';
+
+  @override
+  String get grpIMonth => 'ماه';
+
+  @override
+  String get grpIQuarter => 'سه‌ماهه';
+
+  @override
+  String get grpITaskTree => 'درخت وظایف';
+
+  @override
+  String get grpIByAssignee => 'بر اساس مسئول';
+
+  @override
+  String get grpIByStatus => 'بر اساس وضعیت';
+
+  @override
+  String get grpIEarlier => 'قبلی';
+
+  @override
+  String get grpIToday => 'امروز';
+
+  @override
+  String get grpILater => 'بعدی';
+
+  @override
+  String get grpICriticalPath => 'مسیر بحرانی';
+
+  @override
+  String get grpIHideDone => 'پنهان کردن انجام‌شده‌ها';
+
+  @override
+  String get grpIShowChart => 'نمایش نمودار';
+
+  @override
+  String get grpIShowList => 'نمایش به صورت فهرست';
+
+  @override
+  String get grpIExportImage => 'خروجی به صورت تصویر';
+
+  @override
+  String get grpICurrency => 'واحد پول';
+
+  @override
+  String get grpIClear => 'پاک کردن';
+
+  @override
+  String get grpINone => 'هیچ‌کدام';
+
+  @override
+  String grpIFieldArchived(String name) {
+    return '$name بایگانی شد. مقادیر ۳۰ روز نگه داشته می‌شوند.';
+  }
+
+  @override
+  String get grpIFields => 'فیلدها';
+
+  @override
+  String get grpIAddField => 'افزودن فیلد';
+
+  @override
+  String get grpINoCustomFields =>
+      'هنوز فیلد سفارشی وجود ندارد. برای مواردی مانند مشتری یا امتیاز داستان یکی اضافه کنید.';
+
+  @override
+  String get grpIArchivedRestorable => 'بایگانی‌شده (تا ۳۰ روز قابل بازیابی)';
+
+  @override
+  String get grpIRequired => 'الزامی';
+
+  @override
+  String grpIOptionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count گزینه',
+      one: '۱ گزینه',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpIArchive => 'بایگانی';
+
+  @override
+  String get grpIWriteComment => 'نظری بنویسید… (@ برای اشاره)';
+
+  @override
+  String get grpIComment => 'نظر';
+
+  @override
+  String get grpIBulletList => 'فهرست گلوله‌ای';
+
+  @override
+  String get grpIQuote => 'نقل قول';
+
+  @override
+  String get grpICodeBlock => 'بلوک کد';
+
+  @override
+  String get grpILink => 'پیوند';
+
+  @override
+  String get grpICouldNotReadFile => 'خواندن آن فایل ممکن نبود.';
+
+  @override
+  String get grpICtrlEnterToSend => 'برای ارسال Ctrl+Enter';
+
+  @override
+  String get grpIDeleteCommentTitle => 'این نظر حذف شود؟';
+
+  @override
+  String get grpIDeleteCommentBody =>
+      'به صورت «نظر حذف شد» نمایش داده می‌شود. محتوا و تاریخچه ویرایش آن حذف می‌شود.';
+
+  @override
+  String get grpICannotSeeTask => 'آن‌ها نمی‌توانند این وظیفه را ببینند';
+
+  @override
+  String grpICannotSeeGrant(String names) {
+    return '$names نمی‌توانند این وظیفه را ببینند. آن‌ها را به پروژه اضافه کنید و نظر را بفرستید، یا اشاره را بردارید.';
+  }
+
+  @override
+  String grpICannotSeeRefuse(String names) {
+    return '$names نمی‌توانند این وظیفه را ببینند، بنابراین نمی‌توان به آن‌ها اشاره کرد. اشاره را بردارید یا از مدیر پروژه بخواهید آن‌ها را اضافه کند.';
+  }
+
+  @override
+  String get grpIOk => 'تأیید';
+
+  @override
+  String get grpIAddThemAndSend => 'افزودن و ارسال';
+
+  @override
+  String grpIEditHistory(String author) {
+    return 'تاریخچه ویرایش · $author';
+  }
+
+  @override
+  String grpIRevisionCurrent(String stamp) {
+    return '$stamp · فعلی';
+  }
+
+  @override
+  String get grpISessions => 'نشست‌ها';
+
+  @override
+  String get grpISignOutOthers => 'خروج از دستگاه‌های دیگر';
+
+  @override
+  String get grpIUnknownDevice => 'دستگاه ناشناس';
+
+  @override
+  String get grpIThisDevice => 'این دستگاه';
+
+  @override
+  String get grpISignOutThis => 'خروج از این دستگاه';
+
+  @override
+  String get grpJLink => 'پیوند';
+
+  @override
+  String get grpJInviteEmails => 'نشانی‌های ایمیل';
+
+  @override
+  String grpJInviteEmailsHelp(int max) {
+    return 'چند مورد را با ویرگول جدا کنید. حداکثر $max.';
+  }
+
+  @override
+  String get grpJAdd => 'افزودن';
+
+  @override
+  String grpJInviteInvalidEmail(String email) {
+    return '«$email» نشانی ایمیل معتبری نیست.';
+  }
+
+  @override
+  String grpJInviteTooMany(int max) {
+    return 'هر بار حداکثر $max نفر را می‌توانید دعوت کنید.';
+  }
+
+  @override
+  String get grpJInviteSendAll => 'ارسال دعوت‌نامه‌ها';
+
+  @override
+  String grpJInviteSendCount(int count) {
+    return 'ارسال $count';
+  }
+
+  @override
+  String grpJInvited(int count) {
+    return '$count نفر دعوت شد.';
+  }
+
+  @override
+  String grpJInviteSkipped(String emails) {
+    return 'از قبل عضو هستند، رد شد: $emails';
+  }
+
+  @override
+  String get grpJExpiresAfter => 'انقضا پس از';
+
+  @override
+  String grpJDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count روز',
+      one: '$count روز',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpJMaxUses => 'حداکثر استفاده';
+
+  @override
+  String get grpJMaxUsesHelp => 'برای نامحدود خالی بگذارید.';
+
+  @override
+  String grpJMaxUsesInvalid(int max) {
+    return 'عددی از ۱ تا $max وارد کنید یا خالی بگذارید.';
+  }
+
+  @override
+  String get grpJCreateLink => 'ساخت پیوند';
+
+  @override
+  String get grpJCopyLink => 'کپی پیوند';
+
+  @override
+  String get grpJRole => 'نقش';
+
+  @override
+  String get grpJInvitationTitle => 'دعوت‌نامه';
+
+  @override
+  String get grpJJoin => 'پیوستن';
+
+  @override
+  String get grpJDecline => 'رد کردن';
+
+  @override
+  String get grpJGoToTaskForge => 'رفتن به TaskForge';
+
+  @override
+  String get grpJInvitedToJoin => 'شما به پیوستن دعوت شده‌اید';
+
+  @override
+  String grpJInviterInvitedYou(String name) {
+    return '$name شما را به پیوستن دعوت کرد';
+  }
+
+  @override
+  String get grpJBack => 'بازگشت';
+
+  @override
+  String get grpJMembers => 'اعضا';
+
+  @override
+  String get grpJInvite => 'دعوت';
+
+  @override
+  String get grpJPending => 'در انتظار';
+
+  @override
+  String grpJJoined(String date) {
+    return 'پیوست در $date';
+  }
+
+  @override
+  String get grpJRemoveFromWorkspace => 'حذف از فضای کاری';
+
+  @override
+  String get grpJSearchMembers => 'جستجوی اعضا';
+
+  @override
+  String grpJRemoveMember(String name) {
+    return 'حذف $name';
+  }
+
+  @override
+  String get grpJOwnerCannotLeave =>
+      'شما مالک این فضای کاری هستید و نمی‌توانید آن را ترک کنید. انتقال مالکیت هنوز ممکن نیست.';
+
+  @override
+  String get grpJLeaveWorkspace => 'ترک فضای کاری';
+
+  @override
+  String grpJRemoveMemberTitle(String name) {
+    return '$name حذف شود؟';
+  }
+
+  @override
+  String get grpJRemoveMemberBody =>
+      'دسترسی آنها به این فضای کاری قطع می‌شود. بعداً می‌توانید دوباره دعوتشان کنید.';
+
+  @override
+  String get grpJRemove => 'حذف';
+
+  @override
+  String grpJLeaveTitle(String name) {
+    return '$name ترک شود؟';
+  }
+
+  @override
+  String get grpJLeaveBody =>
+      'تا زمانی که کسی دوباره شما را دعوت کند، دسترسی‌تان به این فضای کاری قطع می‌شود.';
+
+  @override
+  String get grpJLeave => 'ترک';
+
+  @override
+  String grpJErrorRetry(String error) {
+    return '$error تلاش دوباره';
+  }
+
+  @override
+  String get grpJLinkCopied => 'پیوند کپی شد.';
+
+  @override
+  String get grpJNoInvitations => 'هنوز دعوت‌نامه‌ای وجود ندارد.';
+
+  @override
+  String get grpJInvitationResent => 'دعوت‌نامه دوباره ارسال شد.';
+
+  @override
+  String get grpJResend => 'ارسال مجدد';
+
+  @override
+  String get grpJRevoke => 'لغو';
+
+  @override
+  String get grpJStatePending => 'در انتظار';
+
+  @override
+  String get grpJStateExpired => 'منقضی‌شده';
+
+  @override
+  String get grpJStateRevoked => 'لغوشده';
+
+  @override
+  String get grpJStateUsedUp => 'مصرف‌شده';
+
+  @override
+  String grpJUsesCount(int count) {
+    return '$count بار استفاده';
+  }
+
+  @override
+  String grpJUsesOfMax(int uses, int max) {
+    return '$uses/$max بار استفاده';
+  }
+
+  @override
+  String get grpJInviteLink => 'پیوند دعوت';
+
+  @override
+  String grpJInvitationMeta(String name, String date) {
+    return 'توسط $name · انقضا $date';
+  }
+
+  @override
+  String get grpJChangeRole => 'تغییر نقش';
+
+  @override
+  String get grpJBlockOptions => 'گزینه‌های بلوک';
+
+  @override
+  String get grpJMoveUp => 'انتقال به بالا';
+
+  @override
+  String get grpJMoveDown => 'انتقال به پایین';
+
+  @override
+  String get grpJAddBlockBelow => 'افزودن بلوک در پایین';
+
+  @override
+  String get grpJDelete => 'حذف';
+
+  @override
+  String grpJTurnInto(String label) {
+    return 'تبدیل به $label';
+  }
+
+  @override
+  String get grpJClickToWrite => 'برای شروع نوشتن اینجا کلیک کنید';
+
+  @override
+  String get grpJAddBlock => 'افزودن بلوک';
+
+  @override
+  String get grpJDocs => 'اسناد';
+
+  @override
+  String get grpJPickPage => 'یک صفحه انتخاب کنید یا صفحه‌ای بسازید.';
+
+  @override
+  String get grpJNoMatchingBlocks => 'بلوک مطابقی یافت نشد';
+
+  @override
+  String get grpJNoMatchingPages => 'صفحه مطابقی یافت نشد';
+
+  @override
+  String get grpJTableRow => 'ردیف';
+
+  @override
+  String get grpJTableColumn => 'ستون';
+
+  @override
+  String get grpJNoImageAddress => 'هنوز نشانی تصویری وجود ندارد';
+
+  @override
+  String get grpJImageLoadFailed => 'بارگذاری تصویر ممکن نشد';
+
+  @override
+  String get grpJEditImage => 'ویرایش تصویر';
+
+  @override
+  String get grpJLoadingTask => 'در حال بارگیری وظیفه...';
+
+  @override
+  String get grpJNoAccessTask => 'دسترسی به این وظیفه ندارید';
+
+  @override
+  String grpJUnknownBlock(String type) {
+    return 'این بلوک ($type) به نسخه جدیدتر TaskForge نیاز دارد. به همین شکل نگه داشته می‌شود.';
+  }
+
+  @override
+  String get grpJLinkAPage => 'پیوند یک صفحه';
+
+  @override
+  String get grpJNoPagesYetLong => 'هنوز صفحه‌ای وجود ندارد.';
+
+  @override
+  String get grpJRelatedDocs => 'اسناد مرتبط';
+
+  @override
+  String get grpJNoPagesYet => 'هنوز صفحه‌ای نیست.';
+
+  @override
+  String get grpJLinked => 'پیوندشده';
+
+  @override
+  String get grpJEmbedded => 'جاسازی‌شده';
+
+  @override
+  String get grpJUnlink => 'حذف پیوند';
+
+  @override
+  String grpJChangeTone(String tone) {
+    return 'تغییر لحن ($tone)';
+  }
+
+  @override
+  String get grpJBold => 'پررنگ';
+
+  @override
+  String get grpJItalic => 'مورب';
+
+  @override
+  String get grpJStrikethrough => 'خط‌خورده';
+
+  @override
+  String get grpJCode => 'کد';
+
+  @override
+  String get grpJHintParagraph =>
+      'برای بلوک‌ها «/» و برای اشاره به صفحه «[[» را بنویسید';
+
+  @override
+  String grpJHintHeading(int level) {
+    return 'عنوان $level';
+  }
+
+  @override
+  String get grpJCodeLanguageHint => 'زبان';
+
+  @override
+  String get grpJUndo => 'بازگردانی';
+
+  @override
+  String get grpJRestore => 'بازیابی';
+
+  @override
+  String get grpJName => 'نام';
+
+  @override
+  String grpJWorkspaceDeleted(String name) {
+    return '«$name» حذف شد. تا ۷ روز قابل بازیابی است.';
+  }
+
+  @override
+  String get grpJDangerZone => 'منطقه خطر';
+
+  @override
+  String get grpJDangerZoneBody =>
+      'حذف فضای کاری آن را برای همه پنهان می‌کند. تا ۷ روز می‌توانید آن را بازیابی کنید.';
+
+  @override
+  String get grpJDeleteWorkspace => 'حذف فضای کاری';
+
+  @override
+  String get grpJDeleteWorkspaceQ => 'فضای کاری حذف شود؟';
+
+  @override
+  String grpJTypeNameToConfirm(String name) {
+    return 'برای تأیید «$name» را بنویسید';
+  }
+
+  @override
+  String get grpJNewWorkspace => 'فضای کاری جدید';
+
+  @override
+  String get grpJCreateYourWorkspace => 'فضای کاری خود را بسازید';
+
+  @override
+  String get grpJWorkspaceHolds =>
+      'فضای کاری پروژه‌ها و وظایف تیم شما را نگه می‌دارد.';
+
+  @override
+  String get grpJUrl => 'نشانی URL';
+
+  @override
+  String get grpJCreateWorkspace => 'ساخت فضای کاری';
+
+  @override
+  String get grpJRecentlyDeleted => 'به‌تازگی حذف‌شده';
+
+  @override
+  String get grpJSwitchWorkspace => 'تغییر فضای کاری';
+
+  @override
+  String get grpJTimerRunning => 'زمان‌سنج در حال اجرا';
+
+  @override
+  String grpJTimerStoppedOn(String key, String title) {
+    return 'زمان‌سنج روی $key $title متوقف شد';
+  }
+
+  @override
+  String get grpJTime => 'زمان';
+
+  @override
+  String get grpJStop => 'توقف';
+
+  @override
+  String get grpJStartTimer => 'شروع زمان‌سنج';
+
+  @override
+  String get grpJAddTime => 'افزودن زمان';
+
+  @override
+  String grpJTimeOfEstimate(String logged, String estimate) {
+    return '$logged از $estimate';
+  }
+
+  @override
+  String grpJTimeLogged(String logged) {
+    return '$logged ثبت شده';
+  }
+
+  @override
+  String grpJTimeBillable(String duration) {
+    return '$duration قابل صورتحساب';
+  }
+
+  @override
+  String get grpJChangeEstimate => 'تغییر برآورد';
+
+  @override
+  String get grpJSetEstimate => 'تنظیم برآورد';
+
+  @override
+  String get grpJRunning => 'در حال اجرا';
+
+  @override
+  String get grpJLoggedLabel => 'ثبت‌شده';
+
+  @override
+  String get grpJYou => 'شما';
+
+  @override
+  String get grpJBillableSuffix => 'قابل صورتحساب';
+
+  @override
+  String get grpJOverlapsEntry => 'با ورودی دیگری همپوشانی دارد';
+
+  @override
+  String get grpJOver24h => 'بیش از ۲۴ ساعت: بررسی کنید';
+
+  @override
+  String get grpJEdit => 'ویرایش';
+
+  @override
+  String get grpJStopTheTimer => 'توقف زمان‌سنج';
+
+  @override
+  String get grpJRoleActions => 'اقدامات نقش';
+
+  @override
+  String get grpJRename => 'تغییر نام';
+
+  @override
+  String get grpJBuiltInReadOnly => 'داخلی، فقط‌خواندنی';
+
+  @override
+  String get grpJRolesAndPermissions => 'نقش‌ها و مجوزها';
+
+  @override
+  String get grpJNewRole => 'نقش جدید';
+
+  @override
+  String get grpJActivity => 'فعالیت';
+
+  @override
+  String get grpJNoActivity => 'هنوز فعالیتی ثبت نشده است.';
+
+  @override
+  String get grpJDebugTitle => 'TaskForge — اتصال';
+
+  @override
+  String grpJPingLabel(String label) {
+    return 'پینگ $label';
+  }
+
+  @override
+  String grpJPingError(String error) {
+    return 'خطا: $error';
+  }
+}

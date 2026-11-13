@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/bidi.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -33,14 +35,19 @@ class CalendarTray extends ConsumerWidget {
         child: TextButton(
           key: const Key('retry-tray'),
           onPressed: () => ref.read(trayProvider(projectId).notifier).load(),
-          child: Text('${taskErrorMessage(tray.error!)} Retry'),
+          child: Text(
+            context.l10n.grpFErrorRetry(taskErrorMessage(tray.error!)),
+          ),
         ),
       );
     } else if (tray.loading) {
       body = const Center(child: CircularProgressIndicator());
     } else if (tray.tasks.isEmpty) {
-      body = const Center(
-        child: Text('Everything has a date.', key: Key('tray-empty')),
+      body = Center(
+        child: Text(
+          context.l10n.grpFEverythingDated,
+          key: const Key('tray-empty'),
+        ),
       );
     } else {
       body = ListView.builder(
@@ -65,12 +72,12 @@ class CalendarTray extends ConsumerWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: Text(task.displayId),
+            subtitle: Text(isolateLtr(task.displayId)),
             onTap: () => onOpen(task),
             trailing: canMove
                 ? IconButton(
                     key: Key('schedule-${task.id}'),
-                    tooltip: 'Schedule…',
+                    tooltip: context.l10n.grpFSchedule,
                     icon: const Icon(Icons.event_available_outlined),
                     onPressed: () => onSchedule(task),
                   )
@@ -99,7 +106,7 @@ class CalendarTray extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(12),
           child: Text(
-            'Unscheduled',
+            context.l10n.grpFUnscheduled,
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),

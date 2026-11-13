@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/audit/application/audit_providers.dart';
 import 'package:taskforge/features/audit/domain/activity_lines.dart';
 import 'package:taskforge/features/audit/domain/audit.dart';
@@ -29,7 +30,10 @@ class _ActivitySectionState extends State<ActivitySection> {
   Widget build(BuildContext context) => ExpansionTile(
     key: const Key('activity-section'),
     tilePadding: EdgeInsets.zero,
-    title: Text('Activity', style: Theme.of(context).textTheme.titleMedium),
+    title: Text(
+      context.l10n.grpJActivity,
+      style: Theme.of(context).textTheme.titleMedium,
+    ),
     leading: const Icon(Icons.history),
     onExpansionChanged: (v) => setState(() => _open = v),
     children: [
@@ -58,7 +62,10 @@ class ActivityList extends ConsumerWidget {
       return Padding(
         padding: const EdgeInsets.all(8),
         child: state.error == null
-            ? const Text('No activity yet.', key: Key('activity-empty'))
+            ? Text(
+                context.l10n.grpJNoActivity,
+                key: const Key('activity-empty'),
+              )
             : _Failed(
                 error: state.error!,
                 onRetry: ref.read(taskActivityProvider(task).notifier).refresh,
@@ -143,7 +150,7 @@ class _Failed extends StatelessWidget {
       TextButton(
         key: const Key('activity-retry'),
         onPressed: onRetry,
-        child: const Text('Retry'),
+        child: Text(context.l10n.retry),
       ),
     ],
   );

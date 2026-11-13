@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/config.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
@@ -10,18 +12,21 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
-String stateLabel(InviteState s) => switch (s) {
-  InviteState.valid => 'Pending',
-  InviteState.expired => 'Expired',
-  InviteState.revoked => 'Revoked',
-  InviteState.usedUp => 'Used up',
-};
+String stateLabel(InviteState s, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (s) {
+    InviteState.valid => t.grpJStatePending,
+    InviteState.expired => t.grpJStateExpired,
+    InviteState.revoked => t.grpJStateRevoked,
+    InviteState.usedUp => t.grpJStateUsedUp,
+  };
+}
 
 Future<void> copyInviteLink(BuildContext context, String token) async {
   await Clipboard.setData(ClipboardData(text: AppConfig.inviteUrl(token)));
   if (context.mounted) {
     ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Link copied.')));
+        .showSnackBar(SnackBar(content: Text(context.l10n.grpJLinkCopied)));
   }
 }
 
@@ -39,11 +44,11 @@ class PendingTab extends ConsumerWidget {
         child: TextButton(
           key: const Key('retry-invitations'),
           onPressed: () => ref.invalidate(invitationsProvider),
-          child: Text('${inviteErrorMessage(e)} Retry'),
+          child: Text(context.l10n.grpJErrorRetry(inviteErrorMessage(e))),
         ),
       ),
       data: (all) => all.isEmpty
-          ? const Center(child: Text('No invitations yet.'))
+          ? Center(child: Text(context.l10n.grpJNoInvitations))
           : ListView(
               children: [
                 for (final i in all)
@@ -77,8 +82,9 @@ class _InvitationTile extends ConsumerWidget {
     });
     if (sent) ref.invalidate(invitationsProvider);
     if (sent && context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Invitation resent.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.grpJInvitationResent)),
+      );
     }
   }
 
@@ -95,15 +101,15 @@ class _InvitationTile extends ConsumerWidget {
     final i = invitation;
     final live = i.state == InviteState.valid;
     final uses = i.maxUses == 0
-        ? '${i.uses} uses'
-        : '${i.uses}/${i.maxUses} uses';
+        ? context.l10n.grpJUsesCount(i.uses)
+        : context.l10n.grpJUsesOfMax(i.uses, i.maxUses);
     return ListTile(
       key: Key('invite-${i.id}'),
       leading: Icon(i.isLink ? Icons.link : Icons.mail_outline),
-      title: Text(i.isLink ? 'Invite link' : i.email),
+      title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
       subtitle: Text(
-        '${i.isLink ? '$uses · ' : ''}by ${i.createdByName} · '
-        'expires ${formatDate(i.expiresAt)}',
+        '${i.isLink ? '$uses · ' : ''}'
+        '${context.l10n.grpJInvitationMeta(i.createdByName, formatDate(i.expiresAt))}',
       ),
       trailing: Wrap(
         spacing: 4,
@@ -111,7 +117,10 @@ class _InvitationTile extends ConsumerWidget {
         children: [
           if (i.roleName.isNotEmpty)
             Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
-          Chip(key: Key('state-${i.id}'), label: Text(stateLabel(i.state))),
+          Chip(
+            key: Key('state-${i.id}'),
+            label: Text(stateLabel(i.state, context.l10n)),
+          ),
           PermissionGate(
             permission: Perm.memberInvite,
             child: Wrap(
@@ -119,21 +128,21 @@ class _InvitationTile extends ConsumerWidget {
                 if (i.isLink && token.isNotEmpty && live)
                   IconButton(
                     key: Key('copy-${i.id}'),
-                    tooltip: 'Copy link',
+                    tooltip: context.l10n.grpJCopyLink,
                     icon: const Icon(Icons.copy),
                     onPressed: () => copyInviteLink(context, token),
                   ),
                 if (!i.isLink && i.state != InviteState.revoked)
                   IconButton(
                     key: Key('resend-${i.id}'),
-                    tooltip: 'Resend',
+                    tooltip: context.l10n.grpJResend,
                     icon: const Icon(Icons.send),
                     onPressed: () => _resend(context, ref),
                   ),
                 if (live)
                   IconButton(
                     key: Key('revoke-${i.id}'),
-                    tooltip: 'Revoke',
+                    tooltip: context.l10n.grpJRevoke,
                     icon: const Icon(Icons.block),
                     onPressed: () => _revoke(context, ref),
                   ),

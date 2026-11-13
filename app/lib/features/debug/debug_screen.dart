@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ping/ping_client.dart';
 import 'package:taskforge/features/debug/ping_providers.dart';
 
@@ -15,11 +16,11 @@ class DebugScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
+          tooltip: context.l10n.grpJBack,
+          icon: const BackButtonIcon(),
           onPressed: () => context.go('/'),
         ),
-        title: const Text('TaskForge — connectivity'),
+        title: Text(context.l10n.grpJDebugTitle),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -72,13 +73,13 @@ class _PingTileState extends State<PingTile> {
       child: ListTile(
         title: FilledButton(
           onPressed: _loading ? null : _run,
-          child: Text('${widget.client.label} ping'),
+          child: Text(context.l10n.grpJPingLabel(widget.client.label)),
         ),
         subtitle: switch ((_loading, _reply, _error)) {
           (true, _, _) => const LinearProgressIndicator(),
           (_, final reply?, _) => Text(reply),
           (_, _, final error?) => Text(
-            'error: $error',
+            context.l10n.grpJPingError(error),
             style: TextStyle(color: colors.error),
           ),
           _ => null,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/doc_ops.dart';
@@ -178,21 +179,24 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
 
   Widget _menuButton(DocBlock b) => PopupMenuButton<String>(
     key: Key('block-menu-${b.id}'),
-    tooltip: 'Block options',
+    tooltip: context.l10n.grpJBlockOptions,
     iconSize: 18,
     padding: EdgeInsets.zero,
     icon: const Icon(Icons.drag_indicator, size: 18),
     onSelected: (a) => _menu(b, a),
     itemBuilder: (_) => [
-      const PopupMenuItem(value: 'up', child: Text('Move up')),
-      const PopupMenuItem(value: 'down', child: Text('Move down')),
-      const PopupMenuItem(value: 'below', child: Text('Add block below')),
-      const PopupMenuItem(value: 'delete', child: Text('Delete')),
+      PopupMenuItem(value: 'up', child: Text(context.l10n.grpJMoveUp)),
+      PopupMenuItem(value: 'down', child: Text(context.l10n.grpJMoveDown)),
+      PopupMenuItem(
+        value: 'below',
+        child: Text(context.l10n.grpJAddBlockBelow),
+      ),
+      PopupMenuItem(value: 'delete', child: Text(context.l10n.grpJDelete)),
       const PopupMenuDivider(),
       for (final s in slashItems)
         PopupMenuItem(
           value: 'turn:${s.id}',
-          child: Text('Turn into ${s.label}'),
+          child: Text(context.l10n.grpJTurnInto(s.label)),
         ),
     ],
   );
@@ -284,9 +288,9 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
               final b = DocBlock.create(BlockType.paragraph);
               _emit([b], focus: b.id);
             },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text('Click here to start writing'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(context.l10n.grpJClickToWrite),
             ),
           ),
         for (final b in _blocks)
@@ -306,11 +310,11 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
           ),
         if (!widget.readOnly && _blocks.isNotEmpty)
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               key: const Key('add-block'),
               icon: const Icon(Icons.add, size: 16),
-              label: const Text('Add block'),
+              label: Text(context.l10n.grpJAddBlock),
               onPressed: () {
                 final b = DocBlock.create(BlockType.paragraph);
                 _emit([..._blocks, b], focus: b.id);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
@@ -12,28 +13,26 @@ Future<DeleteMode?> askDeleteMode(
 ) => showDialog<DeleteMode>(
   context: context,
   builder: (context) => AlertDialog(
-    title: Text('Delete ${task.displayId}?'),
+    title: Text(context.l10n.grpFDeleteTaskTitle(task.displayId)),
     content: Text(
-      subtaskCount == 1
-          ? 'It has 1 subtask. What should happen to it?'
-          : 'It has $subtaskCount subtasks. What should happen to them?',
+      context.l10n.grpFDeleteSubtasksExplain(subtaskCount),
       key: const Key('delete-mode-explain'),
     ),
     actions: [
       TextButton(
         key: const Key('delete-mode-cancel'),
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       OutlinedButton(
         key: const Key('delete-mode-promote'),
         onPressed: () => Navigator.pop(context, DeleteMode.promote),
-        child: const Text('Keep them (move up a level)'),
+        child: Text(context.l10n.grpFKeepSubtasks),
       ),
       FilledButton(
         key: const Key('delete-mode-subtree'),
         onPressed: () => Navigator.pop(context, DeleteMode.subtree),
-        child: const Text('Delete them too'),
+        child: Text(context.l10n.grpFDeleteThemToo),
       ),
     ],
   ),
@@ -52,28 +51,26 @@ Future<CompleteChoice?> askCompleteSubtasks(
 ) => showDialog<CompleteChoice>(
   context: context,
   builder: (context) => AlertDialog(
-    title: Text('${task.displayId} has open subtasks'),
+    title: Text(context.l10n.grpFOpenSubtasksTitle(task.displayId)),
     content: Text(
-      open == 1
-          ? '1 subtask is not finished. Move it to $statusName too?'
-          : '$open subtasks are not finished. Move them to $statusName too?',
+      context.l10n.grpFOpenSubtasksExplain(open, statusName),
       key: const Key('complete-explain'),
     ),
     actions: [
       TextButton(
         key: const Key('complete-cancel'),
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.cancel),
       ),
       OutlinedButton(
         key: const Key('leave-open'),
         onPressed: () => Navigator.pop(context, CompleteChoice.leave),
-        child: const Text('Leave them open'),
+        child: Text(context.l10n.grpFLeaveOpen),
       ),
       FilledButton(
         key: const Key('complete-all'),
         onPressed: () => Navigator.pop(context, CompleteChoice.all),
-        child: const Text('Complete all'),
+        child: Text(context.l10n.grpFCompleteAll),
       ),
     ],
   ),
@@ -89,7 +86,7 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
       builder: (context) {
         final candidates = tree.candidateParents(task.id);
         return AlertDialog(
-          title: Text('Move ${task.displayId} under…'),
+          title: Text(context.l10n.grpFMoveUnderTitle(task.displayId)),
           content: SizedBox(
             width: 420,
             height: 360,
@@ -100,15 +97,15 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                   ListTile(
                     key: const Key('pick-parent-top'),
                     leading: const Icon(Icons.vertical_align_top),
-                    title: const Text('Top level (no parent)'),
+                    title: Text(context.l10n.grpFTopLevel),
                     onTap: () => Navigator.pop(context, ''),
                   ),
                 for (final t in candidates)
                   if (t.id != task.parentId)
                     ListTile(
                       key: Key('pick-parent-${t.id}'),
-                      contentPadding: EdgeInsets.only(
-                        left: 16.0 + t.depth * 16,
+                      contentPadding: EdgeInsetsDirectional.only(
+                        start: 16.0 + t.depth * 16,
                       ),
                       title: Text(
                         '${t.displayId}  ${t.title}',
@@ -118,11 +115,11 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                     ),
                 if (candidates.where((t) => t.id != task.parentId).isEmpty &&
                     task.parentId.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(16),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
                     child: Text(
-                      'There is no other task to put it under.',
-                      key: Key('pick-parent-none'),
+                      context.l10n.grpFNoOtherParent,
+                      key: const Key('pick-parent-none'),
                     ),
                   ),
               ],
@@ -132,7 +129,7 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
             TextButton(
               key: const Key('pick-parent-cancel'),
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
           ],
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/role_actions.dart';
 
@@ -49,13 +50,13 @@ class _RoleMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => PopupMenuButton<String>(
     key: Key('role-menu-${role.id}'),
-    tooltip: 'Role actions',
+    tooltip: context.l10n.grpJRoleActions,
     onSelected: (action) => action == 'rename'
         ? renameRoleFlow(context, ref, role)
         : deleteRoleFlow(context, ref, role, all),
-    itemBuilder: (_) => const [
-      PopupMenuItem(value: 'rename', child: Text('Rename')),
-      PopupMenuItem(value: 'delete', child: Text('Delete')),
+    itemBuilder: (_) => [
+      PopupMenuItem(value: 'rename', child: Text(context.l10n.grpJRename)),
+      PopupMenuItem(value: 'delete', child: Text(context.l10n.grpJDelete)),
     ],
   );
 }
@@ -80,7 +81,7 @@ class _RoleHeader extends StatelessWidget {
           Icons.lock,
           key: Key('lock-${role.id}'),
           size: 14,
-          semanticLabel: 'Built-in, read-only',
+          semanticLabel: context.l10n.grpJBuiltInReadOnly,
         ),
       Flexible(
         child: Text(
@@ -181,9 +182,9 @@ class RoleList extends StatelessWidget {
             children: [
               for (final area in catalog.registry) ...[
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
                     child: Text(
                       area.area,
                       style: Theme.of(context).textTheme.titleSmall,

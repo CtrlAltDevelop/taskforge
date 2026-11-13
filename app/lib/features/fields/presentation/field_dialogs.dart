@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/fields/presentation/field_input.dart';
 import 'package:taskforge/features/members/domain/members.dart';
@@ -93,7 +94,9 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
     if (!type.hasOptions) {
       _options.clear();
     } else if (_options.isEmpty) {
-      _options.add(_EditableOption('', 'Option 1', optionPalette.first));
+      _options.add(
+        _EditableOption('', context.l10n.grpEOptionN, optionPalette.first),
+      );
     }
   });
 
@@ -102,13 +105,13 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
     final labels = _asOptions.map((o) => o.label.toLowerCase()).toList();
     String? problem;
     if (name.isEmpty) {
-      problem = 'Give the field a name.';
+      problem = context.l10n.grpEProblemName;
     } else if (_type.hasOptions && labels.isEmpty) {
-      problem = 'Add at least one option.';
+      problem = context.l10n.grpEProblemOne;
     } else if (labels.any((l) => l.isEmpty)) {
-      problem = 'Every option needs a label.';
+      problem = context.l10n.grpEProblemLabel;
     } else if (labels.toSet().length != labels.length) {
-      problem = 'Two options have the same label.';
+      problem = context.l10n.grpEProblemDup;
     }
     if (problem != null) {
       setState(() => _problem = problem);
@@ -136,7 +139,9 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text(_editing ? 'Edit field' : 'New field'),
+    title: Text(
+      _editing ? context.l10n.grpEEditField : context.l10n.grpENewField,
+    ),
     content: SizedBox(
       width: 460,
       child: SingleChildScrollView(
@@ -148,8 +153,8 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
               key: const Key('field-name'),
               controller: _name,
               maxLength: maxFieldNameLength,
-              decoration: const InputDecoration(
-                labelText: 'Name',
+              decoration: InputDecoration(
+                labelText: context.l10n.grpEName,
                 counterText: '',
               ),
             ),
@@ -157,7 +162,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
             DropdownButtonFormField<FieldType>(
               key: const Key('field-type'),
               initialValue: _type,
-              decoration: const InputDecoration(labelText: 'Type'),
+              decoration: InputDecoration(labelText: context.l10n.grpEType),
               items: [
                 for (final t in _types)
                   DropdownMenuItem(value: t, child: Text(t.label)),
@@ -168,14 +173,17 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
             ),
             if (_type.hasOptions) ...[
               const SizedBox(height: 16),
-              Text('Options', style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                context.l10n.grpEOptions,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               for (final (i, o) in _options.indexed)
                 Row(
                   key: Key('option-row-$i'),
                   children: [
                     PopupMenuButton<String>(
                       key: Key('option-color-$i'),
-                      tooltip: 'Colour',
+                      tooltip: context.l10n.grpEColour,
                       icon: Icon(
                         Icons.circle,
                         color: optionColor(
@@ -200,12 +208,14 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                       child: TextField(
                         key: Key('option-label-$i'),
                         controller: o.controller,
-                        decoration: const InputDecoration(hintText: 'Label'),
+                        decoration: InputDecoration(
+                          hintText: context.l10n.grpELabel,
+                        ),
                       ),
                     ),
                     IconButton(
                       key: Key('option-remove-$i'),
-                      tooltip: 'Remove option',
+                      tooltip: context.l10n.grpERemoveOption,
                       icon: const Icon(Icons.close),
                       onPressed: () => setState(() {
                         _options.removeAt(i).controller.dispose();
@@ -217,7 +227,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
               TextButton.icon(
                 key: const Key('option-add'),
                 icon: const Icon(Icons.add),
-                label: const Text('Add option'),
+                label: Text(context.l10n.grpEAddOption),
                 onPressed: () => setState(
                   () => _options.add(
                     _EditableOption(
@@ -232,8 +242,8 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
             SwitchListTile(
               key: const Key('field-required'),
               contentPadding: EdgeInsets.zero,
-              title: const Text('Required'),
-              subtitle: const Text('New tasks must have a value.'),
+              title: Text(context.l10n.grpERequired),
+              subtitle: Text(context.l10n.grpERequiredSub),
               value: _required,
               onChanged: (v) => setState(() => _required = v),
             ),
@@ -243,7 +253,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 field: CustomField(
                   id: 'default',
                   projectId: '',
-                  name: 'Default value',
+                  name: context.l10n.grpEDefaultValue,
                   type: _type,
                   options: _preview.options,
                 ),
@@ -252,7 +262,10 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 onChanged: (v) => setState(() => _default = v),
               ),
             const SizedBox(height: 12),
-            Text('Show in', style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              context.l10n.grpEShowIn,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             Wrap(
               spacing: 8,
               children: [
@@ -284,12 +297,14 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
       TextButton(
         key: const Key('field-cancel'),
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpECancel),
       ),
       FilledButton(
         key: const Key('field-save'),
         onPressed: _save,
-        child: Text(_editing ? 'Save' : 'Add field'),
+        child: Text(
+          _editing ? context.l10n.grpESave : context.l10n.grpEAddField,
+        ),
       ),
     ],
   );
@@ -320,7 +335,7 @@ class _RemapDialogState extends State<RemapDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Options are in use'),
+    title: Text(context.l10n.grpEOptionsInUse),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -331,14 +346,16 @@ class _RemapDialogState extends State<RemapDialog> {
               key: Key('remap-${e.key}'),
               initialValue: _choice[e.key],
               decoration: InputDecoration(
-                labelText:
-                    '${widget.field.option(e.key)?.label ?? 'Removed option'}'
-                    ' (${e.value} ${e.value == 1 ? 'value' : 'values'}) becomes',
+                labelText: context.l10n.grpERemapLabel(
+                  widget.field.option(e.key)?.label ??
+                      context.l10n.grpERemovedOption,
+                  e.value,
+                ),
               ),
               items: [
-                const DropdownMenuItem(
+                DropdownMenuItem(
                   value: '',
-                  child: Text('Nothing (clear)'),
+                  child: Text(context.l10n.grpENothingClear),
                 ),
                 for (final o in widget.kept)
                   if (o.id.isNotEmpty)
@@ -353,13 +370,13 @@ class _RemapDialogState extends State<RemapDialog> {
       TextButton(
         key: const Key('remap-cancel'),
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpECancel),
       ),
       FilledButton(
         key: const Key('remap-apply'),
         onPressed: () =>
             Navigator.pop(context, Map<String, String>.of(_choice)),
-        child: const Text('Apply'),
+        child: Text(context.l10n.grpEApply),
       ),
     ],
   );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/filters/domain/filter_fields.dart';
@@ -90,7 +91,7 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
           _message =
               checked?.errors.firstOrNull?.message ??
               _message ??
-              'Finish the conditions first.';
+              context.l10n.grpGFinishConditions;
         });
         return;
       }
@@ -192,8 +193,8 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
         canShare: widget.canShare,
         sharedValue: _project.isEmpty ? 'workspace' : 'project',
         sharedLabel: _project.isEmpty
-            ? 'Everyone in the workspace'
-            : 'Everyone in this project',
+            ? context.l10n.grpGEveryoneWorkspace
+            : context.l10n.grpGEveryoneProject,
       ),
     );
     final workspace = _workspace;
@@ -233,13 +234,19 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
       key: const Key('filter-panel'),
       title: Row(
         children: [
-          const Expanded(child: Text('Filter')),
+          Expanded(child: Text(context.l10n.grpGFilter)),
           SegmentedButton<_Mode>(
             key: const Key('filter-mode'),
             showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(value: _Mode.builder, label: Text('Builder')),
-              ButtonSegment(value: _Mode.text, label: Text('Advanced')),
+            segments: [
+              ButtonSegment(
+                value: _Mode.builder,
+                label: Text(context.l10n.grpGBuilder),
+              ),
+              ButtonSegment(
+                value: _Mode.text,
+                label: Text(context.l10n.grpGAdvanced),
+              ),
             ],
             selected: {_mode},
             onSelectionChanged: _busy ? null : (v) => _switchTo(v.first),
@@ -289,21 +296,21 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
         TextButton(
           key: const Key('filter-clear'),
           onPressed: _clear,
-          child: const Text('Clear filter'),
+          child: Text(context.l10n.grpGClearFilter),
         ),
         TextButton(
           key: const Key('filter-save'),
           onPressed: _busy ? null : _save,
-          child: const Text('Save as…'),
+          child: Text(context.l10n.grpGSaveAs),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.grpGCancel),
         ),
         FilledButton(
           key: const Key('filter-apply'),
           onPressed: _busy ? null : _apply,
-          child: const Text('Apply'),
+          child: Text(context.l10n.grpGApply),
         ),
       ],
     );
@@ -346,7 +353,7 @@ class _SaveDialogState extends State<_SaveDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Save this filter'),
+    title: Text(context.l10n.grpGSaveThisFilter),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -355,7 +362,7 @@ class _SaveDialogState extends State<_SaveDialog> {
           controller: _name,
           autofocus: true,
           maxLength: 60,
-          decoration: const InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(labelText: context.l10n.grpGName),
           onSubmitted: (_) => _done(),
         ),
         if (widget.canShare)
@@ -363,7 +370,10 @@ class _SaveDialogState extends State<_SaveDialog> {
             key: const Key('filter-visibility'),
             value: _visibility,
             items: [
-              const DropdownMenuItem(value: 'private', child: Text('Only me')),
+              DropdownMenuItem(
+                value: 'private',
+                child: Text(context.l10n.grpGOnlyMe),
+              ),
               DropdownMenuItem(
                 value: widget.sharedValue,
                 child: Text(widget.sharedLabel),
@@ -376,12 +386,12 @@ class _SaveDialogState extends State<_SaveDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpGCancel),
       ),
       FilledButton(
         key: const Key('filter-save-confirm'),
         onPressed: _done,
-        child: const Text('Save'),
+        child: Text(context.l10n.grpGSave),
       ),
     ],
   );

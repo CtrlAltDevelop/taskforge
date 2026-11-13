@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 import 'package:taskforge/features/dashboards/presentation/drill_sheet.dart';
@@ -59,7 +60,7 @@ class WidgetCard extends ConsumerWidget {
                 if (saved)
                   IconButton(
                     key: Key('refresh-${widget.id}'),
-                    tooltip: 'Refresh',
+                    tooltip: context.l10n.grpIRefresh,
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(Icons.refresh, size: 18),
                     onPressed: () => ref
@@ -68,19 +69,22 @@ class WidgetCard extends ConsumerWidget {
                   ),
                 PopupMenuButton<String>(
                   key: Key('menu-${widget.id}'),
-                  tooltip: 'Widget menu',
+                  tooltip: context.l10n.grpIWidgetMenu,
                   itemBuilder: (_) => [
                     if (saved)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'export',
-                        child: Text('Export CSV'),
+                        child: Text(context.l10n.grpIExportCsv),
                       ),
                     if (editing)
-                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(context.l10n.grpIEdit),
+                      ),
                     if (editing)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'remove',
-                        child: Text('Remove'),
+                        child: Text(context.l10n.grpIRemove),
                       ),
                   ],
                   onSelected: (v) {
@@ -98,8 +102,11 @@ class WidgetCard extends ConsumerWidget {
             ),
             Expanded(
               child: switch (data) {
-                null => const Center(
-                  child: Text('Save to see numbers.', key: Key('unsaved')),
+                null => Center(
+                  child: Text(
+                    context.l10n.grpISaveToSeeNumbers,
+                    key: const Key('unsaved'),
+                  ),
                 ),
                 AsyncData(:final value) => _Loaded(
                   widget: widget,
@@ -126,7 +133,7 @@ class WidgetCard extends ConsumerWidget {
                         key: Key('retry-${widget.id}'),
                         onPressed: () =>
                             ref.invalidate(widgetDataProvider(key)),
-                        child: const Text('Retry'),
+                        child: Text(context.l10n.grpIRetry),
                       ),
                     ],
                   ),
@@ -153,7 +160,7 @@ class WidgetCard extends ConsumerWidget {
         context: context,
         builder: (_) => AlertDialog(
           key: const Key('widget-export-dialog'),
-          title: Text('$title (CSV)'),
+          title: Text(context.l10n.grpICsvTitle(title)),
           content: SizedBox(
             width: 480,
             child: SingleChildScrollView(
@@ -168,13 +175,12 @@ class WidgetCard extends ConsumerWidget {
             TextButton(
               key: const Key('widget-export-copy'),
               onPressed: () async {
+                final copied = context.l10n.grpICsvCopied;
                 await Clipboard.setData(ClipboardData(text: csv));
-                messenger.showSnackBar(
-                  const SnackBar(content: Text('CSV copied.')),
-                );
+                messenger.showSnackBar(SnackBar(content: Text(copied)));
                 if (context.mounted) Navigator.pop(context);
               },
-              child: const Text('Copy'),
+              child: Text(context.l10n.grpICopy),
             ),
             TextButton(
               key: const Key('widget-export-save'),
@@ -186,11 +192,11 @@ class WidgetCard extends ConsumerWidget {
                 );
                 if (context.mounted) Navigator.pop(context);
               },
-              child: const Text('Save as file'),
+              child: Text(context.l10n.grpISaveAsFile),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(context.l10n.grpIClose),
             ),
           ],
         ),
@@ -218,10 +224,8 @@ class _Loaded extends StatelessWidget {
       if (data.truncated)
         Text(
           widget.kind == WidgetKind.line
-              ? 'Showing the latest ${widget.config.limit} points; '
-                    'shorten the range to see them all.'
-              : 'Showing the top ${widget.config.limit}; '
-                    'narrow the filter to see the rest.',
+              ? context.l10n.grpILatestPoints(widget.config.limit)
+              : context.l10n.grpITopLimit(widget.config.limit),
           key: const Key('widget-truncated'),
           style: Theme.of(context).textTheme.bodySmall,
         ),

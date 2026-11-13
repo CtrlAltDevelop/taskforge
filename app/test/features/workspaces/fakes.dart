@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/app.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 
@@ -45,6 +46,9 @@ class MockAuthApi extends Mock implements AuthApi {
 }
 
 class FakeAccounts implements AccountClient {
+  @override
+  Future<void> updatePreferences(LocalePrefs prefs) async {}
+
   @override
   Future<Account> me() async =>
       const Account(id: 'u1', email: 'zoe@example.com', displayName: 'Zoe');

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/recently_deleted.dart';
@@ -63,7 +64,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Scaffold(
       appBar: widget.firstWorkspace
           ? null
-          : AppBar(title: const Text('New workspace')),
+          : AppBar(title: Text(context.l10n.grpJNewWorkspace)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
@@ -74,18 +75,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               padding: const EdgeInsets.all(24),
               children: [
                 Text(
-                  'Create your workspace',
+                  context.l10n.grpJCreateYourWorkspace,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'A workspace holds your team\'s projects and tasks.',
-                ),
+                Text(context.l10n.grpJWorkspaceHolds),
                 const SizedBox(height: 24),
                 TextFormField(
                   key: const Key('workspace-name'),
                   controller: _name,
-                  decoration: const InputDecoration(labelText: 'Name'),
+                  decoration: InputDecoration(labelText: context.l10n.grpJName),
                   validator: validateWorkspaceName,
                   onChanged: (v) {
                     if (!_slugEdited) _slug.text = slugify(v);
@@ -96,7 +95,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   key: const Key('workspace-slug'),
                   controller: _slug,
                   decoration: InputDecoration(
-                    labelText: 'URL',
+                    labelText: context.l10n.grpJUrl,
                     errorText: _slugError,
                   ),
                   validator: validateSlug,
@@ -119,7 +118,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 FilledButton(
                   key: const Key('create-workspace'),
                   onPressed: _busy ? null : _submit,
-                  child: const Text('Create workspace'),
+                  child: Text(context.l10n.grpJCreateWorkspace),
                 ),
                 if (widget.firstWorkspace) ...[
                   const RecentlyDeleted(),
@@ -127,7 +126,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   TextButton(
                     key: const Key('onboarding-sign-out'),
                     onPressed: ref.read(authSessionProvider).signOut,
-                    child: const Text('Sign out'),
+                    child: Text(context.l10n.signOut),
                   ),
                 ],
               ],

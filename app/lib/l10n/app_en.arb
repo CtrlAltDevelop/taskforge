@@ -1,0 +1,3152 @@
+{
+  "@@locale": "en",
+  "appTitle": "TaskForge",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "save": "Save",
+  "close": "Close",
+  "signOut": "Sign out",
+  "inbox": "Inbox",
+  "workspaceSettings": "Workspace settings",
+  "homeLoadWorkspacesFailed": "Could not load your workspaces. Retry",
+  "homeLoadAccountFailed": "Could not load your account.",
+  "calendar": "Calendar",
+  "calendarSubtitle": "Everything due, across your projects",
+  "notificationSettings": "Notification settings",
+  "notificationSettingsSubtitle": "What pings you, quiet hours and the digest",
+  "offlineAndStorage": "Offline and storage",
+  "offlineAndStorageSubtitle": "Changes made offline, the local copy",
+  "sessions": "Sessions",
+  "sessionsSubtitle": "Devices signed in to your account",
+  "changePassword": "Change password",
+  "connectivity": "Connectivity",
+  "languageAndRegion": "Language and region",
+  "languageAndRegionSubtitle": "Language, calendar, week start and digits",
+  "signIn": "Sign in",
+  "createAccount": "Create account",
+  "forgotPassword": "Forgot your password?",
+  "createAnAccount": "Create an account",
+  "alreadyHaveAccount": "I already have an account",
+  "resetPassword": "Reset password",
+  "sendCode": "Send code",
+  "backToSignIn": "Back to sign in",
+  "setNewPassword": "Set a new password",
+  "updatePassword": "Update password",
+  "codeFromEmail": "Code from your email",
+  "email": "Email",
+  "password": "Password",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "passwordChanged": "Password changed. Sign in again.",
+  "passwordUpdated": "Password updated. Sign in with it.",
+  "enterEmail": "Enter your email address.",
+  "enterValidEmail": "Enter a valid email address.",
+  "enterPassword": "Enter a password.",
+  "passwordTooShort": "Use at least {min} characters.",
+  "@passwordTooShort": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "enterResetCode": "Enter the code from your email.",
+  "enterYourPassword": "Enter your password.",
+  "errWrongCredentials": "Wrong email or password.",
+  "errTooManyAttempts": "Too many attempts. Try again in a few minutes.",
+  "errAccountExists": "An account with that email already exists.",
+  "errServerProblem": "The server had a problem. Try again in a moment.",
+  "errNoConnection": "Cannot reach the server. Check your connection and try again.",
+  "errGeneric": "Something went wrong. Try again.",
+  "languageLabel": "Language",
+  "calendarSystemLabel": "Calendar",
+  "calendarGregorian": "Gregorian",
+  "calendarJalali": "Jalali (Solar Hijri)",
+  "weekStartLabel": "Week starts on",
+  "weekStartDefault": "Language default",
+  "weekSaturday": "Saturday",
+  "weekSunday": "Sunday",
+  "weekMonday": "Monday",
+  "numeralsLabel": "Digits",
+  "numeralsLatin": "Western (0123)",
+  "numeralsNative": "Native to the language",
+  "previewLabel": "Preview",
+  "prefsSaveFailed": "Saved on this device only. We could not reach the server.",
+  "workspaceDefaultLanguage": "Default language for new members",
+  "taskCount": "{count, plural, =0{No tasks} =1{1 task} other{{count} tasks}}",
+  "@taskCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jalaliMonth1": "Farvardin",
+  "jalaliMonth2": "Ordibehesht",
+  "jalaliMonth3": "Khordad",
+  "jalaliMonth4": "Tir",
+  "jalaliMonth5": "Mordad",
+  "jalaliMonth6": "Shahrivar",
+  "jalaliMonth7": "Mehr",
+  "jalaliMonth8": "Aban",
+  "jalaliMonth9": "Azar",
+  "jalaliMonth10": "Dey",
+  "jalaliMonth11": "Bahman",
+  "jalaliMonth12": "Esfand",
+  "pickDateOk": "OK",
+  "pickDateTitle": "Select date",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "weekdayShortMon": "Mon",
+  "weekdayShortTue": "Tue",
+  "weekdayShortWed": "Wed",
+  "weekdayShortThu": "Thu",
+  "weekdayShortFri": "Fri",
+  "weekdayShortSat": "Sat",
+  "weekdayShortSun": "Sun",
+  "grpACancel": "Cancel",
+  "grpASave": "Save",
+  "grpARetry": "Retry",
+  "grpADone": "Done",
+  "grpAClose": "Close",
+  "grpAEdit": "Edit",
+  "grpADelete": "Delete",
+  "grpANote": "Note",
+  "grpATotal": "Total",
+  "grpATask": "Task",
+  "grpAMerge": "Merge",
+  "grpARemove": "Remove",
+  "grpAOfflineBack": "Back",
+  "grpAOfflineTitle": "Offline and storage",
+  "grpAOfflineChooseWorkspace": "Choose a workspace first.",
+  "grpAOfflineNeedsAttention": "Needs your attention",
+  "grpAOfflineNothingToDecide": "Nothing. Every change made offline was sent.",
+  "grpAOfflineWaiting": "Waiting to be sent ({count})",
+  "@grpAOfflineWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpASyncNow": "Sync now",
+  "grpAOfflineNothingWaiting": "Nothing is waiting.",
+  "grpAEntryATask": "a task",
+  "grpAEntryNewTask": "New task “{title}”",
+  "@grpAEntryNewTask": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAEntryEdit": "Edit {name}: {fields}",
+  "@grpAEntryEdit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAEntryDelete": "Delete {name}",
+  "@grpAEntryDelete": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAEntryComment": "Comment on {name}",
+  "@grpAEntryComment": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAEntryUpload": "Upload “{file}” to {name}",
+  "@grpAEntryUpload": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAOfflineClash": "Theirs ({field}): {current}\nYours: {mine}",
+  "@grpAOfflineClash": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "mine": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAKeepMine": "Keep mine",
+  "grpATakeTheirs": "Take theirs",
+  "grpATryAgain": "Try again",
+  "grpADiscard": "Discard",
+  "grpAMergeTitle": "Which of your changes to keep?",
+  "grpAStorage": "Storage",
+  "grpAReading": "Reading…",
+  "grpAStorageUsage": "The copy on this device holds {size} MB of at most {cap} MB.",
+  "@grpAStorageUsage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "cap": {
+        "type": "int"
+      }
+    }
+  },
+  "grpAMostItMayHold": "Most it may hold",
+  "grpAMegabytes": "{mb} MB",
+  "@grpAMegabytes": {
+    "placeholders": {
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
+  "grpAClearCopy": "Clear the copy on this device",
+  "grpAStorageNote": "Changes still waiting to be sent are kept. The copy is stored unencrypted: use your device's disk encryption.",
+  "grpAClearTitle": "Clear the copy on this device?",
+  "grpAClearBody": "What you read is fetched again when you are online. Changes waiting to be sent are not removed.",
+  "grpAClear": "Clear",
+  "grpAKeepOfflineTitle": "Keep projects offline",
+  "grpAKeepOfflineBody": "A kept project is copied whole, so its tasks, statuses and members are there without a connection. Other projects show what you read last.",
+  "grpACopying": "{count, plural, =1{Copying… 1 task} other{Copying… {count} tasks}}",
+  "@grpACopying": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpASprintsTitle": "Sprints",
+  "grpASprintsTitleProject": "Sprints · {name}",
+  "@grpASprintsTitleProject": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpASprintsDisabled": "Sprints are switched off for this project. Turn them on in the project settings.",
+  "grpAProjectNotFound": "Project not found.",
+  "grpAAddedAfterStart": "{count} added after the sprint started (shows as a scope change).",
+  "@grpAAddedAfterStart": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpASprintCompleted": "{name} completed.",
+  "@grpASprintCompleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAPlanning": "Planning",
+  "grpAReports": "Reports",
+  "grpANewSprint": "New sprint",
+  "grpABacklog": "Backlog",
+  "grpABacklogEmpty": "The backlog is empty.",
+  "grpAAddToSprint": "Add to sprint",
+  "grpANoOpenSprint": "No open sprint. Create one to start planning.",
+  "grpADragHere": "Drag tasks here, or select some in the backlog.",
+  "grpADatesRange": "{start} to {end}",
+  "@grpADatesRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "grpADaysLeft": "{count, plural, =1{1 day left} other{{count} days left}}",
+  "@grpADaysLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpASprintGoalText": "Goal: {goal}",
+  "@grpASprintGoalText": {
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAShowOnBoard": "Show on board",
+  "grpAEditSprint": "Edit sprint",
+  "grpAStartSprint": "Start sprint",
+  "grpACompleteSprint": "Complete sprint",
+  "grpANoSprintsYet": "No sprints yet.",
+  "grpASprintNameRequired": "Give the sprint a name.",
+  "grpASprintDatesFormat": "Dates are written YYYY-MM-DD.",
+  "grpASprintEndBeforeStart": "The sprint cannot end before it starts.",
+  "grpASprintCapacityNumber": "Capacity is a number, or empty for none.",
+  "grpASprintSaved": "Sprint saved",
+  "grpASprintName": "Name",
+  "grpASprintGoal": "Goal",
+  "grpASprintStartLabel": "Start (YYYY-MM-DD)",
+  "grpASprintEndLabel": "End (YYYY-MM-DD)",
+  "grpAPickStartDate": "Pick start date",
+  "grpAPickEndDate": "Pick end date",
+  "grpACapacityPointsOptional": "Capacity in points (optional)",
+  "grpACapacityHoursOptional": "Capacity in hours (optional)",
+  "grpASprintOverlap": "These dates overlap {names}.",
+  "@grpASprintOverlap": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpACompleteTitle": "Complete {name}",
+  "@grpACompleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpACompleteCounts": "{done} done, {open} unfinished",
+  "@grpACompleteCounts": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "open": {
+        "type": "int"
+      }
+    }
+  },
+  "grpACompleteWhatHappens": "What happens to the unfinished tasks?",
+  "grpACompleteMoveNext": "Move to the next sprint",
+  "grpACompleteNoPlanned": "No planned sprint to move them to",
+  "grpACompleteBackToBacklog": "Back to the backlog",
+  "grpAPointsFor": "Points for {key}",
+  "@grpAPointsFor": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAPointsInvalid": "Use a number, or leave empty to clear.",
+  "grpAStoryPoints": "Story points",
+  "grpACapacityInHours": "Capacity in hours",
+  "grpACapacityInPoints": "Capacity in points",
+  "grpABurndownTitle": "Burndown: {name}",
+  "@grpABurndownTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAPoints": "Points",
+  "grpATasks": "Tasks",
+  "grpABurndownEmpty": "The burndown starts once the sprint is started.",
+  "grpABurndownChart": "Burndown chart, {days} days, {changes} scope changes",
+  "@grpABurndownChart": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "changes": {
+        "type": "int"
+      }
+    }
+  },
+  "grpABurndownBackfilled": ", {count} back-filled days",
+  "@grpABurndownBackfilled": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpALegendRemaining": "Remaining",
+  "grpALegendIdeal": "Ideal",
+  "grpALegendScopeChange": "Scope change",
+  "grpALegendBackfilled": "Back-filled day",
+  "grpAVelocityEmpty": "Velocity appears after the first completed sprint.",
+  "grpAVelocityTitle": "Velocity (last {count} sprints): average {average} points",
+  "@grpAVelocityTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAVelocityChart": "Velocity chart, {count} sprints",
+  "@grpAVelocityChart": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpALegendCommitted": "Committed",
+  "grpALegendCompleted": "Completed",
+  "grpATimesheetTitle": "Timesheet",
+  "grpAPreviousWeek": "Previous week",
+  "grpANextWeek": "Next week",
+  "grpAThisWeek": "This week",
+  "grpATimesheetEmpty": "No time logged this week.",
+  "grpARunning": "Running",
+  "grpAAddTime": "Add time",
+  "grpAYou": "You",
+  "grpAProjectTotals": "Project totals",
+  "grpAChooseProject": "Choose a project",
+  "grpATotalsEmpty": "No time logged in this project this week.",
+  "grpABillableAmount": "  ({duration} billable)",
+  "@grpABillableAmount": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "grpAEditTime": "Edit time",
+  "grpATimeSpent": "Time spent",
+  "grpABillable": "Billable",
+  "grpABadDuration": "Enter a time like 1h 30m, 90m or 1:30.",
+  "grpAEstimate": "Estimate",
+  "grpAEstimatedTime": "Estimated time",
+  "grpAEmptyForNone": "Empty for none",
+  "grpADeleteTimeTitle": "Delete this time?",
+  "grpADeleteTimeBody": "The logged time is removed for good.",
+  "grpAKeep": "Keep",
+  "grpBCancel": "Cancel",
+  "grpBOk": "OK",
+  "grpBClose": "Close",
+  "grpBSave": "Save",
+  "grpBRetry": "Retry",
+  "grpBRestore": "Restore",
+  "grpBHistory": "History",
+  "grpBCopy": "Copy",
+  "grpBSaveAsFile": "Save as file",
+  "grpBReply": "Reply",
+  "grpBEdit": "Edit",
+  "grpBDelete": "Delete",
+  "grpBBack": "Back",
+  "grpBSomeone": "Someone",
+  "grpBYou": "You",
+  "grpBLoading": "Loading…",
+  "grpBPages": "Pages",
+  "grpBRestricted": "Restricted",
+  "grpBLinkTitle": "Link",
+  "grpBLinkAddressLabel": "Address (http, https or mailto)",
+  "grpBLinkInvalid": "Use an http, https or mailto address.",
+  "grpBIconTitle": "Page icon",
+  "grpBIconLabel": "Emoji or short text (empty for none)",
+  "grpBIconInvalid": "Use at most four characters.",
+  "grpBImageTitle": "Image",
+  "grpBImageAddressLabel": "Image address (http or https)",
+  "grpBDescription": "Description",
+  "grpBImageInvalid": "Use an http or https address.",
+  "grpBEmbedTaskTitle": "Embed a task",
+  "grpBTaskSearchLabel": "Search tasks or paste a task link",
+  "grpBUsePastedTask": "Use the pasted task",
+  "grpBSnippetRemoved": "(removed)",
+  "grpBConflictTitle": "Someone else changed this page",
+  "grpBConflictClean": "Their changes do not overlap with yours. They will be merged.",
+  "grpBConflictOverlap": "Both of you changed these blocks. Choose which to keep; everything else is merged.",
+  "grpBConflictBlock": "Block: {snippet}",
+  "@grpBConflictBlock": {
+    "placeholders": {
+      "snippet": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBConflictMine": "Mine: {snippet}",
+  "@grpBConflictMine": {
+    "placeholders": {
+      "snippet": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBConflictTheirs": "Theirs: {snippet}",
+  "@grpBConflictTheirs": {
+    "placeholders": {
+      "snippet": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBDecideLater": "Decide later",
+  "grpBDiscardMine": "Discard mine",
+  "grpBApplyAndSave": "Apply and save",
+  "grpBShareTitle": "Page access",
+  "grpBShareRestrict": "Restrict this page",
+  "grpBShareRestrictedHint": "Only the people below, its creator and page managers (also for the pages under it).",
+  "grpBShareOpenHint": "Everyone who can open the parent can open it.",
+  "grpBShareNeedPermission": "You need permission \"doc.manage\" to change this.",
+  "grpBEmptyPage": "(empty page)",
+  "grpBImageBlock": "[Image {alt}]",
+  "@grpBImageBlock": {
+    "placeholders": {
+      "alt": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBTaskCardBlock": "[Task card]",
+  "grpBAllRevisions": "All revisions",
+  "grpBNoRevisions": "No revisions yet.",
+  "grpBVersionN": "Version {version}",
+  "@grpBVersionN": {
+    "placeholders": {
+      "version": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBVersionShort": "v{version}",
+  "@grpBVersionShort": {
+    "placeholders": {
+      "version": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBRevisionsLoadFailed": "Could not load history. Retry",
+  "grpBRevisionLoadFailed": "Could not load this revision.",
+  "grpBRestoreVersion": "Restore this version",
+  "grpBLinkedFrom": "Linked from ({count})",
+  "@grpBLinkedFrom": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBNoBacklinks": "No page mentions this one.",
+  "grpBMarkdownTitle": "Markdown: {title}",
+  "@grpBMarkdownTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBMarkdownCopied": "Markdown copied.",
+  "grpBSaveSaved": "Saved",
+  "grpBSaveDirty": "Unsaved changes",
+  "grpBSaveSaving": "Saving...",
+  "grpBSaveError": "Could not save",
+  "grpBSaveConflict": "Conflict: choose what to keep",
+  "grpBDocsCrumb": "Docs",
+  "grpBDocNotFound": "This page does not exist, or you cannot open it.",
+  "grpBBackToAllPages": "Back to all pages",
+  "grpBArchivedBanner": "This page is archived. It is read-only.",
+  "grpBConflictBanner": "Someone else changed this page. Your changes are not saved yet.",
+  "grpBResolve": "Resolve",
+  "grpBRemoteBanner": "A newer version was saved by someone else. It will be merged when you save.",
+  "grpBIsEditing": "{name} is editing",
+  "@grpBIsEditing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBAreEditing": "{names} are editing",
+  "@grpBAreEditing": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBChangeIcon": "Change icon",
+  "grpBUntitled": "Untitled",
+  "grpBReadOnly": "Read only",
+  "grpBAccess": "Access",
+  "grpBExportMarkdown": "Export Markdown",
+  "grpBMoveUnder": "Move \"{name}\" under",
+  "@grpBMoveUnder": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBTopLevel": "Top level",
+  "grpBCollapse": "Collapse",
+  "grpBExpand": "Expand",
+  "grpBPageOptions": "Page options",
+  "grpBNewSubpage": "New subpage",
+  "grpBMoveUp": "Move up",
+  "grpBMoveDown": "Move down",
+  "grpBMoveTo": "Move to...",
+  "grpBArchive": "Archive",
+  "grpBHideArchived": "Hide archived",
+  "grpBShowArchived": "Show archived",
+  "grpBNewPage": "New page",
+  "grpBNoPagesYet": "No pages yet.",
+  "grpBPagesLoadFailed": "Could not load pages. Retry",
+  "grpBToday": "Today",
+  "grpBYesterday": "Yesterday",
+  "grpBSubtaskCreated": "Subtask created.",
+  "grpBComments": "Comments",
+  "grpBCommentsCount": "Comments ({count})",
+  "@grpBCommentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBNoComments": "No comments yet.",
+  "grpBLoadEarlier": "Load earlier comments",
+  "grpBPinned": "Pinned",
+  "grpBReplyHint": "Reply…",
+  "grpBArchivedReadOnly": "This project is archived: comments are read-only.",
+  "grpBReadOnlyComments": "You can read comments but not write them.",
+  "grpBCommentRemoved": "Comment removed",
+  "grpBUnpin": "Unpin",
+  "grpBPin": "Pin",
+  "grpBMakeSubtask": "Make a subtask",
+  "grpBEditHistory": "Edit history",
+  "grpBEditedTooltip": "{count, plural, =1{Edited once: tap to see the history} other{Edited {count} times: tap to see the history}}",
+  "@grpBEditedTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBEdited": "edited",
+  "grpBCommentActions": "Comment actions",
+  "grpBWaitingToSend": "Waiting to be sent",
+  "grpBSending": "Sending…",
+  "grpBNotSent": "Not sent",
+  "grpBDiscard": "Discard",
+  "grpBAddReaction": "Add a reaction",
+  "grpBAuditAll": "All",
+  "grpBAuditTasks": "Tasks",
+  "grpBAuditFiles": "Files",
+  "grpBAuditProjects": "Projects",
+  "grpBAuditMembers": "Members",
+  "grpBAuditRoles": "Roles",
+  "grpBAuditInvitations": "Invitations",
+  "grpBAuditSignIn": "Sign-in",
+  "grpBAuditTitle": "Audit log",
+  "grpBExportCsv": "Export as CSV",
+  "grpBAuditDenied": "You are not allowed to read the audit log.",
+  "grpBAuditEmpty": "Nothing recorded for these filters.",
+  "grpBShowOlder": "Show older",
+  "grpBAnyone": "Anyone",
+  "grpBAnyProject": "Any project",
+  "grpBAnyTime": "Any time",
+  "grpBClearFilters": "Clear filters",
+  "grpBBulkChange": "Part of a bulk change",
+  "grpBCharacters": "({size} characters)",
+  "@grpBCharacters": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "grpBNoFieldChanges": "No field changes recorded.",
+  "grpBAuditExportTitle": "Audit log (CSV)",
+  "grpBAuditExportNote": "Showing the first {shown} of {total} lines. Copy or Save has all of them.",
+  "@grpBAuditExportNote": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "grpBCsvCopied": "CSV copied.",
+  "grpCCancel": "Cancel",
+  "grpCDelete": "Delete",
+  "grpCRetry": "Retry",
+  "grpCBack": "Back",
+  "grpCUndo": "Undo",
+  "grpCField": "Field",
+  "grpCStatus": "Status",
+  "grpCComment": "Comment",
+  "grpCValue": "Value",
+  "grpCDashNew": "New dashboard",
+  "grpCDashDeleteTitle": "Delete “{name}”?",
+  "@grpCDashDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCDashDeleteBody": "Its widgets go with it. This cannot be undone.",
+  "grpCDashTitle": "Dashboards",
+  "grpCDashTitleProject": "Dashboards · {project}",
+  "@grpCDashTitleProject": {
+    "placeholders": {
+      "project": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCDashEmpty": "No dashboards yet.",
+  "grpCDashBlankDashboard": "Blank dashboard",
+  "grpCDashProjectOverview": "Project overview",
+  "grpCDashMyWork": "My work",
+  "grpCDashBlank": "Blank",
+  "grpCDashEdit": "Edit",
+  "grpCDashRefresh": "Refresh",
+  "grpCDashAddWidget": "Add widget",
+  "grpCDashSave": "Save",
+  "grpCDashDialogTitle": "Dashboard",
+  "grpCDashName": "Name",
+  "grpCDashShareDenied": "Sharing needs the dashboard.manage permission.",
+  "grpCDashOk": "OK",
+  "grpCImpTitle": "Import and export",
+  "grpCImpExport": "Export",
+  "grpCImpDenied": "Only admins can import and export data.",
+  "grpCImpPast": "Past imports",
+  "grpCImpNothing": "Nothing imported yet.",
+  "grpCImpTasksCount": "{count} tasks",
+  "@grpCImpTasksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpResume": "Resume",
+  "grpCImpContinue": "Continue",
+  "grpCImpForget": "Forget",
+  "grpCImpUndoTitle": "Undo this import?",
+  "grpCImpUndoBody": "This removes what it made. Anything you added by hand is kept.",
+  "grpCImpUndoConfirm": "Undo import",
+  "grpCImpClaimTitle": "Give {name}'s tasks to...",
+  "@grpCImpClaimTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCImpChooseMember": "Choose a member",
+  "grpCImpAssign": "Assign",
+  "grpCImpAssigned": "{n, plural, one{Assigned {n} task.} other{Assigned {n} tasks.}}",
+  "@grpCImpAssigned": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpWaiting": "People waiting to join",
+  "grpCImpWaitingBody": "Their tasks are assigned automatically when someone joins with the same email.",
+  "grpCImpNoEmail": "no email",
+  "grpCImpPersonSub": "{email} · {count, plural, one{{count} task} other{{count} tasks}}",
+  "@grpCImpPersonSub": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpAssignTo": "Assign to...",
+  "grpCImpStepSource": "Source",
+  "grpCImpStepUpload": "Upload",
+  "grpCImpStepMap": "Map",
+  "grpCImpStepReview": "Review",
+  "grpCImpStepImport": "Import",
+  "grpCImpWhere": "Where is your data coming from?",
+  "grpCImpAuto": "I am not sure: work it out from the file",
+  "grpCImpNext": "Next",
+  "grpCImpZipSeveral": "This zip holds several data files. Which one do you want to import? (A workspace export has one per project.)",
+  "grpCImpChooseAFile": "Choose a file",
+  "grpCImpChooseGeneric": "Choose the file to import (.csv, .json, or a .zip of one).",
+  "grpCImpChooseSource": "Choose your {source} file (.csv, .json, or a .zip of one).",
+  "@grpCImpChooseSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCImpSentNote": "The file is sent to your TaskForge server and read as a stream, so large exports are fine. Nothing is changed until you confirm.",
+  "grpCImpPickFile": "Choose file",
+  "grpCImpResumeThis": "Resume this import",
+  "grpCImpWhatHappens": "This is what will happen",
+  "grpCImpCountTasks": "tasks",
+  "grpCImpCountSubtasks": "of them sub-tasks",
+  "grpCImpCountComments": "comments",
+  "grpCImpCountLinks": "links",
+  "grpCImpCountSprints": "sprints",
+  "grpCImpCountLabels": "labels",
+  "grpCImpCountStatuses": "new statuses",
+  "grpCImpCountPlaceholders": "people to wait for",
+  "grpCImpAlready": "{count} of these were imported before and will be skipped, not duplicated.",
+  "@grpCImpAlready": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpRowErrors": "{count} row(s) cannot be imported and will be left out.",
+  "@grpCImpRowErrors": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpResumeImport": "Resume import",
+  "grpCImpStart": "Start import",
+  "grpCImpUndoRunBody": "This removes the tasks, comments, links, sprints and statuses this import made. Anything you added to them by hand is kept.",
+  "grpCImpWaitingStart": "Waiting to start...",
+  "grpCImpLinking": "Linking tasks...",
+  "grpCImpProgress": "{done} of {total} tasks",
+  "@grpCImpProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpCancel": "Cancel import",
+  "grpCImpFinished": "Import finished",
+  "grpCImpUndone": "Import undone",
+  "grpCImpCancelled": "Import cancelled",
+  "grpCImpStopped": "Import stopped",
+  "grpCImpOpenProject": "Open the project",
+  "grpCImpAnother": "Import another file",
+  "grpCImpRemoved": "Removed {tasks} tasks.",
+  "@grpCImpRemoved": {
+    "placeholders": {
+      "tasks": {
+        "type": "num"
+      }
+    }
+  },
+  "grpCImpRemovedKept": "Removed {tasks} tasks, kept {kept} that have your own sub-tasks.",
+  "@grpCImpRemovedKept": {
+    "placeholders": {
+      "tasks": {
+        "type": "num"
+      },
+      "kept": {
+        "type": "num"
+      }
+    }
+  },
+  "grpCImpTheFile": "the file",
+  "grpCImpSummary": "{issues} tasks, {comments} comments, {links} links found in {file}.",
+  "@grpCImpSummary": {
+    "placeholders": {
+      "issues": {
+        "type": "int"
+      },
+      "comments": {
+        "type": "int"
+      },
+      "links": {
+        "type": "int"
+      },
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCImpSummarySub": "{issues} tasks ({subtasks} sub-tasks), {comments} comments, {links} links found in {file}.",
+  "@grpCImpSummarySub": {
+    "placeholders": {
+      "issues": {
+        "type": "int"
+      },
+      "subtasks": {
+        "type": "int"
+      },
+      "comments": {
+        "type": "int"
+      },
+      "links": {
+        "type": "int"
+      },
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCImpPriUrgent": "Urgent",
+  "grpCImpPriHigh": "High",
+  "grpCImpPriNormal": "Normal",
+  "grpCImpPriLow": "Low",
+  "grpCImpPriNone": "None",
+  "grpCImpFTitle": "Title *",
+  "grpCImpFDescription": "Description",
+  "grpCImpFPriority": "Priority",
+  "grpCImpFAssignee": "Assignee",
+  "grpCImpFReporter": "Reporter",
+  "grpCImpFCreated": "Created",
+  "grpCImpFUpdated": "Updated",
+  "grpCImpFStart": "Start date",
+  "grpCImpFDue": "Due date",
+  "grpCImpFLabels": "Labels",
+  "grpCImpFSprint": "Sprint",
+  "grpCImpFParent": "Parent (id)",
+  "grpCImpFId": "Id",
+  "grpCImpFKey": "Key",
+  "grpCImpFPoints": "Story points",
+  "grpCImpFEstimate": "Estimate",
+  "grpCImpFType": "Type",
+  "grpCImpPriorities": "Priorities",
+  "grpCImpKeepLabels": "Keep {count} labels",
+  "@grpCImpKeepLabels": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCImpKeepLabelsSub": "As a \"Labels\" field on every task.",
+  "grpCImpSprintsCreated": "Sprints that will be created: {sprints}",
+  "@grpCImpSprintsCreated": {
+    "placeholders": {
+      "sprints": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCImpReview": "Review",
+  "grpCImpReadAs": "Read as",
+  "grpCImpZipFile": "File inside the zip",
+  "grpCImpChooseOne": "Choose one",
+  "grpCImpInto": "Import into",
+  "grpCImpNewProject": "A new project",
+  "grpCImpExistingProject": "An existing project",
+  "grpCImpProjectName": "Project name",
+  "grpCImpColumns": "Columns",
+  "grpCImpNotInFile": "(not in the file)",
+  "grpCImpStatuses": "Statuses",
+  "grpCImpSameName": "Same name (create if missing)",
+  "grpCImpPeople": "People",
+  "grpCImpNotMember": "Not a member yet (assign when they join)",
+  "grpCImpUnassigned": "Leave unassigned",
+  "grpCImpFirst200": "Only the first 200 people are listed; the rest wait as placeholders.",
+  "grpCAutoDeleteTitle": "Delete \"{name}\"?",
+  "@grpCAutoDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoDeleteBody": "The rule stops for good. Its run history is deleted too.",
+  "grpCAutoTitle": "Automations",
+  "grpCAutoTitleProject": "Automations · {project}",
+  "@grpCAutoTitleProject": {
+    "placeholders": {
+      "project": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoMissing": "Project not found.",
+  "grpCAutoRules": "Rules",
+  "grpCAutoRunHistory": "Run history",
+  "grpCAutoNew": "New automation",
+  "grpCAutoReadOnly": "Read only",
+  "grpCAutoLimit": "Limit of {limit} rules reached.",
+  "@grpCAutoLimit": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCAutoRuleFilter": "Rule: {name}",
+  "@grpCAutoRuleFilter": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoEmpty": "No automations yet. A rule says: when something happens, and if it matches, then do these things.",
+  "grpCAutoWhen": "When {trigger} · {count, plural, one{{count} action} other{{count} actions}}",
+  "@grpCAutoWhen": {
+    "placeholders": {
+      "trigger": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCAutoNeverRun": "Never run",
+  "grpCAutoHistory": "History",
+  "grpCAutoDryRun": "Dry run",
+  "grpCAutoStatusChanges": "a status changes",
+  "grpCAutoMovesTo": "a task moves to {status}",
+  "@grpCAutoMovesTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoFieldChanges": "{field} changes",
+  "@grpCAutoFieldChanges": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoSomeoneAssigned": "someone is assigned",
+  "grpCAutoUserAssigned": "{user} is assigned",
+  "@grpCAutoUserAssigned": {
+    "placeholders": {
+      "user": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoDueReached": "a due date is reached",
+  "grpCAutoDaysBefore": "{days} days before a due date",
+  "@grpCAutoDaysBefore": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCAutoDeletedStatus": "Deleted status",
+  "grpCAutoUnknownPerson": "Unknown person",
+  "grpCAutoEvent": "Event",
+  "grpCAutoMovesToLabel": "Moves to",
+  "grpCAutoAnyStatus": "Any status",
+  "grpCAutoAssignedPerson": "Assigned person",
+  "grpCAutoAnyone": "Anyone",
+  "grpCAutoDaysLabel": "Days before the due date (0 to {max})",
+  "@grpCAutoDaysLabel": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpCAutoTokensHelp": "You may use {tokens}",
+  "@grpCAutoTokensHelp": {
+    "placeholders": {
+      "tokens": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoDateHint": "YYYY-MM-DD",
+  "grpCAutoUseToken": "Use {token}",
+  "@grpCAutoUseToken": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "grpCAutoHow": "How",
+  "grpCAutoReplaceAssignees": "Replace assignees with",
+  "grpCAutoAdd": "Add",
+  "grpCAutoRemoveEveryone": "Remove everyone",
+  "grpCAutoSubtaskTitle": "Subtask title",
+  "grpCAutoMessage": "Message",
+  "grpCAutoAddress": "Address",
+  "grpCAutoAddressHelp": "Public http(s) addresses only; private ones are refused.",
+  "grpCAutoMethod": "Method",
+  "grpCAutoDoThis": "Do this",
+  "grpDActionFailed": "That did not work ({error}).",
+  "@grpDActionFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDSwitchWorkspace": "Switch workspace",
+  "grpDWorkspaceHere": "{name} (here)",
+  "@grpDWorkspaceHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDNewDoc": "New doc",
+  "grpDTitle": "Title",
+  "grpDUntitled": "Untitled",
+  "grpDNewDashboard": "New dashboard",
+  "grpDNewSprint": "New sprint",
+  "grpDStatusOf": "Status of {id}",
+  "@grpDStatusOf": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDNewTask": "New task",
+  "grpDCancel": "Cancel",
+  "grpDCreate": "Create",
+  "grpDSort": "Sort",
+  "grpDNoSort": "No sort",
+  "grpDSortBy": "Sort: {names}",
+  "@grpDSortBy": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDGroup": "Group",
+  "grpDNoGrouping": "No grouping",
+  "grpDGroupBy": "Group: {name}",
+  "@grpDGroupBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDColumns": "Columns",
+  "grpDRefresh": "Refresh",
+  "grpDLayoutNotSaved": "Your layout could not be saved. It will be tried again on your next change.",
+  "grpDLayouts": "Layouts",
+  "grpDResetLayout": "Reset my layout",
+  "grpDShareLayoutMenu": "Share this layout…",
+  "grpDDeleteShared": "Delete shared “{name}”",
+  "@grpDDeleteShared": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDDeleteSharedTitle": "Delete “{name}”?",
+  "@grpDDeleteSharedTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDDeleteSharedBody": "It disappears for everyone on this project.",
+  "grpDDelete": "Delete",
+  "grpDDeletedNamed": "Deleted “{name}”",
+  "@grpDDeletedNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDSharedNamed": "Shared “{name}”",
+  "@grpDSharedNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDShareLayoutTitle": "Share this layout",
+  "grpDName": "Name",
+  "grpDShare": "Share",
+  "grpDTaskNotFound": "Task not found.",
+  "grpDDeleteTask": "Delete task",
+  "grpDClose": "Close",
+  "grpDPriority": "Priority",
+  "grpDStart": "Start",
+  "grpDDue": "Due",
+  "grpDAssignees": "Assignees",
+  "grpDDescription": "Description",
+  "grpDTaskDeleted": "{id} deleted",
+  "@grpDTaskDeleted": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDUndo": "Undo",
+  "grpDStatus": "Status",
+  "grpDClearField": "Clear {label}",
+  "@grpDClearField": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDDueTime": "Due time (your clock)",
+  "grpDClearDueTime": "Clear due time",
+  "grpDAllOf": "All of",
+  "grpDAnyOf": "Any of",
+  "grpDNot": "NOT",
+  "grpDRemoveGroup": "Remove group",
+  "grpDCondition": "Condition",
+  "grpDFieldRemoved": "Field (removed)",
+  "grpDRemoveCondition": "Remove condition",
+  "grpDOpBefore": "is before",
+  "grpDOpOnOrBefore": "is on or before",
+  "grpDOpAfter": "is after",
+  "grpDOpOnOrAfter": "is on or after",
+  "grpDOpLessThan": "is less than",
+  "grpDOpAtMost": "is at most",
+  "grpDOpMoreThan": "is more than",
+  "grpDOpAtLeast": "is at least",
+  "grpDYes": "Yes",
+  "grpDNo": "No",
+  "grpDCurrentSprint": "the current sprint",
+  "grpDMe": "Me",
+  "grpDChoose": "Choose…",
+  "grpDValue": "Value",
+  "grpDPickDate": "Pick a date",
+  "grpDOrderByLabel": "Order by ",
+  "grpDAscending": "Ascending",
+  "grpDDescending": "Descending",
+  "grpDRemoveOrdering": "Remove ordering",
+  "grpDOrderBy": "Order by",
+  "grpDRepeatNothingToUpdate": "New tasks will use this one. No open task needed changing.",
+  "grpDRepeatUpdatedLater": "Updated {count} open later {count, plural, =1{task} other{tasks}}.",
+  "@grpDRepeatUpdatedLater": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpDRepeat": "Repeat",
+  "grpDRepeatUnsupported": "\"{summary}\" was set in a way this editor cannot show, so it cannot be changed here. You can still pause or stop it.",
+  "@grpDRepeatUnsupported": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDSkipWeekends": "Skip weekends",
+  "grpDStopRepeating": "Stop repeating",
+  "grpDResume": "Resume",
+  "grpDPause": "Pause",
+  "grpDUseForFuture": "Use this task for future ones",
+  "grpDSave": "Save",
+  "grpDEvery": "Every",
+  "grpDRepeatByDay": "On a day of the month",
+  "grpDRepeatByWeekday": "On the nth weekday",
+  "grpDDayNumber": "Day {day}",
+  "@grpDDayNumber": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "grpDNth1": "1st",
+  "grpDNth2": "2nd",
+  "grpDNth3": "3rd",
+  "grpDNth4": "4th",
+  "grpDNthLast": "last",
+  "grpDEnds": "Ends",
+  "grpDEndNever": "Never",
+  "grpDEndAfter": "After",
+  "grpDEndOn": "On",
+  "grpDTasksWord": "tasks",
+  "grpDMakeIt": "Make it",
+  "grpDDaysAhead": "days ahead of its due date",
+  "grpDRepeatAt": "At {time}",
+  "@grpDRepeatAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "grpDNoFurtherDates": "No further dates.",
+  "grpDNextDates": "Next: {dates}",
+  "@grpDNextDates": {
+    "placeholders": {
+      "dates": {
+        "type": "String"
+      }
+    }
+  },
+  "grpEBack": "Back",
+  "grpECancel": "Cancel",
+  "grpEName": "Name",
+  "grpERetry": "Retry",
+  "grpEWorkspaceSettingsTitle": "Workspace settings",
+  "grpEWorkspacesLoadRetry": "Could not load your workspaces. Retry",
+  "grpEMembers": "Members",
+  "grpEMembersSub": "People, invitations and leaving",
+  "grpERolesPerms": "Roles and permissions",
+  "grpERolesPermsSub": "Who can do what",
+  "grpEAuditLog": "Audit log",
+  "grpEAuditLogSub": "Who changed what, and when",
+  "grpEImportExport": "Import and export",
+  "grpEImportExportSub": "Bring in Jira, ClickUp or CSV data; take it out",
+  "grpEWorkspaceUpdated": "Workspace updated.",
+  "grpEGeneral": "General",
+  "grpEChangeLogo": "Change logo",
+  "grpEUrl": "URL",
+  "grpERefresh": "Refresh",
+  "grpESaveChanges": "Save changes",
+  "grpENotifSettings": "Notification settings",
+  "grpEPushOffNotice": "Notifications are off for this device. You can allow them in the system settings; the choice is saved.",
+  "grpEZoneInvalid": "Use a name like Europe/Paris or UTC.",
+  "grpEQuietDifferent": "Start and end must be different times.",
+  "grpEWhatReachesYou": "What reaches you",
+  "grpEInbox": "Inbox",
+  "grpEPush": "Push",
+  "grpEEmail": "Email",
+  "grpEQuietHours": "Quiet hours",
+  "grpEQuietHold": "Hold push and email during quiet hours",
+  "grpEQuietHoldSub": "The inbox always fills; only pings wait.",
+  "grpEFrom": "From",
+  "grpEUntil": "Until",
+  "grpETimeZoneDigest": "Time zone and digest",
+  "grpETimeZone": "Time zone",
+  "grpETimeZoneHelper": "Quiet hours and the digest follow this zone.",
+  "grpEUseDeviceZone": "Use this device’s time zone",
+  "grpETypeZone": "Type your time zone instead, e.g. Europe/Paris.",
+  "grpEDigestAt": "Daily digest is sent at",
+  "grpEEditField": "Edit field",
+  "grpENewField": "New field",
+  "grpEType": "Type",
+  "grpEOptions": "Options",
+  "grpEColour": "Colour",
+  "grpELabel": "Label",
+  "grpERemoveOption": "Remove option",
+  "grpEAddOption": "Add option",
+  "grpERequired": "Required",
+  "grpERequiredSub": "New tasks must have a value.",
+  "grpEDefaultValue": "Default value",
+  "grpEShowIn": "Show in",
+  "grpESave": "Save",
+  "grpEAddField": "Add field",
+  "grpEOptionN": "Option 1",
+  "grpEProblemName": "Give the field a name.",
+  "grpEProblemOne": "Add at least one option.",
+  "grpEProblemLabel": "Every option needs a label.",
+  "grpEProblemDup": "Two options have the same label.",
+  "grpEOptionsInUse": "Options are in use",
+  "grpERemovedOption": "Removed option",
+  "grpERemapLabel": "{label} ({count, plural, =1{1 value} other{{count} values}}) becomes",
+  "@grpERemapLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpENothingClear": "Nothing (clear)",
+  "grpEApply": "Apply",
+  "grpEPrivate": "Private",
+  "grpESprints": "Sprints",
+  "grpEAutomations": "Automations",
+  "grpESearch": "Search",
+  "grpETimesheet": "Timesheet",
+  "grpEDashboards": "Dashboards",
+  "grpEDocs": "Docs",
+  "grpEProjects": "Projects",
+  "grpENewProject": "New project",
+  "grpEFavorites": "Favorites",
+  "grpEProjectsLoadRetry": "Could not load projects. Retry",
+  "grpEArchivedProjects": "Archived projects",
+  "grpEPrivateProjects": "Private projects",
+  "grpENoProjects": "No projects yet",
+  "grpECreateFirstProject": "Create your first project",
+  "grpEMonth1": "January",
+  "grpEMonth2": "February",
+  "grpEMonth3": "March",
+  "grpEMonth4": "April",
+  "grpEMonth5": "May",
+  "grpEMonth6": "June",
+  "grpEMonth7": "July",
+  "grpEMonth8": "August",
+  "grpEMonth9": "September",
+  "grpEMonth10": "October",
+  "grpEMonth11": "November",
+  "grpEMonth12": "December",
+  "grpEWeekLocale": "Locale default",
+  "grpEMonday": "Monday",
+  "grpESaturday": "Saturday",
+  "grpESunday": "Sunday",
+  "grpEPrevious": "Previous",
+  "grpENext": "Next",
+  "grpEToday": "Today",
+  "grpEUnscheduled": "Unscheduled",
+  "grpEMonth": "Month",
+  "grpEWeek": "Week",
+  "grpEDay": "Day",
+  "grpEColourBy": "Colour by",
+  "grpEColourByProject": "Colour by project",
+  "grpEColourByStatus": "Colour by status",
+  "grpEColourByPriority": "Colour by priority",
+  "grpEColourChip": "Colour",
+  "grpEWeekStartsOn": "Week starts on",
+  "grpEHideDone": "Hide done",
+  "grpELayoutNotSaved": "Your calendar layout could not be saved. It will be tried again on your next change.",
+  "grpEEnterName": "Enter a name.",
+  "grpENewRole": "New role",
+  "grpECreate": "Create",
+  "grpERenameRole": "Rename role",
+  "grpERename": "Rename",
+  "grpEDeleteRoleTitle": "Delete \"{name}\"?",
+  "@grpEDeleteRoleTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpERoleNoOne": "No one has this role.",
+  "grpERoleMoveMembers": "{count} member(s) have this role. Move them to:",
+  "@grpERoleMoveMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpEChooseRole": "Choose a role",
+  "grpEDelete": "Delete",
+  "grpFBulkDeleted": "{count} tasks deleted",
+  "@grpFBulkDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkUpdated": "{count} tasks updated",
+  "@grpFBulkUpdated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkPartialDeleted": "{done} of {total} tasks deleted; {failed} could not be.",
+  "@grpFBulkPartialDeleted": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkPartialUpdated": "{done} of {total} tasks updated; {failed} could not be.",
+  "@grpFBulkPartialUpdated": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFDetails": "Details",
+  "grpFBulkDeleteTitle": "Delete {count} tasks?",
+  "@grpFBulkDeleteTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkDeleteBody": "Their subtasks go with them. You can restore them from the trash.",
+  "grpFDelete": "Delete",
+  "grpFSetStatus": "Set status",
+  "grpFSetPriority": "Set priority",
+  "grpFStatus": "Status",
+  "grpFPriority": "Priority",
+  "grpFAssign": "Assign",
+  "grpFClear": "Clear",
+  "grpFBulkUpdating": "Updating {done} of {total}…",
+  "@grpFBulkUpdating": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkSelected": "{count} selected",
+  "@grpFBulkSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFBulkNotChanged": "{count} tasks not changed",
+  "@grpFBulkNotChanged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFTask": "Task",
+  "grpFLinks": "Links",
+  "grpFAddLink": "Add a link",
+  "grpFNoLinks": "No links yet.",
+  "grpFRemoveLink": "Remove link",
+  "grpFLinkSearchHint": "Search tasks in any project",
+  "grpFCloseDuplicate": "Close the duplicate",
+  "grpFLinkAction": "Link",
+  "grpFUnassigned": "Unassigned",
+  "grpFNoValue": "No value",
+  "grpFAssignee": "Assignee",
+  "grpFPresenceEditing": "{name} is editing",
+  "@grpFPresenceEditing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFPresenceViewing": "{name} is viewing",
+  "@grpFPresenceViewing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFEditingOne": "{name} is editing this",
+  "@grpFEditingOne": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFEditingMany": "{count} people are editing this",
+  "@grpFEditingMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFDeleteTaskTitle": "Delete {id}?",
+  "@grpFDeleteTaskTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFDeleteSubtasksExplain": "{count, plural, =1{It has 1 subtask. What should happen to it?} other{It has {count} subtasks. What should happen to them?}}",
+  "@grpFDeleteSubtasksExplain": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFKeepSubtasks": "Keep them (move up a level)",
+  "grpFDeleteThemToo": "Delete them too",
+  "grpFOpenSubtasksTitle": "{id} has open subtasks",
+  "@grpFOpenSubtasksTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFOpenSubtasksExplain": "{count, plural, =1{1 subtask is not finished. Move it to {status} too?} other{{count} subtasks are not finished. Move them to {status} too?}}",
+  "@grpFOpenSubtasksExplain": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFLeaveOpen": "Leave them open",
+  "grpFCompleteAll": "Complete all",
+  "grpFMoveUnderTitle": "Move {id} under…",
+  "@grpFMoveUnderTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFTopLevel": "Top level (no parent)",
+  "grpFNoOtherParent": "There is no other task to put it under.",
+  "grpFSubtasks": "Subtasks",
+  "grpFAddSubtaskHint": "Add a subtask and press Enter",
+  "grpFActionAddSubtask": "Add subtask",
+  "grpFActionMoveUnder": "Move under…",
+  "grpFActionMakeTopLevel": "Make top level",
+  "grpFBlockedByPending": "Blocked by tasks that are not done yet",
+  "grpFBlockedBy": "Blocked by {names}",
+  "@grpFBlockedBy": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFBlocked": "Blocked",
+  "grpFBlockedTitle": "This task is blocked",
+  "grpFBlockedTextOne": "It is blocked by {blockers}, which is not done yet.",
+  "@grpFBlockedTextOne": {
+    "placeholders": {
+      "blockers": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFBlockedTextMany": "It is blocked by {blockers}, which are not done yet.",
+  "@grpFBlockedTextMany": {
+    "placeholders": {
+      "blockers": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFOk": "OK",
+  "grpFCompleteAnyway": "Complete anyway",
+  "grpFConflictTitle": "Someone changed the {field}",
+  "@grpFConflictTitle": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFTheirs": "Theirs",
+  "grpFYours": "Yours",
+  "grpFEmpty": "(empty)",
+  "grpFTakeTheirs": "Take theirs",
+  "grpFKeepMine": "Keep mine",
+  "grpFFieldTitle": "title",
+  "grpFFieldDescription": "description",
+  "grpFFieldStatus": "status",
+  "grpFFieldPriority": "priority",
+  "grpFFieldStartDate": "start date",
+  "grpFFieldDueDate": "due date",
+  "grpFFieldAssignees": "assignees",
+  "grpFFields": "Fields",
+  "grpFRequiredFieldsIntro": "These fields need a value before the task is created.",
+  "grpFRequired": "Required",
+  "grpFCreate": "Create",
+  "grpFChangeStatus": "Change status",
+  "grpFChangePriority": "Change priority",
+  "grpFDate": "Date",
+  "grpFPickDay": "Pick a day…",
+  "grpFAssignees": "Assignees",
+  "grpFViewList": "List",
+  "grpFViewBoard": "Board",
+  "grpFViewTimeline": "Timeline",
+  "grpFErrorRetry": "{message} Retry",
+  "@grpFErrorRetry": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFNoTasksYet": "No tasks yet. Add the first one above.",
+  "grpFSwipeComplete": "Complete",
+  "grpFUndo": "Undo",
+  "grpFMore": "More",
+  "grpFAddSubtaskTo": "Add a subtask to {id}",
+  "@grpFAddSubtaskTo": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFTaskDeleted": "{id} deleted",
+  "@grpFTaskDeleted": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFColTitle": "Title",
+  "grpFTrashTitle": "{name} · Trash",
+  "@grpFTrashTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFTrashEmpty": "The trash is empty.",
+  "grpFTrashedRow": "{id} · deleted",
+  "@grpFTrashedRow": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFRestore": "Restore",
+  "grpFTaskRestored": "{id} restored",
+  "@grpFTaskRestored": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFMoveTo": "Move to…",
+  "grpFMoveToColumn": "Move to {name}",
+  "@grpFMoveToColumn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFPlusCount": "+{count}",
+  "@grpFPlusCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFFoldColumn": "Fold the column",
+  "grpFColumn": "Column",
+  "grpFSetWipLimit": "Set a work-in-progress limit…",
+  "grpFChangeLimit": "Change the limit…",
+  "grpFAddTask": "Add a task",
+  "grpFWipTitle": "Work-in-progress limit",
+  "grpFWipMost": "Most cards this column should hold",
+  "grpFColumnsBy": "Columns by",
+  "grpFColumnsChip": "Columns: {name}",
+  "@grpFColumnsChip": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFSwimlanes": "Swimlanes",
+  "grpFLanesAssignee": "Lanes: assignee",
+  "grpFNoSwimlanes": "No swimlanes",
+  "grpFByAssignee": "By assignee",
+  "grpFCardFields": "Card fields",
+  "grpFCurrentSprint": "Current sprint",
+  "grpFRefresh": "Refresh",
+  "grpFBoardLayoutNotSaved": "Your board layout could not be saved. It will be tried again on your next change.",
+  "grpFReschedule": "Reschedule…",
+  "grpFSchedule": "Schedule…",
+  "grpFRepeatsNotMade": "Repeats: not made yet",
+  "grpFEverythingDated": "Everything has a date.",
+  "grpFNothingOn": "Nothing on {day}.",
+  "@grpFNothingOn": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFKindTasks": "Tasks",
+  "grpFKindComments": "Comments",
+  "grpFKindProjects": "Projects",
+  "grpFKindPeople": "People",
+  "grpFKindPages": "Pages",
+  "grpFChipAssignedToMe": "Assigned to me",
+  "grpFChipOpen": "Open",
+  "grpFChipDone": "Done",
+  "grpFSearchErrGeneric": "Something went wrong. Try again.",
+  "grpFSearchErrNetwork": "Could not reach the server. Check your connection.",
+  "grpFSearchErrDenied": "You do not have access to search here.",
+  "grpFSearchErrRate": "Too many searches. Wait a moment.",
+  "grpFSearchErrInvalid": "That search is not valid.",
+  "grpFSearchHint": "Search tasks, comments, projects, people",
+  "grpFSearchClose": "Close search",
+  "grpFSearchNothing": "Nothing found. Try fewer words, or an id like WEB-12. Narrow with in:KEY, assignee:me, status:open.",
+  "grpFSearchTips": "Type to search. Try an id like WEB-12, or operators: in:KEY, assignee:me, status:open.",
+  "grpFGoTo": "Go to",
+  "grpFShowMore": "Show more {kind}",
+  "@grpFShowMore": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "grpFRecent": "Recent",
+  "grpFPlusMore": "+{count} more",
+  "@grpFPlusMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpFSubtaskDepthLimit": "Subtasks are nested as deep as the app allows here.",
+  "grpFUnscheduled": "Unscheduled",
+  "grpGCloseShortcuts": "Close the keyboard shortcuts",
+  "grpGKeyboardShortcuts": "Keyboard shortcuts",
+  "grpGClose": "Close",
+  "grpGChangedByYou": "Changed by you",
+  "grpGNone": "none",
+  "grpGChangeKeysFor": "Change the keys for {title}",
+  "@grpGChangeKeysFor": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGKeysFor": "Keys for {title}",
+  "@grpGKeysFor": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGPressKeys": "Press the keys you want.",
+  "grpGUseDefault": "Use default",
+  "grpGNoKey": "No key",
+  "grpGCancel": "Cancel",
+  "grpGSave": "Save",
+  "grpGBrowserKeeps": "The browser keeps {keys}.",
+  "@grpGBrowserKeeps": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGAlreadyUsedBy": "Already used by \"{title}\".",
+  "@grpGAlreadyUsedBy": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGKeysTaken": "Another action already uses those keys.",
+  "grpGKeysInvalid": "Those keys cannot be used.",
+  "grpGSaveFailed": "Could not save. Check your connection.",
+  "grpGDefaultUsedBy": "The default keys are used by \"{title}\".",
+  "@grpGDefaultUsedBy": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGDefaultUsedByOther": "The default keys are used by another action.",
+  "grpGPaletteHint": "Type a command, or > actions  # projects  @ people",
+  "grpGNothingMatches": "Nothing matches.",
+  "grpGSearchUnavailable": "Search is not available right now.",
+  "grpGName": "Name",
+  "grpGCreate": "Create",
+  "grpGQuickActions": "Quick actions",
+  "grpGDryRunTitle": "Dry run: {name}",
+  "@grpGDryRunTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGDryRunIntro": "Shows what would happen on a task. Nothing is changed, sent or notified.",
+  "grpGTask": "Task",
+  "grpGTasksLoadFailed": "Could not load the tasks.",
+  "grpGWouldRun": "It would run.",
+  "grpGWouldNotRun": "It would not run on this task.",
+  "grpGRun": "Run",
+  "grpGConditionProblem": "The condition has a problem: see under the If card.",
+  "grpGRuleGone": "That rule no longer exists.",
+  "grpGRule": "Rule",
+  "grpGNewAutomation": "New automation",
+  "grpGEditAutomation": "Edit automation",
+  "grpGWhen": "When",
+  "grpGIfOptional": "If (optional)",
+  "grpGThen": "Then",
+  "grpGAndThen": "And then",
+  "grpGActionLimit": "Limit of {max} actions reached",
+  "@grpGActionLimit": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGAddAction": "Add action",
+  "grpGLoadLatest": "Load the latest version",
+  "grpGMoveUp": "Move up",
+  "grpGMoveDown": "Move down",
+  "grpGRemoveAction": "Remove action",
+  "grpGSwitchedOff": "Switched off: {reason}\nFix it: open the rule, pick something that still exists in the trigger or actions, save, then switch it on again.",
+  "@grpGSwitchedOff": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGUnknown": "Unknown",
+  "grpGEmptyValue": "(empty)",
+  "grpGNothingRunYet": "Nothing has run yet.",
+  "grpGLoadMore": "Load more",
+  "grpGRetry": "Retry",
+  "grpGWhyNotRun": "Why didn't this run? {explanation}",
+  "@grpGWhyNotRun": {
+    "placeholders": {
+      "explanation": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGChainDepth": "Chain depth {depth}",
+  "@grpGChainDepth": {
+    "placeholders": {
+      "depth": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGFilter": "Filter",
+  "grpGFilterCount": "Filter ({count})",
+  "@grpGFilterCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGSavedFilters": "Saved filters",
+  "grpGNoSavedFilters": "No saved filters yet",
+  "grpGFieldGoneNamed": "{name} (a field is gone)",
+  "@grpGFieldGoneNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGManageSaved": "Manage saved filters…",
+  "grpGConditionCount": "{count} condition(s)",
+  "@grpGConditionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGClearFilterTip": "Clear the filter",
+  "grpGNothingSaved": "Nothing saved yet.",
+  "grpGFieldItUsedGone": "A field it used is gone",
+  "grpGDelete": "Delete",
+  "grpGFinishConditions": "Finish the conditions first.",
+  "grpGEveryoneWorkspace": "Everyone in the workspace",
+  "grpGEveryoneProject": "Everyone in this project",
+  "grpGBuilder": "Builder",
+  "grpGAdvanced": "Advanced",
+  "grpGClearFilter": "Clear filter",
+  "grpGSaveAs": "Save as…",
+  "grpGApply": "Apply",
+  "grpGSaveThisFilter": "Save this filter",
+  "grpGOnlyMe": "Only me",
+  "grpGExportSaveFailed": "The file could not be saved. Try again.",
+  "grpGExport": "Export",
+  "grpGEveryProject": "Every project I can open",
+  "grpGOneProject": "One project",
+  "grpGExportInfo": "A zip with tasks.json (which TaskForge can import again), tasks.csv, comments, an attachments manifest and a README.",
+  "grpGExportSavedSized": "Saved {name} ({size}).",
+  "@grpGExportSavedSized": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGExportSaved": "Saved {name}.",
+  "@grpGExportSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGNotesAboutFile": "{count, plural, =1{1 note about this file} other{{count} notes about this file}}",
+  "@grpGNotesAboutFile": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGRowNumber": "Row {line}",
+  "@grpGRowNumber": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGAndMore": "...and {count} more.",
+  "@grpGAndMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpGNotesReadFailed": "Could not read the notes about this import.",
+  "grpGDragToOtherList": "Drag to the other list",
+  "grpGAddedAfterStart": "added after start",
+  "grpGStoryPoints": "Story points",
+  "grpGUnitHours": "h",
+  "grpGUnitPoints": " pts",
+  "grpGLoadOf": "Load {load}{unit} of {cap}{unit}",
+  "@grpGLoadOf": {
+    "placeholders": {
+      "load": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "cap": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGLoadNoCapacity": "Load {load}{unit} (no capacity set)",
+  "@grpGLoadNoCapacity": {
+    "placeholders": {
+      "load": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGSetCapacity": "Set capacity",
+  "grpGPoints": "Points",
+  "grpGHours": "Hours",
+  "grpGOverCapacity": "Over capacity by {amount}{unit}",
+  "@grpGOverCapacity": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "grpGTitleWithCount": "{title} ({count})",
+  "@grpGTitleWithCount": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHCancel": "Cancel",
+  "grpHArchive": "Archive",
+  "grpHRestore": "Restore",
+  "grpHRetry": "Retry",
+  "grpHCreate": "Create",
+  "grpHName": "Name",
+  "grpHDescription": "Description",
+  "grpHArchiveTitle": "Archive \"{name}\"?",
+  "@grpHArchiveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHArchiveBody": "It becomes read-only and disappears from the sidebar. You can restore it at any time.",
+  "grpHDangerZone": "Danger zone",
+  "grpHRestoreProject": "Restore project",
+  "grpHArchiveProject": "Archive project",
+  "grpHArchivedBanner": "This project is archived and read-only.",
+  "grpHArchivedProjects": "Archived projects",
+  "grpHNoArchived": "No archived projects.",
+  "grpHLoadProjectsRetry": "Could not load projects. Retry",
+  "grpHNewProject": "New project",
+  "grpHKey": "Key",
+  "grpHKeyHelp": "Prefix of task numbers, e.g. WEB-12",
+  "grpHFeatures": "Features",
+  "grpHFeaturesHint": "Switching a feature off hides it but keeps its data.",
+  "grpHProjectUpdated": "Project updated.",
+  "grpHGeneral": "General",
+  "grpHKeyFixed": "The key is fixed because tasks already use it ({taskKey}).",
+  "@grpHKeyFixed": {
+    "placeholders": {
+      "taskKey": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHSaveChanges": "Save changes",
+  "grpHAddAMember": "Add a member",
+  "grpHAllAreMembers": "Everyone in the workspace is already a member.",
+  "grpHMembers": "Members",
+  "grpHAddMember": "Add member",
+  "grpHRemove": "Remove",
+  "grpHLoadMembersRetry": "Could not load members. Retry",
+  "grpHPrivateProjects": "Private projects",
+  "grpHNoPrivate": "No private projects.",
+  "grpHKeyAndMembers": "{key} · {count, plural, one{1 member} other{{count} members}}",
+  "@grpHKeyAndMembers": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHAddMe": "Add me",
+  "grpHColorLabel": "Color {color}",
+  "@grpHColorLabel": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHVisOpen": "Open",
+  "grpHVisPrivate": "Private",
+  "grpHVisOpenHint": "Everyone in the workspace can see it.",
+  "grpHVisPrivateHint": "Only invited members can see it.",
+  "grpHProject": "Project",
+  "grpHRemoveFavorite": "Remove favorite",
+  "grpHAddFavorite": "Add favorite",
+  "grpHTrash": "Trash",
+  "grpHProjectSettings": "Project settings",
+  "grpHLoadProjectRetry": "Could not load the project. Retry",
+  "grpHProjectNotFound": "Project not found.",
+  "grpHBack": "Back",
+  "grpHWorkflow": "Workflow",
+  "grpHWorkflowHint": "Statuses, their categories and which moves are allowed.",
+  "grpHFields": "Fields",
+  "grpHFieldsHint": "Custom fields such as Customer, Story points or Environment.",
+  "grpHAdd": "Add",
+  "grpHAttachFile": "Attach a file",
+  "grpHTakePhoto": "Take a photo",
+  "grpHChooseGallery": "Choose from gallery",
+  "grpHPasteImage": "Paste an image",
+  "grpHDeleteFileQ": "Delete this file?",
+  "grpHFileWillBeRemoved": "{filename} will be removed.",
+  "@grpHFileWillBeRemoved": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHDelete": "Delete",
+  "grpHOpenFile": "Open {filename}",
+  "@grpHOpenFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHDeleteFile": "Delete {filename}",
+  "@grpHDeleteFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHWaitingConnection": "Waiting for a connection…",
+  "grpHWaiting": "Waiting…",
+  "grpHUploadDone": "Done",
+  "grpHUploadCancelled": "Cancelled",
+  "grpHPercentUploaded": "{filename}, {percent} percent uploaded",
+  "@grpHPercentUploaded": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHWaitingToBeSent": "Waiting to be sent",
+  "grpHCancelFile": "Cancel {filename}",
+  "@grpHCancelFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHTryFileAgain": "Try {filename} again",
+  "@grpHTryFileAgain": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHDismissFile": "Dismiss {filename}",
+  "@grpHDismissFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHOpen": "Open",
+  "grpHDownload": "Download",
+  "grpHClose": "Close",
+  "grpHCouldNotOpenFile": "Could not open the file.",
+  "grpHCouldNotLoadPicture": "Could not load the picture.",
+  "grpHCouldNotReadFileViewer": "Could not read the file.",
+  "grpHCouldNotPlayVideo": "Could not play the video.",
+  "grpHPause": "Pause",
+  "grpHPlay": "Play",
+  "grpHTextTruncated": "Showing the first {size}. Download the file to read the rest.",
+  "@grpHTextTruncated": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHAttachments": "Attachments",
+  "grpHAttachmentsCount": "Attachments ({count})",
+  "@grpHAttachmentsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHCouldNotReadFile": "Could not read that file.",
+  "grpHDismiss": "Dismiss",
+  "grpHNoAttachments": "No attachments.",
+  "grpHDropZoneLabel": "Attach files: drop them here or click, then paste an image",
+  "grpHDropToAttach": "Drop to attach",
+  "grpHDropFilesHere": "Drop files here to attach them",
+  "grpHSnoozeLaterToday": "Later today",
+  "grpHSnoozeTomorrow": "Tomorrow",
+  "grpHSnoozeNextWeek": "Next week",
+  "grpHMarkAllRead": "Mark all read",
+  "grpHNotificationSettings": "Notification settings",
+  "grpHInbox": "Inbox",
+  "grpHUnreadCount": "{count} unread",
+  "@grpHUnreadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHLoadMore": "Load more",
+  "grpHEmptyAll": "Nothing here. You are all caught up.",
+  "grpHEmptyUnread": "No unread notifications.",
+  "grpHEmptyMentions": "Nobody has mentioned you.",
+  "grpHEmptyAssigned": "Nothing assigned to you lately.",
+  "grpHEmptySnoozed": "Nothing is snoozed.",
+  "grpHEmptyArchived": "Nothing is archived.",
+  "grpHDueDate": "Due {date}",
+  "@grpHDueDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHUnreadPrefix": "Unread. {title}",
+  "@grpHUnreadPrefix": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHMoreCount": "+{count} more",
+  "@grpHMoreCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHMore": "More",
+  "grpHMarkUnread": "Mark unread",
+  "grpHMarkRead": "Mark read",
+  "grpHStopSnoozing": "Stop snoozing",
+  "grpHSnoozeEllipsis": "Snooze…",
+  "grpHMoveToInbox": "Move to inbox",
+  "grpHPushTitle": "Get a ping when it matters",
+  "grpHPushBody": "TaskForge can show a notification when you are assigned a task, mentioned, or a task is due soon, even when the app is in the background. Next your device will ask for permission. You choose which kinds ping you, and quiet hours keep them from waking you.",
+  "grpHNotNow": "Not now",
+  "grpHContinue": "Continue",
+  "grpHPickDateTime": "Pick date and time",
+  "grpHRepeatReadError": "Could not read how this repeats.",
+  "grpHRepeat": "Repeat",
+  "grpHFirstOfSeries": "First of a series",
+  "grpHRepeatingTask": "Repeating task",
+  "grpHSeriesCount": "{count, plural, one{{count} task in this series} other{{count} tasks in this series}}",
+  "@grpHSeriesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHRepeatPaused": "Paused: no new tasks are made.",
+  "grpHRepeatPausedBySystem": "Paused by the system: {reason}",
+  "@grpHRepeatPausedBySystem": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHRepeatNext": "Next: {dates}",
+  "@grpHRepeatNext": {
+    "placeholders": {
+      "dates": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHRepeatWaits": "The next one is made when this is completed.",
+  "grpHRepeatsTitle": "This task repeats",
+  "grpHRepeatsBody": "It is the template of \"{summary}\". Deleting it can stop the series, or the series can keep making new tasks.",
+  "@grpHRepeatsBody": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "grpHDeleteKeepRepeating": "Delete, keep repeating",
+  "grpHDeleteAndStop": "Delete and stop",
+  "grpHChartGroup": "Group",
+  "grpHOfflineReview": "Review",
+  "grpHOfflineSyncing": "Syncing…",
+  "grpHOfflineSyncNow": "Sync now",
+  "grpHOfflineSaved": "You are offline. Changes are saved on this device.",
+  "grpHOfflineWaitsOnline": "{count, plural, one{{count} change waits to be sent.} other{{count} changes wait to be sent.}}",
+  "@grpHOfflineWaitsOnline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHOfflineWaitsOffline": "{count} waiting to be sent.",
+  "@grpHOfflineWaitsOffline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHOfflineAttention": "{count, plural, one{{count} change needs your attention.} other{{count} changes need your attention.}}",
+  "@grpHOfflineAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpHReconnecting": "Reconnecting… what you see will catch up once you are back.",
+  "grpICancel": "Cancel",
+  "grpIDone": "Done",
+  "grpIRetry": "Retry",
+  "grpIClose": "Close",
+  "grpIBack": "Back",
+  "grpIEdit": "Edit",
+  "grpISave": "Save",
+  "grpISaving": "Saving…",
+  "grpIDelete": "Delete",
+  "grpICopy": "Copy",
+  "grpIUndo": "Undo",
+  "grpIRestore": "Restore",
+  "grpIUnnamed": "(unnamed)",
+  "grpIErrorRetry": "{message} Retry",
+  "@grpIErrorRetry": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIMergeTitle": "Someone else saved the workflow first",
+  "grpIMergeBody": "Your edits are kept, and their work was not overwritten. This is what changed in your draft:",
+  "grpIMergeKeep": "I have read this, keep my draft",
+  "grpIMergeReload": "Throw my draft away",
+  "grpINoProblems": "No problems",
+  "grpIEveryTaskValid": "Every task keeps a valid status.",
+  "grpIProblemsToFix": "{count, plural, =1{1 problem to fix before saving} other{{count} problems to fix before saving}}",
+  "@grpIProblemsToFix": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpIAnyStatusMoves": "Any status can move to any other.",
+  "grpIWorkflowGraphLabel": "Workflow with {statuses} statuses and {moves} allowed moves",
+  "@grpIWorkflowGraphLabel": {
+    "placeholders": {
+      "statuses": {
+        "type": "int"
+      },
+      "moves": {
+        "type": "int"
+      }
+    }
+  },
+  "grpINeedsAssignee": "needs an assignee",
+  "grpINeedsSubtasksDone": "needs all subtasks done",
+  "grpIOnlyRoleLower": "only {role}",
+  "@grpIOnlyRoleLower": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIOneRole": "one role",
+  "grpIDragToReorder": "Drag to reorder",
+  "grpIColour": "Colour",
+  "grpINewTasksStartHere": "New tasks start here",
+  "grpIMakeDefaultStatus": "Make this the status new tasks start in",
+  "grpIDeleteStatus": "Delete status",
+  "grpITaskCount": "{count, plural, =1{1 task} other{{count} tasks}}",
+  "@grpITaskCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpICanMoveTo": "Can move to",
+  "grpIConditionsForMove": "Conditions for this move",
+  "grpIName": "Name",
+  "grpIDeleteStatusTitle": "Delete {name}?",
+  "@grpIDeleteStatusTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpITasksInStatus": "{count, plural, =1{1 task is in this status. Choose where it goes.} other{{count} tasks are in this status. Choose where they go.}}",
+  "@grpITasksInStatus": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpIMoveTasksTo": "Move tasks to",
+  "grpIMoveTasksAndDelete": "Move tasks and delete",
+  "grpIWhoMayMove": "Who may make this move",
+  "grpIAnyRole": "Any role",
+  "grpIOnlyRole": "Only {name}",
+  "@grpIOnlyRole": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpITaskNeedsAssignee": "The task needs an assignee",
+  "grpIAllSubtasksDone": "All subtasks must be done",
+  "grpIDoneOrCancelledDepth": "Done or cancelled, at any depth.",
+  "grpIWorkflow": "Workflow",
+  "grpIDiscard": "Discard",
+  "grpIWorkflowSaved": "Workflow saved",
+  "grpIRestrictTransitions": "Restrict transitions",
+  "grpIRestrictTransitionsHint": "Off: any status can move to any other. On: only the arrows you allow.",
+  "grpIRestrictCreation": "New tasks start in the default status only",
+  "grpIRestrictCreationHint": "Off: a task can be created in any status. On: it starts in the status marked with the star and reaches the others by being moved.",
+  "grpIAddStatus": "Add status",
+  "grpINewStatus": "New status",
+  "grpIMigrationNeedsPlace": "Tasks you chose to move here need a new place.",
+  "grpIMoveArrow": "{from} → {to}",
+  "@grpIMoveArrow": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIDeletedStillHasTasks": "{name} was deleted but still has tasks.",
+  "@grpIDeletedStillHasTasks": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIMoveItsTasksTo": "Move its tasks to",
+  "grpIDrillTitle": "{title} · {count}{more} {count, plural, =1{task} other{tasks}}",
+  "@grpIDrillTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "more": {
+        "type": "String"
+      }
+    }
+  },
+  "grpINoTasks": "No tasks.",
+  "grpIDrillTruncated": "Only the first tasks are listed; narrow the filter to see the rest.",
+  "grpIDueOn": "due {date}",
+  "@grpIDueOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "grpINothingToShow": "Nothing to show yet.",
+  "grpIRefresh": "Refresh",
+  "grpIWidgetMenu": "Widget menu",
+  "grpIExportCsv": "Export CSV",
+  "grpIRemove": "Remove",
+  "grpISaveToSeeNumbers": "Save to see numbers.",
+  "grpICsvTitle": "{title} (CSV)",
+  "@grpICsvTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpICsvCopied": "CSV copied.",
+  "grpISaveAsFile": "Save as file",
+  "grpILatestPoints": "Showing the latest {limit} points; shorten the range to see them all.",
+  "@grpILatestPoints": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "grpITopLimit": "Showing the top {limit}; narrow the filter to see the rest.",
+  "@grpITopLimit": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "grpIWidget": "Widget",
+  "grpITitle": "Title",
+  "grpIGroupBy": "Group by",
+  "grpIFilterTfqlOptional": "Filter (TFQL, optional)",
+  "grpIPreview": "Preview",
+  "grpIProject": "Project",
+  "grpISprint": "Sprint",
+  "grpIDateRange": "{start} → {end}",
+  "@grpIDateRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIFromDate": "from {date}",
+  "@grpIFromDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "grpINoDates": "no dates",
+  "grpIDaysCount": "{count, plural, =1{1 day} other{{count} days}}",
+  "@grpIDaysCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpINothingScheduled": "Nothing is scheduled in this range.",
+  "grpIOnCriticalPath": "on the critical path",
+  "grpIBlocked": "blocked",
+  "grpIMovingPushes": "Moving {id} pushes {count}",
+  "@grpIMovingPushes": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpIRangeShift": "{from}  →  {to}",
+  "@grpIRangeShift": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIKeepThem": "Keep them (show conflict)",
+  "grpIShiftDependents": "Shift dependents",
+  "grpIWeekdayMon": "Mon",
+  "grpIWeekdayTue": "Tue",
+  "grpIWeekdayWed": "Wed",
+  "grpIWeekdayThu": "Thu",
+  "grpIWeekdayFri": "Fri",
+  "grpIWeekdaySat": "Sat",
+  "grpIWeekdaySun": "Sun",
+  "grpIWorkingDays": "Working days",
+  "grpIWorkingDaysHint": "Moving a task past another skips the days off.",
+  "grpIHolidays": "Holidays",
+  "grpIHolidaysHint": "Dates like 2026-12-25, separated by commas",
+  "grpITimelineChartLabel": "Timeline chart of {count} tasks. Switch to the list view to read them.",
+  "@grpITimelineChartLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpITimelineDragHint": "Drag a bar to move it, an end to resize it. Ctrl + wheel or pinch zooms.",
+  "grpIUnscheduled": "Unscheduled",
+  "grpIMovedLinksBreak": "Moved. The links it breaks show in red.",
+  "grpITimelineSaved": "Timeline saved.",
+  "grpIDay": "Day",
+  "grpIWeek": "Week",
+  "grpIMonth": "Month",
+  "grpIQuarter": "Quarter",
+  "grpITaskTree": "Task tree",
+  "grpIByAssignee": "By assignee",
+  "grpIByStatus": "By status",
+  "grpIEarlier": "Earlier",
+  "grpIToday": "Today",
+  "grpILater": "Later",
+  "grpICriticalPath": "Critical path",
+  "grpIHideDone": "Hide done",
+  "grpIShowChart": "Show the chart",
+  "grpIShowList": "Show as a list",
+  "grpIExportImage": "Export as an image",
+  "grpICurrency": "Currency",
+  "grpIClear": "Clear",
+  "grpINone": "None",
+  "grpIFieldArchived": "Archived {name}. Values are kept 30 days.",
+  "@grpIFieldArchived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIFields": "Fields",
+  "grpIAddField": "Add field",
+  "grpINoCustomFields": "No custom fields yet. Add one for things like Customer or Story points.",
+  "grpIArchivedRestorable": "Archived (restorable for 30 days)",
+  "grpIRequired": "Required",
+  "grpIOptionsCount": "{count, plural, =1{1 options} other{{count} options}}",
+  "@grpIOptionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpIArchive": "Archive",
+  "grpIWriteComment": "Write a comment… (@ to mention)",
+  "grpIComment": "Comment",
+  "grpIBulletList": "Bullet list",
+  "grpIQuote": "Quote",
+  "grpICodeBlock": "Code block",
+  "grpILink": "Link",
+  "grpICouldNotReadFile": "Could not read that file.",
+  "grpICtrlEnterToSend": "Ctrl+Enter to send",
+  "grpIDeleteCommentTitle": "Delete this comment?",
+  "grpIDeleteCommentBody": "It will show as \"Comment removed\". Its content and edit history are deleted.",
+  "grpICannotSeeTask": "They cannot see this task",
+  "grpICannotSeeGrant": "{names} cannot see this task. Add them to the project and send the comment, or take the mention out.",
+  "@grpICannotSeeGrant": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpICannotSeeRefuse": "{names} cannot see this task, so they cannot be mentioned. Take the mention out, or ask someone who manages the project to add them.",
+  "@grpICannotSeeRefuse": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIOk": "OK",
+  "grpIAddThemAndSend": "Add them and send",
+  "grpIEditHistory": "Edit history · {author}",
+  "@grpIEditHistory": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "grpIRevisionCurrent": "{stamp} · current",
+  "@grpIRevisionCurrent": {
+    "placeholders": {
+      "stamp": {
+        "type": "String"
+      }
+    }
+  },
+  "grpISessions": "Sessions",
+  "grpISignOutOthers": "Sign out other devices",
+  "grpIUnknownDevice": "Unknown device",
+  "grpIThisDevice": "This device",
+  "grpISignOutThis": "Sign out this device",
+  "grpJLink": "Link",
+  "grpJInviteEmails": "Email addresses",
+  "grpJInviteEmailsHelp": "Separate several with commas. Up to {max}.",
+  "@grpJInviteEmailsHelp": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJAdd": "Add",
+  "grpJInviteInvalidEmail": "\"{email}\" is not a valid email address.",
+  "@grpJInviteInvalidEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJInviteTooMany": "You can invite at most {max} people at once.",
+  "@grpJInviteTooMany": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJInviteSendAll": "Send invitations",
+  "grpJInviteSendCount": "Send {count}",
+  "@grpJInviteSendCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJInvited": "Invited {count}.",
+  "@grpJInvited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJInviteSkipped": "Already members, skipped: {emails}",
+  "@grpJInviteSkipped": {
+    "placeholders": {
+      "emails": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJExpiresAfter": "Expires after",
+  "grpJDays": "{count, plural, one{{count} day} other{{count} days}}",
+  "@grpJDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJMaxUses": "Max uses",
+  "grpJMaxUsesHelp": "Leave empty for unlimited.",
+  "grpJMaxUsesInvalid": "Enter a number from 1 to {max}, or leave empty.",
+  "@grpJMaxUsesInvalid": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJCreateLink": "Create link",
+  "grpJCopyLink": "Copy link",
+  "grpJRole": "Role",
+  "grpJInvitationTitle": "Invitation",
+  "grpJJoin": "Join",
+  "grpJDecline": "Decline",
+  "grpJGoToTaskForge": "Go to TaskForge",
+  "grpJInvitedToJoin": "You have been invited to join",
+  "grpJInviterInvitedYou": "{name} invited you to join",
+  "@grpJInviterInvitedYou": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJBack": "Back",
+  "grpJMembers": "Members",
+  "grpJInvite": "Invite",
+  "grpJPending": "Pending",
+  "grpJJoined": "Joined {date}",
+  "@grpJJoined": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJRemoveFromWorkspace": "Remove from workspace",
+  "grpJSearchMembers": "Search members",
+  "grpJRemoveMember": "Remove {name}",
+  "@grpJRemoveMember": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJOwnerCannotLeave": "You own this workspace, so you cannot leave it. Ownership cannot be transferred yet.",
+  "grpJLeaveWorkspace": "Leave workspace",
+  "grpJRemoveMemberTitle": "Remove {name}?",
+  "@grpJRemoveMemberTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJRemoveMemberBody": "They lose access to this workspace. You can invite them again later.",
+  "grpJRemove": "Remove",
+  "grpJLeaveTitle": "Leave {name}?",
+  "@grpJLeaveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJLeaveBody": "You will lose access to this workspace until someone invites you again.",
+  "grpJLeave": "Leave",
+  "grpJErrorRetry": "{error} Retry",
+  "@grpJErrorRetry": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJLinkCopied": "Link copied.",
+  "grpJNoInvitations": "No invitations yet.",
+  "grpJInvitationResent": "Invitation resent.",
+  "grpJResend": "Resend",
+  "grpJRevoke": "Revoke",
+  "grpJStatePending": "Pending",
+  "grpJStateExpired": "Expired",
+  "grpJStateRevoked": "Revoked",
+  "grpJStateUsedUp": "Used up",
+  "grpJUsesCount": "{count, plural, one{{count} use} other{{count} uses}}",
+  "@grpJUsesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJUsesOfMax": "{uses}/{max} uses",
+  "@grpJUsesOfMax": {
+    "placeholders": {
+      "uses": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJInviteLink": "Invite link",
+  "grpJInvitationMeta": "by {name} · expires {date}",
+  "@grpJInvitationMeta": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJChangeRole": "Change role",
+  "grpJBlockOptions": "Block options",
+  "grpJMoveUp": "Move up",
+  "grpJMoveDown": "Move down",
+  "grpJAddBlockBelow": "Add block below",
+  "grpJDelete": "Delete",
+  "grpJTurnInto": "Turn into {label}",
+  "@grpJTurnInto": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJClickToWrite": "Click here to start writing",
+  "grpJAddBlock": "Add block",
+  "grpJDocs": "Docs",
+  "grpJPickPage": "Pick a page, or create one.",
+  "grpJNoMatchingBlocks": "No matching blocks",
+  "grpJNoMatchingPages": "No matching pages",
+  "grpJTableRow": "Row",
+  "grpJTableColumn": "Column",
+  "grpJNoImageAddress": "No image address yet",
+  "grpJImageLoadFailed": "Image could not load",
+  "grpJEditImage": "Edit image",
+  "grpJLoadingTask": "Loading task...",
+  "grpJNoAccessTask": "No access to this task",
+  "grpJUnknownBlock": "This block ({type}) needs a newer version of TaskForge. It is kept as it is.",
+  "@grpJUnknownBlock": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJLinkAPage": "Link a page",
+  "grpJNoPagesYetLong": "There are no pages yet.",
+  "grpJRelatedDocs": "Related docs",
+  "grpJNoPagesYet": "No pages yet.",
+  "grpJLinked": "Linked",
+  "grpJEmbedded": "Embedded",
+  "grpJUnlink": "Unlink",
+  "grpJChangeTone": "Change tone ({tone})",
+  "@grpJChangeTone": {
+    "placeholders": {
+      "tone": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJBold": "Bold",
+  "grpJItalic": "Italic",
+  "grpJStrikethrough": "Strikethrough",
+  "grpJCode": "Code",
+  "grpJHintParagraph": "Type '/' for blocks, '[[' to mention a page",
+  "grpJHintHeading": "Heading {level}",
+  "@grpJHintHeading": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "grpJCodeLanguageHint": "language",
+  "grpJUndo": "Undo",
+  "grpJRestore": "Restore",
+  "grpJName": "Name",
+  "grpJWorkspaceDeleted": "\"{name}\" deleted. Restorable for 7 days.",
+  "@grpJWorkspaceDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJDangerZone": "Danger zone",
+  "grpJDangerZoneBody": "Deleting a workspace hides it for everyone. You can restore it for 7 days.",
+  "grpJDeleteWorkspace": "Delete workspace",
+  "grpJDeleteWorkspaceQ": "Delete workspace?",
+  "grpJTypeNameToConfirm": "Type \"{name}\" to confirm",
+  "@grpJTypeNameToConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJNewWorkspace": "New workspace",
+  "grpJCreateYourWorkspace": "Create your workspace",
+  "grpJWorkspaceHolds": "A workspace holds your team's projects and tasks.",
+  "grpJUrl": "URL",
+  "grpJCreateWorkspace": "Create workspace",
+  "grpJRecentlyDeleted": "Recently deleted",
+  "grpJSwitchWorkspace": "Switch workspace",
+  "grpJTimerRunning": "Timer running",
+  "grpJTimerStoppedOn": "Stopped the timer on {key} {title}",
+  "@grpJTimerStoppedOn": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJTime": "Time",
+  "grpJStop": "Stop",
+  "grpJStartTimer": "Start timer",
+  "grpJAddTime": "Add time",
+  "grpJTimeOfEstimate": "{logged} of {estimate}",
+  "@grpJTimeOfEstimate": {
+    "placeholders": {
+      "logged": {
+        "type": "String"
+      },
+      "estimate": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJTimeLogged": "{logged} logged",
+  "@grpJTimeLogged": {
+    "placeholders": {
+      "logged": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJTimeBillable": "{duration} billable",
+  "@grpJTimeBillable": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJChangeEstimate": "Change estimate",
+  "grpJSetEstimate": "Set estimate",
+  "grpJRunning": "Running",
+  "grpJLoggedLabel": "Logged",
+  "grpJYou": "you",
+  "grpJBillableSuffix": "billable",
+  "grpJOverlapsEntry": "Overlaps another entry",
+  "grpJOver24h": "Over 24 h: check it",
+  "grpJEdit": "Edit",
+  "grpJStopTheTimer": "Stop the timer",
+  "grpJRoleActions": "Role actions",
+  "grpJRename": "Rename",
+  "grpJBuiltInReadOnly": "Built-in, read-only",
+  "grpJRolesAndPermissions": "Roles and permissions",
+  "grpJNewRole": "New role",
+  "grpJActivity": "Activity",
+  "grpJNoActivity": "No activity yet.",
+  "grpJDebugTitle": "TaskForge — connectivity",
+  "grpJPingLabel": "{label} ping",
+  "@grpJPingLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "grpJPingError": "error: {error}",
+  "@grpJPingError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}

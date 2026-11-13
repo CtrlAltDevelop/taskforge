@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
 import 'package:taskforge/features/projects/application/projects_providers.dart';
@@ -86,7 +87,7 @@ Future<void> _changeStatus(ActionContext c) async {
   final target = await showDialog<WorkflowStatus>(
     context: c.context,
     builder: (_) => SimpleDialog(
-      title: Text('Status of ${task.displayId}'),
+      title: Text(c.context.l10n.grpDStatusOf(task.displayId)),
       children: [
         for (final s in options)
           if (s.id != task.statusId)
@@ -235,24 +236,24 @@ class _TitleDialogState extends State<_TitleDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('New task'),
+    title: Text(context.l10n.grpDNewTask),
     content: TextField(
       key: const Key('new-task-title'),
       controller: _controller,
       autofocus: true,
       maxLength: maxTitleLength,
-      decoration: const InputDecoration(labelText: 'Title'),
+      decoration: InputDecoration(labelText: context.l10n.grpDTitle),
       onSubmitted: (v) => Navigator.of(context).pop(v),
     ),
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Cancel'),
+        child: Text(context.l10n.grpDCancel),
       ),
       FilledButton(
         key: const Key('new-task-create'),
         onPressed: () => Navigator.of(context).pop(_controller.text),
-        child: const Text('Create'),
+        child: Text(context.l10n.grpDCreate),
       ),
     ],
   );

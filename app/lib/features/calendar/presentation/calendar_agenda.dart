@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
@@ -34,7 +35,7 @@ class DayTasks extends StatelessWidget {
     if (onDay.isEmpty && ghostsToday.isEmpty) {
       return Center(
         child: Text(
-          'Nothing on ${formatDay(day)}.',
+          context.l10n.grpFNothingOn(formatDay(day)),
           key: const Key('day-empty'),
         ),
       );
@@ -52,7 +53,7 @@ class DayTasks extends StatelessWidget {
             trailing: canMove
                 ? IconButton(
                     key: Key('reschedule-${task.id}'),
-                    tooltip: 'Reschedule…',
+                    tooltip: context.l10n.grpFReschedule,
                     icon: const Icon(Icons.edit_calendar_outlined),
                     onPressed: () => onReschedule(task),
                   )
