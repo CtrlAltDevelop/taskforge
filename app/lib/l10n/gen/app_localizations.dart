@@ -10836,6 +10836,486 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use YYYY-MM-DD.'**
   String get grp1UseIsoDate;
+
+  /// No description provided for @devTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get devTitle;
+
+  /// No description provided for @devSub.
+  ///
+  /// In en, this message translates to:
+  /// **'API tokens and webhooks'**
+  String get devSub;
+
+  /// No description provided for @devTokensTab.
+  ///
+  /// In en, this message translates to:
+  /// **'API tokens'**
+  String get devTokensTab;
+
+  /// No description provided for @devWebhooksTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Webhooks'**
+  String get devWebhooksTab;
+
+  /// No description provided for @devTokenNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New token'**
+  String get devTokenNew;
+
+  /// No description provided for @devTokenName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get devTokenName;
+
+  /// No description provided for @devTokenScopes.
+  ///
+  /// In en, this message translates to:
+  /// **'What it may do'**
+  String get devTokenScopes;
+
+  /// No description provided for @devTokenExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires'**
+  String get devTokenExpiry;
+
+  /// No description provided for @devExpiryNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get devExpiryNever;
+
+  /// No description provided for @devExpiry30.
+  ///
+  /// In en, this message translates to:
+  /// **'In 30 days'**
+  String get devExpiry30;
+
+  /// No description provided for @devExpiry90.
+  ///
+  /// In en, this message translates to:
+  /// **'In 90 days'**
+  String get devExpiry90;
+
+  /// No description provided for @devExpiry365.
+  ///
+  /// In en, this message translates to:
+  /// **'In a year'**
+  String get devExpiry365;
+
+  /// No description provided for @devTokenCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create token'**
+  String get devTokenCreate;
+
+  /// No description provided for @devTokenCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy your token now'**
+  String get devTokenCreatedTitle;
+
+  /// No description provided for @devTokenCreatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the only time it is shown. Store it somewhere safe.'**
+  String get devTokenCreatedBody;
+
+  /// No description provided for @devCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get devCopy;
+
+  /// No description provided for @devCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get devCopied;
+
+  /// No description provided for @devDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get devDone;
+
+  /// No description provided for @devTokenPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts with {prefix}'**
+  String devTokenPrefix(String prefix);
+
+  /// No description provided for @devTokenNeverUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Never used'**
+  String get devTokenNeverUsed;
+
+  /// No description provided for @devTokenUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {when}'**
+  String devTokenUsed(String when);
+
+  /// No description provided for @devTokenActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get devTokenActive;
+
+  /// No description provided for @devTokenExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get devTokenExpired;
+
+  /// No description provided for @devTokenRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked'**
+  String get devTokenRevoked;
+
+  /// No description provided for @devTokenRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke'**
+  String get devTokenRevoke;
+
+  /// No description provided for @devTokenRevokeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke \"{name}\"?'**
+  String devTokenRevokeTitle(String name);
+
+  /// No description provided for @devTokenRevokeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything using this token stops working at once.'**
+  String get devTokenRevokeBody;
+
+  /// No description provided for @devTokensEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tokens yet.'**
+  String get devTokensEmpty;
+
+  /// No description provided for @devTokensHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A token can do what you can do, narrowed to the scopes you pick. It works in this workspace only.'**
+  String get devTokensHint;
+
+  /// No description provided for @devWebhookNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New webhook'**
+  String get devWebhookNew;
+
+  /// No description provided for @devWebhookEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit webhook'**
+  String get devWebhookEdit;
+
+  /// No description provided for @devWebhookName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (optional)'**
+  String get devWebhookName;
+
+  /// No description provided for @devWebhookUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get devWebhookUrl;
+
+  /// No description provided for @devWebhookEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get devWebhookEvents;
+
+  /// No description provided for @devWebhookSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get devWebhookSave;
+
+  /// No description provided for @devWebhookActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get devWebhookActive;
+
+  /// No description provided for @devWebhookSecret.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing secret'**
+  String get devWebhookSecret;
+
+  /// No description provided for @devWebhookTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send test'**
+  String get devWebhookTest;
+
+  /// No description provided for @devWebhookTestDone.
+  ///
+  /// In en, this message translates to:
+  /// **'The test was sent: {status}'**
+  String devWebhookTestDone(String status);
+
+  /// No description provided for @devWebhookDeliveries.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliveries'**
+  String get devWebhookDeliveries;
+
+  /// No description provided for @devWebhookDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get devWebhookDelete;
+
+  /// No description provided for @devWebhookDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String devWebhookDeleteTitle(String name);
+
+  /// No description provided for @devWebhookDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its delivery log is deleted too.'**
+  String get devWebhookDeleteBody;
+
+  /// No description provided for @devWebhooksEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No webhooks yet.'**
+  String get devWebhooksEmpty;
+
+  /// No description provided for @devWebhooksDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Only people who can manage webhooks see these.'**
+  String get devWebhooksDenied;
+
+  /// No description provided for @devWebhookOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched off: {reason}'**
+  String devWebhookOff(String reason);
+
+  /// No description provided for @devWebhookHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Each event is sent as a signed POST. The receiver checks the signature with the secret.'**
+  String get devWebhookHint;
+
+  /// No description provided for @devDeliveriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliveries'**
+  String get devDeliveriesTitle;
+
+  /// No description provided for @devDeliveriesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has been sent yet.'**
+  String get devDeliveriesEmpty;
+
+  /// No description provided for @devStatusDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get devStatusDelivered;
+
+  /// No description provided for @devStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get devStatusPending;
+
+  /// No description provided for @devStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed, will retry'**
+  String get devStatusFailed;
+
+  /// No description provided for @devStatusGaveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Gave up'**
+  String get devStatusGaveUp;
+
+  /// No description provided for @devAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempt {n}'**
+  String devAttempt(int n);
+
+  /// No description provided for @devRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Request'**
+  String get devRequest;
+
+  /// No description provided for @devResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Response'**
+  String get devResponse;
+
+  /// No description provided for @devHeaders.
+  ///
+  /// In en, this message translates to:
+  /// **'Headers'**
+  String get devHeaders;
+
+  /// No description provided for @devBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Body'**
+  String get devBody;
+
+  /// No description provided for @devResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get devResend;
+
+  /// No description provided for @devResent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent again: {status}'**
+  String devResent(String status);
+
+  /// No description provided for @devNextTry.
+  ///
+  /// In en, this message translates to:
+  /// **'Next try {when}'**
+  String devNextTry(String when);
+
+  /// No description provided for @devLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get devLoadMore;
+
+  /// No description provided for @devRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get devRetry;
+
+  /// No description provided for @devDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot do that here.'**
+  String get devDenied;
+
+  /// No description provided for @devScopeWorkspacesRead.
+  ///
+  /// In en, this message translates to:
+  /// **'See the workspace'**
+  String get devScopeWorkspacesRead;
+
+  /// No description provided for @devScopeProjectsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read projects'**
+  String get devScopeProjectsRead;
+
+  /// No description provided for @devScopeProjectsWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Create and change projects'**
+  String get devScopeProjectsWrite;
+
+  /// No description provided for @devScopeTasksRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read tasks'**
+  String get devScopeTasksRead;
+
+  /// No description provided for @devScopeTasksWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Create, change and delete tasks'**
+  String get devScopeTasksWrite;
+
+  /// No description provided for @devScopeCommentsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read comments'**
+  String get devScopeCommentsRead;
+
+  /// No description provided for @devScopeCommentsWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Write comments'**
+  String get devScopeCommentsWrite;
+
+  /// No description provided for @devEventTaskCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'A task is created'**
+  String get devEventTaskCreated;
+
+  /// No description provided for @devEventTaskUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'A task is edited'**
+  String get devEventTaskUpdated;
+
+  /// No description provided for @devEventTaskStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'A task changes status'**
+  String get devEventTaskStatus;
+
+  /// No description provided for @devEventTaskAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'People are assigned to a task'**
+  String get devEventTaskAssigned;
+
+  /// No description provided for @devEventTaskDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'A task is deleted'**
+  String get devEventTaskDeleted;
+
+  /// No description provided for @devEventCommentCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'A comment is added'**
+  String get devEventCommentCreated;
+
+  /// No description provided for @devEventCommentUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'A comment is edited'**
+  String get devEventCommentUpdated;
+
+  /// No description provided for @devEventCommentDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'A comment is deleted'**
+  String get devEventCommentDeleted;
+
+  /// No description provided for @devEventPing.
+  ///
+  /// In en, this message translates to:
+  /// **'Test event'**
+  String get devEventPing;
 }
 
 class _AppLocalizationsDelegate

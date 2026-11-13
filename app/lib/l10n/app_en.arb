@@ -3614,5 +3614,148 @@
   "grp1EnterAmount": "Enter an amount.",
   "grp1EnterCurrency": "Enter a 3-letter currency, e.g. USD.",
   "grp1EnterUrl": "Enter a web address starting with http(s)://",
-  "grp1UseIsoDate": "Use YYYY-MM-DD."
+  "grp1UseIsoDate": "Use YYYY-MM-DD.",
+  "devTitle": "Developer",
+  "devSub": "API tokens and webhooks",
+  "devTokensTab": "API tokens",
+  "devWebhooksTab": "Webhooks",
+  "devTokenNew": "New token",
+  "devTokenName": "Name",
+  "devTokenScopes": "What it may do",
+  "devTokenExpiry": "Expires",
+  "devExpiryNever": "Never",
+  "devExpiry30": "In 30 days",
+  "devExpiry90": "In 90 days",
+  "devExpiry365": "In a year",
+  "devTokenCreate": "Create token",
+  "devTokenCreatedTitle": "Copy your token now",
+  "devTokenCreatedBody": "This is the only time it is shown. Store it somewhere safe.",
+  "devCopy": "Copy",
+  "devCopied": "Copied",
+  "devDone": "Done",
+  "devTokenPrefix": "Starts with {prefix}",
+  "@devTokenPrefix": {
+    "placeholders": {
+      "prefix": {
+        "type": "String"
+      }
+    }
+  },
+  "devTokenNeverUsed": "Never used",
+  "devTokenUsed": "Last used {when}",
+  "@devTokenUsed": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "devTokenActive": "Active",
+  "devTokenExpired": "Expired",
+  "devTokenRevoked": "Revoked",
+  "devTokenRevoke": "Revoke",
+  "devTokenRevokeTitle": "Revoke \"{name}\"?",
+  "@devTokenRevokeTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devTokenRevokeBody": "Anything using this token stops working at once.",
+  "devTokensEmpty": "No tokens yet.",
+  "devTokensHint": "A token can do what you can do, narrowed to the scopes you pick. It works in this workspace only.",
+  "devWebhookNew": "New webhook",
+  "devWebhookEdit": "Edit webhook",
+  "devWebhookName": "Name (optional)",
+  "devWebhookUrl": "URL",
+  "devWebhookEvents": "Events",
+  "devWebhookSave": "Save",
+  "devWebhookActive": "Active",
+  "devWebhookSecret": "Signing secret",
+  "devWebhookTest": "Send test",
+  "devWebhookTestDone": "The test was sent: {status}",
+  "@devWebhookTestDone": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "devWebhookDeliveries": "Deliveries",
+  "devWebhookDelete": "Delete",
+  "devWebhookDeleteTitle": "Delete \"{name}\"?",
+  "@devWebhookDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devWebhookDeleteBody": "Its delivery log is deleted too.",
+  "devWebhooksEmpty": "No webhooks yet.",
+  "devWebhooksDenied": "Only people who can manage webhooks see these.",
+  "devWebhookOff": "Switched off: {reason}",
+  "@devWebhookOff": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "devWebhookHint": "Each event is sent as a signed POST. The receiver checks the signature with the secret.",
+  "devDeliveriesTitle": "Deliveries",
+  "devDeliveriesEmpty": "Nothing has been sent yet.",
+  "devStatusDelivered": "Delivered",
+  "devStatusPending": "Waiting",
+  "devStatusFailed": "Failed, will retry",
+  "devStatusGaveUp": "Gave up",
+  "devAttempt": "Attempt {n}",
+  "@devAttempt": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "devRequest": "Request",
+  "devResponse": "Response",
+  "devHeaders": "Headers",
+  "devBody": "Body",
+  "devResend": "Resend",
+  "devResent": "Sent again: {status}",
+  "@devResent": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "devNextTry": "Next try {when}",
+  "@devNextTry": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "devLoadMore": "Load more",
+  "devRetry": "Try again",
+  "devDenied": "You cannot do that here.",
+  "devScopeWorkspacesRead": "See the workspace",
+  "devScopeProjectsRead": "Read projects",
+  "devScopeProjectsWrite": "Create and change projects",
+  "devScopeTasksRead": "Read tasks",
+  "devScopeTasksWrite": "Create, change and delete tasks",
+  "devScopeCommentsRead": "Read comments",
+  "devScopeCommentsWrite": "Write comments",
+  "devEventTaskCreated": "A task is created",
+  "devEventTaskUpdated": "A task is edited",
+  "devEventTaskStatus": "A task changes status",
+  "devEventTaskAssigned": "People are assigned to a task",
+  "devEventTaskDeleted": "A task is deleted",
+  "devEventCommentCreated": "A comment is added",
+  "devEventCommentUpdated": "A comment is edited",
+  "devEventCommentDeleted": "A comment is deleted",
+  "devEventPing": "Test event"
 }

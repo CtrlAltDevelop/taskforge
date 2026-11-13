@@ -6137,4 +6137,267 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get grp1UseIsoDate => 'از قالب YYYY-MM-DD استفاده کنید.';
+
+  @override
+  String get devTitle => 'توسعه‌دهنده';
+
+  @override
+  String get devSub => 'توکن‌های API و وب‌هوک‌ها';
+
+  @override
+  String get devTokensTab => 'توکن‌های API';
+
+  @override
+  String get devWebhooksTab => 'وب‌هوک‌ها';
+
+  @override
+  String get devTokenNew => 'توکن جدید';
+
+  @override
+  String get devTokenName => 'نام';
+
+  @override
+  String get devTokenScopes => 'اجازه‌های توکن';
+
+  @override
+  String get devTokenExpiry => 'انقضا';
+
+  @override
+  String get devExpiryNever => 'هرگز';
+
+  @override
+  String get devExpiry30 => '۳۰ روز دیگر';
+
+  @override
+  String get devExpiry90 => '۹۰ روز دیگر';
+
+  @override
+  String get devExpiry365 => 'یک سال دیگر';
+
+  @override
+  String get devTokenCreate => 'ساخت توکن';
+
+  @override
+  String get devTokenCreatedTitle => 'توکن را همین حالا کپی کنید';
+
+  @override
+  String get devTokenCreatedBody =>
+      'این تنها باری است که نمایش داده می‌شود. آن را جای امنی نگه دارید.';
+
+  @override
+  String get devCopy => 'کپی';
+
+  @override
+  String get devCopied => 'کپی شد';
+
+  @override
+  String get devDone => 'تمام';
+
+  @override
+  String devTokenPrefix(String prefix) {
+    return 'با $prefix شروع می‌شود';
+  }
+
+  @override
+  String get devTokenNeverUsed => 'هرگز استفاده نشده';
+
+  @override
+  String devTokenUsed(String when) {
+    return 'آخرین استفاده $when';
+  }
+
+  @override
+  String get devTokenActive => 'فعال';
+
+  @override
+  String get devTokenExpired => 'منقضی‌شده';
+
+  @override
+  String get devTokenRevoked => 'لغوشده';
+
+  @override
+  String get devTokenRevoke => 'لغو';
+
+  @override
+  String devTokenRevokeTitle(String name) {
+    return '«$name» لغو شود؟';
+  }
+
+  @override
+  String get devTokenRevokeBody =>
+      'هر چیزی که از این توکن استفاده می‌کند بلافاصله از کار می‌افتد.';
+
+  @override
+  String get devTokensEmpty => 'هنوز توکنی نیست.';
+
+  @override
+  String get devTokensHint =>
+      'یک توکن همان کارهایی را می‌کند که شما می‌توانید، محدود به اجازه‌هایی که انتخاب می‌کنید. فقط در همین فضای کار معتبر است.';
+
+  @override
+  String get devWebhookNew => 'وب‌هوک جدید';
+
+  @override
+  String get devWebhookEdit => 'ویرایش وب‌هوک';
+
+  @override
+  String get devWebhookName => 'نام (اختیاری)';
+
+  @override
+  String get devWebhookUrl => 'نشانی';
+
+  @override
+  String get devWebhookEvents => 'رویدادها';
+
+  @override
+  String get devWebhookSave => 'ذخیره';
+
+  @override
+  String get devWebhookActive => 'فعال';
+
+  @override
+  String get devWebhookSecret => 'رمز امضا';
+
+  @override
+  String get devWebhookTest => 'ارسال آزمایشی';
+
+  @override
+  String devWebhookTestDone(String status) {
+    return 'آزمایش ارسال شد: $status';
+  }
+
+  @override
+  String get devWebhookDeliveries => 'ارسال‌ها';
+
+  @override
+  String get devWebhookDelete => 'حذف';
+
+  @override
+  String devWebhookDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get devWebhookDeleteBody => 'گزارش ارسال‌های آن هم حذف می‌شود.';
+
+  @override
+  String get devWebhooksEmpty => 'هنوز وب‌هوکی نیست.';
+
+  @override
+  String get devWebhooksDenied =>
+      'فقط کسانی که می‌توانند وب‌هوک‌ها را مدیریت کنند این‌ها را می‌بینند.';
+
+  @override
+  String devWebhookOff(String reason) {
+    return 'خاموش شد: $reason';
+  }
+
+  @override
+  String get devWebhookHint =>
+      'هر رویداد به‌صورت یک POST امضاشده ارسال می‌شود. گیرنده امضا را با رمز بررسی می‌کند.';
+
+  @override
+  String get devDeliveriesTitle => 'ارسال‌ها';
+
+  @override
+  String get devDeliveriesEmpty => 'هنوز چیزی ارسال نشده است.';
+
+  @override
+  String get devStatusDelivered => 'تحویل شد';
+
+  @override
+  String get devStatusPending => 'در انتظار';
+
+  @override
+  String get devStatusFailed => 'ناموفق، دوباره تلاش می‌شود';
+
+  @override
+  String get devStatusGaveUp => 'منصرف شد';
+
+  @override
+  String devAttempt(int n) {
+    return 'تلاش $n';
+  }
+
+  @override
+  String get devRequest => 'درخواست';
+
+  @override
+  String get devResponse => 'پاسخ';
+
+  @override
+  String get devHeaders => 'سرایندها';
+
+  @override
+  String get devBody => 'بدنه';
+
+  @override
+  String get devResend => 'ارسال دوباره';
+
+  @override
+  String devResent(String status) {
+    return 'دوباره ارسال شد: $status';
+  }
+
+  @override
+  String devNextTry(String when) {
+    return 'تلاش بعدی $when';
+  }
+
+  @override
+  String get devLoadMore => 'بارگذاری بیشتر';
+
+  @override
+  String get devRetry => 'تلاش دوباره';
+
+  @override
+  String get devDenied => 'شما اینجا اجازه این کار را ندارید.';
+
+  @override
+  String get devScopeWorkspacesRead => 'دیدن فضای کار';
+
+  @override
+  String get devScopeProjectsRead => 'خواندن پروژه‌ها';
+
+  @override
+  String get devScopeProjectsWrite => 'ساخت و تغییر پروژه‌ها';
+
+  @override
+  String get devScopeTasksRead => 'خواندن وظیفه‌ها';
+
+  @override
+  String get devScopeTasksWrite => 'ساخت، تغییر و حذف وظیفه‌ها';
+
+  @override
+  String get devScopeCommentsRead => 'خواندن دیدگاه‌ها';
+
+  @override
+  String get devScopeCommentsWrite => 'نوشتن دیدگاه';
+
+  @override
+  String get devEventTaskCreated => 'وظیفه‌ای ساخته شد';
+
+  @override
+  String get devEventTaskUpdated => 'وظیفه‌ای ویرایش شد';
+
+  @override
+  String get devEventTaskStatus => 'وضعیت وظیفه‌ای تغییر کرد';
+
+  @override
+  String get devEventTaskAssigned => 'کسانی به وظیفه‌ای واگذار شدند';
+
+  @override
+  String get devEventTaskDeleted => 'وظیفه‌ای حذف شد';
+
+  @override
+  String get devEventCommentCreated => 'دیدگاهی افزوده شد';
+
+  @override
+  String get devEventCommentUpdated => 'دیدگاهی ویرایش شد';
+
+  @override
+  String get devEventCommentDeleted => 'دیدگاهی حذف شد';
+
+  @override
+  String get devEventPing => 'رویداد آزمایشی';
 }

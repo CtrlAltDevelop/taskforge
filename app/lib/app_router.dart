@@ -21,6 +21,8 @@ import 'package:taskforge/features/calendar/presentation/workspace_calendar_scre
 import 'package:taskforge/features/inbox/presentation/inbox_screen.dart';
 import 'package:taskforge/features/inbox/presentation/prefs_screen.dart';
 import 'package:taskforge/features/automations/presentation/automations_screen.dart';
+import 'package:taskforge/features/developer/presentation/deliveries_screen.dart';
+import 'package:taskforge/features/developer/presentation/developer_screen.dart';
 import 'package:taskforge/features/docs/presentation/docs_screen.dart';
 import 'package:taskforge/features/sprints/presentation/sprints_screen.dart';
 import 'package:taskforge/features/time/presentation/timesheet_screen.dart';
@@ -193,6 +195,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
       GoRoute(path: '/audit', builder: (_, _) => const AuditScreen()),
       GoRoute(path: '/import', builder: (_, _) => const ImportScreen()),
+      GoRoute(path: '/developer', builder: (_, _) => const DeveloperScreen()),
+      GoRoute(
+        path: '/developer/webhooks/:id',
+        builder: (_, state) =>
+            DeliveriesScreen(webhookId: state.pathParameters['id']!),
+      ),
       GoRoute(path: '/dashboards', builder: (_, _) => const DashboardsScreen()),
       GoRoute(
         path: '/projects/:id/dashboards',

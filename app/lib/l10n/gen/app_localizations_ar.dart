@@ -6197,4 +6197,266 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get grp1UseIsoDate => 'استخدم الصيغة YYYY-MM-DD.';
+
+  @override
+  String get devTitle => 'المطور';
+
+  @override
+  String get devSub => 'رموز API وخطافات الويب';
+
+  @override
+  String get devTokensTab => 'رموز API';
+
+  @override
+  String get devWebhooksTab => 'خطافات الويب';
+
+  @override
+  String get devTokenNew => 'رمز جديد';
+
+  @override
+  String get devTokenName => 'الاسم';
+
+  @override
+  String get devTokenScopes => 'ما يمكنه فعله';
+
+  @override
+  String get devTokenExpiry => 'ينتهي';
+
+  @override
+  String get devExpiryNever => 'أبدًا';
+
+  @override
+  String get devExpiry30 => 'بعد 30 يومًا';
+
+  @override
+  String get devExpiry90 => 'بعد 90 يومًا';
+
+  @override
+  String get devExpiry365 => 'بعد سنة';
+
+  @override
+  String get devTokenCreate => 'إنشاء الرمز';
+
+  @override
+  String get devTokenCreatedTitle => 'انسخ الرمز الآن';
+
+  @override
+  String get devTokenCreatedBody =>
+      'هذه هي المرة الوحيدة التي يظهر فيها. احفظه في مكان آمن.';
+
+  @override
+  String get devCopy => 'نسخ';
+
+  @override
+  String get devCopied => 'تم النسخ';
+
+  @override
+  String get devDone => 'تم';
+
+  @override
+  String devTokenPrefix(String prefix) {
+    return 'يبدأ بـ $prefix';
+  }
+
+  @override
+  String get devTokenNeverUsed => 'لم يُستخدم أبدًا';
+
+  @override
+  String devTokenUsed(String when) {
+    return 'آخر استخدام $when';
+  }
+
+  @override
+  String get devTokenActive => 'نشط';
+
+  @override
+  String get devTokenExpired => 'منتهي';
+
+  @override
+  String get devTokenRevoked => 'ملغى';
+
+  @override
+  String get devTokenRevoke => 'إلغاء';
+
+  @override
+  String devTokenRevokeTitle(String name) {
+    return 'إلغاء «$name»؟';
+  }
+
+  @override
+  String get devTokenRevokeBody =>
+      'سيتوقف كل ما يستخدم هذا الرمز عن العمل فورًا.';
+
+  @override
+  String get devTokensEmpty => 'لا توجد رموز بعد.';
+
+  @override
+  String get devTokensHint =>
+      'يستطيع الرمز فعل ما تستطيعه أنت، مقيّدًا بالنطاقات التي تختارها. ويعمل في مساحة العمل هذه فقط.';
+
+  @override
+  String get devWebhookNew => 'خطاف ويب جديد';
+
+  @override
+  String get devWebhookEdit => 'تعديل خطاف الويب';
+
+  @override
+  String get devWebhookName => 'الاسم (اختياري)';
+
+  @override
+  String get devWebhookUrl => 'العنوان';
+
+  @override
+  String get devWebhookEvents => 'الأحداث';
+
+  @override
+  String get devWebhookSave => 'حفظ';
+
+  @override
+  String get devWebhookActive => 'نشط';
+
+  @override
+  String get devWebhookSecret => 'سر التوقيع';
+
+  @override
+  String get devWebhookTest => 'إرسال اختبار';
+
+  @override
+  String devWebhookTestDone(String status) {
+    return 'تم إرسال الاختبار: $status';
+  }
+
+  @override
+  String get devWebhookDeliveries => 'عمليات التسليم';
+
+  @override
+  String get devWebhookDelete => 'حذف';
+
+  @override
+  String devWebhookDeleteTitle(String name) {
+    return 'حذف «$name»؟';
+  }
+
+  @override
+  String get devWebhookDeleteBody => 'سيُحذف سجل التسليم الخاص به أيضًا.';
+
+  @override
+  String get devWebhooksEmpty => 'لا توجد خطافات ويب بعد.';
+
+  @override
+  String get devWebhooksDenied => 'لا يراها إلا من يستطيع إدارة خطافات الويب.';
+
+  @override
+  String devWebhookOff(String reason) {
+    return 'تم إيقافه: $reason';
+  }
+
+  @override
+  String get devWebhookHint =>
+      'يُرسل كل حدث كطلب POST موقّع. يتحقق المستلم من التوقيع بالسر.';
+
+  @override
+  String get devDeliveriesTitle => 'عمليات التسليم';
+
+  @override
+  String get devDeliveriesEmpty => 'لم يُرسل شيء بعد.';
+
+  @override
+  String get devStatusDelivered => 'تم التسليم';
+
+  @override
+  String get devStatusPending => 'في الانتظار';
+
+  @override
+  String get devStatusFailed => 'فشل، ستتم إعادة المحاولة';
+
+  @override
+  String get devStatusGaveUp => 'تم التخلي';
+
+  @override
+  String devAttempt(int n) {
+    return 'المحاولة $n';
+  }
+
+  @override
+  String get devRequest => 'الطلب';
+
+  @override
+  String get devResponse => 'الاستجابة';
+
+  @override
+  String get devHeaders => 'الترويسات';
+
+  @override
+  String get devBody => 'المحتوى';
+
+  @override
+  String get devResend => 'إعادة الإرسال';
+
+  @override
+  String devResent(String status) {
+    return 'أُعيد الإرسال: $status';
+  }
+
+  @override
+  String devNextTry(String when) {
+    return 'المحاولة التالية $when';
+  }
+
+  @override
+  String get devLoadMore => 'تحميل المزيد';
+
+  @override
+  String get devRetry => 'حاول مجددًا';
+
+  @override
+  String get devDenied => 'لا يمكنك فعل ذلك هنا.';
+
+  @override
+  String get devScopeWorkspacesRead => 'عرض مساحة العمل';
+
+  @override
+  String get devScopeProjectsRead => 'قراءة المشاريع';
+
+  @override
+  String get devScopeProjectsWrite => 'إنشاء المشاريع وتعديلها';
+
+  @override
+  String get devScopeTasksRead => 'قراءة المهام';
+
+  @override
+  String get devScopeTasksWrite => 'إنشاء المهام وتعديلها وحذفها';
+
+  @override
+  String get devScopeCommentsRead => 'قراءة التعليقات';
+
+  @override
+  String get devScopeCommentsWrite => 'كتابة التعليقات';
+
+  @override
+  String get devEventTaskCreated => 'إنشاء مهمة';
+
+  @override
+  String get devEventTaskUpdated => 'تعديل مهمة';
+
+  @override
+  String get devEventTaskStatus => 'تغيّر حالة مهمة';
+
+  @override
+  String get devEventTaskAssigned => 'تعيين أشخاص لمهمة';
+
+  @override
+  String get devEventTaskDeleted => 'حذف مهمة';
+
+  @override
+  String get devEventCommentCreated => 'إضافة تعليق';
+
+  @override
+  String get devEventCommentUpdated => 'تعديل تعليق';
+
+  @override
+  String get devEventCommentDeleted => 'حذف تعليق';
+
+  @override
+  String get devEventPing => 'حدث اختبار';
 }

@@ -93,6 +93,13 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     onTap: () => context.push('/import'),
                   ),
                 ),
+                ListTile(
+                  key: const Key('open-developer'),
+                  leading: const Icon(Icons.code),
+                  title: Text(context.l10n.devTitle),
+                  subtitle: Text(context.l10n.devSub),
+                  onTap: () => context.push('/developer'),
+                ),
               ],
             ),
     );

@@ -6125,6 +6125,269 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grp1UseIsoDate => 'Use YYYY-MM-DD.';
+
+  @override
+  String get devTitle => 'Developer';
+
+  @override
+  String get devSub => 'API tokens and webhooks';
+
+  @override
+  String get devTokensTab => 'API tokens';
+
+  @override
+  String get devWebhooksTab => 'Webhooks';
+
+  @override
+  String get devTokenNew => 'New token';
+
+  @override
+  String get devTokenName => 'Name';
+
+  @override
+  String get devTokenScopes => 'What it may do';
+
+  @override
+  String get devTokenExpiry => 'Expires';
+
+  @override
+  String get devExpiryNever => 'Never';
+
+  @override
+  String get devExpiry30 => 'In 30 days';
+
+  @override
+  String get devExpiry90 => 'In 90 days';
+
+  @override
+  String get devExpiry365 => 'In a year';
+
+  @override
+  String get devTokenCreate => 'Create token';
+
+  @override
+  String get devTokenCreatedTitle => 'Copy your token now';
+
+  @override
+  String get devTokenCreatedBody =>
+      'This is the only time it is shown. Store it somewhere safe.';
+
+  @override
+  String get devCopy => 'Copy';
+
+  @override
+  String get devCopied => 'Copied';
+
+  @override
+  String get devDone => 'Done';
+
+  @override
+  String devTokenPrefix(String prefix) {
+    return 'Starts with $prefix';
+  }
+
+  @override
+  String get devTokenNeverUsed => 'Never used';
+
+  @override
+  String devTokenUsed(String when) {
+    return 'Last used $when';
+  }
+
+  @override
+  String get devTokenActive => 'Active';
+
+  @override
+  String get devTokenExpired => 'Expired';
+
+  @override
+  String get devTokenRevoked => 'Revoked';
+
+  @override
+  String get devTokenRevoke => 'Revoke';
+
+  @override
+  String devTokenRevokeTitle(String name) {
+    return 'Revoke \"$name\"?';
+  }
+
+  @override
+  String get devTokenRevokeBody =>
+      'Anything using this token stops working at once.';
+
+  @override
+  String get devTokensEmpty => 'No tokens yet.';
+
+  @override
+  String get devTokensHint =>
+      'A token can do what you can do, narrowed to the scopes you pick. It works in this workspace only.';
+
+  @override
+  String get devWebhookNew => 'New webhook';
+
+  @override
+  String get devWebhookEdit => 'Edit webhook';
+
+  @override
+  String get devWebhookName => 'Name (optional)';
+
+  @override
+  String get devWebhookUrl => 'URL';
+
+  @override
+  String get devWebhookEvents => 'Events';
+
+  @override
+  String get devWebhookSave => 'Save';
+
+  @override
+  String get devWebhookActive => 'Active';
+
+  @override
+  String get devWebhookSecret => 'Signing secret';
+
+  @override
+  String get devWebhookTest => 'Send test';
+
+  @override
+  String devWebhookTestDone(String status) {
+    return 'The test was sent: $status';
+  }
+
+  @override
+  String get devWebhookDeliveries => 'Deliveries';
+
+  @override
+  String get devWebhookDelete => 'Delete';
+
+  @override
+  String devWebhookDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get devWebhookDeleteBody => 'Its delivery log is deleted too.';
+
+  @override
+  String get devWebhooksEmpty => 'No webhooks yet.';
+
+  @override
+  String get devWebhooksDenied =>
+      'Only people who can manage webhooks see these.';
+
+  @override
+  String devWebhookOff(String reason) {
+    return 'Switched off: $reason';
+  }
+
+  @override
+  String get devWebhookHint =>
+      'Each event is sent as a signed POST. The receiver checks the signature with the secret.';
+
+  @override
+  String get devDeliveriesTitle => 'Deliveries';
+
+  @override
+  String get devDeliveriesEmpty => 'Nothing has been sent yet.';
+
+  @override
+  String get devStatusDelivered => 'Delivered';
+
+  @override
+  String get devStatusPending => 'Waiting';
+
+  @override
+  String get devStatusFailed => 'Failed, will retry';
+
+  @override
+  String get devStatusGaveUp => 'Gave up';
+
+  @override
+  String devAttempt(int n) {
+    return 'Attempt $n';
+  }
+
+  @override
+  String get devRequest => 'Request';
+
+  @override
+  String get devResponse => 'Response';
+
+  @override
+  String get devHeaders => 'Headers';
+
+  @override
+  String get devBody => 'Body';
+
+  @override
+  String get devResend => 'Resend';
+
+  @override
+  String devResent(String status) {
+    return 'Sent again: $status';
+  }
+
+  @override
+  String devNextTry(String when) {
+    return 'Next try $when';
+  }
+
+  @override
+  String get devLoadMore => 'Load more';
+
+  @override
+  String get devRetry => 'Try again';
+
+  @override
+  String get devDenied => 'You cannot do that here.';
+
+  @override
+  String get devScopeWorkspacesRead => 'See the workspace';
+
+  @override
+  String get devScopeProjectsRead => 'Read projects';
+
+  @override
+  String get devScopeProjectsWrite => 'Create and change projects';
+
+  @override
+  String get devScopeTasksRead => 'Read tasks';
+
+  @override
+  String get devScopeTasksWrite => 'Create, change and delete tasks';
+
+  @override
+  String get devScopeCommentsRead => 'Read comments';
+
+  @override
+  String get devScopeCommentsWrite => 'Write comments';
+
+  @override
+  String get devEventTaskCreated => 'A task is created';
+
+  @override
+  String get devEventTaskUpdated => 'A task is edited';
+
+  @override
+  String get devEventTaskStatus => 'A task changes status';
+
+  @override
+  String get devEventTaskAssigned => 'People are assigned to a task';
+
+  @override
+  String get devEventTaskDeleted => 'A task is deleted';
+
+  @override
+  String get devEventCommentCreated => 'A comment is added';
+
+  @override
+  String get devEventCommentUpdated => 'A comment is edited';
+
+  @override
+  String get devEventCommentDeleted => 'A comment is deleted';
+
+  @override
+  String get devEventPing => 'Test event';
 }
 
 /// The translations for English (`en_XA`).
@@ -12362,4 +12625,270 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get grp1UseIsoDate => '[Ûšé ÝÝÝÝ-MM-ÐÐ. ~~~~~]';
+
+  @override
+  String get devTitle => '[Ðéṽéłöþéŕ ~~~]';
+
+  @override
+  String get devSub => '[ÅÞÍ ţöķéñš åñð ŵéƀĥööķš ~~~~~~~]';
+
+  @override
+  String get devTokensTab => '[ÅÞÍ ţöķéñš ~~~]';
+
+  @override
+  String get devWebhooksTab => '[Ŵéƀĥööķš ~~]';
+
+  @override
+  String get devTokenNew => '[Ñéŵ ţöķéñ ~~~]';
+
+  @override
+  String get devTokenName => '[Ñåɱé ~]';
+
+  @override
+  String get devTokenScopes => '[Ŵĥåţ íţ ɱåý ðö ~~~~]';
+
+  @override
+  String get devTokenExpiry => '[Éxþíŕéš ~~]';
+
+  @override
+  String get devExpiryNever => '[Ñéṽéŕ ~]';
+
+  @override
+  String get devExpiry30 => '[Íñ 30 ðåýš ~~~]';
+
+  @override
+  String get devExpiry90 => '[Íñ 90 ðåýš ~~~]';
+
+  @override
+  String get devExpiry365 => '[Íñ å ýéåŕ ~~~]';
+
+  @override
+  String get devTokenCreate => '[Çŕéåţé ţöķéñ ~~~~]';
+
+  @override
+  String get devTokenCreatedTitle => '[Çöþý ýöûŕ ţöķéñ ñöŵ ~~~~~~]';
+
+  @override
+  String get devTokenCreatedBody =>
+      '[Ţĥíš íš ţĥé öñłý ţíɱé íţ íš šĥöŵñ. Šţöŕé íţ šöɱéŵĥéŕé šåƒé. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devCopy => '[Çöþý ~]';
+
+  @override
+  String get devCopied => '[Çöþíéð ~~]';
+
+  @override
+  String get devDone => '[Ðöñé ~]';
+
+  @override
+  String devTokenPrefix(String prefix) {
+    return '[Šţåŕţš ŵíţĥ $prefix ~~~~~~]';
+  }
+
+  @override
+  String get devTokenNeverUsed => '[Ñéṽéŕ ûšéð ~~~]';
+
+  @override
+  String devTokenUsed(String when) {
+    return '[Łåšţ ûšéð $when ~~~~~]';
+  }
+
+  @override
+  String get devTokenActive => '[Åçţíṽé ~~]';
+
+  @override
+  String get devTokenExpired => '[Éxþíŕéð ~~]';
+
+  @override
+  String get devTokenRevoked => '[Ŕéṽöķéð ~~]';
+
+  @override
+  String get devTokenRevoke => '[Ŕéṽöķé ~~]';
+
+  @override
+  String devTokenRevokeTitle(String name) {
+    return '[Ŕéṽöķé \"$name\"? ~~~~~]';
+  }
+
+  @override
+  String get devTokenRevokeBody =>
+      '[Åñýţĥíñĝ ûšíñĝ ţĥíš ţöķéñ šţöþš ŵöŕķíñĝ åţ öñçé. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devTokensEmpty => '[Ñö ţöķéñš ýéţ. ~~~~]';
+
+  @override
+  String get devTokensHint =>
+      '[Å ţöķéñ çåñ ðö ŵĥåţ ýöû çåñ ðö, ñåŕŕöŵéð ţö ţĥé šçöþéš ýöû þíçķ. Íţ ŵöŕķš íñ ţĥíš ŵöŕķšþåçé öñłý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devWebhookNew => '[Ñéŵ ŵéƀĥööķ ~~~]';
+
+  @override
+  String get devWebhookEdit => '[Éðíţ ŵéƀĥööķ ~~~~]';
+
+  @override
+  String get devWebhookName => '[Ñåɱé (öþţíöñåł) ~~~~~]';
+
+  @override
+  String get devWebhookUrl => '[ÛŔŁ ~]';
+
+  @override
+  String get devWebhookEvents => '[Éṽéñţš ~~]';
+
+  @override
+  String get devWebhookSave => '[Šåṽé ~]';
+
+  @override
+  String get devWebhookActive => '[Åçţíṽé ~~]';
+
+  @override
+  String get devWebhookSecret => '[Šíĝñíñĝ šéçŕéţ ~~~~]';
+
+  @override
+  String get devWebhookTest => '[Šéñð ţéšţ ~~~]';
+
+  @override
+  String devWebhookTestDone(String status) {
+    return '[Ţĥé ţéšţ ŵåš šéñţ: $status ~~~~~~~~~]';
+  }
+
+  @override
+  String get devWebhookDeliveries => '[Ðéłíṽéŕíéš ~~~]';
+
+  @override
+  String get devWebhookDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String devWebhookDeleteTitle(String name) {
+    return '[Ðéłéţé \"$name\"? ~~~~~]';
+  }
+
+  @override
+  String get devWebhookDeleteBody =>
+      '[Íţš ðéłíṽéŕý łöĝ íš ðéłéţéð ţöö. ~~~~~~~~~~]';
+
+  @override
+  String get devWebhooksEmpty => '[Ñö ŵéƀĥööķš ýéţ. ~~~~~]';
+
+  @override
+  String get devWebhooksDenied =>
+      '[Öñłý þéöþłé ŵĥö çåñ ɱåñåĝé ŵéƀĥööķš šéé ţĥéšé. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String devWebhookOff(String reason) {
+    return '[Šŵíţçĥéð öƒƒ: $reason ~~~~~~~]';
+  }
+
+  @override
+  String get devWebhookHint =>
+      '[Éåçĥ éṽéñţ íš šéñţ åš å šíĝñéð ÞÖŠŢ. Ţĥé ŕéçéíṽéŕ çĥéçķš ţĥé šíĝñåţûŕé ŵíţĥ ţĥé šéçŕéţ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devDeliveriesTitle => '[Ðéłíṽéŕíéš ~~~]';
+
+  @override
+  String get devDeliveriesEmpty => '[Ñöţĥíñĝ ĥåš ƀééñ šéñţ ýéţ. ~~~~~~~~]';
+
+  @override
+  String get devStatusDelivered => '[Ðéłíṽéŕéð ~~~]';
+
+  @override
+  String get devStatusPending => '[Ŵåíţíñĝ ~~]';
+
+  @override
+  String get devStatusFailed => '[Fåíłéð, ŵíłł ŕéţŕý ~~~~~~]';
+
+  @override
+  String get devStatusGaveUp => '[Ĝåṽé ûþ ~~]';
+
+  @override
+  String devAttempt(int n) {
+    return '[Åţţéɱþţ $n ~~~]';
+  }
+
+  @override
+  String get devRequest => '[Ŕéqûéšţ ~~]';
+
+  @override
+  String get devResponse => '[Ŕéšþöñšé ~~]';
+
+  @override
+  String get devHeaders => '[Ĥéåðéŕš ~~]';
+
+  @override
+  String get devBody => '[ßöðý ~]';
+
+  @override
+  String get devResend => '[Ŕéšéñð ~~]';
+
+  @override
+  String devResent(String status) {
+    return '[Šéñţ åĝåíñ: $status ~~~~~~]';
+  }
+
+  @override
+  String devNextTry(String when) {
+    return '[Ñéxţ ţŕý $when ~~~~~]';
+  }
+
+  @override
+  String get devLoadMore => '[Łöåð ɱöŕé ~~~]';
+
+  @override
+  String get devRetry => '[Ţŕý åĝåíñ ~~~]';
+
+  @override
+  String get devDenied => '[Ýöû çåññöţ ðö ţĥåţ ĥéŕé. ~~~~~~~~]';
+
+  @override
+  String get devScopeWorkspacesRead => '[Šéé ţĥé ŵöŕķšþåçé ~~~~~]';
+
+  @override
+  String get devScopeProjectsRead => '[Ŕéåð þŕöĵéçţš ~~~~]';
+
+  @override
+  String get devScopeProjectsWrite => '[Çŕéåţé åñð çĥåñĝé þŕöĵéçţš ~~~~~~~~]';
+
+  @override
+  String get devScopeTasksRead => '[Ŕéåð ţåšķš ~~~]';
+
+  @override
+  String get devScopeTasksWrite =>
+      '[Çŕéåţé, çĥåñĝé åñð ðéłéţé ţåšķš ~~~~~~~~~~]';
+
+  @override
+  String get devScopeCommentsRead => '[Ŕéåð çöɱɱéñţš ~~~~]';
+
+  @override
+  String get devScopeCommentsWrite => '[Ŵŕíţé çöɱɱéñţš ~~~~]';
+
+  @override
+  String get devEventTaskCreated => '[Å ţåšķ íš çŕéåţéð ~~~~~]';
+
+  @override
+  String get devEventTaskUpdated => '[Å ţåšķ íš éðíţéð ~~~~~]';
+
+  @override
+  String get devEventTaskStatus => '[Å ţåšķ çĥåñĝéš šţåţûš ~~~~~~~]';
+
+  @override
+  String get devEventTaskAssigned =>
+      '[Þéöþłé åŕé åššíĝñéð ţö å ţåšķ ~~~~~~~~~]';
+
+  @override
+  String get devEventTaskDeleted => '[Å ţåšķ íš ðéłéţéð ~~~~~]';
+
+  @override
+  String get devEventCommentCreated => '[Å çöɱɱéñţ íš åððéð ~~~~~~]';
+
+  @override
+  String get devEventCommentUpdated => '[Å çöɱɱéñţ íš éðíţéð ~~~~~~]';
+
+  @override
+  String get devEventCommentDeleted => '[Å çöɱɱéñţ íš ðéłéţéð ~~~~~~]';
+
+  @override
+  String get devEventPing => '[Ţéšţ éṽéñţ ~~~]';
 }

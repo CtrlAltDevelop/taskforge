@@ -6109,4 +6109,266 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get grp1UseIsoDate => 'د YYYY-MM-DD بڼه وکاروئ.';
+
+  @override
+  String get devTitle => 'پراختیاګر';
+
+  @override
+  String get devSub => 'د API ټوکنونه او ویب‌هوکونه';
+
+  @override
+  String get devTokensTab => 'د API ټوکنونه';
+
+  @override
+  String get devWebhooksTab => 'ویب‌هوکونه';
+
+  @override
+  String get devTokenNew => 'نوی ټوکن';
+
+  @override
+  String get devTokenName => 'نوم';
+
+  @override
+  String get devTokenScopes => 'څه کولی شي';
+
+  @override
+  String get devTokenExpiry => 'پای ته رسېږي';
+
+  @override
+  String get devExpiryNever => 'هېڅکله';
+
+  @override
+  String get devExpiry30 => 'په ۳۰ ورځو کې';
+
+  @override
+  String get devExpiry90 => 'په ۹۰ ورځو کې';
+
+  @override
+  String get devExpiry365 => 'په یو کال کې';
+
+  @override
+  String get devTokenCreate => 'ټوکن جوړ کړئ';
+
+  @override
+  String get devTokenCreatedTitle => 'ټوکن همدا اوس کاپي کړئ';
+
+  @override
+  String get devTokenCreatedBody =>
+      'دا یوازینی ځل دی چې ښودل کېږي. په خوندي ځای کې یې وساتئ.';
+
+  @override
+  String get devCopy => 'کاپي';
+
+  @override
+  String get devCopied => 'کاپي شو';
+
+  @override
+  String get devDone => 'بشپړ';
+
+  @override
+  String devTokenPrefix(String prefix) {
+    return 'په $prefix پیلېږي';
+  }
+
+  @override
+  String get devTokenNeverUsed => 'هېڅکله نه دی کارول شوی';
+
+  @override
+  String devTokenUsed(String when) {
+    return 'وروستی کارونه $when';
+  }
+
+  @override
+  String get devTokenActive => 'فعال';
+
+  @override
+  String get devTokenExpired => 'پای ته رسېدلی';
+
+  @override
+  String get devTokenRevoked => 'لغوه شوی';
+
+  @override
+  String get devTokenRevoke => 'لغوه کړئ';
+
+  @override
+  String devTokenRevokeTitle(String name) {
+    return '«$name» لغوه شي؟';
+  }
+
+  @override
+  String get devTokenRevokeBody => 'هر څه چې دا ټوکن کاروي سمدستي کار بندوي.';
+
+  @override
+  String get devTokensEmpty => 'تر اوسه ټوکن نشته.';
+
+  @override
+  String get devTokensHint =>
+      'ټوکن هغه څه کولی شي چې تاسو یې کولی شئ، د ټاکل شویو اجازو پورې محدود. یوازې پدې کاري ځای کې کار کوي.';
+
+  @override
+  String get devWebhookNew => 'نوی ویب‌هوک';
+
+  @override
+  String get devWebhookEdit => 'ویب‌هوک سمول';
+
+  @override
+  String get devWebhookName => 'نوم (اختیاري)';
+
+  @override
+  String get devWebhookUrl => 'پته';
+
+  @override
+  String get devWebhookEvents => 'پیښې';
+
+  @override
+  String get devWebhookSave => 'خوندي کړئ';
+
+  @override
+  String get devWebhookActive => 'فعال';
+
+  @override
+  String get devWebhookSecret => 'د لاسلیک راز';
+
+  @override
+  String get devWebhookTest => 'ازموینه ولېږئ';
+
+  @override
+  String devWebhookTestDone(String status) {
+    return 'ازموینه ولېږل شوه: $status';
+  }
+
+  @override
+  String get devWebhookDeliveries => 'لېږدونه';
+
+  @override
+  String get devWebhookDelete => 'ړنګ کړئ';
+
+  @override
+  String devWebhookDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get devWebhookDeleteBody => 'د لېږدونو لاګ به هم ړنګ شي.';
+
+  @override
+  String get devWebhooksEmpty => 'تر اوسه ویب‌هوک نشته.';
+
+  @override
+  String get devWebhooksDenied =>
+      'دا یوازې هغه کسان ګوري چې ویب‌هوکونه اداره کولی شي.';
+
+  @override
+  String devWebhookOff(String reason) {
+    return 'بند شو: $reason';
+  }
+
+  @override
+  String get devWebhookHint =>
+      'هره پیښه د لاسلیک شوي POST په توګه لېږل کېږي. اخیستونکی لاسلیک د رازه سره تاییدوي.';
+
+  @override
+  String get devDeliveriesTitle => 'لېږدونه';
+
+  @override
+  String get devDeliveriesEmpty => 'تر اوسه هېڅ نه دي لېږل شوي.';
+
+  @override
+  String get devStatusDelivered => 'وسپارل شو';
+
+  @override
+  String get devStatusPending => 'په تمه';
+
+  @override
+  String get devStatusFailed => 'ناکام، بیا به هڅه وشي';
+
+  @override
+  String get devStatusGaveUp => 'پرېښودل شو';
+
+  @override
+  String devAttempt(int n) {
+    return 'هڅه $n';
+  }
+
+  @override
+  String get devRequest => 'غوښتنه';
+
+  @override
+  String get devResponse => 'ځواب';
+
+  @override
+  String get devHeaders => 'سرلیکونه';
+
+  @override
+  String get devBody => 'منځپانګه';
+
+  @override
+  String get devResend => 'بیا ولېږئ';
+
+  @override
+  String devResent(String status) {
+    return 'بیا ولېږل شو: $status';
+  }
+
+  @override
+  String devNextTry(String when) {
+    return 'بله هڅه $when';
+  }
+
+  @override
+  String get devLoadMore => 'نور پورته کړئ';
+
+  @override
+  String get devRetry => 'بیا هڅه وکړئ';
+
+  @override
+  String get devDenied => 'تاسو دلته دا نشئ کولی.';
+
+  @override
+  String get devScopeWorkspacesRead => 'کاري ځای کتل';
+
+  @override
+  String get devScopeProjectsRead => 'پروژې لوستل';
+
+  @override
+  String get devScopeProjectsWrite => 'پروژې جوړول او بدلول';
+
+  @override
+  String get devScopeTasksRead => 'دندې لوستل';
+
+  @override
+  String get devScopeTasksWrite => 'دندې جوړول، بدلول او ړنګول';
+
+  @override
+  String get devScopeCommentsRead => 'نظرونه لوستل';
+
+  @override
+  String get devScopeCommentsWrite => 'نظرونه لیکل';
+
+  @override
+  String get devEventTaskCreated => 'دنده جوړه شي';
+
+  @override
+  String get devEventTaskUpdated => 'دنده سمه شي';
+
+  @override
+  String get devEventTaskStatus => 'د دندې حالت بدل شي';
+
+  @override
+  String get devEventTaskAssigned => 'کسان دندې ته وټاکل شي';
+
+  @override
+  String get devEventTaskDeleted => 'دنده ړنګه شي';
+
+  @override
+  String get devEventCommentCreated => 'نظر اضافه شي';
+
+  @override
+  String get devEventCommentUpdated => 'نظر سم شي';
+
+  @override
+  String get devEventCommentDeleted => 'نظر ړنګ شي';
+
+  @override
+  String get devEventPing => 'د ازموینې پیښه';
 }
