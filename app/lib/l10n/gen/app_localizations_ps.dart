@@ -6371,4 +6371,296 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get devEventPing => 'د ازموینې پیښه';
+
+  @override
+  String get formsTitle => 'فورمې';
+
+  @override
+  String get formsSub => 'عامې فورمې چې کارونه جوړوي';
+
+  @override
+  String get formsHint =>
+      'د فورمې لینک ورکړئ چې د کاري ځای بهر خلک کار درولېږي. حساب ته اړتیا نشته.';
+
+  @override
+  String get formsEmpty => 'تر اوسه فورمه نشته.';
+
+  @override
+  String get formsNew => 'نوې فورمه';
+
+  @override
+  String get formsEdit => 'فورمه سمول';
+
+  @override
+  String get formsPickProject => 'کارونه کوم پروژې ته لاړ شي؟';
+
+  @override
+  String formsSubmissionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count لیږنې',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get formsCopyLink => 'لینک کاپي کړئ';
+
+  @override
+  String get formsLinkCopied => 'لینک کاپي شو.';
+
+  @override
+  String get formsRotateLink => 'نوی لینک (زوړ به کار ونکړي)';
+
+  @override
+  String get formsLinkRotated => 'فورمې نوی لینک لري. زوړ لینک نور کار نه کوي.';
+
+  @override
+  String get formsSubmissions => 'لیږنې';
+
+  @override
+  String get formsNoSubmissions =>
+      'تر اوسه د دې فورمې له لارې څه نه دي لېږل شوي.';
+
+  @override
+  String get formsTaskGone => 'کار ړنګ شوی';
+
+  @override
+  String get formsCopyReference => 'ریفرنس کاپي کړئ';
+
+  @override
+  String get formsDelete => 'فورمه ړنګول';
+
+  @override
+  String formsDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get formsDeleteBody =>
+      'لینک یې کار نه کوي او د لیږنو لیست لرې کېږي. جوړ شوي کارونه پاتې کېږي.';
+
+  @override
+  String get formsDenied => 'تاسو دلته فورمې نشئ مدیریت کولی.';
+
+  @override
+  String get formsGone => 'دا فورمه نور شتون نلري.';
+
+  @override
+  String get formsGonePage => 'دا فورمه شتون نلري.';
+
+  @override
+  String get formsConflict =>
+      'فورمه وروسته له خلاصولو بدله شوه. بیا یې پرانیزئ او هڅه وکړئ.';
+
+  @override
+  String get formsTooMany => 'ډېرې لیږنې. وروسته بیا هڅه وکړئ.';
+
+  @override
+  String get formsUnavailable =>
+      'دا فورمه همدا اوس لیږنې نه مني. وروسته بیا هڅه وکړئ.';
+
+  @override
+  String get formsCaptchaFailed => 'تایید ناکام شو. بیا یې بشپړ کړئ او ولېږئ.';
+
+  @override
+  String get formsCaptchaRequired => 'تایید بشپړ کړئ.';
+
+  @override
+  String get formsCaptchaWebOnly =>
+      'دا فورمه داسې تایید غواړي چې یوازې په براوزر کې کار کوي. لینک هلته پرانیزئ.';
+
+  @override
+  String get formsCaptchaPreview => 'دلته یو تایید ښکاري.';
+
+  @override
+  String get formsRequired => 'دا اړین دی.';
+
+  @override
+  String get formsRequiredTag => 'اړین';
+
+  @override
+  String get formsEmailLabel => 'ستاسو بریښنالیک (اختیاري)';
+
+  @override
+  String get formsEmailLabelRequired => 'ستاسو بریښنالیک *';
+
+  @override
+  String get formsEmailHelp =>
+      'یوازې د همدې غوښتنې د تایید او خبرولو لپاره کارول کېږي.';
+
+  @override
+  String get formsEmailInvalid => 'یو سم بریښنالیک ولیکئ.';
+
+  @override
+  String get formsSubmit => 'لیږل';
+
+  @override
+  String get formsSending => 'لیږل کېږي…';
+
+  @override
+  String get formsThanksTitle => 'مننه، ترلاسه شو';
+
+  @override
+  String formsThanksBody(String reference) {
+    return 'ستاسو ریفرنس $reference دی. کله چې موږ ته لیکئ یې یاد کړئ.';
+  }
+
+  @override
+  String get formsAnother => 'بل ولېږئ';
+
+  @override
+  String formsAddFile(int max) {
+    return 'فایل زیات کړئ (تر $max)';
+  }
+
+  @override
+  String get formsRemoveFile => 'فایل لرې کړئ';
+
+  @override
+  String get formsFileTooBig => 'یو فایل ډېر لوی دی.';
+
+  @override
+  String get formsNoDate => 'نیټه نشته';
+
+  @override
+  String get formsPickDate => 'نیټه وټاکئ';
+
+  @override
+  String get formsClearDate => 'نیټه پاکه کړئ';
+
+  @override
+  String get formsMoneyHint => 'اندازه او اسعار، لکه 12.50 USD';
+
+  @override
+  String get formsBuildTab => 'جوړول';
+
+  @override
+  String get formsPreviewTab => 'مخکتنه';
+
+  @override
+  String get formsNameLabel => 'د فورمې نوم';
+
+  @override
+  String get formsDescriptionLabel => 'د فورمې پر سر متن';
+
+  @override
+  String get formsNeedName => 'فورمې ته نوم ورکړئ.';
+
+  @override
+  String get formsSaved => 'فورمه خوندي شوه.';
+
+  @override
+  String get formsQuestions => 'پوښتنې';
+
+  @override
+  String get formsDefaultTitle => 'لنډیز';
+
+  @override
+  String get formsDefaultDescription => 'جزئیات';
+
+  @override
+  String get formsDefaultFile => 'ضمیمه';
+
+  @override
+  String get formsAddDescription => 'جزئیات زیات کړئ';
+
+  @override
+  String get formsAddFileQuestion => 'د فایل پورته کول زیات کړئ';
+
+  @override
+  String get formsAddField => 'د پروژې ځای زیات کړئ';
+
+  @override
+  String get formsPickField => 'کوم ځای؟';
+
+  @override
+  String get formsNoFields =>
+      'نور ځایونه نشته. د کس ځایونه هیڅکله په عامه فورمه کې نه ښودل کېږي.';
+
+  @override
+  String get formsRemoveQuestion => 'پوښتنه لرې کړئ';
+
+  @override
+  String get formsKindTitle => 'د کار سرلیک';
+
+  @override
+  String get formsKindDescription => 'د کار تشریح';
+
+  @override
+  String get formsKindFile => 'د فایل پورته کول';
+
+  @override
+  String get formsKindField => 'د پروژې ځای';
+
+  @override
+  String get formsEditQuestion => 'پوښتنه سمول';
+
+  @override
+  String get formsQuestionLabel => 'لیبل';
+
+  @override
+  String get formsQuestionHelp => 'د مرستې متن';
+
+  @override
+  String get formsQuestionRequired => 'اړین';
+
+  @override
+  String get formsMaxFiles => 'ډېر فایلونه';
+
+  @override
+  String get formsTarget => 'کار په څه پیلېږي';
+
+  @override
+  String get formsStatusLabel => 'حالت';
+
+  @override
+  String get formsStatusDefault => 'د پروژې لومړی حالت';
+
+  @override
+  String get formsPriorityLabel => 'لومړیتوب';
+
+  @override
+  String get formsPriorityNone => 'هیڅ';
+
+  @override
+  String get formsPriorityLow => 'ټيټ';
+
+  @override
+  String get formsPriorityMedium => 'منځنی';
+
+  @override
+  String get formsPriorityHigh => 'لوړ';
+
+  @override
+  String get formsPriorityUrgent => 'بیړنی';
+
+  @override
+  String get formsAssigneesLabel => 'ور وسپارئ';
+
+  @override
+  String get formsEnabled => 'لیږنې مني';
+
+  @override
+  String get formsRequireEmail => 'بریښنالیک غوښتل';
+
+  @override
+  String get formsSendConfirmation => 'د تایید بریښنالیک لیږل';
+
+  @override
+  String get formsNotifyStatus => 'د حالت بدلون بریښنالیک';
+
+  @override
+  String get formsNotifyStatusHint =>
+      'یو اړخیز: لیږونکی نوی حالت ترلاسه کوي، د کاري ځای لینک نه.';
+
+  @override
+  String get formsBranding => 'بڼه';
+
+  @override
+  String get formsColorLabel => 'د برانډ رنګ';
+
+  @override
+  String get formsLogoLabel => 'د لوګو پته (https://…)';
 }

@@ -11316,6 +11316,546 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Test event'**
   String get devEventPing;
+
+  /// No description provided for @formsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forms'**
+  String get formsTitle;
+
+  /// No description provided for @formsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Public forms that create tasks'**
+  String get formsSub;
+
+  /// No description provided for @formsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share a form\'s link so people outside the workspace can send you work. They need no account.'**
+  String get formsHint;
+
+  /// No description provided for @formsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No forms yet.'**
+  String get formsEmpty;
+
+  /// No description provided for @formsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New form'**
+  String get formsNew;
+
+  /// No description provided for @formsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit form'**
+  String get formsEdit;
+
+  /// No description provided for @formsPickProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Which project gets the tasks?'**
+  String get formsPickProject;
+
+  /// No description provided for @formsSubmissionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 submission} other{{count} submissions}}'**
+  String formsSubmissionCount(int count);
+
+  /// No description provided for @formsCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get formsCopyLink;
+
+  /// No description provided for @formsLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied.'**
+  String get formsLinkCopied;
+
+  /// No description provided for @formsRotateLink.
+  ///
+  /// In en, this message translates to:
+  /// **'New link (old one stops working)'**
+  String get formsRotateLink;
+
+  /// No description provided for @formsLinkRotated.
+  ///
+  /// In en, this message translates to:
+  /// **'The form has a new link. The old one no longer works.'**
+  String get formsLinkRotated;
+
+  /// No description provided for @formsSubmissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Submissions'**
+  String get formsSubmissions;
+
+  /// No description provided for @formsNoSubmissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has been sent through this form yet.'**
+  String get formsNoSubmissions;
+
+  /// No description provided for @formsTaskGone.
+  ///
+  /// In en, this message translates to:
+  /// **'The task was deleted'**
+  String get formsTaskGone;
+
+  /// No description provided for @formsCopyReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy reference'**
+  String get formsCopyReference;
+
+  /// No description provided for @formsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete form'**
+  String get formsDelete;
+
+  /// No description provided for @formsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String formsDeleteTitle(String name);
+
+  /// No description provided for @formsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its link stops working and its list of submissions is removed. The tasks it made stay.'**
+  String get formsDeleteBody;
+
+  /// No description provided for @formsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot manage forms here.'**
+  String get formsDenied;
+
+  /// No description provided for @formsGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That form no longer exists.'**
+  String get formsGone;
+
+  /// No description provided for @formsGonePage.
+  ///
+  /// In en, this message translates to:
+  /// **'This form is not available.'**
+  String get formsGonePage;
+
+  /// No description provided for @formsConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'The form changed since you opened it. Reopen it and try again.'**
+  String get formsConflict;
+
+  /// No description provided for @formsTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many submissions. Try again later.'**
+  String get formsTooMany;
+
+  /// No description provided for @formsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This form cannot take submissions right now. Try again later.'**
+  String get formsUnavailable;
+
+  /// No description provided for @formsCaptchaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification failed. Complete it again and send.'**
+  String get formsCaptchaFailed;
+
+  /// No description provided for @formsCaptchaRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the verification.'**
+  String get formsCaptchaRequired;
+
+  /// No description provided for @formsCaptchaWebOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This form needs a verification that only works in a web browser. Open its link there.'**
+  String get formsCaptchaWebOnly;
+
+  /// No description provided for @formsCaptchaPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'A verification appears here.'**
+  String get formsCaptchaPreview;
+
+  /// No description provided for @formsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This is required.'**
+  String get formsRequired;
+
+  /// No description provided for @formsRequiredTag.
+  ///
+  /// In en, this message translates to:
+  /// **'required'**
+  String get formsRequiredTag;
+
+  /// No description provided for @formsEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email (optional)'**
+  String get formsEmailLabel;
+
+  /// No description provided for @formsEmailLabelRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email *'**
+  String get formsEmailLabelRequired;
+
+  /// No description provided for @formsEmailHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'We only use it to confirm and update you about this request.'**
+  String get formsEmailHelp;
+
+  /// No description provided for @formsEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get formsEmailInvalid;
+
+  /// No description provided for @formsSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get formsSubmit;
+
+  /// No description provided for @formsSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get formsSending;
+
+  /// No description provided for @formsThanksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you, we got it'**
+  String get formsThanksTitle;
+
+  /// No description provided for @formsThanksBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reference is {reference}. Quote it if you write to us.'**
+  String formsThanksBody(String reference);
+
+  /// No description provided for @formsAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Send another'**
+  String get formsAnother;
+
+  /// No description provided for @formsAddFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a file (up to {max})'**
+  String formsAddFile(int max);
+
+  /// No description provided for @formsRemoveFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove file'**
+  String get formsRemoveFile;
+
+  /// No description provided for @formsFileTooBig.
+  ///
+  /// In en, this message translates to:
+  /// **'A file is too large.'**
+  String get formsFileTooBig;
+
+  /// No description provided for @formsNoDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No date'**
+  String get formsNoDate;
+
+  /// No description provided for @formsPickDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get formsPickDate;
+
+  /// No description provided for @formsClearDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get formsClearDate;
+
+  /// No description provided for @formsMoneyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount and currency, like 12.50 USD'**
+  String get formsMoneyHint;
+
+  /// No description provided for @formsBuildTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Build'**
+  String get formsBuildTab;
+
+  /// No description provided for @formsPreviewTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get formsPreviewTab;
+
+  /// No description provided for @formsNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Form name'**
+  String get formsNameLabel;
+
+  /// No description provided for @formsDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Text above the form'**
+  String get formsDescriptionLabel;
+
+  /// No description provided for @formsNeedName.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the form a name.'**
+  String get formsNeedName;
+
+  /// No description provided for @formsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Form saved.'**
+  String get formsSaved;
+
+  /// No description provided for @formsQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get formsQuestions;
+
+  /// No description provided for @formsDefaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get formsDefaultTitle;
+
+  /// No description provided for @formsDefaultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get formsDefaultDescription;
+
+  /// No description provided for @formsDefaultFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachment'**
+  String get formsDefaultFile;
+
+  /// No description provided for @formsAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details'**
+  String get formsAddDescription;
+
+  /// No description provided for @formsAddFileQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Add file upload'**
+  String get formsAddFileQuestion;
+
+  /// No description provided for @formsAddField.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a project field'**
+  String get formsAddField;
+
+  /// No description provided for @formsPickField.
+  ///
+  /// In en, this message translates to:
+  /// **'Which field?'**
+  String get formsPickField;
+
+  /// No description provided for @formsNoFields.
+  ///
+  /// In en, this message translates to:
+  /// **'No other fields can be added. Person fields are never offered on a public form.'**
+  String get formsNoFields;
+
+  /// No description provided for @formsRemoveQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove question'**
+  String get formsRemoveQuestion;
+
+  /// No description provided for @formsKindTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Task title'**
+  String get formsKindTitle;
+
+  /// No description provided for @formsKindDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Task description'**
+  String get formsKindDescription;
+
+  /// No description provided for @formsKindFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File upload'**
+  String get formsKindFile;
+
+  /// No description provided for @formsKindField.
+  ///
+  /// In en, this message translates to:
+  /// **'Project field'**
+  String get formsKindField;
+
+  /// No description provided for @formsEditQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit question'**
+  String get formsEditQuestion;
+
+  /// No description provided for @formsQuestionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get formsQuestionLabel;
+
+  /// No description provided for @formsQuestionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help text'**
+  String get formsQuestionHelp;
+
+  /// No description provided for @formsQuestionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get formsQuestionRequired;
+
+  /// No description provided for @formsMaxFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Most files'**
+  String get formsMaxFiles;
+
+  /// No description provided for @formsTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'What the task starts with'**
+  String get formsTarget;
+
+  /// No description provided for @formsStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get formsStatusLabel;
+
+  /// No description provided for @formsStatusDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'The project\'s first status'**
+  String get formsStatusDefault;
+
+  /// No description provided for @formsPriorityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get formsPriorityLabel;
+
+  /// No description provided for @formsPriorityNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get formsPriorityNone;
+
+  /// No description provided for @formsPriorityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get formsPriorityLow;
+
+  /// No description provided for @formsPriorityMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get formsPriorityMedium;
+
+  /// No description provided for @formsPriorityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get formsPriorityHigh;
+
+  /// No description provided for @formsPriorityUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get formsPriorityUrgent;
+
+  /// No description provided for @formsAssigneesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to'**
+  String get formsAssigneesLabel;
+
+  /// No description provided for @formsEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepting submissions'**
+  String get formsEnabled;
+
+  /// No description provided for @formsRequireEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for an email address'**
+  String get formsRequireEmail;
+
+  /// No description provided for @formsSendConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Email a confirmation'**
+  String get formsSendConfirmation;
+
+  /// No description provided for @formsNotifyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Email status changes'**
+  String get formsNotifyStatus;
+
+  /// No description provided for @formsNotifyStatusHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One way: the sender gets the new status, never a link into the workspace.'**
+  String get formsNotifyStatusHint;
+
+  /// No description provided for @formsBranding.
+  ///
+  /// In en, this message translates to:
+  /// **'Look'**
+  String get formsBranding;
+
+  /// No description provided for @formsColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand color'**
+  String get formsColorLabel;
+
+  /// No description provided for @formsLogoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo address (https://…)'**
+  String get formsLogoLabel;
 }
 
 class _AppLocalizationsDelegate

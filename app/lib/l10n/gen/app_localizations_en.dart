@@ -6388,6 +6388,301 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devEventPing => 'Test event';
+
+  @override
+  String get formsTitle => 'Forms';
+
+  @override
+  String get formsSub => 'Public forms that create tasks';
+
+  @override
+  String get formsHint =>
+      'Share a form\'s link so people outside the workspace can send you work. They need no account.';
+
+  @override
+  String get formsEmpty => 'No forms yet.';
+
+  @override
+  String get formsNew => 'New form';
+
+  @override
+  String get formsEdit => 'Edit form';
+
+  @override
+  String get formsPickProject => 'Which project gets the tasks?';
+
+  @override
+  String formsSubmissionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count submissions',
+      one: '1 submission',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get formsCopyLink => 'Copy link';
+
+  @override
+  String get formsLinkCopied => 'Link copied.';
+
+  @override
+  String get formsRotateLink => 'New link (old one stops working)';
+
+  @override
+  String get formsLinkRotated =>
+      'The form has a new link. The old one no longer works.';
+
+  @override
+  String get formsSubmissions => 'Submissions';
+
+  @override
+  String get formsNoSubmissions =>
+      'Nothing has been sent through this form yet.';
+
+  @override
+  String get formsTaskGone => 'The task was deleted';
+
+  @override
+  String get formsCopyReference => 'Copy reference';
+
+  @override
+  String get formsDelete => 'Delete form';
+
+  @override
+  String formsDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get formsDeleteBody =>
+      'Its link stops working and its list of submissions is removed. The tasks it made stay.';
+
+  @override
+  String get formsDenied => 'You cannot manage forms here.';
+
+  @override
+  String get formsGone => 'That form no longer exists.';
+
+  @override
+  String get formsGonePage => 'This form is not available.';
+
+  @override
+  String get formsConflict =>
+      'The form changed since you opened it. Reopen it and try again.';
+
+  @override
+  String get formsTooMany => 'Too many submissions. Try again later.';
+
+  @override
+  String get formsUnavailable =>
+      'This form cannot take submissions right now. Try again later.';
+
+  @override
+  String get formsCaptchaFailed =>
+      'The verification failed. Complete it again and send.';
+
+  @override
+  String get formsCaptchaRequired => 'Complete the verification.';
+
+  @override
+  String get formsCaptchaWebOnly =>
+      'This form needs a verification that only works in a web browser. Open its link there.';
+
+  @override
+  String get formsCaptchaPreview => 'A verification appears here.';
+
+  @override
+  String get formsRequired => 'This is required.';
+
+  @override
+  String get formsRequiredTag => 'required';
+
+  @override
+  String get formsEmailLabel => 'Your email (optional)';
+
+  @override
+  String get formsEmailLabelRequired => 'Your email *';
+
+  @override
+  String get formsEmailHelp =>
+      'We only use it to confirm and update you about this request.';
+
+  @override
+  String get formsEmailInvalid => 'Enter a valid email address.';
+
+  @override
+  String get formsSubmit => 'Send';
+
+  @override
+  String get formsSending => 'Sending…';
+
+  @override
+  String get formsThanksTitle => 'Thank you, we got it';
+
+  @override
+  String formsThanksBody(String reference) {
+    return 'Your reference is $reference. Quote it if you write to us.';
+  }
+
+  @override
+  String get formsAnother => 'Send another';
+
+  @override
+  String formsAddFile(int max) {
+    return 'Add a file (up to $max)';
+  }
+
+  @override
+  String get formsRemoveFile => 'Remove file';
+
+  @override
+  String get formsFileTooBig => 'A file is too large.';
+
+  @override
+  String get formsNoDate => 'No date';
+
+  @override
+  String get formsPickDate => 'Pick a date';
+
+  @override
+  String get formsClearDate => 'Clear date';
+
+  @override
+  String get formsMoneyHint => 'Amount and currency, like 12.50 USD';
+
+  @override
+  String get formsBuildTab => 'Build';
+
+  @override
+  String get formsPreviewTab => 'Preview';
+
+  @override
+  String get formsNameLabel => 'Form name';
+
+  @override
+  String get formsDescriptionLabel => 'Text above the form';
+
+  @override
+  String get formsNeedName => 'Give the form a name.';
+
+  @override
+  String get formsSaved => 'Form saved.';
+
+  @override
+  String get formsQuestions => 'Questions';
+
+  @override
+  String get formsDefaultTitle => 'Summary';
+
+  @override
+  String get formsDefaultDescription => 'Details';
+
+  @override
+  String get formsDefaultFile => 'Attachment';
+
+  @override
+  String get formsAddDescription => 'Add details';
+
+  @override
+  String get formsAddFileQuestion => 'Add file upload';
+
+  @override
+  String get formsAddField => 'Add a project field';
+
+  @override
+  String get formsPickField => 'Which field?';
+
+  @override
+  String get formsNoFields =>
+      'No other fields can be added. Person fields are never offered on a public form.';
+
+  @override
+  String get formsRemoveQuestion => 'Remove question';
+
+  @override
+  String get formsKindTitle => 'Task title';
+
+  @override
+  String get formsKindDescription => 'Task description';
+
+  @override
+  String get formsKindFile => 'File upload';
+
+  @override
+  String get formsKindField => 'Project field';
+
+  @override
+  String get formsEditQuestion => 'Edit question';
+
+  @override
+  String get formsQuestionLabel => 'Label';
+
+  @override
+  String get formsQuestionHelp => 'Help text';
+
+  @override
+  String get formsQuestionRequired => 'Required';
+
+  @override
+  String get formsMaxFiles => 'Most files';
+
+  @override
+  String get formsTarget => 'What the task starts with';
+
+  @override
+  String get formsStatusLabel => 'Status';
+
+  @override
+  String get formsStatusDefault => 'The project\'s first status';
+
+  @override
+  String get formsPriorityLabel => 'Priority';
+
+  @override
+  String get formsPriorityNone => 'None';
+
+  @override
+  String get formsPriorityLow => 'Low';
+
+  @override
+  String get formsPriorityMedium => 'Medium';
+
+  @override
+  String get formsPriorityHigh => 'High';
+
+  @override
+  String get formsPriorityUrgent => 'Urgent';
+
+  @override
+  String get formsAssigneesLabel => 'Assign to';
+
+  @override
+  String get formsEnabled => 'Accepting submissions';
+
+  @override
+  String get formsRequireEmail => 'Ask for an email address';
+
+  @override
+  String get formsSendConfirmation => 'Email a confirmation';
+
+  @override
+  String get formsNotifyStatus => 'Email status changes';
+
+  @override
+  String get formsNotifyStatusHint =>
+      'One way: the sender gets the new status, never a link into the workspace.';
+
+  @override
+  String get formsBranding => 'Look';
+
+  @override
+  String get formsColorLabel => 'Brand color';
+
+  @override
+  String get formsLogoLabel => 'Logo address (https://…)';
 }
 
 /// The translations for English (`en_XA`).
@@ -12891,4 +13186,301 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get devEventPing => '[Ţéšţ éṽéñţ ~~~]';
+
+  @override
+  String get formsTitle => '[Föŕɱš ~]';
+
+  @override
+  String get formsSub => '[Þûƀłíç ƒöŕɱš ţĥåţ çŕéåţé ţåšķš ~~~~~~~~~~]';
+
+  @override
+  String get formsHint =>
+      '[Šĥåŕé å ƒöŕɱ\'š łíñķ šö þéöþłé öûţšíðé ţĥé ŵöŕķšþåçé çåñ šéñð ýöû ŵöŕķ. Ţĥéý ñééð ñö åççöûñţ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsEmpty => '[Ñö ƒöŕɱš ýéţ. ~~~~]';
+
+  @override
+  String get formsNew => '[Ñéŵ ƒöŕɱ ~~]';
+
+  @override
+  String get formsEdit => '[Éðíţ ƒöŕɱ ~~~]';
+
+  @override
+  String get formsPickProject => '[Ŵĥíçĥ þŕöĵéçţ ĝéţš ţĥé ţåšķš? ~~~~~~~~~]';
+
+  @override
+  String formsSubmissionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count šûƀɱíššíöñš',
+      one: '1 šûƀɱíššíöñ',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get formsCopyLink => '[Çöþý łíñķ ~~~]';
+
+  @override
+  String get formsLinkCopied => '[Łíñķ çöþíéð. ~~~~]';
+
+  @override
+  String get formsRotateLink => '[Ñéŵ łíñķ (öłð öñé šţöþš ŵöŕķíñĝ) ~~~~~~~~~~]';
+
+  @override
+  String get formsLinkRotated =>
+      '[Ţĥé ƒöŕɱ ĥåš å ñéŵ łíñķ. Ţĥé öłð öñé ñö łöñĝéŕ ŵöŕķš. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsSubmissions => '[Šûƀɱíššíöñš ~~~]';
+
+  @override
+  String get formsNoSubmissions =>
+      '[Ñöţĥíñĝ ĥåš ƀééñ šéñţ ţĥŕöûĝĥ ţĥíš ƒöŕɱ ýéţ. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsTaskGone => '[Ţĥé ţåšķ ŵåš ðéłéţéð ~~~~~~]';
+
+  @override
+  String get formsCopyReference => '[Çöþý ŕéƒéŕéñçé ~~~~]';
+
+  @override
+  String get formsDelete => '[Ðéłéţé ƒöŕɱ ~~~]';
+
+  @override
+  String formsDeleteTitle(String name) {
+    return '[Ðéłéţé \"$name\"? ~~~~~]';
+  }
+
+  @override
+  String get formsDeleteBody =>
+      '[Íţš łíñķ šţöþš ŵöŕķíñĝ åñð íţš łíšţ öƒ šûƀɱíššíöñš íš ŕéɱöṽéð. Ţĥé ţåšķš íţ ɱåðé šţåý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsDenied => '[Ýöû çåññöţ ɱåñåĝé ƒöŕɱš ĥéŕé. ~~~~~~~~~]';
+
+  @override
+  String get formsGone => '[Ţĥåţ ƒöŕɱ ñö łöñĝéŕ éxíšţš. ~~~~~~~~~]';
+
+  @override
+  String get formsGonePage => '[Ţĥíš ƒöŕɱ íš ñöţ åṽåíłåƀłé. ~~~~~~~~~]';
+
+  @override
+  String get formsConflict =>
+      '[Ţĥé ƒöŕɱ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéöþéñ íţ åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsTooMany =>
+      '[Ţöö ɱåñý šûƀɱíššíöñš. Ţŕý åĝåíñ łåţéŕ. ~~~~~~~~~~~~]';
+
+  @override
+  String get formsUnavailable =>
+      '[Ţĥíš ƒöŕɱ çåññöţ ţåķé šûƀɱíššíöñš ŕíĝĥţ ñöŵ. Ţŕý åĝåíñ łåţéŕ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsCaptchaFailed =>
+      '[Ţĥé ṽéŕíƒíçåţíöñ ƒåíłéð. Çöɱþłéţé íţ åĝåíñ åñð šéñð. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsCaptchaRequired => '[Çöɱþłéţé ţĥé ṽéŕíƒíçåţíöñ. ~~~~~~~~]';
+
+  @override
+  String get formsCaptchaWebOnly =>
+      '[Ţĥíš ƒöŕɱ ñééðš å ṽéŕíƒíçåţíöñ ţĥåţ öñłý ŵöŕķš íñ å ŵéƀ ƀŕöŵšéŕ. Öþéñ íţš łíñķ ţĥéŕé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsCaptchaPreview => '[Å ṽéŕíƒíçåţíöñ åþþéåŕš ĥéŕé. ~~~~~~~~~]';
+
+  @override
+  String get formsRequired => '[Ţĥíš íš ŕéqûíŕéð. ~~~~~]';
+
+  @override
+  String get formsRequiredTag => '[ŕéqûíŕéð ~~]';
+
+  @override
+  String get formsEmailLabel => '[Ýöûŕ éɱåíł (öþţíöñåł) ~~~~~~~]';
+
+  @override
+  String get formsEmailLabelRequired => '[Ýöûŕ éɱåíł * ~~~~]';
+
+  @override
+  String get formsEmailHelp =>
+      '[Ŵé öñłý ûšé íţ ţö çöñƒíŕɱ åñð ûþðåţé ýöû åƀöûţ ţĥíš ŕéqûéšţ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsEmailInvalid => '[Éñţéŕ å ṽåłíð éɱåíł åððŕéšš. ~~~~~~~~~]';
+
+  @override
+  String get formsSubmit => '[Šéñð ~]';
+
+  @override
+  String get formsSending => '[Šéñðíñĝ… ~~]';
+
+  @override
+  String get formsThanksTitle => '[Ţĥåñķ ýöû, ŵé ĝöţ íţ ~~~~~~]';
+
+  @override
+  String formsThanksBody(String reference) {
+    return '[Ýöûŕ ŕéƒéŕéñçé íš $reference. Qûöţé íţ íƒ ýöû ŵŕíţé ţö ûš. ~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get formsAnother => '[Šéñð åñöţĥéŕ ~~~~]';
+
+  @override
+  String formsAddFile(int max) {
+    return '[Åðð å ƒíłé (ûþ ţö $max) ~~~~~~~~]';
+  }
+
+  @override
+  String get formsRemoveFile => '[Ŕéɱöṽé ƒíłé ~~~]';
+
+  @override
+  String get formsFileTooBig => '[Å ƒíłé íš ţöö łåŕĝé. ~~~~~~]';
+
+  @override
+  String get formsNoDate => '[Ñö ðåţé ~~]';
+
+  @override
+  String get formsPickDate => '[Þíçķ å ðåţé ~~~]';
+
+  @override
+  String get formsClearDate => '[Çłéåŕ ðåţé ~~~]';
+
+  @override
+  String get formsMoneyHint =>
+      '[Åɱöûñţ åñð çûŕŕéñçý, łíķé 12.50 ÛŠÐ ~~~~~~~~~~~]';
+
+  @override
+  String get formsBuildTab => '[ßûíłð ~]';
+
+  @override
+  String get formsPreviewTab => '[Þŕéṽíéŵ ~~]';
+
+  @override
+  String get formsNameLabel => '[Föŕɱ ñåɱé ~~~]';
+
+  @override
+  String get formsDescriptionLabel => '[Ţéxţ åƀöṽé ţĥé ƒöŕɱ ~~~~~~]';
+
+  @override
+  String get formsNeedName => '[Ĝíṽé ţĥé ƒöŕɱ å ñåɱé. ~~~~~~~]';
+
+  @override
+  String get formsSaved => '[Föŕɱ šåṽéð. ~~~]';
+
+  @override
+  String get formsQuestions => '[Qûéšţíöñš ~~~]';
+
+  @override
+  String get formsDefaultTitle => '[Šûɱɱåŕý ~~]';
+
+  @override
+  String get formsDefaultDescription => '[Ðéţåíłš ~~]';
+
+  @override
+  String get formsDefaultFile => '[Åţţåçĥɱéñţ ~~~]';
+
+  @override
+  String get formsAddDescription => '[Åðð ðéţåíłš ~~~]';
+
+  @override
+  String get formsAddFileQuestion => '[Åðð ƒíłé ûþłöåð ~~~~~]';
+
+  @override
+  String get formsAddField => '[Åðð å þŕöĵéçţ ƒíéłð ~~~~~~]';
+
+  @override
+  String get formsPickField => '[Ŵĥíçĥ ƒíéłð? ~~~~]';
+
+  @override
+  String get formsNoFields =>
+      '[Ñö öţĥéŕ ƒíéłðš çåñ ƀé åððéð. Þéŕšöñ ƒíéłðš åŕé ñéṽéŕ öƒƒéŕéð öñ å þûƀłíç ƒöŕɱ. ~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsRemoveQuestion => '[Ŕéɱöṽé qûéšţíöñ ~~~~~]';
+
+  @override
+  String get formsKindTitle => '[Ţåšķ ţíţłé ~~~]';
+
+  @override
+  String get formsKindDescription => '[Ţåšķ ðéšçŕíþţíöñ ~~~~~]';
+
+  @override
+  String get formsKindFile => '[Fíłé ûþłöåð ~~~]';
+
+  @override
+  String get formsKindField => '[Þŕöĵéçţ ƒíéłð ~~~~]';
+
+  @override
+  String get formsEditQuestion => '[Éðíţ qûéšţíöñ ~~~~]';
+
+  @override
+  String get formsQuestionLabel => '[Łåƀéł ~]';
+
+  @override
+  String get formsQuestionHelp => '[Ĥéłþ ţéxţ ~~~]';
+
+  @override
+  String get formsQuestionRequired => '[Ŕéqûíŕéð ~~]';
+
+  @override
+  String get formsMaxFiles => '[Möšţ ƒíłéš ~~~]';
+
+  @override
+  String get formsTarget => '[Ŵĥåţ ţĥé ţåšķ šţåŕţš ŵíţĥ ~~~~~~~~]';
+
+  @override
+  String get formsStatusLabel => '[Šţåţûš ~~]';
+
+  @override
+  String get formsStatusDefault => '[Ţĥé þŕöĵéçţ\'š ƒíŕšţ šţåţûš ~~~~~~~~]';
+
+  @override
+  String get formsPriorityLabel => '[Þŕíöŕíţý ~~]';
+
+  @override
+  String get formsPriorityNone => '[Ñöñé ~]';
+
+  @override
+  String get formsPriorityLow => '[Łöŵ ~]';
+
+  @override
+  String get formsPriorityMedium => '[Méðíûɱ ~~]';
+
+  @override
+  String get formsPriorityHigh => '[Ĥíĝĥ ~]';
+
+  @override
+  String get formsPriorityUrgent => '[Ûŕĝéñţ ~~]';
+
+  @override
+  String get formsAssigneesLabel => '[Åššíĝñ ţö ~~~]';
+
+  @override
+  String get formsEnabled => '[Åççéþţíñĝ šûƀɱíššíöñš ~~~~~~~]';
+
+  @override
+  String get formsRequireEmail => '[Åšķ ƒöŕ åñ éɱåíł åððŕéšš ~~~~~~~~]';
+
+  @override
+  String get formsSendConfirmation => '[Éɱåíł å çöñƒíŕɱåţíöñ ~~~~~~]';
+
+  @override
+  String get formsNotifyStatus => '[Éɱåíł šţåţûš çĥåñĝéš ~~~~~~]';
+
+  @override
+  String get formsNotifyStatusHint =>
+      '[Öñé ŵåý: ţĥé šéñðéŕ ĝéţš ţĥé ñéŵ šţåţûš, ñéṽéŕ å łíñķ íñţö ţĥé ŵöŕķšþåçé. ~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsBranding => '[Łööķ ~]';
+
+  @override
+  String get formsColorLabel => '[ßŕåñð çöłöŕ ~~~]';
+
+  @override
+  String get formsLogoLabel => '[Łöĝö åððŕéšš (ĥţţþš://…) ~~~~~~~~]';
 }

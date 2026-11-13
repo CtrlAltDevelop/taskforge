@@ -3757,5 +3757,123 @@
   "devEventCommentCreated": "A comment is added",
   "devEventCommentUpdated": "A comment is edited",
   "devEventCommentDeleted": "A comment is deleted",
-  "devEventPing": "Test event"
+  "devEventPing": "Test event",
+  "formsTitle": "Forms",
+  "formsSub": "Public forms that create tasks",
+  "formsHint": "Share a form's link so people outside the workspace can send you work. They need no account.",
+  "formsEmpty": "No forms yet.",
+  "formsNew": "New form",
+  "formsEdit": "Edit form",
+  "formsPickProject": "Which project gets the tasks?",
+  "formsSubmissionCount": "{count, plural, one{1 submission} other{{count} submissions}}",
+  "@formsSubmissionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "formsCopyLink": "Copy link",
+  "formsLinkCopied": "Link copied.",
+  "formsRotateLink": "New link (old one stops working)",
+  "formsLinkRotated": "The form has a new link. The old one no longer works.",
+  "formsSubmissions": "Submissions",
+  "formsNoSubmissions": "Nothing has been sent through this form yet.",
+  "formsTaskGone": "The task was deleted",
+  "formsCopyReference": "Copy reference",
+  "formsDelete": "Delete form",
+  "formsDeleteTitle": "Delete \"{name}\"?",
+  "@formsDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "formsDeleteBody": "Its link stops working and its list of submissions is removed. The tasks it made stay.",
+  "formsDenied": "You cannot manage forms here.",
+  "formsGone": "That form no longer exists.",
+  "formsGonePage": "This form is not available.",
+  "formsConflict": "The form changed since you opened it. Reopen it and try again.",
+  "formsTooMany": "Too many submissions. Try again later.",
+  "formsUnavailable": "This form cannot take submissions right now. Try again later.",
+  "formsCaptchaFailed": "The verification failed. Complete it again and send.",
+  "formsCaptchaRequired": "Complete the verification.",
+  "formsCaptchaWebOnly": "This form needs a verification that only works in a web browser. Open its link there.",
+  "formsCaptchaPreview": "A verification appears here.",
+  "formsRequired": "This is required.",
+  "formsRequiredTag": "required",
+  "formsEmailLabel": "Your email (optional)",
+  "formsEmailLabelRequired": "Your email *",
+  "formsEmailHelp": "We only use it to confirm and update you about this request.",
+  "formsEmailInvalid": "Enter a valid email address.",
+  "formsSubmit": "Send",
+  "formsSending": "Sending…",
+  "formsThanksTitle": "Thank you, we got it",
+  "formsThanksBody": "Your reference is {reference}. Quote it if you write to us.",
+  "@formsThanksBody": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "formsAnother": "Send another",
+  "formsAddFile": "Add a file (up to {max})",
+  "@formsAddFile": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "formsRemoveFile": "Remove file",
+  "formsFileTooBig": "A file is too large.",
+  "formsNoDate": "No date",
+  "formsPickDate": "Pick a date",
+  "formsClearDate": "Clear date",
+  "formsMoneyHint": "Amount and currency, like 12.50 USD",
+  "formsBuildTab": "Build",
+  "formsPreviewTab": "Preview",
+  "formsNameLabel": "Form name",
+  "formsDescriptionLabel": "Text above the form",
+  "formsNeedName": "Give the form a name.",
+  "formsSaved": "Form saved.",
+  "formsQuestions": "Questions",
+  "formsDefaultTitle": "Summary",
+  "formsDefaultDescription": "Details",
+  "formsDefaultFile": "Attachment",
+  "formsAddDescription": "Add details",
+  "formsAddFileQuestion": "Add file upload",
+  "formsAddField": "Add a project field",
+  "formsPickField": "Which field?",
+  "formsNoFields": "No other fields can be added. Person fields are never offered on a public form.",
+  "formsRemoveQuestion": "Remove question",
+  "formsKindTitle": "Task title",
+  "formsKindDescription": "Task description",
+  "formsKindFile": "File upload",
+  "formsKindField": "Project field",
+  "formsEditQuestion": "Edit question",
+  "formsQuestionLabel": "Label",
+  "formsQuestionHelp": "Help text",
+  "formsQuestionRequired": "Required",
+  "formsMaxFiles": "Most files",
+  "formsTarget": "What the task starts with",
+  "formsStatusLabel": "Status",
+  "formsStatusDefault": "The project's first status",
+  "formsPriorityLabel": "Priority",
+  "formsPriorityNone": "None",
+  "formsPriorityLow": "Low",
+  "formsPriorityMedium": "Medium",
+  "formsPriorityHigh": "High",
+  "formsPriorityUrgent": "Urgent",
+  "formsAssigneesLabel": "Assign to",
+  "formsEnabled": "Accepting submissions",
+  "formsRequireEmail": "Ask for an email address",
+  "formsSendConfirmation": "Email a confirmation",
+  "formsNotifyStatus": "Email status changes",
+  "formsNotifyStatusHint": "One way: the sender gets the new status, never a link into the workspace.",
+  "formsBranding": "Look",
+  "formsColorLabel": "Brand color",
+  "formsLogoLabel": "Logo address (https://…)"
 }

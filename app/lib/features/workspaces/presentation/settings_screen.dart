@@ -93,6 +93,14 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     onTap: () => context.push('/import'),
                   ),
                 ),
+                if (ref.watch(permissionSetProvider).can(Perm.formManage))
+                  ListTile(
+                    key: const Key('open-forms'),
+                    leading: const Icon(Icons.dynamic_form_outlined),
+                    title: Text(context.l10n.formsTitle),
+                    subtitle: Text(context.l10n.formsSub),
+                    onTap: () => context.push('/forms'),
+                  ),
                 ListTile(
                   key: const Key('open-developer'),
                   leading: const Icon(Icons.code),

@@ -6400,4 +6400,297 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get devEventPing => 'رویداد آزمایشی';
+
+  @override
+  String get formsTitle => 'فرم‌ها';
+
+  @override
+  String get formsSub => 'فرم‌های عمومی که کار می‌سازند';
+
+  @override
+  String get formsHint =>
+      'پیوند یک فرم را بدهید تا افراد بیرون از فضای کار بتوانند کار بفرستند. حساب لازم ندارند.';
+
+  @override
+  String get formsEmpty => 'هنوز فرمی نیست.';
+
+  @override
+  String get formsNew => 'فرم تازه';
+
+  @override
+  String get formsEdit => 'ویرایش فرم';
+
+  @override
+  String get formsPickProject => 'کارها به کدام پروژه برود؟';
+
+  @override
+  String formsSubmissionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ارسال',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get formsCopyLink => 'رونوشت پیوند';
+
+  @override
+  String get formsLinkCopied => 'پیوند رونویسی شد.';
+
+  @override
+  String get formsRotateLink => 'پیوند تازه (پیوند قبلی کار نمی‌کند)';
+
+  @override
+  String get formsLinkRotated =>
+      'فرم پیوند تازه‌ای دارد. پیوند قبلی دیگر کار نمی‌کند.';
+
+  @override
+  String get formsSubmissions => 'ارسال‌ها';
+
+  @override
+  String get formsNoSubmissions => 'هنوز چیزی از این فرم ارسال نشده است.';
+
+  @override
+  String get formsTaskGone => 'کار حذف شده است';
+
+  @override
+  String get formsCopyReference => 'رونوشت شمارهٔ پیگیری';
+
+  @override
+  String get formsDelete => 'حذف فرم';
+
+  @override
+  String formsDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get formsDeleteBody =>
+      'پیوند آن از کار می‌افتد و فهرست ارسال‌ها پاک می‌شود. کارهای ساخته‌شده می‌مانند.';
+
+  @override
+  String get formsDenied => 'اجازهٔ مدیریت فرم‌ها را ندارید.';
+
+  @override
+  String get formsGone => 'این فرم دیگر وجود ندارد.';
+
+  @override
+  String get formsGonePage => 'این فرم در دسترس نیست.';
+
+  @override
+  String get formsConflict =>
+      'فرم پس از باز کردن شما تغییر کرد. دوباره باز کنید و تلاش کنید.';
+
+  @override
+  String get formsTooMany => 'ارسال‌های بسیار زیاد. بعداً دوباره تلاش کنید.';
+
+  @override
+  String get formsUnavailable =>
+      'این فرم اکنون ارسال نمی‌پذیرد. بعداً دوباره تلاش کنید.';
+
+  @override
+  String get formsCaptchaFailed =>
+      'تأیید ناموفق بود. دوباره انجام دهید و ارسال کنید.';
+
+  @override
+  String get formsCaptchaRequired => 'تأیید را کامل کنید.';
+
+  @override
+  String get formsCaptchaWebOnly =>
+      'این فرم به تأییدی نیاز دارد که فقط در مرورگر کار می‌کند. پیوند آن را آنجا باز کنید.';
+
+  @override
+  String get formsCaptchaPreview => 'یک تأیید اینجا نمایش داده می‌شود.';
+
+  @override
+  String get formsRequired => 'این مورد الزامی است.';
+
+  @override
+  String get formsRequiredTag => 'الزامی';
+
+  @override
+  String get formsEmailLabel => 'ایمیل شما (اختیاری)';
+
+  @override
+  String get formsEmailLabelRequired => 'ایمیل شما *';
+
+  @override
+  String get formsEmailHelp =>
+      'فقط برای تأیید و اطلاع‌رسانی دربارهٔ همین درخواست استفاده می‌شود.';
+
+  @override
+  String get formsEmailInvalid => 'یک نشانی ایمیل معتبر وارد کنید.';
+
+  @override
+  String get formsSubmit => 'ارسال';
+
+  @override
+  String get formsSending => 'در حال ارسال…';
+
+  @override
+  String get formsThanksTitle => 'سپاسگزاریم، دریافت شد';
+
+  @override
+  String formsThanksBody(String reference) {
+    return 'شمارهٔ پیگیری شما $reference است. هنگام تماس آن را ذکر کنید.';
+  }
+
+  @override
+  String get formsAnother => 'ارسال دیگر';
+
+  @override
+  String formsAddFile(int max) {
+    return 'افزودن فایل (تا $max)';
+  }
+
+  @override
+  String get formsRemoveFile => 'حذف فایل';
+
+  @override
+  String get formsFileTooBig => 'یک فایل بسیار بزرگ است.';
+
+  @override
+  String get formsNoDate => 'بدون تاریخ';
+
+  @override
+  String get formsPickDate => 'انتخاب تاریخ';
+
+  @override
+  String get formsClearDate => 'پاک کردن تاریخ';
+
+  @override
+  String get formsMoneyHint => 'مبلغ و واحد پول، مانند 12.50 USD';
+
+  @override
+  String get formsBuildTab => 'ساخت';
+
+  @override
+  String get formsPreviewTab => 'پیش‌نمایش';
+
+  @override
+  String get formsNameLabel => 'نام فرم';
+
+  @override
+  String get formsDescriptionLabel => 'متن بالای فرم';
+
+  @override
+  String get formsNeedName => 'برای فرم نامی بگذارید.';
+
+  @override
+  String get formsSaved => 'فرم ذخیره شد.';
+
+  @override
+  String get formsQuestions => 'پرسش‌ها';
+
+  @override
+  String get formsDefaultTitle => 'خلاصه';
+
+  @override
+  String get formsDefaultDescription => 'جزئیات';
+
+  @override
+  String get formsDefaultFile => 'پیوست';
+
+  @override
+  String get formsAddDescription => 'افزودن جزئیات';
+
+  @override
+  String get formsAddFileQuestion => 'افزودن بارگذاری فایل';
+
+  @override
+  String get formsAddField => 'افزودن فیلد پروژه';
+
+  @override
+  String get formsPickField => 'کدام فیلد؟';
+
+  @override
+  String get formsNoFields =>
+      'فیلد دیگری برای افزودن نیست. فیلدهای شخص هرگز در فرم عمومی ارائه نمی‌شوند.';
+
+  @override
+  String get formsRemoveQuestion => 'حذف پرسش';
+
+  @override
+  String get formsKindTitle => 'عنوان کار';
+
+  @override
+  String get formsKindDescription => 'توضیح کار';
+
+  @override
+  String get formsKindFile => 'بارگذاری فایل';
+
+  @override
+  String get formsKindField => 'فیلد پروژه';
+
+  @override
+  String get formsEditQuestion => 'ویرایش پرسش';
+
+  @override
+  String get formsQuestionLabel => 'برچسب';
+
+  @override
+  String get formsQuestionHelp => 'متن راهنما';
+
+  @override
+  String get formsQuestionRequired => 'الزامی';
+
+  @override
+  String get formsMaxFiles => 'بیشترین تعداد فایل';
+
+  @override
+  String get formsTarget => 'کار با چه چیزی آغاز می‌شود';
+
+  @override
+  String get formsStatusLabel => 'وضعیت';
+
+  @override
+  String get formsStatusDefault => 'وضعیت نخست پروژه';
+
+  @override
+  String get formsPriorityLabel => 'اولویت';
+
+  @override
+  String get formsPriorityNone => 'هیچ';
+
+  @override
+  String get formsPriorityLow => 'کم';
+
+  @override
+  String get formsPriorityMedium => 'متوسط';
+
+  @override
+  String get formsPriorityHigh => 'زیاد';
+
+  @override
+  String get formsPriorityUrgent => 'فوری';
+
+  @override
+  String get formsAssigneesLabel => 'واگذار به';
+
+  @override
+  String get formsEnabled => 'پذیرش ارسال';
+
+  @override
+  String get formsRequireEmail => 'درخواست نشانی ایمیل';
+
+  @override
+  String get formsSendConfirmation => 'ارسال ایمیل تأیید';
+
+  @override
+  String get formsNotifyStatus => 'ایمیل تغییر وضعیت';
+
+  @override
+  String get formsNotifyStatusHint =>
+      'یک‌طرفه: فرستنده وضعیت تازه را می‌گیرد، نه پیوندی به فضای کار.';
+
+  @override
+  String get formsBranding => 'ظاهر';
+
+  @override
+  String get formsColorLabel => 'رنگ برند';
+
+  @override
+  String get formsLogoLabel => 'نشانی لوگو (https://…)';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/offline/presentation/offline_screen.dart';
+import 'package:taskforge/core/public_routes.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dart';
@@ -24,6 +25,10 @@ import 'package:taskforge/features/automations/presentation/automations_screen.d
 import 'package:taskforge/features/developer/presentation/deliveries_screen.dart';
 import 'package:taskforge/features/developer/presentation/developer_screen.dart';
 import 'package:taskforge/features/docs/presentation/docs_screen.dart';
+import 'package:taskforge/features/forms/presentation/form_builder_screen.dart';
+import 'package:taskforge/features/forms/presentation/forms_screen.dart';
+import 'package:taskforge/features/forms/presentation/public_form_page.dart';
+import 'package:taskforge/features/forms/presentation/submissions_screen.dart';
 import 'package:taskforge/features/sprints/presentation/sprints_screen.dart';
 import 'package:taskforge/features/time/presentation/timesheet_screen.dart';
 import 'package:taskforge/features/members/presentation/invite_screen.dart';
@@ -91,6 +96,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final native = customSchemeRoute(state.uri);
       if (native != null) return native;
+      // Public pages (an intake form) need no account and no redirect.
+      if (isPublicAppPath(state.uri.path)) return null;
       final signedIn = session.status == AuthStatus.signedIn;
       final atAuthPage = _authPaths.contains(state.uri.path);
       if (!signedIn && !atAuthPage) {
@@ -196,6 +203,28 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/audit', builder: (_, _) => const AuditScreen()),
       GoRoute(path: '/import', builder: (_, _) => const ImportScreen()),
       GoRoute(path: '/developer', builder: (_, _) => const DeveloperScreen()),
+      GoRoute(
+        path: '/f/:token',
+        builder: (_, state) =>
+            PublicFormPage(token: state.pathParameters['token']!),
+      ),
+      GoRoute(path: '/forms', builder: (_, _) => const FormsScreen()),
+      // Fixed paths before `:id`.
+      GoRoute(
+        path: '/forms/new',
+        builder: (_, state) =>
+            FormBuilderScreen(projectId: state.uri.queryParameters['project']),
+      ),
+      GoRoute(
+        path: '/forms/:id',
+        builder: (_, state) =>
+            FormBuilderScreen(formId: state.pathParameters['id']),
+      ),
+      GoRoute(
+        path: '/forms/:id/submissions',
+        builder: (_, state) =>
+            SubmissionsScreen(formId: state.pathParameters['id']!),
+      ),
       GoRoute(
         path: '/developer/webhooks/:id',
         builder: (_, state) =>

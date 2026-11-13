@@ -6459,4 +6459,299 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get devEventPing => 'حدث اختبار';
+
+  @override
+  String get formsTitle => 'النماذج';
+
+  @override
+  String get formsSub => 'نماذج عامة تنشئ مهامًا';
+
+  @override
+  String get formsHint =>
+      'شارك رابط نموذج ليتمكن من هم خارج مساحة العمل من إرسال طلبات. لا يحتاجون إلى حساب.';
+
+  @override
+  String get formsEmpty => 'لا توجد نماذج بعد.';
+
+  @override
+  String get formsNew => 'نموذج جديد';
+
+  @override
+  String get formsEdit => 'تعديل النموذج';
+
+  @override
+  String get formsPickProject => 'أي مشروع يستقبل المهام؟';
+
+  @override
+  String formsSubmissionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count إرسال',
+      many: '$count إرسالًا',
+      few: '$count إرسالات',
+      two: 'إرسالان',
+      one: 'إرسال واحد',
+      zero: 'لا إرسالات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get formsCopyLink => 'نسخ الرابط';
+
+  @override
+  String get formsLinkCopied => 'تم نسخ الرابط.';
+
+  @override
+  String get formsRotateLink => 'رابط جديد (يتوقف القديم)';
+
+  @override
+  String get formsLinkRotated => 'أصبح للنموذج رابط جديد. لم يعد القديم يعمل.';
+
+  @override
+  String get formsSubmissions => 'الإرسالات';
+
+  @override
+  String get formsNoSubmissions => 'لم يُرسل شيء عبر هذا النموذج بعد.';
+
+  @override
+  String get formsTaskGone => 'تم حذف المهمة';
+
+  @override
+  String get formsCopyReference => 'نسخ المرجع';
+
+  @override
+  String get formsDelete => 'حذف النموذج';
+
+  @override
+  String formsDeleteTitle(String name) {
+    return 'حذف \"$name\"؟';
+  }
+
+  @override
+  String get formsDeleteBody =>
+      'يتوقف رابطه وتُزال قائمة الإرسالات. تبقى المهام التي أنشأها.';
+
+  @override
+  String get formsDenied => 'لا يمكنك إدارة النماذج هنا.';
+
+  @override
+  String get formsGone => 'لم يعد هذا النموذج موجودًا.';
+
+  @override
+  String get formsGonePage => 'هذا النموذج غير متاح.';
+
+  @override
+  String get formsConflict =>
+      'تغيّر النموذج منذ فتحته. افتحه من جديد وحاول مرة أخرى.';
+
+  @override
+  String get formsTooMany => 'إرسالات كثيرة جدًا. حاول لاحقًا.';
+
+  @override
+  String get formsUnavailable =>
+      'لا يمكن لهذا النموذج استقبال الإرسالات الآن. حاول لاحقًا.';
+
+  @override
+  String get formsCaptchaFailed => 'فشل التحقق. أكمله مرة أخرى ثم أرسل.';
+
+  @override
+  String get formsCaptchaRequired => 'أكمل التحقق.';
+
+  @override
+  String get formsCaptchaWebOnly =>
+      'يحتاج هذا النموذج إلى تحقق لا يعمل إلا في المتصفح. افتح رابطه هناك.';
+
+  @override
+  String get formsCaptchaPreview => 'يظهر هنا تحقق.';
+
+  @override
+  String get formsRequired => 'هذا الحقل مطلوب.';
+
+  @override
+  String get formsRequiredTag => 'مطلوب';
+
+  @override
+  String get formsEmailLabel => 'بريدك الإلكتروني (اختياري)';
+
+  @override
+  String get formsEmailLabelRequired => 'بريدك الإلكتروني *';
+
+  @override
+  String get formsEmailHelp => 'نستخدمه فقط للتأكيد وإبلاغك بشأن هذا الطلب.';
+
+  @override
+  String get formsEmailInvalid => 'أدخل عنوان بريد إلكتروني صالحًا.';
+
+  @override
+  String get formsSubmit => 'إرسال';
+
+  @override
+  String get formsSending => 'جارٍ الإرسال…';
+
+  @override
+  String get formsThanksTitle => 'شكرًا، تم الاستلام';
+
+  @override
+  String formsThanksBody(String reference) {
+    return 'رقمك المرجعي $reference. اذكره عند مراسلتنا.';
+  }
+
+  @override
+  String get formsAnother => 'إرسال آخر';
+
+  @override
+  String formsAddFile(int max) {
+    return 'إضافة ملف (حتى $max)';
+  }
+
+  @override
+  String get formsRemoveFile => 'إزالة الملف';
+
+  @override
+  String get formsFileTooBig => 'ملف كبير جدًا.';
+
+  @override
+  String get formsNoDate => 'بلا تاريخ';
+
+  @override
+  String get formsPickDate => 'اختر تاريخًا';
+
+  @override
+  String get formsClearDate => 'مسح التاريخ';
+
+  @override
+  String get formsMoneyHint => 'المبلغ والعملة، مثل 12.50 USD';
+
+  @override
+  String get formsBuildTab => 'البناء';
+
+  @override
+  String get formsPreviewTab => 'معاينة';
+
+  @override
+  String get formsNameLabel => 'اسم النموذج';
+
+  @override
+  String get formsDescriptionLabel => 'نص أعلى النموذج';
+
+  @override
+  String get formsNeedName => 'أعطِ النموذج اسمًا.';
+
+  @override
+  String get formsSaved => 'تم حفظ النموذج.';
+
+  @override
+  String get formsQuestions => 'الأسئلة';
+
+  @override
+  String get formsDefaultTitle => 'الملخص';
+
+  @override
+  String get formsDefaultDescription => 'التفاصيل';
+
+  @override
+  String get formsDefaultFile => 'مرفق';
+
+  @override
+  String get formsAddDescription => 'إضافة تفاصيل';
+
+  @override
+  String get formsAddFileQuestion => 'إضافة رفع ملف';
+
+  @override
+  String get formsAddField => 'إضافة حقل مشروع';
+
+  @override
+  String get formsPickField => 'أي حقل؟';
+
+  @override
+  String get formsNoFields =>
+      'لا توجد حقول أخرى للإضافة. حقول الأشخاص لا تُعرض أبدًا في نموذج عام.';
+
+  @override
+  String get formsRemoveQuestion => 'إزالة السؤال';
+
+  @override
+  String get formsKindTitle => 'عنوان المهمة';
+
+  @override
+  String get formsKindDescription => 'وصف المهمة';
+
+  @override
+  String get formsKindFile => 'رفع ملف';
+
+  @override
+  String get formsKindField => 'حقل مشروع';
+
+  @override
+  String get formsEditQuestion => 'تعديل السؤال';
+
+  @override
+  String get formsQuestionLabel => 'التسمية';
+
+  @override
+  String get formsQuestionHelp => 'نص المساعدة';
+
+  @override
+  String get formsQuestionRequired => 'مطلوب';
+
+  @override
+  String get formsMaxFiles => 'أقصى عدد للملفات';
+
+  @override
+  String get formsTarget => 'ما تبدأ به المهمة';
+
+  @override
+  String get formsStatusLabel => 'الحالة';
+
+  @override
+  String get formsStatusDefault => 'أول حالة في المشروع';
+
+  @override
+  String get formsPriorityLabel => 'الأولوية';
+
+  @override
+  String get formsPriorityNone => 'بلا';
+
+  @override
+  String get formsPriorityLow => 'منخفضة';
+
+  @override
+  String get formsPriorityMedium => 'متوسطة';
+
+  @override
+  String get formsPriorityHigh => 'عالية';
+
+  @override
+  String get formsPriorityUrgent => 'عاجلة';
+
+  @override
+  String get formsAssigneesLabel => 'إسناد إلى';
+
+  @override
+  String get formsEnabled => 'يستقبل الإرسالات';
+
+  @override
+  String get formsRequireEmail => 'طلب عنوان بريد إلكتروني';
+
+  @override
+  String get formsSendConfirmation => 'إرسال بريد تأكيد';
+
+  @override
+  String get formsNotifyStatus => 'إرسال بريد عند تغيّر الحالة';
+
+  @override
+  String get formsNotifyStatusHint =>
+      'باتجاه واحد: يصل المرسل الحالة الجديدة وليس رابطًا إلى مساحة العمل.';
+
+  @override
+  String get formsBranding => 'المظهر';
+
+  @override
+  String get formsColorLabel => 'لون العلامة';
+
+  @override
+  String get formsLogoLabel => 'عنوان الشعار (https://…)';
 }
