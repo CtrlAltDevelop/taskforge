@@ -1,0 +1,52 @@
+# Public entry point: automatic HTTPS (Let's Encrypt), the Flutter web build as static files,
+# and the API, WebSocket and gRPC-Web routed to the private services.
+{
+	email {$ACME_EMAIL}
+}
+
+{$TASKFORGE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy same-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		-Server
+	}
+
+	# Prometheus scrapes the backend over the private network; never publish it.
+	handle /metrics* {
+		respond 404
+	}
+
+	# Flutter web talks gRPC-Web: same origin, told apart by content type.
+	@grpcweb header Content-Type application/grpc-web*
+	handle @grpcweb {
+		reverse_proxy envoy:8080 {
+			flush_interval -1
+		}
+	}
+
+	@backend path /api/* /admin/* /graphql /ws/*
+	handle @backend {
+		reverse_proxy backend:8010 {
+			flush_interval -1
+		}
+	}
+
+	# Django admin assets, written by the migrate step into a shared volume.
+	handle /static/* {
+		root * /srv
+		file_server
+	}
+
+	handle {
+		root * /srv/web
+		header /index.html Cache-Control "no-cache"
+		header /main.dart.js Cache-Control "no-cache"
+		header /flutter_service_worker.js Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}

@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint check test integration
+.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -100,7 +100,8 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/templates/grpc/templates.proto \
 	infrastructure/workload/grpc/workload.proto \
 	infrastructure/security/grpc/security.proto \
-	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
+	infrastructure/oauth/rotation/grpc/oauth_rotation.proto \
+	infrastructure/system/grpc/system.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos
 	rm -rf app/lib/gen && mkdir -p app/lib/gen
@@ -113,6 +114,25 @@ gen:
 
 proto-lint:
 	buf lint
+
+# The compatibility gate: fail on a change that breaks existing clients (removed or renumbered
+# field, changed type). Compares against the last release tag, else main.
+proto-breaking:
+	buf breaking --against ".git#ref=$$(git describe --tags --abbrev=0 2>/dev/null || echo origin/main)"
+
+# Phase 38: production stack helpers (see deploy/README.md).
+prod-config:
+	docker compose -f deploy/docker-compose.prod.yml config -q
+
+backup:
+	deploy/scripts/backup.sh
+
+restore-smoke:
+	deploy/scripts/smoke-restore.sh $(BACKUP)
+
+# `make version V=1.2.0` writes VERSION and copies it into pubspec.yaml and pyproject.toml.
+version:
+	deploy/scripts/set-version.sh $(V)
 
 check:
 	PATH="$(CURDIR)/$(VENV):$$PATH" $(MAKE) -C backend check

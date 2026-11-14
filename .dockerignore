@@ -1,0 +1,14 @@
+.git
+.github
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.env
+**/.env.*
+backend/db.sqlite3
+backend/media
+backend/staticfiles
+app/build
+app/.dart_tool
+app/coverage
+docs

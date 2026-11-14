@@ -1,0 +1,164 @@
+# Production stack. From this directory:
+#   cp .env.production.example .env      # then set the five required values at the top
+#   docker compose -f docker-compose.prod.yml up -d
+# Compose reads `.env` here for ${...} and hands it to the backend containers as DJANGO_* settings.
+# Set COMPOSE_PROFILES=minio in .env to run a bundled S3-compatible store instead of an external one.
+name: taskforge
+
+x-backend: &backend
+  image: ${TASKFORGE_BACKEND_IMAGE:-ghcr.io/taskforge/backend}:${TASKFORGE_VERSION:-latest}
+  build:
+    context: ..
+    dockerfile: backend/Dockerfile
+  restart: unless-stopped
+  env_file: .env
+  environment: &backend_env
+    DJANGO_SETTINGS_MODULE: config.settings.production
+    DJANGO_PUBLIC_ORIGIN: https://${TASKFORGE_DOMAIN:?set TASKFORGE_DOMAIN}
+    DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-${TASKFORGE_DOMAIN}}
+    DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?set DJANGO_SECRET_KEY}
+    DJANGO_FIELD_ENCRYPTION_KEY: ${DJANGO_FIELD_ENCRYPTION_KEY:?set DJANGO_FIELD_ENCRYPTION_KEY}
+    DJANGO_INBOX_UNSUBSCRIBE_URL: ${DJANGO_INBOX_UNSUBSCRIBE_URL:-https://${TASKFORGE_DOMAIN}/api/v1/inbox/unsubscribe?token={token}}
+    DJANGO_DB_NAME: ${POSTGRES_DB:-taskforge}
+    DJANGO_DB_USER: ${POSTGRES_USER:-taskforge}
+    DJANGO_DB_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    DJANGO_DB_HOST: postgres
+    DJANGO_REDIS_URL: redis://redis:6379/0
+    DJANGO_AUDIT_TRUSTED_PROXY_HOPS: ${DJANGO_AUDIT_TRUSTED_PROXY_HOPS:-1}
+  volumes:
+    - media:/data/media
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-taskforge}
+      POSTGRES_USER: ${POSTGRES_USER:-taskforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 20
+
+  # Optional bundled object storage (COMPOSE_PROFILES=minio). Skip it to use any external S3.
+  minio:
+    profiles: ["minio"]
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: ["server", "/data"]
+    environment:
+      MINIO_ROOT_USER: ${DJANGO_S3_ACCESS_KEY:-taskforge}
+      MINIO_ROOT_PASSWORD: ${DJANGO_S3_SECRET_KEY:-}
+    volumes: [miniodata:/data]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      retries: 20
+
+  minio-init:
+    profiles: ["minio"]
+    image: minio/mc:latest
+    restart: "no"
+    depends_on:
+      minio: { condition: service_healthy }
+    entrypoint: >
+      sh -c "mc alias set local http://minio:9000 $${DJANGO_S3_ACCESS_KEY} $${DJANGO_S3_SECRET_KEY}
+      && mc mb --ignore-existing local/$${DJANGO_S3_BUCKET}"
+    environment:
+      DJANGO_S3_ACCESS_KEY: ${DJANGO_S3_ACCESS_KEY:-taskforge}
+      DJANGO_S3_SECRET_KEY: ${DJANGO_S3_SECRET_KEY:-}
+      DJANGO_S3_BUCKET: ${DJANGO_S3_BUCKET:-taskforge}
+
+  # Init step: schema migrations, admin static files, search index. The API, gRPC server and
+  # workers start only after it exits successfully, so a failed migration stops the upgrade.
+  migrate:
+    <<: *backend
+    restart: "no"
+    command: >
+      sh -c "python manage.py migrate --noinput
+      && python manage.py collectstatic --noinput
+      && python manage.py reindex"
+    healthcheck: { disable: true }
+    volumes:
+      - media:/data/media
+      - static:/app/staticfiles
+
+  backend:
+    <<: *backend
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    # Reached only through Caddy; no host port.
+    expose: ["8010"]
+
+  grpc:
+    <<: *backend
+    command: ["python", "manage.py", "grpcrunaioserver"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    expose: ["50051"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 50051), 3)"]
+      interval: 15s
+      retries: 5
+
+  worker:
+    <<: *backend
+    command: ["celery", "-A", "config", "worker", "-l", "info"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    healthcheck: { disable: true }
+
+  beat:
+    <<: *backend
+    command: ["celery", "-A", "config", "beat", "-l", "info", "-s", "/tmp/celerybeat-schedule"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    healthcheck: { disable: true }
+
+  envoy:
+    image: envoyproxy/envoy:v1.32-latest
+    restart: unless-stopped
+    command: ["-c", "/etc/envoy/envoy.yaml"]
+    volumes: ["./envoy.prod.yaml:/etc/envoy/envoy.yaml:ro"]
+    depends_on: [grpc]
+
+  caddy:
+    image: ${TASKFORGE_WEB_IMAGE:-ghcr.io/taskforge/web}:${TASKFORGE_VERSION:-latest}
+    build:
+      context: ..
+      dockerfile: deploy/web/Dockerfile
+      args: { VERSION: "${TASKFORGE_VERSION:-0.0.0-dev}" }
+    restart: unless-stopped
+    environment:
+      TASKFORGE_DOMAIN: ${TASKFORGE_DOMAIN:?set TASKFORGE_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - static:/srv/static:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on: [backend, envoy]
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:
+  media:
+  static:
+  caddydata:
+  caddyconfig:

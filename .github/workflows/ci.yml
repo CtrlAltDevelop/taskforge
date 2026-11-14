@@ -75,8 +75,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # `buf breaking` compares against another ref
       - uses: bufbuild/buf-setup-action@v1
       - run: buf lint
+      # Compatibility gate: no change that breaks a released client (removed/renumbered field,
+      # changed type). A pull request is compared with its base branch, a push with the last tag.
+      - name: buf breaking
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            AGAINST=".git#branch=origin/${{ github.base_ref }}"
+          else
+            TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+            [ -n "$TAG" ] || { echo "No release tag yet: nothing to compare with"; exit 0; }
+            AGAINST=".git#tag=$TAG"
+          fi
+          buf breaking --against "$AGAINST"
       # Dart stubs are committed; fail if they drift from the .proto files.
       - uses: subosito/flutter-action@v2
         with:
@@ -92,3 +106,15 @@ jobs:
             infrastructure/oauth/rotation/grpc/oauth_rotation.proto
           rm -rf app/lib/gen/google
           git diff --exit-code -- app/lib/gen
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Production compose is valid
+        working-directory: deploy
+        run: |
+          printf 'TASKFORGE_DOMAIN=ci.example.test\nACME_EMAIL=ci@example.test\nDJANGO_SECRET_KEY=x\nDJANGO_FIELD_ENCRYPTION_KEY=y\nPOSTGRES_PASSWORD=p\nCOMPOSE_PROFILES=minio\n' > .env
+          docker compose -f docker-compose.prod.yml config -q
+      - run: for f in deploy/scripts/*.sh; do bash -n "$f"; done
+      - run: docker build -f backend/Dockerfile -t taskforge-backend:ci .
