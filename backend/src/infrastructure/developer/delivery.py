@@ -60,7 +60,7 @@ def dispatch(
         if event not in hook.events:
             continue
         body = envelope(hook, event, event_id, data)
-        body["project_id"] = str(project_id)
+        body["project_id"] = str(project_id) if project_id else None
         row = WebhookDelivery.objects.create(
             webhook=hook,
             workspace_id=workspace_id,

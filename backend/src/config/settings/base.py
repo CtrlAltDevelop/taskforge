@@ -1057,6 +1057,7 @@ INSTALLED_APPS = [
     "infrastructure.automations.apps.AutomationsConfig",
     "infrastructure.audit.apps.AuditConfig",
     "infrastructure.dashboards.apps.DashboardsConfig",
+    "infrastructure.goals.apps.GoalsConfig",
     "infrastructure.recurrence.apps.RecurrenceConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
@@ -1333,6 +1334,10 @@ FORMS_TURNSTILE_SECRET = os.getenv("DJANGO_FORMS_TURNSTILE_SECRET", "")
 FORMS_HCAPTCHA_SITE_KEY = os.getenv("DJANGO_FORMS_HCAPTCHA_SITE_KEY", "")
 FORMS_HCAPTCHA_SECRET = os.getenv("DJANGO_FORMS_HCAPTCHA_SECRET", "")
 FORMS_MAX_PER_PROJECT = int(os.getenv("DJANGO_FORMS_MAX_PER_PROJECT", "20"))
+
+# Phase 34: goals. A task event queues the linked key results it may move; they are recounted
+# once this many seconds have passed without the row being claimed (a burst costs one recount).
+GOALS_RECOMPUTE_DEBOUNCE_SECONDS = int(os.getenv("DJANGO_GOALS_RECOMPUTE_DEBOUNCE_SECONDS", "15"))
 
 # Celery. Debug and tests run tasks eagerly (see `development.py`); production points the broker
 # and result backend at Redis (`production.py`). Delayed work is database-backed and drained by

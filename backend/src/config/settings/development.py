@@ -34,6 +34,7 @@ if not DEV_EXTERNAL:
     AUTH_CHALLENGE_STORE = "infrastructure.auth.core.challenges.LocMemChallengeStore"
     # Tasks run inline in the caller; no broker, no result backend.
     CELERY_TASK_ALWAYS_EAGER = True
+    GOALS_RECOMPUTE_DEBOUNCE_SECONDS = 0  # eager tasks ignore a countdown: recount at once
     CELERY_TASK_EAGER_PROPAGATES = True
     CELERY_BROKER_URL = "memory://"
     CELERY_RESULT_BACKEND = "cache+memory://"

@@ -1,0 +1,236 @@
+syntax = "proto3";
+
+package config.goals;
+
+service CheckInController {
+    rpc Add(CheckInAddRequest) returns (CheckInAnswer) {}
+    rpc List(CheckInListRequest) returns (CheckInList) {}
+}
+
+service GoalController {
+    rpc Create(GoalCreateRequest) returns (GoalAnswer) {}
+    rpc Delete(GoalDeleteRequest) returns (GoalDeleted) {}
+    rpc DeleteFolder(FolderDeleteRequest) returns (FolderDeleted) {}
+    rpc Get(GoalGetRequest) returns (GoalAnswer) {}
+    rpc List(GoalListRequest) returns (GoalList) {}
+    rpc SaveFolder(FolderSaveRequest) returns (FolderAnswer) {}
+    rpc Update(GoalUpdateRequest) returns (GoalAnswer) {}
+}
+
+service KeyResultController {
+    rpc Create(KeyResultCreateRequest) returns (GoalAnswer) {}
+    rpc Delete(KeyResultDeleteRequest) returns (GoalAnswer) {}
+    rpc ForTask(ForTaskRequest) returns (ForTaskList) {}
+    rpc Update(KeyResultUpdateRequest) returns (GoalAnswer) {}
+}
+
+message CheckIn {
+    string id = 1;
+    string kr_id = 2;
+    string user_id = 3;
+    string value = 4;
+    string previous_value = 5;
+    float progress = 6;
+    string note = 7;
+    string at = 8;
+}
+
+message CheckInAddRequest {
+    string workspace_id = 1;
+    string kr_id = 2;
+    string value = 3;
+    string note = 4;
+}
+
+message CheckInAnswer {
+    CheckIn check_in = 1;
+    Goal goal = 2;
+}
+
+message CheckInList {
+    repeated CheckIn check_ins = 1;
+}
+
+message CheckInListRequest {
+    string workspace_id = 1;
+    string kr_id = 2;
+    int32 limit = 3;
+}
+
+message Contribution {
+    string goal_id = 1;
+    string goal_name = 2;
+    string kr_id = 3;
+    string kr_name = 4;
+}
+
+message Folder {
+    string id = 1;
+    string name = 2;
+    int32 position = 3;
+}
+
+message FolderAnswer {
+    Folder folder = 1;
+}
+
+message FolderDeleteRequest {
+    string workspace_id = 1;
+    string folder_id = 2;
+}
+
+message FolderDeleted {
+    string id = 1;
+}
+
+message FolderSaveRequest {
+    string workspace_id = 1;
+    string folder_id = 2;
+    string name = 3;
+}
+
+message ForTaskList {
+    repeated Contribution contributions = 1;
+}
+
+message ForTaskRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+}
+
+message Goal {
+    string id = 1;
+    string workspace_id = 2;
+    string parent_id = 3;
+    string folder_id = 4;
+    string name = 5;
+    string description = 6;
+    string owner_id = 7;
+    bool private = 8;
+    string period_start = 9;
+    string period_end = 10;
+    string status_override = 11;
+    string status = 12;
+    string status_hint = 13;
+    string weight = 14;
+    float progress = 15;
+    int32 version = 16;
+    bool can_edit = 17;
+    bool can_check_in = 18;
+    repeated string contributor_ids = 19;
+    repeated string child_ids = 20;
+    repeated KeyResult key_results = 21;
+    string created_at = 22;
+}
+
+message GoalAnswer {
+    Goal goal = 1;
+}
+
+message GoalCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    string description = 3;
+    string owner_id = 4;
+    string parent_id = 5;
+    string folder_id = 6;
+    bool private = 7;
+    string period_start = 8;
+    string period_end = 9;
+    string status_override = 10;
+    string weight = 11;
+    repeated string contributor_ids = 12;
+}
+
+message GoalDeleteRequest {
+    string workspace_id = 1;
+    string goal_id = 2;
+}
+
+message GoalDeleted {
+    string id = 1;
+}
+
+message GoalGetRequest {
+    string workspace_id = 1;
+    string goal_id = 2;
+}
+
+message GoalList {
+    repeated Goal goals = 1;
+    repeated Folder folders = 2;
+}
+
+message GoalListRequest {
+    string workspace_id = 1;
+}
+
+message GoalUpdateRequest {
+    string workspace_id = 1;
+    string goal_id = 2;
+    repeated string changed = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string description = 6;
+    string owner_id = 7;
+    string parent_id = 8;
+    string folder_id = 9;
+    bool private = 10;
+    string period_start = 11;
+    string period_end = 12;
+    string status_override = 13;
+    string weight = 14;
+    repeated string contributor_ids = 15;
+}
+
+message KeyResult {
+    string id = 1;
+    string goal_id = 2;
+    string name = 3;
+    string type = 4;
+    string start_value = 5;
+    string target_value = 6;
+    string current_value = 7;
+    string filter_text = 8;
+    repeated string task_ids = 9;
+    string weight = 10;
+    int32 linked_done = 11;
+    int32 linked_total = 12;
+    float progress = 13;
+    int32 position = 14;
+    int32 version = 15;
+}
+
+message KeyResultCreateRequest {
+    string workspace_id = 1;
+    string goal_id = 2;
+    string type = 3;
+    string current_value = 4;
+    string name = 5;
+    string start_value = 6;
+    string target_value = 7;
+    string weight = 8;
+    string filter_text = 9;
+    repeated string task_ids = 10;
+    int32 position = 11;
+}
+
+message KeyResultDeleteRequest {
+    string workspace_id = 1;
+    string kr_id = 2;
+}
+
+message KeyResultUpdateRequest {
+    string workspace_id = 1;
+    string kr_id = 2;
+    repeated string changed = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string start_value = 6;
+    string target_value = 7;
+    string weight = 8;
+    string filter_text = 9;
+    repeated string task_ids = 10;
+    int32 position = 11;
+}
+

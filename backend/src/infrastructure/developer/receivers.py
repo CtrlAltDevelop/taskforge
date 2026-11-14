@@ -12,6 +12,7 @@ from infrastructure.comments.models import Comment
 from infrastructure.comments.signals import comment_changed
 from infrastructure.developer import delivery, events
 from infrastructure.developer.models import Webhook
+from infrastructure.goals.signals import goal_progress_changed
 from infrastructure.tasks.models import Task
 from infrastructure.tasks.signals import task_activity, task_changed
 
@@ -93,7 +94,24 @@ def _comment_changed(sender: Any, **kw: Any) -> None:
     )
 
 
+@_guarded
+def _goal_progress(sender: Any, **kw: Any) -> None:
+    event = "goal.progress_changed"
+    if not _wanted(kw["workspace_id"], event):
+        return
+    data = {
+        "goal_id": kw["goal_id"],
+        "previous": kw["previous"],
+        "progress": kw["progress"],
+        "status": kw["status"],
+        "actor_id": kw["actor_id"] or None,
+    }
+    identity = f"{event}:{kw['goal_id']}:{kw['progress']}:{kw['previous']}"
+    delivery.dispatch(kw["workspace_id"], None, event, identity, {"goal": data})
+
+
 def connect() -> None:
     task_changed.connect(_task_changed, dispatch_uid="developer.task_changed")
     task_activity.connect(_task_activity, dispatch_uid="developer.task_activity")
     comment_changed.connect(_comment_changed, dispatch_uid="developer.comment_changed")
+    goal_progress_changed.connect(_goal_progress, dispatch_uid="developer.goal_progress")

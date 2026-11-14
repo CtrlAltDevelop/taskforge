@@ -64,6 +64,10 @@ PERMISSIONS: Final = (
     Permission("data.manage", "Import projects from other tools, undo an import, export data"),
     Permission("webhook.manage", "Create, edit and delete webhooks and see what was sent"),
     Permission("form.manage", "Create, edit and delete intake forms and read their submissions"),
+    Permission("goal.create", "Create goals and key results"),
+    Permission(
+        "goal.manage", "Edit, delete and see every goal, private ones too, and manage folders"
+    ),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -80,6 +84,7 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
         "time.log",
         "sprint.manage",
         "doc.edit",
+        "goal.create",
         *TASK_KEYS,
     },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,

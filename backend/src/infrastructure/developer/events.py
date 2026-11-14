@@ -27,6 +27,7 @@ CATALOG: Final = (
     Event("comment.created", "A comment is added"),
     Event("comment.updated", "A comment is edited"),
     Event("comment.deleted", "A comment is deleted"),
+    Event("goal.progress_changed", "A goal's progress changes"),
 )
 KEYS: Final = tuple(e.key for e in CATALOG)
 
