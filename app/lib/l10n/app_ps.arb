@@ -2255,5 +2255,19 @@
   "sysBacklog": "د ټاکلي وخت کارونه په انتظار کې",
   "sysBacklogNone": "هیڅ شی په انتظار کې نه دی.",
   "dpopKeyChanged": "د دې وسیلې کیلي بدله شوې، مهرباني وکړئ بیا ننوځئ.",
-  "dpopSessionBound": "د دې وسیلې له کیلي سره تړلې"
+  "dpopSessionBound": "د دې وسیلې له کیلي سره تړلې",
+  "devSessionRename": "نوم بدل کړئ",
+  "devSessionRenameTitle": "د دې ناستې نوم بدل کړئ",
+  "devSessionNameLabel": "نوم",
+  "devSessionNameInvalid": "له ۱ تر ۸۰ پورې توري وکاروئ.",
+  "devSessionRenameFailed": "د ناستې نوم بدل نه شو. بیا هڅه وکړئ.",
+  "devSessionNew": "نوی",
+  "devSessionKeyChanged": "کیلي بدله شوه",
+  "devSessionLastUsed": "وروستی کارول {when}",
+  "devPrivacyTitle": "د وسیلې معلومات",
+  "devPrivacyBody": "کله چې ننوځئ، نوم لیکنه کوئ یا ناسته نوې کوئ، دا اپلیکیشن ستاسو د وسیلې ماډل، عملیاتي سیستم او نسخه، د اپلیکیشن جوړښت، د پردې اندازه، ژبه او وخت سیمه لیږي، څو ستاسو ناستې لوستلی نوم ومومي. سرور شاید پرې توجه ونکړي، او تاسو کولی شئ د هرې ناستې نوم بدل کړئ.",
+  "devAdminCollectTitle": "د وسیلې معلومات راټولول",
+  "devAdminCollectSubtitle": "د هغه څه پر بنسټ چې اپلیکیشن یې راپور ورکوي، ناستې نومول او نوې وسیلې نښه کول. په ډیفالټ بند دی.",
+  "devAdminPepperMissing": "لومړی په سرور کې DJANGO_DEVICE_FINGERPRINT_PEPPER تنظیم کړئ.",
+  "devAdminSaveFailed": "تنظیم خوندي نه شو."
 }

@@ -7659,4 +7659,51 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get dpopSessionBound => 'د دې وسیلې له کیلي سره تړلې';
+
+  @override
+  String get devSessionRename => 'نوم بدل کړئ';
+
+  @override
+  String get devSessionRenameTitle => 'د دې ناستې نوم بدل کړئ';
+
+  @override
+  String get devSessionNameLabel => 'نوم';
+
+  @override
+  String get devSessionNameInvalid => 'له ۱ تر ۸۰ پورې توري وکاروئ.';
+
+  @override
+  String get devSessionRenameFailed => 'د ناستې نوم بدل نه شو. بیا هڅه وکړئ.';
+
+  @override
+  String get devSessionNew => 'نوی';
+
+  @override
+  String get devSessionKeyChanged => 'کیلي بدله شوه';
+
+  @override
+  String devSessionLastUsed(String when) {
+    return 'وروستی کارول $when';
+  }
+
+  @override
+  String get devPrivacyTitle => 'د وسیلې معلومات';
+
+  @override
+  String get devPrivacyBody =>
+      'کله چې ننوځئ، نوم لیکنه کوئ یا ناسته نوې کوئ، دا اپلیکیشن ستاسو د وسیلې ماډل، عملیاتي سیستم او نسخه، د اپلیکیشن جوړښت، د پردې اندازه، ژبه او وخت سیمه لیږي، څو ستاسو ناستې لوستلی نوم ومومي. سرور شاید پرې توجه ونکړي، او تاسو کولی شئ د هرې ناستې نوم بدل کړئ.';
+
+  @override
+  String get devAdminCollectTitle => 'د وسیلې معلومات راټولول';
+
+  @override
+  String get devAdminCollectSubtitle =>
+      'د هغه څه پر بنسټ چې اپلیکیشن یې راپور ورکوي، ناستې نومول او نوې وسیلې نښه کول. په ډیفالټ بند دی.';
+
+  @override
+  String get devAdminPepperMissing =>
+      'لومړی په سرور کې DJANGO_DEVICE_FINGERPRINT_PEPPER تنظیم کړئ.';
+
+  @override
+  String get devAdminSaveFailed => 'تنظیم خوندي نه شو.';
 }

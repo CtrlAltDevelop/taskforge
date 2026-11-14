@@ -15,6 +15,20 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use setCollectDeviceInfoRequestDescriptor instead')
+const SetCollectDeviceInfoRequest$json = {
+  '1': 'SetCollectDeviceInfoRequest',
+  '2': [
+    {'1': 'enabled', '3': 1, '4': 1, '5': 8, '10': 'enabled'},
+  ],
+};
+
+/// Descriptor for `SetCollectDeviceInfoRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setCollectDeviceInfoRequestDescriptor =
+    $convert.base64Decode(
+        'ChtTZXRDb2xsZWN0RGV2aWNlSW5mb1JlcXVlc3QSGAoHZW5hYmxlZBgBIAEoCFIHZW5hYmxlZA'
+        '==');
+
 @$core.Deprecated('Use systemInfoDescriptor instead')
 const SystemInfo$json = {
   '1': 'SystemInfo',
@@ -41,6 +55,20 @@ const SystemInfo$json = {
       '6': '.config.system.SystemInfo.BacklogEntry',
       '10': 'backlog'
     },
+    {
+      '1': 'collect_device_info',
+      '3': 10,
+      '4': 1,
+      '5': 8,
+      '10': 'collectDeviceInfo'
+    },
+    {
+      '1': 'device_pepper_set',
+      '3': 11,
+      '4': 1,
+      '5': 8,
+      '10': 'devicePepperSet'
+    },
   ],
   '3': [SystemInfo_BacklogEntry$json],
 };
@@ -62,5 +90,6 @@ final $typed_data.Uint8List systemInfoDescriptor = $convert.base64Decode(
     'dBgEIAEoCVIGY29tbWl0EhQKBXJlZGlzGAUgASgJUgVyZWRpcxIWCgZicm9rZXIYBiABKAlSBm'
     'Jyb2tlchIUCgVlYWdlchgHIAEoCFIFZWFnZXISGAoHd29ya2VycxgIIAEoBVIHd29ya2VycxJA'
     'CgdiYWNrbG9nGAkgAygLMiYuY29uZmlnLnN5c3RlbS5TeXN0ZW1JbmZvLkJhY2tsb2dFbnRyeV'
-    'IHYmFja2xvZxo6CgxCYWNrbG9nRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiAB'
-    'KAVSBXZhbHVlOgI4AQ==');
+    'IHYmFja2xvZxIuChNjb2xsZWN0X2RldmljZV9pbmZvGAogASgIUhFjb2xsZWN0RGV2aWNlSW5m'
+    'bxIqChFkZXZpY2VfcGVwcGVyX3NldBgLIAEoCFIPZGV2aWNlUGVwcGVyU2V0GjoKDEJhY2tsb2'
+    'dFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoBVIFdmFsdWU6AjgB');

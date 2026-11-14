@@ -2255,5 +2255,19 @@
   "sysBacklog": "کارهای موعددار در انتظار",
   "sysBacklogNone": "چیزی در انتظار نیست.",
   "dpopKeyChanged": "کلید این دستگاه تغییر کرده است؛ لطفاً دوباره وارد شوید.",
-  "dpopSessionBound": "وابسته به کلید این دستگاه"
+  "dpopSessionBound": "وابسته به کلید این دستگاه",
+  "devSessionRename": "تغییر نام",
+  "devSessionRenameTitle": "تغییر نام این نشست",
+  "devSessionNameLabel": "نام",
+  "devSessionNameInvalid": "بین ۱ تا ۸۰ نویسه وارد کنید.",
+  "devSessionRenameFailed": "نام نشست تغییر نکرد. دوباره تلاش کنید.",
+  "devSessionNew": "جدید",
+  "devSessionKeyChanged": "کلید تغییر کرد",
+  "devSessionLastUsed": "آخرین استفاده {when}",
+  "devPrivacyTitle": "اطلاعات دستگاه",
+  "devPrivacyBody": "هنگام ورود، ثبت‌نام یا تازه‌سازی نشست، این برنامه مدل دستگاه، سیستم‌عامل و نسخهٔ آن، شمارهٔ ساخت برنامه، اندازهٔ صفحه، زبان و منطقهٔ زمانی را می‌فرستد تا نشست‌های شما نامی خوانا بگیرند. ممکن است سرور آن را نادیده بگیرد و می‌توانید نام هر نشست را تغییر دهید.",
+  "devAdminCollectTitle": "جمع‌آوری اطلاعات دستگاه",
+  "devAdminCollectSubtitle": "نام‌گذاری نشست‌ها و نشانه‌گذاری دستگاه‌های جدید بر پایهٔ آنچه برنامه گزارش می‌دهد. به‌طور پیش‌فرض خاموش است.",
+  "devAdminPepperMissing": "ابتدا DJANGO_DEVICE_FINGERPRINT_PEPPER را روی سرور تنظیم کنید.",
+  "devAdminSaveFailed": "تنظیم ذخیره نشد."
 }

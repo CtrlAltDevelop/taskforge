@@ -2255,5 +2255,19 @@
   "sysBacklog": "[Ðûé ŵöŕķ ŵåíţíñĝ ~~~~~]",
   "sysBacklogNone": "[Ñöţĥíñĝ íš ŵåíţíñĝ. ~~~~~~]",
   "dpopKeyChanged": "[Ţĥîś ðévîçé’ś ķéý ĉĥáñĝéð, ƥĺéáśé śîĝñ îñ áĝáîñ. ~~~]",
-  "dpopSessionBound": "[Ţîéð ţó ţĥîś ðévîçé’ś ķéý ~~]"
+  "dpopSessionBound": "[Ţîéð ţó ţĥîś ðévîçé’ś ķéý ~~]",
+  "devSessionRename": "[Rëñåmë ~~]",
+  "devSessionRenameTitle": "[Rëñåmë thïs sëssïøñ ~~~~~~]",
+  "devSessionNameLabel": "[Ñåmë ~~]",
+  "devSessionNameInvalid": "[Úsë 1 tø 80 çhåråçtërs. ~~~~~~~]",
+  "devSessionRenameFailed": "[Çøüld ñøt rëñåmë thë sëssïøñ. Trý ågåïñ. ~~~~~~~~~~~~~]",
+  "devSessionNew": "[Ñëw ~~]",
+  "devSessionKeyChanged": "[Këý çhåñgëd ~~~]",
+  "devSessionLastUsed": "[Låst üsëd {when} ~~~~~]",
+  "devPrivacyTitle": "[Dëvïçë ïñførmåtïøñ ~~~~~~]",
+  "devPrivacyBody": "[Whëñ ýøü sïgñ ïñ, sïgñ üp ør rëfrësh ýøür sëssïøñ, thïs åpp sëñds ýøür dëvïçë mødël, øpëråtïñg sýstëm åñd vërsïøñ, åpp büïld, sçrëëñ sïzë, låñgüågë åñd tïmë zøñë, sø ýøür sëssïøñs gët å rëådåblë ñåmë. Thë sërvër måý ïgñørë ït, åñd ýøü çåñ rëñåmë åñý sëssïøñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]",
+  "devAdminCollectTitle": "[Çøllëçt dëvïçë ïñfø ~~~~~~]",
+  "devAdminCollectSubtitle": "[Ñåmë sëssïøñs åñd flåg ñëw dëvïçës frøm whåt thë åpp rëpørts. Óff bý dëfåült. ~~~~~~~~~~~~~~~~~~~~~~~~~]",
+  "devAdminPepperMissing": "[Sët DJÅÑGÓ_DÉVÍÇÉ_FÍÑGÉRPRÍÑT_PÉPPÉR øñ thë sërvër fïrst. ~~~~~~~~~~~~~~~~~~~]",
+  "devAdminSaveFailed": "[Çøüld ñøt såvë thë sëttïñg. ~~~~~~~~~]"
 }

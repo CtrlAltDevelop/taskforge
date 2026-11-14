@@ -36,6 +36,8 @@ class SystemInfo {
     required this.eager,
     required this.workers,
     required this.backlog,
+    this.collectDeviceInfo = false,
+    this.devicePepperSet = false,
   });
 
   final String version;
@@ -58,10 +60,30 @@ class SystemInfo {
   /// Due work whose time has come and is not handled yet, by kind.
   final Map<String, int> backlog;
 
+  /// Phase 40: the server reads `X-Device-Info` and names sessions from it.
+  final bool collectDeviceInfo;
+
+  /// The server has the pepper it needs before this can be turned on.
+  final bool devicePepperSet;
+
+  SystemInfo withCollectDeviceInfo(bool value) => SystemInfo(
+    version: version,
+    minClientVersion: minClientVersion,
+    api: api,
+    commit: commit,
+    redis: redis,
+    broker: broker,
+    eager: eager,
+    workers: workers,
+    backlog: backlog,
+    collectDeviceInfo: value,
+    devicePepperSet: devicePepperSet,
+  );
+
   int get backlogTotal => backlog.values.fold(0, (a, b) => a + b);
 }
 
-enum SystemFailure { denied, network, other }
+enum SystemFailure { denied, network, pepperMissing, other }
 
 class SystemException implements Exception {
   const SystemException(this.failure);

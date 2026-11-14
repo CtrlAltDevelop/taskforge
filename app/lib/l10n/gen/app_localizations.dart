@@ -13644,6 +13644,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tied to this device\'s key'**
   String get dpopSessionBound;
+
+  /// No description provided for @devSessionRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get devSessionRename;
+
+  /// No description provided for @devSessionRenameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename this session'**
+  String get devSessionRenameTitle;
+
+  /// No description provided for @devSessionNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get devSessionNameLabel;
+
+  /// No description provided for @devSessionNameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use 1 to 80 characters.'**
+  String get devSessionNameInvalid;
+
+  /// No description provided for @devSessionRenameFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not rename the session. Try again.'**
+  String get devSessionRenameFailed;
+
+  /// No description provided for @devSessionNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get devSessionNew;
+
+  /// No description provided for @devSessionKeyChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Key changed'**
+  String get devSessionKeyChanged;
+
+  /// No description provided for @devSessionLastUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {when}'**
+  String devSessionLastUsed(String when);
+
+  /// No description provided for @devPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Device information'**
+  String get devPrivacyTitle;
+
+  /// No description provided for @devPrivacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When you sign in, sign up or refresh your session, this app sends your device model, operating system and version, app build, screen size, language and time zone, so your sessions get a readable name. The server may ignore it, and you can rename any session.'**
+  String get devPrivacyBody;
+
+  /// No description provided for @devAdminCollectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect device info'**
+  String get devAdminCollectTitle;
+
+  /// No description provided for @devAdminCollectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Name sessions and flag new devices from what the app reports. Off by default.'**
+  String get devAdminCollectSubtitle;
+
+  /// No description provided for @devAdminPepperMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Set DJANGO_DEVICE_FINGERPRINT_PEPPER on the server first.'**
+  String get devAdminPepperMissing;
+
+  /// No description provided for @devAdminSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the setting.'**
+  String get devAdminSaveFailed;
 }
 
 class _AppLocalizationsDelegate

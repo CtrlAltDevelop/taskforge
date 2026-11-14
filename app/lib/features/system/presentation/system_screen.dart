@@ -48,7 +48,7 @@ class SystemScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   const _Body({required this.info, required this.t});
 
   final SystemInfo info;
@@ -63,8 +63,26 @@ class _Body extends StatelessWidget {
 
   bool _good(String value) => value == 'ok' || value == 'in_memory';
 
+  Future<void> _toggle(BuildContext context, WidgetRef ref, bool on) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await ref.read(systemClientProvider).setCollectDeviceInfo(enabled: on);
+    } on SystemException catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            e.failure == SystemFailure.pepperMissing
+                ? t.devAdminPepperMissing
+                : t.devAdminSaveFailed,
+          ),
+        ),
+      );
+    }
+    ref.invalidate(systemInfoProvider);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final workers = info.eager
         ? t.sysInline
         : (info.workers > 0 ? '${info.workers}' : t.sysNoWorkers);
@@ -110,6 +128,20 @@ class _Body extends StatelessWidget {
                       .map((e) => '${e.key}: ${e.value}')
                       .join('\n'),
           ),
+        ),
+        const Divider(),
+        SwitchListTile(
+          key: const Key('collect-device-info'),
+          title: Text(t.devAdminCollectTitle),
+          subtitle: Text(
+            info.devicePepperSet
+                ? t.devAdminCollectSubtitle
+                : t.devAdminPepperMissing,
+          ),
+          value: info.collectDeviceInfo,
+          onChanged: info.devicePepperSet || info.collectDeviceInfo
+              ? (on) => _toggle(context, ref, on)
+              : null,
         ),
       ],
     );

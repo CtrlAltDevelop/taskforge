@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart' show sha256;
 import 'package:http/http.dart' as http;
 
+import 'package:taskforge/core/auth/device_info.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/http_client.dart';
@@ -68,11 +69,15 @@ class HttpSecondFactorApi implements SecondFactorApi {
     this.baseUrl, {
     http.Client? client,
     this.cookieMode = false,
+    this.deviceInfo,
   }) : _client =
            client ?? (cookieMode ? createAuthHttpClient() : http.Client());
 
   final String baseUrl;
   final bool cookieMode;
+
+  /// Phase 40: these two steps complete a sign-in, so they carry the same header as one.
+  final DeviceInfoSource? deviceInfo;
   final http.Client _client;
 
   static const _timeout = Duration(seconds: 10);
@@ -149,6 +154,8 @@ class HttpSecondFactorApi implements SecondFactorApi {
       ..headers['Accept'] = 'application/json'
       ..body = jsonEncode(json);
     if (cookieMode) request.headers['X-Refresh-Transport'] = 'cookie';
+    final info = await deviceInfo?.header();
+    if (info != null) request.headers['X-Device-Info'] = info;
     final http.Response response;
     try {
       response = await http.Response.fromStream(

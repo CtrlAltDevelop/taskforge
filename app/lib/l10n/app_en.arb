@@ -4362,5 +4362,26 @@
   "sysBacklog": "Due work waiting",
   "sysBacklogNone": "Nothing is waiting.",
   "dpopKeyChanged": "This device's key changed, please sign in again.",
-  "dpopSessionBound": "Tied to this device's key"
+  "dpopSessionBound": "Tied to this device's key",
+  "devSessionRename": "Rename",
+  "devSessionRenameTitle": "Rename this session",
+  "devSessionNameLabel": "Name",
+  "devSessionNameInvalid": "Use 1 to 80 characters.",
+  "devSessionRenameFailed": "Could not rename the session. Try again.",
+  "devSessionNew": "New",
+  "devSessionKeyChanged": "Key changed",
+  "devSessionLastUsed": "Last used {when}",
+  "@devSessionLastUsed": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "devPrivacyTitle": "Device information",
+  "devPrivacyBody": "When you sign in, sign up or refresh your session, this app sends your device model, operating system and version, app build, screen size, language and time zone, so your sessions get a readable name. The server may ignore it, and you can rename any session.",
+  "devAdminCollectTitle": "Collect device info",
+  "devAdminCollectSubtitle": "Name sessions and flag new devices from what the app reports. Off by default.",
+  "devAdminPepperMissing": "Set DJANGO_DEVICE_FINGERPRINT_PEPPER on the server first.",
+  "devAdminSaveFailed": "Could not save the setting."
 }

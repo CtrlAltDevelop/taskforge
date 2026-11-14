@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/http_client.dart';
 
 import 'package:taskforge/core/auth/auth_tokens.dart';
+import 'package:taskforge/core/auth/device_info.dart';
 import 'package:taskforge/core/auth/trusted_device_store.dart';
 
 /// The server refused or failed a request. [title] is the response `title`
@@ -94,12 +95,17 @@ class HttpAuthApi implements AuthApi {
     http.Client? client,
     this.cookieMode = false,
     this.trustedDevices,
+    this.deviceInfo,
   }) : _client =
            client ?? (cookieMode ? createAuthHttpClient() : http.Client());
 
   /// Where the remembered-device token lives; sent with a password sign-in so
   /// a device that already passed the second factor skips it.
   final TrustedDeviceStore? trustedDevices;
+
+  /// Phase 40: the `X-Device-Info` header, sent on sign-in, sign-up and refresh only (and
+  /// built in one place, so every request carries the same set of fields).
+  final DeviceInfoSource? deviceInfo;
 
   final bool cookieMode;
   final String baseUrl;
@@ -114,6 +120,7 @@ class HttpAuthApi implements AuthApi {
       'POST',
       '/api/v1/auth/password/signup',
       json: {'identifier': email, 'email': email, 'password': password},
+      withDeviceInfo: true,
     );
     return _credentials(body['data']['credentials'] as Map<String, dynamic>);
   }
@@ -125,6 +132,7 @@ class HttpAuthApi implements AuthApi {
       '/api/v1/auth/password/login',
       json: {'identifier': email, 'password': password},
       trustedDevice: await trustedDevices?.read(),
+      withDeviceInfo: true,
     );
     final data = body['data'] as Map<String, dynamic>;
     if (data['requires_second_factor'] == true) {
@@ -142,6 +150,7 @@ class HttpAuthApi implements AuthApi {
       'POST',
       '/api/v1/auth/token/refresh',
       json: {'refresh_token': refreshToken, 'request_id': ?requestId},
+      withDeviceInfo: true,
     );
     return _credentials(body['data'] as Map<String, dynamic>);
   }
@@ -213,6 +222,7 @@ class HttpAuthApi implements AuthApi {
     Object? json,
     String? bearer,
     String? trustedDevice,
+    bool withDeviceInfo = false,
   }) async {
     final request = http.Request(method, Uri.parse('$baseUrl$path'))
       ..headers['Content-Type'] = 'application/json'
@@ -221,6 +231,10 @@ class HttpAuthApi implements AuthApi {
     if (bearer != null) request.headers['Authorization'] = 'Bearer $bearer';
     if (trustedDevice != null && trustedDevice.isNotEmpty) {
       request.headers['X-Trusted-Device'] = trustedDevice;
+    }
+    if (withDeviceInfo) {
+      final info = await deviceInfo?.header();
+      if (info != null) request.headers['X-Device-Info'] = info;
     }
     if (json != null) request.body = jsonEncode(json);
 

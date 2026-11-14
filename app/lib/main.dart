@@ -8,6 +8,7 @@ import 'package:taskforge/app.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
+import 'package:taskforge/core/auth/device_info.dart';
 import 'package:taskforge/core/auth/dpop/dpop_http_client.dart';
 import 'package:taskforge/core/auth/dpop/dpop_key_store.dart';
 import 'package:taskforge/core/auth/dpop/dpop_manager.dart';
@@ -45,6 +46,7 @@ Future<void> _run() async {
       AppConfig.restUrl,
       cookieMode: kIsWeb,
       trustedDevices: trustedDevices,
+      deviceInfo: PlatformDeviceInfoSource.shared,
     ),
     store: kIsWeb ? MemoryTokenStore() : SecureTokenStore(),
     cookieSession: kIsWeb,

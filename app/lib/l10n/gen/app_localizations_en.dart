@@ -7686,6 +7686,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dpopSessionBound => 'Tied to this device\'s key';
+
+  @override
+  String get devSessionRename => 'Rename';
+
+  @override
+  String get devSessionRenameTitle => 'Rename this session';
+
+  @override
+  String get devSessionNameLabel => 'Name';
+
+  @override
+  String get devSessionNameInvalid => 'Use 1 to 80 characters.';
+
+  @override
+  String get devSessionRenameFailed =>
+      'Could not rename the session. Try again.';
+
+  @override
+  String get devSessionNew => 'New';
+
+  @override
+  String get devSessionKeyChanged => 'Key changed';
+
+  @override
+  String devSessionLastUsed(String when) {
+    return 'Last used $when';
+  }
+
+  @override
+  String get devPrivacyTitle => 'Device information';
+
+  @override
+  String get devPrivacyBody =>
+      'When you sign in, sign up or refresh your session, this app sends your device model, operating system and version, app build, screen size, language and time zone, so your sessions get a readable name. The server may ignore it, and you can rename any session.';
+
+  @override
+  String get devAdminCollectTitle => 'Collect device info';
+
+  @override
+  String get devAdminCollectSubtitle =>
+      'Name sessions and flag new devices from what the app reports. Off by default.';
+
+  @override
+  String get devAdminPepperMissing =>
+      'Set DJANGO_DEVICE_FINGERPRINT_PEPPER on the server first.';
+
+  @override
+  String get devAdminSaveFailed => 'Could not save the setting.';
 }
 
 /// The translations for English (`en_XA`).
@@ -15508,4 +15556,52 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get dpopSessionBound => '[Ţîéð ţó ţĥîś ðévîçé’ś ķéý ~~]';
+
+  @override
+  String get devSessionRename => '[Rëñåmë ~~]';
+
+  @override
+  String get devSessionRenameTitle => '[Rëñåmë thïs sëssïøñ ~~~~~~]';
+
+  @override
+  String get devSessionNameLabel => '[Ñåmë ~~]';
+
+  @override
+  String get devSessionNameInvalid => '[Úsë 1 tø 80 çhåråçtërs. ~~~~~~~]';
+
+  @override
+  String get devSessionRenameFailed =>
+      '[Çøüld ñøt rëñåmë thë sëssïøñ. Trý ågåïñ. ~~~~~~~~~~~~~]';
+
+  @override
+  String get devSessionNew => '[Ñëw ~~]';
+
+  @override
+  String get devSessionKeyChanged => '[Këý çhåñgëd ~~~]';
+
+  @override
+  String devSessionLastUsed(String when) {
+    return '[Låst üsëd $when ~~~~~]';
+  }
+
+  @override
+  String get devPrivacyTitle => '[Dëvïçë ïñførmåtïøñ ~~~~~~]';
+
+  @override
+  String get devPrivacyBody =>
+      '[Whëñ ýøü sïgñ ïñ, sïgñ üp ør rëfrësh ýøür sëssïøñ, thïs åpp sëñds ýøür dëvïçë mødël, øpëråtïñg sýstëm åñd vërsïøñ, åpp büïld, sçrëëñ sïzë, låñgüågë åñd tïmë zøñë, sø ýøür sëssïøñs gët å rëådåblë ñåmë. Thë sërvër måý ïgñørë ït, åñd ýøü çåñ rëñåmë åñý sëssïøñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devAdminCollectTitle => '[Çøllëçt dëvïçë ïñfø ~~~~~~]';
+
+  @override
+  String get devAdminCollectSubtitle =>
+      '[Ñåmë sëssïøñs åñd flåg ñëw dëvïçës frøm whåt thë åpp rëpørts. Óff bý dëfåült. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devAdminPepperMissing =>
+      '[Sët DJÅÑGÓ_DÉVÍÇÉ_FÍÑGÉRPRÍÑT_PÉPPÉR øñ thë sërvër fïrst. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devAdminSaveFailed => '[Çøüld ñøt såvë thë sëttïñg. ~~~~~~~~~]';
 }

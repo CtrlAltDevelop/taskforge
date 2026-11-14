@@ -2255,5 +2255,19 @@
   "sysBacklog": "أعمال مستحقة قيد الانتظار",
   "sysBacklogNone": "لا شيء في الانتظار.",
   "dpopKeyChanged": "تغيّر مفتاح هذا الجهاز، يُرجى تسجيل الدخول مرة أخرى.",
-  "dpopSessionBound": "مرتبطة بمفتاح هذا الجهاز"
+  "dpopSessionBound": "مرتبطة بمفتاح هذا الجهاز",
+  "devSessionRename": "إعادة التسمية",
+  "devSessionRenameTitle": "إعادة تسمية هذه الجلسة",
+  "devSessionNameLabel": "الاسم",
+  "devSessionNameInvalid": "استخدم من 1 إلى 80 حرفًا.",
+  "devSessionRenameFailed": "تعذّرت إعادة تسمية الجلسة. حاول مرة أخرى.",
+  "devSessionNew": "جديد",
+  "devSessionKeyChanged": "تغيّر المفتاح",
+  "devSessionLastUsed": "آخر استخدام {when}",
+  "devPrivacyTitle": "معلومات الجهاز",
+  "devPrivacyBody": "عند تسجيل الدخول أو إنشاء حساب أو تجديد الجلسة، يرسل هذا التطبيق طراز جهازك ونظام التشغيل وإصداره ورقم بناء التطبيق وحجم الشاشة واللغة والمنطقة الزمنية، لتحصل جلساتك على اسم مقروء. قد يتجاهله الخادم، ويمكنك إعادة تسمية أي جلسة.",
+  "devAdminCollectTitle": "جمع معلومات الجهاز",
+  "devAdminCollectSubtitle": "تسمية الجلسات والتنبيه إلى الأجهزة الجديدة بحسب ما يبلّغ عنه التطبيق. معطّل افتراضيًا.",
+  "devAdminPepperMissing": "اضبط DJANGO_DEVICE_FINGERPRINT_PEPPER على الخادم أولًا.",
+  "devAdminSaveFailed": "تعذّر حفظ الإعداد."
 }

@@ -7744,4 +7744,52 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dpopSessionBound => 'مرتبطة بمفتاح هذا الجهاز';
+
+  @override
+  String get devSessionRename => 'إعادة التسمية';
+
+  @override
+  String get devSessionRenameTitle => 'إعادة تسمية هذه الجلسة';
+
+  @override
+  String get devSessionNameLabel => 'الاسم';
+
+  @override
+  String get devSessionNameInvalid => 'استخدم من 1 إلى 80 حرفًا.';
+
+  @override
+  String get devSessionRenameFailed =>
+      'تعذّرت إعادة تسمية الجلسة. حاول مرة أخرى.';
+
+  @override
+  String get devSessionNew => 'جديد';
+
+  @override
+  String get devSessionKeyChanged => 'تغيّر المفتاح';
+
+  @override
+  String devSessionLastUsed(String when) {
+    return 'آخر استخدام $when';
+  }
+
+  @override
+  String get devPrivacyTitle => 'معلومات الجهاز';
+
+  @override
+  String get devPrivacyBody =>
+      'عند تسجيل الدخول أو إنشاء حساب أو تجديد الجلسة، يرسل هذا التطبيق طراز جهازك ونظام التشغيل وإصداره ورقم بناء التطبيق وحجم الشاشة واللغة والمنطقة الزمنية، لتحصل جلساتك على اسم مقروء. قد يتجاهله الخادم، ويمكنك إعادة تسمية أي جلسة.';
+
+  @override
+  String get devAdminCollectTitle => 'جمع معلومات الجهاز';
+
+  @override
+  String get devAdminCollectSubtitle =>
+      'تسمية الجلسات والتنبيه إلى الأجهزة الجديدة بحسب ما يبلّغ عنه التطبيق. معطّل افتراضيًا.';
+
+  @override
+  String get devAdminPepperMissing =>
+      'اضبط DJANGO_DEVICE_FINGERPRINT_PEPPER على الخادم أولًا.';
+
+  @override
+  String get devAdminSaveFailed => 'تعذّر حفظ الإعداد.';
 }

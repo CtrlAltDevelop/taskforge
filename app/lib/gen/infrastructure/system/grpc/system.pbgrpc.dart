@@ -40,12 +40,24 @@ class SystemControllerClient extends $grpc.Client {
     return $createUnaryCall(_$info, request, options: options);
   }
 
+  $grpc.ResponseFuture<$1.SystemInfo> setCollectDeviceInfo(
+    $1.SetCollectDeviceInfoRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setCollectDeviceInfo, request, options: options);
+  }
+
   // method descriptors
 
   static final _$info = $grpc.ClientMethod<$0.Empty, $1.SystemInfo>(
       '/config.system.SystemController/Info',
       ($0.Empty value) => value.writeToBuffer(),
       $1.SystemInfo.fromBuffer);
+  static final _$setCollectDeviceInfo =
+      $grpc.ClientMethod<$1.SetCollectDeviceInfoRequest, $1.SystemInfo>(
+          '/config.system.SystemController/SetCollectDeviceInfo',
+          ($1.SetCollectDeviceInfoRequest value) => value.writeToBuffer(),
+          $1.SystemInfo.fromBuffer);
 }
 
 @$pb.GrpcServiceName('config.system.SystemController')
@@ -60,6 +72,15 @@ abstract class SystemControllerServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($1.SystemInfo value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$1.SetCollectDeviceInfoRequest, $1.SystemInfo>(
+            'SetCollectDeviceInfo',
+            setCollectDeviceInfo_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $1.SetCollectDeviceInfoRequest.fromBuffer(value),
+            ($1.SystemInfo value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.SystemInfo> info_Pre(
@@ -68,4 +89,12 @@ abstract class SystemControllerServiceBase extends $grpc.Service {
   }
 
   $async.Future<$1.SystemInfo> info($grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$1.SystemInfo> setCollectDeviceInfo_Pre($grpc.ServiceCall $call,
+      $async.Future<$1.SetCollectDeviceInfoRequest> $request) async {
+    return setCollectDeviceInfo($call, await $request);
+  }
+
+  $async.Future<$1.SystemInfo> setCollectDeviceInfo(
+      $grpc.ServiceCall call, $1.SetCollectDeviceInfoRequest request);
 }

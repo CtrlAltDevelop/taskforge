@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/account/device_privacy_note.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/security/application/security_providers.dart';
@@ -76,6 +77,8 @@ class SecurityScreen extends ConsumerWidget {
               onTap: () => context.push('/settings/sso'),
             ),
           ],
+          const Divider(),
+          const DevicePrivacyNote(),
         ],
       ),
     );

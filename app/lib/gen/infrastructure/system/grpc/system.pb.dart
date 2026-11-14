@@ -16,6 +16,69 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class SetCollectDeviceInfoRequest extends $pb.GeneratedMessage {
+  factory SetCollectDeviceInfoRequest({
+    $core.bool? enabled,
+  }) {
+    final result = SetCollectDeviceInfoRequest._();
+    if (enabled != null) result.enabled = enabled;
+    return result;
+  }
+
+  SetCollectDeviceInfoRequest._();
+
+  factory SetCollectDeviceInfoRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetCollectDeviceInfoRequest()..mergeFromBuffer(data, registry);
+  factory SetCollectDeviceInfoRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetCollectDeviceInfoRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetCollectDeviceInfoRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.system'),
+      createEmptyInstance: SetCollectDeviceInfoRequest.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'enabled')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetCollectDeviceInfoRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetCollectDeviceInfoRequest copyWith(
+          void Function(SetCollectDeviceInfoRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as SetCollectDeviceInfoRequest))
+          as SetCollectDeviceInfoRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use SetCollectDeviceInfoRequest() / SetCollectDeviceInfoRequest.new instead')
+  static SetCollectDeviceInfoRequest create() =>
+      SetCollectDeviceInfoRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      SetCollectDeviceInfoRequest._();
+  @$core.override
+  SetCollectDeviceInfoRequest createEmptyInstance() =>
+      SetCollectDeviceInfoRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SetCollectDeviceInfoRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetCollectDeviceInfoRequest>(
+          SetCollectDeviceInfoRequest.$_createMessage);
+  static SetCollectDeviceInfoRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get enabled => $_getBF(0);
+  @$pb.TagNumber(1)
+  set enabled($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasEnabled() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEnabled() => $_clearField(1);
+}
+
 class SystemInfo extends $pb.GeneratedMessage {
   factory SystemInfo({
     $core.String? version,
@@ -27,6 +90,8 @@ class SystemInfo extends $pb.GeneratedMessage {
     $core.bool? eager,
     $core.int? workers,
     $core.Iterable<$core.MapEntry<$core.String, $core.int>>? backlog,
+    $core.bool? collectDeviceInfo,
+    $core.bool? devicePepperSet,
   }) {
     final result = SystemInfo._();
     if (version != null) result.version = version;
@@ -38,6 +103,8 @@ class SystemInfo extends $pb.GeneratedMessage {
     if (eager != null) result.eager = eager;
     if (workers != null) result.workers = workers;
     if (backlog != null) result.backlog.addEntries(backlog);
+    if (collectDeviceInfo != null) result.collectDeviceInfo = collectDeviceInfo;
+    if (devicePepperSet != null) result.devicePepperSet = devicePepperSet;
     return result;
   }
 
@@ -67,6 +134,8 @@ class SystemInfo extends $pb.GeneratedMessage {
         keyFieldType: $pb.PbFieldType.OS,
         valueFieldType: $pb.PbFieldType.O3,
         packageName: const $pb.PackageName('config.system'))
+    ..aOB(10, _omitFieldNames ? '' : 'collectDeviceInfo')
+    ..aOB(11, _omitFieldNames ? '' : 'devicePepperSet')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -163,6 +232,24 @@ class SystemInfo extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(9)
   $pb.PbMap<$core.String, $core.int> get backlog => $_getMap(8);
+
+  @$pb.TagNumber(10)
+  $core.bool get collectDeviceInfo => $_getBF(9);
+  @$pb.TagNumber(10)
+  set collectDeviceInfo($core.bool value) => $_setBool(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasCollectDeviceInfo() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearCollectDeviceInfo() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.bool get devicePepperSet => $_getBF(10);
+  @$pb.TagNumber(11)
+  set devicePepperSet($core.bool value) => $_setBool(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasDevicePepperSet() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearDevicePepperSet() => $_clearField(11);
 }
 
 const $core.bool _omitFieldNames =

@@ -7697,4 +7697,51 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get dpopSessionBound => 'وابسته به کلید این دستگاه';
+
+  @override
+  String get devSessionRename => 'تغییر نام';
+
+  @override
+  String get devSessionRenameTitle => 'تغییر نام این نشست';
+
+  @override
+  String get devSessionNameLabel => 'نام';
+
+  @override
+  String get devSessionNameInvalid => 'بین ۱ تا ۸۰ نویسه وارد کنید.';
+
+  @override
+  String get devSessionRenameFailed => 'نام نشست تغییر نکرد. دوباره تلاش کنید.';
+
+  @override
+  String get devSessionNew => 'جدید';
+
+  @override
+  String get devSessionKeyChanged => 'کلید تغییر کرد';
+
+  @override
+  String devSessionLastUsed(String when) {
+    return 'آخرین استفاده $when';
+  }
+
+  @override
+  String get devPrivacyTitle => 'اطلاعات دستگاه';
+
+  @override
+  String get devPrivacyBody =>
+      'هنگام ورود، ثبت‌نام یا تازه‌سازی نشست، این برنامه مدل دستگاه، سیستم‌عامل و نسخهٔ آن، شمارهٔ ساخت برنامه، اندازهٔ صفحه، زبان و منطقهٔ زمانی را می‌فرستد تا نشست‌های شما نامی خوانا بگیرند. ممکن است سرور آن را نادیده بگیرد و می‌توانید نام هر نشست را تغییر دهید.';
+
+  @override
+  String get devAdminCollectTitle => 'جمع‌آوری اطلاعات دستگاه';
+
+  @override
+  String get devAdminCollectSubtitle =>
+      'نام‌گذاری نشست‌ها و نشانه‌گذاری دستگاه‌های جدید بر پایهٔ آنچه برنامه گزارش می‌دهد. به‌طور پیش‌فرض خاموش است.';
+
+  @override
+  String get devAdminPepperMissing =>
+      'ابتدا DJANGO_DEVICE_FINGERPRINT_PEPPER را روی سرور تنظیم کنید.';
+
+  @override
+  String get devAdminSaveFailed => 'تنظیم ذخیره نشد.';
 }

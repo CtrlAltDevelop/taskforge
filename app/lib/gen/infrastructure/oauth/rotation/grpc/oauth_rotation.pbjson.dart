@@ -95,6 +95,18 @@ const Session$json = {
     {'1': 'auth_method', '3': 7, '4': 1, '5': 9, '10': 'authMethod'},
     {'1': 'current', '3': 8, '4': 1, '5': 8, '10': 'current'},
     {'1': 'dpop_bound', '3': 9, '4': 1, '5': 8, '10': 'dpopBound'},
+    {'1': 'name', '3': 10, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'device_label', '3': 11, '4': 1, '5': 9, '10': 'deviceLabel'},
+    {
+      '1': 'fingerprint_short',
+      '3': 12,
+      '4': 1,
+      '5': 9,
+      '10': 'fingerprintShort'
+    },
+    {'1': 'is_current', '3': 13, '4': 1, '5': 8, '10': 'isCurrent'},
+    {'1': 'new_device', '3': 14, '4': 1, '5': 8, '10': 'newDevice'},
+    {'1': 'key_changed', '3': 15, '4': 1, '5': 8, '10': 'keyChanged'},
   ],
 };
 
@@ -105,7 +117,10 @@ final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode(
     'cGlyZXNfYXQYBCABKAlSCWV4cGlyZXNBdBIdCgppcF9hZGRyZXNzGAUgASgJUglpcEFkZHJlc3'
     'MSHQoKdXNlcl9hZ2VudBgGIAEoCVIJdXNlckFnZW50Eh8KC2F1dGhfbWV0aG9kGAcgASgJUgph'
     'dXRoTWV0aG9kEhgKB2N1cnJlbnQYCCABKAhSB2N1cnJlbnQSHQoKZHBvcF9ib3VuZBgJIAEoCF'
-    'IJZHBvcEJvdW5k');
+    'IJZHBvcEJvdW5kEhIKBG5hbWUYCiABKAlSBG5hbWUSIQoMZGV2aWNlX2xhYmVsGAsgASgJUgtk'
+    'ZXZpY2VMYWJlbBIrChFmaW5nZXJwcmludF9zaG9ydBgMIAEoCVIQZmluZ2VycHJpbnRTaG9ydB'
+    'IdCgppc19jdXJyZW50GA0gASgIUglpc0N1cnJlbnQSHQoKbmV3X2RldmljZRgOIAEoCFIJbmV3'
+    'RGV2aWNlEh8KC2tleV9jaGFuZ2VkGA8gASgIUgprZXlDaGFuZ2Vk');
 
 @$core.Deprecated('Use sessionListDescriptor instead')
 const SessionList$json = {

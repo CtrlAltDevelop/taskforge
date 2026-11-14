@@ -363,6 +363,12 @@ class Session extends $pb.GeneratedMessage {
     $core.String? authMethod,
     $core.bool? current,
     $core.bool? dpopBound,
+    $core.String? name,
+    $core.String? deviceLabel,
+    $core.String? fingerprintShort,
+    $core.bool? isCurrent,
+    $core.bool? newDevice,
+    $core.bool? keyChanged,
   }) {
     final result = Session._();
     if (sessionId != null) result.sessionId = sessionId;
@@ -374,6 +380,12 @@ class Session extends $pb.GeneratedMessage {
     if (authMethod != null) result.authMethod = authMethod;
     if (current != null) result.current = current;
     if (dpopBound != null) result.dpopBound = dpopBound;
+    if (name != null) result.name = name;
+    if (deviceLabel != null) result.deviceLabel = deviceLabel;
+    if (fingerprintShort != null) result.fingerprintShort = fingerprintShort;
+    if (isCurrent != null) result.isCurrent = isCurrent;
+    if (newDevice != null) result.newDevice = newDevice;
+    if (keyChanged != null) result.keyChanged = keyChanged;
     return result;
   }
 
@@ -400,6 +412,12 @@ class Session extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'authMethod')
     ..aOB(8, _omitFieldNames ? '' : 'current')
     ..aOB(9, _omitFieldNames ? '' : 'dpopBound')
+    ..aOS(10, _omitFieldNames ? '' : 'name')
+    ..aOS(11, _omitFieldNames ? '' : 'deviceLabel')
+    ..aOS(12, _omitFieldNames ? '' : 'fingerprintShort')
+    ..aOB(13, _omitFieldNames ? '' : 'isCurrent')
+    ..aOB(14, _omitFieldNames ? '' : 'newDevice')
+    ..aOB(15, _omitFieldNames ? '' : 'keyChanged')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -502,6 +520,60 @@ class Session extends $pb.GeneratedMessage {
   $core.bool hasDpopBound() => $_has(8);
   @$pb.TagNumber(9)
   void clearDpopBound() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get name => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set name($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasName() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearName() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get deviceLabel => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set deviceLabel($core.String value) => $_setString(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasDeviceLabel() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearDeviceLabel() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get fingerprintShort => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set fingerprintShort($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasFingerprintShort() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearFingerprintShort() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.bool get isCurrent => $_getBF(12);
+  @$pb.TagNumber(13)
+  set isCurrent($core.bool value) => $_setBool(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasIsCurrent() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearIsCurrent() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.bool get newDevice => $_getBF(13);
+  @$pb.TagNumber(14)
+  set newDevice($core.bool value) => $_setBool(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasNewDevice() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearNewDevice() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.bool get keyChanged => $_getBF(14);
+  @$pb.TagNumber(15)
+  set keyChanged($core.bool value) => $_setBool(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasKeyChanged() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearKeyChanged() => $_clearField(15);
 }
 
 class SessionList extends $pb.GeneratedMessage {

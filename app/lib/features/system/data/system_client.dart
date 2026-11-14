@@ -16,6 +16,9 @@ import 'package:taskforge/gen/infrastructure/system/grpc/system.pbgrpc.dart'
 abstract interface class SystemClient {
   Future<ServerVersion> serverVersion();
   Future<SystemInfo> info();
+
+  /// Admin only: turns device-info collection on or off; returns the refreshed page data.
+  Future<SystemInfo> setCollectDeviceInfo({required bool enabled});
 }
 
 class GrpcSystemClient implements SystemClient {
@@ -57,9 +60,22 @@ class GrpcSystemClient implements SystemClient {
   }
 
   @override
-  Future<SystemInfo> info() async {
+  Future<SystemInfo> info() =>
+      _read(() => _call(() => _system.info(Empty(), options: _options)));
+
+  @override
+  Future<SystemInfo> setCollectDeviceInfo({required bool enabled}) => _read(
+    () => _call(
+      () => _system.setCollectDeviceInfo(
+        pb.SetCollectDeviceInfoRequest(enabled: enabled),
+        options: _options,
+      ),
+    ),
+  );
+
+  Future<SystemInfo> _read(Future<pb.SystemInfo> Function() call) async {
     try {
-      final r = await _call(() => _system.info(Empty(), options: _options));
+      final r = await call();
       return SystemInfo(
         version: r.version,
         minClientVersion: r.minClientVersion,
@@ -70,10 +86,13 @@ class GrpcSystemClient implements SystemClient {
         eager: r.eager,
         workers: r.workers,
         backlog: Map.unmodifiable(r.backlog),
+        collectDeviceInfo: r.collectDeviceInfo,
+        devicePepperSet: r.devicePepperSet,
       );
     } on GrpcError catch (e) {
       throw SystemException(switch (e.code) {
         StatusCode.permissionDenied => SystemFailure.denied,
+        StatusCode.alreadyExists => SystemFailure.pepperMissing,
         StatusCode.unavailable ||
         StatusCode.deadlineExceeded => SystemFailure.network,
         _ => SystemFailure.other,

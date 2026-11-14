@@ -36,7 +36,25 @@ class SessionInfo {
     required this.lastUsedAt,
     required this.current,
     this.dpopBound = false,
+    this.name = '',
+    this.fingerprintShort = '',
+    this.newDevice = false,
+    this.keyChanged = false,
   });
+
+  /// Reads one entry of `GET /api/v1/auth/token/sessions`.
+  factory SessionInfo.fromJson(Map<String, dynamic> json) => SessionInfo(
+    id: json['session_id'] as String? ?? '',
+    userAgent: json['user_agent'] as String? ?? '',
+    ipAddress: json['ip_address'] as String? ?? '',
+    lastUsedAt: json['last_used_at'] as String? ?? '',
+    current: json['is_current'] as bool? ?? false,
+    dpopBound: json['dpop_bound'] as bool? ?? false,
+    name: json['name'] as String? ?? '',
+    fingerprintShort: json['fingerprint_short'] as String? ?? '',
+    newDevice: json['new_device'] as bool? ?? false,
+    keyChanged: json['key_changed'] as bool? ?? false,
+  );
 
   final String id;
   final String userAgent;
@@ -46,6 +64,31 @@ class SessionInfo {
 
   /// Its tokens only work with a proof from this device's key (DPoP).
   final bool dpopBound;
+
+  /// The readable name (the device label until the user renames it); empty from an old server.
+  final String name;
+
+  /// The first 8 hex characters of the device fingerprint; empty when none was recorded.
+  final String fingerprintShort;
+
+  /// Signed in from a device this account had not used before.
+  final bool newDevice;
+
+  /// The same device, but its session key differs from an earlier one's.
+  final bool keyChanged;
+
+  SessionInfo copyWith({String? name}) => SessionInfo(
+    id: id,
+    userAgent: userAgent,
+    ipAddress: ipAddress,
+    lastUsedAt: lastUsedAt,
+    current: current,
+    dpopBound: dpopBound,
+    name: name ?? this.name,
+    fingerprintShort: fingerprintShort,
+    newDevice: newDevice,
+    keyChanged: keyChanged,
+  );
 }
 
 abstract interface class AccountClient {
@@ -136,8 +179,12 @@ class GrpcAccountClient implements AccountClient {
           userAgent: s.userAgent,
           ipAddress: s.ipAddress,
           lastUsedAt: s.lastUsedAt,
-          current: s.current || s.sessionId == currentId,
+          current: s.isCurrent || s.current || s.sessionId == currentId,
           dpopBound: s.dpopBound,
+          name: s.name,
+          fingerprintShort: s.fingerprintShort,
+          newDevice: s.newDevice,
+          keyChanged: s.keyChanged,
         ),
     ];
   }
