@@ -7,7 +7,7 @@ install:
 # (see AGENTS.md). Every *used* optional app turned on, so the checks below see the whole project
 # rather than whatever this developer happens to have in their `.env`. An app
 # left off is an app whose models, admin, migrations and protos nobody checked.
-ALL_APPS = DJANGO_NOTIFICATIONS_ENABLED=true DJANGO_OAUTH_MODE=rotation DJANGO_AUTH_METHODS=password DJANGO_AUTH_TOKEN_MODE=rotation
+ALL_APPS = DJANGO_NOTIFICATIONS_ENABLED=true DJANGO_OAUTH_MODE=rotation DJANGO_AUTH_METHODS=password DJANGO_AUTH_SECOND_FACTORS=totp,recovery DJANGO_AUTH_TOKEN_MODE=rotation
 
 check:
 	ruff check --no-cache .
@@ -59,14 +59,10 @@ migrations:
 superuser:
 	python3 manage.py createsuperuser
 
-# Only what TaskForge uses: the starter's shop/wallet/club/cms/support apps are off and
-# have SQLite-only assumptions. The deselected test is a starter bug (OAuth profile values
-# overflow varchar(150) on Postgres); fix it in phase 37 when social sign-in is enabled.
-POSTGRES_DESELECT = --deselect src/infrastructure/oauth/core/tests/test_social.py::test_oversized_profile_values_are_clipped_to_their_columns
 
 # The suite on PostgreSQL (needs `make dev` from the repo root): row locks and
 # concurrent refreshes only behave like production there. The connection comes from
 # DJANGO_DB_* in backend/.env (local) or the CI job's environment.
 test-postgres:
 	DJANGO_DB_ENGINE=django.db.backends.postgresql pytest src/infrastructure src/apps/notifications \
-		src/config $(POSTGRES_DESELECT) --no-cov
+		src/config --no-cov

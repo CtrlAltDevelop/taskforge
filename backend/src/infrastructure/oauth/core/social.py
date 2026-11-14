@@ -385,11 +385,11 @@ def _resolve_account(
     account.raw_claims = profile.claims
     account.last_login_at = timezone.now()
     if hasattr(account, "hosted_domain"):
-        account.hosted_domain = str(profile.claims.get("hd", ""))
+        account.hosted_domain = _fitted(account, "hosted_domain", str(profile.claims.get("hd", "")))
     if hasattr(account, "tenant_id"):
-        account.tenant_id = str(profile.claims.get("tid", ""))
+        account.tenant_id = _fitted(account, "tenant_id", str(profile.claims.get("tid", "")))
     if hasattr(account, "login"):
-        account.login = str(profile.claims.get("login", ""))
+        account.login = _fitted(account, "login", str(profile.claims.get("login", "")))
     if hasattr(account, "is_private_email"):
         account.is_private_email = (
             str(profile.claims.get("is_private_email", "false")).lower() == "true"
