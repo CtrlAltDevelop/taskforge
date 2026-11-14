@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'infrastructure/system/grpc/system.proto\x12\rconfig.system\x1a\x1bgoogle/protobuf/empty.proto\"\xfe\x01\n\nSystemInfo\x12\x0f\n\x07version\x18\x01 \x01(\t\x12\x1a\n\x12min_client_version\x18\x02 \x01(\t\x12\x0b\n\x03\x61pi\x18\x03 \x01(\t\x12\x0e\n\x06\x63ommit\x18\x04 \x01(\t\x12\r\n\x05redis\x18\x05 \x01(\t\x12\x0e\n\x06\x62roker\x18\x06 \x01(\t\x12\r\n\x05\x65\x61ger\x18\x07 \x01(\x08\x12\x0f\n\x07workers\x18\x08 \x01(\x05\x12\x37\n\x07\x62\x61\x63klog\x18\t \x03(\x0b\x32&.config.system.SystemInfo.BacklogEntry\x1a.\n\x0c\x42\x61\x63klogEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32O\n\x10SystemController\x12;\n\x04Info\x12\x16.google.protobuf.Empty\x1a\x19.config.system.SystemInfo\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'infrastructure/system/grpc/system.proto\x12\rconfig.system\x1a\x1bgoogle/protobuf/empty.proto\".\n\x1bSetCollectDeviceInfoRequest\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\xb6\x02\n\nSystemInfo\x12\x0f\n\x07version\x18\x01 \x01(\t\x12\x1a\n\x12min_client_version\x18\x02 \x01(\t\x12\x0b\n\x03\x61pi\x18\x03 \x01(\t\x12\x0e\n\x06\x63ommit\x18\x04 \x01(\t\x12\r\n\x05redis\x18\x05 \x01(\t\x12\x0e\n\x06\x62roker\x18\x06 \x01(\t\x12\r\n\x05\x65\x61ger\x18\x07 \x01(\x08\x12\x0f\n\x07workers\x18\x08 \x01(\x05\x12\x37\n\x07\x62\x61\x63klog\x18\t \x03(\x0b\x32&.config.system.SystemInfo.BacklogEntry\x12\x1b\n\x13\x63ollect_device_info\x18\n \x01(\x08\x12\x19\n\x11\x64\x65vice_pepper_set\x18\x0b \x01(\x08\x1a.\n\x0c\x42\x61\x63klogEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32\xb0\x01\n\x10SystemController\x12;\n\x04Info\x12\x16.google.protobuf.Empty\x1a\x19.config.system.SystemInfo\"\x00\x12_\n\x14SetCollectDeviceInfo\x12*.config.system.SetCollectDeviceInfoRequest\x1a\x19.config.system.SystemInfo\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,10 +34,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_SYSTEMINFO_BACKLOGENTRY']._loaded_options = None
   _globals['_SYSTEMINFO_BACKLOGENTRY']._serialized_options = b'8\001'
-  _globals['_SYSTEMINFO']._serialized_start=88
-  _globals['_SYSTEMINFO']._serialized_end=342
-  _globals['_SYSTEMINFO_BACKLOGENTRY']._serialized_start=296
-  _globals['_SYSTEMINFO_BACKLOGENTRY']._serialized_end=342
-  _globals['_SYSTEMCONTROLLER']._serialized_start=344
-  _globals['_SYSTEMCONTROLLER']._serialized_end=423
+  _globals['_SETCOLLECTDEVICEINFOREQUEST']._serialized_start=87
+  _globals['_SETCOLLECTDEVICEINFOREQUEST']._serialized_end=133
+  _globals['_SYSTEMINFO']._serialized_start=136
+  _globals['_SYSTEMINFO']._serialized_end=446
+  _globals['_SYSTEMINFO_BACKLOGENTRY']._serialized_start=400
+  _globals['_SYSTEMINFO_BACKLOGENTRY']._serialized_end=446
+  _globals['_SYSTEMCONTROLLER']._serialized_start=449
+  _globals['_SYSTEMCONTROLLER']._serialized_end=625
 # @@protoc_insertion_point(module_scope)

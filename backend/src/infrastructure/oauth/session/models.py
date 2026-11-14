@@ -6,10 +6,14 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-from infrastructure.oauth.core.models import AbstractOAuthToken, OAuthClient
+from infrastructure.oauth.core.models import (
+    AbstractOAuthToken,
+    DeviceNamedSession,
+    OAuthClient,
+)
 
 
-class OAuthSession(models.Model):
+class OAuthSession(DeviceNamedSession):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

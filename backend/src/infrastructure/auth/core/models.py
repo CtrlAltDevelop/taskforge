@@ -123,3 +123,31 @@ class AuthEvent(models.Model):
 
     def __str__(self) -> str:
         return f"{self.event_type}:{self.id}"
+
+
+class KnownDevice(models.Model):
+    """A device fingerprint this account has signed in from (phase 40).
+
+    Drives the "new device" flag. The fingerprint is a keyed hash (see ``device.py``), so the row
+    holds no raw device value; it goes with the user and is pruned after a year unused.
+    """
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="known_devices",
+    )
+    fingerprint = models.CharField(max_length=32)
+    first_seen_at = models.DateTimeField(default=timezone.now)
+    last_seen_at = models.DateTimeField(default=timezone.now, db_index=True)
+    dpop_jkt = models.CharField(max_length=64, blank=True, default="")
+    """The DPoP key this device last signed in with, so a different key on the same fingerprint
+    reads as ``key_changed`` even when the earlier session has since been revoked."""
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "fingerprint"], name="auth_known_device_unique")
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.user_id}:{self.fingerprint[:8]}"

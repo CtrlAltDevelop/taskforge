@@ -6,10 +6,10 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from infrastructure.oauth.core.models import AbstractOAuthToken
+from infrastructure.oauth.core.models import AbstractOAuthToken, DeviceNamedSession
 
 
-class SlidingToken(AbstractOAuthToken):
+class SlidingToken(AbstractOAuthToken, DeviceNamedSession):
     idle_timeout_seconds = models.PositiveIntegerField(default=900)
     absolute_expires_at = models.DateTimeField()
     previous_expires_at = models.DateTimeField(null=True, blank=True)

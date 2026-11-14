@@ -119,4 +119,13 @@ def system_summary() -> dict[str, Any]:
     from infrastructure.system.version import version_info
 
     health = queue_health(with_workers=True)
-    return {**version_info(), "queue": health}
+    from django.conf import settings
+
+    from infrastructure.auth.core import device
+
+    return {
+        **version_info(),
+        "queue": health,
+        "collect_device_info": device.collection_enabled(),
+        "device_pepper_set": bool(settings.DEVICE_FINGERPRINT_PEPPER),
+    }

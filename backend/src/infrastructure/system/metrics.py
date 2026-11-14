@@ -24,6 +24,16 @@ def _line(name: str, value: float, labels: Mapping[str, str] | None = None) -> s
     return f"{name}{rendered} {value}"
 
 
+def _device_rejections() -> dict[str, int]:
+    from infrastructure.common.app_labels import app_installed
+
+    if not app_installed("auth_core"):
+        return {}
+    from infrastructure.auth.core import device
+
+    return device.rejection_counts()
+
+
 def render() -> str:
     from infrastructure.common.services import health_service
 
@@ -44,5 +54,11 @@ def render() -> str:
         "# HELP taskforge_due_backlog Due-work rows whose time has come and are not handled.",
         "# TYPE taskforge_due_backlog gauge",
         *(_line("taskforge_due_backlog", n, {"kind": kind}) for kind, n in health.backlog.items()),
+        "# HELP taskforge_device_info_rejected Device-info headers or keys dropped as invalid.",
+        "# TYPE taskforge_device_info_rejected gauge",
+        *(
+            _line("taskforge_device_info_rejected", n, {"reason": reason})
+            for reason, n in _device_rejections().items()
+        ),
     ]
     return "\n".join(lines) + "\n"

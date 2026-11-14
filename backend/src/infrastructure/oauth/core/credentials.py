@@ -86,6 +86,20 @@ def by_public_id(queryset: Any, public_id: str) -> Any | None:
         return None
 
 
+def current_session_id(request: HttpRequest) -> str:
+    """The id of the session this request's access token belongs to, or an empty string.
+
+    Works for REST and gRPC alike (``grpc_caller`` copies the metadata credential across).
+    """
+    token = bearer_token(request)
+    if not token:
+        return ""
+    try:
+        return jwt_tokens.decode(token, token_type=jwt_tokens.ACCESS).session_id
+    except jwt_tokens.JwtError:
+        return ""
+
+
 def credential_handle(token: str, *, token_type: str) -> str:
     """Return the row handle inside a token, or an empty string if it is not ours."""
     try:

@@ -16,6 +16,7 @@ from django_socio_grpc.decorators import grpc_action
 
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
+from infrastructure.oauth.core.credentials import current_session_id
 from infrastructure.oauth.core.grpc.messages import (
     CREDENTIALS_RESPONSE,
     END_SESSION_REQUEST,
@@ -68,7 +69,10 @@ class OAuthSessionServiceRpc(generics.GenericService):
     @action
     async def Sessions(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
-        return session_list_message(await sync_to_async(token_service.sessions)(user), _pb2())
+        # Phase 40: the caller's own session, from the credential this call presented.
+        current = current_session_id(context.http_request)
+        sessions = await sync_to_async(token_service.sessions)(user, current)
+        return session_list_message(sessions, _pb2())
 
     @grpc_action(
         request=END_SESSION_REQUEST,

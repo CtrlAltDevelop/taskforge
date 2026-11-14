@@ -52,6 +52,23 @@ class SessionOut(Schema):
     auth_method: str = ""
     current: bool = False
     dpop_bound: bool = False
+    name: str = ""
+    device_label: str = ""
+    fingerprint_short: str = ""
+    is_current: bool = False
+    new_device: bool = False
+    key_changed: bool = False
+
+
+class RenameIn(Schema):
+    """The new name for a session: 1 to 80 characters of plain text."""
+
+    name: str
+
+
+class SessionNameOut(Schema):
+    session_id: str
+    name: str
 
 
 class SessionListOut(Schema):

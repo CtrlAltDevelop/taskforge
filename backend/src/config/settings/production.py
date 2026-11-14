@@ -57,6 +57,17 @@ if len(DPOP_NONCE_SECRET) < 32:
     )
 DPOP_NONCE_ENABLED = os.getenv("DJANGO_DPOP_NONCE_ENABLED", "true").lower() == "true"
 
+# Device fingerprints are keyed by a pepper of their own, never shared with development or tests.
+# Required whenever collection is switched on in the environment; the admin toggle refuses to turn
+# collection on while it is missing.
+DEVICE_FINGERPRINT_PEPPER = os.getenv("DJANGO_DEVICE_FINGERPRINT_PEPPER", "")  # noqa: F405
+if COLLECT_DEVICE_INFO and len(DEVICE_FINGERPRINT_PEPPER) < 32:  # noqa: F405
+    raise ImproperlyConfigured(
+        "DJANGO_DEVICE_FINGERPRINT_PEPPER must be set in production (32+ random characters) "
+        "while DJANGO_COLLECT_DEVICE_INFO is true: "
+        'python -c "import secrets; print(secrets.token_urlsafe(48))"'
+    )
+
 # Caddy terminates TLS and says so; probes and the metrics scrape reach Django over plain HTTP
 # inside the Docker network, so they are exempt from the HTTPS redirect.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

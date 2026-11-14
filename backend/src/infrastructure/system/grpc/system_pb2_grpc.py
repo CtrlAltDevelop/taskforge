@@ -40,6 +40,11 @@ class SystemControllerStub:
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.FromString,
                 _registered_method=True)
+        self.SetCollectDeviceInfo = channel.unary_unary(
+                '/config.system.SystemController/SetCollectDeviceInfo',
+                request_serializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SetCollectDeviceInfoRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.FromString,
+                _registered_method=True)
 
 
 class SystemControllerServicer:
@@ -51,12 +56,23 @@ class SystemControllerServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetCollectDeviceInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_SystemControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Info': grpc.unary_unary_rpc_method_handler(
                     servicer.Info,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    response_serializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.SerializeToString,
+            ),
+            'SetCollectDeviceInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetCollectDeviceInfo,
+                    request_deserializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SetCollectDeviceInfoRequest.FromString,
                     response_serializer=infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.SerializeToString,
             ),
     }
@@ -86,6 +102,33 @@ class SystemController:
             target,
             '/config.system.SystemController/Info',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetCollectDeviceInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.system.SystemController/SetCollectDeviceInfo',
+            infrastructure_dot_system_dot_grpc_dot_system__pb2.SetCollectDeviceInfoRequest.SerializeToString,
             infrastructure_dot_system_dot_grpc_dot_system__pb2.SystemInfo.FromString,
             options,
             channel_credentials,

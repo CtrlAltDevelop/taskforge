@@ -12,11 +12,14 @@ token has to be supplied at all, so each mode publishes its own.
 from django.http import HttpRequest
 from ninja import Router
 
+from infrastructure.oauth.core.credentials import current_session_id
 from infrastructure.oauth.core.rest.exchange import router as exchange_router
 from infrastructure.oauth.core.rest.schemas import (
     MessageOut,
+    RenameIn,
     RevokeIn,
     SessionListOut,
+    SessionNameOut,
     SessionOut,
 )
 from infrastructure.oauth.core.services import SessionList, TokenModeService
@@ -36,6 +39,12 @@ def session_list_out(sessions: SessionList) -> SessionListOut:
                 auth_method=session.auth_method,
                 current=session.current,
                 dpop_bound=session.dpop_bound,
+                name=session.name,
+                device_label=session.device_label,
+                fingerprint_short=session.fingerprint_short,
+                is_current=session.current,
+                new_device=session.new_device,
+                key_changed=session.key_changed,
             )
             for session in sessions.sessions
         ],
@@ -73,7 +82,24 @@ def shared_token_router(service: TokenModeService, *, noun: str) -> Router:
         summary=f"List this account's live {noun}s",
     )
     def sessions(request: HttpRequest) -> SessionListOut:
-        return session_list_out(service.sessions(request.user))
+        return session_list_out(
+            service.sessions(request.user, current_session_id(request))
+        )
+
+    @router.patch(
+        "/sessions/{session_id}",
+        response={200: SessionNameOut, 404: MessageOut, 422: MessageOut},
+        auth=api_auth,
+        summary=f"Rename one of this account's {noun}s",
+    )
+    def rename_session(
+        request: HttpRequest, session_id: str, payload: RenameIn
+    ) -> SessionNameOut:
+        """Name a session. Scoped to the caller: another account's id is a 404."""
+        return SessionNameOut(
+            session_id=session_id,
+            name=service.rename_session(request.user, session_id, payload.name),
+        )
 
     @router.delete(
         "/sessions/{session_id}",

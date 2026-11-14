@@ -67,6 +67,7 @@ for key, value in {
 os.environ.setdefault("DJANGO_DPOP_MODE", "off")
 os.environ.setdefault("DJANGO_DPOP_NONCE_ENABLED", "false")
 os.environ.setdefault("DJANGO_DPOP_NONCE_SECRET", "test-only-dpop-nonce-secret")
+os.environ.setdefault("DJANGO_DEVICE_FINGERPRINT_PEPPER", "test-only-device-pepper")
 
 from config.settings.base import *  # noqa: E402,F403
 

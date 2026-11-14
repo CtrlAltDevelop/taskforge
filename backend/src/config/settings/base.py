@@ -1207,6 +1207,15 @@ DPOP_NONCE_SECRET = os.getenv("DJANGO_DPOP_NONCE_SECRET", "")
 DPOP_MAX_KEY_FAILURES = int(os.getenv("DJANGO_DPOP_MAX_KEY_FAILURES", "10"))
 DPOP_KEY_FAILURE_WINDOW_SECONDS = int(os.getenv("DJANGO_DPOP_KEY_FAILURE_WINDOW_SECONDS", "900"))
 
+# Phase 40 -- device info and named sessions (see infrastructure/auth/core/device.py).
+# Off by default: the `X-Device-Info` header is ignored until an operator turns it on, here or with
+# the admin System page's "Collect device info" toggle (which overrides this default at runtime).
+COLLECT_DEVICE_INFO = os.getenv("DJANGO_COLLECT_DEVICE_INFO", "false").lower() == "true"
+# Keys the device fingerprint. A different value per environment: development.py and test.py set
+# their own fixed ones, production refuses to start without it when collection is on. Rotating it
+# makes every device look new once.
+DEVICE_FINGERPRINT_PEPPER = os.getenv("DJANGO_DEVICE_FINGERPRINT_PEPPER", "")
+
 # Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
 COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
 

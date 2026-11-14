@@ -20,7 +20,7 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.utils import timezone
 
-from infrastructure.auth.core import dpop
+from infrastructure.auth.core import device, dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -221,6 +221,7 @@ def rotate(request: HttpRequest, refresh_token: str, request_id: str = "") -> Is
             presented.mark_used(
                 successor, request_hash=hash_token(request_id) if request_id else ""
             )
+            device.on_refresh(request, family)  # phase 40
             return _issue_pair(request, successor, refresh_handle, access_model)
     except _Reused as reuse:
         _record_reuse(request, reuse.token)
@@ -277,7 +278,7 @@ class RotationTokenService(TokenModeService):
             )
         return rotate(request, refresh_token, request_id)
 
-    def sessions(self, user: Any) -> SessionList:
+    def sessions(self, user: Any, current_id: str = "") -> SessionList:
         return SessionList(
             mode=MODE,
             sessions=[
@@ -292,10 +293,14 @@ class RotationTokenService(TokenModeService):
                     user_agent=family.user_agent,
                     auth_method=str(family.metadata.get("auth_method", "")),
                     dpop_jkt=family.dpop_jkt,
+                    **device.view_fields(family, current=str(family.id) == current_id),
                 )
                 for family in live_families(user)
             ],
         )
+
+    def find_session(self, user: Any, session_id: str) -> Any | None:
+        return by_public_id(live_families(user), session_id)
 
     def revoke_session(self, user: Any, session_id: str) -> bool:
         return revoke_family(user, session_id)

@@ -15,7 +15,7 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.utils import timezone
 
-from infrastructure.auth.core import dpop
+from infrastructure.auth.core import device, dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -76,6 +76,7 @@ def refresh_access(request: HttpRequest, session_token: str) -> IssuedCredential
         )
         session.last_seen_at = now
         session.save(update_fields=["last_seen_at"])
+        device.on_refresh(request, session)  # phase 40
 
         return sign_pair(
             session.user,
@@ -135,7 +136,7 @@ class OAuthSessionService(TokenModeService):
             )
         return refresh_access(request, refresh_token)
 
-    def sessions(self, user: Any) -> SessionList:
+    def sessions(self, user: Any, current_id: str = "") -> SessionList:
         return SessionList(
             mode=MODE,
             sessions=[
@@ -148,10 +149,14 @@ class OAuthSessionService(TokenModeService):
                     user_agent=session.user_agent,
                     auth_method=str(session.metadata.get("auth_method", "")),
                     dpop_jkt=session.dpop_jkt,
+                    **device.view_fields(session, current=str(session.id) == current_id),
                 )
                 for session in live_sessions(user)
             ],
         )
+
+    def find_session(self, user: Any, session_id: str) -> Any | None:
+        return by_public_id(live_sessions(user), session_id)
 
     def revoke_session(self, user: Any, session_id: str) -> bool:
         return revoke_session(user, session_id)

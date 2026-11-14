@@ -14,6 +14,12 @@ FIELD_ENCRYPTION_KEY = FIELD_ENCRYPTION_KEY or "WKFDTWKLw3-iB-HY-UhDvkeFS-kiuclh
 # without DJANGO_DPOP_NONCE_SECRET and tests use their own value).
 DPOP_NONCE_SECRET = DPOP_NONCE_SECRET or "dev-only-dpop-nonce-secret-not-for-production"  # noqa: F405
 
+# A fixed, non-secret pepper for device fingerprints, development only (production refuses to
+# start without DJANGO_DEVICE_FINGERPRINT_PEPPER when collection is on; tests use their own).
+DEVICE_FINGERPRINT_PEPPER = (
+    DEVICE_FINGERPRINT_PEPPER or "dev-only-device-pepper-not-for-production"  # noqa: F405
+)
+
 # No mail server in development: reset codes and other emails print in this process's
 # output instead of failing with a connection error.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

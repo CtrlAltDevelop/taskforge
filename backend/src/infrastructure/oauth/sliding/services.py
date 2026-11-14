@@ -15,7 +15,7 @@ from typing import Any
 from django.http import HttpRequest
 from django.utils import timezone
 
-from infrastructure.auth.core import dpop
+from infrastructure.auth.core import device, dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -55,6 +55,7 @@ def slide(request: HttpRequest, presented: str = "") -> IssuedCredentials:
         raise ApiError(
             "This session has ended. Sign in again.", status=401, title=ResponseTitle.SESSION_ENDED
         )
+    device.on_refresh(request, record)  # phase 40
     event_model.objects.create(
         token=record,
         event_type="slid",
@@ -112,7 +113,7 @@ class SlidingTokenService(TokenModeService):
         """
         return slide(request, refresh_token)
 
-    def sessions(self, user: Any) -> SessionList:
+    def sessions(self, user: Any, current_id: str = "") -> SessionList:
         return SessionList(
             mode=MODE,
             sessions=[
@@ -125,10 +126,14 @@ class SlidingTokenService(TokenModeService):
                     user_agent=record.user_agent,
                     auth_method=str(record.metadata.get("auth_method", "")),
                     dpop_jkt=record.dpop_jkt,
+                    **device.view_fields(record, current=str(record.id) == current_id),
                 )
                 for record in live_tokens(user)
             ],
         )
+
+    def find_session(self, user: Any, session_id: str) -> Any | None:
+        return by_public_id(live_tokens(user), session_id)
 
     def revoke_session(self, user: Any, session_id: str) -> bool:
         return revoke_token(user, session_id)

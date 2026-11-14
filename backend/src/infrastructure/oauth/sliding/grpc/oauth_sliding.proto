@@ -45,6 +45,12 @@ message Session {
     string auth_method = 7;
     bool current = 8;
     bool dpop_bound = 9;
+    string name = 10;
+    string device_label = 11;
+    string fingerprint_short = 12;
+    bool is_current = 13;
+    bool new_device = 14;
+    bool key_changed = 15;
 }
 
 message SessionList {

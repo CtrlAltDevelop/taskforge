@@ -24,7 +24,8 @@ from django.utils import timezone
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
-from infrastructure.auth.core import dpop
+from infrastructure.auth.core import device, dpop
+from infrastructure.auth.core.device import DeviceRecord
 from infrastructure.common.app_labels import app_installed
 from infrastructure.common.identity import session_csrf_failure
 from infrastructure.developer import scopes, tokens
@@ -64,7 +65,7 @@ __all__ = [
 
 
 def _issue_sliding(
-    request: HttpRequest, user: Any, method: str, jkt: str = ""
+    request: HttpRequest, user: Any, method: str, jkt: str, dev: DeviceRecord
 ) -> IssuedCredentials:
     """Issue one sliding credential, whose JWT outlives each idle window.
 
@@ -88,8 +89,9 @@ def _issue_sliding(
         idle_timeout_seconds=idle,
         issued_ip=client_ip(request),
         user_agent=user_agent(request),
-        metadata={"auth_method": method},
+        metadata={"auth_method": method, "device_flags": dev.flags},
         dpop_jkt=jkt,
+        **dev.row_fields,
     )
     event_model.objects.create(
         token=record,
@@ -110,7 +112,7 @@ def _issue_sliding(
 
 
 def _issue_session(
-    request: HttpRequest, user: Any, method: str, jkt: str = ""
+    request: HttpRequest, user: Any, method: str, jkt: str, dev: DeviceRecord
 ) -> IssuedCredentials:
     session_model = token_model("session", "OAuthSession")
     access_model = token_model("session", "SessionAccessToken")
@@ -125,8 +127,9 @@ def _issue_session(
         expires_at=now + session_lifetime,
         ip_address=client_ip(request),
         user_agent=user_agent(request),
-        metadata={"auth_method": method},
+        metadata={"auth_method": method, "device_flags": dev.flags},
         dpop_jkt=jkt,
+        **dev.row_fields,
     )
     access_model.objects.create(
         user=user,
@@ -151,7 +154,7 @@ def _issue_session(
 
 
 def _issue_rotation(
-    request: HttpRequest, user: Any, method: str, jkt: str = ""
+    request: HttpRequest, user: Any, method: str, jkt: str, dev: DeviceRecord
 ) -> IssuedCredentials:
     family_model = token_model("rotation", "TokenFamily")
     refresh_model = token_model("rotation", "RotatingRefreshToken")
@@ -166,8 +169,9 @@ def _issue_rotation(
         expires_at=now + refresh_lifetime,
         issued_ip=client_ip(request),
         user_agent=user_agent(request),
-        metadata={"auth_method": method},
+        metadata={"auth_method": method, "device_flags": dev.flags},
         dpop_jkt=jkt,
+        **dev.row_fields,
     )
     refresh = refresh_model.objects.create(
         user=user,
@@ -220,7 +224,8 @@ def issue_credentials(request: HttpRequest, user: Any, *, method: str) -> Issued
     }
     jkt = dpop.signin_binding(request)
     with transaction.atomic():
-        return issuers[mode](request, user, method, jkt)
+        # Phase 40: name the session and register its device (a no-op while collection is off).
+        return issuers[mode](request, user, method, jkt, device.for_signin(request, user, jkt))
 
 
 def _revoke_sliding(digest: str) -> bool:

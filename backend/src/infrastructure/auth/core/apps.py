@@ -76,4 +76,10 @@ class AuthCoreConfig(AppConfig):
     )
 
     def ready(self) -> None:
-        from infrastructure.auth.core import checks  # noqa: F401
+        from infrastructure.auth.core import (
+            checks,  # noqa: F401
+            device,
+        )
+        from infrastructure.common import dueworkers
+
+        dueworkers.register("auth.known_devices.prune", device.prune_known_devices)

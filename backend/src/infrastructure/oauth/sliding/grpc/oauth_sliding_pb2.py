@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n5infrastructure/oauth/sliding/grpc/oauth_sliding.proto\x12\x14\x63onfig.oauth_sliding\x1a\x1bgoogle/protobuf/empty.proto\"v\n\x0b\x43redentials\x12\x12\n\ntoken_type\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\x15\n\rrefresh_token\x18\x03 \x01(\t\x12\x12\n\nexpires_in\x18\x04 \x01(\x05\x12\x12\n\nsession_id\x18\x05 \x01(\t\"\'\n\x11\x45ndSessionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\x19\n\x07Message\x12\x0e\n\x06\x64\x65tail\x18\x01 \x01(\t\"\'\n\x0eRefreshRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\"\x1e\n\rRevokeRequest\x12\r\n\x05token\x18\x01 \x01(\t\"\xbd\x01\n\x07Session\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x12\n\ncreated_at\x18\x02 \x01(\t\x12\x14\n\x0clast_used_at\x18\x03 \x01(\t\x12\x12\n\nexpires_at\x18\x04 \x01(\t\x12\x12\n\nip_address\x18\x05 \x01(\t\x12\x12\n\nuser_agent\x18\x06 \x01(\t\x12\x13\n\x0b\x61uth_method\x18\x07 \x01(\t\x12\x0f\n\x07\x63urrent\x18\x08 \x01(\x08\x12\x12\n\ndpop_bound\x18\t \x01(\x08\"L\n\x0bSessionList\x12\x0c\n\x04mode\x18\x01 \x01(\t\x12/\n\x08sessions\x18\x02 \x03(\x0b\x32\x1d.config.oauth_sliding.Session2\xe2\x02\n\x19SlidingTokenRpcController\x12V\n\nEndSession\x12\'.config.oauth_sliding.EndSessionRequest\x1a\x1d.config.oauth_sliding.Message\"\x00\x12T\n\x07Refresh\x12$.config.oauth_sliding.RefreshRequest\x1a!.config.oauth_sliding.Credentials\"\x00\x12N\n\x06Revoke\x12#.config.oauth_sliding.RevokeRequest\x1a\x1d.config.oauth_sliding.Message\"\x00\x12G\n\x08Sessions\x12\x16.google.protobuf.Empty\x1a!.config.oauth_sliding.SessionList\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n5infrastructure/oauth/sliding/grpc/oauth_sliding.proto\x12\x14\x63onfig.oauth_sliding\x1a\x1bgoogle/protobuf/empty.proto\"v\n\x0b\x43redentials\x12\x12\n\ntoken_type\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\x15\n\rrefresh_token\x18\x03 \x01(\t\x12\x12\n\nexpires_in\x18\x04 \x01(\x05\x12\x12\n\nsession_id\x18\x05 \x01(\t\"\'\n\x11\x45ndSessionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\x19\n\x07Message\x12\x0e\n\x06\x64\x65tail\x18\x01 \x01(\t\"\'\n\x0eRefreshRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\"\x1e\n\rRevokeRequest\x12\r\n\x05token\x18\x01 \x01(\t\"\xb9\x02\n\x07Session\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x12\n\ncreated_at\x18\x02 \x01(\t\x12\x14\n\x0clast_used_at\x18\x03 \x01(\t\x12\x12\n\nexpires_at\x18\x04 \x01(\t\x12\x12\n\nip_address\x18\x05 \x01(\t\x12\x12\n\nuser_agent\x18\x06 \x01(\t\x12\x13\n\x0b\x61uth_method\x18\x07 \x01(\t\x12\x0f\n\x07\x63urrent\x18\x08 \x01(\x08\x12\x12\n\ndpop_bound\x18\t \x01(\x08\x12\x0c\n\x04name\x18\n \x01(\t\x12\x14\n\x0c\x64\x65vice_label\x18\x0b \x01(\t\x12\x19\n\x11\x66ingerprint_short\x18\x0c \x01(\t\x12\x12\n\nis_current\x18\r \x01(\x08\x12\x12\n\nnew_device\x18\x0e \x01(\x08\x12\x13\n\x0bkey_changed\x18\x0f \x01(\x08\"L\n\x0bSessionList\x12\x0c\n\x04mode\x18\x01 \x01(\t\x12/\n\x08sessions\x18\x02 \x03(\x0b\x32\x1d.config.oauth_sliding.Session2\xe2\x02\n\x19SlidingTokenRpcController\x12V\n\nEndSession\x12\'.config.oauth_sliding.EndSessionRequest\x1a\x1d.config.oauth_sliding.Message\"\x00\x12T\n\x07Refresh\x12$.config.oauth_sliding.RefreshRequest\x1a!.config.oauth_sliding.Credentials\"\x00\x12N\n\x06Revoke\x12#.config.oauth_sliding.RevokeRequest\x1a\x1d.config.oauth_sliding.Message\"\x00\x12G\n\x08Sessions\x12\x16.google.protobuf.Empty\x1a!.config.oauth_sliding.SessionList\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -43,9 +43,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_REVOKEREQUEST']._serialized_start=337
   _globals['_REVOKEREQUEST']._serialized_end=367
   _globals['_SESSION']._serialized_start=370
-  _globals['_SESSION']._serialized_end=559
-  _globals['_SESSIONLIST']._serialized_start=561
-  _globals['_SESSIONLIST']._serialized_end=637
-  _globals['_SLIDINGTOKENRPCCONTROLLER']._serialized_start=640
-  _globals['_SLIDINGTOKENRPCCONTROLLER']._serialized_end=994
+  _globals['_SESSION']._serialized_end=683
+  _globals['_SESSIONLIST']._serialized_start=685
+  _globals['_SESSIONLIST']._serialized_end=761
+  _globals['_SLIDINGTOKENRPCCONTROLLER']._serialized_start=764
+  _globals['_SLIDINGTOKENRPCCONTROLLER']._serialized_end=1118
 # @@protoc_insertion_point(module_scope)

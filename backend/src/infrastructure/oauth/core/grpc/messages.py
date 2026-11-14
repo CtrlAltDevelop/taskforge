@@ -36,6 +36,12 @@ class Session(serializers.Serializer[dict[str, object]]):
     auth_method = serializers.CharField()
     current = serializers.BooleanField()
     dpop_bound = serializers.BooleanField()
+    name = serializers.CharField()
+    device_label = serializers.CharField()
+    fingerprint_short = serializers.CharField()
+    is_current = serializers.BooleanField()
+    new_device = serializers.BooleanField()
+    key_changed = serializers.BooleanField()
 
 
 SESSION_LIST_RESPONSE = [
@@ -70,6 +76,12 @@ def session_list_message(sessions: SessionList, pb2: Any) -> Any:
                 auth_method=session.auth_method,
                 current=session.current,
                 dpop_bound=session.dpop_bound,
+                name=session.name,
+                device_label=session.device_label,
+                fingerprint_short=session.fingerprint_short,
+                is_current=session.current,
+                new_device=session.new_device,
+                key_changed=session.key_changed,
             )
             for session in sessions.sessions
         ],

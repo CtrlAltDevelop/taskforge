@@ -9,6 +9,24 @@ from django.db import models
 from django.utils import timezone
 
 
+class DeviceNamedSession(models.Model):
+    """Phase 40: what a session row says about the device behind it.
+
+    Mixed into the one row per session of each token mode. Only derived values live here: the
+    label built from validated model/OS facts and a keyed fingerprint, never a raw header.
+    """
+
+    name = models.CharField(max_length=80, blank=True)
+    """What the Sessions screen shows; the device label until the user renames it."""
+    device_label = models.CharField(max_length=120, blank=True)
+    device_fingerprint = models.CharField(max_length=32, blank=True, default="", db_index=True)
+    name_edited = models.BooleanField(default=False)
+    """True once the user renamed the session: a refresh never overwrites the name."""
+
+    class Meta:
+        abstract = True
+
+
 def default_grant_types() -> list[str]:
     return ["authorization_code"]
 

@@ -39,6 +39,11 @@ class SessionView:
     user_agent: str
     auth_method: str
     current: bool = False
+    name: str = ""
+    device_label: str = ""
+    fingerprint_short: str = ""
+    new_device: bool = False
+    key_changed: bool = False
     dpop_jkt: str = ""
     """The thumbprint of the key this session is bound to; empty for a bearer-only session."""
 
@@ -68,8 +73,30 @@ class TokenModeService:
     def refresh(self, request: HttpRequest, *, refresh_token: str = "") -> IssuedCredentials:
         raise NotImplementedError
 
-    def sessions(self, user: Any) -> SessionList:
+    def sessions(self, user: Any, current_id: str = "") -> SessionList:
         raise NotImplementedError
+
+    def find_session(self, user: Any, session_id: str) -> Any | None:
+        """The caller's own live session row, or ``None``: never another account's."""
+        raise NotImplementedError
+
+    def rename_session(self, user: Any, session_id: str, name: str) -> str:
+        """Give one of the caller's own sessions a name of their choosing."""
+        from infrastructure.auth.core import device
+
+        try:
+            clean = device.clean_name(name)
+        except ValueError as error:
+            raise ApiError(
+                str(error), status=422, title=ResponseTitle.VALIDATION_ERROR
+            ) from error
+        session = self.find_session(user, session_id)
+        if session is None:
+            raise ApiError("No such session.", status=404, title=ResponseTitle.SESSION_NOT_FOUND)
+        session.name = clean
+        session.name_edited = True
+        session.save(update_fields=["name", "name_edited"])
+        return clean
 
     def end_session(self, user: Any, session_id: str) -> str:
         """Revoke one named credential, or refuse if the account has no such one."""

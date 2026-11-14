@@ -6,6 +6,11 @@ import "google/protobuf/empty.proto";
 
 service SystemController {
     rpc Info(google.protobuf.Empty) returns (SystemInfo) {}
+    rpc SetCollectDeviceInfo(SetCollectDeviceInfoRequest) returns (SystemInfo) {}
+}
+
+message SetCollectDeviceInfoRequest {
+    bool enabled = 1;
 }
 
 message SystemInfo {
@@ -18,5 +23,7 @@ message SystemInfo {
     bool eager = 7;
     int32 workers = 8;
     map<string,int32> backlog = 9;
+    bool collect_device_info = 10;
+    bool device_pepper_set = 11;
 }
 

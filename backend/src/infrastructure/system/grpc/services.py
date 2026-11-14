@@ -26,6 +26,8 @@ INFO = [
     {"name": "eager", "type": "bool"},
     {"name": "workers", "type": "int32"},
     {"name": "backlog", "type": "map<string,int32>"},
+    {"name": "collect_device_info", "type": "bool"},
+    {"name": "device_pepper_set", "type": "bool"},
 ]
 
 
@@ -45,7 +47,33 @@ def _info() -> Any:
         eager=queue.eager,
         workers=queue.workers,
         backlog=queue.backlog,
+        collect_device_info=data["collect_device_info"],
+        device_pepper_set=data["device_pepper_set"],
     )
+
+
+def _set_collect_device_info(user: Any, enabled: bool) -> Any:
+    from django.conf import settings
+
+    from infrastructure.system import toggles
+
+    if enabled and not settings.DEVICE_FINGERPRINT_PEPPER:
+        raise ApiError(
+            "Set DJANGO_DEVICE_FINGERPRINT_PEPPER on the server before turning this on.",
+            status=409,
+            title=ResponseTitle.CONFLICT,
+        )
+    toggles.set_enabled(toggles.COLLECT_DEVICE_INFO, enabled, by=user)
+    return _info()
+
+
+def _require_admin(user: Any) -> None:
+    if not (user.is_staff or user.is_superuser):
+        raise ApiError(
+            "Only administrators can see the system status.",
+            status=403,
+            title=ResponseTitle.FORBIDDEN,
+        )
 
 
 class SystemService(generics.GenericService):
@@ -53,13 +81,20 @@ class SystemService(generics.GenericService):
     @action
     async def Info(self, request: Any, context: Any) -> Any:
         user = require_caller(await grpc_caller(context))
-        if not (user.is_staff or user.is_superuser):
-            raise ApiError(
-                "Only administrators can see the system status.",
-                status=403,
-                title=ResponseTitle.FORBIDDEN,
-            )
+        _require_admin(user)
         return await sync_to_async(_info)()
+
+    @grpc_action(
+        request=[{"name": "enabled", "type": "bool"}],
+        request_name="SetCollectDeviceInfoRequest",
+        response=INFO,
+        response_name="SystemInfo",
+    )
+    @action
+    async def SetCollectDeviceInfo(self, request: Any, context: Any) -> Any:
+        user = require_caller(await grpc_caller(context))
+        _require_admin(user)
+        return await sync_to_async(_set_collect_device_info)(user, request.enabled)
 
 
 GRPC_SERVICES = [SystemService]
