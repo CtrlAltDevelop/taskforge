@@ -7284,4 +7284,334 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get wlConflict =>
       'از زمان باز کردن تغییر کرده است. بارگذاری مجدد کنید و دوباره تلاش کنید.';
+
+  @override
+  String get secTitle => 'امنیت';
+
+  @override
+  String get secSubtitle => 'تأیید دومرحله‌ای و دستگاه‌های مورد اعتماد';
+
+  @override
+  String get secTwoStep => 'تأیید دومرحله‌ای';
+
+  @override
+  String get secOn => 'روشن است. ورود کد برنامهٔ احراز هویت شما را می‌خواهد.';
+
+  @override
+  String get secOff =>
+      'خاموش است. برای محافظت از حساب خود مرحلهٔ دوم اضافه کنید.';
+
+  @override
+  String get secEnable => 'روشن کردن';
+
+  @override
+  String get secTurnOn => 'روشن کردن';
+
+  @override
+  String get secDisable => 'خاموش کردن';
+
+  @override
+  String get secDisableTitle => 'خاموش کردن تأیید دومرحله‌ای';
+
+  @override
+  String get secDisabled => 'تأیید دومرحله‌ای خاموش شد.';
+
+  @override
+  String get secEnrollTitle => 'راه‌اندازی برنامهٔ احراز هویت';
+
+  @override
+  String get secScanQr =>
+      'این کد را با برنامهٔ احراز هویت مانند Aegis، Authy یا Google Authenticator اسکن کنید.';
+
+  @override
+  String get secOrTypeKey => 'یا این کلید را وارد کنید:';
+
+  @override
+  String get secEnterCode => 'کد ۶ رقمی از برنامه';
+
+  @override
+  String get secCopied => 'کپی شد.';
+
+  @override
+  String get secRecoveryTitle => 'کدهای بازیابی';
+
+  @override
+  String get secRecoveryBody =>
+      'این ده کد را در جای امنی نگه دارید. اگر گوشی خود را گم کنید هر کدام فقط یک بار کار می‌کند. دوباره نمایش داده نمی‌شوند.';
+
+  @override
+  String get secCodesCopied => 'کدهای بازیابی کپی شد.';
+
+  @override
+  String get secSavedThem => 'ذخیره کردم';
+
+  @override
+  String secCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کد باقی مانده',
+      one: '۱ کد باقی مانده',
+      zero: 'کدی باقی نمانده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get secRegenerate => 'کدهای جدید';
+
+  @override
+  String get secRegenerateTitle => 'جایگزینی کدهای بازیابی';
+
+  @override
+  String get secCodeOrRecovery => 'کد برنامه یا کد بازیابی';
+
+  @override
+  String get secDevices => 'دستگاه‌های مورد اعتماد';
+
+  @override
+  String get secDevicesSub =>
+      'این دستگاه‌ها تا پایان اعتبار، هنگام ورود کد نمی‌خواهند.';
+
+  @override
+  String get secNoDevices => 'هیچ دستگاهی به خاطر سپرده نشده است.';
+
+  @override
+  String get secForgetAll => 'فراموش کردن همه';
+
+  @override
+  String get secForget => 'فراموش کردن این دستگاه';
+
+  @override
+  String get secUnnamedDevice => 'دستگاه بی‌نام';
+
+  @override
+  String secDeviceUntil(String date) {
+    return 'مورد اعتماد تا $date';
+  }
+
+  @override
+  String get secBlocked =>
+      'این فضای کار تأیید دومرحله‌ای را الزامی کرده است. برای ادامه آن را در پایین روشن کنید.';
+
+  @override
+  String secGraceUntil(String date) {
+    return 'این فضای کار از $date تأیید دومرحله‌ای را الزامی می‌کند. پیش از آن روشنش کنید.';
+  }
+
+  @override
+  String get secPolicyTitle => 'الزام فضای کار';
+
+  @override
+  String get secRequire => 'الزامی کردن تأیید دومرحله‌ای';
+
+  @override
+  String get secRequireSub =>
+      'اعضایی که آن را روشن نکرده باشند پس از پایان مهلت مسدود می‌شوند.';
+
+  @override
+  String get secGraceDays => 'مهلت (روز)';
+
+  @override
+  String get secGraceInvalid => 'عددی بین ۰ تا ۹۰ وارد کنید.';
+
+  @override
+  String get secPolicySaved => 'الزام ذخیره شد.';
+
+  @override
+  String get secVerifyTitle => 'تأیید دومرحله‌ای';
+
+  @override
+  String get secEnterAppCode =>
+      'کد ۶ رقمی برنامهٔ احراز هویت خود را وارد کنید.';
+
+  @override
+  String get secEnterRecovery =>
+      'یکی از کدهای بازیابی خود را وارد کنید. هر کد یک بار کار می‌کند.';
+
+  @override
+  String get secAppCode => 'کد';
+
+  @override
+  String get secRecoveryCode => 'کد بازیابی';
+
+  @override
+  String get secRememberDevice => 'تا ۳۰ روز در این دستگاه دوباره نپرس';
+
+  @override
+  String get secVerify => 'تأیید';
+
+  @override
+  String get secUseRecovery => 'استفاده از کد بازیابی';
+
+  @override
+  String get secUseAppCode => 'استفاده از کد برنامه';
+
+  @override
+  String get secBackToSignIn => 'بازگشت به ورود';
+
+  @override
+  String get secWrongCode => 'این کد درست نیست. دوباره تلاش کنید.';
+
+  @override
+  String get secLocked =>
+      'کدهای نادرست زیاد بود. کمی صبر کنید و دوباره تلاش کنید.';
+
+  @override
+  String get secTooManyTries => 'تلاش‌های نادرست زیاد بود. دوباره وارد شوید.';
+
+  @override
+  String get secSignInExpired =>
+      'زمان این ورود تمام شد. دوباره از رمز عبور شروع کنید.';
+
+  @override
+  String get secConflict =>
+      'در این میان تغییر کرده است. بارگذاری مجدد کنید و دوباره تلاش کنید.';
+
+  @override
+  String get secNotFound => 'پیدا نشد.';
+
+  @override
+  String get ssoTitle => 'ورود یکپارچه (SSO)';
+
+  @override
+  String get ssoTitleShort => 'ورود یکپارچه';
+
+  @override
+  String get ssoSub =>
+      'اجازه دهید افراد با ارائه‌دهندهٔ هویت شما (OpenID Connect) وارد شوند.';
+
+  @override
+  String get ssoContinue => 'ادامه با SSO';
+
+  @override
+  String get ssoContinueShort => 'ادامه';
+
+  @override
+  String get ssoWorkspaceName => 'نام نشانی فضای کار';
+
+  @override
+  String get ssoWorkspaceHelp => 'نام کوتاه در نشانی فضای کار، مثلاً acme';
+
+  @override
+  String get ssoOpenFailed => 'مرورگر باز نشد.';
+
+  @override
+  String get ssoErrUnverified =>
+      'ارائه‌دهندهٔ هویت نشانی ایمیل شما را تأیید نکرد، پس نمی‌توانید با آن وارد شوید.';
+
+  @override
+  String get ssoErrDomain =>
+      'دامنهٔ ایمیل شما اجازهٔ ورود به این فضای کار را ندارد.';
+
+  @override
+  String get ssoErrNoAccount =>
+      'حسابی برای شما اینجا وجود ندارد و ثبت‌نام با SSO خاموش است.';
+
+  @override
+  String get ssoErrRemoved =>
+      'شما از این فضای کار حذف شده‌اید. دعوت‌نامه بخواهید.';
+
+  @override
+  String get ssoErrDisabled => 'این حساب غیرفعال است.';
+
+  @override
+  String get ssoErrGeneric => 'ورود یکپارچه کامل نشد. دوباره شروع کنید.';
+
+  @override
+  String get ssoRedirectHelp =>
+      'این نشانی بازگشت را در ارائه‌دهندهٔ هویت خود ثبت کنید:';
+
+  @override
+  String get ssoEnabled => 'ورود یکپارچه روشن است';
+
+  @override
+  String get ssoName => 'نام نمایشی (اختیاری)';
+
+  @override
+  String get ssoIssuer => 'نشانی صادرکننده (Issuer)';
+
+  @override
+  String get ssoIssuerHelp =>
+      'جایی که /.well-known/openid-configuration قرار دارد، مثلاً https://id.example.com/realms/acme';
+
+  @override
+  String get ssoClientId => 'شناسهٔ کلاینت';
+
+  @override
+  String get ssoClientSecret => 'رمز کلاینت';
+
+  @override
+  String get ssoSecretKept => 'یک رمز ذخیره شده است. برای حفظ آن خالی بگذارید.';
+
+  @override
+  String get ssoSecretNeeded =>
+      'الزامی است. رمزگذاری‌شده ذخیره می‌شود و دیگر نمایش داده نمی‌شود.';
+
+  @override
+  String get ssoScopes => 'دامنه‌ها (Scopes)';
+
+  @override
+  String get ssoDomains => 'دامنه‌های ایمیل مجاز';
+
+  @override
+  String get ssoDomainsHelp =>
+      'با ویرگول جدا کنید، مثلاً acme.com. خالی یعنی همه.';
+
+  @override
+  String get ssoAutoCreate => 'ساخت حساب در اولین ورود';
+
+  @override
+  String get ssoAutoCreateSub =>
+      'افراد از دامنه‌های مجاز بدون دعوت‌نامه عضو می‌شوند.';
+
+  @override
+  String get ssoRoles => 'نقش‌ها';
+
+  @override
+  String get ssoGroupClaim => 'نام ادعای گروه (claim)';
+
+  @override
+  String get ssoDefaultRole =>
+      'نقش افرادی که با هیچ گروهی نمی‌خوانند (پیش‌فرض: عضو).';
+
+  @override
+  String get ssoDefaultRoleAuto => 'عضو (پیش‌فرض)';
+
+  @override
+  String get ssoGroup => 'گروه';
+
+  @override
+  String get ssoAddMapping => 'نگاشت گروه به نقش';
+
+  @override
+  String get ssoEnforce => 'الزامی کردن ورود یکپارچه';
+
+  @override
+  String get ssoEnforceSub =>
+      'ورود با رمز عبور را برای اعضا خاموش می‌کند. مالکان آن را به‌عنوان راه بازگشت نگه می‌دارند.';
+
+  @override
+  String get ssoSaved => 'ورود یکپارچه ذخیره شد.';
+
+  @override
+  String get ssoTest => 'آزمایش';
+
+  @override
+  String ssoTestOk(int keys) {
+    return 'ارائه‌دهنده پاسخ داد ($keys کلید امضا یافت شد)';
+  }
+
+  @override
+  String get ssoTestFailed => 'آزمایش ناموفق بود';
+
+  @override
+  String get ssoRemove => 'حذف';
+
+  @override
+  String get ssoRemoveTitle => 'ورود یکپارچه حذف شود؟';
+
+  @override
+  String get ssoRemoveBody =>
+      'افرادی که از طریق آن وارد شده‌اند باید دوباره وارد شوند.';
 }

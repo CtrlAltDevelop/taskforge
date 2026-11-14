@@ -4194,5 +4194,130 @@
   "wlDelete": "Delete",
   "wlDenied": "You are not allowed to do that with workload.",
   "wlGone": "That entry no longer exists.",
-  "wlConflict": "It changed since you opened it. Reload and try again."
+  "wlConflict": "It changed since you opened it. Reload and try again.",
+  "secTitle": "Security",
+  "secSubtitle": "Two-step verification and trusted devices",
+  "secTwoStep": "Two-step verification",
+  "secOn": "On. Sign-in asks for a code from your authenticator app.",
+  "secOff": "Off. Add a second step to protect your account.",
+  "secEnable": "Turn on",
+  "secTurnOn": "Turn on",
+  "secDisable": "Turn off",
+  "secDisableTitle": "Turn off two-step verification",
+  "secDisabled": "Two-step verification is off.",
+  "secEnrollTitle": "Set up an authenticator app",
+  "secScanQr": "Scan this code with an authenticator app such as Aegis, Authy or Google Authenticator.",
+  "secOrTypeKey": "Or type this key in:",
+  "secEnterCode": "6-digit code from the app",
+  "secCopied": "Copied.",
+  "secRecoveryTitle": "Recovery codes",
+  "secRecoveryBody": "Keep these ten codes somewhere safe. Each works once if you lose your phone. They will not be shown again.",
+  "secCodesCopied": "Recovery codes copied.",
+  "secSavedThem": "I saved them",
+  "secCodesLeft": "{count, plural, =0{No codes left} =1{1 code left} other{{count} codes left}}",
+  "@secCodesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "secRegenerate": "New codes",
+  "secRegenerateTitle": "Replace recovery codes",
+  "secCodeOrRecovery": "Authenticator or recovery code",
+  "secDevices": "Trusted devices",
+  "secDevicesSub": "These skip the code at sign-in until they expire.",
+  "secNoDevices": "No device is remembered.",
+  "secForgetAll": "Forget all",
+  "secForget": "Forget this device",
+  "secUnnamedDevice": "Unnamed device",
+  "secDeviceUntil": "Trusted until {date}",
+  "@secDeviceUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "secBlocked": "This workspace requires two-step verification. Turn it on below to continue.",
+  "secGraceUntil": "This workspace will require two-step verification from {date}. Turn it on before then.",
+  "@secGraceUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "secPolicyTitle": "Workspace requirement",
+  "secRequire": "Require two-step verification",
+  "secRequireSub": "Members who have not turned it on are blocked once the grace period ends.",
+  "secGraceDays": "Grace period (days)",
+  "secGraceInvalid": "Enter 0 to 90 days.",
+  "secPolicySaved": "Requirement saved.",
+  "secVerifyTitle": "Two-step verification",
+  "secEnterAppCode": "Enter the 6-digit code from your authenticator app.",
+  "secEnterRecovery": "Enter one of your recovery codes. Each works once.",
+  "secAppCode": "Code",
+  "secRecoveryCode": "Recovery code",
+  "secRememberDevice": "Don't ask again on this device for 30 days",
+  "secVerify": "Verify",
+  "secUseRecovery": "Use a recovery code",
+  "secUseAppCode": "Use the app code",
+  "secBackToSignIn": "Back to sign in",
+  "secWrongCode": "That code is not right. Try again.",
+  "secLocked": "Too many wrong codes. Wait a while and try again.",
+  "secTooManyTries": "Too many wrong tries. Sign in again.",
+  "secSignInExpired": "This sign-in timed out. Start again from the password.",
+  "secConflict": "That changed in the meantime. Reload and try again.",
+  "secNotFound": "Not found.",
+  "ssoTitle": "Single sign-on",
+  "ssoTitleShort": "Single sign-on",
+  "ssoSub": "Let people sign in with your identity provider (OpenID Connect).",
+  "ssoContinue": "Continue with SSO",
+  "ssoContinueShort": "Continue",
+  "ssoWorkspaceName": "Workspace URL name",
+  "ssoWorkspaceHelp": "The short name in your workspace address, e.g. acme",
+  "ssoOpenFailed": "Could not open the browser.",
+  "ssoErrUnverified": "Your identity provider did not confirm your email address, so you cannot sign in with it.",
+  "ssoErrDomain": "Your email domain may not sign in to this workspace.",
+  "ssoErrNoAccount": "No account exists for you here and sign-up through SSO is off.",
+  "ssoErrRemoved": "You were removed from this workspace. Ask for an invitation.",
+  "ssoErrDisabled": "This account is disabled.",
+  "ssoErrGeneric": "Single sign-on could not be completed. Start again.",
+  "ssoRedirectHelp": "Register this redirect URI at your identity provider:",
+  "ssoEnabled": "Single sign-on is on",
+  "ssoName": "Name shown to people (optional)",
+  "ssoIssuer": "Issuer URL",
+  "ssoIssuerHelp": "Where /.well-known/openid-configuration lives, e.g. https://id.example.com/realms/acme",
+  "ssoClientId": "Client ID",
+  "ssoClientSecret": "Client secret",
+  "ssoSecretKept": "A secret is stored. Leave empty to keep it.",
+  "ssoSecretNeeded": "Required. It is stored encrypted and never shown again.",
+  "ssoScopes": "Scopes",
+  "ssoDomains": "Allowed email domains",
+  "ssoDomainsHelp": "Comma separated, e.g. acme.com. Empty allows any.",
+  "ssoAutoCreate": "Create accounts on first sign-in",
+  "ssoAutoCreateSub": "People from allowed domains join without an invitation.",
+  "ssoRoles": "Roles",
+  "ssoGroupClaim": "Group claim name",
+  "ssoDefaultRole": "Role for people no group matches (default: Member).",
+  "ssoDefaultRoleAuto": "Member (default)",
+  "ssoGroup": "Group",
+  "ssoAddMapping": "Map a group to a role",
+  "ssoEnforce": "Require single sign-on",
+  "ssoEnforceSub": "Turns off password sign-in for members. Owners keep it as a way back in.",
+  "ssoSaved": "Single sign-on saved.",
+  "ssoTest": "Test",
+  "ssoTestOk": "The provider answered ({keys} signing keys found)",
+  "@ssoTestOk": {
+    "placeholders": {
+      "keys": {
+        "type": "int"
+      }
+    }
+  },
+  "ssoTestFailed": "The test failed",
+  "ssoRemove": "Remove",
+  "ssoRemoveTitle": "Remove single sign-on?",
+  "ssoRemoveBody": "People who signed in through it will have to sign in again."
 }

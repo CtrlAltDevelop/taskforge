@@ -109,6 +109,13 @@ class HomeScreen extends ConsumerWidget {
             onTap: () => context.go('/sessions'),
           ),
           ListTile(
+            key: const Key('open-security'),
+            leading: const Icon(Icons.verified_user_outlined),
+            title: Text(context.l10n.secTitle),
+            subtitle: Text(context.l10n.secSubtitle),
+            onTap: () => context.push('/settings/security'),
+          ),
+          ListTile(
             key: const Key('open-change-password'),
             leading: const Icon(Icons.lock_reset),
             title: Text(context.l10n.changePassword),

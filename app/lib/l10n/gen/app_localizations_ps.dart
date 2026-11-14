@@ -7252,4 +7252,328 @@ class AppLocalizationsPs extends AppLocalizations {
   @override
   String get wlConflict =>
       'له پرانیستلو راهیسې بدل شوی. بیا یې پورته کړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get secTitle => 'امنیت';
+
+  @override
+  String get secSubtitle => 'دوه‌پړاویز تایید او باوري وسایل';
+
+  @override
+  String get secTwoStep => 'دوه‌پړاویز تایید';
+
+  @override
+  String get secOn => 'فعال دی. ننوتل ستاسو د تایید اپ کوډ غواړي.';
+
+  @override
+  String get secOff => 'بند دی. د خپل حساب د ساتنې لپاره دویم پړاو اضافه کړئ.';
+
+  @override
+  String get secEnable => 'فعالول';
+
+  @override
+  String get secTurnOn => 'فعالول';
+
+  @override
+  String get secDisable => 'بندول';
+
+  @override
+  String get secDisableTitle => 'دوه‌پړاویز تایید بندول';
+
+  @override
+  String get secDisabled => 'دوه‌پړاویز تایید بند شو.';
+
+  @override
+  String get secEnrollTitle => 'د تایید اپ تنظیمول';
+
+  @override
+  String get secScanQr =>
+      'دا کوډ د تایید په اپ لکه Aegis، Authy یا Google Authenticator سکین کړئ.';
+
+  @override
+  String get secOrTypeKey => 'یا دا کیلي ولیکئ:';
+
+  @override
+  String get secEnterCode => 'له اپ څخه ۶ رقمي کوډ';
+
+  @override
+  String get secCopied => 'کاپي شو.';
+
+  @override
+  String get secRecoveryTitle => 'د بیا ترلاسه کولو کوډونه';
+
+  @override
+  String get secRecoveryBody =>
+      'دا لس کوډونه په خوندي ځای کې وساتئ. که ګرځنده مو ورک شي هر یو یو ځل کار کوي. بیا نه ښودل کېږي.';
+
+  @override
+  String get secCodesCopied => 'د بیا ترلاسه کولو کوډونه کاپي شول.';
+
+  @override
+  String get secSavedThem => 'ما خوندي کړل';
+
+  @override
+  String secCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کوډونه پاتې دي',
+      one: '۱ کوډ پاتې دی',
+      zero: 'کوم کوډ نه دی پاتې',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get secRegenerate => 'نوي کوډونه';
+
+  @override
+  String get secRegenerateTitle => 'د بیا ترلاسه کولو کوډونه بدلول';
+
+  @override
+  String get secCodeOrRecovery => 'د اپ یا بیا ترلاسه کولو کوډ';
+
+  @override
+  String get secDevices => 'باوري وسایل';
+
+  @override
+  String get secDevicesSub =>
+      'دا وسایل تر پای ته رسېدو پورې په ننوتلو کې کوډ نه غواړي.';
+
+  @override
+  String get secNoDevices => 'هیڅ وسیله په یاد نه ده ساتل شوې.';
+
+  @override
+  String get secForgetAll => 'ټول هېرول';
+
+  @override
+  String get secForget => 'دا وسیله هېرول';
+
+  @override
+  String get secUnnamedDevice => 'بې نومه وسیله';
+
+  @override
+  String secDeviceUntil(String date) {
+    return 'تر $date پورې باوري';
+  }
+
+  @override
+  String get secBlocked =>
+      'دا کاري ځای دوه‌پړاویز تایید غواړي. د دوام لپاره یې لاندې فعال کړئ.';
+
+  @override
+  String secGraceUntil(String date) {
+    return 'دا کاري ځای له $date راهیسې دوه‌پړاویز تایید غواړي. تر هغه مخکې یې فعال کړئ.';
+  }
+
+  @override
+  String get secPolicyTitle => 'د کاري ځای اړتیا';
+
+  @override
+  String get secRequire => 'دوه‌پړاویز تایید اړین کول';
+
+  @override
+  String get secRequireSub =>
+      'هغه غړي چې نه وي فعال کړی د مهلت تر پای وروسته بندېږي.';
+
+  @override
+  String get secGraceDays => 'مهلت (ورځې)';
+
+  @override
+  String get secGraceInvalid => '۰ تر ۹۰ ورځې ولیکئ.';
+
+  @override
+  String get secPolicySaved => 'اړتیا خوندي شوه.';
+
+  @override
+  String get secVerifyTitle => 'دوه‌پړاویز تایید';
+
+  @override
+  String get secEnterAppCode => 'د خپل تایید اپ ۶ رقمي کوډ ولیکئ.';
+
+  @override
+  String get secEnterRecovery =>
+      'یو د بیا ترلاسه کولو کوډ ولیکئ. هر یو یو ځل کار کوي.';
+
+  @override
+  String get secAppCode => 'کوډ';
+
+  @override
+  String get secRecoveryCode => 'د بیا ترلاسه کولو کوډ';
+
+  @override
+  String get secRememberDevice => 'په دې وسیله کې ۳۰ ورځې بیا مه پوښتئ';
+
+  @override
+  String get secVerify => 'تایید';
+
+  @override
+  String get secUseRecovery => 'د بیا ترلاسه کولو کوډ کارول';
+
+  @override
+  String get secUseAppCode => 'د اپ کوډ کارول';
+
+  @override
+  String get secBackToSignIn => 'ننوتلو ته بیرته';
+
+  @override
+  String get secWrongCode => 'دا کوډ سم نه دی. بیا هڅه وکړئ.';
+
+  @override
+  String get secLocked => 'ډېر ناسم کوډونه. لږ صبر وکړئ او بیا هڅه وکړئ.';
+
+  @override
+  String get secTooManyTries => 'ډېرې ناسمې هڅې. بیا ننوځئ.';
+
+  @override
+  String get secSignInExpired => 'دا ننوتل پای ته ورسېد. له پټنوم بیا پیل کړئ.';
+
+  @override
+  String get secConflict => 'دا په دې منځ کې بدل شو. بیا پرانیزئ او هڅه وکړئ.';
+
+  @override
+  String get secNotFound => 'ونه موندل شو.';
+
+  @override
+  String get ssoTitle => 'یو ځلي ننوتل (SSO)';
+
+  @override
+  String get ssoTitleShort => 'یو ځلي ننوتل';
+
+  @override
+  String get ssoSub =>
+      'اجازه ورکړئ چې خلک ستاسو د هویت چمتو کوونکي (OpenID Connect) سره ننوځي.';
+
+  @override
+  String get ssoContinue => 'د SSO سره دوام';
+
+  @override
+  String get ssoContinueShort => 'دوام';
+
+  @override
+  String get ssoWorkspaceName => 'د کاري ځای د پتې نوم';
+
+  @override
+  String get ssoWorkspaceHelp => 'د کاري ځای په پته کې لنډ نوم، لکه acme';
+
+  @override
+  String get ssoOpenFailed => 'برازر خلاص نه شو.';
+
+  @override
+  String get ssoErrUnverified =>
+      'ستاسو د هویت چمتو کوونکي ستاسو بریښنالیک نه دی تایید کړی، نو په هغه نه شئ ننوتلی.';
+
+  @override
+  String get ssoErrDomain =>
+      'ستاسو د بریښنالیک ډومین ته په دې کاري ځای کې د ننوتلو اجازه نشته.';
+
+  @override
+  String get ssoErrNoAccount =>
+      'دلته ستاسو حساب نشته او د SSO له لارې نوملیکنه بنده ده.';
+
+  @override
+  String get ssoErrRemoved =>
+      'تاسو له دې کاري ځای څخه لرې شوي یاست. بلنه وغواړئ.';
+
+  @override
+  String get ssoErrDisabled => 'دا حساب بند دی.';
+
+  @override
+  String get ssoErrGeneric => 'یو ځلي ننوتل بشپړ نه شو. بیا پیل کړئ.';
+
+  @override
+  String get ssoRedirectHelp =>
+      'دا د بیرته لارښوونې پته خپل د هویت چمتو کوونکي سره ثبت کړئ:';
+
+  @override
+  String get ssoEnabled => 'یو ځلي ننوتل فعال دی';
+
+  @override
+  String get ssoName => 'ښودل کېدونکی نوم (اختیاري)';
+
+  @override
+  String get ssoIssuer => 'د صادرونکي پته (Issuer)';
+
+  @override
+  String get ssoIssuerHelp =>
+      'چېرې چې /.well-known/openid-configuration دی، لکه https://id.example.com/realms/acme';
+
+  @override
+  String get ssoClientId => 'د پیرودونکي پېژندنه';
+
+  @override
+  String get ssoClientSecret => 'د پیرودونکي راز';
+
+  @override
+  String get ssoSecretKept => 'یو راز خوندي دی. د ساتلو لپاره یې خالي پریږدئ.';
+
+  @override
+  String get ssoSecretNeeded =>
+      'اړین دی. کوډ شوی خوندي کېږي او بیا نه ښودل کېږي.';
+
+  @override
+  String get ssoScopes => 'ساحې (Scopes)';
+
+  @override
+  String get ssoDomains => 'اجازه شوي د بریښنالیک ډومینونه';
+
+  @override
+  String get ssoDomainsHelp =>
+      'په کوما جلا کړئ، لکه acme.com. خالي هر یو ته اجازه ورکوي.';
+
+  @override
+  String get ssoAutoCreate => 'په لومړي ننوتلو کې حسابونه جوړول';
+
+  @override
+  String get ssoAutoCreateSub =>
+      'د اجازه شویو ډومینونو خلک پرته له بلنې یوځای کېږي.';
+
+  @override
+  String get ssoRoles => 'رولونه';
+
+  @override
+  String get ssoGroupClaim => 'د ډلې ادعا نوم (claim)';
+
+  @override
+  String get ssoDefaultRole =>
+      'د هغو خلکو رول چې هیڅ ډله ورسره نه برابرېږي (اصلي: غړی).';
+
+  @override
+  String get ssoDefaultRoleAuto => 'غړی (اصلي)';
+
+  @override
+  String get ssoGroup => 'ډله';
+
+  @override
+  String get ssoAddMapping => 'ډله له رول سره تړل';
+
+  @override
+  String get ssoEnforce => 'یو ځلي ننوتل اړین کول';
+
+  @override
+  String get ssoEnforceSub =>
+      'د غړو لپاره د پټنوم ننوتل بندوي. مالکان یې د بېرته راتګ لپاره ساتي.';
+
+  @override
+  String get ssoSaved => 'یو ځلي ننوتل خوندي شو.';
+
+  @override
+  String get ssoTest => 'ازموینه';
+
+  @override
+  String ssoTestOk(int keys) {
+    return 'چمتو کوونکي ځواب ورکړ ($keys د لاسلیک کیلي وموندل شوې)';
+  }
+
+  @override
+  String get ssoTestFailed => 'ازموینه ناکامه شوه';
+
+  @override
+  String get ssoRemove => 'لرې کول';
+
+  @override
+  String get ssoRemoveTitle => 'یو ځلي ننوتل لرې شي؟';
+
+  @override
+  String get ssoRemoveBody => 'هغه خلک چې له دې لارې ننوتي، باید بیا ننوځي.';
 }

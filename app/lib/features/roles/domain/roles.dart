@@ -42,6 +42,7 @@ abstract final class Perm {
   static const templateManage = 'template.manage';
   static const workloadView = 'workload.view';
   static const workloadManage = 'workload.manage';
+  static const securityManage = 'security.manage';
 
   static const all = [
     workspaceView,
@@ -81,6 +82,7 @@ abstract final class Perm {
     templateManage,
     workloadView,
     workloadManage,
+    securityManage,
   ];
 }
 

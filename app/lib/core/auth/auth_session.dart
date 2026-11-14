@@ -69,6 +69,10 @@ class AuthSession extends ChangeNotifier {
   Future<void> signIn(String email, String password) async =>
       _adopt(await _api.signIn(email, password));
 
+  /// Finishes a sign-in whose last step happened elsewhere (the second-factor
+  /// code, a single-sign-on ticket): the tokens are the same as a password's.
+  Future<void> adoptTokens(AuthTokens tokens) => _adopt(tokens);
+
   Future<void> signUp(String email, String password) async =>
       _adopt(await _api.signUp(email, password));
 

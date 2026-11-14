@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskforge/core/auth/http_client.dart';
 
 import 'package:taskforge/core/auth/auth_tokens.dart';
+import 'package:taskforge/core/auth/trusted_device_store.dart';
 
 /// The server refused or failed a request. [title] is the response `title`
 /// (e.g. `INVALID_CREDENTIALS`, `REFRESH_RACE`) for code to branch on.
@@ -21,6 +22,23 @@ class AuthApiException implements Exception {
 
   @override
   String toString() => message;
+}
+
+/// A sign-in that stopped after the first factor: the password was right and
+/// the account has two-step verification on. [loginTicket] is the short-lived
+/// challenge token to present with the code.
+class SecondFactorRequired extends AuthApiException {
+  const SecondFactorRequired({
+    required this.loginTicket,
+    this.methods = const [],
+  }) : super(
+         status: 400,
+         title: 'SECOND_FACTOR_REQUIRED',
+         message: 'Second factor required.',
+       );
+
+  final String loginTicket;
+  final List<String> methods;
 }
 
 /// The server could not be reached; the user's session is untouched.
@@ -63,8 +81,17 @@ abstract interface class AuthApi {
 class HttpAuthApi implements AuthApi {
   /// [cookieMode] is for browsers: the server keeps the refresh token in an
   /// HttpOnly cookie, so no script (and no stored value) ever holds it.
-  HttpAuthApi(this.baseUrl, {http.Client? client, this.cookieMode = false})
-    : _client = client ?? (cookieMode ? createAuthHttpClient() : http.Client());
+  HttpAuthApi(
+    this.baseUrl, {
+    http.Client? client,
+    this.cookieMode = false,
+    this.trustedDevices,
+  }) : _client =
+           client ?? (cookieMode ? createAuthHttpClient() : http.Client());
+
+  /// Where the remembered-device token lives; sent with a password sign-in so
+  /// a device that already passed the second factor skips it.
+  final TrustedDeviceStore? trustedDevices;
 
   final bool cookieMode;
   final String baseUrl;
@@ -89,13 +116,13 @@ class HttpAuthApi implements AuthApi {
       'POST',
       '/api/v1/auth/password/login',
       json: {'identifier': email, 'password': password},
+      trustedDevice: await trustedDevices?.read(),
     );
     final data = body['data'] as Map<String, dynamic>;
     if (data['requires_second_factor'] == true) {
-      throw const AuthApiException(
-        status: 400,
-        title: 'SECOND_FACTOR_REQUIRED',
-        message: 'Second factor required.',
+      throw SecondFactorRequired(
+        loginTicket: (data['login_ticket'] as String?) ?? '',
+        methods: [...((data['methods'] as List?) ?? const []).cast<String>()],
       );
     }
     return _credentials(data['credentials'] as Map<String, dynamic>);
@@ -177,12 +204,16 @@ class HttpAuthApi implements AuthApi {
     String path, {
     Object? json,
     String? bearer,
+    String? trustedDevice,
   }) async {
     final request = http.Request(method, Uri.parse('$baseUrl$path'))
       ..headers['Content-Type'] = 'application/json'
       ..headers['Accept'] = 'application/json';
     if (cookieMode) request.headers['X-Refresh-Transport'] = 'cookie';
     if (bearer != null) request.headers['Authorization'] = 'Bearer $bearer';
+    if (trustedDevice != null && trustedDevice.isNotEmpty) {
+      request.headers['X-Trusted-Device'] = trustedDevice;
+    }
     if (json != null) request.body = jsonEncode(json);
 
     final http.Response response;

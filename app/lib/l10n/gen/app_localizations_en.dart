@@ -7272,6 +7272,337 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get wlConflict =>
       'It changed since you opened it. Reload and try again.';
+
+  @override
+  String get secTitle => 'Security';
+
+  @override
+  String get secSubtitle => 'Two-step verification and trusted devices';
+
+  @override
+  String get secTwoStep => 'Two-step verification';
+
+  @override
+  String get secOn =>
+      'On. Sign-in asks for a code from your authenticator app.';
+
+  @override
+  String get secOff => 'Off. Add a second step to protect your account.';
+
+  @override
+  String get secEnable => 'Turn on';
+
+  @override
+  String get secTurnOn => 'Turn on';
+
+  @override
+  String get secDisable => 'Turn off';
+
+  @override
+  String get secDisableTitle => 'Turn off two-step verification';
+
+  @override
+  String get secDisabled => 'Two-step verification is off.';
+
+  @override
+  String get secEnrollTitle => 'Set up an authenticator app';
+
+  @override
+  String get secScanQr =>
+      'Scan this code with an authenticator app such as Aegis, Authy or Google Authenticator.';
+
+  @override
+  String get secOrTypeKey => 'Or type this key in:';
+
+  @override
+  String get secEnterCode => '6-digit code from the app';
+
+  @override
+  String get secCopied => 'Copied.';
+
+  @override
+  String get secRecoveryTitle => 'Recovery codes';
+
+  @override
+  String get secRecoveryBody =>
+      'Keep these ten codes somewhere safe. Each works once if you lose your phone. They will not be shown again.';
+
+  @override
+  String get secCodesCopied => 'Recovery codes copied.';
+
+  @override
+  String get secSavedThem => 'I saved them';
+
+  @override
+  String secCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count codes left',
+      one: '1 code left',
+      zero: 'No codes left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get secRegenerate => 'New codes';
+
+  @override
+  String get secRegenerateTitle => 'Replace recovery codes';
+
+  @override
+  String get secCodeOrRecovery => 'Authenticator or recovery code';
+
+  @override
+  String get secDevices => 'Trusted devices';
+
+  @override
+  String get secDevicesSub =>
+      'These skip the code at sign-in until they expire.';
+
+  @override
+  String get secNoDevices => 'No device is remembered.';
+
+  @override
+  String get secForgetAll => 'Forget all';
+
+  @override
+  String get secForget => 'Forget this device';
+
+  @override
+  String get secUnnamedDevice => 'Unnamed device';
+
+  @override
+  String secDeviceUntil(String date) {
+    return 'Trusted until $date';
+  }
+
+  @override
+  String get secBlocked =>
+      'This workspace requires two-step verification. Turn it on below to continue.';
+
+  @override
+  String secGraceUntil(String date) {
+    return 'This workspace will require two-step verification from $date. Turn it on before then.';
+  }
+
+  @override
+  String get secPolicyTitle => 'Workspace requirement';
+
+  @override
+  String get secRequire => 'Require two-step verification';
+
+  @override
+  String get secRequireSub =>
+      'Members who have not turned it on are blocked once the grace period ends.';
+
+  @override
+  String get secGraceDays => 'Grace period (days)';
+
+  @override
+  String get secGraceInvalid => 'Enter 0 to 90 days.';
+
+  @override
+  String get secPolicySaved => 'Requirement saved.';
+
+  @override
+  String get secVerifyTitle => 'Two-step verification';
+
+  @override
+  String get secEnterAppCode =>
+      'Enter the 6-digit code from your authenticator app.';
+
+  @override
+  String get secEnterRecovery =>
+      'Enter one of your recovery codes. Each works once.';
+
+  @override
+  String get secAppCode => 'Code';
+
+  @override
+  String get secRecoveryCode => 'Recovery code';
+
+  @override
+  String get secRememberDevice => 'Don\'t ask again on this device for 30 days';
+
+  @override
+  String get secVerify => 'Verify';
+
+  @override
+  String get secUseRecovery => 'Use a recovery code';
+
+  @override
+  String get secUseAppCode => 'Use the app code';
+
+  @override
+  String get secBackToSignIn => 'Back to sign in';
+
+  @override
+  String get secWrongCode => 'That code is not right. Try again.';
+
+  @override
+  String get secLocked => 'Too many wrong codes. Wait a while and try again.';
+
+  @override
+  String get secTooManyTries => 'Too many wrong tries. Sign in again.';
+
+  @override
+  String get secSignInExpired =>
+      'This sign-in timed out. Start again from the password.';
+
+  @override
+  String get secConflict =>
+      'That changed in the meantime. Reload and try again.';
+
+  @override
+  String get secNotFound => 'Not found.';
+
+  @override
+  String get ssoTitle => 'Single sign-on';
+
+  @override
+  String get ssoTitleShort => 'Single sign-on';
+
+  @override
+  String get ssoSub =>
+      'Let people sign in with your identity provider (OpenID Connect).';
+
+  @override
+  String get ssoContinue => 'Continue with SSO';
+
+  @override
+  String get ssoContinueShort => 'Continue';
+
+  @override
+  String get ssoWorkspaceName => 'Workspace URL name';
+
+  @override
+  String get ssoWorkspaceHelp =>
+      'The short name in your workspace address, e.g. acme';
+
+  @override
+  String get ssoOpenFailed => 'Could not open the browser.';
+
+  @override
+  String get ssoErrUnverified =>
+      'Your identity provider did not confirm your email address, so you cannot sign in with it.';
+
+  @override
+  String get ssoErrDomain =>
+      'Your email domain may not sign in to this workspace.';
+
+  @override
+  String get ssoErrNoAccount =>
+      'No account exists for you here and sign-up through SSO is off.';
+
+  @override
+  String get ssoErrRemoved =>
+      'You were removed from this workspace. Ask for an invitation.';
+
+  @override
+  String get ssoErrDisabled => 'This account is disabled.';
+
+  @override
+  String get ssoErrGeneric =>
+      'Single sign-on could not be completed. Start again.';
+
+  @override
+  String get ssoRedirectHelp =>
+      'Register this redirect URI at your identity provider:';
+
+  @override
+  String get ssoEnabled => 'Single sign-on is on';
+
+  @override
+  String get ssoName => 'Name shown to people (optional)';
+
+  @override
+  String get ssoIssuer => 'Issuer URL';
+
+  @override
+  String get ssoIssuerHelp =>
+      'Where /.well-known/openid-configuration lives, e.g. https://id.example.com/realms/acme';
+
+  @override
+  String get ssoClientId => 'Client ID';
+
+  @override
+  String get ssoClientSecret => 'Client secret';
+
+  @override
+  String get ssoSecretKept => 'A secret is stored. Leave empty to keep it.';
+
+  @override
+  String get ssoSecretNeeded =>
+      'Required. It is stored encrypted and never shown again.';
+
+  @override
+  String get ssoScopes => 'Scopes';
+
+  @override
+  String get ssoDomains => 'Allowed email domains';
+
+  @override
+  String get ssoDomainsHelp =>
+      'Comma separated, e.g. acme.com. Empty allows any.';
+
+  @override
+  String get ssoAutoCreate => 'Create accounts on first sign-in';
+
+  @override
+  String get ssoAutoCreateSub =>
+      'People from allowed domains join without an invitation.';
+
+  @override
+  String get ssoRoles => 'Roles';
+
+  @override
+  String get ssoGroupClaim => 'Group claim name';
+
+  @override
+  String get ssoDefaultRole =>
+      'Role for people no group matches (default: Member).';
+
+  @override
+  String get ssoDefaultRoleAuto => 'Member (default)';
+
+  @override
+  String get ssoGroup => 'Group';
+
+  @override
+  String get ssoAddMapping => 'Map a group to a role';
+
+  @override
+  String get ssoEnforce => 'Require single sign-on';
+
+  @override
+  String get ssoEnforceSub =>
+      'Turns off password sign-in for members. Owners keep it as a way back in.';
+
+  @override
+  String get ssoSaved => 'Single sign-on saved.';
+
+  @override
+  String get ssoTest => 'Test';
+
+  @override
+  String ssoTestOk(int keys) {
+    return 'The provider answered ($keys signing keys found)';
+  }
+
+  @override
+  String get ssoTestFailed => 'The test failed';
+
+  @override
+  String get ssoRemove => 'Remove';
+
+  @override
+  String get ssoRemoveTitle => 'Remove single sign-on?';
+
+  @override
+  String get ssoRemoveBody =>
+      'People who signed in through it will have to sign in again.';
 }
 
 /// The translations for English (`en_XA`).
@@ -14672,4 +15003,341 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   @override
   String get wlConflict =>
       '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secTitle => '[Šéçûŕíţý ~~]';
+
+  @override
+  String get secSubtitle =>
+      '[Ţŵö-šţéþ ṽéŕíƒíçåţíöñ åñð ţŕûšţéð ðéṽíçéš ~~~~~~~~~~~~~]';
+
+  @override
+  String get secTwoStep => '[Ţŵö-šţéþ ṽéŕíƒíçåţíöñ ~~~~~~~]';
+
+  @override
+  String get secOn =>
+      '[Öñ. Šíĝñ-íñ åšķš ƒöŕ å çöðé ƒŕöɱ ýöûŕ åûţĥéñţíçåţöŕ åþþ. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secOff =>
+      '[Öƒƒ. Åðð å šéçöñð šţéþ ţö þŕöţéçţ ýöûŕ åççöûñţ. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secEnable => '[Ţûŕñ öñ ~~]';
+
+  @override
+  String get secTurnOn => '[Ţûŕñ öñ ~~]';
+
+  @override
+  String get secDisable => '[Ţûŕñ öƒƒ ~~]';
+
+  @override
+  String get secDisableTitle => '[Ţûŕñ öƒƒ ţŵö-šţéþ ṽéŕíƒíçåţíöñ ~~~~~~~~~~]';
+
+  @override
+  String get secDisabled => '[Ţŵö-šţéþ ṽéŕíƒíçåţíöñ íš öƒƒ. ~~~~~~~~~]';
+
+  @override
+  String get secEnrollTitle => '[Šéţ ûþ åñ åûţĥéñţíçåţöŕ åþþ ~~~~~~~~~]';
+
+  @override
+  String get secScanQr =>
+      '[Šçåñ ţĥíš çöðé ŵíţĥ åñ åûţĥéñţíçåţöŕ åþþ šûçĥ åš Åéĝíš, Åûţĥý öŕ Ĝööĝłé Åûţĥéñţíçåţöŕ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secOrTypeKey => '[Öŕ ţýþé ţĥíš ķéý íñ: ~~~~~~]';
+
+  @override
+  String get secEnterCode => '[6-ðíĝíţ çöðé ƒŕöɱ ţĥé åþþ ~~~~~~~~]';
+
+  @override
+  String get secCopied => '[Çöþíéð. ~~]';
+
+  @override
+  String get secRecoveryTitle => '[Ŕéçöṽéŕý çöðéš ~~~~]';
+
+  @override
+  String get secRecoveryBody =>
+      '[Ķééþ ţĥéšé ţéñ çöðéš šöɱéŵĥéŕé šåƒé. Éåçĥ ŵöŕķš öñçé íƒ ýöû łöšé ýöûŕ þĥöñé. Ţĥéý ŵíłł ñöţ ƀé šĥöŵñ åĝåíñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secCodesCopied => '[Ŕéçöṽéŕý çöðéš çöþíéð. ~~~~~~~]';
+
+  @override
+  String get secSavedThem => '[Í šåṽéð ţĥéɱ ~~~~]';
+
+  @override
+  String secCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count çöðéš łéƒţ',
+      one: '1 çöðé łéƒţ',
+      zero: 'Ñö çöðéš łéƒţ',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get secRegenerate => '[Ñéŵ çöðéš ~~~]';
+
+  @override
+  String get secRegenerateTitle => '[Ŕéþłåçé ŕéçöṽéŕý çöðéš ~~~~~~~]';
+
+  @override
+  String get secCodeOrRecovery => '[Åûţĥéñţíçåţöŕ öŕ ŕéçöṽéŕý çöðé ~~~~~~~~~~]';
+
+  @override
+  String get secDevices => '[Ţŕûšţéð ðéṽíçéš ~~~~~]';
+
+  @override
+  String get secDevicesSub =>
+      '[Ţĥéšé šķíþ ţĥé çöðé åţ šíĝñ-íñ ûñţíł ţĥéý éxþíŕé. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secNoDevices => '[Ñö ðéṽíçé íš ŕéɱéɱƀéŕéð. ~~~~~~~~]';
+
+  @override
+  String get secForgetAll => '[Föŕĝéţ åłł ~~~]';
+
+  @override
+  String get secForget => '[Föŕĝéţ ţĥíš ðéṽíçé ~~~~~~]';
+
+  @override
+  String get secUnnamedDevice => '[Ûññåɱéð ðéṽíçé ~~~~]';
+
+  @override
+  String secDeviceUntil(String date) {
+    return '[Ţŕûšţéð ûñţíł $date ~~~~~~]';
+  }
+
+  @override
+  String get secBlocked =>
+      '[Ţĥíš ŵöŕķšþåçé ŕéqûíŕéš ţŵö-šţéþ ṽéŕíƒíçåţíöñ. Ţûŕñ íţ öñ ƀéłöŵ ţö çöñţíñûé. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String secGraceUntil(String date) {
+    return '[Ţĥíš ŵöŕķšþåçé ŵíłł ŕéqûíŕé ţŵö-šţéþ ṽéŕíƒíçåţíöñ ƒŕöɱ $date. Ţûŕñ íţ öñ ƀéƒöŕé ţĥéñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get secPolicyTitle => '[Ŵöŕķšþåçé ŕéqûíŕéɱéñţ ~~~~~~~]';
+
+  @override
+  String get secRequire => '[Ŕéqûíŕé ţŵö-šţéþ ṽéŕíƒíçåţíöñ ~~~~~~~~~]';
+
+  @override
+  String get secRequireSub =>
+      '[Méɱƀéŕš ŵĥö ĥåṽé ñöţ ţûŕñéð íţ öñ åŕé ƀłöçķéð öñçé ţĥé ĝŕåçé þéŕíöð éñðš. ~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secGraceDays => '[Ĝŕåçé þéŕíöð (ðåýš) ~~~~~~]';
+
+  @override
+  String get secGraceInvalid => '[Éñţéŕ 0 ţö 90 ðåýš. ~~~~~~]';
+
+  @override
+  String get secPolicySaved => '[Ŕéqûíŕéɱéñţ šåṽéð. ~~~~~~]';
+
+  @override
+  String get secVerifyTitle => '[Ţŵö-šţéþ ṽéŕíƒíçåţíöñ ~~~~~~~]';
+
+  @override
+  String get secEnterAppCode =>
+      '[Éñţéŕ ţĥé 6-ðíĝíţ çöðé ƒŕöɱ ýöûŕ åûţĥéñţíçåţöŕ åþþ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secEnterRecovery =>
+      '[Éñţéŕ öñé öƒ ýöûŕ ŕéçöṽéŕý çöðéš. Éåçĥ ŵöŕķš öñçé. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secAppCode => '[Çöðé ~]';
+
+  @override
+  String get secRecoveryCode => '[Ŕéçöṽéŕý çöðé ~~~~]';
+
+  @override
+  String get secRememberDevice =>
+      '[Ðöñ\'ţ åšķ åĝåíñ öñ ţĥíš ðéṽíçé ƒöŕ 30 ðåýš ~~~~~~~~~~~~~~]';
+
+  @override
+  String get secVerify => '[Ṽéŕíƒý ~~]';
+
+  @override
+  String get secUseRecovery => '[Ûšé å ŕéçöṽéŕý çöðé ~~~~~~]';
+
+  @override
+  String get secUseAppCode => '[Ûšé ţĥé åþþ çöðé ~~~~~]';
+
+  @override
+  String get secBackToSignIn => '[ßåçķ ţö šíĝñ íñ ~~~~~]';
+
+  @override
+  String get secWrongCode => '[Ţĥåţ çöðé íš ñöţ ŕíĝĥţ. Ţŕý åĝåíñ. ~~~~~~~~~~~]';
+
+  @override
+  String get secLocked =>
+      '[Ţöö ɱåñý ŵŕöñĝ çöðéš. Ŵåíţ å ŵĥíłé åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secTooManyTries =>
+      '[Ţöö ɱåñý ŵŕöñĝ ţŕíéš. Šíĝñ íñ åĝåíñ. ~~~~~~~~~~~~]';
+
+  @override
+  String get secSignInExpired =>
+      '[Ţĥíš šíĝñ-íñ ţíɱéð öûţ. Šţåŕţ åĝåíñ ƒŕöɱ ţĥé þåššŵöŕð. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secConflict =>
+      '[Ţĥåţ çĥåñĝéð íñ ţĥé ɱéåñţíɱé. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get secNotFound => '[Ñöţ ƒöûñð. ~~~]';
+
+  @override
+  String get ssoTitle => '[Šíñĝłé šíĝñ-öñ ~~~~]';
+
+  @override
+  String get ssoTitleShort => '[Šíñĝłé šíĝñ-öñ ~~~~]';
+
+  @override
+  String get ssoSub =>
+      '[Łéţ þéöþłé šíĝñ íñ ŵíţĥ ýöûŕ íðéñţíţý þŕöṽíðéŕ (ÖþéñÍÐ Çöññéçţ). ~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoContinue => '[Çöñţíñûé ŵíţĥ ŠŠÖ ~~~~~]';
+
+  @override
+  String get ssoContinueShort => '[Çöñţíñûé ~~]';
+
+  @override
+  String get ssoWorkspaceName => '[Ŵöŕķšþåçé ÛŔŁ ñåɱé ~~~~~~]';
+
+  @override
+  String get ssoWorkspaceHelp =>
+      '[Ţĥé šĥöŕţ ñåɱé íñ ýöûŕ ŵöŕķšþåçé åððŕéšš, é.ĝ. åçɱé ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoOpenFailed => '[Çöûłð ñöţ öþéñ ţĥé ƀŕöŵšéŕ. ~~~~~~~~~]';
+
+  @override
+  String get ssoErrUnverified =>
+      '[Ýöûŕ íðéñţíţý þŕöṽíðéŕ ðíð ñöţ çöñƒíŕɱ ýöûŕ éɱåíł åððŕéšš, šö ýöû çåññöţ šíĝñ íñ ŵíţĥ íţ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoErrDomain =>
+      '[Ýöûŕ éɱåíł ðöɱåíñ ɱåý ñöţ šíĝñ íñ ţö ţĥíš ŵöŕķšþåçé. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoErrNoAccount =>
+      '[Ñö åççöûñţ éxíšţš ƒöŕ ýöû ĥéŕé åñð šíĝñ-ûþ ţĥŕöûĝĥ ŠŠÖ íš öƒƒ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoErrRemoved =>
+      '[Ýöû ŵéŕé ŕéɱöṽéð ƒŕöɱ ţĥíš ŵöŕķšþåçé. Åšķ ƒöŕ åñ íñṽíţåţíöñ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoErrDisabled => '[Ţĥíš åççöûñţ íš ðíšåƀłéð. ~~~~~~~~]';
+
+  @override
+  String get ssoErrGeneric =>
+      '[Šíñĝłé šíĝñ-öñ çöûłð ñöţ ƀé çöɱþłéţéð. Šţåŕţ åĝåíñ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoRedirectHelp =>
+      '[Ŕéĝíšţéŕ ţĥíš ŕéðíŕéçţ ÛŔÍ åţ ýöûŕ íðéñţíţý þŕöṽíðéŕ: ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoEnabled => '[Šíñĝłé šíĝñ-öñ íš öñ ~~~~~~]';
+
+  @override
+  String get ssoName => '[Ñåɱé šĥöŵñ ţö þéöþłé (öþţíöñåł) ~~~~~~~~~~]';
+
+  @override
+  String get ssoIssuer => '[Íššûéŕ ÛŔŁ ~~~]';
+
+  @override
+  String get ssoIssuerHelp =>
+      '[Ŵĥéŕé /.ŵéłł-ķñöŵñ/öþéñíð-çöñƒíĝûŕåţíöñ łíṽéš, é.ĝ. ĥţţþš://íð.éxåɱþłé.çöɱ/ŕéåłɱš/åçɱé ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoClientId => '[Çłíéñţ ÍÐ ~~~]';
+
+  @override
+  String get ssoClientSecret => '[Çłíéñţ šéçŕéţ ~~~~]';
+
+  @override
+  String get ssoSecretKept =>
+      '[Å šéçŕéţ íš šţöŕéð. Łéåṽé éɱþţý ţö ķééþ íţ. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoSecretNeeded =>
+      '[Ŕéqûíŕéð. Íţ íš šţöŕéð éñçŕýþţéð åñð ñéṽéŕ šĥöŵñ åĝåíñ. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoScopes => '[Šçöþéš ~~]';
+
+  @override
+  String get ssoDomains => '[Åłłöŵéð éɱåíł ðöɱåíñš ~~~~~~~]';
+
+  @override
+  String get ssoDomainsHelp =>
+      '[Çöɱɱå šéþåŕåţéð, é.ĝ. åçɱé.çöɱ. Éɱþţý åłłöŵš åñý. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoAutoCreate => '[Çŕéåţé åççöûñţš öñ ƒíŕšţ šíĝñ-íñ ~~~~~~~~~~]';
+
+  @override
+  String get ssoAutoCreateSub =>
+      '[Þéöþłé ƒŕöɱ åłłöŵéð ðöɱåíñš ĵöíñ ŵíţĥöûţ åñ íñṽíţåţíöñ. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoRoles => '[Ŕöłéš ~]';
+
+  @override
+  String get ssoGroupClaim => '[Ĝŕöûþ çłåíɱ ñåɱé ~~~~~]';
+
+  @override
+  String get ssoDefaultRole =>
+      '[Ŕöłé ƒöŕ þéöþłé ñö ĝŕöûþ ɱåţçĥéš (ðéƒåûłţ: Méɱƀéŕ). ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoDefaultRoleAuto => '[Méɱƀéŕ (ðéƒåûłţ) ~~~~~]';
+
+  @override
+  String get ssoGroup => '[Ĝŕöûþ ~]';
+
+  @override
+  String get ssoAddMapping => '[Måþ å ĝŕöûþ ţö å ŕöłé ~~~~~~~]';
+
+  @override
+  String get ssoEnforce => '[Ŕéqûíŕé šíñĝłé šíĝñ-öñ ~~~~~~~]';
+
+  @override
+  String get ssoEnforceSub =>
+      '[Ţûŕñš öƒƒ þåššŵöŕð šíĝñ-íñ ƒöŕ ɱéɱƀéŕš. Öŵñéŕš ķééþ íţ åš å ŵåý ƀåçķ íñ. ~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get ssoSaved => '[Šíñĝłé šíĝñ-öñ šåṽéð. ~~~~~~~]';
+
+  @override
+  String get ssoTest => '[Ţéšţ ~]';
+
+  @override
+  String ssoTestOk(int keys) {
+    return '[Ţĥé þŕöṽíðéŕ åñšŵéŕéð ($keys šíĝñíñĝ ķéýš ƒöûñð) ~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get ssoTestFailed => '[Ţĥé ţéšţ ƒåíłéð ~~~~~]';
+
+  @override
+  String get ssoRemove => '[Ŕéɱöṽé ~~]';
+
+  @override
+  String get ssoRemoveTitle => '[Ŕéɱöṽé šíñĝłé šíĝñ-öñ? ~~~~~~~]';
+
+  @override
+  String get ssoRemoveBody =>
+      '[Þéöþłé ŵĥö šíĝñéð íñ ţĥŕöûĝĥ íţ ŵíłł ĥåṽé ţö šíĝñ íñ åĝåíñ. ~~~~~~~~~~~~~~~~~~~]';
 }

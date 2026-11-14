@@ -59,6 +59,8 @@ dependencies:
   drift: ^2.35.4
   path_provider: ^2.1.6
   path: ^1.9.1
+  qr: ^4.0.1
+  crypto: ^3.0.8
 
 dev_dependencies:
   flutter_test:

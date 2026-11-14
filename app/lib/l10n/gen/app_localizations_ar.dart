@@ -7339,4 +7339,326 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get wlConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مجدداً.';
+
+  @override
+  String get secTitle => 'الأمان';
+
+  @override
+  String get secSubtitle => 'التحقق بخطوتين والأجهزة الموثوقة';
+
+  @override
+  String get secTwoStep => 'التحقق بخطوتين';
+
+  @override
+  String get secOn => 'مفعّل. يطلب تسجيل الدخول رمزًا من تطبيق المصادقة.';
+
+  @override
+  String get secOff => 'غير مفعّل. أضف خطوة ثانية لحماية حسابك.';
+
+  @override
+  String get secEnable => 'تفعيل';
+
+  @override
+  String get secTurnOn => 'تفعيل';
+
+  @override
+  String get secDisable => 'إيقاف';
+
+  @override
+  String get secDisableTitle => 'إيقاف التحقق بخطوتين';
+
+  @override
+  String get secDisabled => 'تم إيقاف التحقق بخطوتين.';
+
+  @override
+  String get secEnrollTitle => 'إعداد تطبيق المصادقة';
+
+  @override
+  String get secScanQr =>
+      'امسح هذا الرمز بتطبيق مصادقة مثل Aegis أو Authy أو Google Authenticator.';
+
+  @override
+  String get secOrTypeKey => 'أو اكتب هذا المفتاح:';
+
+  @override
+  String get secEnterCode => 'الرمز المكوّن من 6 أرقام من التطبيق';
+
+  @override
+  String get secCopied => 'تم النسخ.';
+
+  @override
+  String get secRecoveryTitle => 'رموز الاسترداد';
+
+  @override
+  String get secRecoveryBody =>
+      'احتفظ بهذه الرموز العشرة في مكان آمن. يعمل كل منها مرة واحدة إذا فقدت هاتفك. لن تظهر مرة أخرى.';
+
+  @override
+  String get secCodesCopied => 'تم نسخ رموز الاسترداد.';
+
+  @override
+  String get secSavedThem => 'لقد حفظتها';
+
+  @override
+  String secCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count رموز متبقية',
+      one: 'رمز واحد متبقٍ',
+      zero: 'لا توجد رموز متبقية',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get secRegenerate => 'رموز جديدة';
+
+  @override
+  String get secRegenerateTitle => 'استبدال رموز الاسترداد';
+
+  @override
+  String get secCodeOrRecovery => 'رمز التطبيق أو رمز الاسترداد';
+
+  @override
+  String get secDevices => 'الأجهزة الموثوقة';
+
+  @override
+  String get secDevicesSub =>
+      'تتخطى هذه الأجهزة الرمز عند الدخول حتى تنتهي صلاحيتها.';
+
+  @override
+  String get secNoDevices => 'لا يوجد جهاز محفوظ.';
+
+  @override
+  String get secForgetAll => 'نسيان الكل';
+
+  @override
+  String get secForget => 'نسيان هذا الجهاز';
+
+  @override
+  String get secUnnamedDevice => 'جهاز بلا اسم';
+
+  @override
+  String secDeviceUntil(String date) {
+    return 'موثوق حتى $date';
+  }
+
+  @override
+  String get secBlocked =>
+      'تتطلب مساحة العمل هذه التحقق بخطوتين. فعّله أدناه للمتابعة.';
+
+  @override
+  String secGraceUntil(String date) {
+    return 'ستتطلب مساحة العمل هذه التحقق بخطوتين اعتبارًا من $date. فعّله قبل ذلك.';
+  }
+
+  @override
+  String get secPolicyTitle => 'متطلبات مساحة العمل';
+
+  @override
+  String get secRequire => 'فرض التحقق بخطوتين';
+
+  @override
+  String get secRequireSub =>
+      'يُحظر الأعضاء الذين لم يفعّلوه بعد انتهاء المهلة.';
+
+  @override
+  String get secGraceDays => 'فترة السماح (أيام)';
+
+  @override
+  String get secGraceInvalid => 'أدخل من 0 إلى 90 يومًا.';
+
+  @override
+  String get secPolicySaved => 'تم حفظ المتطلب.';
+
+  @override
+  String get secVerifyTitle => 'التحقق بخطوتين';
+
+  @override
+  String get secEnterAppCode =>
+      'أدخل الرمز المكوّن من 6 أرقام من تطبيق المصادقة.';
+
+  @override
+  String get secEnterRecovery =>
+      'أدخل أحد رموز الاسترداد. يعمل كل رمز مرة واحدة.';
+
+  @override
+  String get secAppCode => 'الرمز';
+
+  @override
+  String get secRecoveryCode => 'رمز الاسترداد';
+
+  @override
+  String get secRememberDevice =>
+      'لا تسأل مرة أخرى على هذا الجهاز لمدة 30 يومًا';
+
+  @override
+  String get secVerify => 'تحقق';
+
+  @override
+  String get secUseRecovery => 'استخدم رمز استرداد';
+
+  @override
+  String get secUseAppCode => 'استخدم رمز التطبيق';
+
+  @override
+  String get secBackToSignIn => 'العودة إلى تسجيل الدخول';
+
+  @override
+  String get secWrongCode => 'هذا الرمز غير صحيح. حاول مرة أخرى.';
+
+  @override
+  String get secLocked => 'رموز خاطئة كثيرة. انتظر قليلًا ثم حاول مرة أخرى.';
+
+  @override
+  String get secTooManyTries => 'محاولات خاطئة كثيرة. سجّل الدخول من جديد.';
+
+  @override
+  String get secSignInExpired =>
+      'انتهت مهلة تسجيل الدخول. ابدأ من جديد بكلمة المرور.';
+
+  @override
+  String get secConflict => 'تغيّر هذا في الأثناء. أعد التحميل وحاول مرة أخرى.';
+
+  @override
+  String get secNotFound => 'غير موجود.';
+
+  @override
+  String get ssoTitle => 'تسجيل الدخول الموحّد (SSO)';
+
+  @override
+  String get ssoTitleShort => 'تسجيل الدخول الموحّد';
+
+  @override
+  String get ssoSub =>
+      'اسمح للأشخاص بالدخول عبر مزوّد الهوية لديك (OpenID Connect).';
+
+  @override
+  String get ssoContinue => 'المتابعة عبر SSO';
+
+  @override
+  String get ssoContinueShort => 'متابعة';
+
+  @override
+  String get ssoWorkspaceName => 'اسم عنوان مساحة العمل';
+
+  @override
+  String get ssoWorkspaceHelp => 'الاسم القصير في عنوان مساحة العمل، مثل acme';
+
+  @override
+  String get ssoOpenFailed => 'تعذّر فتح المتصفح.';
+
+  @override
+  String get ssoErrUnverified =>
+      'لم يؤكد مزوّد الهوية بريدك الإلكتروني، لذلك لا يمكنك الدخول به.';
+
+  @override
+  String get ssoErrDomain =>
+      'نطاق بريدك غير مسموح له بالدخول إلى مساحة العمل هذه.';
+
+  @override
+  String get ssoErrNoAccount => 'لا يوجد حساب لك هنا والتسجيل عبر SSO متوقف.';
+
+  @override
+  String get ssoErrRemoved => 'تمت إزالتك من مساحة العمل هذه. اطلب دعوة.';
+
+  @override
+  String get ssoErrDisabled => 'هذا الحساب معطّل.';
+
+  @override
+  String get ssoErrGeneric => 'تعذّر إكمال تسجيل الدخول الموحّد. ابدأ من جديد.';
+
+  @override
+  String get ssoRedirectHelp =>
+      'سجّل عنوان إعادة التوجيه هذا لدى مزوّد الهوية:';
+
+  @override
+  String get ssoEnabled => 'تسجيل الدخول الموحّد مفعّل';
+
+  @override
+  String get ssoName => 'الاسم المعروض (اختياري)';
+
+  @override
+  String get ssoIssuer => 'عنوان المُصدِر (Issuer)';
+
+  @override
+  String get ssoIssuerHelp =>
+      'حيث يوجد /.well-known/openid-configuration، مثل https://id.example.com/realms/acme';
+
+  @override
+  String get ssoClientId => 'معرّف العميل';
+
+  @override
+  String get ssoClientSecret => 'سر العميل';
+
+  @override
+  String get ssoSecretKept => 'يوجد سر محفوظ. اتركه فارغًا للإبقاء عليه.';
+
+  @override
+  String get ssoSecretNeeded => 'مطلوب. يُخزَّن مشفّرًا ولا يُعرض مرة أخرى.';
+
+  @override
+  String get ssoScopes => 'النطاقات (Scopes)';
+
+  @override
+  String get ssoDomains => 'نطاقات البريد المسموحة';
+
+  @override
+  String get ssoDomainsHelp => 'افصل بفواصل، مثل acme.com. الفارغ يسمح للجميع.';
+
+  @override
+  String get ssoAutoCreate => 'إنشاء الحسابات عند أول دخول';
+
+  @override
+  String get ssoAutoCreateSub => 'ينضم أصحاب النطاقات المسموحة دون دعوة.';
+
+  @override
+  String get ssoRoles => 'الأدوار';
+
+  @override
+  String get ssoGroupClaim => 'اسم مطالبة المجموعة (claim)';
+
+  @override
+  String get ssoDefaultRole =>
+      'الدور لمن لا تطابقه أي مجموعة (الافتراضي: عضو).';
+
+  @override
+  String get ssoDefaultRoleAuto => 'عضو (افتراضي)';
+
+  @override
+  String get ssoGroup => 'المجموعة';
+
+  @override
+  String get ssoAddMapping => 'ربط مجموعة بدور';
+
+  @override
+  String get ssoEnforce => 'فرض تسجيل الدخول الموحّد';
+
+  @override
+  String get ssoEnforceSub =>
+      'يوقف الدخول بكلمة المرور للأعضاء. يحتفظ المالكون بها كمنفذ احتياطي.';
+
+  @override
+  String get ssoSaved => 'تم حفظ تسجيل الدخول الموحّد.';
+
+  @override
+  String get ssoTest => 'اختبار';
+
+  @override
+  String ssoTestOk(int keys) {
+    return 'استجاب المزوّد (عُثر على $keys مفاتيح توقيع)';
+  }
+
+  @override
+  String get ssoTestFailed => 'فشل الاختبار';
+
+  @override
+  String get ssoRemove => 'إزالة';
+
+  @override
+  String get ssoRemoveTitle => 'إزالة تسجيل الدخول الموحّد؟';
+
+  @override
+  String get ssoRemoveBody => 'سيضطر من دخلوا عبره إلى تسجيل الدخول من جديد.';
 }

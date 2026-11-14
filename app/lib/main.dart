@@ -8,6 +8,7 @@ import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/core/auth/token_store.dart';
+import 'package:taskforge/core/auth/trusted_device_store.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/data/workspace_store.dart';
@@ -18,8 +19,13 @@ Future<void> main() async {
   usePathUrlStrategy();
   // Web: the refresh token stays in an HttpOnly cookie and only the short-lived
   // access token is held, in memory. Elsewhere tokens live in the Keychain/Keystore.
+  final trustedDevices = SecureTrustedDeviceStore();
   final session = AuthSession(
-    api: HttpAuthApi(AppConfig.restUrl, cookieMode: kIsWeb),
+    api: HttpAuthApi(
+      AppConfig.restUrl,
+      cookieMode: kIsWeb,
+      trustedDevices: trustedDevices,
+    ),
     store: kIsWeb ? MemoryTokenStore() : SecureTokenStore(),
     cookieSession: kIsWeb,
   );
@@ -28,6 +34,7 @@ Future<void> main() async {
     ProviderScope(
       overrides: [
         authSessionProvider.overrideWithValue(session),
+        trustedDeviceStoreProvider.overrideWithValue(trustedDevices),
         workspaceStoreProvider.overrideWithValue(SecureWorkspaceStore()),
       ],
       child: const TaskForgeApp(),

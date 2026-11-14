@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/auth/auth_api.dart' show SecondFactorRequired;
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/auth/credentials_form.dart';
 import 'package:taskforge/features/auth/validators.dart';
+import 'package:taskforge/features/security/presentation/sso_flow.dart';
 
 class SignInScreen extends ConsumerWidget {
   const SignInScreen({super.key, this.from});
@@ -20,9 +22,28 @@ class SignInScreen extends ConsumerWidget {
       title: context.l10n.signIn,
       submitLabel: context.l10n.signIn,
       passwordValidator: validateSignInPassword,
-      onSubmit: session.signIn,
+      onSubmit: (email, password) async {
+        try {
+          await session.signIn(email, password);
+        } on SecondFactorRequired catch (challenge) {
+          if (!context.mounted) return;
+          // The password was right; the code is the next step.
+          context.go(
+            from == null
+                ? '/two-factor'
+                : '/two-factor?from=${Uri.encodeComponent(from!)}',
+            extra: challenge,
+          );
+        }
+      },
       footer: Column(
         children: [
+          OutlinedButton.icon(
+            key: const Key('go-sso'),
+            onPressed: () => showSsoDialog(context, ref),
+            icon: const Icon(Icons.badge_outlined),
+            label: Text(context.l10n.ssoContinue),
+          ),
           TextButton(
             key: const Key('go-forgot'),
             onPressed: () => context.go('/forgot-password'),

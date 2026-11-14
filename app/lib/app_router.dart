@@ -46,6 +46,12 @@ import 'package:taskforge/features/projects/presentation/project_settings_screen
 import 'package:taskforge/features/fields/presentation/fields_screen.dart';
 import 'package:taskforge/features/workflows/presentation/workflow_screen.dart';
 import 'package:taskforge/features/roles/presentation/roles_screen.dart';
+import 'package:taskforge/features/security/application/security_providers.dart';
+import 'package:taskforge/features/security/presentation/security_screen.dart';
+import 'package:taskforge/features/security/presentation/sso_callback_screen.dart';
+import 'package:taskforge/features/security/presentation/sso_setup_screen.dart';
+import 'package:taskforge/features/security/presentation/two_factor_screen.dart';
+import 'package:taskforge/core/auth/auth_api.dart' show SecondFactorRequired;
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
 import 'package:taskforge/features/workspaces/presentation/settings_screen.dart';
@@ -56,6 +62,8 @@ const _authPaths = {
   '/sign-up',
   '/forgot-password',
   '/reset-password',
+  '/two-factor',
+  '/sso/callback',
 };
 
 /// Signed-in pages that make no sense to return to after signing in again.
@@ -75,9 +83,17 @@ String safeReturnPath(String? from) {
       : from;
 }
 
-/// Maps the native link `taskforge://invite/<token>` (host `invite`, path
-/// `/<token>`) onto the in-app route; null for every other location.
+/// Maps the native links onto in-app routes: `taskforge://invite/<token>`
+/// (host `invite`, path `/<token>`) and `taskforge://sso/callback?ticket=...`;
+/// null for every other location.
 String? customSchemeRoute(Uri uri) {
+  if (uri.scheme == 'taskforge' && uri.host == 'sso') {
+    // The system browser coming back from single sign-on: keep ticket/error.
+    return Uri(
+      path: '/sso/callback',
+      query: uri.query.isEmpty ? null : uri.query,
+    ).toString();
+  }
   if (uri.scheme != 'taskforge' || uri.host != 'invite') return null;
   final token = uri.pathSegments.where((s) => s.isNotEmpty).firstOrNull;
   return token == null ? '/' : '/invite/${Uri.encodeComponent(token)}';
@@ -88,6 +104,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   // Re-run the redirect whenever the workspace list changes (zero-workspace guard).
   final workspacesChanged = ValueNotifier(0);
   ref.listen(workspacesProvider, (_, _) => workspacesChanged.value++);
+  // The two-factor gate: re-run the redirect when the policy answer changes.
+  ref.listen(securityPolicyProvider, (_, _) => workspacesChanged.value++);
   ref.onDispose(workspacesChanged.dispose);
   late final GoRouter router;
   // A project belongs to one workspace: leave its pages when the workspace changes.
@@ -117,6 +135,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         return safeReturnPath(state.uri.queryParameters['from']);
       }
       if (!signedIn) return null;
+      // A workspace that requires two-factor and a member who has not turned
+      // it on (grace over): only the security screen opens until they do.
+      final policy = ref.read(securityPolicyProvider).value;
+      if (policy != null &&
+          policy.blocked &&
+          !state.uri.path.startsWith('/settings/security')) {
+        return '/settings/security';
+      }
       // Signed in with no workspace: always onboarding. While the list is still
       // loading (or failed) stay put; the screens show their own progress/retry.
       final workspaces = ref.read(workspacesProvider).value;
@@ -271,6 +297,28 @@ final routerProvider = Provider<GoRouter>((ref) {
             InviteScreen(token: state.pathParameters['token']!),
       ),
       GoRoute(path: '/sessions', builder: (_, _) => const SessionsScreen()),
+      GoRoute(
+        path: '/settings/security',
+        builder: (_, _) => const SecurityScreen(),
+      ),
+      GoRoute(path: '/settings/sso', builder: (_, _) => const SsoSetupScreen()),
+      GoRoute(
+        path: '/two-factor',
+        // The challenge is passed as navigation state; without it, start over.
+        redirect: (_, state) =>
+            state.extra is SecondFactorRequired ? null : '/sign-in',
+        builder: (_, state) => TwoFactorScreen(
+          challenge: state.extra as SecondFactorRequired,
+          from: state.uri.queryParameters['from'],
+        ),
+      ),
+      GoRoute(
+        path: '/sso/callback',
+        builder: (_, state) => SsoCallbackScreen(
+          ticket: state.uri.queryParameters['ticket'],
+          error: state.uri.queryParameters['sso_error'],
+        ),
+      ),
       GoRoute(
         path: '/settings/language',
         builder: (_, _) => const LanguageScreen(),

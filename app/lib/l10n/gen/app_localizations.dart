@@ -12906,6 +12906,588 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It changed since you opened it. Reload and try again.'**
   String get wlConflict;
+
+  /// No description provided for @secTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get secTitle;
+
+  /// No description provided for @secSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification and trusted devices'**
+  String get secSubtitle;
+
+  /// No description provided for @secTwoStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification'**
+  String get secTwoStep;
+
+  /// No description provided for @secOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On. Sign-in asks for a code from your authenticator app.'**
+  String get secOn;
+
+  /// No description provided for @secOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off. Add a second step to protect your account.'**
+  String get secOff;
+
+  /// No description provided for @secEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get secEnable;
+
+  /// No description provided for @secTurnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get secTurnOn;
+
+  /// No description provided for @secDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get secDisable;
+
+  /// No description provided for @secDisableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off two-step verification'**
+  String get secDisableTitle;
+
+  /// No description provided for @secDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification is off.'**
+  String get secDisabled;
+
+  /// No description provided for @secEnrollTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up an authenticator app'**
+  String get secEnrollTitle;
+
+  /// No description provided for @secScanQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this code with an authenticator app such as Aegis, Authy or Google Authenticator.'**
+  String get secScanQr;
+
+  /// No description provided for @secOrTypeKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type this key in:'**
+  String get secOrTypeKey;
+
+  /// No description provided for @secEnterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit code from the app'**
+  String get secEnterCode;
+
+  /// No description provided for @secCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied.'**
+  String get secCopied;
+
+  /// No description provided for @secRecoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes'**
+  String get secRecoveryTitle;
+
+  /// No description provided for @secRecoveryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep these ten codes somewhere safe. Each works once if you lose your phone. They will not be shown again.'**
+  String get secRecoveryBody;
+
+  /// No description provided for @secCodesCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes copied.'**
+  String get secCodesCopied;
+
+  /// No description provided for @secSavedThem.
+  ///
+  /// In en, this message translates to:
+  /// **'I saved them'**
+  String get secSavedThem;
+
+  /// No description provided for @secCodesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No codes left} =1{1 code left} other{{count} codes left}}'**
+  String secCodesLeft(int count);
+
+  /// No description provided for @secRegenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'New codes'**
+  String get secRegenerate;
+
+  /// No description provided for @secRegenerateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace recovery codes'**
+  String get secRegenerateTitle;
+
+  /// No description provided for @secCodeOrRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Authenticator or recovery code'**
+  String get secCodeOrRecovery;
+
+  /// No description provided for @secDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Trusted devices'**
+  String get secDevices;
+
+  /// No description provided for @secDevicesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'These skip the code at sign-in until they expire.'**
+  String get secDevicesSub;
+
+  /// No description provided for @secNoDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No device is remembered.'**
+  String get secNoDevices;
+
+  /// No description provided for @secForgetAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget all'**
+  String get secForgetAll;
+
+  /// No description provided for @secForget.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget this device'**
+  String get secForget;
+
+  /// No description provided for @secUnnamedDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unnamed device'**
+  String get secUnnamedDevice;
+
+  /// No description provided for @secDeviceUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Trusted until {date}'**
+  String secDeviceUntil(String date);
+
+  /// No description provided for @secBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace requires two-step verification. Turn it on below to continue.'**
+  String get secBlocked;
+
+  /// No description provided for @secGraceUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace will require two-step verification from {date}. Turn it on before then.'**
+  String secGraceUntil(String date);
+
+  /// No description provided for @secPolicyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace requirement'**
+  String get secPolicyTitle;
+
+  /// No description provided for @secRequire.
+  ///
+  /// In en, this message translates to:
+  /// **'Require two-step verification'**
+  String get secRequire;
+
+  /// No description provided for @secRequireSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Members who have not turned it on are blocked once the grace period ends.'**
+  String get secRequireSub;
+
+  /// No description provided for @secGraceDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Grace period (days)'**
+  String get secGraceDays;
+
+  /// No description provided for @secGraceInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 0 to 90 days.'**
+  String get secGraceInvalid;
+
+  /// No description provided for @secPolicySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirement saved.'**
+  String get secPolicySaved;
+
+  /// No description provided for @secVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification'**
+  String get secVerifyTitle;
+
+  /// No description provided for @secEnterAppCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from your authenticator app.'**
+  String get secEnterAppCode;
+
+  /// No description provided for @secEnterRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter one of your recovery codes. Each works once.'**
+  String get secEnterRecovery;
+
+  /// No description provided for @secAppCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get secAppCode;
+
+  /// No description provided for @secRecoveryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get secRecoveryCode;
+
+  /// No description provided for @secRememberDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t ask again on this device for 30 days'**
+  String get secRememberDevice;
+
+  /// No description provided for @secVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get secVerify;
+
+  /// No description provided for @secUseRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a recovery code'**
+  String get secUseRecovery;
+
+  /// No description provided for @secUseAppCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the app code'**
+  String get secUseAppCode;
+
+  /// No description provided for @secBackToSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
+  String get secBackToSignIn;
+
+  /// No description provided for @secWrongCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is not right. Try again.'**
+  String get secWrongCode;
+
+  /// No description provided for @secLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many wrong codes. Wait a while and try again.'**
+  String get secLocked;
+
+  /// No description provided for @secTooManyTries.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many wrong tries. Sign in again.'**
+  String get secTooManyTries;
+
+  /// No description provided for @secSignInExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in timed out. Start again from the password.'**
+  String get secSignInExpired;
+
+  /// No description provided for @secConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'That changed in the meantime. Reload and try again.'**
+  String get secConflict;
+
+  /// No description provided for @secNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found.'**
+  String get secNotFound;
+
+  /// No description provided for @ssoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Single sign-on'**
+  String get ssoTitle;
+
+  /// No description provided for @ssoTitleShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Single sign-on'**
+  String get ssoTitleShort;
+
+  /// No description provided for @ssoSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Let people sign in with your identity provider (OpenID Connect).'**
+  String get ssoSub;
+
+  /// No description provided for @ssoContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with SSO'**
+  String get ssoContinue;
+
+  /// No description provided for @ssoContinueShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get ssoContinueShort;
+
+  /// No description provided for @ssoWorkspaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace URL name'**
+  String get ssoWorkspaceName;
+
+  /// No description provided for @ssoWorkspaceHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The short name in your workspace address, e.g. acme'**
+  String get ssoWorkspaceHelp;
+
+  /// No description provided for @ssoOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the browser.'**
+  String get ssoOpenFailed;
+
+  /// No description provided for @ssoErrUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Your identity provider did not confirm your email address, so you cannot sign in with it.'**
+  String get ssoErrUnverified;
+
+  /// No description provided for @ssoErrDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email domain may not sign in to this workspace.'**
+  String get ssoErrDomain;
+
+  /// No description provided for @ssoErrNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No account exists for you here and sign-up through SSO is off.'**
+  String get ssoErrNoAccount;
+
+  /// No description provided for @ssoErrRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'You were removed from this workspace. Ask for an invitation.'**
+  String get ssoErrRemoved;
+
+  /// No description provided for @ssoErrDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is disabled.'**
+  String get ssoErrDisabled;
+
+  /// No description provided for @ssoErrGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Single sign-on could not be completed. Start again.'**
+  String get ssoErrGeneric;
+
+  /// No description provided for @ssoRedirectHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Register this redirect URI at your identity provider:'**
+  String get ssoRedirectHelp;
+
+  /// No description provided for @ssoEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Single sign-on is on'**
+  String get ssoEnabled;
+
+  /// No description provided for @ssoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name shown to people (optional)'**
+  String get ssoName;
+
+  /// No description provided for @ssoIssuer.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuer URL'**
+  String get ssoIssuer;
+
+  /// No description provided for @ssoIssuerHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Where /.well-known/openid-configuration lives, e.g. https://id.example.com/realms/acme'**
+  String get ssoIssuerHelp;
+
+  /// No description provided for @ssoClientId.
+  ///
+  /// In en, this message translates to:
+  /// **'Client ID'**
+  String get ssoClientId;
+
+  /// No description provided for @ssoClientSecret.
+  ///
+  /// In en, this message translates to:
+  /// **'Client secret'**
+  String get ssoClientSecret;
+
+  /// No description provided for @ssoSecretKept.
+  ///
+  /// In en, this message translates to:
+  /// **'A secret is stored. Leave empty to keep it.'**
+  String get ssoSecretKept;
+
+  /// No description provided for @ssoSecretNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Required. It is stored encrypted and never shown again.'**
+  String get ssoSecretNeeded;
+
+  /// No description provided for @ssoScopes.
+  ///
+  /// In en, this message translates to:
+  /// **'Scopes'**
+  String get ssoScopes;
+
+  /// No description provided for @ssoDomains.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed email domains'**
+  String get ssoDomains;
+
+  /// No description provided for @ssoDomainsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Comma separated, e.g. acme.com. Empty allows any.'**
+  String get ssoDomainsHelp;
+
+  /// No description provided for @ssoAutoCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create accounts on first sign-in'**
+  String get ssoAutoCreate;
+
+  /// No description provided for @ssoAutoCreateSub.
+  ///
+  /// In en, this message translates to:
+  /// **'People from allowed domains join without an invitation.'**
+  String get ssoAutoCreateSub;
+
+  /// No description provided for @ssoRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'Roles'**
+  String get ssoRoles;
+
+  /// No description provided for @ssoGroupClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Group claim name'**
+  String get ssoGroupClaim;
+
+  /// No description provided for @ssoDefaultRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role for people no group matches (default: Member).'**
+  String get ssoDefaultRole;
+
+  /// No description provided for @ssoDefaultRoleAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Member (default)'**
+  String get ssoDefaultRoleAuto;
+
+  /// No description provided for @ssoGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get ssoGroup;
+
+  /// No description provided for @ssoAddMapping.
+  ///
+  /// In en, this message translates to:
+  /// **'Map a group to a role'**
+  String get ssoAddMapping;
+
+  /// No description provided for @ssoEnforce.
+  ///
+  /// In en, this message translates to:
+  /// **'Require single sign-on'**
+  String get ssoEnforce;
+
+  /// No description provided for @ssoEnforceSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Turns off password sign-in for members. Owners keep it as a way back in.'**
+  String get ssoEnforceSub;
+
+  /// No description provided for @ssoSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Single sign-on saved.'**
+  String get ssoSaved;
+
+  /// No description provided for @ssoTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get ssoTest;
+
+  /// No description provided for @ssoTestOk.
+  ///
+  /// In en, this message translates to:
+  /// **'The provider answered ({keys} signing keys found)'**
+  String ssoTestOk(int keys);
+
+  /// No description provided for @ssoTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The test failed'**
+  String get ssoTestFailed;
+
+  /// No description provided for @ssoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get ssoRemove;
+
+  /// No description provided for @ssoRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove single sign-on?'**
+  String get ssoRemoveTitle;
+
+  /// No description provided for @ssoRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People who signed in through it will have to sign in again.'**
+  String get ssoRemoveBody;
 }
 
 class _AppLocalizationsDelegate
