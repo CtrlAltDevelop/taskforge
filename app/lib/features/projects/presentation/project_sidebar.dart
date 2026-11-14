@@ -156,6 +156,14 @@ class ProjectSidebar extends ConsumerWidget {
           trailing: const ShortcutHint('nav.docs'),
           onTap: () => _go(context, '/docs'),
         ),
+        ListTile(
+          key: const Key('open-templates'),
+          dense: true,
+          selected: current.startsWith('/templates'),
+          leading: const Icon(Icons.copy_all_outlined),
+          title: Text(context.l10n.tplTitle),
+          onTap: () => _go(context, '/templates'),
+        ),
         const Divider(height: 1),
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 0),

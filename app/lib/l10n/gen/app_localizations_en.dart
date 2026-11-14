@@ -7734,6 +7734,150 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devAdminSaveFailed => 'Could not save the setting.';
+
+  @override
+  String get audTokenCreated => 'created an API token';
+
+  @override
+  String get audTokenRevoked => 'revoked an API token';
+
+  @override
+  String get audWebhookCreated => 'added a webhook';
+
+  @override
+  String get audWebhookUpdated => 'changed a webhook';
+
+  @override
+  String get audWebhookDeleted => 'deleted a webhook';
+
+  @override
+  String get audWebhookDisabled =>
+      'had a webhook switched off after repeated failures';
+
+  @override
+  String get audFormCreated => 'created an intake form';
+
+  @override
+  String get audFormUpdated => 'changed an intake form';
+
+  @override
+  String get audFormDeleted => 'deleted an intake form';
+
+  @override
+  String get audFormSubmitted => 'submitted an intake form';
+
+  @override
+  String get audGoalCreated => 'created a goal';
+
+  @override
+  String get audGoalUpdated => 'changed a goal';
+
+  @override
+  String get audGoalDeleted => 'deleted a goal';
+
+  @override
+  String audGoalFolderCreated(String name) {
+    return 'created the goal folder $name';
+  }
+
+  @override
+  String audGoalFolderRenamed(String before, String after) {
+    return 'renamed the goal folder $before to $after';
+  }
+
+  @override
+  String audGoalFolderDeleted(String name) {
+    return 'deleted the goal folder $name';
+  }
+
+  @override
+  String audGoalKrCreated(String name) {
+    return 'added the key result $name';
+  }
+
+  @override
+  String audGoalKrUpdated(String name) {
+    return 'changed the key result $name';
+  }
+
+  @override
+  String audGoalKrDeleted(String name) {
+    return 'deleted the key result $name';
+  }
+
+  @override
+  String audGoalCheckedIn(String value, String name) {
+    return 'checked in $value on $name';
+  }
+
+  @override
+  String get audTemplateCreated => 'created a template';
+
+  @override
+  String get audTemplateUpdated => 'changed a template';
+
+  @override
+  String get audTemplateDeleted => 'deleted a template';
+
+  @override
+  String get audTemplateApplied => 'used a template';
+
+  @override
+  String get audWorkloadCapacity => 'set a capacity';
+
+  @override
+  String get audWorkloadTimeOffCreated => 'added time off';
+
+  @override
+  String get audWorkloadTimeOffUpdated => 'changed time off';
+
+  @override
+  String get audWorkloadTimeOffDeleted => 'removed time off';
+
+  @override
+  String get audWorkloadHolidayCreated => 'added a holiday';
+
+  @override
+  String get audWorkloadHolidayUpdated => 'changed a holiday';
+
+  @override
+  String get audWorkloadHolidayDeleted => 'removed a holiday';
+
+  @override
+  String get audWorkloadEstimateSet => 'set an estimate';
+
+  @override
+  String get audSecuritySsoConfigured => 'set up single sign-on';
+
+  @override
+  String get audSecuritySsoRemoved => 'removed single sign-on';
+
+  @override
+  String get audSecuritySsoMemberJoined => 'joined through single sign-on';
+
+  @override
+  String get audSecuritySsoRoleChanged =>
+      'had their role changed by single sign-on';
+
+  @override
+  String get audSecurityPolicyChanged => 'changed the security policy';
+
+  @override
+  String get devWebhookProject => 'Project';
+
+  @override
+  String get devWebhookWholeWorkspace => 'Whole workspace';
+
+  @override
+  String updNoticeText(String version) {
+    return 'Version $version is available.';
+  }
+
+  @override
+  String get updNoticeGet => 'Download';
+
+  @override
+  String get updNoticeDismiss => 'Dismiss';
 }
 
 /// The translations for English (`en_XA`).

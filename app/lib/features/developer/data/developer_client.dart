@@ -205,6 +205,7 @@ class GrpcDeveloperClient implements DeveloperClient {
             name: draft.name.trim(),
             url: draft.url.trim(),
             events: draft.events,
+            projectId: draft.projectId,
           ),
           options: _options,
         );
@@ -224,11 +225,19 @@ class GrpcDeveloperClient implements DeveloperClient {
         webhookId: hook.id,
         expectedVersion: hook.version,
         fields: [
-          if (active != null) 'active' else ...['name', 'url', 'events'],
+          if (active != null)
+            'active'
+          else ...[
+            'name',
+            'url',
+            'events',
+            'project',
+          ],
         ],
         name: draft.name.trim(),
         url: draft.url.trim(),
         events: draft.events,
+        projectId: draft.projectId,
         active: active ?? hook.active,
       ),
       options: _options,

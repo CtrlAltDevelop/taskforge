@@ -13728,6 +13728,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save the setting.'**
   String get devAdminSaveFailed;
+
+  /// No description provided for @audTokenCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created an API token'**
+  String get audTokenCreated;
+
+  /// No description provided for @audTokenRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'revoked an API token'**
+  String get audTokenRevoked;
+
+  /// No description provided for @audWebhookCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'added a webhook'**
+  String get audWebhookCreated;
+
+  /// No description provided for @audWebhookUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed a webhook'**
+  String get audWebhookUpdated;
+
+  /// No description provided for @audWebhookDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a webhook'**
+  String get audWebhookDeleted;
+
+  /// No description provided for @audWebhookDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'had a webhook switched off after repeated failures'**
+  String get audWebhookDisabled;
+
+  /// No description provided for @audFormCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created an intake form'**
+  String get audFormCreated;
+
+  /// No description provided for @audFormUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed an intake form'**
+  String get audFormUpdated;
+
+  /// No description provided for @audFormDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted an intake form'**
+  String get audFormDeleted;
+
+  /// No description provided for @audFormSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'submitted an intake form'**
+  String get audFormSubmitted;
+
+  /// No description provided for @audGoalCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created a goal'**
+  String get audGoalCreated;
+
+  /// No description provided for @audGoalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed a goal'**
+  String get audGoalUpdated;
+
+  /// No description provided for @audGoalDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a goal'**
+  String get audGoalDeleted;
+
+  /// No description provided for @audGoalFolderCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created the goal folder {name}'**
+  String audGoalFolderCreated(String name);
+
+  /// No description provided for @audGoalFolderRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'renamed the goal folder {before} to {after}'**
+  String audGoalFolderRenamed(String before, String after);
+
+  /// No description provided for @audGoalFolderDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted the goal folder {name}'**
+  String audGoalFolderDeleted(String name);
+
+  /// No description provided for @audGoalKrCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'added the key result {name}'**
+  String audGoalKrCreated(String name);
+
+  /// No description provided for @audGoalKrUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed the key result {name}'**
+  String audGoalKrUpdated(String name);
+
+  /// No description provided for @audGoalKrDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted the key result {name}'**
+  String audGoalKrDeleted(String name);
+
+  /// No description provided for @audGoalCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'checked in {value} on {name}'**
+  String audGoalCheckedIn(String value, String name);
+
+  /// No description provided for @audTemplateCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created a template'**
+  String get audTemplateCreated;
+
+  /// No description provided for @audTemplateUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed a template'**
+  String get audTemplateUpdated;
+
+  /// No description provided for @audTemplateDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a template'**
+  String get audTemplateDeleted;
+
+  /// No description provided for @audTemplateApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'used a template'**
+  String get audTemplateApplied;
+
+  /// No description provided for @audWorkloadCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'set a capacity'**
+  String get audWorkloadCapacity;
+
+  /// No description provided for @audWorkloadTimeOffCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'added time off'**
+  String get audWorkloadTimeOffCreated;
+
+  /// No description provided for @audWorkloadTimeOffUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed time off'**
+  String get audWorkloadTimeOffUpdated;
+
+  /// No description provided for @audWorkloadTimeOffDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'removed time off'**
+  String get audWorkloadTimeOffDeleted;
+
+  /// No description provided for @audWorkloadHolidayCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'added a holiday'**
+  String get audWorkloadHolidayCreated;
+
+  /// No description provided for @audWorkloadHolidayUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'changed a holiday'**
+  String get audWorkloadHolidayUpdated;
+
+  /// No description provided for @audWorkloadHolidayDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'removed a holiday'**
+  String get audWorkloadHolidayDeleted;
+
+  /// No description provided for @audWorkloadEstimateSet.
+  ///
+  /// In en, this message translates to:
+  /// **'set an estimate'**
+  String get audWorkloadEstimateSet;
+
+  /// No description provided for @audSecuritySsoConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'set up single sign-on'**
+  String get audSecuritySsoConfigured;
+
+  /// No description provided for @audSecuritySsoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'removed single sign-on'**
+  String get audSecuritySsoRemoved;
+
+  /// No description provided for @audSecuritySsoMemberJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'joined through single sign-on'**
+  String get audSecuritySsoMemberJoined;
+
+  /// No description provided for @audSecuritySsoRoleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'had their role changed by single sign-on'**
+  String get audSecuritySsoRoleChanged;
+
+  /// No description provided for @audSecurityPolicyChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'changed the security policy'**
+  String get audSecurityPolicyChanged;
+
+  /// No description provided for @devWebhookProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get devWebhookProject;
+
+  /// No description provided for @devWebhookWholeWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole workspace'**
+  String get devWebhookWholeWorkspace;
+
+  /// No description provided for @updNoticeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} is available.'**
+  String updNoticeText(String version);
+
+  /// No description provided for @updNoticeGet.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updNoticeGet;
+
+  /// No description provided for @updNoticeDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get updNoticeDismiss;
 }
 
 class _AppLocalizationsDelegate

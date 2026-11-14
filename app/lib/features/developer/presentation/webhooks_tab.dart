@@ -8,6 +8,8 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/developer/application/developer_providers.dart';
 import 'package:taskforge/features/developer/domain/developer.dart';
 import 'package:taskforge/features/developer/presentation/developer_screen.dart';
+import 'package:taskforge/features/projects/application/projects_providers.dart';
+import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 class WebhooksTab extends ConsumerWidget {
@@ -166,6 +168,7 @@ class WebhooksTab extends ConsumerWidget {
                               name: h.name,
                               url: h.url,
                               events: h.events,
+                              projectId: h.projectId,
                             ),
                             active: !h.active,
                           );
@@ -225,6 +228,7 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
   late final _name = TextEditingController(text: widget.hook?.name ?? '');
   late final _url = TextEditingController(text: widget.hook?.url ?? '');
   late final _events = <String>{...?widget.hook?.events};
+  late String _projectId = widget.hook?.projectId ?? '';
 
   @override
   void dispose() {
@@ -236,6 +240,10 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
   @override
   Widget build(BuildContext context) {
     final catalog = ref.watch(developerCatalogProvider);
+    final projects =
+        ref.watch(projectCatalogProvider(false)).value?.projects ??
+        const <Project>[];
+    final projectIds = {'', ...projects.map((p) => p.id)};
     final ready = _url.text.trim().isNotEmpty && _events.isNotEmpty;
     return AlertDialog(
       title: Text(
@@ -267,6 +275,23 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                 decoration: InputDecoration(
                   labelText: context.l10n.devWebhookUrl,
                 ),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                key: const Key('webhook-project'),
+                initialValue: projectIds.contains(_projectId) ? _projectId : '',
+                decoration: InputDecoration(
+                  labelText: context.l10n.devWebhookProject,
+                ),
+                items: [
+                  DropdownMenuItem(
+                    value: '',
+                    child: Text(context.l10n.devWebhookWholeWorkspace),
+                  ),
+                  for (final p in projects)
+                    DropdownMenuItem(value: p.id, child: Text(p.name)),
+                ],
+                onChanged: (v) => setState(() => _projectId = v ?? ''),
               ),
               const SizedBox(height: 12),
               Text(
@@ -309,6 +334,7 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                     name: _name.text,
                     url: _url.text,
                     events: _events.toList(),
+                    projectId: _projectId,
                   ),
                 )
               : null,

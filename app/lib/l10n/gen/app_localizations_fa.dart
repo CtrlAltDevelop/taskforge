@@ -7744,4 +7744,146 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get devAdminSaveFailed => 'تنظیم ذخیره نشد.';
+
+  @override
+  String get audTokenCreated => 'یک توکن API ساخت';
+
+  @override
+  String get audTokenRevoked => 'یک توکن API را باطل کرد';
+
+  @override
+  String get audWebhookCreated => 'یک وب‌هوک افزود';
+
+  @override
+  String get audWebhookUpdated => 'یک وب‌هوک را تغییر داد';
+
+  @override
+  String get audWebhookDeleted => 'یک وب‌هوک را حذف کرد';
+
+  @override
+  String get audWebhookDisabled => 'یک وب‌هوک پس از شکست‌های مکرر خاموش شد';
+
+  @override
+  String get audFormCreated => 'یک فرم دریافت ساخت';
+
+  @override
+  String get audFormUpdated => 'یک فرم دریافت را تغییر داد';
+
+  @override
+  String get audFormDeleted => 'یک فرم دریافت را حذف کرد';
+
+  @override
+  String get audFormSubmitted => 'یک فرم دریافت را ارسال کرد';
+
+  @override
+  String get audGoalCreated => 'یک هدف ساخت';
+
+  @override
+  String get audGoalUpdated => 'یک هدف را تغییر داد';
+
+  @override
+  String get audGoalDeleted => 'یک هدف را حذف کرد';
+
+  @override
+  String audGoalFolderCreated(String name) {
+    return 'پوشه هدف $name را ساخت';
+  }
+
+  @override
+  String audGoalFolderRenamed(String before, String after) {
+    return 'پوشه هدف $before را به $after تغییر نام داد';
+  }
+
+  @override
+  String audGoalFolderDeleted(String name) {
+    return 'پوشه هدف $name را حذف کرد';
+  }
+
+  @override
+  String audGoalKrCreated(String name) {
+    return 'نتیجه کلیدی $name را افزود';
+  }
+
+  @override
+  String audGoalKrUpdated(String name) {
+    return 'نتیجه کلیدی $name را تغییر داد';
+  }
+
+  @override
+  String audGoalKrDeleted(String name) {
+    return 'نتیجه کلیدی $name را حذف کرد';
+  }
+
+  @override
+  String audGoalCheckedIn(String value, String name) {
+    return 'مقدار $value را برای $name ثبت کرد';
+  }
+
+  @override
+  String get audTemplateCreated => 'یک الگو ساخت';
+
+  @override
+  String get audTemplateUpdated => 'یک الگو را تغییر داد';
+
+  @override
+  String get audTemplateDeleted => 'یک الگو را حذف کرد';
+
+  @override
+  String get audTemplateApplied => 'از یک الگو استفاده کرد';
+
+  @override
+  String get audWorkloadCapacity => 'ظرفیت تعیین کرد';
+
+  @override
+  String get audWorkloadTimeOffCreated => 'مرخصی افزود';
+
+  @override
+  String get audWorkloadTimeOffUpdated => 'مرخصی را تغییر داد';
+
+  @override
+  String get audWorkloadTimeOffDeleted => 'مرخصی را حذف کرد';
+
+  @override
+  String get audWorkloadHolidayCreated => 'یک تعطیلی افزود';
+
+  @override
+  String get audWorkloadHolidayUpdated => 'یک تعطیلی را تغییر داد';
+
+  @override
+  String get audWorkloadHolidayDeleted => 'یک تعطیلی را حذف کرد';
+
+  @override
+  String get audWorkloadEstimateSet => 'برآورد تعیین کرد';
+
+  @override
+  String get audSecuritySsoConfigured => 'ورود یکپارچه را تنظیم کرد';
+
+  @override
+  String get audSecuritySsoRemoved => 'ورود یکپارچه را حذف کرد';
+
+  @override
+  String get audSecuritySsoMemberJoined => 'از طریق ورود یکپارچه پیوست';
+
+  @override
+  String get audSecuritySsoRoleChanged => 'نقش‌شان توسط ورود یکپارچه تغییر کرد';
+
+  @override
+  String get audSecurityPolicyChanged => 'سیاست امنیتی را تغییر داد';
+
+  @override
+  String get devWebhookProject => 'پروژه';
+
+  @override
+  String get devWebhookWholeWorkspace => 'کل فضای کار';
+
+  @override
+  String updNoticeText(String version) {
+    return 'نسخه $version در دسترس است.';
+  }
+
+  @override
+  String get updNoticeGet => 'دریافت';
+
+  @override
+  String get updNoticeDismiss => 'بستن';
 }

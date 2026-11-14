@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/version.dart';
@@ -122,16 +123,29 @@ class DesktopUpdateNotice extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref.watch(desktopUpdateNoticeProvider);
-    if (server == null) return const SizedBox.shrink();
+    final notice = ref.watch(desktopUpdateNoticeProvider);
+    if (notice == null) return const SizedBox.shrink();
+    final t = context.l10n;
     return MaterialBanner(
       key: const Key('desktop-update-notice'),
       leading: const Icon(Icons.system_update_alt),
-      content: Text(context.l10n.sysUpdateAvailable(server.version)),
+      content: Text(t.updNoticeText(notice.version)),
       actions: [
+        if (notice.downloadUrl.isNotEmpty)
+          TextButton(
+            key: const Key('update-notice-get'),
+            onPressed: () => launchUrl(
+              Uri.parse(notice.downloadUrl),
+              mode: LaunchMode.externalApplication,
+            ),
+            child: Text(t.updNoticeGet),
+          ),
         TextButton(
-          onPressed: () => context.push('/about'),
-          child: Text(context.l10n.sysAboutTitle),
+          key: const Key('update-notice-dismiss'),
+          onPressed: () => ref
+              .read(dismissedUpdateProvider.notifier)
+              .dismiss(notice.version),
+          child: Text(t.updNoticeDismiss),
         ),
       ],
     );

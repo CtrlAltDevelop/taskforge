@@ -7706,4 +7706,147 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get devAdminSaveFailed => 'تنظیم خوندي نه شو.';
+
+  @override
+  String get audTokenCreated => 'یو API توکن جوړ کړ';
+
+  @override
+  String get audTokenRevoked => 'یو API توکن لغوه کړ';
+
+  @override
+  String get audWebhookCreated => 'یو ویب‌هوک اضافه کړ';
+
+  @override
+  String get audWebhookUpdated => 'یو ویب‌هوک بدل کړ';
+
+  @override
+  String get audWebhookDeleted => 'یو ویب‌هوک ړنګ کړ';
+
+  @override
+  String get audWebhookDisabled => 'یو ویب‌هوک د تکرارو ناکامیو وروسته بند شو';
+
+  @override
+  String get audFormCreated => 'یو د ترلاسه فورمه جوړه کړه';
+
+  @override
+  String get audFormUpdated => 'یوه د ترلاسه فورمه بدله کړه';
+
+  @override
+  String get audFormDeleted => 'یوه د ترلاسه فورمه ړنګه کړه';
+
+  @override
+  String get audFormSubmitted => 'یوه د ترلاسه فورمه ولېږله';
+
+  @override
+  String get audGoalCreated => 'یو هدف جوړ کړ';
+
+  @override
+  String get audGoalUpdated => 'یو هدف بدل کړ';
+
+  @override
+  String get audGoalDeleted => 'یو هدف ړنګ کړ';
+
+  @override
+  String audGoalFolderCreated(String name) {
+    return 'د هدفونو پوښۍ $name جوړه کړه';
+  }
+
+  @override
+  String audGoalFolderRenamed(String before, String after) {
+    return 'د هدفونو پوښۍ $before په $after بدله کړه';
+  }
+
+  @override
+  String audGoalFolderDeleted(String name) {
+    return 'د هدفونو پوښۍ $name ړنګه کړه';
+  }
+
+  @override
+  String audGoalKrCreated(String name) {
+    return 'کلیدي پایله $name یې اضافه کړه';
+  }
+
+  @override
+  String audGoalKrUpdated(String name) {
+    return 'کلیدي پایله $name یې بدله کړه';
+  }
+
+  @override
+  String audGoalKrDeleted(String name) {
+    return 'کلیدي پایله $name یې ړنګه کړه';
+  }
+
+  @override
+  String audGoalCheckedIn(String value, String name) {
+    return 'د $name لپاره $value ثبت کړ';
+  }
+
+  @override
+  String get audTemplateCreated => 'یو کیڼۍ جوړ کړ';
+
+  @override
+  String get audTemplateUpdated => 'یو کیڼۍ بدل کړ';
+
+  @override
+  String get audTemplateDeleted => 'یو کیڼۍ ړنګ کړ';
+
+  @override
+  String get audTemplateApplied => 'یو کیڼۍ وکاروه';
+
+  @override
+  String get audWorkloadCapacity => 'ظرفیت وټاکه';
+
+  @override
+  String get audWorkloadTimeOffCreated => 'رخصتي اضافه کړه';
+
+  @override
+  String get audWorkloadTimeOffUpdated => 'رخصتي بدله کړه';
+
+  @override
+  String get audWorkloadTimeOffDeleted => 'رخصتي ړنګه کړه';
+
+  @override
+  String get audWorkloadHolidayCreated => 'یوه رخصتي اضافه کړه';
+
+  @override
+  String get audWorkloadHolidayUpdated => 'یوه رخصتي بدله کړه';
+
+  @override
+  String get audWorkloadHolidayDeleted => 'یوه رخصتي ړنګه کړه';
+
+  @override
+  String get audWorkloadEstimateSet => 'اټکل یې وټاکه';
+
+  @override
+  String get audSecuritySsoConfigured => 'یو ځلې ننوتل یې تنظیم کړ';
+
+  @override
+  String get audSecuritySsoRemoved => 'یو ځلې ننوتل یې لرې کړ';
+
+  @override
+  String get audSecuritySsoMemberJoined => 'د یو ځلې ننوتلو له لارې یوځای شو';
+
+  @override
+  String get audSecuritySsoRoleChanged =>
+      'رول یې د یو ځلې ننوتلو له لارې بدل شو';
+
+  @override
+  String get audSecurityPolicyChanged => 'امنیتي پالیسي یې بدله کړه';
+
+  @override
+  String get devWebhookProject => 'پروژه';
+
+  @override
+  String get devWebhookWholeWorkspace => 'ټوله کاري ځای';
+
+  @override
+  String updNoticeText(String version) {
+    return '$version نسخه شتون لري.';
+  }
+
+  @override
+  String get updNoticeGet => 'ډاونلوډ';
+
+  @override
+  String get updNoticeDismiss => 'بندول';
 }

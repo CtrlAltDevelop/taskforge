@@ -54,6 +54,7 @@ class Webhook {
     required this.version,
     required this.lastStatus,
     required this.lastAt,
+    this.projectId = '',
   });
 
   final String id;
@@ -66,6 +67,9 @@ class Webhook {
   final int version;
   final String lastStatus;
   final String lastAt;
+
+  /// The one project this hook is limited to; empty means the whole workspace.
+  final String projectId;
 
   String get title => name.isEmpty ? url : name;
 }
@@ -159,11 +163,19 @@ class CatalogItem {
 /// A webhook as the editor builds it.
 @immutable
 class WebhookDraft {
-  const WebhookDraft({this.name = '', this.url = '', this.events = const []});
+  const WebhookDraft({
+    this.name = '',
+    this.url = '',
+    this.events = const [],
+    this.projectId = '',
+  });
 
   final String name;
   final String url;
   final List<String> events;
+
+  /// Empty means the whole workspace.
+  final String projectId;
 }
 
 enum DeveloperFailure { network, denied, invalid, notFound, conflict, other }

@@ -4383,5 +4383,89 @@
   "devAdminCollectTitle": "Collect device info",
   "devAdminCollectSubtitle": "Name sessions and flag new devices from what the app reports. Off by default.",
   "devAdminPepperMissing": "Set DJANGO_DEVICE_FINGERPRINT_PEPPER on the server first.",
-  "devAdminSaveFailed": "Could not save the setting."
+  "devAdminSaveFailed": "Could not save the setting.",
+  "audTokenCreated": "created an API token",
+  "audTokenRevoked": "revoked an API token",
+  "audWebhookCreated": "added a webhook",
+  "audWebhookUpdated": "changed a webhook",
+  "audWebhookDeleted": "deleted a webhook",
+  "audWebhookDisabled": "had a webhook switched off after repeated failures",
+  "audFormCreated": "created an intake form",
+  "audFormUpdated": "changed an intake form",
+  "audFormDeleted": "deleted an intake form",
+  "audFormSubmitted": "submitted an intake form",
+  "audGoalCreated": "created a goal",
+  "audGoalUpdated": "changed a goal",
+  "audGoalDeleted": "deleted a goal",
+  "audGoalFolderCreated": "created the goal folder {name}",
+  "@audGoalFolderCreated": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "audGoalFolderRenamed": "renamed the goal folder {before} to {after}",
+  "@audGoalFolderRenamed": {
+    "placeholders": {
+      "before": { "type": "String" },
+      "after": { "type": "String" }
+    }
+  },
+  "audGoalFolderDeleted": "deleted the goal folder {name}",
+  "@audGoalFolderDeleted": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "audGoalKrCreated": "added the key result {name}",
+  "@audGoalKrCreated": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "audGoalKrUpdated": "changed the key result {name}",
+  "@audGoalKrUpdated": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "audGoalKrDeleted": "deleted the key result {name}",
+  "@audGoalKrDeleted": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "audGoalCheckedIn": "checked in {value} on {name}",
+  "@audGoalCheckedIn": {
+    "placeholders": {
+      "value": { "type": "String" },
+      "name": { "type": "String" }
+    }
+  },
+  "audTemplateCreated": "created a template",
+  "audTemplateUpdated": "changed a template",
+  "audTemplateDeleted": "deleted a template",
+  "audTemplateApplied": "used a template",
+  "audWorkloadCapacity": "set a capacity",
+  "audWorkloadTimeOffCreated": "added time off",
+  "audWorkloadTimeOffUpdated": "changed time off",
+  "audWorkloadTimeOffDeleted": "removed time off",
+  "audWorkloadHolidayCreated": "added a holiday",
+  "audWorkloadHolidayUpdated": "changed a holiday",
+  "audWorkloadHolidayDeleted": "removed a holiday",
+  "audWorkloadEstimateSet": "set an estimate",
+  "audSecuritySsoConfigured": "set up single sign-on",
+  "audSecuritySsoRemoved": "removed single sign-on",
+  "audSecuritySsoMemberJoined": "joined through single sign-on",
+  "audSecuritySsoRoleChanged": "had their role changed by single sign-on",
+  "audSecurityPolicyChanged": "changed the security policy",
+  "devWebhookProject": "Project",
+  "devWebhookWholeWorkspace": "Whole workspace",
+  "updNoticeText": "Version {version} is available.",
+  "@updNoticeText": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "updNoticeGet": "Download",
+  "updNoticeDismiss": "Dismiss"
 }

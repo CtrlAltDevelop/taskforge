@@ -7792,4 +7792,146 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get devAdminSaveFailed => 'تعذّر حفظ الإعداد.';
+
+  @override
+  String get audTokenCreated => 'أنشأ رمز API';
+
+  @override
+  String get audTokenRevoked => 'ألغى رمز API';
+
+  @override
+  String get audWebhookCreated => 'أضاف webhook';
+
+  @override
+  String get audWebhookUpdated => 'عدّل webhook';
+
+  @override
+  String get audWebhookDeleted => 'حذف webhook';
+
+  @override
+  String get audWebhookDisabled => 'أُوقف webhook بعد إخفاقات متكررة';
+
+  @override
+  String get audFormCreated => 'أنشأ نموذج استقبال';
+
+  @override
+  String get audFormUpdated => 'عدّل نموذج استقبال';
+
+  @override
+  String get audFormDeleted => 'حذف نموذج استقبال';
+
+  @override
+  String get audFormSubmitted => 'أرسل نموذج استقبال';
+
+  @override
+  String get audGoalCreated => 'أنشأ هدفاً';
+
+  @override
+  String get audGoalUpdated => 'عدّل هدفاً';
+
+  @override
+  String get audGoalDeleted => 'حذف هدفاً';
+
+  @override
+  String audGoalFolderCreated(String name) {
+    return 'أنشأ مجلد الأهداف $name';
+  }
+
+  @override
+  String audGoalFolderRenamed(String before, String after) {
+    return 'أعاد تسمية مجلد الأهداف $before إلى $after';
+  }
+
+  @override
+  String audGoalFolderDeleted(String name) {
+    return 'حذف مجلد الأهداف $name';
+  }
+
+  @override
+  String audGoalKrCreated(String name) {
+    return 'أضاف النتيجة الرئيسية $name';
+  }
+
+  @override
+  String audGoalKrUpdated(String name) {
+    return 'عدّل النتيجة الرئيسية $name';
+  }
+
+  @override
+  String audGoalKrDeleted(String name) {
+    return 'حذف النتيجة الرئيسية $name';
+  }
+
+  @override
+  String audGoalCheckedIn(String value, String name) {
+    return 'سجّل $value لـ $name';
+  }
+
+  @override
+  String get audTemplateCreated => 'أنشأ قالباً';
+
+  @override
+  String get audTemplateUpdated => 'عدّل قالباً';
+
+  @override
+  String get audTemplateDeleted => 'حذف قالباً';
+
+  @override
+  String get audTemplateApplied => 'استخدم قالباً';
+
+  @override
+  String get audWorkloadCapacity => 'حدّد سعة';
+
+  @override
+  String get audWorkloadTimeOffCreated => 'أضاف إجازة';
+
+  @override
+  String get audWorkloadTimeOffUpdated => 'عدّل إجازة';
+
+  @override
+  String get audWorkloadTimeOffDeleted => 'حذف إجازة';
+
+  @override
+  String get audWorkloadHolidayCreated => 'أضاف عطلة';
+
+  @override
+  String get audWorkloadHolidayUpdated => 'عدّل عطلة';
+
+  @override
+  String get audWorkloadHolidayDeleted => 'حذف عطلة';
+
+  @override
+  String get audWorkloadEstimateSet => 'حدّد تقديراً';
+
+  @override
+  String get audSecuritySsoConfigured => 'أعدّ تسجيل الدخول الموحد';
+
+  @override
+  String get audSecuritySsoRemoved => 'أزال تسجيل الدخول الموحد';
+
+  @override
+  String get audSecuritySsoMemberJoined => 'انضم عبر تسجيل الدخول الموحد';
+
+  @override
+  String get audSecuritySsoRoleChanged => 'تغيّر دوره عبر تسجيل الدخول الموحد';
+
+  @override
+  String get audSecurityPolicyChanged => 'غيّر سياسة الأمان';
+
+  @override
+  String get devWebhookProject => 'المشروع';
+
+  @override
+  String get devWebhookWholeWorkspace => 'مساحة العمل بأكملها';
+
+  @override
+  String updNoticeText(String version) {
+    return 'الإصدار $version متاح.';
+  }
+
+  @override
+  String get updNoticeGet => 'تنزيل';
+
+  @override
+  String get updNoticeDismiss => 'إغلاق';
 }
