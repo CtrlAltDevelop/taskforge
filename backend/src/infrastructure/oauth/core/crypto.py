@@ -9,7 +9,11 @@ from django.core.exceptions import ImproperlyConfigured
 
 
 def _fernet() -> Fernet:
-    configured_key = getattr(settings, "OAUTH_ENCRYPTION_KEY", "")
+    # `DJANGO_FIELD_ENCRYPTION_KEY` is the deployment's key; the older name still works so that
+    # nothing encrypted before it existed becomes unreadable.
+    configured_key = getattr(settings, "FIELD_ENCRYPTION_KEY", "") or getattr(
+        settings, "OAUTH_ENCRYPTION_KEY", ""
+    )
     key = (
         configured_key.encode()
         if configured_key
@@ -18,7 +22,7 @@ def _fernet() -> Fernet:
     try:
         return Fernet(key)
     except (TypeError, ValueError) as error:
-        raise ImproperlyConfigured("DJANGO_OAUTH_ENCRYPTION_KEY must be a Fernet key") from error
+        raise ImproperlyConfigured("DJANGO_FIELD_ENCRYPTION_KEY must be a Fernet key") from error
 
 
 def encrypt_secret(value: str) -> str:

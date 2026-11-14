@@ -35,11 +35,17 @@ from infrastructure.auth.core.identities import account_email, account_phone, no
 from infrastructure.auth.core.models import AuthEventType, PhoneNumber
 from infrastructure.auth.core.services import masking_service
 from infrastructure.auth.core.sessions import IssuedCredentials, issue_credentials
-from infrastructure.auth.core.throttling import guard_delivery
+from infrastructure.auth.core.throttling import (
+    attempts_exhausted,
+    clear_attempts,
+    guard_delivery,
+    record_failed_attempt,
+)
 from infrastructure.auth.twofactor.models import RecoveryCode, SecondFactor, SecondFactorMethod
 from infrastructure.common.responses import ResponseTitle
 
 CODE_PURPOSE = "second_factor_code"
+LOCKOUT_SCOPE = "2fa"
 TOTP_PERIOD = 30
 TOTP_WINDOW = 1
 RECOVERY_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
@@ -372,6 +378,16 @@ class TwoFactorService:
         """Check the second factor and, if it holds, issue the credential."""
         store = get_challenge_store()
         user, metadata = resolve_pending_login(login_ticket)
+        # Per-account lockout across tickets: a ticket allows a few guesses, but starting again
+        # with the password must not reset the count.
+        if attempts_exhausted(
+            LOCKOUT_SCOPE, str(user.pk), limit=settings.SECURITY_MFA_MAX_FAILURES
+        ):
+            raise AuthError(
+                "Too many wrong codes. Wait a while before trying again.",
+                status=429,
+                title=ResponseTitle.SECOND_FACTOR_LOCKED,
+            )
         methods = pending_methods(metadata)
         chosen = self.chosen_method(metadata, methods, method)
         if chosen not in methods:
@@ -403,10 +419,14 @@ class TwoFactorService:
                 factor_for(user, chosen).mark_used()
 
         if not accepted:
+            record_failed_attempt(
+                LOCKOUT_SCOPE, str(user.pk), window=settings.SECURITY_MFA_LOCKOUT_SECONDS
+            )
             store.fail(login_ticket)
             record_event(request, AuthEventType.SECOND_FACTOR_FAILED, user=user, method=chosen)
             raise AuthError("That code is not valid.", status=400, title=ResponseTitle.INVALID_CODE)
 
+        clear_attempts(LOCKOUT_SCOPE, str(user.pk))
         store.discard(login_ticket)
         if code_ticket:
             store.discard(code_ticket)

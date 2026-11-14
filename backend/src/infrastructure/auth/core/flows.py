@@ -92,8 +92,19 @@ def complete_login(
         raise AuthError(
             "This account is disabled.", status=403, title=ResponseTitle.ACCOUNT_DISABLED
         )
-    factors = enrolled_second_factors(user)
-    if not factors:
+    # Phase 37: workspace security policy. SSO-only workspaces refuse other first factors, and a
+    # single-sign-on login or a trusted device does not owe the local second factor. Later
+    # phases (DPoP binding, device info) extend this one function, not the callers.
+    skipped = ""
+    if app_installed("security"):
+        from infrastructure.security import login_policy
+
+        login_policy.check_first_factor(user, method)
+        factors = enrolled_second_factors(user)
+        skipped = login_policy.skips_second_factor(request, user, method) if factors else ""
+    else:
+        factors = enrolled_second_factors(user)
+    if not factors or skipped:
         credentials = issue_credentials(request, user, method=method)
         record_event(
             request,
@@ -101,6 +112,7 @@ def complete_login(
             user=user,
             method=method,
             identifier=identifier,
+            **({"second_factor_skipped": skipped} if skipped else {}),
         )
         return LoginResult(credentials=credentials)
 

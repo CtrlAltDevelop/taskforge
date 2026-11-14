@@ -15,6 +15,12 @@ if INBOX_UNSUBSCRIBE_URL.startswith("http://localhost"):  # noqa: F405
         "DJANGO_INBOX_UNSUBSCRIBE_URL must be set in production (the link in notification emails)"
     )
 
+if not FIELD_ENCRYPTION_KEY:  # noqa: F405
+    raise ImproperlyConfigured(
+        "DJANGO_FIELD_ENCRYPTION_KEY must be set in production (a Fernet key: "
+        'python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")'
+    )
+
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "true").lower() == "true"

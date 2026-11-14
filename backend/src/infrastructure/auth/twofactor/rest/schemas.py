@@ -12,6 +12,9 @@ class VerifyIn(Schema):
     login_ticket: str
     code: str
     method: str = ""
+    # Phase 37: remember this device so the next sign-in skips the code (30 days).
+    remember_device: bool = False
+    device_label: str = ""
 
 
 class EnrolledFactor(Schema):

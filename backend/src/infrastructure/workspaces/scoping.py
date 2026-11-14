@@ -35,11 +35,17 @@ WORKSPACE_META_KEY = "HTTP_X_WORKSPACE"
 VIEW = "workspace.view"
 
 
-def require_workspace(user: Any, raw_id: str | None, permission: str | None = None) -> Workspace:
+def require_workspace(
+    user: Any, raw_id: str | None, permission: str | None = None, *, enforce: bool = True
+) -> Workspace:
     """The live workspace ``raw_id`` if ``user`` is a member (and holds ``permission``), else 403.
 
     Without ``permission`` this is a membership check only: the member and
     invitation adapters resolve with it and their services check their own key.
+
+    ``enforce`` applies the workspace's security policy (phase 37: a member who has not turned
+    on two-factor after the grace period is refused). Only the security screens, which are how
+    one turns it on, pass ``False``.
     """
     _forbidden = access.forbidden
     if user is None or not getattr(user, "is_authenticated", False):
@@ -59,6 +65,10 @@ def require_workspace(user: Any, raw_id: str | None, permission: str | None = No
     token = getattr(user, "api_token", None)
     if token is not None and token.workspace_id != workspace.pk:
         raise _forbidden()  # an API token belongs to one workspace
+    if enforce:
+        from infrastructure.security import policy
+
+        policy.check(user, workspace)
     if permission is not None:
         access.require(user, permission, workspace)
     return workspace

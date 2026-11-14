@@ -16,6 +16,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from infrastructure.audit import changes as audit_changes
+from infrastructure.auth.core.sessions import revoke_all_for_user
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.workspaces import access, roles
@@ -117,4 +118,9 @@ def set_role(workspace: Workspace, actor: Any, user_id: str, role_id: str) -> Wo
             _guard_last_owner(workspace, target)
         audit_changes.update_rows(WorkspaceMember.objects.filter(pk=target.pk), role=role)
         announce_access(workspace, target.user_id)
+        if target.user_id != actor.pk and access.role_keys(target.role) - access.role_keys(role):
+            # Losing permissions ends the person's sessions (phase 37): they sign in again and
+            # carry only what the new role holds. A promotion needs no such reset.
+            user = target.user
+            transaction.on_commit(lambda: revoke_all_for_user(user, "role_changed"))
     return _target(workspace, user_id)

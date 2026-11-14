@@ -188,6 +188,11 @@ if unknown_second_factors:
     raise ImproperlyConfigured(
         f"Unknown DJANGO_AUTH_SECOND_FACTORS: {', '.join(sorted(unknown_second_factors))}"
     )
+# TaskForge (phase 37): authenticator codes and recovery codes are part of the product, not an
+# opt-in. `sms` and `email` stay opt-in (SMS codes are insecure, see the phase doc).
+for _factor in ("totp", "recovery"):
+    if _factor not in AUTH_SECOND_FACTORS:
+        AUTH_SECOND_FACTORS.append(_factor)
 if AUTH_SECOND_FACTORS and not AUTH_METHODS:
     raise ImproperlyConfigured(
         "DJANGO_AUTH_SECOND_FACTORS requires at least one DJANGO_AUTH_METHODS entry"
@@ -894,6 +899,10 @@ SUPPORT_UPLOAD_EXTENSIONS = [
 ] or None
 
 OAUTH_ENCRYPTION_KEY = os.getenv("DJANGO_OAUTH_ENCRYPTION_KEY", "")
+# Phase 37: the Fernet key for every secret stored recoverably (TOTP secrets, SSO client secrets,
+# provider tokens). Required in production (see production.py); development.py supplies a distinct
+# development key. `OAUTH_ENCRYPTION_KEY` is still honoured when this one is absent.
+FIELD_ENCRYPTION_KEY = os.getenv("DJANGO_FIELD_ENCRYPTION_KEY", "")
 OAUTH_STATE_TTL_SECONDS = int(os.getenv("DJANGO_OAUTH_STATE_TTL_SECONDS", "600"))
 OAUTH_HTTP_TIMEOUT_SECONDS = float(os.getenv("DJANGO_OAUTH_HTTP_TIMEOUT_SECONDS", "10"))
 OAUTH_CLOCK_SKEW_SECONDS = int(os.getenv("DJANGO_OAUTH_CLOCK_SKEW_SECONDS", "60"))
@@ -1166,7 +1175,13 @@ CORS_ALLOWED_ORIGINS = [
 # Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
 COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
 
-CORS_ALLOW_HEADERS = (*default_cors_headers, "x-workspace", "x-refresh-transport", "x-client-id")
+CORS_ALLOW_HEADERS = (
+    *default_cors_headers,
+    "x-workspace",
+    "x-refresh-transport",
+    "x-client-id",
+    "x-trusted-device",
+)
 # Web clients send the refresh cookie cross-origin; origins stay an explicit allowlist.
 CORS_ALLOW_CREDENTIALS = True
 
@@ -1176,6 +1191,25 @@ CORS_ALLOW_CREDENTIALS = True
 REFRESH_COOKIE_NAME = "tf_refresh"
 REFRESH_COOKIE_SECURE = os.getenv("DJANGO_REFRESH_COOKIE_SECURE", "true").lower() == "true"
 REFRESH_COOKIE_SAMESITE = os.getenv("DJANGO_REFRESH_COOKIE_SAMESITE", "Strict")
+
+# Phase 37 -- two-factor policy, trusted devices and single sign-on (infrastructure/security).
+SECURITY_TRUSTED_DEVICE_DAYS = int(os.getenv("DJANGO_SECURITY_TRUSTED_DEVICE_DAYS", "30"))
+# Failed second-factor codes per account before further attempts are refused for the window.
+SECURITY_MFA_MAX_FAILURES = int(os.getenv("DJANGO_SECURITY_MFA_MAX_FAILURES", "10"))
+SECURITY_MFA_LOCKOUT_SECONDS = int(os.getenv("DJANGO_SECURITY_MFA_LOCKOUT_SECONDS", "900"))
+SSO_ATTEMPT_TTL_SECONDS = int(os.getenv("DJANGO_SSO_ATTEMPT_TTL_SECONDS", "600"))
+SSO_TICKET_TTL_SECONDS = int(os.getenv("DJANGO_SSO_TICKET_TTL_SECONDS", "60"))
+# Where the API is reached from outside (the redirect URI registered at the identity provider).
+# Empty: derived from the request, which is right unless a proxy hides the public host.
+SSO_CALLBACK_BASE_URL = os.getenv("DJANGO_SSO_CALLBACK_BASE_URL", "").rstrip("/")
+# Where a finished sign-in may send the browser: the native deep link, and `/sso/callback` under
+# each web origin of the app (default: the CORS origins). Anything else is refused at `start`.
+SSO_NATIVE_RETURN_URL = os.getenv("DJANGO_SSO_NATIVE_RETURN_URL", "taskforge://sso/callback")
+SSO_WEB_RETURN_ORIGINS = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv("DJANGO_SSO_WEB_RETURN_ORIGINS", "").split(",")
+    if origin.strip()
+] or list(CORS_ALLOWED_ORIGINS)
 
 ROOT_URLCONF = "config.urls"
 TEMPLATES = [

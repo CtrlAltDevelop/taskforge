@@ -58,6 +58,13 @@
         "description": "Download an export zip with the short-lived signed link that Exports.Status returns."
       },
       {
+        "app_config": "infrastructure.security.apps.SecurityConfig",
+        "prefix": "/auth/sso",
+        "router": "infrastructure.security.rest.sso.router",
+        "tag": "Single sign-on",
+        "description": "Sign in through a workspace's OpenID Connect provider: start (a browser redirect), callback, and the exchange of the one-time ticket for the usual credentials. No bearer token; the second-factor settings and SSO setup are gRPC."
+      },
+      {
         "app_config": "infrastructure.developer.apps.DeveloperConfig",
         "prefix": "/workspaces",
         "router": "infrastructure.developer.rest.public.router",

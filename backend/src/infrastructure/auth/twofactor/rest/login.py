@@ -5,6 +5,8 @@ caller reaches *without* a credential -- they are the last step of a login, not
 something an account does to itself.
 """
 
+from typing import Any
+
 from django.http import HttpRequest
 from ninja import Router
 
@@ -52,10 +54,24 @@ def challenge(request: HttpRequest, payload: ChallengeIn) -> ChallengeOut:
 )
 def verify(request: HttpRequest, payload: VerifyIn) -> LoginOut:
     """Check the second factor and, if it holds, issue the credential."""
+    pending_user: Any = None
+    if payload.remember_device:
+        from infrastructure.auth.core.flows import resolve_pending_login
+
+        pending_user, _ = resolve_pending_login(payload.login_ticket)
     credentials = twofactor_service.verify(
         request,
         login_ticket=payload.login_ticket,
         code=payload.code,
         method=payload.method,
     )
-    return LoginOut(requires_second_factor=False, credentials=credentials_out(credentials))
+    token = ""
+    if payload.remember_device:
+        from infrastructure.security import devices
+
+        token = devices.trust(request, pending_user, payload.device_label)
+    return LoginOut(
+        requires_second_factor=False,
+        credentials=credentials_out(credentials),
+        trusted_device_token=token,
+    )

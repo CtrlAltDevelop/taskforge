@@ -51,6 +51,8 @@ class LoginOut(Schema):
     credentials: CredentialsOut | None = None
     login_ticket: str = ""
     methods: list[str] = []
+    # Only on a second-factor verify that asked to remember the device: shown once.
+    trusted_device_token: str = ""
 
 
 class ChallengeOut(Schema):

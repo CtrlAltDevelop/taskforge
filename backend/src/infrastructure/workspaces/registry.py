@@ -72,6 +72,7 @@ PERMISSIONS: Final = (
     Permission("template.manage", "Edit and delete every shared template"),
     Permission("workload.view", "See other people's workload, capacity and time off"),
     Permission("workload.manage", "Set capacity for anyone, edit anyone's time off and holidays"),
+    Permission("security.manage", "Require two-factor, set up single sign-on and its role mapping"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 

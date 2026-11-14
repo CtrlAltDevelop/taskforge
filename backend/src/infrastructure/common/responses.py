@@ -96,6 +96,17 @@ class ResponseTitle(StrEnum):
     SECOND_FACTOR_NOT_CODE_BASED = "SECOND_FACTOR_NOT_CODE_BASED"
     SECOND_FACTOR_NO_DESTINATION = "SECOND_FACTOR_NO_DESTINATION"
     ENROLMENT_NOT_STARTED = "ENROLMENT_NOT_STARTED"
+    SECOND_FACTOR_LOCKED = "SECOND_FACTOR_LOCKED"
+
+    # Security policy and single sign-on
+    TWO_FACTOR_REQUIRED = "TWO_FACTOR_REQUIRED"
+    SSO_REQUIRED = "SSO_REQUIRED"
+    SSO_FAILED = "SSO_FAILED"
+    SSO_NOT_CONFIGURED = "SSO_NOT_CONFIGURED"
+    SSO_EMAIL_UNVERIFIED = "SSO_EMAIL_UNVERIFIED"
+    SSO_DOMAIN_NOT_ALLOWED = "SSO_DOMAIN_NOT_ALLOWED"
+    SSO_NO_ACCOUNT = "SSO_NO_ACCOUNT"
+    SSO_MEMBER_REMOVED = "SSO_MEMBER_REMOVED"
 
     # Credentials and sessions
     TOKEN_REQUIRED = "TOKEN_REQUIRED"
@@ -280,6 +291,19 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.SECOND_FACTOR_NOT_CODE_BASED: "That second factor does not use a sent code.",
     ResponseTitle.SECOND_FACTOR_NO_DESTINATION: "That second factor has no destination on file.",
     ResponseTitle.ENROLMENT_NOT_STARTED: "Begin enrolment before confirming it.",
+    ResponseTitle.SECOND_FACTOR_LOCKED: "Too many wrong codes. Wait a while before trying again.",
+    ResponseTitle.TWO_FACTOR_REQUIRED: (
+        "This workspace requires two-factor authentication. Turn it on in Security settings."
+    ),
+    ResponseTitle.SSO_REQUIRED: "This workspace requires single sign-on. Use Continue with SSO.",
+    ResponseTitle.SSO_FAILED: "Single sign-on could not be completed. Start again.",
+    ResponseTitle.SSO_NOT_CONFIGURED: "Single sign-on is not set up for that workspace.",
+    ResponseTitle.SSO_EMAIL_UNVERIFIED: (
+        "The identity provider did not confirm this email address, so it cannot be used to sign in."
+    ),
+    ResponseTitle.SSO_DOMAIN_NOT_ALLOWED: "That email domain may not sign in to this workspace.",
+    ResponseTitle.SSO_NO_ACCOUNT: "No account exists for this identity and sign-up is off.",
+    ResponseTitle.SSO_MEMBER_REMOVED: "You were removed from this workspace. Ask for an invitation.",
     ResponseTitle.TOKEN_REQUIRED: "A token is required and none was given.",
     ResponseTitle.TOKEN_INVALID: "The token is not one this deployment issued.",
     ResponseTitle.TOKEN_EXPIRED: "The token has expired.",

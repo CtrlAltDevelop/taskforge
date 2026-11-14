@@ -6,6 +6,10 @@ DEBUG = True
 # Plain http://localhost cannot carry a Secure cookie in every browser.
 REFRESH_COOKIE_SECURE = False
 
+# A distinct, non-secret key for development databases only (production refuses to start without
+# DJANGO_FIELD_ENCRYPTION_KEY). Never reuse it: anything encrypted with it is readable by anyone.
+FIELD_ENCRYPTION_KEY = FIELD_ENCRYPTION_KEY or "WKFDTWKLw3-iB-HY-UhDvkeFS-kiuclhvZeTd7VbFQQ="  # noqa: F405
+
 # No mail server in development: reset codes and other emails print in this process's
 # output instead of failing with a connection error.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
