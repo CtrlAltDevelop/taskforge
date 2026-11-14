@@ -118,3 +118,120 @@ jobs:
           docker compose -f docker-compose.prod.yml config -q
       - run: for f in deploy/scripts/*.sh; do bash -n "$f"; done
       - run: docker build -f backend/Dockerfile -t taskforge-backend:ci .
+
+  # Phase 38: the production compose stack really starts, migrates and answers. Caddy is left out
+  # (it needs ports 80/443 and a certificate); the probes go through the backend container.
+  compose-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: deploy
+    steps:
+      - uses: actions/checkout@v6
+      - name: Throwaway environment
+        run: |
+          {
+            echo "TASKFORGE_DOMAIN=ci.example.test"
+            echo "ACME_EMAIL=ci@example.test"
+            echo "TASKFORGE_VERSION=ci"
+            echo "TASKFORGE_BACKEND_IMAGE=taskforge-backend"
+            echo "DJANGO_SECRET_KEY=$(openssl rand -hex 32)"
+            echo "DJANGO_FIELD_ENCRYPTION_KEY=$(python3 -c 'import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())')"
+            echo "DJANGO_DPOP_NONCE_SECRET=$(openssl rand -hex 32)"
+            echo "DJANGO_INBOX_UNSUBSCRIBE_URL=https://ci.example.test/api/v1/inbox/unsubscribe?token={token}"
+            echo "POSTGRES_PASSWORD=$(openssl rand -hex 16)"
+            echo "DJANGO_SECURE_SSL_REDIRECT=false"
+            echo "COMPOSE_PROFILES=minio"
+            echo "DJANGO_S3_SECRET_KEY=$(openssl rand -hex 16)"
+          } > .env
+      - name: Build and start
+        run: docker compose -f docker-compose.prod.yml up -d --build backend grpc
+      - name: Wait for /api/health/ready
+        run: |
+          probe() {
+            docker compose -f docker-compose.prod.yml exec -T backend python -c "
+          import sys, urllib.request
+          r = urllib.request.Request('http://127.0.0.1:8010$1', headers={'Host': 'ci.example.test'})
+          sys.stdout.write(urllib.request.urlopen(r, timeout=4).read().decode())"
+          }
+          for i in $(seq 1 60); do
+            if probe /api/health/ready > ready.json 2>/dev/null; then break; fi
+            sleep 5
+          done
+          cat ready.json
+          grep -q '"status": "ok"' ready.json
+          probe /api/version | tee version.json
+          grep -q '"min_client_version"' version.json
+      - name: Logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.prod.yml logs --tail=200
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.prod.yml down -v
+
+  # Phase 38: upgrading from the previous release (N) to this commit (N+1) migrates cleanly and
+  # the app still answers. No earlier tag yet: the job reports that and passes.
+  upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: taskforge
+          POSTGRES_USER: taskforge
+          POSTGRES_PASSWORD: taskforge-ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U taskforge" --health-interval 5s --health-retries 10
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_DB_ENGINE: django.db.backends.postgresql
+      DJANGO_DB_NAME: taskforge
+      DJANGO_DB_USER: taskforge
+      DJANGO_DB_PASSWORD: taskforge-ci-only
+      DJANGO_DB_HOST: 127.0.0.1
+      DJANGO_DB_PORT: "5432"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Find the previous release tag
+        id: previous
+        run: |
+          TAG="$(git tag --list 'v*' --sort=-v:refname | head -n 1)"
+          if [ -z "$TAG" ]; then TAG="$(git tag --sort=-creatordate | head -n 1)"; fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          [ -n "$TAG" ] || echo "No previous tag: the upgrade check is skipped."
+      - name: Migrate with the previous release (N)
+        if: steps.previous.outputs.tag != ''
+        run: |
+          git worktree add ../previous "${{ steps.previous.outputs.tag }}"
+          python -m venv ../previous-venv
+          ../previous-venv/bin/pip install -e '../previous/backend'
+          cd ../previous/backend
+          ../../previous-venv/bin/python manage.py migrate --noinput
+      - name: Migrate with this commit (N+1)
+        if: steps.previous.outputs.tag != ''
+        working-directory: backend
+        run: |
+          python -m pip install -e '.[dev]'
+          python manage.py migrate --noinput
+          python manage.py makemigrations --check --dry-run
+      - name: Smoke the upgraded database
+        if: steps.previous.outputs.tag != ''
+        working-directory: backend
+        run: |
+          python manage.py check
+          python - <<'PY'
+          import django
+          django.setup()
+          from django.test import Client
+          c = Client(HTTP_HOST="localhost")
+          assert c.get("/api/health/ready").status_code == 200
+          assert "min_client_version" in c.get("/api/version").json()
+          PY
