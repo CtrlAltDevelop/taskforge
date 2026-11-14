@@ -406,21 +406,39 @@ def save_folder(actor: Any, workspace: Workspace, folder_id: str, name: str) -> 
     """Create (empty ``folder_id``) or rename a folder; needs ``goal.manage``."""
     access.require(actor, MANAGE, workspace)
     clean = _text(name, "Name", 80, required=True)
-    if not folder_id:
-        last = GoalFolder.objects.filter(workspace=workspace).count()
-        return GoalFolder.objects.create(workspace=workspace, name=clean, position=last)
-    folder = _folder(workspace, folder_id)
-    assert folder is not None
-    folder.name = clean
-    folder.save(update_fields=["name"])
-    return folder
+    with transaction.atomic():
+        if not folder_id:
+            last = GoalFolder.objects.filter(workspace=workspace).count()
+            created = GoalFolder.objects.create(workspace=workspace, name=clean, position=last)
+            _audit_folder(created, "goal.folder_created", {"name": clean}, actor)
+            return created
+        folder = _folder(workspace, folder_id)
+        assert folder is not None
+        before = folder.name
+        folder.name = clean
+        folder.save(update_fields=["name"])
+        _audit_folder(folder, "goal.folder_renamed", {"from": before, "name": clean}, actor)
+        return folder
 
 
 def delete_folder(actor: Any, workspace: Workspace, folder_id: str) -> None:
     access.require(actor, MANAGE, workspace)
-    folder = _folder(workspace, folder_id)
-    if folder is not None:
-        folder.delete()  # its goals stay, without a folder
+    with transaction.atomic():
+        folder = _folder(workspace, folder_id)
+        if folder is not None:
+            _audit_folder(folder, "goal.folder_deleted", {"name": folder.name}, actor)
+            folder.delete()  # its goals stay, without a folder
+
+
+def _audit_folder(folder: GoalFolder, action: str, changes: dict[str, Any], actor: Any) -> None:
+    recorder.record(
+        workspace_id=folder.workspace_id,
+        action=action,
+        target_type="goal_folder",
+        target_id=folder.pk,
+        changes=changes,
+        actor=actor,
+    )
 
 
 # ----------------------------------------------------------------------------- key results

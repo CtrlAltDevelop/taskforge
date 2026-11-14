@@ -1914,6 +1914,15 @@ ENDPOINTS += (
         ),
     ),
     Endpoint(
+        "GoalController.SaveFolder",
+        "goal.manage",
+        _grpc(
+            gostubs.GoalControllerStub,
+            "SaveFolder",
+            lambda w: gopb.FolderSaveRequest(workspace_id=w.ws, name="Q1"),
+        ),
+    ),
+    Endpoint(
         "TemplateController.List",
         "workspace.view",
         _grpc(
@@ -1984,7 +1993,7 @@ _GRPC_LATER = {
     "WebhookController": ("Update", "Delete", "Test", "Deliveries", "Redeliver"),
     "ApiTokenController": ("Revoke",),
     "FormController": ("Create", "Delete", "List", "Submissions", "Update"),
-    "GoalController": ("Get", "Update", "Delete", "SaveFolder", "DeleteFolder"),
+    "GoalController": ("Get", "Update", "Delete", "DeleteFolder"),
     "KeyResultController": ("Create", "Delete", "ForTask", "Update"),
     "CheckInController": ("Add", "List"),
     "TemplateController": ("Apply", "Create", "Delete", "Get", "SaveFromTask", "Update"),
