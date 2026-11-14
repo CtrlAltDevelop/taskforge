@@ -1226,6 +1226,7 @@ CORS_ALLOW_HEADERS = (
     "x-client-id",
     "x-trusted-device",
     "dpop",
+    "x-device-info",
 )
 # A browser script may only read the headers named here: the client needs the server nonce.
 CORS_EXPOSE_HEADERS = ["DPoP-Nonce", "Date", "WWW-Authenticate"]
