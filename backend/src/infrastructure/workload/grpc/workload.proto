@@ -1,0 +1,225 @@
+syntax = "proto3";
+
+package config.workload;
+
+service CapacityController {
+    rpc Get(CapacityGetRequest) returns (CapacityList) {}
+    rpc Set(CapacitySetRequest) returns (CapacityAnswer) {}
+}
+
+service HolidayController {
+    rpc Create(HolidayCreateRequest) returns (HolidayAnswer) {}
+    rpc Delete(HolidayDeleteRequest) returns (HolidayDeleted) {}
+    rpc List(HolidayListRequest) returns (HolidayList) {}
+    rpc Update(HolidayUpdateRequest) returns (HolidayAnswer) {}
+}
+
+service TimeOffController {
+    rpc Create(TimeOffCreateRequest) returns (TimeOffAnswer) {}
+    rpc Delete(TimeOffDeleteRequest) returns (TimeOffDeleted) {}
+    rpc List(TimeOffListRequest) returns (TimeOffList) {}
+    rpc Update(TimeOffUpdateRequest) returns (TimeOffAnswer) {}
+}
+
+service WorkloadController {
+    rpc Get(WorkloadGetRequest) returns (WorkloadAnswer) {}
+    rpc SetAssigneeEstimate(AssigneeEstimateRequest) returns (AssigneeEstimateAnswer) {}
+}
+
+message AssigneeEstimateAnswer {
+    string task_id = 1;
+}
+
+message AssigneeEstimateRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+    string user_id = 3;
+    int32 estimate_sec = 4;
+}
+
+message AssigneeSeconds {
+    string user_id = 1;
+    int32 seconds = 2;
+}
+
+message Capacity {
+    string user_id = 1;
+    string hours_per_day = 2;
+    repeated int32 working_days = 3;
+    bool is_set = 4;
+}
+
+message CapacityAnswer {
+    Capacity capacity = 1;
+}
+
+message CapacityGetRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+}
+
+message CapacityList {
+    repeated Capacity capacities = 1;
+}
+
+message CapacitySetRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+    string hours_per_day = 3;
+    repeated int32 working_days = 4;
+}
+
+message Contribution {
+    string task_id = 1;
+    int32 seconds = 2;
+    bool warning = 3;
+}
+
+message DayCell {
+    string date = 1;
+    int32 load_sec = 2;
+    int32 capacity_sec = 3;
+    bool over = 4;
+    repeated Contribution contributions = 5;
+}
+
+message Holiday {
+    string id = 1;
+    string date = 2;
+    string name = 3;
+}
+
+message HolidayAnswer {
+    Holiday holiday = 1;
+}
+
+message HolidayCreateRequest {
+    string workspace_id = 1;
+    string date = 2;
+    string name = 3;
+}
+
+message HolidayDeleteRequest {
+    string workspace_id = 1;
+    string holiday_id = 2;
+}
+
+message HolidayDeleted {
+    string id = 1;
+}
+
+message HolidayList {
+    repeated Holiday holidays = 1;
+}
+
+message HolidayListRequest {
+    string workspace_id = 1;
+    string range_start = 2;
+    string range_end = 3;
+}
+
+message HolidayUpdateRequest {
+    string workspace_id = 1;
+    string holiday_id = 2;
+    string date = 3;
+    string name = 4;
+}
+
+message LoadTask {
+    string task_id = 1;
+    string project_id = 2;
+    string display_id = 3;
+    string title = 4;
+    int32 version = 5;
+    string start_date = 6;
+    string due_date = 7;
+    int32 estimate_sec = 8;
+    repeated string assignee_ids = 9;
+    repeated AssigneeSeconds own = 10;
+    string reason = 11;
+}
+
+message OffRange {
+    string start_date = 1;
+    string end_date = 2;
+    string kind = 3;
+}
+
+message PersonLoad {
+    string user_id = 1;
+    Capacity capacity = 2;
+    repeated OffRange time_off = 3;
+    repeated DayCell days = 4;
+    int32 total_load_sec = 5;
+}
+
+message TimeOff {
+    string id = 1;
+    string user_id = 2;
+    string start_date = 3;
+    string end_date = 4;
+    string kind = 5;
+    string note = 6;
+}
+
+message TimeOffAnswer {
+    TimeOff entry = 1;
+}
+
+message TimeOffCreateRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+    string start_date = 3;
+    string end_date = 4;
+    string kind = 5;
+    string note = 6;
+}
+
+message TimeOffDeleteRequest {
+    string workspace_id = 1;
+    string time_off_id = 2;
+}
+
+message TimeOffDeleted {
+    string id = 1;
+}
+
+message TimeOffList {
+    repeated TimeOff entries = 1;
+}
+
+message TimeOffListRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+    string range_start = 3;
+    string range_end = 4;
+}
+
+message TimeOffUpdateRequest {
+    string workspace_id = 1;
+    string time_off_id = 2;
+    string start_date = 3;
+    string end_date = 4;
+    string kind = 5;
+    string note = 6;
+}
+
+message WorkloadAnswer {
+    string range_start = 1;
+    string range_end = 2;
+    bool can_see_all = 3;
+    repeated PersonLoad people = 4;
+    repeated LoadTask tasks = 5;
+    repeated LoadTask unestimated = 6;
+    repeated string holidays = 7;
+    bool truncated = 8;
+}
+
+message WorkloadGetRequest {
+    string workspace_id = 1;
+    string range_start = 2;
+    string range_end = 3;
+    repeated string project_ids = 4;
+    repeated string user_ids = 5;
+}
+

@@ -29,12 +29,17 @@ EVERY_DAY: Final = list(range(7))
 
 
 def working_calendar(workspace: Workspace) -> WorkingCalendar:
+    """The workspace's weekdays and holidays: its own list plus the workload holidays (phase 36),
+    so a bar never ends on a day the workload grid counts as a holiday."""
+    from infrastructure.workload.models import Holiday
+
     setting = WorkingCalendarSetting.objects.filter(workspace=workspace).first()
+    shared = frozenset(Holiday.objects.filter(workspace=workspace).values_list("date", flat=True))
     if setting is None:
-        return WorkingCalendar()
+        return WorkingCalendar(holidays=shared)
     return WorkingCalendar(
         days=frozenset(setting.days),
-        holidays=frozenset(date.fromisoformat(h) for h in setting.holidays),
+        holidays=shared | frozenset(date.fromisoformat(h) for h in setting.holidays),
     )
 
 
