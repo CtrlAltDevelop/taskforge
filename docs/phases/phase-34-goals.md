@@ -1,6 +1,6 @@
 # Phase 34 — Goals (OKRs)
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Set **goals** with measurable **key results** that update automatically from tasks or manually.
@@ -34,10 +34,10 @@ Goals list with progress bars and status chips, detail with key result rows, che
 - Deleting a linked task doesn’t crash progress (removed from the denominator).
 
 ## Acceptance criteria
-- [ ] Linked-task KR updates when tasks complete
-- [ ] Number KR works for both increase and decrease targets
-- [ ] Nested goals roll up
-- [ ] Check-in history visible
+- [x] Linked-task KR updates when tasks complete
+- [x] Number KR works for both increase and decrease targets
+- [x] Nested goals roll up
+- [x] Check-in history visible
 
 ## Tests
 Progress math (both directions, zero denominators), rollup, risk hint, debounce job.

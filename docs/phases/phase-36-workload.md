@@ -1,6 +1,6 @@
 # Phase 36 — Workload and Capacity
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 A **workload view** showing how much work each person has per day/week versus their capacity, with drag-to-rebalance.
@@ -33,10 +33,10 @@ Grid of people × days with stacked load bars, hover tooltip listing contributin
 - Same algorithm is reused by timeline cascade (15) — single shared service.
 
 ## Acceptance criteria
-- [ ] Hand-computed fixture matches grid for multi-day, multi-assignee tasks
-- [ ] Holidays/time off reduce capacity correctly
-- [ ] Drag reassign updates both people’s totals instantly and persists
-- [ ] Unestimated list accurate
+- [x] Hand-computed fixture matches grid for multi-day, multi-assignee tasks
+- [x] Holidays/time off reduce capacity correctly
+- [x] Drag reassign updates both people’s totals instantly and persists
+- [x] Unestimated list accurate
 
 ## Tests
 Allocation algorithm (edge dates, DST, zero-length), capacity math, permission to view, Flutter grid widget tests.

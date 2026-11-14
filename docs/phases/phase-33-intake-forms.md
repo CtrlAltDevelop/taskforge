@@ -1,6 +1,6 @@
 # Phase 33 — Intake Forms
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Shareable **forms** that create tasks — usable by people **outside** the workspace (clients, customers, other teams).
@@ -33,10 +33,10 @@ Builder (drag fields, preview), submission inbox, public form page rendered by t
 - Disabled/deleted form returns a generic not-found.
 
 ## Acceptance criteria
-- [ ] Anonymous visitor submits form → task appears in the target project
-- [ ] Spam flood is throttled; honeypot submissions dropped
-- [ ] Submitter email receives confirmation; no access to workspace data
-- [ ] Custom field answers validated exactly like in-app
+- [x] Anonymous visitor submits form → task appears in the target project
+- [x] Spam flood is throttled; honeypot submissions dropped
+- [x] Submitter email receives confirmation; no access to workspace data
+- [x] Custom field answers validated exactly like in-app
 
 ## Tests
 Public endpoint isolation, rate limiting, upload limits, field validation reuse, email flow.

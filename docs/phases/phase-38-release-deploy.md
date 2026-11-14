@@ -1,6 +1,6 @@
 # Phase 38 — Release and Deployment
 
-**Status:** TODO
+**Status:** MOSTLY DONE — see the roadmap entry for what is left
 
 ## Feature
 **One-command self-hosted deployment** and automated **release builds** for web, Android, iOS, and desktop.

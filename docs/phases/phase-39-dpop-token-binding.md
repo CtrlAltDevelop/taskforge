@@ -1,6 +1,6 @@
 # Phase 39 — DPoP Token Binding
 
-**Status:** TODO
+**Status:** MOSTLY DONE — see the roadmap entry for what is left
 
 ## Feature
 Every authenticated request on REST, gRPC and WebSocket carries a **DPoP proof** (RFC 9449), so a stolen access or refresh token is useless without the device's private key.

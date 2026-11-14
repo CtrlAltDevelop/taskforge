@@ -1,6 +1,6 @@
 # Phase 40 — Device Info and Named Sessions
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Every session gets a readable **name** ("Pixel 8 · Android 14") and a privacy-safe **device fingerprint**, so users can see, rename and control exactly which devices are signed in.
@@ -44,14 +44,14 @@ Sessions screen rows show the name with an edit icon (inline rename), a **This d
 - `KnownDevice` rows are removed when the user is deleted and pruned after 12 months unused.
 
 ## Acceptance criteria
-- [ ] Sign-in with the header creates a session named from model and OS, and the Sessions screen shows it with "This device"
-- [ ] Rename persists, survives refresh, and only works on the caller's own sessions
-- [ ] A malformed header (too long, missing `model` or `os`, bad pattern) never fails a sign-in; bad optional keys are ignored
-- [ ] Same device signing in twice gives the same fingerprint; a different device or a different account gives a different one
-- [ ] First sign-in with an unseen fingerprint sets `new_device`; the second does not
-- [ ] Same fingerprint with a different DPoP key shows `key_changed`
-- [ ] With **Collect device info** off, nothing is stored or flagged and the app still works
-- [ ] No raw header value other than the derived label is stored or logged
+- [x] Sign-in with the header creates a session named from model and OS, and the Sessions screen shows it with "This device"
+- [x] Rename persists, survives refresh, and only works on the caller's own sessions
+- [x] A malformed header (too long, missing `model` or `os`, bad pattern) never fails a sign-in; bad optional keys are ignored
+- [x] Same device signing in twice gives the same fingerprint; a different device or a different account gives a different one
+- [x] First sign-in with an unseen fingerprint sets `new_device`; the second does not
+- [x] Same fingerprint with a different DPoP key shows `key_changed`
+- [x] With **Collect device info** off, nothing is stored or flagged and the app still works
+- [x] No raw header value other than the derived label is stored or logged
 
 ## Tests
 Header parser table (each key valid and invalid, length cap, duplicates, control characters), fingerprint stability and per-user separation, new-device and key-changed flags, rename authorization (cross-user), setting off path, no raw values in DB or logs, Flutter header builder and Sessions screen widget tests (rename, chips, current device).

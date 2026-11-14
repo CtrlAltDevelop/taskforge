@@ -1,6 +1,6 @@
 # Phase 37 — Two-Factor Auth and SSO
 
-**Status:** TODO
+**Status:** MOSTLY DONE — see the roadmap entry for what is left
 
 ## Feature
 Stronger sign-in: **TOTP two-factor authentication** with recovery codes, and **single sign-on** via OIDC (and optional SAML).

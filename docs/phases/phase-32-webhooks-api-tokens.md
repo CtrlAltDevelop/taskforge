@@ -1,6 +1,6 @@
 # Phase 32 — Webhooks and API Tokens
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 A **public REST API** secured by personal/service **API tokens**, plus outgoing **webhooks** for events.
@@ -34,11 +34,11 @@ Settings → Developer: token list/create (copy-once secret dialog), scopes pick
 - Idempotent event ids so receivers can dedupe.
 
 ## Acceptance criteria
-- [ ] Create task via curl with a token; scope violation → 403
-- [ ] Webhook receives correctly signed event; tampered signature fails verification sample
-- [ ] SSRF attempts to `127.0.0.1`/metadata IP are refused
-- [ ] Redelivery works from UI
-- [ ] Creating and revoking a token each leave an audit entry (actor, token name and prefix; never the token or its hash)
+- [x] Create task via curl with a token; scope violation → 403
+- [x] Webhook receives correctly signed event; tampered signature fails verification sample
+- [x] SSRF attempts to `127.0.0.1`/metadata IP are refused
+- [x] Redelivery works from UI
+- [x] Creating and revoking a token each leave an audit entry (actor, token name and prefix; never the token or its hash)
 
 ## Tests
 Hash/prefix lookup, scope enforcement, signature fixtures, SSRF suite, retry schedule.

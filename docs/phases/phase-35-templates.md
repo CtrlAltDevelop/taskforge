@@ -1,6 +1,6 @@
 # Phase 35 — Templates
 
-**Status:** TODO
+**Status:** DONE
 
 ## Feature
 Save a **task, subtask tree, or whole project** as a template and create new ones from it.
@@ -31,10 +31,10 @@ Template gallery with preview of structure (tree, statuses), apply dialog collec
 - Size cap (e.g. 2,000 tasks) to prevent abuse.
 
 ## Acceptance criteria
-- [ ] Save a project with workflow/fields/tasks → create a new project identical in structure
-- [ ] Relative dates shift correctly from chosen start date
-- [ ] Variables substituted everywhere they appear
-- [ ] Failure midway leaves nothing behind
+- [x] Save a project with workflow/fields/tasks → create a new project identical in structure
+- [x] Relative dates shift correctly from chosen start date
+- [x] Variables substituted everywhere they appear
+- [x] Failure midway leaves nothing behind
 
 ## Tests
 Snapshot→apply round-trip, date shifting, validation drift, transactional rollback.
