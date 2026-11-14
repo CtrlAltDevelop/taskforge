@@ -5,6 +5,7 @@ const publicAppPrefixes = <String>[
   '/f/', // a public intake form
   '/sso/', // where the identity provider's redirect lands (no token yet)
   '/two-factor', // the code prompt of a sign-in in progress
+  '/update-required', // the blocking screen for an app older than the server's minimum
 ];
 
 /// Whether [path] is one of the public pages (a public intake form).

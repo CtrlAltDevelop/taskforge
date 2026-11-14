@@ -7576,4 +7576,80 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get ssoRemoveBody => 'هغه خلک چې له دې لارې ننوتي، باید بیا ننوځي.';
+
+  @override
+  String get sysAboutTitle => 'په اړه';
+
+  @override
+  String get sysClientVersion => 'د اپ نسخه';
+
+  @override
+  String get sysServerVersion => 'د سرور نسخه';
+
+  @override
+  String get sysUnknown => 'نامعلوم (سرور نه ترلاسه کېږي)';
+
+  @override
+  String sysUpdateAvailable(String version) {
+    return 'نوې نسخه ($version) شته. دا اپ تازه کړئ.';
+  }
+
+  @override
+  String get sysCheckAgain => 'بیا وګورئ';
+
+  @override
+  String get sysUpdateRequiredTitle => 'تازه کول اړین دي';
+
+  @override
+  String sysUpdateRequiredBody(String current, String minimum) {
+    return 'دا اپ ($current) د دې سرور لپاره ډېر زوړ دی؛ سرور $minimum یا نوې نسخې ته اړتیا لري. د دوام لپاره وروستۍ نسخه نصب کړئ.';
+  }
+
+  @override
+  String get sysTitle => 'سیستم';
+
+  @override
+  String get sysSubtitle => 'نسخه او د کتار روغتیا (مدیران)';
+
+  @override
+  String get sysDenied => 'یوازې مدیران کولی شي د سیستم حالت وګوري.';
+
+  @override
+  String get sysLoadFailed => 'د سیستم حالت نه شو پورته کېدای.';
+
+  @override
+  String get sysMinClient => 'تر ټولو زوړ ملاتړ شوی اپ';
+
+  @override
+  String get sysRedis => 'Redis';
+
+  @override
+  String get sysBroker => 'د دندو کتار (Celery)';
+
+  @override
+  String get sysWorkers => 'کارکوونکي';
+
+  @override
+  String get sysOk => 'سم';
+
+  @override
+  String get sysUnavailable => 'نه ترلاسه کېږي';
+
+  @override
+  String get sysInMemory => 'په حافظه کې (ډیبګ)';
+
+  @override
+  String get sysNotConfigured => 'تنظیم شوی نه دی';
+
+  @override
+  String get sysInline => 'دندې په ځای اجرا کېږي (ډیبګ)';
+
+  @override
+  String get sysNoWorkers => 'هیڅ کارکوونکي ځواب نه ورکړ';
+
+  @override
+  String get sysBacklog => 'د ټاکلي وخت کارونه په انتظار کې';
+
+  @override
+  String get sysBacklogNone => 'هیڅ شی په انتظار کې نه دی.';
 }

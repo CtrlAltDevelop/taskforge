@@ -4319,5 +4319,46 @@
   "ssoTestFailed": "The test failed",
   "ssoRemove": "Remove",
   "ssoRemoveTitle": "Remove single sign-on?",
-  "ssoRemoveBody": "People who signed in through it will have to sign in again."
+  "ssoRemoveBody": "People who signed in through it will have to sign in again.",
+  "sysAboutTitle": "About",
+  "sysClientVersion": "App version",
+  "sysServerVersion": "Server version",
+  "sysUnknown": "Unknown (server not reachable)",
+  "sysUpdateAvailable": "A newer version ({version}) is available. Update this app.",
+  "@sysUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sysCheckAgain": "Check again",
+  "sysUpdateRequiredTitle": "Update required",
+  "sysUpdateRequiredBody": "This app ({current}) is too old for this server, which needs {minimum} or newer. Install the latest version to continue.",
+  "@sysUpdateRequiredBody": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "sysTitle": "System",
+  "sysSubtitle": "Version and queue health (administrators)",
+  "sysDenied": "Only administrators can see the system status.",
+  "sysLoadFailed": "Could not load the system status.",
+  "sysMinClient": "Oldest supported app",
+  "sysRedis": "Redis",
+  "sysBroker": "Task queue (Celery broker)",
+  "sysWorkers": "Workers",
+  "sysOk": "OK",
+  "sysUnavailable": "Not reachable",
+  "sysInMemory": "In memory (debug)",
+  "sysNotConfigured": "Not configured",
+  "sysInline": "Tasks run inline (debug)",
+  "sysNoWorkers": "No worker answered",
+  "sysBacklog": "Due work waiting",
+  "sysBacklogNone": "Nothing is waiting."
 }

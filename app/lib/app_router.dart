@@ -52,6 +52,9 @@ import 'package:taskforge/features/security/presentation/sso_callback_screen.dar
 import 'package:taskforge/features/security/presentation/sso_setup_screen.dart';
 import 'package:taskforge/features/security/presentation/two_factor_screen.dart';
 import 'package:taskforge/core/auth/auth_api.dart' show SecondFactorRequired;
+import 'package:taskforge/features/system/application/system_providers.dart';
+import 'package:taskforge/features/system/presentation/system_screen.dart';
+import 'package:taskforge/features/system/presentation/version_screens.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
 import 'package:taskforge/features/workspaces/presentation/settings_screen.dart';
@@ -106,6 +109,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen(workspacesProvider, (_, _) => workspacesChanged.value++);
   // The two-factor gate: re-run the redirect when the policy answer changes.
   ref.listen(securityPolicyProvider, (_, _) => workspacesChanged.value++);
+  // An app older than the server's minimum is held on one screen until it is updated.
+  ref.listen(updateRequiredProvider, (_, _) => workspacesChanged.value++);
   ref.onDispose(workspacesChanged.dispose);
   late final GoRouter router;
   // A project belongs to one workspace: leave its pages when the workspace changes.
@@ -120,6 +125,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final native = customSchemeRoute(state.uri);
       if (native != null) return native;
+      final mustUpdate = ref.read(updateRequiredProvider);
+      final atUpdate = state.uri.path == '/update-required';
+      if (mustUpdate && !atUpdate) return '/update-required';
+      if (!mustUpdate && atUpdate) return '/';
       // Public pages (an intake form) need no account and no redirect.
       if (isPublicAppPath(state.uri.path)) return null;
       final signedIn = session.status == AuthStatus.signedIn;
@@ -158,6 +167,12 @@ final routerProvider = Provider<GoRouter>((ref) {
     },
     routes: [
       GoRoute(path: '/', builder: (_, _) => const HomeScreen()),
+      GoRoute(path: '/about', builder: (_, _) => const AboutScreen()),
+      GoRoute(path: '/system', builder: (_, _) => const SystemScreen()),
+      GoRoute(
+        path: '/update-required',
+        builder: (_, _) => const UpdateRequiredScreen(),
+      ),
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
       GoRoute(
         path: '/workspaces/new',

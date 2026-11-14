@@ -7,6 +7,8 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/presentation/app_shell.dart';
+import 'package:taskforge/features/system/application/system_providers.dart';
+import 'package:taskforge/features/system/presentation/version_screens.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
@@ -58,6 +60,7 @@ class HomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const DesktopUpdateNotice(),
           account.when(
             data: (a) => ListTile(
               leading: const CircleAvatar(child: Icon(Icons.person)),
@@ -126,6 +129,21 @@ class HomeScreen extends ConsumerWidget {
             title: Text(context.l10n.connectivity),
             onTap: () => context.go('/debug'),
           ),
+          ListTile(
+            key: const Key('open-about'),
+            leading: const Icon(Icons.info_outline),
+            title: Text(context.l10n.sysAboutTitle),
+            onTap: () => context.push('/about'),
+          ),
+          // Administrators only: the call fails for everyone else, and the tile stays hidden.
+          if (ref.watch(systemInfoProvider).hasValue)
+            ListTile(
+              key: const Key('open-system'),
+              leading: const Icon(Icons.monitor_heart_outlined),
+              title: Text(context.l10n.sysTitle),
+              subtitle: Text(context.l10n.sysSubtitle),
+              onTap: () => context.push('/system'),
+            ),
         ],
       ),
     );

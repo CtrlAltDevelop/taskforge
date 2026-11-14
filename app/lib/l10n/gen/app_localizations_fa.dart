@@ -7614,4 +7614,80 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get ssoRemoveBody =>
       'افرادی که از طریق آن وارد شده‌اند باید دوباره وارد شوند.';
+
+  @override
+  String get sysAboutTitle => 'درباره';
+
+  @override
+  String get sysClientVersion => 'نسخه برنامه';
+
+  @override
+  String get sysServerVersion => 'نسخه سرور';
+
+  @override
+  String get sysUnknown => 'نامشخص (سرور در دسترس نیست)';
+
+  @override
+  String sysUpdateAvailable(String version) {
+    return 'نسخه جدیدتری ($version) موجود است. برنامه را به‌روز کنید.';
+  }
+
+  @override
+  String get sysCheckAgain => 'بررسی دوباره';
+
+  @override
+  String get sysUpdateRequiredTitle => 'به‌روزرسانی لازم است';
+
+  @override
+  String sysUpdateRequiredBody(String current, String minimum) {
+    return 'این برنامه ($current) برای این سرور بیش از حد قدیمی است؛ سرور به نسخه $minimum یا جدیدتر نیاز دارد. برای ادامه آخرین نسخه را نصب کنید.';
+  }
+
+  @override
+  String get sysTitle => 'سیستم';
+
+  @override
+  String get sysSubtitle => 'نسخه و سلامت صف (مدیران)';
+
+  @override
+  String get sysDenied => 'فقط مدیران می‌توانند وضعیت سیستم را ببینند.';
+
+  @override
+  String get sysLoadFailed => 'وضعیت سیستم بارگذاری نشد.';
+
+  @override
+  String get sysMinClient => 'قدیمی‌ترین برنامهٔ پشتیبانی‌شده';
+
+  @override
+  String get sysRedis => 'Redis';
+
+  @override
+  String get sysBroker => 'صف وظایف (Celery)';
+
+  @override
+  String get sysWorkers => 'کارگرها';
+
+  @override
+  String get sysOk => 'سالم';
+
+  @override
+  String get sysUnavailable => 'در دسترس نیست';
+
+  @override
+  String get sysInMemory => 'در حافظه (اشکال‌زدایی)';
+
+  @override
+  String get sysNotConfigured => 'پیکربندی نشده';
+
+  @override
+  String get sysInline => 'وظایف درجا اجرا می‌شوند (اشکال‌زدایی)';
+
+  @override
+  String get sysNoWorkers => 'هیچ کارگری پاسخ نداد';
+
+  @override
+  String get sysBacklog => 'کارهای موعددار در انتظار';
+
+  @override
+  String get sysBacklogNone => 'چیزی در انتظار نیست.';
 }

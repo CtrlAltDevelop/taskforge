@@ -7603,6 +7603,82 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ssoRemoveBody =>
       'People who signed in through it will have to sign in again.';
+
+  @override
+  String get sysAboutTitle => 'About';
+
+  @override
+  String get sysClientVersion => 'App version';
+
+  @override
+  String get sysServerVersion => 'Server version';
+
+  @override
+  String get sysUnknown => 'Unknown (server not reachable)';
+
+  @override
+  String sysUpdateAvailable(String version) {
+    return 'A newer version ($version) is available. Update this app.';
+  }
+
+  @override
+  String get sysCheckAgain => 'Check again';
+
+  @override
+  String get sysUpdateRequiredTitle => 'Update required';
+
+  @override
+  String sysUpdateRequiredBody(String current, String minimum) {
+    return 'This app ($current) is too old for this server, which needs $minimum or newer. Install the latest version to continue.';
+  }
+
+  @override
+  String get sysTitle => 'System';
+
+  @override
+  String get sysSubtitle => 'Version and queue health (administrators)';
+
+  @override
+  String get sysDenied => 'Only administrators can see the system status.';
+
+  @override
+  String get sysLoadFailed => 'Could not load the system status.';
+
+  @override
+  String get sysMinClient => 'Oldest supported app';
+
+  @override
+  String get sysRedis => 'Redis';
+
+  @override
+  String get sysBroker => 'Task queue (Celery broker)';
+
+  @override
+  String get sysWorkers => 'Workers';
+
+  @override
+  String get sysOk => 'OK';
+
+  @override
+  String get sysUnavailable => 'Not reachable';
+
+  @override
+  String get sysInMemory => 'In memory (debug)';
+
+  @override
+  String get sysNotConfigured => 'Not configured';
+
+  @override
+  String get sysInline => 'Tasks run inline (debug)';
+
+  @override
+  String get sysNoWorkers => 'No worker answered';
+
+  @override
+  String get sysBacklog => 'Due work waiting';
+
+  @override
+  String get sysBacklogNone => 'Nothing is waiting.';
 }
 
 /// The translations for English (`en_XA`).
@@ -15340,4 +15416,82 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   @override
   String get ssoRemoveBody =>
       '[Þéöþłé ŵĥö šíĝñéð íñ ţĥŕöûĝĥ íţ ŵíłł ĥåṽé ţö šíĝñ íñ åĝåíñ. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sysAboutTitle => '[Åƀöûţ ~]';
+
+  @override
+  String get sysClientVersion => '[Åþþ ṽéŕšíöñ ~~~]';
+
+  @override
+  String get sysServerVersion => '[Šéŕṽéŕ ṽéŕšíöñ ~~~~]';
+
+  @override
+  String get sysUnknown => '[Ûñķñöŵñ (šéŕṽéŕ ñöţ ŕéåçĥåƀłé) ~~~~~~~~~~]';
+
+  @override
+  String sysUpdateAvailable(String version) {
+    return '[Å ñéŵéŕ ṽéŕšíöñ ($version) íš åṽåíłåƀłé. Ûþðåţé ţĥíš åþþ. ~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get sysCheckAgain => '[Çĥéçķ åĝåíñ ~~~]';
+
+  @override
+  String get sysUpdateRequiredTitle => '[Ûþðåţé ŕéqûíŕéð ~~~~~]';
+
+  @override
+  String sysUpdateRequiredBody(String current, String minimum) {
+    return '[Ţĥíš åþþ ($current) íš ţöö öłð ƒöŕ ţĥíš šéŕṽéŕ, ŵĥíçĥ ñééðš $minimum öŕ ñéŵéŕ. Íñšţåłł ţĥé łåţéšţ ṽéŕšíöñ ţö çöñţíñûé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get sysTitle => '[Šýšţéɱ ~~]';
+
+  @override
+  String get sysSubtitle =>
+      '[Ṽéŕšíöñ åñð qûéûé ĥéåłţĥ (åðɱíñíšţŕåţöŕš) ~~~~~~~~~~~~~]';
+
+  @override
+  String get sysDenied =>
+      '[Öñłý åðɱíñíšţŕåţöŕš çåñ šéé ţĥé šýšţéɱ šţåţûš. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sysLoadFailed => '[Çöûłð ñöţ łöåð ţĥé šýšţéɱ šţåţûš. ~~~~~~~~~~~]';
+
+  @override
+  String get sysMinClient => '[Öłðéšţ šûþþöŕţéð åþþ ~~~~~~]';
+
+  @override
+  String get sysRedis => '[Ŕéðíš ~]';
+
+  @override
+  String get sysBroker => '[Ţåšķ qûéûé (Çéłéŕý ƀŕöķéŕ) ~~~~~~~~]';
+
+  @override
+  String get sysWorkers => '[Ŵöŕķéŕš ~~]';
+
+  @override
+  String get sysOk => '[ÖĶ ]';
+
+  @override
+  String get sysUnavailable => '[Ñöţ ŕéåçĥåƀłé ~~~~]';
+
+  @override
+  String get sysInMemory => '[Íñ ɱéɱöŕý (ðéƀûĝ) ~~~~~]';
+
+  @override
+  String get sysNotConfigured => '[Ñöţ çöñƒíĝûŕéð ~~~~]';
+
+  @override
+  String get sysInline => '[Ţåšķš ŕûñ íñłíñé (ðéƀûĝ) ~~~~~~~~]';
+
+  @override
+  String get sysNoWorkers => '[Ñö ŵöŕķéŕ åñšŵéŕéð ~~~~~~]';
+
+  @override
+  String get sysBacklog => '[Ðûé ŵöŕķ ŵåíţíñĝ ~~~~~]';
+
+  @override
+  String get sysBacklogNone => '[Ñöţĥíñĝ íš ŵåíţíñĝ. ~~~~~~]';
 }

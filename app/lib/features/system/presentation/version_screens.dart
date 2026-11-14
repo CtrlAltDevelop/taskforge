@@ -1,0 +1,139 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/version.dart';
+import 'package:taskforge/features/system/application/system_providers.dart';
+
+/// Server and client version, and a way to re-check against the server.
+class AboutScreen extends ConsumerWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.l10n;
+    final server = ref.watch(serverVersionProvider);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(t.sysAboutTitle),
+        leading: IconButton(
+          tooltip: t.grpBClose,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.canPop() ? context.pop() : context.go('/'),
+        ),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            key: const Key('about-client-version'),
+            leading: const Icon(Icons.phone_android),
+            title: Text(t.sysClientVersion),
+            subtitle: Text(clientVersion),
+          ),
+          ListTile(
+            key: const Key('about-server-version'),
+            leading: const Icon(Icons.dns_outlined),
+            title: Text(t.sysServerVersion),
+            subtitle: Text(
+              server.when(
+                data: (s) => s.version,
+                loading: () => '…',
+                error: (_, _) => t.sysUnknown,
+              ),
+            ),
+          ),
+          if (server.value case final s? when s.isNewerThan(clientVersion))
+            ListTile(
+              leading: const Icon(Icons.system_update_alt),
+              title: Text(t.sysUpdateAvailable(s.version)),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                key: const Key('about-check'),
+                icon: const Icon(Icons.refresh),
+                label: Text(t.sysCheckAgain),
+                onPressed: () => ref.invalidate(serverVersionProvider),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Blocks the app when it is older than the server's minimum supported client.
+class UpdateRequiredScreen extends ConsumerWidget {
+  const UpdateRequiredScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.l10n;
+    final server = ref.watch(serverVersionProvider).value;
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.system_update_alt, size: 56),
+                  const SizedBox(height: 16),
+                  Text(
+                    t.sysUpdateRequiredTitle,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    t.sysUpdateRequiredBody(
+                      clientVersion,
+                      server?.minClientVersion ?? '',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  FilledButton(
+                    key: const Key('update-required-retry'),
+                    onPressed: () => ref.invalidate(serverVersionProvider),
+                    child: Text(t.sysCheckAgain),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A one-line notice on desktop: the server runs a newer release than this app.
+class DesktopUpdateNotice extends ConsumerWidget {
+  const DesktopUpdateNotice({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final server = ref.watch(desktopUpdateNoticeProvider);
+    if (server == null) return const SizedBox.shrink();
+    return MaterialBanner(
+      key: const Key('desktop-update-notice'),
+      leading: const Icon(Icons.system_update_alt),
+      content: Text(context.l10n.sysUpdateAvailable(server.version)),
+      actions: [
+        TextButton(
+          onPressed: () => context.push('/about'),
+          child: Text(context.l10n.sysAboutTitle),
+        ),
+      ],
+    );
+  }
+}

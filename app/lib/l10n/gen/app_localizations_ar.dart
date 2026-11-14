@@ -7661,4 +7661,80 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ssoRemoveBody => 'سيضطر من دخلوا عبره إلى تسجيل الدخول من جديد.';
+
+  @override
+  String get sysAboutTitle => 'حول';
+
+  @override
+  String get sysClientVersion => 'إصدار التطبيق';
+
+  @override
+  String get sysServerVersion => 'إصدار الخادم';
+
+  @override
+  String get sysUnknown => 'غير معروف (الخادم غير متاح)';
+
+  @override
+  String sysUpdateAvailable(String version) {
+    return 'يتوفر إصدار أحدث ($version). حدّث هذا التطبيق.';
+  }
+
+  @override
+  String get sysCheckAgain => 'تحقق مرة أخرى';
+
+  @override
+  String get sysUpdateRequiredTitle => 'التحديث مطلوب';
+
+  @override
+  String sysUpdateRequiredBody(String current, String minimum) {
+    return 'هذا التطبيق ($current) قديم جدًا لهذا الخادم الذي يحتاج إلى الإصدار $minimum أو أحدث. ثبّت أحدث إصدار للمتابعة.';
+  }
+
+  @override
+  String get sysTitle => 'النظام';
+
+  @override
+  String get sysSubtitle => 'الإصدار وحالة قائمة المهام (للمسؤولين)';
+
+  @override
+  String get sysDenied => 'يمكن للمسؤولين فقط رؤية حالة النظام.';
+
+  @override
+  String get sysLoadFailed => 'تعذّر تحميل حالة النظام.';
+
+  @override
+  String get sysMinClient => 'أقدم تطبيق مدعوم';
+
+  @override
+  String get sysRedis => 'Redis';
+
+  @override
+  String get sysBroker => 'قائمة المهام (Celery)';
+
+  @override
+  String get sysWorkers => 'العمال';
+
+  @override
+  String get sysOk => 'سليم';
+
+  @override
+  String get sysUnavailable => 'غير متاح';
+
+  @override
+  String get sysInMemory => 'في الذاكرة (تصحيح)';
+
+  @override
+  String get sysNotConfigured => 'غير مهيأ';
+
+  @override
+  String get sysInline => 'تُنفَّذ المهام مباشرة (تصحيح)';
+
+  @override
+  String get sysNoWorkers => 'لم يرد أي عامل';
+
+  @override
+  String get sysBacklog => 'أعمال مستحقة قيد الانتظار';
+
+  @override
+  String get sysBacklogNone => 'لا شيء في الانتظار.';
 }

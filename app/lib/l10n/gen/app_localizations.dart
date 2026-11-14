@@ -13488,6 +13488,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'People who signed in through it will have to sign in again.'**
   String get ssoRemoveBody;
+
+  /// No description provided for @sysAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get sysAboutTitle;
+
+  /// No description provided for @sysClientVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get sysClientVersion;
+
+  /// No description provided for @sysServerVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Server version'**
+  String get sysServerVersion;
+
+  /// No description provided for @sysUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown (server not reachable)'**
+  String get sysUnknown;
+
+  /// No description provided for @sysUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version ({version}) is available. Update this app.'**
+  String sysUpdateAvailable(String version);
+
+  /// No description provided for @sysCheckAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Check again'**
+  String get sysCheckAgain;
+
+  /// No description provided for @sysUpdateRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get sysUpdateRequiredTitle;
+
+  /// No description provided for @sysUpdateRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This app ({current}) is too old for this server, which needs {minimum} or newer. Install the latest version to continue.'**
+  String sysUpdateRequiredBody(String current, String minimum);
+
+  /// No description provided for @sysTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get sysTitle;
+
+  /// No description provided for @sysSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Version and queue health (administrators)'**
+  String get sysSubtitle;
+
+  /// No description provided for @sysDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Only administrators can see the system status.'**
+  String get sysDenied;
+
+  /// No description provided for @sysLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the system status.'**
+  String get sysLoadFailed;
+
+  /// No description provided for @sysMinClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest supported app'**
+  String get sysMinClient;
+
+  /// No description provided for @sysRedis.
+  ///
+  /// In en, this message translates to:
+  /// **'Redis'**
+  String get sysRedis;
+
+  /// No description provided for @sysBroker.
+  ///
+  /// In en, this message translates to:
+  /// **'Task queue (Celery broker)'**
+  String get sysBroker;
+
+  /// No description provided for @sysWorkers.
+  ///
+  /// In en, this message translates to:
+  /// **'Workers'**
+  String get sysWorkers;
+
+  /// No description provided for @sysOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get sysOk;
+
+  /// No description provided for @sysUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not reachable'**
+  String get sysUnavailable;
+
+  /// No description provided for @sysInMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'In memory (debug)'**
+  String get sysInMemory;
+
+  /// No description provided for @sysNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Not configured'**
+  String get sysNotConfigured;
+
+  /// No description provided for @sysInline.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks run inline (debug)'**
+  String get sysInline;
+
+  /// No description provided for @sysNoWorkers.
+  ///
+  /// In en, this message translates to:
+  /// **'No worker answered'**
+  String get sysNoWorkers;
+
+  /// No description provided for @sysBacklog.
+  ///
+  /// In en, this message translates to:
+  /// **'Due work waiting'**
+  String get sysBacklog;
+
+  /// No description provided for @sysBacklogNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is waiting.'**
+  String get sysBacklogNone;
 }
 
 class _AppLocalizationsDelegate
