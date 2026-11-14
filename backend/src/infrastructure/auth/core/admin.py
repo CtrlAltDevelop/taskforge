@@ -3,7 +3,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin as UnfoldModelAdmin
 
-from infrastructure.auth.core.models import AuthEvent, PhoneNumber
+from infrastructure.auth.core.models import AuthEvent, KnownDevice, PhoneNumber
 from infrastructure.common.admin import ReadOnlyAdmin
 
 
@@ -39,4 +39,15 @@ class AuthEventAdmin(ReadOnlyAdmin):
     search_fields = ("user__username", "user__email", "ip_address")
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
+    list_select_related = ("user",)
+
+
+@admin.register(KnownDevice)
+class KnownDeviceAdmin(ReadOnlyAdmin):
+    """Device fingerprints an account has signed in from. Read-only: keyed hashes, no raw values."""
+
+    list_display = ("user", "fingerprint", "first_seen_at", "last_seen_at")
+    search_fields = ("user__username", "user__email")
+    date_hierarchy = "last_seen_at"
+    ordering = ("-last_seen_at",)
     list_select_related = ("user",)
