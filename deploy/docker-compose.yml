@@ -21,6 +21,19 @@ services:
     volumes: ["./envoy.yaml:/etc/envoy/envoy.yaml:ro"]
     ports: ["127.0.0.1:8081:8080"]  # host 8081: 8080 is commonly taken
     extra_hosts: ["host.docker.internal:host-gateway"]
+  # Optional (`docker compose --profile sso up`): a dev identity provider for phase 37. Issuer
+  # http://localhost:8082/realms/taskforge, client `taskforge` / secret `taskforge-dev-only`, user
+  # dev@taskforge.test / dev-only-password. Plain http to localhost is accepted by the backend
+  # only while DEBUG is on.
+  keycloak:
+    profiles: ["sso"]
+    image: quay.io/keycloak/keycloak:26.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin-dev-only
+    volumes: ["./keycloak/taskforge-realm.json:/opt/keycloak/data/import/taskforge-realm.json:ro"]
+    ports: ["127.0.0.1:8082:8080"]  # loopback only: dev credentials are in the repo
   # Optional (`docker compose --profile workers up`): the same code as the API, in Celery roles.
   worker:
     profiles: ["workers"]

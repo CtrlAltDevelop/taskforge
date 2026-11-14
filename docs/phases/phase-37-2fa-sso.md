@@ -47,3 +47,17 @@ TOTP time-step tests, replay rejection, OIDC validation matrix, takeover attempt
 
 ## Depends on
 Phases 01, 04.
+
+## Implementation notes
+
+**Recovery.** A locked-out person (lost authenticator and recovery codes) is recovered by an operator on the server: `python manage.py disable2fa <username-or-email>`. It removes their authenticator and recovery codes, forgets their trusted devices and ends every session; there is deliberately no API for it.
+
+**Trusted devices** end on every password change or reset, on 2FA removal and when an unverified account is linked to an identity.
+
+**OIDC safety.** Issuer, discovery and JWKS addresses must be https and public: private, loopback, link-local (cloud metadata) and reserved addresses are refused, including names that resolve to them. Plain http is accepted only for `localhost` while `DEBUG` is on (the Keycloak dev flow). Discovery and JWKS are fetched with a timeout, no redirects and a 256 KiB cap; ID tokens are verified against that JWKS with asymmetric algorithms only.
+
+**Accepted deviations**
+- OIDC only; SAML is skipped.
+- The SSO entry key is the workspace slug, with one identity provider per workspace.
+- A single-sign-on login skips the local second factor (the identity provider's multi-factor stands in).
+- Not verified against a real Keycloak yet: `deploy/keycloak/taskforge-realm.json` and the `keycloak` service (profile `sso`, port 8082) are provided for that run. The acceptance item for a live Keycloak login stays open until it is done.
