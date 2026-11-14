@@ -59,6 +59,12 @@ TOKEN_ROUTES = {
     ("POST", "/auth/token/revoke"),
     ("GET", "/auth/token/sessions"),
     ("DELETE", "/auth/token/sessions/{session_id}"),
+    ("PATCH", "/auth/token/sessions/{session_id}"),
+}
+SSO_ROUTES = {
+    ("GET", "/auth/sso/{slug}/start"),
+    ("GET", "/auth/sso/callback"),
+    ("POST", "/auth/sso/exchange"),
 }
 ALL_ROUTES = (
     PASSWORD_ROUTES
@@ -67,6 +73,7 @@ ALL_ROUTES = (
     | MAGIC_LINK_ROUTES
     | TWO_FACTOR_ROUTES
     | TOKEN_ROUTES
+    | SSO_ROUTES
 )
 
 
@@ -114,8 +121,10 @@ def test_every_route_is_reachable(db: None, verb: str, path: str) -> None:
     reveal. What the handler decides about an empty body is each route's own
     business -- the logout routes are deliberately idempotent and answer 200.
     """
-    url = f"/api/v1{path}".replace("{method}", "totp").replace(
-        "{session_id}", "00000000-0000-0000-0000-000000000000"
+    url = (
+        f"/api/v1{path}".replace("{method}", "totp")
+        .replace("{session_id}", "00000000-0000-0000-0000-000000000000")
+        .replace("{slug}", "nobody")
     )
     response = getattr(Client(), verb.lower())(url, {}, content_type="application/json")
 

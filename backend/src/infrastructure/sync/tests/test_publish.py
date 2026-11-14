@@ -133,7 +133,11 @@ def test_a_clients_own_id_travels_with_its_writes_through_the_grpc_caller(
     monkeypatch.setattr(identity, "caller", lambda request: team.member)
 
     async def scenario() -> None:
-        context = SimpleNamespace(http_request=SimpleNamespace(META={"x-client-id": "phone-1"}))
+        context = SimpleNamespace(
+            http_request=SimpleNamespace(META={"x-client-id": "phone-1"}),
+            service_class_name="TaskService",
+            grpc_action="List",
+        )
         assert await identity.grpc_caller(context) == team.member
         await sync_to_async(_make)(team, project)
 

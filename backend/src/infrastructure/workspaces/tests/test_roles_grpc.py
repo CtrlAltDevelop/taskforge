@@ -6,13 +6,14 @@ from typing import Any
 import grpc
 import pytest
 from django.contrib.auth import get_user_model
+from django.test import Client
 
 from infrastructure.workspaces import services
 from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 from infrastructure.workspaces.grpc import workspaces_pb2_grpc as stubs
 from infrastructure.workspaces.registry import ALL_KEYS, BUILTIN_GRANTS
 
-from .test_grpc import _token
+from .test_grpc import PASSWORD, _token
 
 Roles, Perms, Members = (
     stubs.RoleControllerStub,
@@ -21,6 +22,18 @@ Roles, Perms, Members = (
 )
 Workspaces = stubs.WorkspaceControllerStub
 GrpcCall = Callable[..., Any]
+
+
+def _sign_in_again(username: str) -> str:
+    """Losing permissions ends a person's sessions (phase 37), so they sign in again."""
+    response = Client().post(
+        "/api/v1/auth/password/login",
+        {"identifier": username, "password": PASSWORD},
+        content_type="application/json",
+    )
+    assert response.status_code == 200, response.content
+    token: str = response.json()["data"]["credentials"]["access_token"]
+    return token
 
 
 @pytest.fixture
@@ -72,6 +85,12 @@ def test_list_returns_roles_counts_and_the_grouped_registry(team: Any, grpc_call
         "audit",
         "dashboard",
         "data",
+        "webhook",
+        "form",
+        "goal",
+        "template",
+        "workload",
+        "security",
     ]
     assert {p.key for a in listed.registry for p in a.permissions} == ALL_KEYS
     assert all(p.label for a in listed.registry for p in a.permissions)
@@ -97,6 +116,7 @@ def test_custom_role_lifecycle_over_grpc(team: Any, grpc_call: GrpcCall) -> None
         token=zoe,
     )
     assert (moved.role_id, moved.role_name, moved.is_owner) == (made.id, "Helper", False)
+    vic = _sign_in_again("vic")  # moving to a role with fewer permissions ended vic's session
     grpc_call(
         stubs.InvitationControllerStub,
         "CreateLink",

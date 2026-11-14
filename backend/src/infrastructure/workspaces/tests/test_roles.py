@@ -27,6 +27,9 @@ RECRUITER = [
     "time.log",
     "sprint.manage",
     "doc.edit",
+    "goal.create",  # the built-in Member also holds these three (phases 34, 35, 36)
+    "template.create",
+    "workload.view",
 ]
 
 

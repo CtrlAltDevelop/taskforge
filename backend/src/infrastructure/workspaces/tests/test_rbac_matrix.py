@@ -38,6 +38,9 @@ from infrastructure.customfields.grpc import customfields_pb2_grpc as fstubs
 from infrastructure.dashboards import services as dashboard_services
 from infrastructure.dashboards.grpc import dashboards_pb2 as dbpb
 from infrastructure.dashboards.grpc import dashboards_pb2_grpc as dbstubs
+from infrastructure.developer import events as webhook_events
+from infrastructure.developer.grpc import developer_pb2 as devpb
+from infrastructure.developer.grpc import developer_pb2_grpc as devstubs
 from infrastructure.docs import services as doc_services
 from infrastructure.docs.grpc import wikidocs_pb2 as dpb
 from infrastructure.docs.grpc import wikidocs_pb2_grpc as dstubs
@@ -45,6 +48,8 @@ from infrastructure.docs.models import DocRevision
 from infrastructure.filters import services as filter_services
 from infrastructure.filters.grpc import filters_pb2 as flpb
 from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
+from infrastructure.goals.grpc import goals_pb2 as gopb
+from infrastructure.goals.grpc import goals_pb2_grpc as gostubs
 from infrastructure.imports import exports as export_services
 from infrastructure.imports import services as import_services
 from infrastructure.imports.grpc import imports_pb2 as impb
@@ -73,11 +78,15 @@ from infrastructure.tasks import links as task_links
 from infrastructure.tasks import services as task_services
 from infrastructure.tasks.grpc import tasks_pb2 as tpb
 from infrastructure.tasks.grpc import tasks_pb2_grpc as tstubs
+from infrastructure.templates.grpc import templates_pb2 as tppb
+from infrastructure.templates.grpc import templates_pb2_grpc as tpstubs
 from infrastructure.timetracking.grpc import timetracking_pb2 as mpb
 from infrastructure.timetracking.grpc import timetracking_pb2_grpc as mstubs
 from infrastructure.workflows import services as workflow_services
 from infrastructure.workflows.grpc import workflows_pb2 as wpb
 from infrastructure.workflows.grpc import workflows_pb2_grpc as wstubs
+from infrastructure.workload.grpc import workload_pb2 as wlpb
+from infrastructure.workload.grpc import workload_pb2_grpc as wlstubs
 from infrastructure.workspaces import access, invitations, roles, services
 from infrastructure.workspaces.grpc import workspaces_pb2 as pb
 from infrastructure.workspaces.grpc import workspaces_pb2_grpc as stubs
@@ -1831,6 +1840,214 @@ def _world(people: dict[str, Any], n: int) -> World:
         ids,
     )
 
+
+# Phases 32-40: the workspace-scoped handlers whose requests are cheap to build. The rest are in
+# EXEMPT below with the reason they are not matrix-tested here.
+ENDPOINTS += (
+    Endpoint(
+        "WebhookController.List",
+        "webhook.manage",
+        _grpc(
+            devstubs.WebhookControllerStub,
+            "List",
+            lambda w: devpb.WebhookListRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "WebhookController.Create",
+        "webhook.manage",
+        _grpc(
+            devstubs.WebhookControllerStub,
+            "Create",
+            lambda w: devpb.WebhookCreateRequest(
+                workspace_id=w.ws,
+                url="https://93.184.216.34/hook",
+                events=[webhook_events.KEYS[0]],
+            ),
+        ),
+    ),
+    Endpoint(
+        "ApiTokenController.List",
+        "workspace.view",
+        _grpc(
+            devstubs.ApiTokenControllerStub,
+            "List",
+            lambda w: devpb.ApiTokenListRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "ApiTokenController.Catalog",
+        "workspace.view",
+        _grpc(
+            devstubs.ApiTokenControllerStub,
+            "Catalog",
+            lambda w: devpb.CatalogRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "ApiTokenController.Create",
+        "workspace.view",
+        _grpc(
+            devstubs.ApiTokenControllerStub,
+            "Create",
+            lambda w: devpb.ApiTokenCreateRequest(
+                workspace_id=w.ws, name="ci", scopes=["tasks:read"]
+            ),
+        ),
+    ),
+    Endpoint(
+        "GoalController.List",
+        "workspace.view",
+        _grpc(
+            gostubs.GoalControllerStub, "List", lambda w: gopb.GoalListRequest(workspace_id=w.ws)
+        ),
+    ),
+    Endpoint(
+        "GoalController.Create",
+        "goal.create",
+        _grpc(
+            gostubs.GoalControllerStub,
+            "Create",
+            lambda w: gopb.GoalCreateRequest(
+                workspace_id=w.ws, name="Ship", period_start="2026-01-01", period_end="2026-03-31"
+            ),
+        ),
+    ),
+    Endpoint(
+        "TemplateController.List",
+        "workspace.view",
+        _grpc(
+            tpstubs.TemplateControllerStub,
+            "List",
+            lambda w: tppb.TemplateListRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "TemplateController.SaveFromProject",
+        "template.create",
+        _grpc(
+            tpstubs.TemplateControllerStub,
+            "SaveFromProject",
+            lambda w: tppb.TemplateSaveFromProjectRequest(
+                workspace_id=w.ws, project_id=w.project_id, name="Kit"
+            ),
+        ),
+    ),
+    Endpoint(
+        "CapacityController.Get",
+        "workspace.view",
+        _grpc(
+            wlstubs.CapacityControllerStub,
+            "Get",
+            lambda w: wlpb.CapacityGetRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "HolidayController.List",
+        "workspace.view",
+        _grpc(
+            wlstubs.HolidayControllerStub,
+            "List",
+            lambda w: wlpb.HolidayListRequest(
+                workspace_id=w.ws, range_start="2026-01-01", range_end="2026-12-31"
+            ),
+        ),
+    ),
+    Endpoint(
+        "HolidayController.Create",
+        "workload.manage",
+        _grpc(
+            wlstubs.HolidayControllerStub,
+            "Create",
+            lambda w: wlpb.HolidayCreateRequest(workspace_id=w.ws, date="2026-12-25", name="Xmas"),
+        ),
+    ),
+    Endpoint(
+        "WorkloadController.Get",
+        "workspace.view",
+        _grpc(
+            wlstubs.WorkloadControllerStub,
+            "Get",
+            lambda w: wlpb.WorkloadGetRequest(
+                workspace_id=w.ws, range_start="2026-01-01", range_end="2026-01-31"
+            ),
+        ),
+    ),
+)
+
+_LATER = "gated like its siblings; the phase's own tests cover it (not in the matrix yet)"
+_ACCOUNT = "account-level: the caller's own security or session, not workspace data"
+_PUBLIC = "public: the form's secret token (or the signed state) is the capability"
+_TOKEN_API = "public REST API: the token's scope as well as the permission (developer tests)"
+_SIGN_IN = "public sign-in: the provider, signed state and one-time ticket are the capability"
+_GRPC_LATER = {
+    "WebhookController": ("Update", "Delete", "Test", "Deliveries", "Redeliver"),
+    "ApiTokenController": ("Revoke",),
+    "FormController": ("Create", "Delete", "List", "Submissions", "Update"),
+    "GoalController": ("Get", "Update", "Delete", "SaveFolder", "DeleteFolder"),
+    "KeyResultController": ("Create", "Delete", "ForTask", "Update"),
+    "CheckInController": ("Add", "List"),
+    "TemplateController": ("Apply", "Create", "Delete", "Get", "SaveFromTask", "Update"),
+    "CapacityController": ("Set",),
+    "HolidayController": ("Update", "Delete"),
+    "TimeOffController": ("Create", "Delete", "List", "Update"),
+    "WorkloadController": ("SetAssigneeEstimate",),
+    "SecurityPolicyController": ("Get", "Set"),
+    "SsoController": ("Delete", "Get", "Save", "Test"),
+    "SystemController": ("SetCollectDeviceInfo",),
+}
+EXEMPT.update({f"{c}.{m}": _LATER for c, ms in _GRPC_LATER.items() for m in ms})
+EXEMPT.update(
+    {
+        f"SecondFactorController.{m}": _ACCOUNT
+        for m in ("Begin", "Confirm", "Disable", "RegenerateCodes", "RevokeDevice", "Status")
+    }
+)
+EXEMPT.update(
+    {
+        "SystemController.Info": "any signed-in caller: versions and update-required only",
+        "GET /auth/sso/{slug}/start": _SIGN_IN,
+        "GET /auth/sso/callback": _SIGN_IN,
+        "POST /auth/sso/exchange": _SIGN_IN,
+        "GET /public/forms/{token}": _PUBLIC,
+        "POST /public/forms/{token}/submit": _PUBLIC,
+        "GET /tokens": _LATER,
+        "POST /tokens": _LATER,
+        "DELETE /tokens/{token_id}": _LATER,
+        "GET /workspaces": _TOKEN_API,
+    }
+)
+EXEMPT.update(
+    {
+        f"{m} /webhooks{p}": _LATER
+        for m, p in (
+            ("GET", ""),
+            ("POST", ""),
+            ("PATCH", "/{webhook_id}"),
+            ("DELETE", "/{webhook_id}"),
+            ("GET", "/{webhook_id}/deliveries"),
+            ("POST", "/{webhook_id}/deliveries/{delivery_id}/redeliver"),
+            ("POST", "/{webhook_id}/test"),
+        )
+    }
+)
+_PROJECTS = "/workspaces/{workspace_id}/projects"
+EXEMPT.update(
+    {
+        f"{m} {_PROJECTS}{p}": _TOKEN_API
+        for m, p in (
+            ("GET", ""),
+            ("POST", ""),
+            ("GET", "/{project_id}/tasks"),
+            ("POST", "/{project_id}/tasks"),
+            ("GET", "/{project_id}/tasks/{task_id}"),
+            ("PATCH", "/{project_id}/tasks/{task_id}"),
+            ("DELETE", "/{project_id}/tasks/{task_id}"),
+            ("GET", "/{project_id}/tasks/{task_id}/comments"),
+            ("POST", "/{project_id}/tasks/{task_id}/comments"),
+        )
+    }
+)
 
 def _expect_denied(refusal: BaseException, endpoint: Endpoint, role: str) -> None:
     hint = f"missing: {endpoint.permission}; your role: {role}"
