@@ -161,6 +161,17 @@ class _State extends ConsumerState<CreateProjectDialog> {
     ),
     actions: [
       TextButton(
+        key: const Key('project-from-template'),
+        onPressed: _busy
+            ? null
+            : () {
+                final router = GoRouter.of(context);
+                Navigator.of(context).pop();
+                router.push('/templates?kind=project');
+              },
+        child: Text(context.l10n.tplFromTemplate),
+      ),
+      TextButton(
         onPressed: _busy ? null : () => Navigator.of(context).pop(),
         child: Text(context.l10n.grpHCancel),
       ),

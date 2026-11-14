@@ -6940,4 +6940,167 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get goalsConflict =>
       'از زمان باز کردن تغییر کرده است. دوباره بارگیری کنید و تلاش کنید.';
+
+  @override
+  String get tplTitle => 'قالب‌ها';
+
+  @override
+  String get tplSearch => 'جستجوی قالب‌ها';
+
+  @override
+  String get tplAll => 'همه';
+
+  @override
+  String get tplKindProject => 'پروژه‌ها';
+
+  @override
+  String get tplKindTask => 'کارها';
+
+  @override
+  String get tplEmpty => 'قالبی پیدا نشد.';
+
+  @override
+  String get tplBuiltIn => 'داخلی';
+
+  @override
+  String get tplPrivate => 'فقط من';
+
+  @override
+  String get tplShared => 'همه اعضای فضای کاری';
+
+  @override
+  String tplTasksN(int count) {
+    return '$count کار';
+  }
+
+  @override
+  String tplAutomationsN(int count) {
+    return '$count خودکارسازی';
+  }
+
+  @override
+  String get tplStatuses => 'وضعیت‌ها';
+
+  @override
+  String get tplFields => 'فیلدهای سفارشی';
+
+  @override
+  String get tplFeatures => 'قابلیت‌ها';
+
+  @override
+  String get tplTasks => 'کارها';
+
+  @override
+  String get tplNoTasks => 'کار نمونه‌ای نیست.';
+
+  @override
+  String get tplApply => 'استفاده از قالب';
+
+  @override
+  String get tplEdit => 'ویرایش';
+
+  @override
+  String get tplDelete => 'حذف';
+
+  @override
+  String get tplDeleteAsk =>
+      'این قالب حذف شود؟ پروژه‌هایی که از آن ساخته شده‌اند تغییری نمی‌کنند.';
+
+  @override
+  String tplApplyTitle(String name) {
+    return 'استفاده از $name';
+  }
+
+  @override
+  String get tplProjectName => 'نام پروژه';
+
+  @override
+  String get tplProjectKey => 'کلید';
+
+  @override
+  String get tplTargetProject => 'افزودن به پروژه';
+
+  @override
+  String get tplStartDate => 'تاریخ شروع';
+
+  @override
+  String get tplStartHelp => 'تاریخ‌های نسبی از این روز شمرده می‌شوند.';
+
+  @override
+  String get tplVariables => 'تکمیل کنید';
+
+  @override
+  String get tplRequired => 'الزامی است.';
+
+  @override
+  String get tplCreate => 'ایجاد';
+
+  @override
+  String tplApplied(int count) {
+    return '$count کار ایجاد شد.';
+  }
+
+  @override
+  String get tplWarnings => 'برخی بخش‌ها رد شدند';
+
+  @override
+  String get tplSaveTitle => 'ذخیره به‌عنوان قالب';
+
+  @override
+  String get tplName => 'نام';
+
+  @override
+  String get tplDescription => 'توضیحات';
+
+  @override
+  String get tplVisibility => 'چه کسی می‌تواند استفاده کند';
+
+  @override
+  String get tplInclude => 'شامل';
+
+  @override
+  String get tplPartWorkflow => 'وضعیت‌ها و گردش کار';
+
+  @override
+  String get tplPartFields => 'فیلدهای سفارشی';
+
+  @override
+  String get tplPartAutomations => 'خودکارسازی‌ها';
+
+  @override
+  String get tplPartFeatures => 'کلیدهای قابلیت';
+
+  @override
+  String get tplPartTasks => 'کارهای نمونه';
+
+  @override
+  String get tplAssignees => 'نگه داشتن مسئولان';
+
+  @override
+  String get tplSave => 'ذخیره';
+
+  @override
+  String get tplSaved => 'قالب ذخیره شد.';
+
+  @override
+  String get tplSaveTask => 'ذخیره کار به‌عنوان قالب';
+
+  @override
+  String get tplSaveProject => 'ذخیره پروژه به‌عنوان قالب';
+
+  @override
+  String get tplFromTemplate => 'از روی قالب…';
+
+  @override
+  String get tplCmdOpen => 'باز کردن قالب‌ها';
+
+  @override
+  String get tplDenied => 'اجازه این کار را روی قالب‌ها ندارید.';
+
+  @override
+  String get tplGone => 'این قالب دیگر وجود ندارد.';
+
+  @override
+  String get tplConflict =>
+      'از زمان باز کردن تغییر کرده است. دوباره بارگذاری کنید و تلاش کنید.';
 }

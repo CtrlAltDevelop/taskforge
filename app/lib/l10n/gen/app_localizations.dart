@@ -12288,6 +12288,312 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It changed since you opened it. Reload and try again.'**
   String get goalsConflict;
+
+  /// No description provided for @tplTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates'**
+  String get tplTitle;
+
+  /// No description provided for @tplSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search templates'**
+  String get tplSearch;
+
+  /// No description provided for @tplAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get tplAll;
+
+  /// No description provided for @tplKindProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get tplKindProject;
+
+  /// No description provided for @tplKindTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get tplKindTask;
+
+  /// No description provided for @tplEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No templates match.'**
+  String get tplEmpty;
+
+  /// No description provided for @tplBuiltIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in'**
+  String get tplBuiltIn;
+
+  /// No description provided for @tplPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Only me'**
+  String get tplPrivate;
+
+  /// No description provided for @tplShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone in the workspace'**
+  String get tplShared;
+
+  /// No description provided for @tplTasksN.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} tasks'**
+  String tplTasksN(int count);
+
+  /// No description provided for @tplAutomationsN.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} automations'**
+  String tplAutomationsN(int count);
+
+  /// No description provided for @tplStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'Statuses'**
+  String get tplStatuses;
+
+  /// No description provided for @tplFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields'**
+  String get tplFields;
+
+  /// No description provided for @tplFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get tplFeatures;
+
+  /// No description provided for @tplTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get tplTasks;
+
+  /// No description provided for @tplNoTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No example tasks.'**
+  String get tplNoTasks;
+
+  /// No description provided for @tplApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Use template'**
+  String get tplApply;
+
+  /// No description provided for @tplEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get tplEdit;
+
+  /// No description provided for @tplDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get tplDelete;
+
+  /// No description provided for @tplDeleteAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this template? Projects already made from it are not affected.'**
+  String get tplDeleteAsk;
+
+  /// No description provided for @tplApplyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {name}'**
+  String tplApplyTitle(String name);
+
+  /// No description provided for @tplProjectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project name'**
+  String get tplProjectName;
+
+  /// No description provided for @tplProjectKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Key'**
+  String get tplProjectKey;
+
+  /// No description provided for @tplTargetProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to project'**
+  String get tplTargetProject;
+
+  /// No description provided for @tplStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get tplStartDate;
+
+  /// No description provided for @tplStartHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Relative dates count from this day.'**
+  String get tplStartHelp;
+
+  /// No description provided for @tplVariables.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in'**
+  String get tplVariables;
+
+  /// No description provided for @tplRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required.'**
+  String get tplRequired;
+
+  /// No description provided for @tplCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get tplCreate;
+
+  /// No description provided for @tplApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Created {count} tasks.'**
+  String tplApplied(int count);
+
+  /// No description provided for @tplWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Some parts were skipped'**
+  String get tplWarnings;
+
+  /// No description provided for @tplSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as template'**
+  String get tplSaveTitle;
+
+  /// No description provided for @tplName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get tplName;
+
+  /// No description provided for @tplDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get tplDescription;
+
+  /// No description provided for @tplVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can use it'**
+  String get tplVisibility;
+
+  /// No description provided for @tplInclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Include'**
+  String get tplInclude;
+
+  /// No description provided for @tplPartWorkflow.
+  ///
+  /// In en, this message translates to:
+  /// **'Statuses and workflow'**
+  String get tplPartWorkflow;
+
+  /// No description provided for @tplPartFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields'**
+  String get tplPartFields;
+
+  /// No description provided for @tplPartAutomations.
+  ///
+  /// In en, this message translates to:
+  /// **'Automations'**
+  String get tplPartAutomations;
+
+  /// No description provided for @tplPartFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature switches'**
+  String get tplPartFeatures;
+
+  /// No description provided for @tplPartTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Example tasks'**
+  String get tplPartTasks;
+
+  /// No description provided for @tplAssignees.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep assignees'**
+  String get tplAssignees;
+
+  /// No description provided for @tplSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get tplSave;
+
+  /// No description provided for @tplSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Template saved.'**
+  String get tplSaved;
+
+  /// No description provided for @tplSaveTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Save task as template'**
+  String get tplSaveTask;
+
+  /// No description provided for @tplSaveProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Save project as template'**
+  String get tplSaveProject;
+
+  /// No description provided for @tplFromTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'From a template…'**
+  String get tplFromTemplate;
+
+  /// No description provided for @tplCmdOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open templates'**
+  String get tplCmdOpen;
+
+  /// No description provided for @tplDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to do that with templates.'**
+  String get tplDenied;
+
+  /// No description provided for @tplGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That template no longer exists.'**
+  String get tplGone;
+
+  /// No description provided for @tplConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'It changed since you opened it. Reload and try again.'**
+  String get tplConflict;
 }
 
 class _AppLocalizationsDelegate

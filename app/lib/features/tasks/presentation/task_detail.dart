@@ -32,6 +32,7 @@ import 'package:taskforge/features/tasks/presentation/subtask_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/tasks/presentation/task_fields_panel.dart';
+import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -91,6 +92,23 @@ class TaskDetail extends ConsumerWidget {
             PresenceStrip(projectId: project.id, taskId: task.id),
             WatchButton(projectId: project.id, taskId: task.id),
             if (task.isBlocked) BlockedBadge(blockedBy: task.blockedBy),
+            if (permissions.can(Perm.templateCreate))
+              IconButton(
+                key: const Key('save-task-template'),
+                tooltip: context.l10n.tplSaveTask,
+                icon: const Icon(Icons.copy_all_outlined),
+                onPressed: () async {
+                  final saved = await showSaveTemplateSheet(
+                    context,
+                    projectId: project.id,
+                    taskId: task.id,
+                    initialName: task.title,
+                  );
+                  if (saved != null && context.mounted) {
+                    sayTemplates(context, context.l10n.tplSaved);
+                  }
+                },
+              ),
             if (canDelete)
               IconButton(
                 key: const Key('delete-task'),

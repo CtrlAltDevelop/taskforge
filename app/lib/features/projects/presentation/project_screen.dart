@@ -12,6 +12,7 @@ import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/presentation/task_trash_screen.dart';
+import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/task_section.dart';
 
 /// A project's page: its header and its tasks.
@@ -66,6 +67,22 @@ class ProjectScreen extends ConsumerWidget {
                     builder: (_) => TaskTrashScreen(project: project),
                   ),
                 ),
+              ),
+            if (ref.watch(permissionSetProvider).can(Perm.templateCreate))
+              IconButton(
+                key: const Key('save-project-template'),
+                tooltip: context.l10n.tplSaveProject,
+                icon: const Icon(Icons.copy_all_outlined),
+                onPressed: () async {
+                  final saved = await showSaveTemplateSheet(
+                    context,
+                    projectId: project.id,
+                    initialName: project.name,
+                  );
+                  if (saved != null && context.mounted) {
+                    sayTemplates(context, context.l10n.tplSaved);
+                  }
+                },
               ),
             IconButton(
               key: const Key('open-project-settings'),

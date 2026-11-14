@@ -6909,4 +6909,167 @@ class AppLocalizationsPs extends AppLocalizations {
   @override
   String get goalsConflict =>
       'له خلاصولو راهیسې بدل شوی. بیا یې پرانیزئ او هڅه وکړئ.';
+
+  @override
+  String get tplTitle => 'کالبونه';
+
+  @override
+  String get tplSearch => 'په کالبونو کې لټون';
+
+  @override
+  String get tplAll => 'ټول';
+
+  @override
+  String get tplKindProject => 'پروژې';
+
+  @override
+  String get tplKindTask => 'کارونه';
+
+  @override
+  String get tplEmpty => 'هېڅ کالب ونه موندل شو.';
+
+  @override
+  String get tplBuiltIn => 'دننه جوړ';
+
+  @override
+  String get tplPrivate => 'یوازې زه';
+
+  @override
+  String get tplShared => 'د کاري ځای ټول غړي';
+
+  @override
+  String tplTasksN(int count) {
+    return '$count کارونه';
+  }
+
+  @override
+  String tplAutomationsN(int count) {
+    return '$count اتومات کارونه';
+  }
+
+  @override
+  String get tplStatuses => 'حالتونه';
+
+  @override
+  String get tplFields => 'دودیز ساحې';
+
+  @override
+  String get tplFeatures => 'ځانګړتیاوې';
+
+  @override
+  String get tplTasks => 'کارونه';
+
+  @override
+  String get tplNoTasks => 'بېلګه کارونه نشته.';
+
+  @override
+  String get tplApply => 'کالب وکاروئ';
+
+  @override
+  String get tplEdit => 'سمول';
+
+  @override
+  String get tplDelete => 'ړنګول';
+
+  @override
+  String get tplDeleteAsk =>
+      'دا کالب ړنګ شي؟ هغه پروژې چې له دې جوړې شوې اغېز نه ورباندې کیږي.';
+
+  @override
+  String tplApplyTitle(String name) {
+    return '$name وکاروئ';
+  }
+
+  @override
+  String get tplProjectName => 'د پروژې نوم';
+
+  @override
+  String get tplProjectKey => 'کلیډ';
+
+  @override
+  String get tplTargetProject => 'پروژې ته زیاتول';
+
+  @override
+  String get tplStartDate => 'د پیل نېټه';
+
+  @override
+  String get tplStartHelp => 'نسبي نېټې له دې ورځې شمېرل کیږي.';
+
+  @override
+  String get tplVariables => 'ډک کړئ';
+
+  @override
+  String get tplRequired => 'اړین دی.';
+
+  @override
+  String get tplCreate => 'جوړول';
+
+  @override
+  String tplApplied(int count) {
+    return '$count کارونه جوړ شول.';
+  }
+
+  @override
+  String get tplWarnings => 'ځینې برخې پرېښودل شوې';
+
+  @override
+  String get tplSaveTitle => 'د کالب په توګه خوندي کول';
+
+  @override
+  String get tplName => 'نوم';
+
+  @override
+  String get tplDescription => 'تشریح';
+
+  @override
+  String get tplVisibility => 'څوک یې کارولی شي';
+
+  @override
+  String get tplInclude => 'شاملول';
+
+  @override
+  String get tplPartWorkflow => 'حالتونه او کاري بهیر';
+
+  @override
+  String get tplPartFields => 'دودیز ساحې';
+
+  @override
+  String get tplPartAutomations => 'اتومات کارونه';
+
+  @override
+  String get tplPartFeatures => 'د ځانګړتیاوو سویچونه';
+
+  @override
+  String get tplPartTasks => 'بېلګه کارونه';
+
+  @override
+  String get tplAssignees => 'مسؤلین وساتئ';
+
+  @override
+  String get tplSave => 'خوندي کول';
+
+  @override
+  String get tplSaved => 'کالب خوندي شو.';
+
+  @override
+  String get tplSaveTask => 'کار د کالب په توګه خوندي کړئ';
+
+  @override
+  String get tplSaveProject => 'پروژه د کالب په توګه خوندي کړئ';
+
+  @override
+  String get tplFromTemplate => 'له کالب څخه…';
+
+  @override
+  String get tplCmdOpen => 'کالبونه پرانیزئ';
+
+  @override
+  String get tplDenied => 'تاسو د کالبونو سره د دې کار اجازه نه لرئ.';
+
+  @override
+  String get tplGone => 'دا کالب نور شتون نلري.';
+
+  @override
+  String get tplConflict =>
+      'له خلاصولو راهیسې بدل شوی. بیا یې پرانیزئ او هڅه وکړئ.';
 }

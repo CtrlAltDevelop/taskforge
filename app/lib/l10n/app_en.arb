@@ -4022,5 +4022,84 @@
   "goalsSubgoals": "Sub-goals",
   "goalsDenied": "You are not allowed to do that with goals.",
   "goalsGone": "That goal no longer exists.",
-  "goalsConflict": "It changed since you opened it. Reload and try again."
+  "goalsConflict": "It changed since you opened it. Reload and try again.",
+  "tplTitle": "Templates",
+  "tplSearch": "Search templates",
+  "tplAll": "All",
+  "tplKindProject": "Projects",
+  "tplKindTask": "Tasks",
+  "tplEmpty": "No templates match.",
+  "tplBuiltIn": "Built-in",
+  "tplPrivate": "Only me",
+  "tplShared": "Everyone in the workspace",
+  "tplTasksN": "{count} tasks",
+  "@tplTasksN": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tplAutomationsN": "{count} automations",
+  "@tplAutomationsN": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tplStatuses": "Statuses",
+  "tplFields": "Custom fields",
+  "tplFeatures": "Features",
+  "tplTasks": "Tasks",
+  "tplNoTasks": "No example tasks.",
+  "tplApply": "Use template",
+  "tplEdit": "Edit",
+  "tplDelete": "Delete",
+  "tplDeleteAsk": "Delete this template? Projects already made from it are not affected.",
+  "tplApplyTitle": "Use {name}",
+  "@tplApplyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tplProjectName": "Project name",
+  "tplProjectKey": "Key",
+  "tplTargetProject": "Add to project",
+  "tplStartDate": "Start date",
+  "tplStartHelp": "Relative dates count from this day.",
+  "tplVariables": "Fill in",
+  "tplRequired": "Required.",
+  "tplCreate": "Create",
+  "tplApplied": "Created {count} tasks.",
+  "@tplApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tplWarnings": "Some parts were skipped",
+  "tplSaveTitle": "Save as template",
+  "tplName": "Name",
+  "tplDescription": "Description",
+  "tplVisibility": "Who can use it",
+  "tplInclude": "Include",
+  "tplPartWorkflow": "Statuses and workflow",
+  "tplPartFields": "Custom fields",
+  "tplPartAutomations": "Automations",
+  "tplPartFeatures": "Feature switches",
+  "tplPartTasks": "Example tasks",
+  "tplAssignees": "Keep assignees",
+  "tplSave": "Save",
+  "tplSaved": "Template saved.",
+  "tplSaveTask": "Save task as template",
+  "tplSaveProject": "Save project as template",
+  "tplFromTemplate": "From a template…",
+  "tplCmdOpen": "Open templates",
+  "tplDenied": "You are not allowed to do that with templates.",
+  "tplGone": "That template no longer exists.",
+  "tplConflict": "It changed since you opened it. Reload and try again."
 }

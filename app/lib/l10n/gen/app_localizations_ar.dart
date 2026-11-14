@@ -6998,4 +6998,166 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get goalsConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مجددًا.';
+
+  @override
+  String get tplTitle => 'القوالب';
+
+  @override
+  String get tplSearch => 'ابحث في القوالب';
+
+  @override
+  String get tplAll => 'الكل';
+
+  @override
+  String get tplKindProject => 'المشاريع';
+
+  @override
+  String get tplKindTask => 'المهام';
+
+  @override
+  String get tplEmpty => 'لا توجد قوالب مطابقة.';
+
+  @override
+  String get tplBuiltIn => 'مدمج';
+
+  @override
+  String get tplPrivate => 'أنا فقط';
+
+  @override
+  String get tplShared => 'الجميع في مساحة العمل';
+
+  @override
+  String tplTasksN(int count) {
+    return '$count مهمة';
+  }
+
+  @override
+  String tplAutomationsN(int count) {
+    return '$count أتمتة';
+  }
+
+  @override
+  String get tplStatuses => 'الحالات';
+
+  @override
+  String get tplFields => 'حقول مخصصة';
+
+  @override
+  String get tplFeatures => 'الميزات';
+
+  @override
+  String get tplTasks => 'المهام';
+
+  @override
+  String get tplNoTasks => 'لا توجد مهام نموذجية.';
+
+  @override
+  String get tplApply => 'استخدام القالب';
+
+  @override
+  String get tplEdit => 'تعديل';
+
+  @override
+  String get tplDelete => 'حذف';
+
+  @override
+  String get tplDeleteAsk =>
+      'حذف هذا القالب؟ المشاريع التي أُنشئت منه لا تتأثر.';
+
+  @override
+  String tplApplyTitle(String name) {
+    return 'استخدام $name';
+  }
+
+  @override
+  String get tplProjectName => 'اسم المشروع';
+
+  @override
+  String get tplProjectKey => 'المفتاح';
+
+  @override
+  String get tplTargetProject => 'إضافة إلى المشروع';
+
+  @override
+  String get tplStartDate => 'تاريخ البدء';
+
+  @override
+  String get tplStartHelp => 'تُحسب التواريخ النسبية من هذا اليوم.';
+
+  @override
+  String get tplVariables => 'املأ البيانات';
+
+  @override
+  String get tplRequired => 'مطلوب.';
+
+  @override
+  String get tplCreate => 'إنشاء';
+
+  @override
+  String tplApplied(int count) {
+    return 'تم إنشاء $count مهمة.';
+  }
+
+  @override
+  String get tplWarnings => 'تم تخطي بعض الأجزاء';
+
+  @override
+  String get tplSaveTitle => 'حفظ كقالب';
+
+  @override
+  String get tplName => 'الاسم';
+
+  @override
+  String get tplDescription => 'الوصف';
+
+  @override
+  String get tplVisibility => 'من يمكنه استخدامه';
+
+  @override
+  String get tplInclude => 'تضمين';
+
+  @override
+  String get tplPartWorkflow => 'الحالات وسير العمل';
+
+  @override
+  String get tplPartFields => 'حقول مخصصة';
+
+  @override
+  String get tplPartAutomations => 'الأتمتة';
+
+  @override
+  String get tplPartFeatures => 'مفاتيح الميزات';
+
+  @override
+  String get tplPartTasks => 'مهام نموذجية';
+
+  @override
+  String get tplAssignees => 'الإبقاء على المكلّفين';
+
+  @override
+  String get tplSave => 'حفظ';
+
+  @override
+  String get tplSaved => 'تم حفظ القالب.';
+
+  @override
+  String get tplSaveTask => 'حفظ المهمة كقالب';
+
+  @override
+  String get tplSaveProject => 'حفظ المشروع كقالب';
+
+  @override
+  String get tplFromTemplate => 'من قالب…';
+
+  @override
+  String get tplCmdOpen => 'فتح القوالب';
+
+  @override
+  String get tplDenied => 'لا يسمح لك بهذا الإجراء على القوالب.';
+
+  @override
+  String get tplGone => 'هذا القالب لم يعد موجودًا.';
+
+  @override
+  String get tplConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مرة أخرى.';
 }

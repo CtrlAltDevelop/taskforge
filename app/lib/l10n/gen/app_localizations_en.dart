@@ -6929,6 +6929,169 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get goalsConflict =>
       'It changed since you opened it. Reload and try again.';
+
+  @override
+  String get tplTitle => 'Templates';
+
+  @override
+  String get tplSearch => 'Search templates';
+
+  @override
+  String get tplAll => 'All';
+
+  @override
+  String get tplKindProject => 'Projects';
+
+  @override
+  String get tplKindTask => 'Tasks';
+
+  @override
+  String get tplEmpty => 'No templates match.';
+
+  @override
+  String get tplBuiltIn => 'Built-in';
+
+  @override
+  String get tplPrivate => 'Only me';
+
+  @override
+  String get tplShared => 'Everyone in the workspace';
+
+  @override
+  String tplTasksN(int count) {
+    return '$count tasks';
+  }
+
+  @override
+  String tplAutomationsN(int count) {
+    return '$count automations';
+  }
+
+  @override
+  String get tplStatuses => 'Statuses';
+
+  @override
+  String get tplFields => 'Custom fields';
+
+  @override
+  String get tplFeatures => 'Features';
+
+  @override
+  String get tplTasks => 'Tasks';
+
+  @override
+  String get tplNoTasks => 'No example tasks.';
+
+  @override
+  String get tplApply => 'Use template';
+
+  @override
+  String get tplEdit => 'Edit';
+
+  @override
+  String get tplDelete => 'Delete';
+
+  @override
+  String get tplDeleteAsk =>
+      'Delete this template? Projects already made from it are not affected.';
+
+  @override
+  String tplApplyTitle(String name) {
+    return 'Use $name';
+  }
+
+  @override
+  String get tplProjectName => 'Project name';
+
+  @override
+  String get tplProjectKey => 'Key';
+
+  @override
+  String get tplTargetProject => 'Add to project';
+
+  @override
+  String get tplStartDate => 'Start date';
+
+  @override
+  String get tplStartHelp => 'Relative dates count from this day.';
+
+  @override
+  String get tplVariables => 'Fill in';
+
+  @override
+  String get tplRequired => 'Required.';
+
+  @override
+  String get tplCreate => 'Create';
+
+  @override
+  String tplApplied(int count) {
+    return 'Created $count tasks.';
+  }
+
+  @override
+  String get tplWarnings => 'Some parts were skipped';
+
+  @override
+  String get tplSaveTitle => 'Save as template';
+
+  @override
+  String get tplName => 'Name';
+
+  @override
+  String get tplDescription => 'Description';
+
+  @override
+  String get tplVisibility => 'Who can use it';
+
+  @override
+  String get tplInclude => 'Include';
+
+  @override
+  String get tplPartWorkflow => 'Statuses and workflow';
+
+  @override
+  String get tplPartFields => 'Custom fields';
+
+  @override
+  String get tplPartAutomations => 'Automations';
+
+  @override
+  String get tplPartFeatures => 'Feature switches';
+
+  @override
+  String get tplPartTasks => 'Example tasks';
+
+  @override
+  String get tplAssignees => 'Keep assignees';
+
+  @override
+  String get tplSave => 'Save';
+
+  @override
+  String get tplSaved => 'Template saved.';
+
+  @override
+  String get tplSaveTask => 'Save task as template';
+
+  @override
+  String get tplSaveProject => 'Save project as template';
+
+  @override
+  String get tplFromTemplate => 'From a template…';
+
+  @override
+  String get tplCmdOpen => 'Open templates';
+
+  @override
+  String get tplDenied => 'You are not allowed to do that with templates.';
+
+  @override
+  String get tplGone => 'That template no longer exists.';
+
+  @override
+  String get tplConflict =>
+      'It changed since you opened it. Reload and try again.';
 }
 
 /// The translations for English (`en_XA`).
@@ -13978,5 +14141,170 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get goalsConflict =>
+      '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get tplTitle => '[Ţéɱþłåţéš ~~~]';
+
+  @override
+  String get tplSearch => '[Šéåŕçĥ ţéɱþłåţéš ~~~~~]';
+
+  @override
+  String get tplAll => '[Åłł ~]';
+
+  @override
+  String get tplKindProject => '[Þŕöĵéçţš ~~]';
+
+  @override
+  String get tplKindTask => '[Ţåšķš ~]';
+
+  @override
+  String get tplEmpty => '[Ñö ţéɱþłåţéš ɱåţçĥ. ~~~~~~]';
+
+  @override
+  String get tplBuiltIn => '[ßûíłţ-íñ ~~]';
+
+  @override
+  String get tplPrivate => '[Öñłý ɱé ~~]';
+
+  @override
+  String get tplShared => '[Éṽéŕýöñé íñ ţĥé ŵöŕķšþåçé ~~~~~~~~]';
+
+  @override
+  String tplTasksN(int count) {
+    return '[$count ţåšķš ~~~~]';
+  }
+
+  @override
+  String tplAutomationsN(int count) {
+    return '[$count åûţöɱåţíöñš ~~~~~~]';
+  }
+
+  @override
+  String get tplStatuses => '[Šţåţûšéš ~~]';
+
+  @override
+  String get tplFields => '[Çûšţöɱ ƒíéłðš ~~~~]';
+
+  @override
+  String get tplFeatures => '[Féåţûŕéš ~~]';
+
+  @override
+  String get tplTasks => '[Ţåšķš ~]';
+
+  @override
+  String get tplNoTasks => '[Ñö éxåɱþłé ţåšķš. ~~~~~]';
+
+  @override
+  String get tplApply => '[Ûšé ţéɱþłåţé ~~~~]';
+
+  @override
+  String get tplEdit => '[Éðíţ ~]';
+
+  @override
+  String get tplDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String get tplDeleteAsk =>
+      '[Ðéłéţé ţĥíš ţéɱþłåţé? Þŕöĵéçţš åłŕéåðý ɱåðé ƒŕöɱ íţ åŕé ñöţ åƒƒéçţéð. ~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String tplApplyTitle(String name) {
+    return '[Ûšé $name ~~~]';
+  }
+
+  @override
+  String get tplProjectName => '[Þŕöĵéçţ ñåɱé ~~~~]';
+
+  @override
+  String get tplProjectKey => '[Ķéý ~]';
+
+  @override
+  String get tplTargetProject => '[Åðð ţö þŕöĵéçţ ~~~~]';
+
+  @override
+  String get tplStartDate => '[Šţåŕţ ðåţé ~~~]';
+
+  @override
+  String get tplStartHelp =>
+      '[Ŕéłåţíṽé ðåţéš çöûñţ ƒŕöɱ ţĥíš ðåý. ~~~~~~~~~~~]';
+
+  @override
+  String get tplVariables => '[Fíłł íñ ~~]';
+
+  @override
+  String get tplRequired => '[Ŕéqûíŕéð. ~~~]';
+
+  @override
+  String get tplCreate => '[Çŕéåţé ~~]';
+
+  @override
+  String tplApplied(int count) {
+    return '[Çŕéåţéð $count ţåšķš. ~~~~~~~]';
+  }
+
+  @override
+  String get tplWarnings => '[Šöɱé þåŕţš ŵéŕé šķíþþéð ~~~~~~~]';
+
+  @override
+  String get tplSaveTitle => '[Šåṽé åš ţéɱþłåţé ~~~~~]';
+
+  @override
+  String get tplName => '[Ñåɱé ~]';
+
+  @override
+  String get tplDescription => '[Ðéšçŕíþţíöñ ~~~]';
+
+  @override
+  String get tplVisibility => '[Ŵĥö çåñ ûšé íţ ~~~~]';
+
+  @override
+  String get tplInclude => '[Íñçłûðé ~~]';
+
+  @override
+  String get tplPartWorkflow => '[Šţåţûšéš åñð ŵöŕķƒłöŵ ~~~~~~~]';
+
+  @override
+  String get tplPartFields => '[Çûšţöɱ ƒíéłðš ~~~~]';
+
+  @override
+  String get tplPartAutomations => '[Åûţöɱåţíöñš ~~~]';
+
+  @override
+  String get tplPartFeatures => '[Féåţûŕé šŵíţçĥéš ~~~~~]';
+
+  @override
+  String get tplPartTasks => '[Éxåɱþłé ţåšķš ~~~~]';
+
+  @override
+  String get tplAssignees => '[Ķééþ åššíĝñééš ~~~~]';
+
+  @override
+  String get tplSave => '[Šåṽé ~]';
+
+  @override
+  String get tplSaved => '[Ţéɱþłåţé šåṽéð. ~~~~~]';
+
+  @override
+  String get tplSaveTask => '[Šåṽé ţåšķ åš ţéɱþłåţé ~~~~~~~]';
+
+  @override
+  String get tplSaveProject => '[Šåṽé þŕöĵéçţ åš ţéɱþłåţé ~~~~~~~~]';
+
+  @override
+  String get tplFromTemplate => '[Fŕöɱ å ţéɱþłåţé… ~~~~~]';
+
+  @override
+  String get tplCmdOpen => '[Öþéñ ţéɱþłåţéš ~~~~]';
+
+  @override
+  String get tplDenied =>
+      '[Ýöû åŕé ñöţ åłłöŵéð ţö ðö ţĥåţ ŵíţĥ ţéɱþłåţéš. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get tplGone => '[Ţĥåţ ţéɱþłåţé ñö łöñĝéŕ éxíšţš. ~~~~~~~~~~]';
+
+  @override
+  String get tplConflict =>
       '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
 }

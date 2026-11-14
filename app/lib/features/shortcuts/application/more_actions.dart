@@ -174,6 +174,14 @@ final List<AppAction> moreActions = [
         .toggle(Theme.of(c.context).brightness),
   ),
   AppAction(
+    id: 'templates.open',
+    titleOf: (l) => l.tplCmdOpen,
+    groupOf: groupProjects,
+    semanticOf: (l) => l.tplCmdOpen,
+    keywords: const ['template', 'gallery', 'blueprint'],
+    run: (c) => c.router.go('/templates'),
+  ),
+  AppAction(
     id: 'project.create',
     titleOf: (l) => l.grpKCreateProject,
     groupOf: groupProjects,
