@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package config.templates;
+
+service TemplateController {
+    rpc Apply(TemplateApplyRequest) returns (TemplateApplied) {}
+    rpc Create(TemplateCreateRequest) returns (TemplateAnswer) {}
+    rpc Delete(TemplateDeleteRequest) returns (TemplateDeleted) {}
+    rpc Get(TemplateGetRequest) returns (TemplateAnswer) {}
+    rpc List(TemplateListRequest) returns (TemplateList) {}
+    rpc SaveFromProject(TemplateSaveFromProjectRequest) returns (TemplateAnswer) {}
+    rpc SaveFromTask(TemplateSaveFromTaskRequest) returns (TemplateAnswer) {}
+    rpc Update(TemplateUpdateRequest) returns (TemplateAnswer) {}
+}
+
+message Template {
+    string id = 1;
+    string kind = 2;
+    string name = 3;
+    string description = 4;
+    string visibility = 5;
+    bool builtin = 6;
+    string created_by = 7;
+    string created_at = 8;
+    string updated_at = 9;
+    int32 version = 10;
+    int32 task_count = 11;
+    repeated string variables = 12;
+    repeated string includes = 13;
+    repeated string status_names = 14;
+    bool can_edit = 15;
+    string content_json = 16;
+}
+
+message TemplateAnswer {
+    Template template = 1;
+}
+
+message TemplateApplied {
+    string project_id = 1;
+    repeated string task_ids = 2;
+    repeated Warning warnings = 3;
+}
+
+message TemplateApplyRequest {
+    string workspace_id = 1;
+    string template_id = 2;
+    string project_id = 3;
+    string parent_task_id = 4;
+    string project_name = 5;
+    string project_key = 6;
+    string project_description = 7;
+    string project_icon = 8;
+    string project_color = 9;
+    string project_visibility = 10;
+    string start_date = 11;
+    repeated Variable variables = 12;
+}
+
+message TemplateCreateRequest {
+    string workspace_id = 1;
+    string kind = 2;
+    string name = 3;
+    string description = 4;
+    string visibility = 5;
+    string content_json = 6;
+}
+
+message TemplateDeleteRequest {
+    string workspace_id = 1;
+    string template_id = 2;
+}
+
+message TemplateDeleted {
+    string id = 1;
+}
+
+message TemplateGetRequest {
+    string workspace_id = 1;
+    string template_id = 2;
+}
+
+message TemplateList {
+    repeated Template templates = 1;
+}
+
+message TemplateListRequest {
+    string workspace_id = 1;
+    string query = 2;
+    string kind = 3;
+}
+
+message TemplateSaveFromProjectRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string name = 3;
+    string description = 4;
+    string visibility = 5;
+    repeated string include = 6;
+    bool include_assignees = 7;
+}
+
+message TemplateSaveFromTaskRequest {
+    string workspace_id = 1;
+    string project_id = 2;
+    string task_id = 3;
+    string name = 4;
+    string description = 5;
+    string visibility = 6;
+    bool include_assignees = 7;
+}
+
+message TemplateUpdateRequest {
+    string workspace_id = 1;
+    string template_id = 2;
+    repeated string changed = 3;
+    int32 expected_version = 4;
+    string name = 5;
+    string description = 6;
+    string visibility = 7;
+    string content_json = 8;
+}
+
+message Variable {
+    string name = 1;
+    string value = 2;
+}
+
+message Warning {
+    string code = 1;
+    string message = 2;
+}
+

@@ -1058,6 +1058,7 @@ INSTALLED_APPS = [
     "infrastructure.audit.apps.AuditConfig",
     "infrastructure.dashboards.apps.DashboardsConfig",
     "infrastructure.goals.apps.GoalsConfig",
+    "infrastructure.templates.apps.TemplatesConfig",
     "infrastructure.recurrence.apps.RecurrenceConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,

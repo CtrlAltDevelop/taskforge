@@ -97,6 +97,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/developer/grpc/developer.proto \
 	infrastructure/forms/grpc/forms.proto \
 	infrastructure/goals/grpc/goals.proto \
+	infrastructure/templates/grpc/templates.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto
 proto:
 	cd backend && ../$(VENV)/python manage.py protos

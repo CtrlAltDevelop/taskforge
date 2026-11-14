@@ -68,6 +68,8 @@ PERMISSIONS: Final = (
     Permission(
         "goal.manage", "Edit, delete and see every goal, private ones too, and manage folders"
     ),
+    Permission("template.create", "Save tasks and projects as templates"),
+    Permission("template.manage", "Edit and delete every shared template"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
 
@@ -85,6 +87,7 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
         "sprint.manage",
         "doc.edit",
         "goal.create",
+        "template.create",
         *TASK_KEYS,
     },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,
