@@ -1070,6 +1070,7 @@ INSTALLED_APPS = [
     "infrastructure.templates.apps.TemplatesConfig",
     "infrastructure.workload.apps.WorkloadConfig",
     "infrastructure.recurrence.apps.RecurrenceConfig",
+    "infrastructure.system.apps.SystemConfig",
     *OAUTH_INSTALLED_APPS,
     *AUTH_INSTALLED_APPS,
     *CMS_INSTALLED_APPS,
@@ -1152,6 +1153,8 @@ UNFOLD = {
     "SCRIPTS": ADMIN_LIVE_SCRIPTS,
 }
 
+from infrastructure.system.jsonlog import logging_config  # noqa: E402
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # before CommonMiddleware
@@ -1162,16 +1165,23 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "infrastructure.system.middleware.SecurityHeadersMiddleware",
 ]
+
+# Phase 38: the one address the app is reached at from outside (https://tasks.example.com), with
+# no trailing slash. Production derives CORS, the SSO callback and the Secure/CSRF origins from it.
+PUBLIC_ORIGIN = os.getenv("DJANGO_PUBLIC_ORIGIN", "").strip().rstrip("/")
 
 # Flutter web is served from a different origin than the API, so the browser sends
 # a preflight. Empty (the default) allows no cross-origin browser at all; native
 # apps are unaffected by CORS. Name the app's origins, e.g. http://localhost:5000.
+# Defaults to PUBLIC_ORIGIN, never to a wildcard: CORS is always an explicit allowlist.
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",")
     if origin.strip()
-]
+] or ([PUBLIC_ORIGIN] if PUBLIC_ORIGIN else [])
+CSRF_TRUSTED_ORIGINS = [PUBLIC_ORIGIN] if PUBLIC_ORIGIN else []
 # Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
 COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
 
@@ -1201,7 +1211,7 @@ SSO_ATTEMPT_TTL_SECONDS = int(os.getenv("DJANGO_SSO_ATTEMPT_TTL_SECONDS", "600")
 SSO_TICKET_TTL_SECONDS = int(os.getenv("DJANGO_SSO_TICKET_TTL_SECONDS", "60"))
 # Where the API is reached from outside (the redirect URI registered at the identity provider).
 # Empty: derived from the request, which is right unless a proxy hides the public host.
-SSO_CALLBACK_BASE_URL = os.getenv("DJANGO_SSO_CALLBACK_BASE_URL", "").rstrip("/")
+SSO_CALLBACK_BASE_URL = os.getenv("DJANGO_SSO_CALLBACK_BASE_URL", "").rstrip("/") or PUBLIC_ORIGIN
 # Where a finished sign-in may send the browser: the native deep link, and `/sso/callback` under
 # each web origin of the app (default: the CORS origins). Anything else is refused at `start`.
 SSO_NATIVE_RETURN_URL = os.getenv("DJANGO_SSO_NATIVE_RETURN_URL", "taskforge://sso/callback")
@@ -1390,3 +1400,24 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     "tick": {"task": "infrastructure.common.tick", "schedule": 60.0},
 }
+
+# --- Phase 38: release, deployment and operations (infrastructure/system) -----------------------
+# The version this build reports. The VERSION file at the repository root is the source of truth
+# (`deploy/scripts/set-version.sh` copies it to pyproject.toml and the app); the Docker image bakes
+# it in as TASKFORGE_VERSION, and `DJANGO_APP_VERSION` overrides both for a custom build.
+APP_VERSION = os.getenv("DJANGO_APP_VERSION", "")
+# Clients older than this are told to update (`GET /api/version`, the app's "update required"
+# screen). Raise it only when a release drops something old clients still call.
+MIN_CLIENT_VERSION = os.getenv("DJANGO_MIN_CLIENT_VERSION", "0.0.0")
+BUILD_COMMIT = os.getenv("DJANGO_BUILD_COMMIT", "")
+# Bearer token for `GET /metrics` (Prometheus format). Empty: the endpoint answers 404.
+METRICS_TOKEN = os.getenv("DJANGO_METRICS_TOKEN", "")
+# `json` (one object per line, for a log shipper) or `text`. Production defaults to json.
+LOG_FORMAT = os.getenv("DJANGO_LOG_FORMAT", "text").lower()
+LOG_LEVEL = os.getenv("DJANGO_LOG_LEVEL", "INFO").upper()
+# Error reporting through any Sentry-compatible service. Unset: nothing is imported or sent.
+# Needs `pip install sentry-sdk` (the `sentry` extra); a DSN without it is a startup warning.
+SENTRY_DSN = os.getenv("DJANGO_SENTRY_DSN", "")
+SENTRY_ENVIRONMENT = os.getenv("DJANGO_SENTRY_ENVIRONMENT", "production")
+SENTRY_TRACES_SAMPLE_RATE = float(os.getenv("DJANGO_SENTRY_TRACES_SAMPLE_RATE", "0"))
+LOGGING = logging_config(fmt=LOG_FORMAT, level=LOG_LEVEL)

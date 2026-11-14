@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "backend"
-version = "0.1.0"
+version = "1.0.0"
 description = "A production-oriented Django Ninja API"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -61,6 +61,8 @@ asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
 # Thumbnails of images (Pillow) and of the first page of a PDF (pypdfium2). Without them uploads
 # still work; there is just no thumbnail.
 media = ["pillow>=11,<13", "pypdfium2>=4.30,<6.0"]
+# Error reporting to Sentry or a compatible service (DJANGO_SENTRY_DSN).
+sentry = ["sentry-sdk>=2.0,<3.0"]
 all = ["backend[oauth,redis,s3,totp,asgi,media]"]
 dev = [
   "backend[all]",

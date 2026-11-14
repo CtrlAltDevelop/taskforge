@@ -13,6 +13,7 @@ from config.graph import schema as graph_schema
 from config.public_api import public_api
 from infrastructure.common.adminlive import anything_live, live_script
 from infrastructure.common.identity import session_csrf_failure
+from infrastructure.system import views as system_views
 
 
 def api_docs(request: HttpRequest) -> HttpResponse:
@@ -35,6 +36,12 @@ def api_redoc(request: HttpRequest, version: str = "") -> HttpResponse:
 
 
 urlpatterns = [
+    # Phase 38: operations. Unversioned and credential-free (see infrastructure/system/views.py).
+    path("api/health", system_views.ready, name="health"),
+    path("api/health/live", system_views.live, name="health-live"),
+    path("api/health/ready", system_views.ready, name="health-ready"),
+    path("api/version", system_views.version, name="version"),
+    path("metrics", system_views.prometheus, name="metrics"),
     path("admin/", admin.site.urls),
     path("api/docs", api_docs, name="api-docs"),
     path("api/redoc", api_redoc, name="api-redoc"),

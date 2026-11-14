@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package config.system;
+
+import "google/protobuf/empty.proto";
+
+service SystemController {
+    rpc Info(google.protobuf.Empty) returns (SystemInfo) {}
+}
+
+message SystemInfo {
+    string version = 1;
+    string min_client_version = 2;
+    string api = 3;
+    string commit = 4;
+    string redis = 5;
+    string broker = 6;
+    bool eager = 7;
+    int32 workers = 8;
+    map<string,int32> backlog = 9;
+}
+

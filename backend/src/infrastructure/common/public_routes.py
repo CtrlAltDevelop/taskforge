@@ -9,6 +9,13 @@ from typing import Final
 
 # Paths of the Django API (served by `config/public_api.py` and the registry's public routers).
 PUBLIC_API_PREFIXES: Final = (
+    # Phase 38: probes and the version a too-old client must be able to read (no credential, and
+    # no proof of possession: a load balancer cannot make one). `/metrics` is exempt from the
+    # auth layers too but guards itself with DJANGO_METRICS_TOKEN.
+    "/api/health",  # also /api/health/live, /api/health/ready
+    "/api/version",
+    "/api/v1/health/",  # the versioned probes of the common app
+    "/metrics",
     "/api/public/",  # intake forms: read a form, submit it
     "/api/v1/public/",  # the same routes inside the versioned API
     # Phase 37: the steps of a sign-in that happen before there is a token to send.

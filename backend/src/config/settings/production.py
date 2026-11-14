@@ -3,9 +3,28 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 
 from config.settings.base import *  # noqa: F403
+from config.settings.base import logging_config
+from infrastructure.system.reporting import init_error_reporting
+from infrastructure.system.version import server_version
 
-if SECRET_KEY == "unsafe-development-key":  # noqa: F405
-    raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set in production")
+_WEAK_KEY_MARKERS = ("unsafe", "change-me", "changeme", "django-insecure", "secret", "example")
+
+
+def _check_secret_key(key: str) -> None:
+    """Refuse to boot on a default, placeholder or short key: it signs every token."""
+    lowered = key.lower()
+    if (
+        len(key) < 50
+        or len(set(key)) < 10
+        or any(marker in lowered for marker in _WEAK_KEY_MARKERS)
+    ):
+        raise ImproperlyConfigured(
+            "DJANGO_SECRET_KEY is missing, a placeholder or too short (need 50+ random "
+            'characters): python -c "import secrets; print(secrets.token_urlsafe(64))"'
+        )
+
+
+_check_secret_key(SECRET_KEY)  # noqa: F405
 
 if not ALLOWED_HOSTS:  # noqa: F405
     raise ImproperlyConfigured("DJANGO_ALLOWED_HOSTS must be set in production")
@@ -20,6 +39,18 @@ if not FIELD_ENCRYPTION_KEY:  # noqa: F405
         "DJANGO_FIELD_ENCRYPTION_KEY must be set in production (a Fernet key: "
         'python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")'
     )
+
+if not PUBLIC_ORIGIN.startswith("https://"):  # noqa: F405
+    raise ImproperlyConfigured(
+        "DJANGO_PUBLIC_ORIGIN must be set to the https:// address the app is served at"
+    )
+if "*" in CORS_ALLOWED_ORIGINS or "*" in ALLOWED_HOSTS:  # noqa: F405
+    raise ImproperlyConfigured("CORS origins and allowed hosts must be listed, never '*'")
+
+# Caddy terminates TLS and says so; probes and the metrics scrape reach Django over plain HTTP
+# inside the Docker network, so they are exempt from the HTTPS redirect.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_REDIRECT_EXEMPT = [r"^api/health", r"^api/version$", r"^metrics$"]
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
@@ -39,6 +70,18 @@ def _required(name: str) -> str:
         raise ImproperlyConfigured(f"{name} must be set in production")
     return value
 
+
+EMAIL_BACKEND = os.getenv("DJANGO_EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.getenv("DJANGO_EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "true").lower() == "true"
+DEFAULT_FROM_EMAIL = os.getenv("DJANGO_DEFAULT_FROM_EMAIL", "TaskForge <no-reply@localhost>")
+
+LOGGING = logging_config(  # noqa: F405
+    fmt=os.getenv("DJANGO_LOG_FORMAT", "json").lower(), level=LOG_LEVEL  # noqa: F405
+)
 
 REDIS_URL = _required("DJANGO_REDIS_URL")  # e.g. redis://redis:6379/0
 
@@ -89,3 +132,10 @@ if os.getenv("DJANGO_S3_BUCKET"):
         },
         "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
     }
+
+init_error_reporting(
+    SENTRY_DSN,  # noqa: F405
+    environment=SENTRY_ENVIRONMENT,  # noqa: F405
+    release=server_version(),
+    traces_sample_rate=SENTRY_TRACES_SAMPLE_RATE,  # noqa: F405
+)
