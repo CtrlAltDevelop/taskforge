@@ -12594,6 +12594,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It changed since you opened it. Reload and try again.'**
   String get tplConflict;
+
+  /// No description provided for @wlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workload'**
+  String get wlTitle;
+
+  /// No description provided for @wlSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity, time off and holidays'**
+  String get wlSettings;
+
+  /// No description provided for @wlPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get wlPrevious;
+
+  /// No description provided for @wlNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get wlNext;
+
+  /// No description provided for @wlToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get wlToday;
+
+  /// No description provided for @wlZoomDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get wlZoomDay;
+
+  /// No description provided for @wlZoomWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get wlZoomWeek;
+
+  /// No description provided for @wlZoomMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get wlZoomMonth;
+
+  /// No description provided for @wlProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get wlProjects;
+
+  /// No description provided for @wlPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get wlPeople;
+
+  /// No description provided for @wlClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get wlClearFilter;
+
+  /// No description provided for @wlLegendUnder.
+  ///
+  /// In en, this message translates to:
+  /// **'Under half of capacity'**
+  String get wlLegendUnder;
+
+  /// No description provided for @wlLegendOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Within capacity'**
+  String get wlLegendOk;
+
+  /// No description provided for @wlLegendOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Over capacity'**
+  String get wlLegendOver;
+
+  /// No description provided for @wlLegendSevere.
+  ///
+  /// In en, this message translates to:
+  /// **'Far over capacity (above 125%)'**
+  String get wlLegendSevere;
+
+  /// No description provided for @wlOnlyYours.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only see your own workload.'**
+  String get wlOnlyYours;
+
+  /// No description provided for @wlSetCapacityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Some people have no capacity set yet. Their load is shown without over-capacity colours.'**
+  String get wlSetCapacityHint;
+
+  /// No description provided for @wlSetCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Set capacity'**
+  String get wlSetCapacity;
+
+  /// No description provided for @wlNoCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'No capacity set'**
+  String get wlNoCapacity;
+
+  /// No description provided for @wlTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many tasks: the grid shows only part of them.'**
+  String get wlTruncated;
+
+  /// No description provided for @wlNoPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'No people to show.'**
+  String get wlNoPeople;
+
+  /// No description provided for @wlCapacitySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h/day, {days} days a week'**
+  String wlCapacitySummary(String hours, String days);
+
+  /// No description provided for @wlUnestimated.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 task without an estimate} other{{count} tasks without estimates}}'**
+  String wlUnestimated(int count);
+
+  /// No description provided for @wlUndated.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 task without dates} other{{count} tasks without dates}}'**
+  String wlUndated(int count);
+
+  /// No description provided for @wlReasonNoEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'No estimate: not counted in the grid'**
+  String get wlReasonNoEstimate;
+
+  /// No description provided for @wlReasonNoDates.
+  ///
+  /// In en, this message translates to:
+  /// **'No dates: cannot be placed on a day'**
+  String get wlReasonNoDates;
+
+  /// No description provided for @wlCellTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Load {load} h of {capacity} h'**
+  String wlCellTotal(String load, String capacity);
+
+  /// No description provided for @wlHoursUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get wlHoursUnit;
+
+  /// No description provided for @wlCellEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned'**
+  String get wlCellEmpty;
+
+  /// No description provided for @wlHoursInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours per day is a number from 0 to 24.'**
+  String get wlHoursInvalid;
+
+  /// No description provided for @wlCapacityOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity of {name}'**
+  String wlCapacityOf(String name);
+
+  /// No description provided for @wlHoursPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours per day'**
+  String get wlHoursPerDay;
+
+  /// No description provided for @wlWorkingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Working days'**
+  String get wlWorkingDays;
+
+  /// No description provided for @wlTabCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity'**
+  String get wlTabCapacity;
+
+  /// No description provided for @wlTabTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Time off'**
+  String get wlTabTimeOff;
+
+  /// No description provided for @wlTabHolidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Holidays'**
+  String get wlTabHolidays;
+
+  /// No description provided for @wlAddTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Add time off'**
+  String get wlAddTimeOff;
+
+  /// No description provided for @wlNoTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'No time off entered.'**
+  String get wlNoTimeOff;
+
+  /// No description provided for @wlKindVacation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacation'**
+  String get wlKindVacation;
+
+  /// No description provided for @wlKindSick.
+  ///
+  /// In en, this message translates to:
+  /// **'Sick leave'**
+  String get wlKindSick;
+
+  /// No description provided for @wlKindPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal'**
+  String get wlKindPersonal;
+
+  /// No description provided for @wlKindOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get wlKindOther;
+
+  /// No description provided for @wlPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get wlPerson;
+
+  /// No description provided for @wlKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Kind'**
+  String get wlKind;
+
+  /// No description provided for @wlNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get wlNote;
+
+  /// No description provided for @wlAddHoliday.
+  ///
+  /// In en, this message translates to:
+  /// **'Add holiday'**
+  String get wlAddHoliday;
+
+  /// No description provided for @wlNoHolidays.
+  ///
+  /// In en, this message translates to:
+  /// **'No holidays yet.'**
+  String get wlNoHolidays;
+
+  /// No description provided for @wlHolidayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday name'**
+  String get wlHolidayName;
+
+  /// No description provided for @wlDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get wlDelete;
+
+  /// No description provided for @wlDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to do that with workload.'**
+  String get wlDenied;
+
+  /// No description provided for @wlGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That entry no longer exists.'**
+  String get wlGone;
+
+  /// No description provided for @wlConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'It changed since you opened it. Reload and try again.'**
+  String get wlConflict;
 }
 
 class _AppLocalizationsDelegate

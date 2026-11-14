@@ -7072,4 +7072,184 @@ class AppLocalizationsPs extends AppLocalizations {
   @override
   String get tplConflict =>
       'له خلاصولو راهیسې بدل شوی. بیا یې پرانیزئ او هڅه وکړئ.';
+
+  @override
+  String get wlTitle => 'د کار پرېکړه';
+
+  @override
+  String get wlSettings => 'ظرفیت، رخصتۍ او رخصتي ورځې';
+
+  @override
+  String get wlPrevious => 'تیر';
+
+  @override
+  String get wlNext => 'راتلونکی';
+
+  @override
+  String get wlToday => 'نن';
+
+  @override
+  String get wlZoomDay => 'ورځ';
+
+  @override
+  String get wlZoomWeek => 'اونۍ';
+
+  @override
+  String get wlZoomMonth => 'میاشت';
+
+  @override
+  String get wlProjects => 'پروژې';
+
+  @override
+  String get wlPeople => 'خلک';
+
+  @override
+  String get wlClearFilter => 'فلټر پاکول';
+
+  @override
+  String get wlLegendUnder => 'د ظرفیت له نیمایي کم';
+
+  @override
+  String get wlLegendOk => 'د ظرفیت په کچه';
+
+  @override
+  String get wlLegendOver => 'له ظرفیت زیات';
+
+  @override
+  String get wlLegendSevere => 'له ظرفیت ډېر زیات (له ۱۲۵٪ پورته)';
+
+  @override
+  String get wlOnlyYours => 'تاسو یوازې خپل د کار پرېکړه لیدلی شئ.';
+
+  @override
+  String get wlSetCapacityHint =>
+      'د ځينو کسانو ظرفیت لا نه دی ټاکل شوی. بار یې د زیاتوالي رنګونو پرته ښودل کېږي.';
+
+  @override
+  String get wlSetCapacity => 'ظرفیت ټاکل';
+
+  @override
+  String get wlNoCapacity => 'ظرفیت نه دی ټاکل شوی';
+
+  @override
+  String get wlTruncated => 'ډېر کارونه: جدول یوازې یوه برخه ښيي.';
+
+  @override
+  String get wlNoPeople => 'د ښودلو لپاره څوک نشته.';
+
+  @override
+  String wlCapacitySummary(String hours, String days) {
+    return '$hours ساعته په ورځ کې، $days ورځې په اونۍ کې';
+  }
+
+  @override
+  String wlUnestimated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کارونه پرته له اټکل',
+      one: '۱ کار پرته له اټکل',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wlUndated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کارونه پرته له نیټو',
+      one: '۱ کار پرته له نیټو',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wlReasonNoEstimate => 'پرته له اټکل: په جدول کې نه شمېرل کېږي';
+
+  @override
+  String get wlReasonNoDates => 'پرته له نیټو: په هیڅ ورځ کې نه ځای کېږي';
+
+  @override
+  String wlCellTotal(String load, String capacity) {
+    return 'بار $load ساعته له $capacity ساعتو';
+  }
+
+  @override
+  String get wlHoursUnit => 'ساعته';
+
+  @override
+  String get wlCellEmpty => 'هیڅ نه دي پلان شوي';
+
+  @override
+  String get wlHoursInvalid => 'په ورځ کې ساعتونه له ۰ تر ۲۴ پورې شمېره ده.';
+
+  @override
+  String wlCapacityOf(String name) {
+    return 'د $name ظرفیت';
+  }
+
+  @override
+  String get wlHoursPerDay => 'په ورځ کې ساعتونه';
+
+  @override
+  String get wlWorkingDays => 'د کار ورځې';
+
+  @override
+  String get wlTabCapacity => 'ظرفیت';
+
+  @override
+  String get wlTabTimeOff => 'رخصتۍ';
+
+  @override
+  String get wlTabHolidays => 'رخصتي ورځې';
+
+  @override
+  String get wlAddTimeOff => 'رخصتي ورزیاتول';
+
+  @override
+  String get wlNoTimeOff => 'هیڅ رخصتي نه ده ثبت شوې.';
+
+  @override
+  String get wlKindVacation => 'رخصتي';
+
+  @override
+  String get wlKindSick => 'ناروغي رخصتي';
+
+  @override
+  String get wlKindPersonal => 'شخصي';
+
+  @override
+  String get wlKindOther => 'نور';
+
+  @override
+  String get wlPerson => 'کس';
+
+  @override
+  String get wlKind => 'ډول';
+
+  @override
+  String get wlNote => 'یادښت';
+
+  @override
+  String get wlAddHoliday => 'رخصتي ورځ ورزیاتول';
+
+  @override
+  String get wlNoHolidays => 'تر اوسه رخصتي ورځې نشته.';
+
+  @override
+  String get wlHolidayName => 'د رخصتۍ نوم';
+
+  @override
+  String get wlDelete => 'ړنګول';
+
+  @override
+  String get wlDenied => 'تاسو د کار په پرېکړه کې د دې کار اجازه نه لرئ.';
+
+  @override
+  String get wlGone => 'دا ننوتنه نور نشته.';
+
+  @override
+  String get wlConflict =>
+      'له پرانیستلو راهیسې بدل شوی. بیا یې پورته کړئ او بیا هڅه وکړئ.';
 }

@@ -4101,5 +4101,98 @@
   "tplCmdOpen": "Open templates",
   "tplDenied": "You are not allowed to do that with templates.",
   "tplGone": "That template no longer exists.",
-  "tplConflict": "It changed since you opened it. Reload and try again."
+  "tplConflict": "It changed since you opened it. Reload and try again.",
+  "wlTitle": "Workload",
+  "wlSettings": "Capacity, time off and holidays",
+  "wlPrevious": "Previous",
+  "wlNext": "Next",
+  "wlToday": "Today",
+  "wlZoomDay": "Day",
+  "wlZoomWeek": "Week",
+  "wlZoomMonth": "Month",
+  "wlProjects": "Projects",
+  "wlPeople": "People",
+  "wlClearFilter": "Clear filter",
+  "wlLegendUnder": "Under half of capacity",
+  "wlLegendOk": "Within capacity",
+  "wlLegendOver": "Over capacity",
+  "wlLegendSevere": "Far over capacity (above 125%)",
+  "wlOnlyYours": "You can only see your own workload.",
+  "wlSetCapacityHint": "Some people have no capacity set yet. Their load is shown without over-capacity colours.",
+  "wlSetCapacity": "Set capacity",
+  "wlNoCapacity": "No capacity set",
+  "wlTruncated": "Too many tasks: the grid shows only part of them.",
+  "wlNoPeople": "No people to show.",
+  "wlCapacitySummary": "{hours} h/day, {days} days a week",
+  "@wlCapacitySummary": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "wlUnestimated": "{count, plural, =1{1 task without an estimate} other{{count} tasks without estimates}}",
+  "@wlUnestimated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wlUndated": "{count, plural, =1{1 task without dates} other{{count} tasks without dates}}",
+  "@wlUndated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wlReasonNoEstimate": "No estimate: not counted in the grid",
+  "wlReasonNoDates": "No dates: cannot be placed on a day",
+  "wlCellTotal": "Load {load} h of {capacity} h",
+  "@wlCellTotal": {
+    "placeholders": {
+      "load": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  },
+  "wlHoursUnit": "h",
+  "wlCellEmpty": "Nothing planned",
+  "wlHoursInvalid": "Hours per day is a number from 0 to 24.",
+  "wlCapacityOf": "Capacity of {name}",
+  "@wlCapacityOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wlHoursPerDay": "Hours per day",
+  "wlWorkingDays": "Working days",
+  "wlTabCapacity": "Capacity",
+  "wlTabTimeOff": "Time off",
+  "wlTabHolidays": "Holidays",
+  "wlAddTimeOff": "Add time off",
+  "wlNoTimeOff": "No time off entered.",
+  "wlKindVacation": "Vacation",
+  "wlKindSick": "Sick leave",
+  "wlKindPersonal": "Personal",
+  "wlKindOther": "Other",
+  "wlPerson": "Person",
+  "wlKind": "Kind",
+  "wlNote": "Note",
+  "wlAddHoliday": "Add holiday",
+  "wlNoHolidays": "No holidays yet.",
+  "wlHolidayName": "Holiday name",
+  "wlDelete": "Delete",
+  "wlDenied": "You are not allowed to do that with workload.",
+  "wlGone": "That entry no longer exists.",
+  "wlConflict": "It changed since you opened it. Reload and try again."
 }

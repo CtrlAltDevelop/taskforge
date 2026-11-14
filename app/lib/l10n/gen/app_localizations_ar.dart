@@ -7160,4 +7160,183 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tplConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مرة أخرى.';
+
+  @override
+  String get wlTitle => 'عبء العمل';
+
+  @override
+  String get wlSettings => 'السعة والإجازات والعطل';
+
+  @override
+  String get wlPrevious => 'السابق';
+
+  @override
+  String get wlNext => 'التالي';
+
+  @override
+  String get wlToday => 'اليوم';
+
+  @override
+  String get wlZoomDay => 'يوم';
+
+  @override
+  String get wlZoomWeek => 'أسبوع';
+
+  @override
+  String get wlZoomMonth => 'شهر';
+
+  @override
+  String get wlProjects => 'المشاريع';
+
+  @override
+  String get wlPeople => 'الأشخاص';
+
+  @override
+  String get wlClearFilter => 'مسح التصفية';
+
+  @override
+  String get wlLegendUnder => 'أقل من نصف السعة';
+
+  @override
+  String get wlLegendOk => 'ضمن السعة';
+
+  @override
+  String get wlLegendOver => 'فوق السعة';
+
+  @override
+  String get wlLegendSevere => 'فوق السعة بكثير (أكثر من 125٪)';
+
+  @override
+  String get wlOnlyYours => 'يمكنك رؤية عبء عملك فقط.';
+
+  @override
+  String get wlSetCapacityHint =>
+      'لم تُحدَّد السعة لبعض الأشخاص بعد. يظهر حملهم دون ألوان تجاوز السعة.';
+
+  @override
+  String get wlSetCapacity => 'تحديد السعة';
+
+  @override
+  String get wlNoCapacity => 'لم تُحدَّد السعة';
+
+  @override
+  String get wlTruncated => 'مهام كثيرة جداً: تعرض الشبكة جزءاً منها فقط.';
+
+  @override
+  String get wlNoPeople => 'لا يوجد أشخاص للعرض.';
+
+  @override
+  String wlCapacitySummary(String hours, String days) {
+    return '$hours ساعة يومياً، $days أيام في الأسبوع';
+  }
+
+  @override
+  String wlUnestimated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مهام بلا تقدير',
+      one: 'مهمة واحدة بلا تقدير',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wlUndated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مهام بلا تواريخ',
+      one: 'مهمة واحدة بلا تواريخ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wlReasonNoEstimate => 'بلا تقدير: لا تُحتسب في الشبكة';
+
+  @override
+  String get wlReasonNoDates => 'بلا تواريخ: لا يمكن وضعها على يوم';
+
+  @override
+  String wlCellTotal(String load, String capacity) {
+    return 'الحمل $load ساعة من $capacity ساعة';
+  }
+
+  @override
+  String get wlHoursUnit => 'ساعة';
+
+  @override
+  String get wlCellEmpty => 'لا شيء مخطط';
+
+  @override
+  String get wlHoursInvalid => 'الساعات في اليوم رقم من 0 إلى 24.';
+
+  @override
+  String wlCapacityOf(String name) {
+    return 'سعة $name';
+  }
+
+  @override
+  String get wlHoursPerDay => 'ساعات في اليوم';
+
+  @override
+  String get wlWorkingDays => 'أيام العمل';
+
+  @override
+  String get wlTabCapacity => 'السعة';
+
+  @override
+  String get wlTabTimeOff => 'الإجازات';
+
+  @override
+  String get wlTabHolidays => 'العطل';
+
+  @override
+  String get wlAddTimeOff => 'إضافة إجازة';
+
+  @override
+  String get wlNoTimeOff => 'لم تُدخل أي إجازة.';
+
+  @override
+  String get wlKindVacation => 'عطلة';
+
+  @override
+  String get wlKindSick => 'إجازة مرضية';
+
+  @override
+  String get wlKindPersonal => 'شخصية';
+
+  @override
+  String get wlKindOther => 'أخرى';
+
+  @override
+  String get wlPerson => 'الشخص';
+
+  @override
+  String get wlKind => 'النوع';
+
+  @override
+  String get wlNote => 'ملاحظة';
+
+  @override
+  String get wlAddHoliday => 'إضافة عطلة';
+
+  @override
+  String get wlNoHolidays => 'لا توجد عطل بعد.';
+
+  @override
+  String get wlHolidayName => 'اسم العطلة';
+
+  @override
+  String get wlDelete => 'حذف';
+
+  @override
+  String get wlDenied => 'ليس لديك إذن لهذا الإجراء في عبء العمل.';
+
+  @override
+  String get wlGone => 'هذا الإدخال لم يعد موجوداً.';
+
+  @override
+  String get wlConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مجدداً.';
 }

@@ -140,6 +140,14 @@ class ProjectSidebar extends ConsumerWidget {
           onTap: () => _go(context, '/goals'),
         ),
         ListTile(
+          key: const Key('open-workload'),
+          dense: true,
+          selected: current.startsWith('/workload'),
+          leading: const Icon(Icons.stacked_bar_chart),
+          title: Text(context.l10n.wlTitle),
+          onTap: () => _go(context, '/workload'),
+        ),
+        ListTile(
           key: const Key('open-docs'),
           dense: true,
           selected: current.startsWith('/docs'),

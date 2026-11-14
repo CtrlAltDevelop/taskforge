@@ -7092,6 +7092,186 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tplConflict =>
       'It changed since you opened it. Reload and try again.';
+
+  @override
+  String get wlTitle => 'Workload';
+
+  @override
+  String get wlSettings => 'Capacity, time off and holidays';
+
+  @override
+  String get wlPrevious => 'Previous';
+
+  @override
+  String get wlNext => 'Next';
+
+  @override
+  String get wlToday => 'Today';
+
+  @override
+  String get wlZoomDay => 'Day';
+
+  @override
+  String get wlZoomWeek => 'Week';
+
+  @override
+  String get wlZoomMonth => 'Month';
+
+  @override
+  String get wlProjects => 'Projects';
+
+  @override
+  String get wlPeople => 'People';
+
+  @override
+  String get wlClearFilter => 'Clear filter';
+
+  @override
+  String get wlLegendUnder => 'Under half of capacity';
+
+  @override
+  String get wlLegendOk => 'Within capacity';
+
+  @override
+  String get wlLegendOver => 'Over capacity';
+
+  @override
+  String get wlLegendSevere => 'Far over capacity (above 125%)';
+
+  @override
+  String get wlOnlyYours => 'You can only see your own workload.';
+
+  @override
+  String get wlSetCapacityHint =>
+      'Some people have no capacity set yet. Their load is shown without over-capacity colours.';
+
+  @override
+  String get wlSetCapacity => 'Set capacity';
+
+  @override
+  String get wlNoCapacity => 'No capacity set';
+
+  @override
+  String get wlTruncated => 'Too many tasks: the grid shows only part of them.';
+
+  @override
+  String get wlNoPeople => 'No people to show.';
+
+  @override
+  String wlCapacitySummary(String hours, String days) {
+    return '$hours h/day, $days days a week';
+  }
+
+  @override
+  String wlUnestimated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tasks without estimates',
+      one: '1 task without an estimate',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wlUndated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tasks without dates',
+      one: '1 task without dates',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wlReasonNoEstimate => 'No estimate: not counted in the grid';
+
+  @override
+  String get wlReasonNoDates => 'No dates: cannot be placed on a day';
+
+  @override
+  String wlCellTotal(String load, String capacity) {
+    return 'Load $load h of $capacity h';
+  }
+
+  @override
+  String get wlHoursUnit => 'h';
+
+  @override
+  String get wlCellEmpty => 'Nothing planned';
+
+  @override
+  String get wlHoursInvalid => 'Hours per day is a number from 0 to 24.';
+
+  @override
+  String wlCapacityOf(String name) {
+    return 'Capacity of $name';
+  }
+
+  @override
+  String get wlHoursPerDay => 'Hours per day';
+
+  @override
+  String get wlWorkingDays => 'Working days';
+
+  @override
+  String get wlTabCapacity => 'Capacity';
+
+  @override
+  String get wlTabTimeOff => 'Time off';
+
+  @override
+  String get wlTabHolidays => 'Holidays';
+
+  @override
+  String get wlAddTimeOff => 'Add time off';
+
+  @override
+  String get wlNoTimeOff => 'No time off entered.';
+
+  @override
+  String get wlKindVacation => 'Vacation';
+
+  @override
+  String get wlKindSick => 'Sick leave';
+
+  @override
+  String get wlKindPersonal => 'Personal';
+
+  @override
+  String get wlKindOther => 'Other';
+
+  @override
+  String get wlPerson => 'Person';
+
+  @override
+  String get wlKind => 'Kind';
+
+  @override
+  String get wlNote => 'Note';
+
+  @override
+  String get wlAddHoliday => 'Add holiday';
+
+  @override
+  String get wlNoHolidays => 'No holidays yet.';
+
+  @override
+  String get wlHolidayName => 'Holiday name';
+
+  @override
+  String get wlDelete => 'Delete';
+
+  @override
+  String get wlDenied => 'You are not allowed to do that with workload.';
+
+  @override
+  String get wlGone => 'That entry no longer exists.';
+
+  @override
+  String get wlConflict =>
+      'It changed since you opened it. Reload and try again.';
 }
 
 /// The translations for English (`en_XA`).
@@ -14306,5 +14486,190 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get tplConflict =>
+      '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wlTitle => '[Ŵöŕķłöåð ~~]';
+
+  @override
+  String get wlSettings => '[Çåþåçíţý, ţíɱé öƒƒ åñð ĥöłíðåýš ~~~~~~~~~~]';
+
+  @override
+  String get wlPrevious => '[Þŕéṽíöûš ~~]';
+
+  @override
+  String get wlNext => '[Ñéxţ ~]';
+
+  @override
+  String get wlToday => '[Ţöðåý ~]';
+
+  @override
+  String get wlZoomDay => '[Ðåý ~]';
+
+  @override
+  String get wlZoomWeek => '[Ŵééķ ~]';
+
+  @override
+  String get wlZoomMonth => '[Möñţĥ ~]';
+
+  @override
+  String get wlProjects => '[Þŕöĵéçţš ~~]';
+
+  @override
+  String get wlPeople => '[Þéöþłé ~~]';
+
+  @override
+  String get wlClearFilter => '[Çłéåŕ ƒíłţéŕ ~~~~]';
+
+  @override
+  String get wlLegendUnder => '[Ûñðéŕ ĥåłƒ öƒ çåþåçíţý ~~~~~~~]';
+
+  @override
+  String get wlLegendOk => '[Ŵíţĥíñ çåþåçíţý ~~~~~]';
+
+  @override
+  String get wlLegendOver => '[Öṽéŕ çåþåçíţý ~~~~]';
+
+  @override
+  String get wlLegendSevere => '[Fåŕ öṽéŕ çåþåçíţý (åƀöṽé 125%) ~~~~~~~~~~]';
+
+  @override
+  String get wlOnlyYours => '[Ýöû çåñ öñłý šéé ýöûŕ öŵñ ŵöŕķłöåð. ~~~~~~~~~~~]';
+
+  @override
+  String get wlSetCapacityHint =>
+      '[Šöɱé þéöþłé ĥåṽé ñö çåþåçíţý šéţ ýéţ. Ţĥéíŕ łöåð íš šĥöŵñ ŵíţĥöûţ öṽéŕ-çåþåçíţý çöłöûŕš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wlSetCapacity => '[Šéţ çåþåçíţý ~~~~]';
+
+  @override
+  String get wlNoCapacity => '[Ñö çåþåçíţý šéţ ~~~~~]';
+
+  @override
+  String get wlTruncated =>
+      '[Ţöö ɱåñý ţåšķš: ţĥé ĝŕíð šĥöŵš öñłý þåŕţ öƒ ţĥéɱ. ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wlNoPeople => '[Ñö þéöþłé ţö šĥöŵ. ~~~~~~]';
+
+  @override
+  String wlCapacitySummary(String hours, String days) {
+    return '[$hours ĥ/ðåý, $days ðåýš å ŵééķ ~~~~~~~~~~~]';
+  }
+
+  @override
+  String wlUnestimated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ţåšķš ŵíţĥöûţ éšţíɱåţéš',
+      one: '1 ţåšķ ŵíţĥöûţ åñ éšţíɱåţé',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String wlUndated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ţåšķš ŵíţĥöûţ ðåţéš',
+      one: '1 ţåšķ ŵíţĥöûţ ðåţéš',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get wlReasonNoEstimate =>
+      '[Ñö éšţíɱåţé: ñöţ çöûñţéð íñ ţĥé ĝŕíð ~~~~~~~~~~~~]';
+
+  @override
+  String get wlReasonNoDates =>
+      '[Ñö ðåţéš: çåññöţ ƀé þłåçéð öñ å ðåý ~~~~~~~~~~~]';
+
+  @override
+  String wlCellTotal(String load, String capacity) {
+    return '[Łöåð $load ĥ öƒ $capacity ĥ ~~~~~~~~~]';
+  }
+
+  @override
+  String get wlHoursUnit => '[ĥ ]';
+
+  @override
+  String get wlCellEmpty => '[Ñöţĥíñĝ þłåññéð ~~~~~]';
+
+  @override
+  String get wlHoursInvalid =>
+      '[Ĥöûŕš þéŕ ðåý íš å ñûɱƀéŕ ƒŕöɱ 0 ţö 24. ~~~~~~~~~~~~~]';
+
+  @override
+  String wlCapacityOf(String name) {
+    return '[Çåþåçíţý öƒ $name ~~~~~~]';
+  }
+
+  @override
+  String get wlHoursPerDay => '[Ĥöûŕš þéŕ ðåý ~~~~]';
+
+  @override
+  String get wlWorkingDays => '[Ŵöŕķíñĝ ðåýš ~~~~]';
+
+  @override
+  String get wlTabCapacity => '[Çåþåçíţý ~~]';
+
+  @override
+  String get wlTabTimeOff => '[Ţíɱé öƒƒ ~~]';
+
+  @override
+  String get wlTabHolidays => '[Ĥöłíðåýš ~~]';
+
+  @override
+  String get wlAddTimeOff => '[Åðð ţíɱé öƒƒ ~~~~]';
+
+  @override
+  String get wlNoTimeOff => '[Ñö ţíɱé öƒƒ éñţéŕéð. ~~~~~~]';
+
+  @override
+  String get wlKindVacation => '[Ṽåçåţíöñ ~~]';
+
+  @override
+  String get wlKindSick => '[Šíçķ łéåṽé ~~~]';
+
+  @override
+  String get wlKindPersonal => '[Þéŕšöñåł ~~]';
+
+  @override
+  String get wlKindOther => '[Öţĥéŕ ~]';
+
+  @override
+  String get wlPerson => '[Þéŕšöñ ~~]';
+
+  @override
+  String get wlKind => '[Ķíñð ~]';
+
+  @override
+  String get wlNote => '[Ñöţé ~]';
+
+  @override
+  String get wlAddHoliday => '[Åðð ĥöłíðåý ~~~]';
+
+  @override
+  String get wlNoHolidays => '[Ñö ĥöłíðåýš ýéţ. ~~~~~]';
+
+  @override
+  String get wlHolidayName => '[Ĥöłíðåý ñåɱé ~~~~]';
+
+  @override
+  String get wlDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String get wlDenied =>
+      '[Ýöû åŕé ñöţ åłłöŵéð ţö ðö ţĥåţ ŵíţĥ ŵöŕķłöåð. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wlGone => '[Ţĥåţ éñţŕý ñö łöñĝéŕ éxíšţš. ~~~~~~~~~]';
+
+  @override
+  String get wlConflict =>
       '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
 }

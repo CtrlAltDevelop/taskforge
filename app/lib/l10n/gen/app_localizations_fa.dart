@@ -7103,4 +7103,185 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get tplConflict =>
       'از زمان باز کردن تغییر کرده است. دوباره بارگذاری کنید و تلاش کنید.';
+
+  @override
+  String get wlTitle => 'حجم کار';
+
+  @override
+  String get wlSettings => 'ظرفیت، مرخصی و تعطیلات';
+
+  @override
+  String get wlPrevious => 'قبلی';
+
+  @override
+  String get wlNext => 'بعدی';
+
+  @override
+  String get wlToday => 'امروز';
+
+  @override
+  String get wlZoomDay => 'روز';
+
+  @override
+  String get wlZoomWeek => 'هفته';
+
+  @override
+  String get wlZoomMonth => 'ماه';
+
+  @override
+  String get wlProjects => 'پروژه‌ها';
+
+  @override
+  String get wlPeople => 'افراد';
+
+  @override
+  String get wlClearFilter => 'پاک کردن فیلتر';
+
+  @override
+  String get wlLegendUnder => 'کمتر از نیمی از ظرفیت';
+
+  @override
+  String get wlLegendOk => 'در حد ظرفیت';
+
+  @override
+  String get wlLegendOver => 'بیش از ظرفیت';
+
+  @override
+  String get wlLegendSevere => 'بسیار بیش از ظرفیت (بالای ۱۲۵٪)';
+
+  @override
+  String get wlOnlyYours => 'فقط حجم کار خودتان را می‌بینید.';
+
+  @override
+  String get wlSetCapacityHint =>
+      'برای بعضی افراد هنوز ظرفیت تعیین نشده است. بار آنها بدون رنگ بیش‌ازحد نشان داده می‌شود.';
+
+  @override
+  String get wlSetCapacity => 'تعیین ظرفیت';
+
+  @override
+  String get wlNoCapacity => 'ظرفیت تعیین نشده';
+
+  @override
+  String get wlTruncated =>
+      'وظایف بسیار زیاد است: جدول فقط بخشی از آنها را نشان می‌دهد.';
+
+  @override
+  String get wlNoPeople => 'فردی برای نمایش نیست.';
+
+  @override
+  String wlCapacitySummary(String hours, String days) {
+    return '$hours ساعت در روز، $days روز در هفته';
+  }
+
+  @override
+  String wlUnestimated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه بدون برآورد',
+      one: '۱ وظیفه بدون برآورد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wlUndated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه بدون تاریخ',
+      one: '۱ وظیفه بدون تاریخ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wlReasonNoEstimate => 'بدون برآورد: در جدول شمرده نمی‌شود';
+
+  @override
+  String get wlReasonNoDates => 'بدون تاریخ: روی هیچ روزی قرار نمی‌گیرد';
+
+  @override
+  String wlCellTotal(String load, String capacity) {
+    return 'بار $load ساعت از $capacity ساعت';
+  }
+
+  @override
+  String get wlHoursUnit => 'ساعت';
+
+  @override
+  String get wlCellEmpty => 'چیزی برنامه‌ریزی نشده';
+
+  @override
+  String get wlHoursInvalid => 'ساعت در روز عددی از ۰ تا ۲۴ است.';
+
+  @override
+  String wlCapacityOf(String name) {
+    return 'ظرفیت $name';
+  }
+
+  @override
+  String get wlHoursPerDay => 'ساعت در روز';
+
+  @override
+  String get wlWorkingDays => 'روزهای کاری';
+
+  @override
+  String get wlTabCapacity => 'ظرفیت';
+
+  @override
+  String get wlTabTimeOff => 'مرخصی';
+
+  @override
+  String get wlTabHolidays => 'تعطیلات';
+
+  @override
+  String get wlAddTimeOff => 'افزودن مرخصی';
+
+  @override
+  String get wlNoTimeOff => 'مرخصی‌ای ثبت نشده است.';
+
+  @override
+  String get wlKindVacation => 'تعطیلات';
+
+  @override
+  String get wlKindSick => 'مرخصی استعلاجی';
+
+  @override
+  String get wlKindPersonal => 'شخصی';
+
+  @override
+  String get wlKindOther => 'دیگر';
+
+  @override
+  String get wlPerson => 'فرد';
+
+  @override
+  String get wlKind => 'نوع';
+
+  @override
+  String get wlNote => 'یادداشت';
+
+  @override
+  String get wlAddHoliday => 'افزودن تعطیلی';
+
+  @override
+  String get wlNoHolidays => 'هنوز تعطیلی‌ای نیست.';
+
+  @override
+  String get wlHolidayName => 'نام تعطیلی';
+
+  @override
+  String get wlDelete => 'حذف';
+
+  @override
+  String get wlDenied => 'اجازه این کار را در حجم کار ندارید.';
+
+  @override
+  String get wlGone => 'این مورد دیگر وجود ندارد.';
+
+  @override
+  String get wlConflict =>
+      'از زمان باز کردن تغییر کرده است. بارگذاری مجدد کنید و دوباره تلاش کنید.';
 }

@@ -9,6 +9,8 @@ import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dart';
 import 'package:taskforge/features/goals/presentation/goal_detail_screen.dart';
 import 'package:taskforge/features/goals/presentation/goals_screen.dart';
+import 'package:taskforge/features/workload/presentation/workload_screen.dart';
+import 'package:taskforge/features/workload/presentation/workload_settings.dart';
 import 'package:taskforge/features/templates/domain/templates.dart';
 import 'package:taskforge/features/templates/presentation/templates_screen.dart';
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
@@ -236,6 +238,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/dashboards', builder: (_, _) => const DashboardsScreen()),
       GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
+      GoRoute(path: '/workload', builder: (_, _) => const WorkloadScreen()),
+      GoRoute(
+        path: '/workload/settings',
+        builder: (_, _) => const WorkloadSettingsScreen(),
+      ),
       GoRoute(
         path: '/templates',
         builder: (_, state) => TemplatesScreen(
