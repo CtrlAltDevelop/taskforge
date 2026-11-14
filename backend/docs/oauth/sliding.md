@@ -18,6 +18,10 @@ _This app publishes no routes of its own._
 
 | Field | Type | Notes |
 | --- | --- | --- |
+| `name` | Char |  |
+| `device_label` | Char |  |
+| `device_fingerprint` | Char |  |
+| `name_edited` | Boolean |  |
 | `id` | UUID | primary key, not editable |
 | `user` | ForeignKey | → `accounts.User` |
 | `client` | ForeignKey | → `oauth_core.OAuthClient`, nullable |
@@ -36,6 +40,7 @@ _This app publishes no routes of its own._
 | `absolute_expires_at` | DateTime |  |
 | `previous_expires_at` | DateTime | nullable |
 | `slide_count` | PositiveInteger |  |
+| `dpop_jkt` | Char |  |
 
 #### `SlidingTokenEvent`
 

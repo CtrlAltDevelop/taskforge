@@ -73,6 +73,13 @@ PROJECT_LABELS = frozenset(
         "support",
         "wallet",
         "workspaces",
+        "developer",
+        "forms",
+        "goals",
+        "templates",
+        "workload",
+        "security",
+        "system",
     }
 )
 NONE = "_None._"

@@ -114,6 +114,8 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `SECOND_FACTOR_NOT_CODE_BASED` | That second factor does not use a sent code. |
 | `SECOND_FACTOR_NO_DESTINATION` | That second factor has no destination on file. |
 | `ENROLMENT_NOT_STARTED` | Begin enrolment before confirming it. |
+| `SECOND_FACTOR_LOCKED` | Too many wrong codes. Wait a while before trying again. |
+| `TWO_FACTOR_REQUIRED` | The workspace requires two-factor authentication; turn it on in Security settings. |
 
 ### Credentials and sessions
 
@@ -136,6 +138,18 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `OAUTH_NOT_CONFIGURED` | This provider has no credentials configured. |
 | `OAUTH_STATE_MISSING` | The callback arrived without its state. |
 | `OAUTH_FAILED` | The provider did not complete the sign-in. |
+
+### Single sign-on
+
+| Title | Means |
+| --- | --- |
+| `SSO_REQUIRED` | The workspace requires single sign-on; use Continue with SSO. |
+| `SSO_FAILED` | The single sign-on could not be completed; start again. |
+| `SSO_NOT_CONFIGURED` | Single sign-on is not set up for that workspace. |
+| `SSO_EMAIL_UNVERIFIED` | The identity provider did not confirm the email address, so it cannot be used. |
+| `SSO_DOMAIN_NOT_ALLOWED` | That email domain may not sign in to the workspace. |
+| `SSO_NO_ACCOUNT` | No account exists for the identity and sign-up is off. |
+| `SSO_MEMBER_REMOVED` | The person was removed from the workspace; they need an invitation. |
 
 ### Workspaces
 

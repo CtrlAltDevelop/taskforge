@@ -18,6 +18,7 @@ Active when `DJANGO_AUTH_TOKEN_MODE=rotation`, and the default when
 | `POST` | `/api/v1/auth/token/revoke` | None | Revoke the presented credential |
 | `GET` | `/api/v1/auth/token/sessions` | Bearer | List this account's live sessions |
 | `DELETE` | `/api/v1/auth/token/sessions/{session_id}` | Bearer | End one of this account's sessions |
+| `PATCH` | `/api/v1/auth/token/sessions/{session_id}` | Bearer | Rename one of this account's sessions |
 <!-- /generated:routes -->
 
 ## Models
@@ -87,6 +88,10 @@ Active when `DJANGO_AUTH_TOKEN_MODE=rotation`, and the default when
 
 | Field | Type | Notes |
 | --- | --- | --- |
+| `name` | Char |  |
+| `device_label` | Char |  |
+| `device_fingerprint` | Char |  |
+| `name_edited` | Boolean |  |
 | `id` | UUID | primary key, not editable |
 | `user` | ForeignKey | → `accounts.User` |
 | `client` | ForeignKey | → `oauth_core.OAuthClient`, nullable |
@@ -98,6 +103,7 @@ Active when `DJANGO_AUTH_TOKEN_MODE=rotation`, and the default when
 | `revoked_at` | DateTime | nullable |
 | `revocation_reason` | Char |  |
 | `reuse_detected_at` | DateTime | nullable |
+| `dpop_jkt` | Char |  |
 | `device_id` | Char |  |
 | `issued_ip` | GenericIPAddress | nullable |
 | `user_agent` | Text |  |

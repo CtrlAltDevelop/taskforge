@@ -39,6 +39,19 @@ Audit trail for sign-in activity.
 | `metadata` | JSON |  |
 | `created_at` | DateTime | not editable |
 
+#### `KnownDevice`
+
+A device fingerprint this account has signed in from (phase 40).
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | BigAuto | primary key |
+| `user` | ForeignKey | → `accounts.User` |
+| `fingerprint` | Char |  |
+| `first_seen_at` | DateTime |  |
+| `last_seen_at` | DateTime |  |
+| `dpop_jkt` | Char |  |
+
 #### `PhoneNumber`
 
 A number an account has proven it controls.
@@ -60,6 +73,7 @@ A number an account has proven it controls.
 | Model | Editable | Actions | Columns |
 | --- | --- | --- | --- |
 | `AuthEvent` | No — read-only | — | `created_at`, `event_type`, `method`, `user`, `ip_address` |
+| `KnownDevice` | No — read-only | — | `user`, `fingerprint`, `first_seen_at`, `last_seen_at` |
 | `PhoneNumber` | Yes | — | `number`, `user`, `is_verified`, `is_primary`, `created_at`, `verified_at` |
 <!-- /generated:admin -->
 

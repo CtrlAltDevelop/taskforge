@@ -18,10 +18,15 @@ _This app publishes no routes of its own._
 
 | Field | Type | Notes |
 | --- | --- | --- |
+| `name` | Char |  |
+| `device_label` | Char |  |
+| `device_fingerprint` | Char |  |
+| `name_edited` | Boolean |  |
 | `id` | UUID | primary key, not editable |
 | `user` | ForeignKey | → `accounts.User` |
 | `client` | ForeignKey | → `oauth_core.OAuthClient`, nullable |
 | `session_key_hash` | Char | unique, not editable |
+| `dpop_jkt` | Char |  |
 | `device_id` | Char |  |
 | `scopes` | JSON |  |
 | `audience` | Char |  |
