@@ -8,7 +8,9 @@ and ID-token validation: signature through the provider's JWKS, ``iss``, ``aud``
 import base64
 import hashlib
 import ipaddress
+import json
 import secrets
+import socket
 from dataclasses import dataclass
 from typing import Any
 from urllib.parse import urlencode, urlparse
@@ -36,6 +38,10 @@ class Discovery:
     jwks_uri: str
 
 
+MAX_RESPONSE_BYTES = 256 * 1024
+_JWKS_SECONDS = 300
+
+
 def _loopback(host: str) -> bool:
     if host == "localhost" or host.endswith(".localhost"):
         return True
@@ -45,26 +51,71 @@ def _loopback(host: str) -> bool:
         return False
 
 
+def _forbidden_address(address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    """Private, loopback, link-local (cloud metadata), reserved, multicast or unspecified."""
+    if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
+        address = address.ipv4_mapped
+    return (
+        address.is_private
+        or address.is_loopback
+        or address.is_link_local
+        or address.is_reserved
+        or address.is_multicast
+        or address.is_unspecified
+    )
+
+
 def require_safe_url(url: str, what: str) -> None:
-    """https always; http only for a provider on this machine (a local Keycloak)."""
+    """https to a public address; plain http only to localhost, and only when DEBUG is on."""
     parsed = urlparse(url)
-    if parsed.scheme == "https" and parsed.hostname:
+    host = parsed.hostname
+    if not host or parsed.username or parsed.password:
+        raise OidcError(f"The {what} must be an https address.")
+    if _loopback(host):
+        if parsed.scheme == "http" and settings.DEBUG:
+            return
+        raise OidcError(f"The {what} must be a public https address.")
+    if parsed.scheme != "https":
+        raise OidcError(f"The {what} must be an https address.")
+    try:
+        literal = ipaddress.ip_address(host)
+    except ValueError:
         return
-    if parsed.scheme == "http" and parsed.hostname and _loopback(parsed.hostname):
-        return
-    raise OidcError(f"The {what} must be an https address.")
+    if _forbidden_address(literal):
+        raise OidcError(f"The {what} must be a public address.")
+
+
+def _resolves_publicly(host: str) -> bool:
+    """False when any address the name points at is internal (blocks name-based SSRF)."""
+    try:
+        infos = socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
+    except OSError:
+        return False
+    return all(_forbidden_address(ipaddress.ip_address(info[4][0])) is False for info in infos)
 
 
 def _get_json(url: str) -> dict[str, Any]:
+    """GET a JSON object: timeout, no redirects, and a cap on how much is read."""
+    require_safe_url(url, "identity provider address")
+    host = urlparse(url).hostname or ""
+    if not _loopback(host) and not _resolves_publicly(host):
+        raise OidcError("The identity provider address is not reachable publicly.")
     try:
-        response = httpx.get(
-            url,
-            headers={"Accept": "application/json"},
-            timeout=settings.OAUTH_HTTP_TIMEOUT_SECONDS,
-            follow_redirects=False,
-        )
-        response.raise_for_status()
-        body = response.json()
+        with (
+            httpx.Client(
+                timeout=settings.OAUTH_HTTP_TIMEOUT_SECONDS, follow_redirects=False
+            ) as client,
+            client.stream("GET", url, headers={"Accept": "application/json"}) as response,
+        ):
+            response.raise_for_status()
+            chunks: list[bytes] = []
+            size = 0
+            for chunk in response.iter_bytes():
+                size += len(chunk)
+                if size > MAX_RESPONSE_BYTES:
+                    raise OidcError("The identity provider's answer is too large.")
+                chunks.append(chunk)
+        body = json.loads(b"".join(chunks))
     except (httpx.HTTPError, ValueError) as error:
         raise OidcError("The identity provider could not be reached.") from error
     if not isinstance(body, dict):
@@ -177,17 +228,36 @@ def exchange_code(
     return id_token
 
 
+def _signing_key(discovery: Discovery, id_token: str) -> Any:
+    """The JWKS key the token names, fetched safely; refetched once when the kid is new."""
+    header = jwt.get_unverified_header(id_token)
+    algorithm = header.get("alg")
+    if algorithm not in ALGORITHMS:
+        raise OidcError("The ID token is not valid.")
+    kid = header.get("kid")
+    cache_key = f"security:jwks:{hash_token(discovery.jwks_uri)}"
+    for fresh in (False, True):
+        document = None if fresh else cache.get(cache_key)
+        if document is None:
+            document = _get_json(discovery.jwks_uri)
+            cache.set(cache_key, document, _JWKS_SECONDS)
+        for entry in document.get("keys", []):
+            if isinstance(entry, dict) and (kid is None or entry.get("kid") == kid):
+                try:
+                    return jwt.PyJWK.from_dict(entry).key
+                except jwt.PyJWTError:
+                    continue
+    raise OidcError("The ID token is not valid.")
+
+
 def validate_id_token(
     discovery: Discovery, *, id_token: str, client_id: str, nonce_hash: str
 ) -> dict[str, Any]:
     """Verify signature, issuer, audience, expiry and nonce; return the claims."""
     try:
-        key = jwt.PyJWKClient(
-            discovery.jwks_uri, timeout=settings.OAUTH_HTTP_TIMEOUT_SECONDS
-        ).get_signing_key_from_jwt(id_token)
         claims = jwt.decode(
             id_token,
-            key.key,
+            _signing_key(discovery, id_token),
             algorithms=ALGORITHMS,
             audience=client_id,
             issuer=[discovery.issuer, f"{discovery.issuer}/"],

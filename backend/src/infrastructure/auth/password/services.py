@@ -226,6 +226,9 @@ class PasswordService:
         user.set_password(password)
         user.save(update_fields=["password"])
         revoked = revoke_all_for_user(user)
+        from infrastructure.security import devices  # local: security depends on auth
+
+        devices.revoke(user)  # a trusted device must not outlive the password it was trusted under
         record_event(
             request,
             AuthEventType.PASSWORD_CHANGED,
