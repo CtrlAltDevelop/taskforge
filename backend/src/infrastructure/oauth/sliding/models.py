@@ -14,6 +14,9 @@ class SlidingToken(AbstractOAuthToken):
     absolute_expires_at = models.DateTimeField()
     previous_expires_at = models.DateTimeField(null=True, blank=True)
     slide_count = models.PositiveIntegerField(default=0)
+    # Phase 39: thumbprint of the DPoP key this session is bound to ("" = bearer-only, issued
+    # before binding existed or while DJANGO_DPOP_MODE was off).
+    dpop_jkt = models.CharField(max_length=64, blank=True, default="", db_index=True)
 
     class Meta(AbstractOAuthToken.Meta):
         verbose_name = "sliding token"

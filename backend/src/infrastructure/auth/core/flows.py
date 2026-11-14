@@ -12,6 +12,7 @@ from django.apps import apps
 from django.conf import settings
 from django.http import HttpRequest
 
+from infrastructure.auth.core import dpop
 from infrastructure.auth.core.challenges import Challenge, get_challenge_store
 from infrastructure.auth.core.errors import AuthError
 from infrastructure.auth.core.identities import user_by_id
@@ -94,7 +95,10 @@ def complete_login(
         )
     # Phase 37: workspace security policy. SSO-only workspaces refuse other first factors, and a
     # single-sign-on login or a trusted device does not owe the local second factor. Later
-    # phases (DPoP binding, device info) extend this one function, not the callers.
+    # phases (device info) extend this one function, not the callers.
+    # Phase 39: the proof that binds the session to the device key is verified here, before a
+    # second factor is asked for, and remembered on the request for `issue_credentials`.
+    dpop.signin_binding(request)
     skipped = ""
     if app_installed("security"):
         from infrastructure.security import login_policy

@@ -47,6 +47,16 @@ if not PUBLIC_ORIGIN.startswith("https://"):  # noqa: F405
 if "*" in CORS_ALLOWED_ORIGINS or "*" in ALLOWED_HOSTS:  # noqa: F405
     raise ImproperlyConfigured("CORS origins and allowed hosts must be listed, never '*'")
 
+# The DPoP server nonce is on by default here and keyed by a secret of its own, never shared with
+# development or tests.
+DPOP_NONCE_SECRET = os.getenv("DJANGO_DPOP_NONCE_SECRET", "")  # noqa: F405
+if len(DPOP_NONCE_SECRET) < 32:
+    raise ImproperlyConfigured(
+        "DJANGO_DPOP_NONCE_SECRET must be set in production (32+ random characters): "
+        'python -c "import secrets; print(secrets.token_urlsafe(48))"'
+    )
+DPOP_NONCE_ENABLED = os.getenv("DJANGO_DPOP_NONCE_ENABLED", "true").lower() == "true"
+
 # Caddy terminates TLS and says so; probes and the metrics scrape reach Django over plain HTTP
 # inside the Docker network, so they are exempt from the HTTPS redirect.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

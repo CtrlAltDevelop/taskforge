@@ -26,6 +26,8 @@ TOKEN_MODE_APPS: Final = {
     "rotation": "oauth_rotation",
 }
 BEARER: Final = "bearer"
+DPOP: Final = "DPoP"  # the token_type of a credential bound to the client's key (RFC 9449)
+AUTHORIZATION_SCHEMES: Final = (BEARER, "dpop")
 
 
 @dataclass(frozen=True)
@@ -53,7 +55,7 @@ def user_agent(request: HttpRequest) -> str:
 def bearer_token(request: HttpRequest) -> str:
     header = request.META.get("HTTP_AUTHORIZATION", "")
     scheme, _, value = header.partition(" ")
-    return value.strip() if scheme.lower() == BEARER else ""
+    return value.strip() if scheme.lower() in AUTHORIZATION_SCHEMES else ""
 
 
 def token_model(mode: str, name: str) -> Any:
@@ -92,6 +94,11 @@ def credential_handle(token: str, *, token_type: str) -> str:
         return ""
 
 
+def _confirmation(jkt: str) -> dict[str, Any] | None:
+    """The ``cnf`` claim (RFC 7800) that binds an access token to a DPoP key."""
+    return {"cnf": {"jkt": jkt}} if jkt else None
+
+
 def sign_single(
     user: Any,
     *,
@@ -101,6 +108,7 @@ def sign_single(
     handle: str,
     signature_lifetime: timedelta,
     expires_in: int,
+    bind_jkt: str = "",
 ) -> IssuedCredentials:
     """Sign a mode that has one token doing both jobs.
 
@@ -116,9 +124,10 @@ def sign_single(
         mode=mode,
         session_id=session_id,
         methods=methods,
+        extra_claims=_confirmation(bind_jkt),
     )
     return IssuedCredentials(
-        token_type=BEARER,
+        token_type=DPOP if bind_jkt else BEARER,
         access_token=access_token,
         expires_in=expires_in,
         session_id=session_id,
@@ -135,8 +144,12 @@ def sign_pair(
     refresh_handle: str,
     access_lifetime: timedelta,
     refresh_lifetime: timedelta,
+    bind_jkt: str = "",
 ) -> IssuedCredentials:
-    """Sign a stored access/refresh handle pair as a matching pair of tokens."""
+    """Sign a stored access/refresh handle pair as a matching pair of tokens.
+
+    bind_jkt (phase 39) puts the session's DPoP key in the access token's ``cnf.jkt`` claim.
+    """
     subject = str(user.pk)
     access_token, _ = jwt_tokens.mint(
         subject=subject,
@@ -146,6 +159,7 @@ def sign_pair(
         mode=mode,
         session_id=session_id,
         methods=methods,
+        extra_claims=_confirmation(bind_jkt),
     )
     refresh_token, _ = jwt_tokens.mint(
         subject=subject,
@@ -157,7 +171,7 @@ def sign_pair(
         methods=methods,
     )
     return IssuedCredentials(
-        token_type=BEARER,
+        token_type=DPOP if bind_jkt else BEARER,
         access_token=access_token,
         refresh_token=refresh_token,
         expires_in=int(access_lifetime.total_seconds()),

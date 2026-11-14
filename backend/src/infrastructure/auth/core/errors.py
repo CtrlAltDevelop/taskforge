@@ -18,6 +18,7 @@ from infrastructure.auth.core.challenges import (
     ChallengeExpired,
     InvalidCode,
 )
+from infrastructure.auth.core.dpop import DpopError
 from infrastructure.auth.core.identities import IdentityError
 from infrastructure.auth.core.throttling import RateLimited
 from infrastructure.common.errors import ApiError
@@ -54,6 +55,23 @@ def register_auth_exception_handlers(api: NinjaAPI) -> None:
             ),
             status=status,
         )
+
+    @api.exception_handler(DpopError)
+    def _dpop_error(request: HttpRequest, error: DpopError) -> HttpResponse:
+        """RFC 9449: a 401 whose WWW-Authenticate names the error, the nonce and the clock."""
+        response = api.create_response(
+            request,
+            envelope(
+                status=401,
+                data=error.data,
+                errors=[str(error)],
+                title=ResponseTitle.TOKEN_INVALID,
+                description=str(error),
+            ),
+            status=401,
+        )
+        error.apply_headers(response)
+        return response
 
     @api.exception_handler(RateLimited)
     def _rate_limited(request: HttpRequest, error: RateLimited) -> HttpResponse:

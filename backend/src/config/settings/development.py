@@ -10,6 +10,10 @@ REFRESH_COOKIE_SECURE = False
 # DJANGO_FIELD_ENCRYPTION_KEY). Never reuse it: anything encrypted with it is readable by anyone.
 FIELD_ENCRYPTION_KEY = FIELD_ENCRYPTION_KEY or "WKFDTWKLw3-iB-HY-UhDvkeFS-kiuclhvZeTd7VbFQQ="  # noqa: F405
 
+# A fixed, non-secret key for the DPoP server nonce, development only (production refuses to start
+# without DJANGO_DPOP_NONCE_SECRET and tests use their own value).
+DPOP_NONCE_SECRET = DPOP_NONCE_SECRET or "dev-only-dpop-nonce-secret-not-for-production"  # noqa: F405
+
 # No mail server in development: reset codes and other emails print in this process's
 # output instead of failing with a connection error.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

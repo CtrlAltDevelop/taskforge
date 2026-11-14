@@ -1096,6 +1096,8 @@ GRPC_FRAMEWORK = {
     # something sets it, and django-socio-grpc reads it on every response. The
     # asyncio server starts it empty, which is what the library expects.
     "GRPC_ASYNC": True,
+    # Phase 39: records the called method's path for the DPoP proof check.
+    "SERVER_INTERCEPTORS": ["infrastructure.auth.core.dpop_grpc.method_path_interceptor"],
 }
 
 # Whether the admin loads the live script at all. Both feeds are optional apps
@@ -1159,6 +1161,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # before CommonMiddleware
     "infrastructure.auth.core.refresh_cookie.RefreshCookieMiddleware",
+    "infrastructure.auth.core.dpop.DpopNonceMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -1182,6 +1185,28 @@ CORS_ALLOWED_ORIGINS = [
     if origin.strip()
 ] or ([PUBLIC_ORIGIN] if PUBLIC_ORIGIN else [])
 CSRF_TRUSTED_ORIGINS = [PUBLIC_ORIGIN] if PUBLIC_ORIGIN else []
+
+# Phase 39 -- DPoP token binding (RFC 9449; see infrastructure/auth/core/dpop.py).
+# `required` in every environment by default: a bearer token without a proof from the session's key
+# is refused on REST, gRPC and WebSocket. `optional` accepts a plain bearer (logged once per
+# session) while clients catch up; `off` ignores proofs entirely and binds nothing.
+DPOP_MODE = os.getenv("DJANGO_DPOP_MODE", "required").strip().lower()
+if DPOP_MODE not in {"off", "optional", "required"}:
+    raise ImproperlyConfigured("DJANGO_DPOP_MODE must be one of: off, optional, required")
+# The origin proofs are bound to (`htu`): never taken from the Host header, so a proxy cannot
+# cause a mismatch. A client signs the same origin (`DPOP_ORIGIN` in the app's config).
+DPOP_PUBLIC_ORIGIN = PUBLIC_ORIGIN or "http://localhost:8010"
+DPOP_IAT_WINDOW_SECONDS = int(os.getenv("DJANGO_DPOP_IAT_WINDOW_SECONDS", "60"))
+# Server nonce: off here (and in tests and development); production turns it on by default.
+DPOP_NONCE_ENABLED = os.getenv("DJANGO_DPOP_NONCE_ENABLED", "false").lower() == "true"
+DPOP_NONCE_ROTATION_SECONDS = int(os.getenv("DJANGO_DPOP_NONCE_ROTATION_SECONDS", "300"))
+# Keys the rotating nonces. A different value per environment: development.py and test.py set
+# their own fixed ones, production refuses to start without DJANGO_DPOP_NONCE_SECRET.
+DPOP_NONCE_SECRET = os.getenv("DJANGO_DPOP_NONCE_SECRET", "")
+# Proofs signed by the wrong key for a token, per account, before further attempts get a 429.
+DPOP_MAX_KEY_FAILURES = int(os.getenv("DJANGO_DPOP_MAX_KEY_FAILURES", "10"))
+DPOP_KEY_FAILURE_WINDOW_SECONDS = int(os.getenv("DJANGO_DPOP_KEY_FAILURE_WINDOW_SECONDS", "900"))
+
 # Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
 COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
 
@@ -1191,7 +1216,10 @@ CORS_ALLOW_HEADERS = (
     "x-refresh-transport",
     "x-client-id",
     "x-trusted-device",
+    "dpop",
 )
+# A browser script may only read the headers named here: the client needs the server nonce.
+CORS_EXPOSE_HEADERS = ["DPoP-Nonce", "Date", "WWW-Authenticate"]
 # Web clients send the refresh cookie cross-origin; origins stay an explicit allowlist.
 CORS_ALLOW_CREDENTIALS = True
 

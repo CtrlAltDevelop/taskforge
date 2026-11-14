@@ -20,6 +20,7 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.utils import timezone
 
+from infrastructure.auth.core import dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -96,6 +97,7 @@ def _issue_pair(
         refresh_handle=refresh_handle,
         access_lifetime=access_lifetime,
         refresh_lifetime=family.expires_at - now,
+        bind_jkt=family.dpop_jkt,
     )
 
 
@@ -166,6 +168,10 @@ def rotate(request: HttpRequest, refresh_token: str, request_id: str = "") -> Is
                     status=401,
                     title=ResponseTitle.TOKEN_INVALID,
                 )
+            # Phase 39: a bound session refreshes only with a proof from its own key. Checked
+            # before anything is spent or revoked, so a thief holding the token alone can neither
+            # use it nor burn it (a spent-token replay would otherwise end the family).
+            dpop.verify_refresh(request, presented.family.dpop_jkt)
             if presented.used_at is not None:
                 grace = timedelta(seconds=settings.AUTH_REFRESH_REUSE_GRACE_SECONDS)
                 if presented.family.revoked_at is not None:
@@ -285,6 +291,7 @@ class RotationTokenService(TokenModeService):
                     ip_address=family.issued_ip or "",
                     user_agent=family.user_agent,
                     auth_method=str(family.metadata.get("auth_method", "")),
+                    dpop_jkt=family.dpop_jkt,
                 )
                 for family in live_families(user)
             ],

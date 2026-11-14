@@ -41,6 +41,10 @@ class Credentials:
     """The subprotocol to echo on accept. A browser that offered one and is
     answered with none closes the connection itself, so this is not cosmetic."""
 
+    proof_verified: bool = False
+    """The token was presented with a DPoP proof this connection has already checked (phase 39),
+    so periodic re-checks verify only that the session is still alive: a proof is single-use."""
+
 
 def _header(scope: dict[str, Any], name: str) -> str:
     """Read one handshake header. ASGI gives them as lowercased byte pairs."""
@@ -88,7 +92,34 @@ def credentials_from_scope(scope: dict[str, Any]) -> Credentials:
     )
 
 
-def user_from_token(token: str) -> Any | None:
+def resolve_token_user(
+    token: str, *, proof: str = "", url: str = "", verified: bool = False
+) -> Any | None:
+    """Resolve the account a token belongs to; raises ``DpopError`` for a refused proof.
+
+    A WebSocket cannot set headers, so the proof of a bound session travels in the
+    ``authenticate`` frame (phase 39) with ``htm=GET`` and ``htu`` the socket's own URL.
+    ``verified`` is for re-checks of a connection that already proved its key.
+    """
+    if not token:
+        return None
+    try:
+        from infrastructure.auth.core import dpop
+        from infrastructure.auth.core.sessions import resolve_request_user
+    except ImportError:  # pragma: no cover - only in a project without the auth apps
+        return None
+    meta = {"HTTP_AUTHORIZATION": f"{'DPoP' if (proof or verified) else 'Bearer'} {token}"}
+    if proof:
+        meta.update({dpop.HEADER_META: proof, dpop.METHOD_META: "GET", dpop.URL_META: url})
+    if verified:
+        meta[dpop.VERIFIED_META] = "1"
+    request = SimpleNamespace(META=meta)
+    return resolve_request_user(cast(HttpRequest, request))
+
+
+def user_from_token(
+    token: str, *, proof: str = "", url: str = "", verified: bool = False
+) -> Any | None:
     """Resolve the account a bearer token belongs to, or ``None``.
 
     The project's own resolver is reused rather than re-implemented, so a socket
@@ -96,14 +127,12 @@ def user_from_token(token: str) -> Any | None:
     minted under a token mode the project no longer runs. It reads the token off
     a request, so it is given the smallest thing that looks like one.
     """
-    if not token:
-        return None
+    from infrastructure.auth.core.dpop import DpopError
+
     try:
-        from infrastructure.auth.core.sessions import resolve_request_user
-    except ImportError:  # pragma: no cover - only in a project without the auth apps
+        return resolve_token_user(token, proof=proof, url=url, verified=verified)
+    except DpopError:
         return None
-    request = SimpleNamespace(META={"HTTP_AUTHORIZATION": f"Bearer {token}"})
-    return resolve_request_user(cast(HttpRequest, request))
 
 
 def user_from_session(session_key: str) -> Any | None:
@@ -122,7 +151,9 @@ def user_from_session(session_key: str) -> Any | None:
 
 def user_from_credentials(credentials: Credentials) -> Any | None:
     """A token if there is one, the session cookie if there is not."""
-    return user_from_token(credentials.token) or user_from_session(credentials.session_key)
+    return user_from_token(
+        credentials.token, verified=credentials.proof_verified
+    ) or user_from_session(credentials.session_key)
 
 
 def user_summary(user: Any) -> dict[str, Any]:

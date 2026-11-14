@@ -22,6 +22,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.http import HttpRequest
 
+from infrastructure.auth.core import dpop
 from infrastructure.auth.core.challenges import get_challenge_store
 from infrastructure.auth.core.errors import AuthError
 from infrastructure.auth.core.flows import (
@@ -101,6 +102,8 @@ class PasswordService:
     def signup(
         self, request: HttpRequest, *, identifier: str, password: str, email: str = ""
     ) -> LoginResult:
+        # Phase 39: a sign-up that cannot be bound to a key must not leave an account behind.
+        dpop.signin_binding(request)
         user_model = get_user_model()
         username_field = user_model.USERNAME_FIELD
         identifier = identifier.strip()

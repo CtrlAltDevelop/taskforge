@@ -35,6 +35,7 @@ def session_list_out(sessions: SessionList) -> SessionListOut:
                 user_agent=session.user_agent,
                 auth_method=session.auth_method,
                 current=session.current,
+                dpop_bound=session.dpop_bound,
             )
             for session in sessions.sessions
         ],

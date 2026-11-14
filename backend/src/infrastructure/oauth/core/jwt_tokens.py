@@ -54,6 +54,8 @@ class TokenClaims:
     session_id: str
     methods: list[str]
     expires_at: datetime
+    cnf_jkt: str = ""
+    """The thumbprint of the DPoP key this token is bound to (``cnf.jkt``), or empty."""
 
 
 def _algorithm() -> str:
@@ -167,6 +169,8 @@ def decode(token: str, *, token_type: str) -> TokenClaims:
     if str(claims.get("typ", "")) != token_type:
         raise JwtError(f"Expected a {token_type} token.")
     methods = claims.get("amr") or []
+    confirmation = claims.get("cnf")
+    cnf_jkt = str(confirmation.get("jkt", "")) if isinstance(confirmation, dict) else ""
     return TokenClaims(
         handle=str(claims["jti"]),
         subject=str(claims["sub"]),
@@ -175,4 +179,5 @@ def decode(token: str, *, token_type: str) -> TokenClaims:
         session_id=str(claims.get("sid", "")),
         methods=[str(item) for item in methods] if isinstance(methods, list) else [],
         expires_at=datetime.fromtimestamp(int(claims["exp"]), tz=UTC),
+        cnf_jkt=cnf_jkt,
     )

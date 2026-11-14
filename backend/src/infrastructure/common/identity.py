@@ -69,7 +69,7 @@ def caller(request: HttpRequest) -> Any | None:
 CLIENT_ID_META_KEY = "x-client-id"  # a client's own id, so it can recognise its own writes
 
 
-def _grpc_caller(context: Any) -> Any | None:
+def _grpc_caller(context: Any, method: str = "") -> Any | None:
     request = getattr(context, "http_request", None)
     if request is None:
         return None
@@ -77,6 +77,13 @@ def _grpc_caller(context: Any) -> Any | None:
         header = request.META.get(AUTHORIZATION_METADATA_KEY)
         if header:
             request.META[AUTHORIZATION_META_KEY] = header
+    if method:
+        # Phase 39: what a DPoP proof on a gRPC call (metadata `dpop`) is about: always a POST to
+        # the public origin plus `/<package.Service>/<Method>`.
+        from infrastructure.auth.core import dpop
+
+        request.META[dpop.METHOD_META] = "POST"
+        request.META[dpop.URL_META] = f"{dpop.public_origin()}{method}"
     user = caller(request)
     if user is not None:
         from infrastructure.developer import scopes
@@ -104,4 +111,7 @@ async def grpc_caller(context: Any) -> Any | None:
     Awaitable because the gRPC server is: checking a credential reads a row, and
     the ORM refuses to be called from the event loop.
     """
-    return await sync_to_async(_grpc_caller)(context)
+    from infrastructure.auth.core.dpop_grpc import CURRENT_METHOD
+
+    # Read here, in the task that serves the call: the sync thread below starts without it.
+    return await sync_to_async(_grpc_caller)(context, CURRENT_METHOD.get())

@@ -22,6 +22,11 @@ PUBLIC_API_PREFIXES: Final = (
     "/api/v1/auth/sso/",  # start (browser redirect), callback, ticket exchange
     "/api/v1/auth/2fa/challenge",  # a second factor for a sign-in already in progress
     "/api/v1/auth/2fa/verify",
+    # Phase 39: public documentation, and inbound webhooks (they authenticate by signature).
+    "/api/docs",
+    "/api/v1/docs",
+    "/api/v1/openapi.json",
+    "/api/v1/wallet/hooks",
 )
 
 # Routes of the Flutter web build that render without login chrome or an auth header.

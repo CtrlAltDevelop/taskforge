@@ -24,11 +24,13 @@ from django.utils import timezone
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
+from infrastructure.auth.core import dpop
 from infrastructure.common.app_labels import app_installed
 from infrastructure.common.identity import session_csrf_failure
 from infrastructure.developer import scopes, tokens
 from infrastructure.oauth.core import jwt_tokens
 from infrastructure.oauth.core.credentials import (
+    AUTHORIZATION_SCHEMES,
     BEARER,
     TOKEN_MODE_APPS,
     IssuedCredentials,
@@ -61,7 +63,9 @@ __all__ = [
 ]
 
 
-def _issue_sliding(request: HttpRequest, user: Any, method: str) -> IssuedCredentials:
+def _issue_sliding(
+    request: HttpRequest, user: Any, method: str, jkt: str = ""
+) -> IssuedCredentials:
     """Issue one sliding credential, whose JWT outlives each idle window.
 
     The signature is valid for the absolute lifetime, not the idle one: sliding
@@ -85,6 +89,7 @@ def _issue_sliding(request: HttpRequest, user: Any, method: str) -> IssuedCreden
         issued_ip=client_ip(request),
         user_agent=user_agent(request),
         metadata={"auth_method": method},
+        dpop_jkt=jkt,
     )
     event_model.objects.create(
         token=record,
@@ -100,10 +105,13 @@ def _issue_sliding(request: HttpRequest, user: Any, method: str) -> IssuedCreden
         handle=handle,
         signature_lifetime=absolute_expiry - now,
         expires_in=int((expiry - now).total_seconds()),
+        bind_jkt=jkt,
     )
 
 
-def _issue_session(request: HttpRequest, user: Any, method: str) -> IssuedCredentials:
+def _issue_session(
+    request: HttpRequest, user: Any, method: str, jkt: str = ""
+) -> IssuedCredentials:
     session_model = token_model("session", "OAuthSession")
     access_model = token_model("session", "SessionAccessToken")
     now = timezone.now()
@@ -118,6 +126,7 @@ def _issue_session(request: HttpRequest, user: Any, method: str) -> IssuedCreden
         ip_address=client_ip(request),
         user_agent=user_agent(request),
         metadata={"auth_method": method},
+        dpop_jkt=jkt,
     )
     access_model.objects.create(
         user=user,
@@ -137,10 +146,13 @@ def _issue_session(request: HttpRequest, user: Any, method: str) -> IssuedCreden
         refresh_handle=session_handle,
         access_lifetime=access_lifetime,
         refresh_lifetime=session_lifetime,
+        bind_jkt=jkt,
     )
 
 
-def _issue_rotation(request: HttpRequest, user: Any, method: str) -> IssuedCredentials:
+def _issue_rotation(
+    request: HttpRequest, user: Any, method: str, jkt: str = ""
+) -> IssuedCredentials:
     family_model = token_model("rotation", "TokenFamily")
     refresh_model = token_model("rotation", "RotatingRefreshToken")
     access_model = token_model("rotation", "RotatingAccessToken")
@@ -155,6 +167,7 @@ def _issue_rotation(request: HttpRequest, user: Any, method: str) -> IssuedCrede
         issued_ip=client_ip(request),
         user_agent=user_agent(request),
         metadata={"auth_method": method},
+        dpop_jkt=jkt,
     )
     refresh = refresh_model.objects.create(
         user=user,
@@ -185,11 +198,17 @@ def _issue_rotation(request: HttpRequest, user: Any, method: str) -> IssuedCrede
         refresh_handle=refresh_handle,
         access_lifetime=access_lifetime,
         refresh_lifetime=refresh_lifetime,
+        bind_jkt=jkt,
     )
 
 
 def issue_credentials(request: HttpRequest, user: Any, *, method: str) -> IssuedCredentials:
-    """Mint the credential for a user who has cleared every required factor."""
+    """Mint the credential for a user who has cleared every required factor.
+
+    Phase 39: the session is bound to the key that signed the request's DPoP proof (see
+    ``dpop.signin_binding``); in required mode a sign-in without a proof is refused here,
+    which is why every path that issues a token (password, codes, SSO, MFA, exchange) is covered.
+    """
     mode = settings.AUTH_TOKEN_MODE
     if mode == "none":
         django_login(request, user, backend=MODEL_BACKEND)
@@ -199,8 +218,9 @@ def issue_credentials(request: HttpRequest, user: Any, *, method: str) -> Issued
         "session": _issue_session,
         "rotation": _issue_rotation,
     }
+    jkt = dpop.signin_binding(request)
     with transaction.atomic():
-        return issuers[mode](request, user, method)
+        return issuers[mode](request, user, method, jkt)
 
 
 def _revoke_sliding(digest: str) -> bool:
@@ -380,6 +400,13 @@ def resolve_request_user(request: HttpRequest) -> Any | None:
         return None
     if claims.mode != mode:
         return None
+    dpop.authorize(
+        request,
+        presented,
+        bound_jkt=claims.cnf_jkt,
+        session_id=claims.session_id,
+        user_id=claims.subject,
+    )
     resolvers = {
         "sliding": _user_from_sliding,
         "session": _user_from_session,
@@ -417,7 +444,13 @@ class JwtBearer(HttpBearer):
             if session_csrf_failure(request) is not None:
                 raise HttpError(403, "CSRF check failed.")
             return self._adopt(request, resolve_request_user(request))
-        return super().__call__(request)
+        # Phase 39: a key-bound token arrives as `Authorization: DPoP <token>` with a `DPoP`
+        # header; ninja's own parser only knows the `Bearer` scheme.
+        header = request.headers.get(self.header, "")
+        scheme, _, token = header.partition(" ")
+        if scheme.lower() not in AUTHORIZATION_SCHEMES or not token.strip():
+            return None
+        return self.authenticate(request, token.strip())
 
     def authenticate(self, request: HttpRequest, token: str) -> Any | None:
         user = resolve_request_user(request)

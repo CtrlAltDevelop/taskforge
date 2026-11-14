@@ -27,7 +27,8 @@ from typing import Any, Final
 from asgiref.sync import sync_to_async
 
 from apps.notifications.broadcast import Subscription, get_broker
-from apps.notifications.identity import user_from_token, user_summary
+from apps.notifications.identity import resolve_token_user, user_from_token, user_summary
+from infrastructure.auth.core import dpop
 from infrastructure.sync import presence, rooms, trimmer
 from infrastructure.sync.actor import origin_tag
 from infrastructure.sync.publish import channel_of, project_room
@@ -54,6 +55,7 @@ class SyncSocket:
         self._conn = uuid.uuid4().hex  # this connection, so two tabs of one person are two
         self._client_id = ""
         self._token = ""
+        self._path = str(scope.get("path", ""))
         self._joined_channels: set[str] = set()  # a broker subscription cannot leave a channel
         self._rooms: dict[str, float] = {}  # room -> when its access was last checked
         self._seen: deque[int] = deque(maxlen=SEEN_CURSORS)
@@ -109,7 +111,12 @@ class SyncSocket:
             return False
         frame = self._parse(message)
         token = frame.get("token") if frame and frame.get("type") == "authenticate" else None
-        user = await sync_to_async(user_from_token)(token) if isinstance(token, str) else None
+        try:
+            user = await self._account_for(frame, token)
+        except dpop.DpopError as error:
+            await self._refuse_proof(error)
+            await self._close(UNAUTHENTICATED)
+            return False
         if user is None or not user.is_active:
             await self._error("unauthenticated")
             await self._close(UNAUTHENTICATED)
@@ -118,6 +125,40 @@ class SyncSocket:
         self._client_id = client_id[:64] if isinstance(client_id, str) else ""
         self._user, self._token = user, str(token)
         return True
+
+    async def _account_for(self, frame: dict[str, Any] | None, token: object) -> Any | None:
+        """The account behind a token and, for a bound session, the DPoP proof in the same frame.
+
+        A socket cannot set headers, so the proof rides in the frame (``htm=GET``, ``htu`` the
+        socket's own URL); it is never taken from the URL.
+        """
+        if not isinstance(token, str):
+            return None
+        proof = frame.get("dpop") if frame else None
+        return await sync_to_async(resolve_token_user)(
+            token,
+            proof=proof if isinstance(proof, str) else "",
+            url=dpop.socket_url(self._path),
+        )
+
+    async def _refuse_proof(self, error: dpop.DpopError) -> None:
+        """RFC 9449 over a socket: the error name, why, and the nonce or clock to retry with."""
+        extra = {key: value for key, value in (error.data or {}).items() if key != "error"}
+        await self._error(error.error, **extra)
+
+    async def _reauthenticate(self, frame: dict[str, Any]) -> None:
+        """A refreshed access token: a new ``authenticate`` with a new proof, same account."""
+        try:
+            user = await self._account_for(frame, frame.get("token"))
+        except dpop.DpopError as error:
+            await self._refuse_proof(error)
+            return
+        if user is None or not user.is_active or user.pk != self._user.pk:
+            await self._error("unauthenticated")
+            await self._close(UNAUTHENTICATED)
+            return
+        self._token = str(frame["token"])
+        await self._json({"type": "authenticated"})
 
     def _parse(self, message: dict[str, Any]) -> dict[str, Any] | None:
         text = message.get("text")
@@ -165,7 +206,8 @@ class SyncSocket:
         if now - self._revalidated < REVALIDATE_SECONDS:
             return True
         self._revalidated = now
-        user = await sync_to_async(user_from_token)(self._token)
+        # The proof was checked once at `authenticate` and is single-use: re-check the session only.
+        user = await sync_to_async(user_from_token)(self._token, verified=True)
         if user is None or user.pk != self._user.pk or not user.is_active:
             await self._error("unauthenticated")
             await self._close(UNAUTHENTICATED)
@@ -270,6 +312,8 @@ class SyncSocket:
             await self._unsubscribe(frame)
         elif kind == "presence":
             await self._presence(frame)
+        elif kind == "authenticate":
+            await self._reauthenticate(frame)
         else:
             await self._error("unknown_command")
 

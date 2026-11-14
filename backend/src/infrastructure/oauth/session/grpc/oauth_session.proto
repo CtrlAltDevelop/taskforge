@@ -44,6 +44,7 @@ message Session {
     string user_agent = 6;
     string auth_method = 7;
     bool current = 8;
+    bool dpop_bound = 9;
 }
 
 message SessionList {

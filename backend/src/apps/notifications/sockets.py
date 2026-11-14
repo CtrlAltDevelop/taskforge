@@ -57,8 +57,8 @@ from apps.notifications.events import payload
 from apps.notifications.identity import (
     Credentials,
     credentials_from_scope,
+    resolve_token_user,
     user_from_credentials,
-    user_from_token,
     user_summary,
 )
 from apps.notifications.models import Audience, Notification, unread_count
@@ -68,6 +68,7 @@ from apps.notifications.services import (
     notification_service,
     window,
 )
+from infrastructure.auth.core import dpop
 from infrastructure.common.errors import ApiError
 
 AUTHENTICATION_REQUIRED = "AUTHENTICATION_REQUIRED"
@@ -397,7 +398,7 @@ class NotificationSocket:
             )
         return self._user
 
-    async def _account_for(self, token: str) -> Any:
+    async def _account_for(self, token: str, proof: str = "") -> Any:
         """The account a token names, or a refusal the client can be told about.
 
         Shared by the ``authenticate`` command and by a token riding on any other
@@ -408,7 +409,14 @@ class NotificationSocket:
         first account's channel and there is no honest way to serve two people
         down one socket.
         """
-        user = await sync_to_async(user_from_token)(token)
+        try:
+            user = await sync_to_async(resolve_token_user)(
+                token,
+                proof=proof,
+                url=dpop.socket_url(str(self._scope.get("path", ""))),
+            )
+        except dpop.DpopError as error:  # phase 39: a bound session needs its proof
+            raise SocketError(TOKEN_INVALID, f"{error.error}: {error}") from error
         if user is None:
             raise SocketError(TOKEN_INVALID, "That token does not identify anybody.")
         if self._user is not None and self._user.pk != user.pk:
@@ -425,7 +433,7 @@ class NotificationSocket:
 
     async def _welcome(self, user: Any, token: str) -> None:
         """Adopt an account, say so, and hand over what it missed while away."""
-        await self._adopt(user, Credentials(token=token))
+        await self._adopt(user, Credentials(token=token, proof_verified=True))
         await self._send_json(
             {
                 "type": "authenticated",
@@ -453,7 +461,7 @@ class NotificationSocket:
         token = str(frame.get("token") or "").strip()
         if not token:
             return
-        user = await self._account_for(token)
+        user = await self._account_for(token, str(frame.get("dpop") or ""))
         if self._user is None:
             await self._welcome(user, token)
 
@@ -465,7 +473,7 @@ class NotificationSocket:
         reconnect nor be left waiting for a reply that never comes.
         """
         token = str(frame.get("token", ""))
-        await self._welcome(await self._account_for(token), token)
+        await self._welcome(await self._account_for(token, str(frame.get("dpop") or "")), token)
 
     async def _whoami(self, frame: dict[str, Any]) -> None:
         """Who this connection currently belongs to, if anybody.

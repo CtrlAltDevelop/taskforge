@@ -51,6 +51,7 @@ class SessionOut(Schema):
     user_agent: str = ""
     auth_method: str = ""
     current: bool = False
+    dpop_bound: bool = False
 
 
 class SessionListOut(Schema):

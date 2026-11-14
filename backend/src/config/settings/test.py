@@ -62,6 +62,12 @@ for key, value in {
 }.items():
     os.environ.setdefault(key, value)
 
+# Existing suites authenticate with plain bearer tokens; the DPoP tests switch the mode on with
+# override_settings. A distinct fixed nonce secret, and the nonce off, as everywhere but production.
+os.environ.setdefault("DJANGO_DPOP_MODE", "off")
+os.environ.setdefault("DJANGO_DPOP_NONCE_ENABLED", "false")
+os.environ.setdefault("DJANGO_DPOP_NONCE_SECRET", "test-only-dpop-nonce-secret")
+
 from config.settings.base import *  # noqa: E402,F403
 
 SECRET_KEY = "test-only-secret-key"

@@ -15,6 +15,7 @@ from typing import Any
 from django.http import HttpRequest
 from django.utils import timezone
 
+from infrastructure.auth.core import dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -48,6 +49,7 @@ def slide(request: HttpRequest, presented: str = "") -> IssuedCredentials:
     )
     if record is None:
         raise ApiError("That token is not valid.", status=401, title=ResponseTitle.TOKEN_INVALID)
+    dpop.verify_refresh(request, record.dpop_jkt)  # phase 39: only from the bound key
     previous = record.expires_at
     if not record.slide():
         raise ApiError(
@@ -67,6 +69,7 @@ def slide(request: HttpRequest, presented: str = "") -> IssuedCredentials:
         handle=claims.handle,
         signature_lifetime=record.absolute_expires_at - timezone.now(),
         expires_in=int((record.expires_at - timezone.now()).total_seconds()),
+        bind_jkt=record.dpop_jkt,
     )
 
 
@@ -121,6 +124,7 @@ class SlidingTokenService(TokenModeService):
                     ip_address=record.issued_ip or "",
                     user_agent=record.user_agent,
                     auth_method=str(record.metadata.get("auth_method", "")),
+                    dpop_jkt=record.dpop_jkt,
                 )
                 for record in live_tokens(user)
             ],

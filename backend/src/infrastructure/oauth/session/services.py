@@ -15,6 +15,7 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.utils import timezone
 
+from infrastructure.auth.core import dpop
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
 from infrastructure.oauth.core import jwt_tokens
@@ -59,6 +60,7 @@ def refresh_access(request: HttpRequest, session_token: str) -> IssuedCredential
                 title=ResponseTitle.SESSION_ENDED,
             )
 
+        dpop.verify_refresh(request, session.dpop_jkt)  # phase 39: only from the bound key
         now = timezone.now()
         access_lifetime = timedelta(seconds=settings.AUTH_ACCESS_TOKEN_TTL_SECONDS)
         access_handle = jwt_tokens.new_handle()
@@ -84,6 +86,7 @@ def refresh_access(request: HttpRequest, session_token: str) -> IssuedCredential
             refresh_handle=handle,
             access_lifetime=access_lifetime,
             refresh_lifetime=session.expires_at - now,
+            bind_jkt=session.dpop_jkt,
         )
 
 
@@ -144,6 +147,7 @@ class OAuthSessionService(TokenModeService):
                     ip_address=session.ip_address or "",
                     user_agent=session.user_agent,
                     auth_method=str(session.metadata.get("auth_method", "")),
+                    dpop_jkt=session.dpop_jkt,
                 )
                 for session in live_sessions(user)
             ],

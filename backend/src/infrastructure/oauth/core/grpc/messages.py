@@ -35,6 +35,7 @@ class Session(serializers.Serializer[dict[str, object]]):
     user_agent = serializers.CharField()
     auth_method = serializers.CharField()
     current = serializers.BooleanField()
+    dpop_bound = serializers.BooleanField()
 
 
 SESSION_LIST_RESPONSE = [
@@ -68,6 +69,7 @@ def session_list_message(sessions: SessionList, pb2: Any) -> Any:
                 user_agent=session.user_agent,
                 auth_method=session.auth_method,
                 current=session.current,
+                dpop_bound=session.dpop_bound,
             )
             for session in sessions.sessions
         ],

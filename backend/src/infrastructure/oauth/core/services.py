@@ -39,6 +39,12 @@ class SessionView:
     user_agent: str
     auth_method: str
     current: bool = False
+    dpop_jkt: str = ""
+    """The thumbprint of the key this session is bound to; empty for a bearer-only session."""
+
+    @property
+    def dpop_bound(self) -> bool:
+        return bool(self.dpop_jkt)
 
 
 @dataclass(frozen=True, slots=True)
