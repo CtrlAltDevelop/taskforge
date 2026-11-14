@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
+import 'package:taskforge/core/auth/dpop/dpop_manager.dart';
 import 'package:taskforge/core/config.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/sync/catch_up_client.dart';
@@ -35,6 +36,8 @@ final syncClientProvider = Provider<SyncClient?>((ref) {
     url: Uri.parse(AppConfig.syncUrl),
     token: ref.watch(authSessionProvider).accessToken,
     refreshToken: ref.watch(authSessionProvider).forceRefresh,
+    socketProof: DpopManager.shared.socketProof,
+    onProofRefused: DpopManager.shared.learnFromFrame,
     clientId: appClientId,
     head: () => catchUps.head(workspace),
     catchUp: (cursor) => catchUps.since(workspace, cursor),

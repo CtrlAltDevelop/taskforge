@@ -38,6 +38,21 @@ class SignInScreen extends ConsumerWidget {
       },
       footer: Column(
         children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: session.keyChanged,
+            builder: (context, changed, _) => changed
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      key: const Key('key-changed'),
+                      context.l10n.dpopKeyChanged,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
           OutlinedButton.icon(
             key: const Key('go-sso'),
             onPressed: () => showSsoDialog(context, ref),

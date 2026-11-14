@@ -362,6 +362,7 @@ class Session extends $pb.GeneratedMessage {
     $core.String? userAgent,
     $core.String? authMethod,
     $core.bool? current,
+    $core.bool? dpopBound,
   }) {
     final result = Session._();
     if (sessionId != null) result.sessionId = sessionId;
@@ -372,6 +373,7 @@ class Session extends $pb.GeneratedMessage {
     if (userAgent != null) result.userAgent = userAgent;
     if (authMethod != null) result.authMethod = authMethod;
     if (current != null) result.current = current;
+    if (dpopBound != null) result.dpopBound = dpopBound;
     return result;
   }
 
@@ -397,6 +399,7 @@ class Session extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'userAgent')
     ..aOS(7, _omitFieldNames ? '' : 'authMethod')
     ..aOB(8, _omitFieldNames ? '' : 'current')
+    ..aOB(9, _omitFieldNames ? '' : 'dpopBound')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -490,6 +493,15 @@ class Session extends $pb.GeneratedMessage {
   $core.bool hasCurrent() => $_has(7);
   @$pb.TagNumber(8)
   void clearCurrent() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get dpopBound => $_getBF(8);
+  @$pb.TagNumber(9)
+  set dpopBound($core.bool value) => $_setBool(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasDpopBound() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearDpopBound() => $_clearField(9);
 }
 
 class SessionList extends $pb.GeneratedMessage {

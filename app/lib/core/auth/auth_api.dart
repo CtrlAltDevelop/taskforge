@@ -14,11 +14,19 @@ class AuthApiException implements Exception {
     required this.status,
     required this.title,
     required this.message,
+    this.code = '',
   });
 
   final int status;
   final String title;
   final String message;
+
+  /// The RFC 9449 error the server named (`invalid_token`, `invalid_dpop_proof`,
+  /// `use_dpop_nonce`) when a proof or key was the problem, otherwise empty.
+  final String code;
+
+  /// The session's key is gone or is not this device's: the user must sign in again here.
+  bool get keyChanged => code == 'invalid_token';
 
   @override
   String toString() => message;
@@ -243,8 +251,10 @@ class HttpAuthApi implements AuthApi {
     final errors =
         (body['errors'] as List?)?.map((e) => e.toString()).toList() ??
         const [];
+    final data = body['data'];
     throw AuthApiException(
       status: response.statusCode,
+      code: data is Map ? (data['error'] as String? ?? '') : '',
       title: (body['title'] as String?) ?? 'ERROR',
       message: errors.isNotEmpty
           ? errors.join('\n')

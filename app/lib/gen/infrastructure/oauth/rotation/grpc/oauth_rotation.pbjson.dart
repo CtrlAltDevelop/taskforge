@@ -94,6 +94,7 @@ const Session$json = {
     {'1': 'user_agent', '3': 6, '4': 1, '5': 9, '10': 'userAgent'},
     {'1': 'auth_method', '3': 7, '4': 1, '5': 9, '10': 'authMethod'},
     {'1': 'current', '3': 8, '4': 1, '5': 8, '10': 'current'},
+    {'1': 'dpop_bound', '3': 9, '4': 1, '5': 8, '10': 'dpopBound'},
   ],
 };
 
@@ -103,7 +104,8 @@ final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode(
     'IgASgJUgljcmVhdGVkQXQSIAoMbGFzdF91c2VkX2F0GAMgASgJUgpsYXN0VXNlZEF0Eh0KCmV4'
     'cGlyZXNfYXQYBCABKAlSCWV4cGlyZXNBdBIdCgppcF9hZGRyZXNzGAUgASgJUglpcEFkZHJlc3'
     'MSHQoKdXNlcl9hZ2VudBgGIAEoCVIJdXNlckFnZW50Eh8KC2F1dGhfbWV0aG9kGAcgASgJUgph'
-    'dXRoTWV0aG9kEhgKB2N1cnJlbnQYCCABKAhSB2N1cnJlbnQ=');
+    'dXRoTWV0aG9kEhgKB2N1cnJlbnQYCCABKAhSB2N1cnJlbnQSHQoKZHBvcF9ib3VuZBgJIAEoCF'
+    'IJZHBvcEJvdW5k');
 
 @$core.Deprecated('Use sessionListDescriptor instead')
 const SessionList$json = {

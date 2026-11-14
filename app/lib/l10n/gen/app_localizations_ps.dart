@@ -7652,4 +7652,11 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get sysBacklogNone => 'هیڅ شی په انتظار کې نه دی.';
+
+  @override
+  String get dpopKeyChanged =>
+      'د دې وسیلې کیلي بدله شوې، مهرباني وکړئ بیا ننوځئ.';
+
+  @override
+  String get dpopSessionBound => 'د دې وسیلې له کیلي سره تړلې';
 }

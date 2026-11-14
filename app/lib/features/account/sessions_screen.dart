@@ -35,6 +35,14 @@ class SessionsScreen extends ConsumerWidget {
     ref.invalidate(sessionsProvider);
   }
 
+  /// The device icon, with a lock when the session's tokens are tied to its key (DPoP).
+  Widget _device(BuildContext context, SessionInfo s) => s.dpopBound
+      ? Tooltip(
+          message: context.l10n.dpopSessionBound,
+          child: const Icon(Icons.lock_outline, key: Key('session-bound')),
+        )
+      : const Icon(Icons.devices);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessions = ref.watch(sessionsProvider);
@@ -65,7 +73,7 @@ class SessionsScreen extends ConsumerWidget {
           children: [
             for (final s in items)
               ListTile(
-                leading: const Icon(Icons.devices),
+                leading: _device(context, s),
                 title: Text(
                   s.userAgent.isEmpty
                       ? context.l10n.grpIUnknownDevice

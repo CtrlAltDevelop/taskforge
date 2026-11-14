@@ -13632,6 +13632,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing is waiting.'**
   String get sysBacklogNone;
+
+  /// No description provided for @dpopKeyChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device\'s key changed, please sign in again.'**
+  String get dpopKeyChanged;
+
+  /// No description provided for @dpopSessionBound.
+  ///
+  /// In en, this message translates to:
+  /// **'Tied to this device\'s key'**
+  String get dpopSessionBound;
 }
 
 class _AppLocalizationsDelegate

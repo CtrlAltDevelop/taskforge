@@ -42,6 +42,8 @@ class SyncClient {
     required this.head,
     this.clientId = '',
     this.refreshToken,
+    this.socketProof,
+    this.onProofRefused,
     Random? random,
     Timers? timers,
     this.pingEvery = const Duration(seconds: 25),
@@ -69,6 +71,13 @@ class SyncClient {
 
   /// Gets a new access token after the server refused the one in use.
   final Future<String?> Function()? refreshToken;
+
+  /// A DPoP proof for the `authenticate` frame (phase 39): `htm=GET`, `htu` the socket URL, `ath`
+  /// of the token. Null when the deployment does not bind sessions.
+  final Future<String> Function(Uri url, String accessToken)? socketProof;
+
+  /// Told about a refused proof (the frame carries the nonce or clock to retry with).
+  final void Function(Map<String, dynamic> frame)? onProofRefused;
   final Random _random;
   final Timers _timers;
   final Duration pingEvery;
@@ -189,10 +198,12 @@ class SyncClient {
         onDone: () => _closed(epoch),
         onError: (Object _) => _closed(epoch),
       );
+      final proof = await socketProof?.call(url, access);
       connection.send(
         jsonEncode({
           'type': 'authenticate',
           'token': access,
+          'dpop': ?proof,
           if (clientId.isNotEmpty) 'client_id': clientId,
         }),
       );
@@ -307,7 +318,15 @@ class SyncClient {
   void _error(Map<String, dynamic> frame, Completer<void> ready) {
     final code = frame['code'];
     final room = frame['room'];
-    if (code == 'unauthenticated') {
+    if (code == 'use_dpop_nonce') {
+      // The token is fine; the server wants its nonce in the proof. Reconnect with it.
+      onProofRefused?.call(frame);
+      if (!ready.isCompleted) ready.completeError(StateError('nonce'));
+    } else if (code == 'invalid_dpop_proof' || code == 'invalid_token') {
+      onProofRefused?.call(frame);
+      _refused = true;
+      if (!ready.isCompleted) ready.completeError(StateError('proof'));
+    } else if (code == 'unauthenticated') {
       _refused = true; // the next attempt gets a new token
       if (!ready.isCompleted) {
         ready.completeError(StateError('unauthenticated'));

@@ -26,6 +26,18 @@ class AppConfig {
   static String get restUrl =>
       _env('REST_URL', _useOrigin ? Uri.base.origin : 'http://$_host:8010');
 
+  /// The origin a DPoP proof is signed for (RFC 9449 `htu`): the server's configured public
+  /// origin (`DJANGO_PUBLIC_ORIGIN`), never the host actually dialled, so an emulator's 10.0.2.2
+  /// or a proxy cannot cause a mismatch. Defaults to the REST address, to the page's own origin
+  /// on the same-origin web build, and to the server's development default otherwise.
+  static String get dpopOrigin {
+    const set = String.fromEnvironment('DPOP_ORIGIN');
+    if (set.isNotEmpty) return set;
+    const rest = String.fromEnvironment('REST_URL');
+    if (rest.isNotEmpty) return rest;
+    return _useOrigin ? Uri.base.origin : 'http://localhost:8010';
+  }
+
   /// Native gRPC (mobile/desktop) talks straight to the gRPC server.
   static String get grpcHost => _env('GRPC_HOST', _host);
   static int get grpcPort =>

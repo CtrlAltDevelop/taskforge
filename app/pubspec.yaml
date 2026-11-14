@@ -61,6 +61,8 @@ dependencies:
   path: ^1.9.1
   qr: ^4.0.1
   crypto: ^3.0.8
+  pointycastle: ^4.0.0
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

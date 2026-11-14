@@ -7679,6 +7679,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sysBacklogNone => 'Nothing is waiting.';
+
+  @override
+  String get dpopKeyChanged =>
+      'This device\'s key changed, please sign in again.';
+
+  @override
+  String get dpopSessionBound => 'Tied to this device\'s key';
 }
 
 /// The translations for English (`en_XA`).
@@ -15494,4 +15501,11 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get sysBacklogNone => '[Ñöţĥíñĝ íš ŵåíţíñĝ. ~~~~~~]';
+
+  @override
+  String get dpopKeyChanged =>
+      '[Ţĥîś ðévîçé’ś ķéý ĉĥáñĝéð, ƥĺéáśé śîĝñ îñ áĝáîñ. ~~~]';
+
+  @override
+  String get dpopSessionBound => '[Ţîéð ţó ţĥîś ðévîçé’ś ķéý ~~]';
 }

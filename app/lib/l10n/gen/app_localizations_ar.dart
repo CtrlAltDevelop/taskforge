@@ -7737,4 +7737,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sysBacklogNone => 'لا شيء في الانتظار.';
+
+  @override
+  String get dpopKeyChanged =>
+      'تغيّر مفتاح هذا الجهاز، يُرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get dpopSessionBound => 'مرتبطة بمفتاح هذا الجهاز';
 }

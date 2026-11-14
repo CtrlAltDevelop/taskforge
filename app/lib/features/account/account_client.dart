@@ -35,6 +35,7 @@ class SessionInfo {
     required this.ipAddress,
     required this.lastUsedAt,
     required this.current,
+    this.dpopBound = false,
   });
 
   final String id;
@@ -42,6 +43,9 @@ class SessionInfo {
   final String ipAddress;
   final String lastUsedAt;
   final bool current;
+
+  /// Its tokens only work with a proof from this device's key (DPoP).
+  final bool dpopBound;
 }
 
 abstract interface class AccountClient {
@@ -133,6 +137,7 @@ class GrpcAccountClient implements AccountClient {
           ipAddress: s.ipAddress,
           lastUsedAt: s.lastUsedAt,
           current: s.current || s.sessionId == currentId,
+          dpopBound: s.dpopBound,
         ),
     ];
   }

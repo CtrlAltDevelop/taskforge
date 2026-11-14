@@ -4360,5 +4360,7 @@
   "sysInline": "Tasks run inline (debug)",
   "sysNoWorkers": "No worker answered",
   "sysBacklog": "Due work waiting",
-  "sysBacklogNone": "Nothing is waiting."
+  "sysBacklogNone": "Nothing is waiting.",
+  "dpopKeyChanged": "This device's key changed, please sign in again.",
+  "dpopSessionBound": "Tied to this device's key"
 }

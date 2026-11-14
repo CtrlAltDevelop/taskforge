@@ -7690,4 +7690,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get sysBacklogNone => 'چیزی در انتظار نیست.';
+
+  @override
+  String get dpopKeyChanged =>
+      'کلید این دستگاه تغییر کرده است؛ لطفاً دوباره وارد شوید.';
+
+  @override
+  String get dpopSessionBound => 'وابسته به کلید این دستگاه';
 }

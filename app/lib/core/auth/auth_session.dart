@@ -46,6 +46,10 @@ class AuthSession extends ChangeNotifier {
 
   AuthStatus get status => _status;
 
+  /// True after the server ended this session because its key is not this device's (storage was
+  /// cleared, a new browser profile): the sign-in screen says so. Cleared by the next sign-in.
+  final keyChanged = ValueNotifier<bool>(false);
+
   Future<void> restore() async {
     if (cookieSession && await _store.read() == null) {
       await _restoreThroughCookie();
@@ -162,6 +166,7 @@ class AuthSession extends ChangeNotifier {
       if (epoch != _epoch) return null; // the identity changed while we waited
       if (e.title == 'REFRESH_RACE') return _afterRace(tokens, e);
       if (e.status == 401) {
+        if (e.keyChanged) keyChanged.value = true;
         await _endSession();
         return null;
       }
@@ -198,6 +203,7 @@ class AuthSession extends ChangeNotifier {
   }
 
   Future<void> _adopt(AuthTokens tokens) async {
+    keyChanged.value = false;
     _epoch++;
     await _store.write(tokens);
     _setStatus(AuthStatus.signedIn);
