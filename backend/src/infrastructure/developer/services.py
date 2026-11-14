@@ -124,6 +124,7 @@ def create_token(
                 "prefix": token.prefix,
                 "scopes": chosen,
             },
+            actor,
         )
     return Issued(token, secret)
 
@@ -151,14 +152,21 @@ def revoke_token(actor: Any, workspace: Workspace, token_id: str) -> ApiToken:
                     "name": token.name,
                     "prefix": token.prefix,
                 },
+                actor,
             )
     return token
 
 
 def _audit(
-    workspace: Workspace, action: str, target_type: str, target_id: Any, changes: dict[str, Any]
+    workspace: Workspace,
+    action: str,
+    target_type: str,
+    target_id: Any,
+    changes: dict[str, Any],
+    actor: Any = None,
 ) -> None:
     recorder.record(
+        actor=actor,
         workspace_id=workspace.pk,
         action=action,
         target_type=target_type,

@@ -45,3 +45,10 @@ Hash/prefix lookup, scope enforcement, signature fixtures, SSRF suite, retry sch
 
 ## Depends on
 Phases 01, 04, 06; event catalog shared with 16/24/27.
+
+## Implementation notes
+Accepted deviations from the plan above:
+- Tokens are personal only; there are no service-account tokens (the plan's "or admin for service accounts" is not built).
+- A token can never manage tokens or webhooks (a leaked token cannot mint a longer-lived one).
+- A webhook switched off after 24 hours of failures shows `disabled_reason` and a `webhook.disabled` audit entry, not an inbox notice.
+- The public task schema omits the description.
