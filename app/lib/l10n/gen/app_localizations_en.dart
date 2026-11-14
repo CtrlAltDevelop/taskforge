@@ -6683,6 +6683,252 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get formsLogoLabel => 'Logo address (https://…)';
+
+  @override
+  String get goalsTitle => 'Goals';
+
+  @override
+  String get goalsEmpty => 'No goals yet. Create one to track what matters.';
+
+  @override
+  String get goalsNew => 'New goal';
+
+  @override
+  String get goalsEdit => 'Edit goal';
+
+  @override
+  String get goalsDelete => 'Delete goal';
+
+  @override
+  String goalsDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get goalsDeleteBody =>
+      'Its key results and check-ins are deleted. Goals under it move up one level.';
+
+  @override
+  String get goalsSave => 'Save';
+
+  @override
+  String get goalsName => 'Name';
+
+  @override
+  String get goalsDescription => 'Description';
+
+  @override
+  String goalsPeriod(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get goalsOwner => 'Owner';
+
+  @override
+  String get goalsContributors => 'Contributors';
+
+  @override
+  String get goalsParent => 'Parent goal';
+
+  @override
+  String get goalsNone => 'None';
+
+  @override
+  String get goalsFolder => 'Folder';
+
+  @override
+  String get goalsNoFolder => 'No folder';
+
+  @override
+  String get goalsNewFolder => 'New folder';
+
+  @override
+  String get goalsFolderName => 'Folder name';
+
+  @override
+  String get goalsRenameFolder => 'Rename folder';
+
+  @override
+  String get goalsDeleteFolder => 'Delete folder';
+
+  @override
+  String get goalsWeight => 'Weight';
+
+  @override
+  String get goalsPrivate => 'Private';
+
+  @override
+  String get goalsPrivateHint =>
+      'Only the owner, contributors and admins can see it.';
+
+  @override
+  String get goalsStatusLabel => 'Status';
+
+  @override
+  String get goalsStatusAuto => 'Automatic';
+
+  @override
+  String get goalsStatusOnTrack => 'On track';
+
+  @override
+  String get goalsStatusAtRisk => 'At risk';
+
+  @override
+  String get goalsStatusOffTrack => 'Off track';
+
+  @override
+  String get goalsStatusAutoNote => 'Worked out from progress and time.';
+
+  @override
+  String goalsStatusSet(String status) {
+    return 'Set by hand. Suggested: $status';
+  }
+
+  @override
+  String goalsProgressPercent(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get goalsKeyResults => 'Key results';
+
+  @override
+  String get goalsNoKr => 'No key results yet.';
+
+  @override
+  String get goalsAddKr => 'Add key result';
+
+  @override
+  String get goalsEditKr => 'Edit key result';
+
+  @override
+  String get goalsDeleteKr => 'Delete key result';
+
+  @override
+  String get goalsKrName => 'Key result';
+
+  @override
+  String get goalsKrType => 'Measured as';
+
+  @override
+  String get goalsKrNumber => 'Number';
+
+  @override
+  String get goalsKrPercentage => 'Percentage';
+
+  @override
+  String get goalsKrBoolean => 'Done or not';
+
+  @override
+  String get goalsKrLinked => 'Linked tasks';
+
+  @override
+  String get goalsKrStart => 'Start value';
+
+  @override
+  String get goalsKrTarget => 'Target value';
+
+  @override
+  String get goalsKrCurrent => 'Current value';
+
+  @override
+  String get goalsKrDirectionHint =>
+      'A target below the start works too, for example reducing bugs from 40 to 10.';
+
+  @override
+  String get goalsKrFilter => 'Task filter (optional)';
+
+  @override
+  String get goalsKrFilterHint =>
+      'A TFQL filter over the workspace, such as label = launch. Tasks you add by hand count too.';
+
+  @override
+  String goalsKrPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tasks added by hand',
+      one: '1 task added by hand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalsKrNumberProgress(String current, String target) {
+    return '$current of $target';
+  }
+
+  @override
+  String goalsKrLinkedProgress(int done, int total) {
+    return '$done of $total tasks done';
+  }
+
+  @override
+  String get goalsKrDone => 'Done';
+
+  @override
+  String get goalsKrNotDone => 'Not done';
+
+  @override
+  String get goalsCheckIn => 'Check in';
+
+  @override
+  String goalsCheckInTitle(String name) {
+    return 'Check in: $name';
+  }
+
+  @override
+  String get goalsCheckInValue => 'New value';
+
+  @override
+  String get goalsCheckInDone => 'Done';
+
+  @override
+  String get goalsCheckInNote => 'Note';
+
+  @override
+  String get goalsCheckInLinkedHint =>
+      'The linked tasks set the value. You can still leave a note.';
+
+  @override
+  String get goalsCheckInHistory => 'History';
+
+  @override
+  String get goalsCheckInEmpty => 'No check-ins yet.';
+
+  @override
+  String get goalsCheckInSystem => 'Counted from tasks';
+
+  @override
+  String goalsCheckInChange(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get goalsContributes => 'Contributes to';
+
+  @override
+  String get goalsAddToKr => 'Count in a key result';
+
+  @override
+  String get goalsPickKr => 'Which key result counts this task?';
+
+  @override
+  String get goalsNoLinkedKr => 'No linked key results you can edit.';
+
+  @override
+  String get goalsSubgoals => 'Sub-goals';
+
+  @override
+  String get goalsDenied => 'You are not allowed to do that with goals.';
+
+  @override
+  String get goalsGone => 'That goal no longer exists.';
+
+  @override
+  String get goalsConflict =>
+      'It changed since you opened it. Reload and try again.';
 }
 
 /// The translations for English (`en_XA`).
@@ -13483,4 +13729,254 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get formsLogoLabel => '[Łöĝö åððŕéšš (ĥţţþš://…) ~~~~~~~~]';
+
+  @override
+  String get goalsTitle => '[Ĝöåłš ~]';
+
+  @override
+  String get goalsEmpty =>
+      '[Ñö ĝöåłš ýéţ. Çŕéåţé öñé ţö ţŕåçķ ŵĥåţ ɱåţţéŕš. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsNew => '[Ñéŵ ĝöåł ~~]';
+
+  @override
+  String get goalsEdit => '[Éðíţ ĝöåł ~~~]';
+
+  @override
+  String get goalsDelete => '[Ðéłéţé ĝöåł ~~~]';
+
+  @override
+  String goalsDeleteTitle(String name) {
+    return '[Ðéłéţé \"$name\"? ~~~~~]';
+  }
+
+  @override
+  String get goalsDeleteBody =>
+      '[Íţš ķéý ŕéšûłţš åñð çĥéçķ-íñš åŕé ðéłéţéð. Ĝöåłš ûñðéŕ íţ ɱöṽé ûþ öñé łéṽéł. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsSave => '[Šåṽé ~]';
+
+  @override
+  String get goalsName => '[Ñåɱé ~]';
+
+  @override
+  String get goalsDescription => '[Ðéšçŕíþţíöñ ~~~]';
+
+  @override
+  String goalsPeriod(String start, String end) {
+    return '[$start – $end ~~~~~]';
+  }
+
+  @override
+  String get goalsOwner => '[Öŵñéŕ ~]';
+
+  @override
+  String get goalsContributors => '[Çöñţŕíƀûţöŕš ~~~~]';
+
+  @override
+  String get goalsParent => '[Þåŕéñţ ĝöåł ~~~]';
+
+  @override
+  String get goalsNone => '[Ñöñé ~]';
+
+  @override
+  String get goalsFolder => '[Föłðéŕ ~~]';
+
+  @override
+  String get goalsNoFolder => '[Ñö ƒöłðéŕ ~~~]';
+
+  @override
+  String get goalsNewFolder => '[Ñéŵ ƒöłðéŕ ~~~]';
+
+  @override
+  String get goalsFolderName => '[Föłðéŕ ñåɱé ~~~]';
+
+  @override
+  String get goalsRenameFolder => '[Ŕéñåɱé ƒöłðéŕ ~~~~]';
+
+  @override
+  String get goalsDeleteFolder => '[Ðéłéţé ƒöłðéŕ ~~~~]';
+
+  @override
+  String get goalsWeight => '[Ŵéíĝĥţ ~~]';
+
+  @override
+  String get goalsPrivate => '[Þŕíṽåţé ~~]';
+
+  @override
+  String get goalsPrivateHint =>
+      '[Öñłý ţĥé öŵñéŕ, çöñţŕíƀûţöŕš åñð åðɱíñš çåñ šéé íţ. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsStatusLabel => '[Šţåţûš ~~]';
+
+  @override
+  String get goalsStatusAuto => '[Åûţöɱåţíç ~~~]';
+
+  @override
+  String get goalsStatusOnTrack => '[Öñ ţŕåçķ ~~]';
+
+  @override
+  String get goalsStatusAtRisk => '[Åţ ŕíšķ ~~]';
+
+  @override
+  String get goalsStatusOffTrack => '[Öƒƒ ţŕåçķ ~~~]';
+
+  @override
+  String get goalsStatusAutoNote =>
+      '[Ŵöŕķéð öûţ ƒŕöɱ þŕöĝŕéšš åñð ţíɱé. ~~~~~~~~~~~]';
+
+  @override
+  String goalsStatusSet(String status) {
+    return '[Šéţ ƀý ĥåñð. Šûĝĝéšţéð: $status ~~~~~~~~~~]';
+  }
+
+  @override
+  String goalsProgressPercent(int percent) {
+    return '[$percent% ~~~]';
+  }
+
+  @override
+  String get goalsKeyResults => '[Ķéý ŕéšûłţš ~~~]';
+
+  @override
+  String get goalsNoKr => '[Ñö ķéý ŕéšûłţš ýéţ. ~~~~~~]';
+
+  @override
+  String get goalsAddKr => '[Åðð ķéý ŕéšûłţ ~~~~]';
+
+  @override
+  String get goalsEditKr => '[Éðíţ ķéý ŕéšûłţ ~~~~~]';
+
+  @override
+  String get goalsDeleteKr => '[Ðéłéţé ķéý ŕéšûłţ ~~~~~]';
+
+  @override
+  String get goalsKrName => '[Ķéý ŕéšûłţ ~~~]';
+
+  @override
+  String get goalsKrType => '[Méåšûŕéð åš ~~~]';
+
+  @override
+  String get goalsKrNumber => '[Ñûɱƀéŕ ~~]';
+
+  @override
+  String get goalsKrPercentage => '[Þéŕçéñţåĝé ~~~]';
+
+  @override
+  String get goalsKrBoolean => '[Ðöñé öŕ ñöţ ~~~]';
+
+  @override
+  String get goalsKrLinked => '[Łíñķéð ţåšķš ~~~~]';
+
+  @override
+  String get goalsKrStart => '[Šţåŕţ ṽåłûé ~~~]';
+
+  @override
+  String get goalsKrTarget => '[Ţåŕĝéţ ṽåłûé ~~~~]';
+
+  @override
+  String get goalsKrCurrent => '[Çûŕŕéñţ ṽåłûé ~~~~]';
+
+  @override
+  String get goalsKrDirectionHint =>
+      '[Å ţåŕĝéţ ƀéłöŵ ţĥé šţåŕţ ŵöŕķš ţöö, ƒöŕ éxåɱþłé ŕéðûçíñĝ ƀûĝš ƒŕöɱ 40 ţö 10. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsKrFilter => '[Ţåšķ ƒíłţéŕ (öþţíöñåł) ~~~~~~~]';
+
+  @override
+  String get goalsKrFilterHint =>
+      '[Å ŢFQŁ ƒíłţéŕ öṽéŕ ţĥé ŵöŕķšþåçé, šûçĥ åš łåƀéł = łåûñçĥ. Ţåšķš ýöû åðð ƀý ĥåñð çöûñţ ţöö. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String goalsKrPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ţåšķš åððéð ƀý ĥåñð',
+      one: '1 ţåšķ åððéð ƀý ĥåñð',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String goalsKrNumberProgress(String current, String target) {
+    return '[$current öƒ $target ~~~~~~~]';
+  }
+
+  @override
+  String goalsKrLinkedProgress(int done, int total) {
+    return '[$done öƒ $total ţåšķš ðöñé ~~~~~~~~~]';
+  }
+
+  @override
+  String get goalsKrDone => '[Ðöñé ~]';
+
+  @override
+  String get goalsKrNotDone => '[Ñöţ ðöñé ~~]';
+
+  @override
+  String get goalsCheckIn => '[Çĥéçķ íñ ~~]';
+
+  @override
+  String goalsCheckInTitle(String name) {
+    return '[Çĥéçķ íñ: $name ~~~~~]';
+  }
+
+  @override
+  String get goalsCheckInValue => '[Ñéŵ ṽåłûé ~~~]';
+
+  @override
+  String get goalsCheckInDone => '[Ðöñé ~]';
+
+  @override
+  String get goalsCheckInNote => '[Ñöţé ~]';
+
+  @override
+  String get goalsCheckInLinkedHint =>
+      '[Ţĥé łíñķéð ţåšķš šéţ ţĥé ṽåłûé. Ýöû çåñ šţíłł łéåṽé å ñöţé. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsCheckInHistory => '[Ĥíšţöŕý ~~]';
+
+  @override
+  String get goalsCheckInEmpty => '[Ñö çĥéçķ-íñš ýéţ. ~~~~~]';
+
+  @override
+  String get goalsCheckInSystem => '[Çöûñţéð ƒŕöɱ ţåšķš ~~~~~~]';
+
+  @override
+  String goalsCheckInChange(String from, String to) {
+    return '[$from → $to ~~~~]';
+  }
+
+  @override
+  String get goalsContributes => '[Çöñţŕíƀûţéš ţö ~~~~]';
+
+  @override
+  String get goalsAddToKr => '[Çöûñţ íñ å ķéý ŕéšûłţ ~~~~~~~]';
+
+  @override
+  String get goalsPickKr => '[Ŵĥíçĥ ķéý ŕéšûłţ çöûñţš ţĥíš ţåšķ? ~~~~~~~~~~~]';
+
+  @override
+  String get goalsNoLinkedKr =>
+      '[Ñö łíñķéð ķéý ŕéšûłţš ýöû çåñ éðíţ. ~~~~~~~~~~~]';
+
+  @override
+  String get goalsSubgoals => '[Šûƀ-ĝöåłš ~~~]';
+
+  @override
+  String get goalsDenied =>
+      '[Ýöû åŕé ñöţ åłłöŵéð ţö ðö ţĥåţ ŵíţĥ ĝöåłš. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get goalsGone => '[Ţĥåţ ĝöåł ñö łöñĝéŕ éxíšţš. ~~~~~~~~~]';
+
+  @override
+  String get goalsConflict =>
+      '[Íţ çĥåñĝéð šíñçé ýöû öþéñéð íţ. Ŕéłöåð åñð ţŕý åĝåíñ. ~~~~~~~~~~~~~~~~~]';
 }

@@ -36,6 +36,8 @@ abstract final class Perm {
   static const dataManage = 'data.manage';
   static const webhookManage = 'webhook.manage';
   static const formManage = 'form.manage';
+  static const goalCreate = 'goal.create';
+  static const goalManage = 'goal.manage';
 
   static const all = [
     workspaceView,
@@ -69,6 +71,8 @@ abstract final class Perm {
     dataManage,
     webhookManage,
     formManage,
+    goalCreate,
+    goalManage,
   ];
 }
 

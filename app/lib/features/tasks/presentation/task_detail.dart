@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/offline/presentation/offline_banner.dart';
 import 'package:taskforge/features/audit/presentation/activity_section.dart';
 import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
+import 'package:taskforge/features/goals/presentation/contributes_panel.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
 import 'package:taskforge/features/time/domain/time.dart' show timeFeature;
 import 'package:taskforge/features/time/presentation/time_section.dart';
@@ -305,6 +306,8 @@ class TaskDetail extends ConsumerWidget {
           taskId: task.id,
           canEdit: ref.watch(permissionSetProvider).can(Perm.docEdit),
         ),
+        const SizedBox(height: 16),
+        ContributesPanel(taskId: task.id),
         if (project.enabledFeatures.contains(timeFeature)) ...[
           const SizedBox(height: 16),
           const Divider(),

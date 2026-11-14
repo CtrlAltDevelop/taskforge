@@ -6693,4 +6693,251 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get formsLogoLabel => 'نشانی لوگو (https://…)';
+
+  @override
+  String get goalsTitle => 'اهداف';
+
+  @override
+  String get goalsEmpty =>
+      'هنوز هدفی نیست. یکی بسازید تا آنچه مهم است را پیگیری کنید.';
+
+  @override
+  String get goalsNew => 'هدف جدید';
+
+  @override
+  String get goalsEdit => 'ویرایش هدف';
+
+  @override
+  String get goalsDelete => 'حذف هدف';
+
+  @override
+  String goalsDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get goalsDeleteBody =>
+      'نتایج کلیدی و ثبت‌های پیشرفت آن حذف می‌شوند. اهداف زیرمجموعه یک سطح بالا می‌روند.';
+
+  @override
+  String get goalsSave => 'ذخیره';
+
+  @override
+  String get goalsName => 'نام';
+
+  @override
+  String get goalsDescription => 'توضیحات';
+
+  @override
+  String goalsPeriod(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get goalsOwner => 'مسئول';
+
+  @override
+  String get goalsContributors => 'مشارکت‌کنندگان';
+
+  @override
+  String get goalsParent => 'هدف بالاتر';
+
+  @override
+  String get goalsNone => 'هیچ‌کدام';
+
+  @override
+  String get goalsFolder => 'پوشه';
+
+  @override
+  String get goalsNoFolder => 'بدون پوشه';
+
+  @override
+  String get goalsNewFolder => 'پوشه جدید';
+
+  @override
+  String get goalsFolderName => 'نام پوشه';
+
+  @override
+  String get goalsRenameFolder => 'تغییر نام پوشه';
+
+  @override
+  String get goalsDeleteFolder => 'حذف پوشه';
+
+  @override
+  String get goalsWeight => 'وزن';
+
+  @override
+  String get goalsPrivate => 'خصوصی';
+
+  @override
+  String get goalsPrivateHint =>
+      'فقط مسئول، مشارکت‌کنندگان و مدیران آن را می‌بینند.';
+
+  @override
+  String get goalsStatusLabel => 'وضعیت';
+
+  @override
+  String get goalsStatusAuto => 'خودکار';
+
+  @override
+  String get goalsStatusOnTrack => 'طبق برنامه';
+
+  @override
+  String get goalsStatusAtRisk => 'در خطر';
+
+  @override
+  String get goalsStatusOffTrack => 'عقب‌تر از برنامه';
+
+  @override
+  String get goalsStatusAutoNote => 'از روی پیشرفت و زمان محاسبه می‌شود.';
+
+  @override
+  String goalsStatusSet(String status) {
+    return 'دستی تنظیم شده. پیشنهاد: $status';
+  }
+
+  @override
+  String goalsProgressPercent(int percent) {
+    return '$percent٪';
+  }
+
+  @override
+  String get goalsKeyResults => 'نتایج کلیدی';
+
+  @override
+  String get goalsNoKr => 'هنوز نتیجه کلیدی‌ای نیست.';
+
+  @override
+  String get goalsAddKr => 'افزودن نتیجه کلیدی';
+
+  @override
+  String get goalsEditKr => 'ویرایش نتیجه کلیدی';
+
+  @override
+  String get goalsDeleteKr => 'حذف نتیجه کلیدی';
+
+  @override
+  String get goalsKrName => 'نتیجه کلیدی';
+
+  @override
+  String get goalsKrType => 'نوع اندازه‌گیری';
+
+  @override
+  String get goalsKrNumber => 'عدد';
+
+  @override
+  String get goalsKrPercentage => 'درصد';
+
+  @override
+  String get goalsKrBoolean => 'انجام شد / نشد';
+
+  @override
+  String get goalsKrLinked => 'وظایف پیوندی';
+
+  @override
+  String get goalsKrStart => 'مقدار شروع';
+
+  @override
+  String get goalsKrTarget => 'مقدار هدف';
+
+  @override
+  String get goalsKrCurrent => 'مقدار فعلی';
+
+  @override
+  String get goalsKrDirectionHint =>
+      'هدف کمتر از شروع هم ممکن است، مثلاً کاهش باگ‌ها از ۴۰ به ۱۰.';
+
+  @override
+  String get goalsKrFilter => 'فیلتر وظایف (اختیاری)';
+
+  @override
+  String get goalsKrFilterHint =>
+      'یک فیلتر TFQL روی فضای کار، مثل label = launch. وظایفی که دستی اضافه می‌کنید هم شمرده می‌شوند.';
+
+  @override
+  String goalsKrPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count وظیفه دستی اضافه شده',
+      one: '۱ وظیفه دستی اضافه شده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalsKrNumberProgress(String current, String target) {
+    return '$current از $target';
+  }
+
+  @override
+  String goalsKrLinkedProgress(int done, int total) {
+    return '$done از $total وظیفه انجام شده';
+  }
+
+  @override
+  String get goalsKrDone => 'انجام شد';
+
+  @override
+  String get goalsKrNotDone => 'انجام نشده';
+
+  @override
+  String get goalsCheckIn => 'ثبت پیشرفت';
+
+  @override
+  String goalsCheckInTitle(String name) {
+    return 'ثبت پیشرفت: $name';
+  }
+
+  @override
+  String get goalsCheckInValue => 'مقدار جدید';
+
+  @override
+  String get goalsCheckInDone => 'انجام شد';
+
+  @override
+  String get goalsCheckInNote => 'یادداشت';
+
+  @override
+  String get goalsCheckInLinkedHint =>
+      'وظایف پیوندی مقدار را تعیین می‌کنند. می‌توانید یادداشتی بگذارید.';
+
+  @override
+  String get goalsCheckInHistory => 'تاریخچه';
+
+  @override
+  String get goalsCheckInEmpty => 'هنوز ثبتی نیست.';
+
+  @override
+  String get goalsCheckInSystem => 'از وظایف شمرده شد';
+
+  @override
+  String goalsCheckInChange(String from, String to) {
+    return '$from ← $to';
+  }
+
+  @override
+  String get goalsContributes => 'مشارکت در';
+
+  @override
+  String get goalsAddToKr => 'شمردن در یک نتیجه کلیدی';
+
+  @override
+  String get goalsPickKr => 'کدام نتیجه کلیدی این وظیفه را بشمارد؟';
+
+  @override
+  String get goalsNoLinkedKr => 'نتیجه کلیدی پیوندی قابل ویرایشی ندارید.';
+
+  @override
+  String get goalsSubgoals => 'زیرهدف‌ها';
+
+  @override
+  String get goalsDenied => 'اجازه این کار را روی اهداف ندارید.';
+
+  @override
+  String get goalsGone => 'این هدف دیگر وجود ندارد.';
+
+  @override
+  String get goalsConflict =>
+      'از زمان باز کردن تغییر کرده است. دوباره بارگیری کنید و تلاش کنید.';
 }

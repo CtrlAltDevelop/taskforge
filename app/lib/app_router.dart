@@ -7,6 +7,8 @@ import 'package:taskforge/core/public_routes.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/auth/auth_session.dart';
 import 'package:taskforge/features/dashboards/presentation/dashboards_screen.dart';
+import 'package:taskforge/features/goals/presentation/goal_detail_screen.dart';
+import 'package:taskforge/features/goals/presentation/goals_screen.dart';
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
 import 'package:taskforge/features/imports/presentation/import_screen.dart';
 import 'package:taskforge/features/account/home_screen.dart';
@@ -231,6 +233,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             DeliveriesScreen(webhookId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/dashboards', builder: (_, _) => const DashboardsScreen()),
+      GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
+      GoRoute(
+        path: '/goals/:id',
+        builder: (_, state) =>
+            GoalDetailScreen(goalId: state.pathParameters['id']!),
+      ),
       GoRoute(
         path: '/projects/:id/dashboards',
         builder: (_, state) =>

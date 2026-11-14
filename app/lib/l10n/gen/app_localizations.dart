@@ -11856,6 +11856,438 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logo address (https://…)'**
   String get formsLogoLabel;
+
+  /// No description provided for @goalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goalsTitle;
+
+  /// No description provided for @goalsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No goals yet. Create one to track what matters.'**
+  String get goalsEmpty;
+
+  /// No description provided for @goalsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New goal'**
+  String get goalsNew;
+
+  /// No description provided for @goalsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit goal'**
+  String get goalsEdit;
+
+  /// No description provided for @goalsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete goal'**
+  String get goalsDelete;
+
+  /// No description provided for @goalsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String goalsDeleteTitle(String name);
+
+  /// No description provided for @goalsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its key results and check-ins are deleted. Goals under it move up one level.'**
+  String get goalsDeleteBody;
+
+  /// No description provided for @goalsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get goalsSave;
+
+  /// No description provided for @goalsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get goalsName;
+
+  /// No description provided for @goalsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get goalsDescription;
+
+  /// No description provided for @goalsPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} – {end}'**
+  String goalsPeriod(String start, String end);
+
+  /// No description provided for @goalsOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get goalsOwner;
+
+  /// No description provided for @goalsContributors.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributors'**
+  String get goalsContributors;
+
+  /// No description provided for @goalsParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent goal'**
+  String get goalsParent;
+
+  /// No description provided for @goalsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get goalsNone;
+
+  /// No description provided for @goalsFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get goalsFolder;
+
+  /// No description provided for @goalsNoFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'No folder'**
+  String get goalsNoFolder;
+
+  /// No description provided for @goalsNewFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'New folder'**
+  String get goalsNewFolder;
+
+  /// No description provided for @goalsFolderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder name'**
+  String get goalsFolderName;
+
+  /// No description provided for @goalsRenameFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename folder'**
+  String get goalsRenameFolder;
+
+  /// No description provided for @goalsDeleteFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete folder'**
+  String get goalsDeleteFolder;
+
+  /// No description provided for @goalsWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get goalsWeight;
+
+  /// No description provided for @goalsPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private'**
+  String get goalsPrivate;
+
+  /// No description provided for @goalsPrivateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the owner, contributors and admins can see it.'**
+  String get goalsPrivateHint;
+
+  /// No description provided for @goalsStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get goalsStatusLabel;
+
+  /// No description provided for @goalsStatusAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get goalsStatusAuto;
+
+  /// No description provided for @goalsStatusOnTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'On track'**
+  String get goalsStatusOnTrack;
+
+  /// No description provided for @goalsStatusAtRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'At risk'**
+  String get goalsStatusAtRisk;
+
+  /// No description provided for @goalsStatusOffTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Off track'**
+  String get goalsStatusOffTrack;
+
+  /// No description provided for @goalsStatusAutoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked out from progress and time.'**
+  String get goalsStatusAutoNote;
+
+  /// No description provided for @goalsStatusSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set by hand. Suggested: {status}'**
+  String goalsStatusSet(String status);
+
+  /// No description provided for @goalsProgressPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String goalsProgressPercent(int percent);
+
+  /// No description provided for @goalsKeyResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Key results'**
+  String get goalsKeyResults;
+
+  /// No description provided for @goalsNoKr.
+  ///
+  /// In en, this message translates to:
+  /// **'No key results yet.'**
+  String get goalsNoKr;
+
+  /// No description provided for @goalsAddKr.
+  ///
+  /// In en, this message translates to:
+  /// **'Add key result'**
+  String get goalsAddKr;
+
+  /// No description provided for @goalsEditKr.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit key result'**
+  String get goalsEditKr;
+
+  /// No description provided for @goalsDeleteKr.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete key result'**
+  String get goalsDeleteKr;
+
+  /// No description provided for @goalsKrName.
+  ///
+  /// In en, this message translates to:
+  /// **'Key result'**
+  String get goalsKrName;
+
+  /// No description provided for @goalsKrType.
+  ///
+  /// In en, this message translates to:
+  /// **'Measured as'**
+  String get goalsKrType;
+
+  /// No description provided for @goalsKrNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get goalsKrNumber;
+
+  /// No description provided for @goalsKrPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage'**
+  String get goalsKrPercentage;
+
+  /// No description provided for @goalsKrBoolean.
+  ///
+  /// In en, this message translates to:
+  /// **'Done or not'**
+  String get goalsKrBoolean;
+
+  /// No description provided for @goalsKrLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked tasks'**
+  String get goalsKrLinked;
+
+  /// No description provided for @goalsKrStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start value'**
+  String get goalsKrStart;
+
+  /// No description provided for @goalsKrTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Target value'**
+  String get goalsKrTarget;
+
+  /// No description provided for @goalsKrCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current value'**
+  String get goalsKrCurrent;
+
+  /// No description provided for @goalsKrDirectionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A target below the start works too, for example reducing bugs from 40 to 10.'**
+  String get goalsKrDirectionHint;
+
+  /// No description provided for @goalsKrFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Task filter (optional)'**
+  String get goalsKrFilter;
+
+  /// No description provided for @goalsKrFilterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A TFQL filter over the workspace, such as label = launch. Tasks you add by hand count too.'**
+  String get goalsKrFilterHint;
+
+  /// No description provided for @goalsKrPicked.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 task added by hand} other{{count} tasks added by hand}}'**
+  String goalsKrPicked(int count);
+
+  /// No description provided for @goalsKrNumberProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} of {target}'**
+  String goalsKrNumberProgress(String current, String target);
+
+  /// No description provided for @goalsKrLinkedProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} tasks done'**
+  String goalsKrLinkedProgress(int done, int total);
+
+  /// No description provided for @goalsKrDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get goalsKrDone;
+
+  /// No description provided for @goalsKrNotDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not done'**
+  String get goalsKrNotDone;
+
+  /// No description provided for @goalsCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in'**
+  String get goalsCheckIn;
+
+  /// No description provided for @goalsCheckInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in: {name}'**
+  String goalsCheckInTitle(String name);
+
+  /// No description provided for @goalsCheckInValue.
+  ///
+  /// In en, this message translates to:
+  /// **'New value'**
+  String get goalsCheckInValue;
+
+  /// No description provided for @goalsCheckInDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get goalsCheckInDone;
+
+  /// No description provided for @goalsCheckInNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get goalsCheckInNote;
+
+  /// No description provided for @goalsCheckInLinkedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The linked tasks set the value. You can still leave a note.'**
+  String get goalsCheckInLinkedHint;
+
+  /// No description provided for @goalsCheckInHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get goalsCheckInHistory;
+
+  /// No description provided for @goalsCheckInEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-ins yet.'**
+  String get goalsCheckInEmpty;
+
+  /// No description provided for @goalsCheckInSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Counted from tasks'**
+  String get goalsCheckInSystem;
+
+  /// No description provided for @goalsCheckInChange.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} → {to}'**
+  String goalsCheckInChange(String from, String to);
+
+  /// No description provided for @goalsContributes.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributes to'**
+  String get goalsContributes;
+
+  /// No description provided for @goalsAddToKr.
+  ///
+  /// In en, this message translates to:
+  /// **'Count in a key result'**
+  String get goalsAddToKr;
+
+  /// No description provided for @goalsPickKr.
+  ///
+  /// In en, this message translates to:
+  /// **'Which key result counts this task?'**
+  String get goalsPickKr;
+
+  /// No description provided for @goalsNoLinkedKr.
+  ///
+  /// In en, this message translates to:
+  /// **'No linked key results you can edit.'**
+  String get goalsNoLinkedKr;
+
+  /// No description provided for @goalsSubgoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub-goals'**
+  String get goalsSubgoals;
+
+  /// No description provided for @goalsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not allowed to do that with goals.'**
+  String get goalsDenied;
+
+  /// No description provided for @goalsGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That goal no longer exists.'**
+  String get goalsGone;
+
+  /// No description provided for @goalsConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'It changed since you opened it. Reload and try again.'**
+  String get goalsConflict;
 }
 
 class _AppLocalizationsDelegate

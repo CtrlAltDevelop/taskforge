@@ -6663,4 +6663,250 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get formsLogoLabel => 'د لوګو پته (https://…)';
+
+  @override
+  String get goalsTitle => 'موخې';
+
+  @override
+  String get goalsEmpty =>
+      'تر اوسه موخه نشته. یوه جوړه کړئ چې مهم کارونه تعقیب کړئ.';
+
+  @override
+  String get goalsNew => 'نوې موخه';
+
+  @override
+  String get goalsEdit => 'موخه سمول';
+
+  @override
+  String get goalsDelete => 'موخه ړنګول';
+
+  @override
+  String goalsDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get goalsDeleteBody =>
+      'کلیدي پایلې او د پرمختګ ثبتونه یې ړنګیږي. لاندې موخې یو کچه پورته کیږي.';
+
+  @override
+  String get goalsSave => 'ساتل';
+
+  @override
+  String get goalsName => 'نوم';
+
+  @override
+  String get goalsDescription => 'تشریح';
+
+  @override
+  String goalsPeriod(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get goalsOwner => 'مسؤل';
+
+  @override
+  String get goalsContributors => 'ګډونوالا';
+
+  @override
+  String get goalsParent => 'پورتنۍ موخه';
+
+  @override
+  String get goalsNone => 'هیڅ';
+
+  @override
+  String get goalsFolder => 'پوښۍ';
+
+  @override
+  String get goalsNoFolder => 'پرته له پوښۍ';
+
+  @override
+  String get goalsNewFolder => 'نوې پوښۍ';
+
+  @override
+  String get goalsFolderName => 'د پوښۍ نوم';
+
+  @override
+  String get goalsRenameFolder => 'د پوښۍ نوم بدلول';
+
+  @override
+  String get goalsDeleteFolder => 'پوښۍ ړنګول';
+
+  @override
+  String get goalsWeight => 'وزن';
+
+  @override
+  String get goalsPrivate => 'شخصي';
+
+  @override
+  String get goalsPrivateHint => 'یوازې مسؤل، ګډونوالا او مدیران یې ګوري.';
+
+  @override
+  String get goalsStatusLabel => 'حالت';
+
+  @override
+  String get goalsStatusAuto => 'اتومات';
+
+  @override
+  String get goalsStatusOnTrack => 'په پټلۍ';
+
+  @override
+  String get goalsStatusAtRisk => 'په خطر کې';
+
+  @override
+  String get goalsStatusOffTrack => 'له پټلۍ وتلی';
+
+  @override
+  String get goalsStatusAutoNote => 'له پرمختګ او وخت څخه حسابیږي.';
+
+  @override
+  String goalsStatusSet(String status) {
+    return 'په لاس ټاکل شوی. وړاندیز: $status';
+  }
+
+  @override
+  String goalsProgressPercent(int percent) {
+    return '$percent٪';
+  }
+
+  @override
+  String get goalsKeyResults => 'کلیدي پایلې';
+
+  @override
+  String get goalsNoKr => 'تر اوسه کلیدي پایلې نشته.';
+
+  @override
+  String get goalsAddKr => 'کلیدي پایله زیاتول';
+
+  @override
+  String get goalsEditKr => 'کلیدي پایله سمول';
+
+  @override
+  String get goalsDeleteKr => 'کلیدي پایله ړنګول';
+
+  @override
+  String get goalsKrName => 'کلیدي پایله';
+
+  @override
+  String get goalsKrType => 'د اندازې ډول';
+
+  @override
+  String get goalsKrNumber => 'شمیره';
+
+  @override
+  String get goalsKrPercentage => 'سلنه';
+
+  @override
+  String get goalsKrBoolean => 'ترسره شو یا نه';
+
+  @override
+  String get goalsKrLinked => 'تړلي کارونه';
+
+  @override
+  String get goalsKrStart => 'پیل ارزښت';
+
+  @override
+  String get goalsKrTarget => 'موخیز ارزښت';
+
+  @override
+  String get goalsKrCurrent => 'اوسنی ارزښت';
+
+  @override
+  String get goalsKrDirectionHint =>
+      'موخه له پیل څخه کمه هم کیدی شي، لکه د ستونزو کمول له ۴۰ څخه ۱۰ ته.';
+
+  @override
+  String get goalsKrFilter => 'د کارونو فلټر (اختیاري)';
+
+  @override
+  String get goalsKrFilterHint =>
+      'د کاري ځای پر سر د TFQL فلټر، لکه label = launch. هغه کارونه چې په لاس یې زیاتوئ هم شمیرل کیږي.';
+
+  @override
+  String goalsKrPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count کارونه په لاس زیات شوي',
+      one: '۱ کار په لاس زیات شوی',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalsKrNumberProgress(String current, String target) {
+    return '$current له $target څخه';
+  }
+
+  @override
+  String goalsKrLinkedProgress(int done, int total) {
+    return '$done له $total کارونو ترسره شوي';
+  }
+
+  @override
+  String get goalsKrDone => 'ترسره شو';
+
+  @override
+  String get goalsKrNotDone => 'نه دی ترسره';
+
+  @override
+  String get goalsCheckIn => 'پرمختګ ثبتول';
+
+  @override
+  String goalsCheckInTitle(String name) {
+    return 'پرمختګ ثبتول: $name';
+  }
+
+  @override
+  String get goalsCheckInValue => 'نوی ارزښت';
+
+  @override
+  String get goalsCheckInDone => 'ترسره شو';
+
+  @override
+  String get goalsCheckInNote => 'یادښت';
+
+  @override
+  String get goalsCheckInLinkedHint =>
+      'تړلي کارونه ارزښت ټاکي. بیا هم یادښت پریښودی شئ.';
+
+  @override
+  String get goalsCheckInHistory => 'پخوانی';
+
+  @override
+  String get goalsCheckInEmpty => 'تر اوسه ثبت نشته.';
+
+  @override
+  String get goalsCheckInSystem => 'له کارونو شمیرل شوی';
+
+  @override
+  String goalsCheckInChange(String from, String to) {
+    return '$from ← $to';
+  }
+
+  @override
+  String get goalsContributes => 'ګډون کوي په';
+
+  @override
+  String get goalsAddToKr => 'په یوه کلیدي پایله کې شمیرل';
+
+  @override
+  String get goalsPickKr => 'کومه کلیدي پایله دا کار وشمیري؟';
+
+  @override
+  String get goalsNoLinkedKr => 'داسې تړلې کلیدي پایلې نشته چې سمولی یې شئ.';
+
+  @override
+  String get goalsSubgoals => 'فرعي موخې';
+
+  @override
+  String get goalsDenied => 'تاسو د موخو سره د دې کار اجازه نه لرئ.';
+
+  @override
+  String get goalsGone => 'دا موخه نور شتون نلري.';
+
+  @override
+  String get goalsConflict =>
+      'له خلاصولو راهیسې بدل شوی. بیا یې پرانیزئ او هڅه وکړئ.';
 }

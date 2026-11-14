@@ -6754,4 +6754,248 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get formsLogoLabel => 'عنوان الشعار (https://…)';
+
+  @override
+  String get goalsTitle => 'الأهداف';
+
+  @override
+  String get goalsEmpty => 'لا توجد أهداف بعد. أنشئ هدفًا لتتبع ما يهم.';
+
+  @override
+  String get goalsNew => 'هدف جديد';
+
+  @override
+  String get goalsEdit => 'تعديل الهدف';
+
+  @override
+  String get goalsDelete => 'حذف الهدف';
+
+  @override
+  String goalsDeleteTitle(String name) {
+    return 'حذف \"$name\"؟';
+  }
+
+  @override
+  String get goalsDeleteBody =>
+      'تُحذف نتائجه الرئيسية وتسجيلات تقدمه. تنتقل الأهداف التابعة له مستوى واحدًا للأعلى.';
+
+  @override
+  String get goalsSave => 'حفظ';
+
+  @override
+  String get goalsName => 'الاسم';
+
+  @override
+  String get goalsDescription => 'الوصف';
+
+  @override
+  String goalsPeriod(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get goalsOwner => 'المالك';
+
+  @override
+  String get goalsContributors => 'المساهمون';
+
+  @override
+  String get goalsParent => 'الهدف الأعلى';
+
+  @override
+  String get goalsNone => 'بلا';
+
+  @override
+  String get goalsFolder => 'المجلد';
+
+  @override
+  String get goalsNoFolder => 'بلا مجلد';
+
+  @override
+  String get goalsNewFolder => 'مجلد جديد';
+
+  @override
+  String get goalsFolderName => 'اسم المجلد';
+
+  @override
+  String get goalsRenameFolder => 'إعادة تسمية المجلد';
+
+  @override
+  String get goalsDeleteFolder => 'حذف المجلد';
+
+  @override
+  String get goalsWeight => 'الوزن';
+
+  @override
+  String get goalsPrivate => 'خاص';
+
+  @override
+  String get goalsPrivateHint => 'يراه المالك والمساهمون والمسؤولون فقط.';
+
+  @override
+  String get goalsStatusLabel => 'الحالة';
+
+  @override
+  String get goalsStatusAuto => 'تلقائي';
+
+  @override
+  String get goalsStatusOnTrack => 'على المسار';
+
+  @override
+  String get goalsStatusAtRisk => 'في خطر';
+
+  @override
+  String get goalsStatusOffTrack => 'خارج المسار';
+
+  @override
+  String get goalsStatusAutoNote => 'يُحسب من التقدم والوقت.';
+
+  @override
+  String goalsStatusSet(String status) {
+    return 'حُدد يدويًا. المقترح: $status';
+  }
+
+  @override
+  String goalsProgressPercent(int percent) {
+    return '$percent٪';
+  }
+
+  @override
+  String get goalsKeyResults => 'النتائج الرئيسية';
+
+  @override
+  String get goalsNoKr => 'لا توجد نتائج رئيسية بعد.';
+
+  @override
+  String get goalsAddKr => 'إضافة نتيجة رئيسية';
+
+  @override
+  String get goalsEditKr => 'تعديل النتيجة الرئيسية';
+
+  @override
+  String get goalsDeleteKr => 'حذف النتيجة الرئيسية';
+
+  @override
+  String get goalsKrName => 'النتيجة الرئيسية';
+
+  @override
+  String get goalsKrType => 'طريقة القياس';
+
+  @override
+  String get goalsKrNumber => 'رقم';
+
+  @override
+  String get goalsKrPercentage => 'نسبة مئوية';
+
+  @override
+  String get goalsKrBoolean => 'منجز أو لا';
+
+  @override
+  String get goalsKrLinked => 'مهام مرتبطة';
+
+  @override
+  String get goalsKrStart => 'القيمة الابتدائية';
+
+  @override
+  String get goalsKrTarget => 'القيمة المستهدفة';
+
+  @override
+  String get goalsKrCurrent => 'القيمة الحالية';
+
+  @override
+  String get goalsKrDirectionHint =>
+      'يمكن أن يكون الهدف أقل من البداية، مثل خفض الأخطاء من 40 إلى 10.';
+
+  @override
+  String get goalsKrFilter => 'مرشح المهام (اختياري)';
+
+  @override
+  String get goalsKrFilterHint =>
+      'مرشح TFQL على مساحة العمل مثل label = launch. تُحتسب المهام التي تضيفها يدويًا أيضًا.';
+
+  @override
+  String goalsKrPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مهام أُضيفت يدويًا',
+      one: 'مهمة واحدة أُضيفت يدويًا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalsKrNumberProgress(String current, String target) {
+    return '$current من $target';
+  }
+
+  @override
+  String goalsKrLinkedProgress(int done, int total) {
+    return '$done من $total مهام منجزة';
+  }
+
+  @override
+  String get goalsKrDone => 'منجز';
+
+  @override
+  String get goalsKrNotDone => 'غير منجز';
+
+  @override
+  String get goalsCheckIn => 'تسجيل تقدم';
+
+  @override
+  String goalsCheckInTitle(String name) {
+    return 'تسجيل تقدم: $name';
+  }
+
+  @override
+  String get goalsCheckInValue => 'القيمة الجديدة';
+
+  @override
+  String get goalsCheckInDone => 'منجز';
+
+  @override
+  String get goalsCheckInNote => 'ملاحظة';
+
+  @override
+  String get goalsCheckInLinkedHint =>
+      'المهام المرتبطة تحدد القيمة. ما زال بإمكانك ترك ملاحظة.';
+
+  @override
+  String get goalsCheckInHistory => 'السجل';
+
+  @override
+  String get goalsCheckInEmpty => 'لا توجد تسجيلات بعد.';
+
+  @override
+  String get goalsCheckInSystem => 'حُسب من المهام';
+
+  @override
+  String goalsCheckInChange(String from, String to) {
+    return '$from ← $to';
+  }
+
+  @override
+  String get goalsContributes => 'يساهم في';
+
+  @override
+  String get goalsAddToKr => 'احتسابها في نتيجة رئيسية';
+
+  @override
+  String get goalsPickKr => 'أي نتيجة رئيسية تحتسب هذه المهمة؟';
+
+  @override
+  String get goalsNoLinkedKr => 'لا توجد نتائج رئيسية مرتبطة يمكنك تعديلها.';
+
+  @override
+  String get goalsSubgoals => 'الأهداف الفرعية';
+
+  @override
+  String get goalsDenied => 'ليس لديك إذن لهذا الإجراء على الأهداف.';
+
+  @override
+  String get goalsGone => 'هذا الهدف لم يعد موجودًا.';
+
+  @override
+  String get goalsConflict => 'تغيّر منذ فتحته. أعد التحميل وحاول مجددًا.';
 }

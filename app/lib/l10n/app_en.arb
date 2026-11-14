@@ -3875,5 +3875,152 @@
   "formsNotifyStatusHint": "One way: the sender gets the new status, never a link into the workspace.",
   "formsBranding": "Look",
   "formsColorLabel": "Brand color",
-  "formsLogoLabel": "Logo address (https://…)"
+  "formsLogoLabel": "Logo address (https://…)",
+  "goalsTitle": "Goals",
+  "goalsEmpty": "No goals yet. Create one to track what matters.",
+  "goalsNew": "New goal",
+  "goalsEdit": "Edit goal",
+  "goalsDelete": "Delete goal",
+  "goalsDeleteTitle": "Delete \"{name}\"?",
+  "@goalsDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsDeleteBody": "Its key results and check-ins are deleted. Goals under it move up one level.",
+  "goalsSave": "Save",
+  "goalsName": "Name",
+  "goalsDescription": "Description",
+  "goalsPeriod": "{start} – {end}",
+  "@goalsPeriod": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsOwner": "Owner",
+  "goalsContributors": "Contributors",
+  "goalsParent": "Parent goal",
+  "goalsNone": "None",
+  "goalsFolder": "Folder",
+  "goalsNoFolder": "No folder",
+  "goalsNewFolder": "New folder",
+  "goalsFolderName": "Folder name",
+  "goalsRenameFolder": "Rename folder",
+  "goalsDeleteFolder": "Delete folder",
+  "goalsWeight": "Weight",
+  "goalsPrivate": "Private",
+  "goalsPrivateHint": "Only the owner, contributors and admins can see it.",
+  "goalsStatusLabel": "Status",
+  "goalsStatusAuto": "Automatic",
+  "goalsStatusOnTrack": "On track",
+  "goalsStatusAtRisk": "At risk",
+  "goalsStatusOffTrack": "Off track",
+  "goalsStatusAutoNote": "Worked out from progress and time.",
+  "goalsStatusSet": "Set by hand. Suggested: {status}",
+  "@goalsStatusSet": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsProgressPercent": "{percent}%",
+  "@goalsProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "goalsKeyResults": "Key results",
+  "goalsNoKr": "No key results yet.",
+  "goalsAddKr": "Add key result",
+  "goalsEditKr": "Edit key result",
+  "goalsDeleteKr": "Delete key result",
+  "goalsKrName": "Key result",
+  "goalsKrType": "Measured as",
+  "goalsKrNumber": "Number",
+  "goalsKrPercentage": "Percentage",
+  "goalsKrBoolean": "Done or not",
+  "goalsKrLinked": "Linked tasks",
+  "goalsKrStart": "Start value",
+  "goalsKrTarget": "Target value",
+  "goalsKrCurrent": "Current value",
+  "goalsKrDirectionHint": "A target below the start works too, for example reducing bugs from 40 to 10.",
+  "goalsKrFilter": "Task filter (optional)",
+  "goalsKrFilterHint": "A TFQL filter over the workspace, such as label = launch. Tasks you add by hand count too.",
+  "goalsKrPicked": "{count, plural, one{1 task added by hand} other{{count} tasks added by hand}}",
+  "@goalsKrPicked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "goalsKrNumberProgress": "{current} of {target}",
+  "@goalsKrNumberProgress": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsKrLinkedProgress": "{done} of {total} tasks done",
+  "@goalsKrLinkedProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "goalsKrDone": "Done",
+  "goalsKrNotDone": "Not done",
+  "goalsCheckIn": "Check in",
+  "goalsCheckInTitle": "Check in: {name}",
+  "@goalsCheckInTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsCheckInValue": "New value",
+  "goalsCheckInDone": "Done",
+  "goalsCheckInNote": "Note",
+  "goalsCheckInLinkedHint": "The linked tasks set the value. You can still leave a note.",
+  "goalsCheckInHistory": "History",
+  "goalsCheckInEmpty": "No check-ins yet.",
+  "goalsCheckInSystem": "Counted from tasks",
+  "goalsCheckInChange": "{from} → {to}",
+  "@goalsCheckInChange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsContributes": "Contributes to",
+  "goalsAddToKr": "Count in a key result",
+  "goalsPickKr": "Which key result counts this task?",
+  "goalsNoLinkedKr": "No linked key results you can edit.",
+  "goalsSubgoals": "Sub-goals",
+  "goalsDenied": "You are not allowed to do that with goals.",
+  "goalsGone": "That goal no longer exists.",
+  "goalsConflict": "It changed since you opened it. Reload and try again."
 }
