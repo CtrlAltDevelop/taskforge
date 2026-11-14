@@ -13,9 +13,14 @@ import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/account/home_screen.dart';
+import 'package:taskforge/features/account/sessions_api.dart';
+import 'package:taskforge/features/security/application/security_providers.dart';
+import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
+import '../security/fakes.dart';
+import '../system/fakes.dart';
 import '../workspaces/fakes.dart' show FakeWorkspaceClient, ws;
 
 class _FakeApi implements AuthApi {
@@ -115,6 +120,15 @@ class _FakeAccounts implements AccountClient {
   ];
 }
 
+/// The session list is REST now; it answers the same two sessions.
+class _FakeSessionsApi implements SessionsApi {
+  @override
+  Future<List<SessionInfo>> list() => _FakeAccounts().sessions();
+
+  @override
+  Future<String> rename(String sessionId, String name) async => name;
+}
+
 Future<(AuthSession, _FakeApi)> _pump(
   WidgetTester tester, {
   AuthTokens? signedInAs,
@@ -130,6 +144,9 @@ Future<(AuthSession, _FakeApi)> _pump(
         authSessionProvider.overrideWithValue(session),
         syncClientProvider.overrideWithValue(null),
         accountClientProvider.overrideWithValue(_FakeAccounts()),
+        sessionsApiProvider.overrideWithValue(_FakeSessionsApi()),
+        securityClientProvider.overrideWithValue(FakeSecurityClient()),
+        systemClientProvider.overrideWithValue(FakeSystemClient()),
         workspaceClientProvider.overrideWithValue(
           FakeWorkspaceClient([ws('w1', 'Acme')]),
         ),
@@ -406,6 +423,8 @@ void main() {
         sessionId: 's',
       ),
     );
+    await tester.ensureVisible(find.byKey(const Key('open-change-password')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
     await tester.pumpAndSettle();
 
@@ -437,6 +456,8 @@ void main() {
         sessionId: 's',
       ),
     );
+    await tester.ensureVisible(find.byKey(const Key('open-change-password')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
     await tester.pumpAndSettle();
 

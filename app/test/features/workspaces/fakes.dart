@@ -5,9 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/app.dart';
+import 'package:taskforge/features/goals/application/goals_providers.dart';
+import 'package:taskforge/features/security/application/security_providers.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
+import 'package:taskforge/features/system/application/system_providers.dart';
 
+import '../goals/fakes.dart';
+import '../security/fakes.dart';
 import '../shortcuts/fakes.dart';
+import '../system/fakes.dart';
 
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/auth/auth_providers.dart';
@@ -174,6 +180,9 @@ Future<ProviderContainer> pumpSignedIn(
   FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
 
+  /// What the server says its version is (default: nothing to update).
+  FakeSystemClient? system,
+
   /// The live connection: none unless a test brings its own.
   Override? sync,
 }) async {
@@ -221,6 +230,10 @@ Future<ProviderContainer> pumpSignedIn(
       shortcutsClientProvider.overrideWithValue(
         shortcuts ?? FakeShortcutsClient(),
       ),
+      // The router asks both on every launch: answer "nothing required, nothing to update".
+      securityClientProvider.overrideWithValue(FakeSecurityClient()),
+      systemClientProvider.overrideWithValue(system ?? FakeSystemClient()),
+      goalsClientProvider.overrideWithValue(FakeGoalsClient()),
       ...overrides,
     ],
   );

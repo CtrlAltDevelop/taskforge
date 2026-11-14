@@ -1,6 +1,11 @@
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 
+import 'package:taskforge/features/security/application/security_providers.dart';
+import 'package:taskforge/features/system/application/system_providers.dart';
+
+import '../security/fakes.dart';
+import '../system/fakes.dart';
 import '../inbox/fakes.dart';
 import '../time/fakes.dart';
 
@@ -49,6 +54,8 @@ Future<ProviderContainer> _pumpSignedOut(
       membersClientProvider.overrideWithValue(members),
       inboxClientProvider.overrideWithValue(FakeInboxClient()),
       timeClientProvider.overrideWithValue(FakeTimeClient()),
+      securityClientProvider.overrideWithValue(FakeSecurityClient()),
+      systemClientProvider.overrideWithValue(FakeSystemClient()),
     ],
   );
   addTearDown(container.dispose);
