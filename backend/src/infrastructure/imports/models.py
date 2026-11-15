@@ -14,6 +14,7 @@ from infrastructure.workspaces.models import Workspace
 
 
 class Status:
+    FETCHING: Final = "fetching"  # a ClickUp fetch is writing the file (phase 41)
     UPLOADED: Final = "uploaded"  # the file is stored; nothing has been read for the mapping
     ANALYZED: Final = "analyzed"  # the file was read and a mapping proposed
     QUEUED: Final = "queued"
@@ -26,7 +27,7 @@ class Status:
     FINISHED: Final = (DONE, FAILED, CANCELLED, UNDONE)
     CHOICES: Final = tuple(
         (s, s.title())
-        for s in (UPLOADED, ANALYZED, QUEUED, RUNNING, DONE, FAILED, CANCELLED, UNDONE)
+        for s in (FETCHING, UPLOADED, ANALYZED, QUEUED, RUNNING, DONE, FAILED, CANCELLED, UNDONE)
     )
 
 

@@ -16,7 +16,16 @@ from django.utils import timezone
 
 from infrastructure.audit import recorder
 from infrastructure.common.errors import ApiError
-from infrastructure.imports import dryrun, engine, files, parsers, queue, streams
+from infrastructure.imports import (
+    clickup_api,
+    clickup_fetch,
+    dryrun,
+    engine,
+    files,
+    parsers,
+    queue,
+    streams,
+)
 from infrastructure.imports import mapping as mapping_rules
 from infrastructure.imports import scan as scanning
 from infrastructure.imports import undo as undoing
@@ -29,6 +38,7 @@ from infrastructure.workspaces.models import Workspace
 MANAGE: Final = "data.manage"
 LIST_LIMIT: Final = 50
 HEAD_BYTES: Final = 8192
+MAX_LISTS: Final = 200
 
 
 def not_found() -> ApiError:
@@ -227,9 +237,9 @@ def start(actor: Any, workspace: Workspace, job_id: str, raw: dict[str, Any]) ->
 
 def cancel(actor: Any, workspace: Workspace, job_id: str) -> ImportJob:
     job = job_of(actor, workspace, job_id)
-    stopped = ImportJob.objects.filter(pk=job.pk, status__in=Status.ACTIVE).update(
-        status=Status.CANCELLED
-    )
+    stopped = ImportJob.objects.filter(
+        pk=job.pk, status__in=(*Status.ACTIVE, Status.FETCHING)
+    ).update(status=Status.CANCELLED)
     if stopped:
         _record(job, "import.cancelled", {"done": job.done, "total": job.total})
     return ImportJob.objects.get(pk=job.pk)
@@ -266,3 +276,34 @@ def discard(actor: Any, workspace: Workspace, job_id: str) -> None:
     _record(job, "import.discarded", {"filename": job.filename})
     files.remove(job)
     job.delete()
+
+
+def clickup_lists(actor: Any, workspace: Workspace, token: str) -> list[dict[str, Any]]:
+    """The ClickUp workspaces and lists this token can see (the token is not kept)."""
+    access.require(actor, MANAGE, workspace)
+    with clickup_api.make_client(token) as http:
+        return clickup_api.workspaces_with_lists(http)
+
+
+def clickup_fetch_start(
+    actor: Any, workspace: Workspace, token: str, list_ids: list[str]
+) -> ImportJob:
+    """Pull the lists into a job's file in the background; the job is ``fetching`` until it is
+    ``uploaded`` and the wizard goes on at Map."""
+    access.require(actor, MANAGE, workspace)
+    ids = list(dict.fromkeys(list_ids))
+    if not ids or len(ids) > MAX_LISTS or not all(clickup_api.valid_id(i) for i in ids):
+        raise ApiError("Choose between 1 and 200 ClickUp lists.", status=400)
+    if not token.strip():
+        raise ApiError("A ClickUp token is needed.", status=400)
+    job = ImportJob.objects.create(
+        workspace=workspace,
+        created_by=actor,
+        source="clickup_json",
+        filename="ClickUp",
+        status=Status.FETCHING,
+        heartbeat_at=timezone.now(),
+    )
+    _record(job, "import.clickup_fetch", {"lists": len(ids)})
+    queue.run_later(clickup_fetch.run, job.pk, token, ids)
+    return ImportJob.objects.get(pk=job.pk)

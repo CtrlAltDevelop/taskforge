@@ -769,6 +769,14 @@ def resume_stalled(now: datetime | None = None) -> int:
     from infrastructure.imports import queue
 
     moment = now or timezone.now()
+    ImportJob.objects.filter(
+        status=JobStatus.FETCHING,
+        heartbeat_at__lt=moment - timedelta(seconds=STALE_AFTER_SECONDS),
+    ).update(
+        status=JobStatus.FAILED,
+        error="The ClickUp fetch was interrupted; fetch again.",
+        finished_at=moment,
+    )
     stale = list(
         ImportJob.objects.filter(
             status=JobStatus.RUNNING,

@@ -4,6 +4,7 @@ The file goes over REST because browsers send big files as multipart; it is copi
 blocks, never held whole. Needs ``data.manage``.
 """
 
+from typing import Any
 from uuid import UUID
 
 from django.conf import settings
@@ -53,3 +54,39 @@ def upload(
         member=job.member,
         members=services.members_of(request.user, workspace, str(job.pk)),
     )
+
+
+class ClickUpListIn(Schema):
+    workspace_id: UUID
+    token: str
+
+
+class ClickUpFetchIn(ClickUpListIn):
+    list_ids: list[str]
+
+
+class ClickUpFetchOut(Schema):
+    id: str
+    status: str
+
+
+@router.post(
+    "/clickup/lists",
+    auth=api_auth,
+    summary="The ClickUp workspaces and lists a personal API token can see (token not kept)",
+)
+def clickup_lists(request: HttpRequest, payload: ClickUpListIn) -> list[dict[str, Any]]:
+    workspace = require_workspace(request.user, str(payload.workspace_id))
+    return services.clickup_lists(request.user, workspace, payload.token)
+
+
+@router.post(
+    "/clickup/fetch",
+    response=ClickUpFetchOut,
+    auth=api_auth,
+    summary="Fetch ClickUp lists in the background into an import job (watch it with gRPC Get)",
+)
+def clickup_fetch(request: HttpRequest, payload: ClickUpFetchIn) -> ClickUpFetchOut:
+    workspace = require_workspace(request.user, str(payload.workspace_id))
+    job = services.clickup_fetch_start(request.user, workspace, payload.token, payload.list_ids)
+    return ClickUpFetchOut(id=str(job.pk), status=job.status)

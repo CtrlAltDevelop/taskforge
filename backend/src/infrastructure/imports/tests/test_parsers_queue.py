@@ -73,3 +73,20 @@ def test_a_job_runs_on_its_lane_and_a_failing_one_does_not_kill_it() -> None:
         queue.run_later(lambda: 1 / 0, lane="test-lane")  # logged, worker survives
         queue.run_later(done.set, lane="test-lane")
         assert done.wait(5)
+
+
+def test_checklists_and_custom_fields_are_kept_in_the_body() -> None:
+    task = {
+        "id": "a",
+        "name": "A",
+        "text_content": "Intro",
+        "checklists": [
+            {"name": "Ship", "items": [{"name": "Test", "resolved": True}, {"name": "Tag"}]}
+        ],
+        "custom_fields": [{"name": "Client", "value": "Acme"}, {"name": "Empty", "value": None}],
+    }
+    (issue,) = _parse({"tasks": [task]})
+    assert issue.body_format == "md"
+    assert issue.body == (
+        "Intro\n\n**Ship**\n- [x] Test\n- [ ] Tag\n**Custom fields**\n- Client: Acme"
+    )

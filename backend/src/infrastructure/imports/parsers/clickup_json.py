@@ -42,6 +42,29 @@ def _links(task: dict[str, Any], own: str) -> tuple[RLink, ...]:
     return tuple(out)
 
 
+def _extras(task: dict[str, Any]) -> str:
+    """Checklists and custom-field values as Markdown lines (they have no field of their own)."""
+    lines: list[str] = []
+    for checklist in task.get("checklists") or []:
+        if not isinstance(checklist, dict):
+            continue
+        lines.append(f"**{checklist.get('name') or 'Checklist'}**")
+        lines += [
+            f"- [{'x' if item.get('resolved') else ' '}] {item.get('name', '')}"
+            for item in checklist.get("items") or []
+            if isinstance(item, dict)
+        ]
+    fields = [
+        f"- {f['name']}: {f['value']}"
+        for f in task.get("custom_fields") or []
+        if isinstance(f, dict) and f.get("name") and f.get("value") not in (None, "", [])
+        # ponytail: raw value (dropdowns show their option index); map to real fields if asked
+    ]
+    if fields:
+        lines += ["**Custom fields**", *fields]
+    return "\n".join(lines)
+
+
 def _one(task: Any, position: int) -> RIssue | Problem:
     if not isinstance(task, dict):
         return Problem(position, "Entry is not an object.")
@@ -54,6 +77,9 @@ def _one(task: Any, position: int) -> RIssue | Problem:
         or task.get("description")
         or ""
     )
+    extras = _extras(task)
+    if extras:
+        description = f"{description}\n\n{extras}".strip()
     priority = task.get("priority")
     comments = tuple(
         RComment(
@@ -71,7 +97,7 @@ def _one(task: Any, position: int) -> RIssue | Problem:
         source_id=own,
         title=title,
         body=str(description),
-        body_format="md" if task.get("markdown_description") else "text",
+        body_format="md" if task.get("markdown_description") or extras else "text",
         status=str((task.get("status") or {}).get("status", "")),
         priority=str(
             priority.get("priority", "") if isinstance(priority, dict) else priority or ""
