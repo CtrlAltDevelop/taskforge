@@ -1,5 +1,6 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/app_theme.dart' show radiusMedium;
 import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +25,7 @@ import 'package:taskforge/core/sync/presentation/connection_status.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/recurrence/presentation/repeat_section.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
+import 'package:taskforge/features/tasks/domain/list_drop.dart';
 import 'package:taskforge/features/tasks/domain/list_rows.dart';
 import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -32,6 +34,7 @@ import 'package:taskforge/features/timeline/presentation/timeline_view.dart';
 import 'package:taskforge/features/tasks/presentation/bulk_bar.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/tasks/presentation/list_toolbar.dart';
+import 'package:taskforge/features/tasks/presentation/row_drop_target.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 
 export 'package:taskforge/features/tasks/presentation/task_actions.dart'
@@ -344,6 +347,9 @@ class _TaskListState extends ConsumerState<_TaskList> {
   /// The task whose inline "add subtask" field is open.
   String? _addingUnder;
 
+  /// The subtask being dragged now (a drop bar to make it a main task shows).
+  Task? _draggingSub;
+
   Project get project => widget.project;
 
   @override
@@ -428,7 +434,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
       if (canDelete) TaskAction.delete,
     ];
     if (widget.wide) {
-      return TaskTable(
+      final table = TaskTable(
         projectId: project.id,
         entries: entries,
         layout: layout,
@@ -440,15 +446,42 @@ class _TaskListState extends ConsumerState<_TaskList> {
         actionsFor: actionsFor,
         onAction: (action, task) => _act(action, tree, task),
         progressOf: tree.progressOf,
-        wrapRow: canUpdate && layout.query.isDefault
-            ? (task, row) => _dropTarget(tree, task, _draggable(task, row))
+        wrapRow: canUpdate
+            ? (task, row) => _dropTarget(
+                tree,
+                task,
+                layout.query,
+                _canDrag(task, layout.query) ? _draggable(task, row) : row,
+              )
+            : null,
+        wrapGroup: canUpdate && layout.groupBy.isNotEmpty
+            ? (group, header) => _groupDrop(tree, layout, group, header)
             : null,
       );
+      return Column(
+        children: [
+          if (_draggingSub != null) _topLevelDrop(_draggingSub!),
+          Expanded(child: table),
+        ],
+      );
     }
-    return _cards(context, state, entries, tree, lookups, layout, actionsFor, (
-      canUpdate: canUpdate,
-      canDelete: canDelete,
-    ));
+    final cards = _cards(
+      context,
+      state,
+      entries,
+      tree,
+      lookups,
+      layout,
+      actionsFor,
+      (canUpdate: canUpdate, canDelete: canDelete),
+      canDrag: canUpdate,
+    );
+    return Column(
+      children: [
+        if (_draggingSub != null) _topLevelDrop(_draggingSub!),
+        Expanded(child: cards),
+      ],
+    );
   }
 
   /// The phone list: one card per task, long-press to start picking, swipe to
@@ -461,8 +494,9 @@ class _TaskListState extends ConsumerState<_TaskList> {
     ListLookups lookups,
     ListLayout layout,
     List<TaskAction> Function(Task) actionsFor,
-    ({bool canUpdate, bool canDelete}) can,
-  ) {
+    ({bool canUpdate, bool canDelete}) can, {
+    required bool canDrag,
+  }) {
     final picked = ref.watch(taskSelectionProvider(project.id));
     final selection = ref.read(taskSelectionProvider(project.id).notifier);
     final doneStatus = lookups.flow?.statuses
@@ -487,6 +521,7 @@ class _TaskListState extends ConsumerState<_TaskList> {
           ref.read(taskListProvider(project.id).notifier).refresh(),
       child: ListView.builder(
         key: const Key('task-list'),
+        padding: const EdgeInsets.only(top: 4, bottom: 96),
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: items.length + (state.loading ? 1 : 0),
         itemBuilder: (context, i) {
@@ -495,7 +530,12 @@ class _TaskListState extends ConsumerState<_TaskList> {
           }
           final item = items[i];
           if (item is String) return _inlineAdd(tree, item);
-          if (item is GroupEntry) return _groupTile(lookups, layout, item);
+          if (item is GroupEntry) {
+            final header = _groupTile(lookups, layout, item);
+            return canDrag && layout.groupBy.isNotEmpty
+                ? _groupDrop(tree, layout, item, header)
+                : header;
+          }
           final entry = item as TaskEntry;
           final task = entry.task;
           final actions = actionsFor(task);
@@ -519,8 +559,12 @@ class _TaskListState extends ConsumerState<_TaskList> {
             actions: actions,
             onAction: (action) => _act(action, tree, task),
             fieldSummary: summarize(task),
+            dragHandle: canDrag && _canDrag(task, layout.query)
+                ? _dragHandle(task)
+                : null,
           );
-          return _swipeable(task, tile, doneStatus, tree, can);
+          final row = _swipeable(task, tile, doneStatus, tree, can);
+          return canDrag ? _dropTarget(tree, task, layout.query, row) : row;
         },
       ),
     );
@@ -630,43 +674,192 @@ class _TaskListState extends ConsumerState<_TaskList> {
   Widget _draggable(Task task, Widget tile) => LongPressDraggable<String>(
     key: Key('drag-${task.id}'),
     data: task.id,
-    feedback: Material(
-      elevation: 4,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 320),
-        child: ListTile(
-          title: Text(task.title, overflow: TextOverflow.ellipsis),
-          subtitle: Text(isolateLtr(task.displayId)),
-        ),
-      ),
-    ),
+    dragAnchorStrategy: pointerDragAnchorStrategy,
+    feedback: _dragFeedback(task),
     childWhenDragging: Opacity(opacity: 0.4, child: tile),
+    onDragStarted: () => _dragStarted(task),
+    onDragEnd: (_) => _dragEnded(),
     child: tile,
   );
 
-  Widget _dropTarget(TaskTree tree, Task target, Widget child) =>
-      DragTarget<String>(
-        key: Key('drop-${target.id}'),
-        onWillAcceptWithDetails: (d) {
-          final dragged = tree.task(d.data);
-          return dragged != null &&
-              dragged.parentId != target.id &&
-              !tree.wouldCycle(dragged.id, target.id) &&
-              target.depth + 1 + tree.levelsBelow(dragged.id) < softDepthLimit;
-        },
-        onAcceptWithDetails: (d) {
-          final dragged = tree.task(d.data);
-          if (dragged != null) _reparent(dragged, target.id);
-        },
-        builder: (context, candidates, _) => DecoratedBox(
-          decoration: BoxDecoration(
-            border: candidates.isEmpty
-                ? null
-                : Border.all(color: Theme.of(context).colorScheme.primary),
-          ),
-          child: child,
+  /// Phone cards: long press already picks, so a handle starts the drag at once
+  /// (mouse or finger; it wins over the list's scroll and the card's swipe).
+  Widget _dragHandle(Task task) => Draggable<String>(
+    key: Key('drag-${task.id}'),
+    data: task.id,
+    feedback: _dragFeedback(task),
+    dragAnchorStrategy: pointerDragAnchorStrategy,
+    onDragStarted: () => _dragStarted(task),
+    onDragEnd: (_) => _dragEnded(),
+    child: const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: Icon(Icons.drag_indicator),
+    ),
+  );
+
+  Widget _dragFeedback(Task task) => Material(
+    elevation: 4,
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 320),
+      child: ListTile(
+        title: Text(task.title, overflow: TextOverflow.ellipsis),
+        subtitle: Text(isolateLtr(task.displayId)),
+      ),
+    ),
+  );
+
+  void _dragStarted(Task task) {
+    if (task.parentId.isNotEmpty) setState(() => _draggingSub = task);
+  }
+
+  void _dragEnded() {
+    if (_draggingSub != null) setState(() => _draggingSub = null);
+  }
+
+  /// Shown while a subtask is dragged: dropping it here makes it a main task.
+  Widget _topLevelDrop(Task dragged) => DragTarget<String>(
+    key: const Key('drop-top-level'),
+    onWillAcceptWithDetails: (d) => d.data == dragged.id,
+    onAcceptWithDetails: (_) => _reparent(dragged, ''),
+    builder: (context, candidates, _) {
+      final scheme = Theme.of(context).colorScheme;
+      final hot = candidates.isNotEmpty;
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        margin: const EdgeInsets.all(8),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: hot ? scheme.primaryContainer : null,
+          border: Border.all(color: scheme.primary),
+          borderRadius: BorderRadius.circular(8),
         ),
+        child: Text(context.l10n.grpFActionMakeTopLevel),
       );
+    },
+  );
+
+  /// A subtask only nests (it is not a board card), so only a default list lets
+  /// it be picked up; a main task also reorders and changes group.
+  bool _canDrag(Task task, ListQuery query) =>
+      query.isDefault || task.parentId.isEmpty;
+
+  bool _canNest(TaskTree tree, Task dragged, Task target, ListQuery query) =>
+      query.isDefault &&
+      dragged.parentId != target.id &&
+      !tree.wouldCycle(dragged.id, target.id) &&
+      target.depth + 1 + tree.levelsBelow(dragged.id) < softDepthLimit;
+
+  RowDrop? _plan(
+    TaskTree tree,
+    Task dragged,
+    Task target,
+    DropZone zone,
+    ListQuery query,
+  ) => planRowDrop(
+    dragged: dragged,
+    target: target,
+    zone: zone,
+    query: query,
+    canNest: _canNest(tree, dragged, target, query),
+  );
+
+  Widget _dropTarget(
+    TaskTree tree,
+    Task target,
+    ListQuery query,
+    Widget child,
+  ) => RowDropTarget(
+    key: Key('drop-${target.id}'),
+    canNest: query.isDefault,
+    willAccept: (id) {
+      final dragged = tree.task(id);
+      return dragged != null &&
+          dragged.id != target.id &&
+          DropZone.values.any(
+            (z) => _plan(tree, dragged, target, z, query) != null,
+          );
+    },
+    onDrop: (id, zone) {
+      final dragged = tree.task(id);
+      if (dragged == null) return;
+      switch (_plan(tree, dragged, target, zone, query)) {
+        case NestDrop():
+          _reparent(dragged, target.id);
+        case MoveDrop(
+          :final groupBy,
+          :final column,
+          :final beforeId,
+          :final afterId,
+        ):
+          _moveCard(
+            dragged,
+            groupBy: groupBy,
+            column: column,
+            beforeId: beforeId,
+            afterId: afterId,
+          );
+        case null:
+      }
+    },
+    child: child,
+  );
+
+  /// A group header takes a main task: it joins that group (last).
+  Widget _groupDrop(
+    TaskTree tree,
+    ListLayout layout,
+    GroupEntry group,
+    Widget header,
+  ) => DragTarget<String>(
+    key: Key('drop-group-${group.key}'),
+    onWillAcceptWithDetails: (d) {
+      final dragged = tree.task(d.data);
+      return dragged != null &&
+          dragged.parentId.isEmpty &&
+          groupKeyOf(dragged, layout.groupBy) != group.key;
+    },
+    onAcceptWithDetails: (d) {
+      final dragged = tree.task(d.data);
+      if (dragged == null) return;
+      _moveCard(dragged, groupBy: layout.groupBy, column: group.key);
+    },
+    builder: (context, candidates, _) => DecoratedBox(
+      decoration: BoxDecoration(
+        border: candidates.isEmpty
+            ? null
+            : Border.all(color: Theme.of(context).colorScheme.primary),
+      ),
+      child: header,
+    ),
+  );
+
+  Future<void> _moveCard(
+    Task task, {
+    required String groupBy,
+    required String column,
+    String beforeId = '',
+    String afterId = '',
+  }) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    try {
+      await ref
+          .read(taskListProvider(project.id).notifier)
+          .moveCard(
+            ref.read(boardClientProvider),
+            task,
+            groupBy: groupBy,
+            column: column,
+            beforeId: beforeId,
+            afterId: afterId,
+          );
+    } on TaskException catch (e) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(taskErrorMessage(e, l10n))));
+    }
+  }
 
   Future<void> _act(TaskAction action, TaskTree tree, Task task) async {
     switch (action) {
@@ -778,9 +971,13 @@ class TaskTile extends StatelessWidget {
     this.onLongPress,
     this.picked,
     this.onPick,
+    this.dragHandle,
   });
 
   final Task task;
+
+  /// Grip that starts dragging the task onto another (phone cards).
+  final Widget? dragHandle;
 
   /// The task's custom field values for the List view (see [fieldSummary]).
   final String fieldSummary;
@@ -809,21 +1006,39 @@ class TaskTile extends StatelessWidget {
   final VoidCallback? onPick;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-    decoration: BoxDecoration(
-      border: Border(
-        bottom: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final done = task.statusCategory == StatusCategory.done;
+    final accent = statusColor ?? scheme.outline;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      color: selected || picked == true
+          ? scheme.secondaryContainer
+          : done
+          ? scheme.surfaceContainerLowest
+          : scheme.surfaceContainerLow,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Status colour stripe: the card's state at a glance.
+            Container(key: Key('stripe-${task.id}'), width: 5, color: accent),
+            Expanded(child: _tile(context)),
+            if (dragHandle != null) Center(child: dragHandle),
+          ],
+        ),
       ),
-    ),
-    child: _tile(context),
-  );
+    );
+  }
 
   Widget _tile(BuildContext context) => ListTile(
     key: Key('task-${task.id}'),
-    selected: selected || picked == true,
+    selected: false,
     onTap: onTap,
     onLongPress: onLongPress,
-    contentPadding: EdgeInsetsDirectional.only(start: 8.0 + depth * 20, end: 8),
+    contentPadding: EdgeInsetsDirectional.only(start: 8.0 + depth * 16, end: 8),
+    shape: const RoundedRectangleBorder(),
     leading: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -862,9 +1077,11 @@ class TaskTile extends StatelessWidget {
     ),
     title: Text(
       task.title,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: task.statusCategory == StatusCategory.done
           ? const TextStyle(decoration: TextDecoration.lineThrough)
-          : null,
+          : const TextStyle(fontWeight: FontWeight.w600),
     ),
     subtitle: Row(
       children: [
@@ -934,7 +1151,11 @@ class _SwipeBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    color: Theme.of(context).colorScheme.secondaryContainer,
+    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      borderRadius: BorderRadius.circular(radiusMedium),
+    ),
     alignment: alignment,
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Row(
@@ -955,10 +1176,13 @@ class _Skeleton extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         for (var i = 0; i < 6; i++)
-          ListTile(
-            leading: CircleAvatar(backgroundColor: color, radius: 10),
-            title: Container(height: 12, color: color),
-            subtitle: Container(height: 8, width: 120, color: color),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: ListTile(
+              leading: CircleAvatar(backgroundColor: color, radius: 10),
+              title: Container(height: 12, color: color),
+              subtitle: Container(height: 8, width: 120, color: color),
+            ),
           ),
       ],
     );

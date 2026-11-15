@@ -52,6 +52,7 @@ class TaskTable extends ConsumerStatefulWidget {
     required this.onAction,
     required this.progressOf,
     this.wrapRow,
+    this.wrapGroup,
   });
 
   final String projectId;
@@ -70,6 +71,9 @@ class TaskTable extends ConsumerStatefulWidget {
 
   /// Wraps a task row (the list uses it to make rows draggable).
   final Widget Function(Task, Widget)? wrapRow;
+
+  /// Wraps a group header (the list uses it to take dropped tasks).
+  final Widget Function(GroupEntry, Widget)? wrapGroup;
 
   @override
   ConsumerState<TaskTable> createState() => _TaskTableState();
@@ -332,7 +336,7 @@ class _TaskTableState extends ConsumerState<TaskTable> {
           return const LinearProgressIndicator(key: Key('tasks-streaming'));
         }
         return switch (entries[i]) {
-          GroupEntry() => _groupRow(context, entries[i] as GroupEntry),
+          GroupEntry() => _wrapGroup(context, entries[i] as GroupEntry),
           TaskEntry() => _taskRow(
             context,
             entries[i] as TaskEntry,
@@ -341,6 +345,11 @@ class _TaskTableState extends ConsumerState<TaskTable> {
         };
       },
     );
+  }
+
+  Widget _wrapGroup(BuildContext context, GroupEntry group) {
+    final row = _groupRow(context, group);
+    return widget.wrapGroup?.call(group, row) ?? row;
   }
 
   Widget _groupRow(BuildContext context, GroupEntry group) {

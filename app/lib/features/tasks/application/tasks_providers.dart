@@ -7,6 +7,7 @@ import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
+import 'package:taskforge/features/board/data/board_client.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/tasks/data/offline_tasks_client.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
@@ -397,6 +398,33 @@ class TaskList extends Notifier<TaskListState> {
     }
     if (ref.mounted) await load();
     return moved;
+  }
+
+  /// Drops top-level [task] with the board's move: into [column] of [groupBy]
+  /// (a different one changes that field like any edit), right before
+  /// [beforeId], else right after [afterId], else last. The server rewrites the
+  /// order, so the list is read again.
+  Future<void> moveCard(
+    BoardClient board,
+    Task task, {
+    required String groupBy,
+    required String column,
+    String beforeId = '',
+    String afterId = '',
+  }) async {
+    try {
+      await board.move(
+        _workspace,
+        task,
+        groupBy: groupBy,
+        column: column,
+        beforeId: beforeId,
+        afterId: afterId,
+      );
+    } on Object catch (e) {
+      throw mapTaskError(e);
+    }
+    if (ref.mounted) await load();
   }
 
   /// Applies [change] to every task of [ids] in one call. Each task that took

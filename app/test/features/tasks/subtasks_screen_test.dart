@@ -387,6 +387,30 @@ void main() {
       expect(server.parentCalls, [(task: 'b', parent: 'a2')]);
     });
 
+    testWidgets('a subtask is dragged onto the top-level bar to promote it', (
+      tester,
+    ) async {
+      final (_, server) = await _open(tester);
+      expect(find.byKey(const Key('drop-top-level')), findsNothing);
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('task-a2'))),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+      await gesture.moveBy(const Offset(0, -10));
+      await tester.pump();
+      expect(find.byKey(const Key('drop-top-level')), findsOneWidget);
+      await gesture.moveTo(
+        tester.getCenter(find.byKey(const Key('drop-top-level'))),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(server.parentCalls, [(task: 'a2', parent: '')]);
+      expect(find.byKey(const Key('drop-top-level')), findsNothing);
+    });
+
     testWidgets('a row cannot be dropped onto its own subtask', (tester) async {
       final (_, server) = await _open(tester);
 
@@ -413,13 +437,48 @@ void main() {
       expect(server.parentCalls, isEmpty);
     });
 
-    testWidgets('on a phone there is no dragging, only the menu', (
+    testWidgets('on a phone a card is dragged by its handle onto another', (
       tester,
     ) async {
-      await _open(tester, size: _phone);
+      final (_, server) = await _open(tester, size: _phone);
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('drag-b'))),
+      );
+      await gesture.moveBy(const Offset(0, -20));
+      await tester.pump();
+      await gesture.moveTo(tester.getCenter(find.byKey(const Key('task-a2'))));
+      await tester.pump(const Duration(milliseconds: 100));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(server.parentCalls, [(task: 'b', parent: 'a2')]);
+    });
+
+    testWidgets('on a phone a subtask is dropped on the top-level bar', (
+      tester,
+    ) async {
+      final (_, server) = await _open(tester, size: _phone);
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('drag-a2'))),
+      );
+      await gesture.moveBy(const Offset(0, -20));
+      await tester.pump();
+      await gesture.moveTo(
+        tester.getCenter(find.byKey(const Key('drop-top-level'))),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(server.parentCalls, [(task: 'a2', parent: '')]);
+    });
+
+    testWidgets('a viewer gets no drag handles on a phone', (tester) async {
+      await _open(tester, size: _phone, role: 'Viewer');
 
       expect(find.byKey(const Key('drag-a')), findsNothing);
-      expect(find.byKey(const Key('task-menu-a')), findsOneWidget);
     });
   });
 
