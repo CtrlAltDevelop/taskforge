@@ -1,6 +1,5 @@
 {
   "lib/features/automations/presentation/action_cards.dart": 1,
   "lib/features/dashboards/presentation/widget_editor.dart": 1,
-  "lib/features/filters/presentation/filter_builder.dart": 1,
-  "lib/features/workflows/domain/workflow_merge.dart": 3
+  "lib/features/filters/presentation/filter_builder.dart": 1
 }

@@ -226,7 +226,10 @@ class PagePicker extends StatelessWidget {
                       key: Key('pick-page-${p.id}'),
                       dense: true,
                       leading: Text(p.icon.isEmpty ? '📄' : p.icon),
-                      title: Text(p.label, overflow: TextOverflow.ellipsis),
+                      title: Text(
+                        p.labelIn(context.l10n),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       onTap: () => onPick(p),
                     ),
                 ],

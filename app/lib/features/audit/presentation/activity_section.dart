@@ -139,7 +139,9 @@ class _Line extends StatelessWidget {
         e.actorType == 'user' ? Icons.person_outline : Icons.smart_toy_outlined,
         size: 18,
       ),
-      title: Text('${e.whoIn(context.l10n)} ${describeEntry(e, labels)}'),
+      title: Text(
+        '${e.whoIn(context.l10n)} ${describeEntry(e, labels, context.l10n)}',
+      ),
       subtitle: Text(
         relativeTime(now, e.at, context.l10n, context.localePrefs),
       ),

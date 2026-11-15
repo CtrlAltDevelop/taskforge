@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
+import 'package:taskforge/core/i18n/formatting.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
@@ -44,6 +45,12 @@ String rangeTitle(
   Day first,
   Day last,
 ) => switch (mode) {
+  CalendarMode.month when context.localePrefs.isJalali => () {
+    final j = jalaliOf(anchor);
+    return context.localDigits(
+      '${jalaliMonthName(context.l10n, j.month)} ${j.year}',
+    );
+  }(),
   CalendarMode.month => '${_monthName(context, anchor.month)} ${anchor.year}',
   CalendarMode.week => '${context.localIso(first)} – ${context.localIso(last)}',
   CalendarMode.day => context.localIso(anchor),
@@ -78,7 +85,12 @@ class CalendarToolbar extends ConsumerWidget {
     final mode = shownMode(layout, compact: compact);
     final anchor = ref.watch(calendarAnchorProvider(projectId));
     final weekStart = ref.watch(weekStartProvider(projectId));
-    final range = visibleRange(mode, anchor, weekStart);
+    final range = visibleRange(
+      mode,
+      anchor,
+      weekStart,
+      jalali: ref.watch(calendarJalaliProvider),
+    );
     final notifier = ref.read(calendarLayoutProvider(projectId).notifier);
     final cursor = ref.read(calendarAnchorProvider(projectId).notifier);
     return SingleChildScrollView(

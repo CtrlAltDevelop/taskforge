@@ -41,7 +41,7 @@ class RelatedDocsPanel extends ConsumerWidget {
             SimpleDialogOption(
               key: Key('related-pick-${d.id}'),
               onPressed: () => Navigator.pop(context, d),
-              child: Text(d.label),
+              child: Text(d.labelIn(context.l10n)),
             ),
         ],
       ),
@@ -100,7 +100,7 @@ class RelatedDocsPanel extends ConsumerWidget {
             dense: true,
             contentPadding: EdgeInsets.zero,
             leading: Text(r.doc.icon.isEmpty ? '📄' : r.doc.icon),
-            title: Text(r.doc.label),
+            title: Text(r.doc.labelIn(context.l10n)),
             subtitle: Text(
               r.kind == 'link'
                   ? context.l10n.grpJLinked

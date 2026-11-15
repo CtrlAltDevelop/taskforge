@@ -1,8 +1,8 @@
-import 'package:taskforge/core/i18n/l10n_context.dart';
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
+import 'package:taskforge/core/i18n/l10n_context.dart';
 
 /// One value on a chart: [key] is what a click reports back (the bucket).
 class ChartDatum {
@@ -77,18 +77,23 @@ class BarChartView extends StatelessWidget {
     super.key,
     required this.data,
     this.onTap,
-    this.semanticsLabel = 'Bar chart',
+    this.semanticsLabel,
   });
 
   final List<ChartDatum> data;
   final ValueChanged<ChartDatum>? onTap;
-  final String semanticsLabel;
+
+  /// The name read out first; the chart's own kind when null.
+  final String? semanticsLabel;
 
   @override
   Widget build(BuildContext context) {
     final top = data.fold<double>(0, (m, d) => math.max(m, d.value));
     return Semantics(
-      label: '$semanticsLabel, ${data.length} bars',
+      label: context.l10n.grpRChartBars(
+        semanticsLabel ?? context.l10n.grpMWkBar,
+        data.length,
+      ),
       container: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -174,12 +179,14 @@ class PieChartView extends StatelessWidget {
     super.key,
     required this.data,
     this.onTap,
-    this.semanticsLabel = 'Pie chart',
+    this.semanticsLabel,
   });
 
   final List<ChartDatum> data;
   final ValueChanged<ChartDatum>? onTap;
-  final String semanticsLabel;
+
+  /// The name read out first; the chart's own kind when null.
+  final String? semanticsLabel;
 
   double get _sum => data.fold<double>(0, (s, d) => s + math.max(d.value, 0));
 
@@ -203,7 +210,10 @@ class PieChartView extends StatelessWidget {
     ];
     final sum = _sum;
     return Semantics(
-      label: '$semanticsLabel, ${data.length} slices',
+      label: context.l10n.grpRChartSlices(
+        semanticsLabel ?? context.l10n.grpMWkPie,
+        data.length,
+      ),
       container: true,
       child: Row(
         children: [
@@ -241,9 +251,13 @@ class PieChartView extends StatelessWidget {
                 for (var i = 0; i < data.length; i++)
                   Semantics(
                     button: onTap != null,
-                    label:
-                        '${data[i].label}, ${data[i].shown}'
-                        '${sum <= 0 ? '' : ', ${(data[i].value / sum * 100).round()} percent'}',
+                    label: sum <= 0
+                        ? '${data[i].label}, ${data[i].shown}'
+                        : context.l10n.grpRChartPercent(
+                            data[i].label,
+                            data[i].shown,
+                            (data[i].value / sum * 100).round(),
+                          ),
                     excludeSemantics: true,
                     child: InkWell(
                       key: Key('slice-${data[i].key}'),
@@ -347,13 +361,15 @@ class LineChartView extends StatelessWidget {
     required this.xLabels,
     required this.series,
     this.onTap,
-    this.semanticsLabel = 'Line chart',
+    this.semanticsLabel,
   });
 
   final List<String> xLabels;
   final List<ChartSeries> series;
   final ValueChanged<int>? onTap;
-  final String semanticsLabel;
+
+  /// The name read out first; the chart's own kind when null.
+  final String? semanticsLabel;
 
   /// The x position (0..count-1) nearest to [dx] of [width] pixels.
   static int nearest(double dx, double width, int count) {
@@ -370,9 +386,11 @@ class LineChartView extends StatelessWidget {
     ];
     final text = Theme.of(context).textTheme.bodySmall;
     return Semantics(
-      label:
-          '$semanticsLabel, ${series.length} line${series.length == 1 ? '' : 's'}, '
-          '${xLabels.length} points',
+      label: context.l10n.grpRChartLines(
+        semanticsLabel ?? context.l10n.grpMWkLine,
+        series.length,
+        xLabels.length,
+      ),
       container: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

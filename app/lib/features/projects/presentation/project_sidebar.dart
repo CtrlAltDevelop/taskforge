@@ -26,6 +26,21 @@ class ProjectSidebar extends ConsumerWidget {
     onNavigate?.call();
   }
 
+  /// The open path. A page that is being replaced (a new user sent on to
+  /// onboarding) can rebuild after its route state is gone: then ask the router.
+  static String _currentPath(BuildContext context) {
+    try {
+      return GoRouterState.of(context).uri.path;
+    } on GoError {
+      return GoRouter.maybeOf(context)
+              ?.routeInformationProvider
+              .value
+              .uri
+              .path ??
+          '';
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(projectCatalogProvider(false));
@@ -33,7 +48,7 @@ class ProjectSidebar extends ConsumerWidget {
     final projects = sidebarOrder(catalog.value?.projects ?? const []);
     final favorites = projects.where((p) => p.isFavorite).toList();
     final others = projects.where((p) => !p.isFavorite).toList();
-    final current = GoRouterState.of(context).uri.path;
+    final current = _currentPath(context);
 
     Widget section(String title, List<Project> items) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,

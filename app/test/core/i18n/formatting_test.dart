@@ -25,6 +25,18 @@ void main() {
       expect(localizeDigits('WEB-12', 'en'), 'WEB-12');
       expect(localizeDigits('a1b', 'fa'), 'a۱b');
     });
+
+    test('a point or comma between digits becomes the Arabic separator', () {
+      expect(localizeDigits('1.5 KB', 'fa'), '۱٫۵ KB');
+      expect(localizeDigits('1,234.5', 'ar'), '١٬٢٣٤٫٥');
+      expect(localizeDigits('2.5', 'ps'), '۲٫۵');
+    });
+
+    test('punctuation not between two digits stays as it is', () {
+      expect(localizeDigits('Done. 3, 4', 'fa'), 'Done. ۳, ۴');
+      expect(localizeDigits('.5 and 5.', 'ar'), '.٥ and ٥.');
+      expect(localizeDigits('1.5, 2,500', 'en'), '1.5, 2,500');
+    });
   });
 
   group('LocalePrefs', () {

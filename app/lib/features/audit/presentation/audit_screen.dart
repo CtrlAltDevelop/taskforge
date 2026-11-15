@@ -304,7 +304,7 @@ class _Row extends StatelessWidget {
     dense: true,
     contentPadding: EdgeInsets.zero,
     title: Text(
-      '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels)}',
+      '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels, context.l10n)}',
     ),
     subtitle: Text(
       '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
@@ -366,7 +366,7 @@ class DiffDialog extends StatelessWidget {
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: '${fieldLabel(c.name)}: ',
+                                text: '${fieldLabel(c.name, context.l10n)}: ',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -384,7 +384,7 @@ class DiffDialog extends StatelessWidget {
                           key: Key('diff-${c.name}'),
                         )
                       : Text(
-                          '${fieldLabel(c.name)}: ${_name(context, c.name, c.after)}',
+                          '${fieldLabel(c.name, context.l10n)}: ${_name(context, c.name, c.after)}',
                           key: Key('diff-${c.name}'),
                         ),
                 ),

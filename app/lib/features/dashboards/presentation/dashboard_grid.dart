@@ -171,12 +171,19 @@ class _CellState extends State<_Cell> {
                   },
                 ),
               ),
-              Positioned(
-                right: 0,
+              PositionedDirectional(
+                end: 0,
                 bottom: 0,
                 child: GestureDetector(
                   key: Key('resize-${c.widgetId}'),
-                  onPanUpdate: (d) => setState(() => _grow += d.delta),
+                  // The handle is at the end edge: dragging toward it grows
+                  // the card, which is leftwards in right-to-left.
+                  onPanUpdate: (d) => setState(
+                    () => _grow += Offset(
+                      rtl ? -d.delta.dx : d.delta.dx,
+                      d.delta.dy,
+                    ),
+                  ),
                   onPanEnd: (_) {
                     final dw = (_grow.dx / w).round();
                     final dh = (_grow.dy / rowHeight).round();

@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart' show Locale;
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The chords the browser keeps for itself. The server holds the same list
 /// (`backend/.../shortcuts/reserved_chords.json`); a test on each side reads
@@ -90,15 +93,19 @@ class Chord {
   ].join('+');
 
   /// What to show a person: `Ctrl+Shift+K`, or `⌘⇧K` on macOS.
-  String label({required bool isMac}) {
-    final k = _keyLabels[key] ?? key.toUpperCase();
+  ///
+  /// The key names (Enter, Esc, Ctrl...) are in the language of [l10n];
+  /// English when it is null.
+  String label({required bool isMac, AppLocalizations? l10n}) {
+    final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+    final k = _keyLabel(key, l);
     if (isMac) {
       return '${ctrl ? '⌃' : ''}${alt ? '⌥' : ''}${shift ? '⇧' : ''}${mod ? '⌘' : ''}$k';
     }
     return [
-      if (mod || ctrl) 'Ctrl',
-      if (alt) 'Alt',
-      if (shift) 'Shift',
+      if (mod || ctrl) l.grpRKeyCtrl,
+      if (alt) l.grpRKeyAlt,
+      if (shift) l.grpRKeyShift,
       k,
     ].join('+');
   }
@@ -117,25 +124,26 @@ class Chord {
 
   static const _modifiers = {'mod', 'ctrl', 'alt', 'shift'};
 
-  static const _keyLabels = {
-    'slash': '/',
-    'question': '?',
-    'comma': ',',
-    'period': '.',
-    'enter': 'Enter',
-    'escape': 'Esc',
-    'space': 'Space',
-    'tab': 'Tab',
-    'backspace': 'Backspace',
-    'delete': 'Delete',
-    'up': '↑',
-    'down': '↓',
-    'left': '←',
-    'right': '→',
-    'home': 'Home',
-    'end': 'End',
-    'pageup': 'PgUp',
-    'pagedown': 'PgDn',
+  static String _keyLabel(String key, AppLocalizations l) => switch (key) {
+    'slash' => '/',
+    'question' => '?',
+    'comma' => ',',
+    'period' => '.',
+    'enter' => l.grpRKeyEnter,
+    'escape' => l.grpRKeyEsc,
+    'space' => l.grpRKeySpace,
+    'tab' => l.grpRKeyTab,
+    'backspace' => l.grpRKeyBackspace,
+    'delete' => l.grpRKeyDelete,
+    'up' => '↑',
+    'down' => '↓',
+    'left' => '←',
+    'right' => '→',
+    'home' => l.grpRKeyHome,
+    'end' => l.grpRKeyEnd,
+    'pageup' => l.grpRKeyPgUp,
+    'pagedown' => l.grpRKeyPgDn,
+    _ => key.toUpperCase(),
   };
 }
 

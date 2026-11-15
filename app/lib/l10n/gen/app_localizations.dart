@@ -10837,6 +10837,581 @@ abstract class AppLocalizations {
   /// **'Use YYYY-MM-DD.'**
   String get grp1UseIsoDate;
 
+  /// No description provided for @taskAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a task and press Enter'**
+  String get taskAddHint;
+
+  /// No description provided for @grpRMnAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added by someone else: {name}.'**
+  String grpRMnAdded(String name);
+
+  /// No description provided for @grpRMnKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept {name}: you deleted it, but someone else changed it first. Delete it again if you still want to.'**
+  String grpRMnKept(String name);
+
+  /// No description provided for @grpRMnDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted by someone else: {name}.'**
+  String grpRMnDeleted(String name);
+
+  /// No description provided for @grpRMnDeletedEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted by someone else: {name}. Your changes to it were dropped.'**
+  String grpRMnDeletedEdited(String name);
+
+  /// No description provided for @grpRMnFieldAdopted.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed the {what} of {status} to {value}.'**
+  String grpRMnFieldAdopted(String what, String status, String value);
+
+  /// No description provided for @grpRMnFieldDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'Your change to the {what} of {status} ({mine}) was dropped: someone else changed it to {value}.'**
+  String grpRMnFieldDropped(
+    String what,
+    String status,
+    String mine,
+    String value,
+  );
+
+  /// No description provided for @grpRMnSwitchAdopted.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else turned \"{what}\" {state}.'**
+  String grpRMnSwitchAdopted(String what, String state);
+
+  /// No description provided for @grpRMnSwitchDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'Your change to \"{what}\" was dropped: someone else turned it {state}.'**
+  String grpRMnSwitchDropped(String what, String state);
+
+  /// No description provided for @grpRMnOrderDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'Your new order of the statuses was dropped: someone else reordered them too.'**
+  String get grpRMnOrderDropped;
+
+  /// No description provided for @grpRMnReordered.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else reordered the statuses.'**
+  String get grpRMnReordered;
+
+  /// No description provided for @grpRMnMigrationLost.
+  ///
+  /// In en, this message translates to:
+  /// **'The status you chose for the tasks of {name} was deleted by someone else: choose another place for them.'**
+  String grpRMnMigrationLost(String name);
+
+  /// No description provided for @grpRMnDeletedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'a deleted status'**
+  String get grpRMnDeletedStatus;
+
+  /// No description provided for @grpRMnMoveAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else allowed the move {name}.'**
+  String grpRMnMoveAllowed(String name);
+
+  /// No description provided for @grpRMnMoveRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else removed the move {name}.'**
+  String grpRMnMoveRemoved(String name);
+
+  /// No description provided for @grpRMnConditionsAdopted.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else changed the conditions of the move {name}.'**
+  String grpRMnConditionsAdopted(String name);
+
+  /// No description provided for @grpRMnConditionsDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'Your change to the conditions of the move {name} was dropped: someone else changed them too.'**
+  String grpRMnConditionsDropped(String name);
+
+  /// No description provided for @grpRMnMovesDropped.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One of your moves was dropped because a status it used is gone.} other{{count} of your moves were dropped because a status they used is gone.}}'**
+  String grpRMnMovesDropped(int count);
+
+  /// No description provided for @grpRMnWhatName.
+  ///
+  /// In en, this message translates to:
+  /// **'name'**
+  String get grpRMnWhatName;
+
+  /// No description provided for @grpRMnWhatColour.
+  ///
+  /// In en, this message translates to:
+  /// **'colour'**
+  String get grpRMnWhatColour;
+
+  /// No description provided for @grpRMnWhatCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'category'**
+  String get grpRMnWhatCategory;
+
+  /// No description provided for @grpRMnWhatDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'default'**
+  String get grpRMnWhatDefault;
+
+  /// No description provided for @grpRMnNone.
+  ///
+  /// In en, this message translates to:
+  /// **'none'**
+  String get grpRMnNone;
+
+  /// No description provided for @grpRMnIsDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'the default'**
+  String get grpRMnIsDefault;
+
+  /// No description provided for @grpRMnNotDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'not the default'**
+  String get grpRMnNotDefault;
+
+  /// No description provided for @grpRMnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'on'**
+  String get grpRMnOn;
+
+  /// No description provided for @grpRMnOff.
+  ///
+  /// In en, this message translates to:
+  /// **'off'**
+  String get grpRMnOff;
+
+  /// No description provided for @grpRKeyCtrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl'**
+  String get grpRKeyCtrl;
+
+  /// No description provided for @grpRKeyAlt.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt'**
+  String get grpRKeyAlt;
+
+  /// No description provided for @grpRKeyShift.
+  ///
+  /// In en, this message translates to:
+  /// **'Shift'**
+  String get grpRKeyShift;
+
+  /// No description provided for @grpRKeyEnter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get grpRKeyEnter;
+
+  /// No description provided for @grpRKeyEsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Esc'**
+  String get grpRKeyEsc;
+
+  /// No description provided for @grpRKeySpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Space'**
+  String get grpRKeySpace;
+
+  /// No description provided for @grpRKeyTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Tab'**
+  String get grpRKeyTab;
+
+  /// No description provided for @grpRKeyBackspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Backspace'**
+  String get grpRKeyBackspace;
+
+  /// No description provided for @grpRKeyDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get grpRKeyDelete;
+
+  /// No description provided for @grpRKeyHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get grpRKeyHome;
+
+  /// No description provided for @grpRKeyEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get grpRKeyEnd;
+
+  /// No description provided for @grpRKeyPgUp.
+  ///
+  /// In en, this message translates to:
+  /// **'PgUp'**
+  String get grpRKeyPgUp;
+
+  /// No description provided for @grpRKeyPgDn.
+  ///
+  /// In en, this message translates to:
+  /// **'PgDn'**
+  String get grpRKeyPgDn;
+
+  /// No description provided for @grpRCmForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You can no longer comment on this task.'**
+  String get grpRCmForbidden;
+
+  /// No description provided for @grpRCmGone.
+  ///
+  /// In en, this message translates to:
+  /// **'The task was deleted.'**
+  String get grpRCmGone;
+
+  /// No description provided for @grpRCmArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'The project was archived.'**
+  String get grpRCmArchived;
+
+  /// No description provided for @grpRCmInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The comment is not valid.'**
+  String get grpRCmInvalid;
+
+  /// No description provided for @grpRCmMention.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone mentioned cannot see this task.'**
+  String get grpRCmMention;
+
+  /// No description provided for @grpRCmRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'The server refused the comment.'**
+  String get grpRCmRefused;
+
+  /// No description provided for @grpRDependsRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'This depends on a change that was refused: {reason}'**
+  String grpRDependsRefused(String reason);
+
+  /// No description provided for @grpRKeepUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'It could not be read. Try again.'**
+  String get grpRKeepUnreadable;
+
+  /// No description provided for @grpRDenyNeed.
+  ///
+  /// In en, this message translates to:
+  /// **'You need permission \"{permission}\"'**
+  String grpRDenyNeed(String permission);
+
+  /// No description provided for @grpRDenyNeedRole.
+  ///
+  /// In en, this message translates to:
+  /// **'You need permission \"{permission}\" — your role is {role}'**
+  String grpRDenyNeedRole(String permission, String role);
+
+  /// No description provided for @grpRRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Request failed.'**
+  String get grpRRequestFailed;
+
+  /// No description provided for @grpRUnitB.
+  ///
+  /// In en, this message translates to:
+  /// **'B'**
+  String get grpRUnitB;
+
+  /// No description provided for @grpRUnitKB.
+  ///
+  /// In en, this message translates to:
+  /// **'KB'**
+  String get grpRUnitKB;
+
+  /// No description provided for @grpRUnitMB.
+  ///
+  /// In en, this message translates to:
+  /// **'MB'**
+  String get grpRUnitMB;
+
+  /// No description provided for @grpRUnitGB.
+  ///
+  /// In en, this message translates to:
+  /// **'GB'**
+  String get grpRUnitGB;
+
+  /// No description provided for @grpRUnitTB.
+  ///
+  /// In en, this message translates to:
+  /// **'TB'**
+  String get grpRUnitTB;
+
+  /// No description provided for @grpRStorageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {quota} used'**
+  String grpRStorageOf(String used, String quota);
+
+  /// No description provided for @grpRStorageUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} used'**
+  String grpRStorageUsed(String used);
+
+  /// No description provided for @grpRChartBars.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {count} bars'**
+  String grpRChartBars(String label, int count);
+
+  /// No description provided for @grpRChartSlices.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {count} slices'**
+  String grpRChartSlices(String label, int count);
+
+  /// No description provided for @grpRChartLines.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {lines, plural, =1{1 line} other{{lines} lines}}, {points} points'**
+  String grpRChartLines(String label, int lines, int points);
+
+  /// No description provided for @grpRChartPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {shown}, {percent} percent'**
+  String grpRChartPercent(String label, String shown, int percent);
+
+  /// No description provided for @grpRAuCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created this task'**
+  String get grpRAuCreated;
+
+  /// No description provided for @grpRAuTrashed.
+  ///
+  /// In en, this message translates to:
+  /// **'moved this task to the trash'**
+  String get grpRAuTrashed;
+
+  /// No description provided for @grpRAuRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'restored this task'**
+  String get grpRAuRestored;
+
+  /// No description provided for @grpRAuStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'changed status {from} → {to}'**
+  String grpRAuStatus(String from, String to);
+
+  /// No description provided for @grpRAuAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'assigned {names}'**
+  String grpRAuAssigned(String names);
+
+  /// No description provided for @grpRAuUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'unassigned {names}'**
+  String grpRAuUnassigned(String names);
+
+  /// No description provided for @grpRAuAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} and {b}'**
+  String grpRAuAnd(String a, String b);
+
+  /// No description provided for @grpRAuCommented.
+  ///
+  /// In en, this message translates to:
+  /// **'commented'**
+  String get grpRAuCommented;
+
+  /// No description provided for @grpRAuCommentEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited a comment'**
+  String get grpRAuCommentEdited;
+
+  /// No description provided for @grpRAuCommentDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a comment'**
+  String get grpRAuCommentDeleted;
+
+  /// No description provided for @grpRAuReacted.
+  ///
+  /// In en, this message translates to:
+  /// **'reacted {emoji} to a comment'**
+  String grpRAuReacted(String emoji);
+
+  /// No description provided for @grpRAuUnreacted.
+  ///
+  /// In en, this message translates to:
+  /// **'took back {emoji} on a comment'**
+  String grpRAuUnreacted(String emoji);
+
+  /// No description provided for @grpRAuAttached.
+  ///
+  /// In en, this message translates to:
+  /// **'attached {file}'**
+  String grpRAuAttached(String file);
+
+  /// No description provided for @grpRAuFileRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'removed the file {file}'**
+  String grpRAuFileRemoved(String file);
+
+  /// No description provided for @grpRAuTimeLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'logged time'**
+  String get grpRAuTimeLogged;
+
+  /// No description provided for @grpRAuTimeUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'updated a time entry'**
+  String get grpRAuTimeUpdated;
+
+  /// No description provided for @grpRAuTimeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a time entry'**
+  String get grpRAuTimeDeleted;
+
+  /// No description provided for @grpRAuLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'linked {type} {task}'**
+  String grpRAuLinked(String type, String task);
+
+  /// No description provided for @grpRAuLinkRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'removed a link'**
+  String get grpRAuLinkRemoved;
+
+  /// No description provided for @grpRAuFieldSet.
+  ///
+  /// In en, this message translates to:
+  /// **'set a custom field'**
+  String get grpRAuFieldSet;
+
+  /// No description provided for @grpRAuDocLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'linked a page'**
+  String get grpRAuDocLinked;
+
+  /// No description provided for @grpRAuDocUnlinked.
+  ///
+  /// In en, this message translates to:
+  /// **'unlinked a page'**
+  String get grpRAuDocUnlinked;
+
+  /// No description provided for @grpRAuEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited this task'**
+  String get grpRAuEdited;
+
+  /// No description provided for @grpRAuChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'changed {parts}'**
+  String grpRAuChanged(String parts);
+
+  /// No description provided for @grpRAuPart.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} {from} → {to}'**
+  String grpRAuPart(String label, String from, String to);
+
+  /// No description provided for @grpRAuSomething.
+  ///
+  /// In en, this message translates to:
+  /// **'did something'**
+  String get grpRAuSomething;
+
+  /// No description provided for @grpRAuFStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'status'**
+  String get grpRAuFStatus;
+
+  /// No description provided for @grpRAuFSprint.
+  ///
+  /// In en, this message translates to:
+  /// **'sprint'**
+  String get grpRAuFSprint;
+
+  /// No description provided for @grpRAuFParent.
+  ///
+  /// In en, this message translates to:
+  /// **'parent task'**
+  String get grpRAuFParent;
+
+  /// No description provided for @grpRAuFDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'due date'**
+  String get grpRAuFDueDate;
+
+  /// No description provided for @grpRAuFDueTime.
+  ///
+  /// In en, this message translates to:
+  /// **'due time'**
+  String get grpRAuFDueTime;
+
+  /// No description provided for @grpRAuFStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'start date'**
+  String get grpRAuFStartDate;
+
+  /// No description provided for @grpRAuFEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'estimate'**
+  String get grpRAuFEstimate;
+
   /// No description provided for @devTitle.
   ///
   /// In en, this message translates to:

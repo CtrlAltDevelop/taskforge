@@ -19,7 +19,9 @@ String? normalizeLanguage(String raw) {
   return supportedLanguages.contains(language) ? language : null;
 }
 
-/// Persian and Pashto share the extended Arabic-Indic digits; Arabic has its own.
+/// Persian and Pashto share the extended Arabic-Indic digits; Arabic has its
+/// own. A "." or "," between two digits becomes the Arabic decimal ("٫") or
+/// thousands ("٬") separator.
 String localizeDigits(String text, String language) {
   final zero = switch (language) {
     'fa' || 'ps' => 0x06F0,
@@ -27,9 +29,20 @@ String localizeDigits(String text, String language) {
     _ => null,
   };
   if (zero == null) return text;
+  bool isDigit(int unit) => unit >= 0x30 && unit <= 0x39;
+  final units = text.codeUnits;
   return String.fromCharCodes([
-    for (final unit in text.codeUnits)
-      if (unit >= 0x30 && unit <= 0x39) zero + (unit - 0x30) else unit,
+    for (var i = 0; i < units.length; i++)
+      if (isDigit(units[i]))
+        zero + (units[i] - 0x30)
+      else if ((units[i] == 0x2E || units[i] == 0x2C) &&
+          i > 0 &&
+          i < units.length - 1 &&
+          isDigit(units[i - 1]) &&
+          isDigit(units[i + 1]))
+        units[i] == 0x2E ? 0x066B : 0x066C
+      else
+        units[i],
   ]);
 }
 

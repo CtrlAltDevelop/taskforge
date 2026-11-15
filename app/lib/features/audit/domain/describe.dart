@@ -1,12 +1,23 @@
+import 'dart:ui' show Locale;
+
 import 'package:taskforge/features/audit/domain/audit.dart';
+import 'package:taskforge/features/audit/domain/describe_workspace.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What an entry says happened, as a phrase that follows the actor's name
-/// ("Ali" + "changed status To do → Done"). [labels] names the ids in it.
-String describeEntry(AuditEntry e, Map<String, String> labels) {
+/// ("Ali" + "changed status To do → Done"). [labels] names the ids in it. In
+/// the language of [l10n] (English when null).
+String describeEntry(
+  AuditEntry e,
+  Map<String, String> labels, [
+  AppLocalizations? l10n,
+]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  String shown(Object? v) => _shown(v, l);
   String name(Object? id) {
     final key = id?.toString() ?? '';
-    if (key.isEmpty) return 'none';
-    return labels[key] ?? _shown(id);
+    if (key.isEmpty) return l.grpRMnNone;
+    return labels[key] ?? shown(id);
   }
 
   Object? after(String field) {
@@ -21,15 +32,15 @@ String describeEntry(AuditEntry e, Map<String, String> labels) {
 
   switch (e.action) {
     case 'task.created':
-      return 'created this task';
+      return l.grpRAuCreated;
     case 'task.deleted':
-      return 'moved this task to the trash';
+      return l.grpRAuTrashed;
     case 'task.restored':
-      return 'restored this task';
+      return l.grpRAuRestored;
     case 'task.status_changed':
       final c = e.changes['status_id'];
       if (c is List && c.length == 2) {
-        return 'changed status ${name(c[0])} → ${name(c[1])}';
+        return l.grpRAuStatus(name(c[0]), name(c[1]));
       }
     case 'task.assignees_changed':
       final c = e.changes['assignees'];
@@ -44,86 +55,105 @@ String describeEntry(AuditEntry e, Map<String, String> labels) {
           for (final n in was)
             if (!now.contains(n)) n,
         ];
-        return [
-          if (added.isNotEmpty) 'assigned ${added.join(', ')}',
-          if (removed.isNotEmpty) 'unassigned ${removed.join(', ')}',
-        ].join(' and ');
+        final parts = [
+          if (added.isNotEmpty) l.grpRAuAssigned(added.join(', ')),
+          if (removed.isNotEmpty) l.grpRAuUnassigned(removed.join(', ')),
+        ];
+        return parts.length == 2
+            ? l.grpRAuAnd(parts[0], parts[1])
+            : parts.join();
       }
     case 'task.updated':
-      return _edited(e, name);
+      return _edited(e, name, l);
     case 'comment.created':
-      return 'commented';
+      return l.grpRAuCommented;
     case 'comment.updated':
-      return 'edited a comment';
+      return l.grpRAuCommentEdited;
     case 'comment.deleted':
-      return 'deleted a comment';
+      return l.grpRAuCommentDeleted;
     case 'comment.reacted':
-      return 'reacted ${_shown(after('emoji'))} to a comment';
+      return l.grpRAuReacted(shown(after('emoji')));
     case 'comment.unreacted':
-      return 'took back ${_shown(after('emoji'))} on a comment';
+      return l.grpRAuUnreacted(shown(after('emoji')));
     case 'attachment.created':
-      return 'attached ${_shown(after('filename'))}';
+      return l.grpRAuAttached(shown(after('filename')));
     case 'attachment.deleted':
-      return 'removed the file ${_shown(after('filename'))}';
+      return l.grpRAuFileRemoved(shown(after('filename')));
     case 'time.created':
-      return 'logged time';
+      return l.grpRAuTimeLogged;
     case 'time.updated':
-      return 'updated a time entry';
+      return l.grpRAuTimeUpdated;
     case 'time.deleted':
-      return 'deleted a time entry';
+      return l.grpRAuTimeDeleted;
     case 'link.created':
-      return 'linked ${_shown(after('type'))} ${name(after('to_task_id'))}';
+      return l.grpRAuLinked(shown(after('type')), name(after('to_task_id')));
     case 'link.deleted':
-      return 'removed a link';
+      return l.grpRAuLinkRemoved;
     case 'field_value.created' || 'field_value.updated':
-      return 'set a custom field';
+      return l.grpRAuFieldSet;
     case 'doc_link.created':
-      return 'linked a page';
+      return l.grpRAuDocLinked;
     case 'doc_link.deleted':
-      return 'unlinked a page';
+      return l.grpRAuDocUnlinked;
   }
-  return _humanize(e.action);
+  return describeWorkspaceAction(e.action, after, shown, l) ??
+      _humanize(e.action, l);
 }
 
-String _edited(AuditEntry e, String Function(Object?) name) {
+String _edited(
+  AuditEntry e,
+  String Function(Object?) name,
+  AppLocalizations l,
+) {
   final parts = <String>[];
   for (final c in fieldChanges(e)) {
-    final label = fieldLabel(c.name);
-    final from = _value(c.name, c.before, name);
-    final to = _value(c.name, c.after, name);
+    final label = fieldLabel(c.name, l);
+    final from = _value(c.name, c.before, name, l);
+    final to = _value(c.name, c.after, name, l);
     parts.add(
       c.hasBefore && !c.name.endsWith('_id') && c.name != 'description'
-          ? '$label $from → $to'
+          ? l.grpRAuPart(label, from, to)
           : label,
     );
   }
-  return parts.isEmpty ? 'edited this task' : 'changed ${parts.join(', ')}';
+  return parts.isEmpty ? l.grpRAuEdited : l.grpRAuChanged(parts.join(', '));
 }
 
-String _value(String field, Object? v, String Function(Object?) name) =>
-    field.endsWith('_id') ? name(v) : _shown(v);
+String _value(
+  String field,
+  Object? v,
+  String Function(Object?) name,
+  AppLocalizations l,
+) => field.endsWith('_id') ? name(v) : _shown(v, l);
 
-String fieldLabel(String field) => switch (field) {
-  'status_id' => 'status',
-  'sprint_id' => 'sprint',
-  'parent_id' => 'parent task',
-  'due_date' => 'due date',
-  'due_time' => 'due time',
-  'start_date' => 'start date',
-  'estimate_sec' => 'estimate',
-  _ => field.replaceAll('_id', '').replaceAll('_', ' '),
-};
+/// The audit's word for a changed field, in the language of [l10n] (English
+/// when null).
+String fieldLabel(String field, [AppLocalizations? l10n]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (field) {
+    'status_id' => l.grpRAuFStatus,
+    'sprint_id' => l.grpRAuFSprint,
+    'parent_id' => l.grpRAuFParent,
+    'due_date' => l.grpRAuFDueDate,
+    'due_time' => l.grpRAuFDueTime,
+    'start_date' => l.grpRAuFStartDate,
+    'estimate_sec' => l.grpRAuFEstimate,
+    _ => field.replaceAll('_id', '').replaceAll('_', ' '),
+  };
+}
 
 /// A value as a reader wants it: quoted text, "none", or the size marker the
 /// server leaves for a body it did not copy.
-String _shown(Object? v) {
-  if (v == null || v == '') return 'none';
-  if (v is Map && v.containsKey('size')) return '(${v['size']} characters)';
+String _shown(Object? v, AppLocalizations l) {
+  if (v == null || v == '') return l.grpRMnNone;
+  if (v is Map && v.containsKey('size')) {
+    return l.grpBCharacters('${v['size']}');
+  }
   if (v is String) return '“$v”';
   return v.toString();
 }
 
-String _humanize(String action) {
+String _humanize(String action, AppLocalizations l) {
   final spaced = action.replaceAll('_', ' ').replaceAll('.', ' ');
-  return spaced.isEmpty ? 'did something' : spaced;
+  return spaced.isEmpty ? l.grpRAuSomething : spaced;
 }

@@ -225,7 +225,9 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         });
         final sidebar = !widget.workspaceWide && box.maxWidth >= trayBreakpoint;
         final mode = phone ? CalendarMode.month : modeOf(layout);
-        final range = visibleRange(mode, anchor, weekStart);
+        final jalali = ref.watch(calendarJalaliProvider);
+        final range = visibleRange(mode, anchor, weekStart, jalali: jalali);
+        final anchorMonth = jalali ? jalaliOf(anchor).month : anchor.month;
         final weeks = (daysBetween(range.first, range.last) + 1) ~/ 7;
         Color colorOf(Task t) => _colorOf(t, layout.colorBy);
         final ghosts =
@@ -247,7 +249,8 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
               MonthDots(
                 first: range.first,
                 weeks: weeks,
-                month: anchor.month,
+                month: anchorMonth,
+                jalali: jalali,
                 tasks: state.tasks,
                 ghosts: ghosts,
                 today: today,
@@ -286,7 +289,8 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             tasks: state.tasks,
             ghosts: ghosts,
             today: today,
-            month: mode == CalendarMode.month ? anchor.month : null,
+            month: mode == CalendarMode.month ? anchorMonth : null,
+            jalali: jalali,
             maxLanes: mode == CalendarMode.month ? 3 : 30,
             canMove: canMove,
             longPress: box.maxWidth < trayBreakpoint,

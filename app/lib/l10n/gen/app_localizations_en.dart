@@ -6127,6 +6127,378 @@ class AppLocalizationsEn extends AppLocalizations {
   String get grp1UseIsoDate => 'Use YYYY-MM-DD.';
 
   @override
+  String get taskAddHint => 'Add a task and press Enter';
+
+  @override
+  String grpRMnAdded(String name) {
+    return 'Added by someone else: $name.';
+  }
+
+  @override
+  String grpRMnKept(String name) {
+    return 'Kept $name: you deleted it, but someone else changed it first. Delete it again if you still want to.';
+  }
+
+  @override
+  String grpRMnDeleted(String name) {
+    return 'Deleted by someone else: $name.';
+  }
+
+  @override
+  String grpRMnDeletedEdited(String name) {
+    return 'Deleted by someone else: $name. Your changes to it were dropped.';
+  }
+
+  @override
+  String grpRMnFieldAdopted(String what, String status, String value) {
+    return 'Someone else changed the $what of $status to $value.';
+  }
+
+  @override
+  String grpRMnFieldDropped(
+    String what,
+    String status,
+    String mine,
+    String value,
+  ) {
+    return 'Your change to the $what of $status ($mine) was dropped: someone else changed it to $value.';
+  }
+
+  @override
+  String grpRMnSwitchAdopted(String what, String state) {
+    return 'Someone else turned \"$what\" $state.';
+  }
+
+  @override
+  String grpRMnSwitchDropped(String what, String state) {
+    return 'Your change to \"$what\" was dropped: someone else turned it $state.';
+  }
+
+  @override
+  String get grpRMnOrderDropped =>
+      'Your new order of the statuses was dropped: someone else reordered them too.';
+
+  @override
+  String get grpRMnReordered => 'Someone else reordered the statuses.';
+
+  @override
+  String grpRMnMigrationLost(String name) {
+    return 'The status you chose for the tasks of $name was deleted by someone else: choose another place for them.';
+  }
+
+  @override
+  String get grpRMnDeletedStatus => 'a deleted status';
+
+  @override
+  String grpRMnMoveAllowed(String name) {
+    return 'Someone else allowed the move $name.';
+  }
+
+  @override
+  String grpRMnMoveRemoved(String name) {
+    return 'Someone else removed the move $name.';
+  }
+
+  @override
+  String grpRMnConditionsAdopted(String name) {
+    return 'Someone else changed the conditions of the move $name.';
+  }
+
+  @override
+  String grpRMnConditionsDropped(String name) {
+    return 'Your change to the conditions of the move $name was dropped: someone else changed them too.';
+  }
+
+  @override
+  String grpRMnMovesDropped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count of your moves were dropped because a status they used is gone.',
+      one: 'One of your moves was dropped because a status it used is gone.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpRMnWhatName => 'name';
+
+  @override
+  String get grpRMnWhatColour => 'colour';
+
+  @override
+  String get grpRMnWhatCategory => 'category';
+
+  @override
+  String get grpRMnWhatDefault => 'default';
+
+  @override
+  String get grpRMnNone => 'none';
+
+  @override
+  String get grpRMnIsDefault => 'the default';
+
+  @override
+  String get grpRMnNotDefault => 'not the default';
+
+  @override
+  String get grpRMnOn => 'on';
+
+  @override
+  String get grpRMnOff => 'off';
+
+  @override
+  String get grpRKeyCtrl => 'Ctrl';
+
+  @override
+  String get grpRKeyAlt => 'Alt';
+
+  @override
+  String get grpRKeyShift => 'Shift';
+
+  @override
+  String get grpRKeyEnter => 'Enter';
+
+  @override
+  String get grpRKeyEsc => 'Esc';
+
+  @override
+  String get grpRKeySpace => 'Space';
+
+  @override
+  String get grpRKeyTab => 'Tab';
+
+  @override
+  String get grpRKeyBackspace => 'Backspace';
+
+  @override
+  String get grpRKeyDelete => 'Delete';
+
+  @override
+  String get grpRKeyHome => 'Home';
+
+  @override
+  String get grpRKeyEnd => 'End';
+
+  @override
+  String get grpRKeyPgUp => 'PgUp';
+
+  @override
+  String get grpRKeyPgDn => 'PgDn';
+
+  @override
+  String get grpRCmForbidden => 'You can no longer comment on this task.';
+
+  @override
+  String get grpRCmGone => 'The task was deleted.';
+
+  @override
+  String get grpRCmArchived => 'The project was archived.';
+
+  @override
+  String get grpRCmInvalid => 'The comment is not valid.';
+
+  @override
+  String get grpRCmMention => 'Someone mentioned cannot see this task.';
+
+  @override
+  String get grpRCmRefused => 'The server refused the comment.';
+
+  @override
+  String grpRDependsRefused(String reason) {
+    return 'This depends on a change that was refused: $reason';
+  }
+
+  @override
+  String get grpRKeepUnreadable => 'It could not be read. Try again.';
+
+  @override
+  String grpRDenyNeed(String permission) {
+    return 'You need permission \"$permission\"';
+  }
+
+  @override
+  String grpRDenyNeedRole(String permission, String role) {
+    return 'You need permission \"$permission\" — your role is $role';
+  }
+
+  @override
+  String get grpRRequestFailed => 'Request failed.';
+
+  @override
+  String get grpRUnitB => 'B';
+
+  @override
+  String get grpRUnitKB => 'KB';
+
+  @override
+  String get grpRUnitMB => 'MB';
+
+  @override
+  String get grpRUnitGB => 'GB';
+
+  @override
+  String get grpRUnitTB => 'TB';
+
+  @override
+  String grpRStorageOf(String used, String quota) {
+    return '$used of $quota used';
+  }
+
+  @override
+  String grpRStorageUsed(String used) {
+    return '$used used';
+  }
+
+  @override
+  String grpRChartBars(String label, int count) {
+    return '$label, $count bars';
+  }
+
+  @override
+  String grpRChartSlices(String label, int count) {
+    return '$label, $count slices';
+  }
+
+  @override
+  String grpRChartLines(String label, int lines, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      lines,
+      locale: localeName,
+      other: '$lines lines',
+      one: '1 line',
+    );
+    return '$label, $_temp0, $points points';
+  }
+
+  @override
+  String grpRChartPercent(String label, String shown, int percent) {
+    return '$label, $shown, $percent percent';
+  }
+
+  @override
+  String get grpRAuCreated => 'created this task';
+
+  @override
+  String get grpRAuTrashed => 'moved this task to the trash';
+
+  @override
+  String get grpRAuRestored => 'restored this task';
+
+  @override
+  String grpRAuStatus(String from, String to) {
+    return 'changed status $from → $to';
+  }
+
+  @override
+  String grpRAuAssigned(String names) {
+    return 'assigned $names';
+  }
+
+  @override
+  String grpRAuUnassigned(String names) {
+    return 'unassigned $names';
+  }
+
+  @override
+  String grpRAuAnd(String a, String b) {
+    return '$a and $b';
+  }
+
+  @override
+  String get grpRAuCommented => 'commented';
+
+  @override
+  String get grpRAuCommentEdited => 'edited a comment';
+
+  @override
+  String get grpRAuCommentDeleted => 'deleted a comment';
+
+  @override
+  String grpRAuReacted(String emoji) {
+    return 'reacted $emoji to a comment';
+  }
+
+  @override
+  String grpRAuUnreacted(String emoji) {
+    return 'took back $emoji on a comment';
+  }
+
+  @override
+  String grpRAuAttached(String file) {
+    return 'attached $file';
+  }
+
+  @override
+  String grpRAuFileRemoved(String file) {
+    return 'removed the file $file';
+  }
+
+  @override
+  String get grpRAuTimeLogged => 'logged time';
+
+  @override
+  String get grpRAuTimeUpdated => 'updated a time entry';
+
+  @override
+  String get grpRAuTimeDeleted => 'deleted a time entry';
+
+  @override
+  String grpRAuLinked(String type, String task) {
+    return 'linked $type $task';
+  }
+
+  @override
+  String get grpRAuLinkRemoved => 'removed a link';
+
+  @override
+  String get grpRAuFieldSet => 'set a custom field';
+
+  @override
+  String get grpRAuDocLinked => 'linked a page';
+
+  @override
+  String get grpRAuDocUnlinked => 'unlinked a page';
+
+  @override
+  String get grpRAuEdited => 'edited this task';
+
+  @override
+  String grpRAuChanged(String parts) {
+    return 'changed $parts';
+  }
+
+  @override
+  String grpRAuPart(String label, String from, String to) {
+    return '$label $from → $to';
+  }
+
+  @override
+  String get grpRAuSomething => 'did something';
+
+  @override
+  String get grpRAuFStatus => 'status';
+
+  @override
+  String get grpRAuFSprint => 'sprint';
+
+  @override
+  String get grpRAuFParent => 'parent task';
+
+  @override
+  String get grpRAuFDueDate => 'due date';
+
+  @override
+  String get grpRAuFDueTime => 'due time';
+
+  @override
+  String get grpRAuFStartDate => 'start date';
+
+  @override
+  String get grpRAuFEstimate => 'estimate';
+
+  @override
   String get devTitle => 'Developer';
 
   @override
@@ -14115,6 +14487,382 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get grp1UseIsoDate => '[Ûšé ÝÝÝÝ-MM-ÐÐ. ~~~~~]';
+
+  @override
+  String get taskAddHint => '[Åðð å ţåšķ åñð þŕéšš Éñţéŕ ~~~~~~~~]';
+
+  @override
+  String grpRMnAdded(String name) {
+    return '[Åððéð ƀý šöɱéöñé éłšé: $name. ~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnKept(String name) {
+    return '[Ķéþţ $name: ýöû ðéłéţéð íţ, ƀûţ šöɱéöñé éłšé çĥåñĝéð íţ ƒíŕšţ. Ðéłéţé íţ åĝåíñ íƒ ýöû šţíłł ŵåñţ ţö. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnDeleted(String name) {
+    return '[Ðéłéţéð ƀý šöɱéöñé éłšé: $name. ~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnDeletedEdited(String name) {
+    return '[Ðéłéţéð ƀý šöɱéöñé éłšé: $name. Ýöûŕ çĥåñĝéš ţö íţ ŵéŕé ðŕöþþéð. ~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnFieldAdopted(String what, String status, String value) {
+    return '[Šöɱéöñé éłšé çĥåñĝéð ţĥé $what öƒ $status ţö $value. ~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnFieldDropped(
+    String what,
+    String status,
+    String mine,
+    String value,
+  ) {
+    return '[Ýöûŕ çĥåñĝé ţö ţĥé $what öƒ $status ($mine) ŵåš ðŕöþþéð: šöɱéöñé éłšé çĥåñĝéð íţ ţö $value. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnSwitchAdopted(String what, String state) {
+    return '[Šöɱéöñé éłšé ţûŕñéð \"$what\" $state. ~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnSwitchDropped(String what, String state) {
+    return '[Ýöûŕ çĥåñĝé ţö \"$what\" ŵåš ðŕöþþéð: šöɱéöñé éłšé ţûŕñéð íţ $state. ~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRMnOrderDropped =>
+      '[Ýöûŕ ñéŵ öŕðéŕ öƒ ţĥé šţåţûšéš ŵåš ðŕöþþéð: šöɱéöñé éłšé ŕéöŕðéŕéð ţĥéɱ ţöö. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get grpRMnReordered =>
+      '[Šöɱéöñé éłšé ŕéöŕðéŕéð ţĥé šţåţûšéš. ~~~~~~~~~~~~]';
+
+  @override
+  String grpRMnMigrationLost(String name) {
+    return '[Ţĥé šţåţûš ýöû çĥöšé ƒöŕ ţĥé ţåšķš öƒ $name ŵåš ðéłéţéð ƀý šöɱéöñé éłšé: çĥööšé åñöţĥéŕ þłåçé ƒöŕ ţĥéɱ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRMnDeletedStatus => '[å ðéłéţéð šţåţûš ~~~~~]';
+
+  @override
+  String grpRMnMoveAllowed(String name) {
+    return '[Šöɱéöñé éłšé åłłöŵéð ţĥé ɱöṽé $name. ~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnMoveRemoved(String name) {
+    return '[Šöɱéöñé éłšé ŕéɱöṽéð ţĥé ɱöṽé $name. ~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnConditionsAdopted(String name) {
+    return '[Šöɱéöñé éłšé çĥåñĝéð ţĥé çöñðíţíöñš öƒ ţĥé ɱöṽé $name. ~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnConditionsDropped(String name) {
+    return '[Ýöûŕ çĥåñĝé ţö ţĥé çöñðíţíöñš öƒ ţĥé ɱöṽé $name ŵåš ðŕöþþéð: šöɱéöñé éłšé çĥåñĝéð ţĥéɱ ţöö. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRMnMovesDropped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count öƒ ýöûŕ ɱöṽéš ŵéŕé ðŕöþþéð ƀéçåûšé å šţåţûš ţĥéý ûšéð íš ĝöñé.',
+      one: 'Öñé öƒ ýöûŕ ɱöṽéš ŵåš ðŕöþþéð ƀéçåûšé å šţåţûš íţ ûšéð íš ĝöñé.',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRMnWhatName => '[ñåɱé ~]';
+
+  @override
+  String get grpRMnWhatColour => '[çöłöûŕ ~~]';
+
+  @override
+  String get grpRMnWhatCategory => '[çåţéĝöŕý ~~]';
+
+  @override
+  String get grpRMnWhatDefault => '[ðéƒåûłţ ~~]';
+
+  @override
+  String get grpRMnNone => '[ñöñé ~]';
+
+  @override
+  String get grpRMnIsDefault => '[ţĥé ðéƒåûłţ ~~~]';
+
+  @override
+  String get grpRMnNotDefault => '[ñöţ ţĥé ðéƒåûłţ ~~~~~]';
+
+  @override
+  String get grpRMnOn => '[öñ ]';
+
+  @override
+  String get grpRMnOff => '[öƒƒ ~]';
+
+  @override
+  String get grpRKeyCtrl => '[Çţŕł ~]';
+
+  @override
+  String get grpRKeyAlt => '[Åłţ ~]';
+
+  @override
+  String get grpRKeyShift => '[Šĥíƒţ ~]';
+
+  @override
+  String get grpRKeyEnter => '[Éñţéŕ ~]';
+
+  @override
+  String get grpRKeyEsc => '[Éšç ~]';
+
+  @override
+  String get grpRKeySpace => '[Šþåçé ~]';
+
+  @override
+  String get grpRKeyTab => '[Ţåƀ ~]';
+
+  @override
+  String get grpRKeyBackspace => '[ßåçķšþåçé ~~~]';
+
+  @override
+  String get grpRKeyDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String get grpRKeyHome => '[Ĥöɱé ~]';
+
+  @override
+  String get grpRKeyEnd => '[Éñð ~]';
+
+  @override
+  String get grpRKeyPgUp => '[ÞĝÛþ ~]';
+
+  @override
+  String get grpRKeyPgDn => '[ÞĝÐñ ~]';
+
+  @override
+  String get grpRCmForbidden =>
+      '[Ýöû çåñ ñö łöñĝéŕ çöɱɱéñţ öñ ţĥíš ţåšķ. ~~~~~~~~~~~~~]';
+
+  @override
+  String get grpRCmGone => '[Ţĥé ţåšķ ŵåš ðéłéţéð. ~~~~~~~]';
+
+  @override
+  String get grpRCmArchived => '[Ţĥé þŕöĵéçţ ŵåš åŕçĥíṽéð. ~~~~~~~~]';
+
+  @override
+  String get grpRCmInvalid => '[Ţĥé çöɱɱéñţ íš ñöţ ṽåłíð. ~~~~~~~~]';
+
+  @override
+  String get grpRCmMention =>
+      '[Šöɱéöñé ɱéñţíöñéð çåññöţ šéé ţĥíš ţåšķ. ~~~~~~~~~~~~~]';
+
+  @override
+  String get grpRCmRefused => '[Ţĥé šéŕṽéŕ ŕéƒûšéð ţĥé çöɱɱéñţ. ~~~~~~~~~~]';
+
+  @override
+  String grpRDependsRefused(String reason) {
+    return '[Ţĥíš ðéþéñðš öñ å çĥåñĝé ţĥåţ ŵåš ŕéƒûšéð: $reason ~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRKeepUnreadable =>
+      '[Íţ çöûłð ñöţ ƀé ŕéåð. Ţŕý åĝåíñ. ~~~~~~~~~~]';
+
+  @override
+  String grpRDenyNeed(String permission) {
+    return '[Ýöû ñééð þéŕɱíššíöñ \"$permission\" ~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRDenyNeedRole(String permission, String role) {
+    return '[Ýöû ñééð þéŕɱíššíöñ \"$permission\" — ýöûŕ ŕöłé íš $role ~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRRequestFailed => '[Ŕéqûéšţ ƒåíłéð. ~~~~~]';
+
+  @override
+  String get grpRUnitB => '[ß ]';
+
+  @override
+  String get grpRUnitKB => '[Ķß ]';
+
+  @override
+  String get grpRUnitMB => '[Mß ]';
+
+  @override
+  String get grpRUnitGB => '[Ĝß ]';
+
+  @override
+  String get grpRUnitTB => '[Ţß ]';
+
+  @override
+  String grpRStorageOf(String used, String quota) {
+    return '[$used öƒ $quota ûšéð ~~~~~~~]';
+  }
+
+  @override
+  String grpRStorageUsed(String used) {
+    return '[$used ûšéð ~~~]';
+  }
+
+  @override
+  String grpRChartBars(String label, int count) {
+    return '[$label, $count ƀåŕš ~~~~~~~]';
+  }
+
+  @override
+  String grpRChartSlices(String label, int count) {
+    return '[$label, $count šłíçéš ~~~~~~~]';
+  }
+
+  @override
+  String grpRChartLines(String label, int lines, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      lines,
+      locale: localeName,
+      other: '$lines łíñéš',
+      one: '1 łíñé',
+    );
+    return '[$label, $_temp0, $points þöíñţš ~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRChartPercent(String label, String shown, int percent) {
+    return '[$label, $shown, $percent þéŕçéñţ ~~~~~~~~~~~]';
+  }
+
+  @override
+  String get grpRAuCreated => '[çŕéåţéð ţĥíš ţåšķ ~~~~~]';
+
+  @override
+  String get grpRAuTrashed => '[ɱöṽéð ţĥíš ţåšķ ţö ţĥé ţŕåšĥ ~~~~~~~~~]';
+
+  @override
+  String get grpRAuRestored => '[ŕéšţöŕéð ţĥíš ţåšķ ~~~~~~]';
+
+  @override
+  String grpRAuStatus(String from, String to) {
+    return '[çĥåñĝéð šţåţûš $from → $to ~~~~~~~~~]';
+  }
+
+  @override
+  String grpRAuAssigned(String names) {
+    return '[åššíĝñéð $names ~~~~~]';
+  }
+
+  @override
+  String grpRAuUnassigned(String names) {
+    return '[ûñåššíĝñéð $names ~~~~~~]';
+  }
+
+  @override
+  String grpRAuAnd(String a, String b) {
+    return '[$a åñð $b ~~~]';
+  }
+
+  @override
+  String get grpRAuCommented => '[çöɱɱéñţéð ~~~]';
+
+  @override
+  String get grpRAuCommentEdited => '[éðíţéð å çöɱɱéñţ ~~~~~]';
+
+  @override
+  String get grpRAuCommentDeleted => '[ðéłéţéð å çöɱɱéñţ ~~~~~]';
+
+  @override
+  String grpRAuReacted(String emoji) {
+    return '[ŕéåçţéð $emoji ţö å çöɱɱéñţ ~~~~~~~~~]';
+  }
+
+  @override
+  String grpRAuUnreacted(String emoji) {
+    return '[ţööķ ƀåçķ $emoji öñ å çöɱɱéñţ ~~~~~~~~~~]';
+  }
+
+  @override
+  String grpRAuAttached(String file) {
+    return '[åţţåçĥéð $file ~~~~~]';
+  }
+
+  @override
+  String grpRAuFileRemoved(String file) {
+    return '[ŕéɱöṽéð ţĥé ƒíłé $file ~~~~~~~]';
+  }
+
+  @override
+  String get grpRAuTimeLogged => '[łöĝĝéð ţíɱé ~~~]';
+
+  @override
+  String get grpRAuTimeUpdated => '[ûþðåţéð å ţíɱé éñţŕý ~~~~~~]';
+
+  @override
+  String get grpRAuTimeDeleted => '[ðéłéţéð å ţíɱé éñţŕý ~~~~~~]';
+
+  @override
+  String grpRAuLinked(String type, String task) {
+    return '[łíñķéð $type $task ~~~~~~]';
+  }
+
+  @override
+  String get grpRAuLinkRemoved => '[ŕéɱöṽéð å łíñķ ~~~~]';
+
+  @override
+  String get grpRAuFieldSet => '[šéţ å çûšţöɱ ƒíéłð ~~~~~~]';
+
+  @override
+  String get grpRAuDocLinked => '[łíñķéð å þåĝé ~~~~]';
+
+  @override
+  String get grpRAuDocUnlinked => '[ûñłíñķéð å þåĝé ~~~~~]';
+
+  @override
+  String get grpRAuEdited => '[éðíţéð ţĥíš ţåšķ ~~~~~]';
+
+  @override
+  String grpRAuChanged(String parts) {
+    return '[çĥåñĝéð $parts ~~~~~]';
+  }
+
+  @override
+  String grpRAuPart(String label, String from, String to) {
+    return '[$label $from → $to ~~~~~~~]';
+  }
+
+  @override
+  String get grpRAuSomething => '[ðíð šöɱéţĥíñĝ ~~~~]';
+
+  @override
+  String get grpRAuFStatus => '[šţåţûš ~~]';
+
+  @override
+  String get grpRAuFSprint => '[šþŕíñţ ~~]';
+
+  @override
+  String get grpRAuFParent => '[þåŕéñţ ţåšķ ~~~]';
+
+  @override
+  String get grpRAuFDueDate => '[ðûé ðåţé ~~]';
+
+  @override
+  String get grpRAuFDueTime => '[ðûé ţíɱé ~~]';
+
+  @override
+  String get grpRAuFStartDate => '[šţåŕţ ðåţé ~~~]';
+
+  @override
+  String get grpRAuFEstimate => '[éšţíɱåţé ~~]';
 
   @override
   String get devTitle => '[Ðéṽéłöþéŕ ~~~]';

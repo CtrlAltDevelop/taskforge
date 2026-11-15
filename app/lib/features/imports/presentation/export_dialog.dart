@@ -117,7 +117,9 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                   state.job != null
                       ? context.l10n.grpGExportSavedSized(
                           '${state.saved}',
-                          context.localDigits(humanSize(state.job!.size)),
+                          context.localDigits(
+                            humanSize(state.job!.size, context.l10n),
+                          ),
                         )
                       : context.l10n.grpGExportSaved('${state.saved}'),
                   key: const Key('export-done'),

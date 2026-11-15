@@ -81,7 +81,7 @@ class AttachmentViewer extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '${file.filename} · ${context.localDigits(formatBytes(file.size))}',
+                      '${file.filename} · ${context.localDigits(formatBytes(file.size, context.l10n))}',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -202,7 +202,9 @@ class _TextPreview extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 8),
               child: Text(
                 context.l10n.grpHTextTruncated(
-                  context.localDigits(formatBytes(textPreviewBytes)),
+                  context.localDigits(
+                    formatBytes(textPreviewBytes, context.l10n),
+                  ),
                 ),
                 key: const Key('viewer-truncated'),
                 style: Theme.of(context).textTheme.labelSmall,

@@ -92,9 +92,13 @@ class MonthDots extends StatelessWidget {
     required this.selected,
     required this.onSelect,
     this.ghosts = const [],
+    this.jalali = false,
   });
 
   final List<RepeatGhost> ghosts;
+
+  /// [month] and the day numbers are Jalali.
+  final bool jalali;
   final Day first;
   final int weeks;
   final int month;
@@ -112,15 +116,18 @@ class MonthDots extends StatelessWidget {
           Row(
             children: [
               for (var c = 0; c < 7; c++)
-                Expanded(child: _cell(scheme, addDays(first, 7 * w + c))),
+                Expanded(
+                  child: _cell(context, scheme, addDays(first, 7 * w + c)),
+                ),
             ],
           ),
       ],
     );
   }
 
-  Widget _cell(ColorScheme scheme, Day d) {
+  Widget _cell(BuildContext context, ColorScheme scheme, Day d) {
     final isSelected = d == selected;
+    final shown = jalali ? jalaliOf(d) : null;
     final has = tasksOn(tasks, d).isNotEmpty;
     final hasGhost = !has && ghostsOn(ghosts, d).isNotEmpty;
     return InkWell(
@@ -138,8 +145,12 @@ class MonthDots extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${d.day}',
-              style: TextStyle(color: d.month == month ? null : scheme.outline),
+              context.localDigits('${shown?.day ?? d.day}'),
+              style: TextStyle(
+                color: (shown?.month ?? d.month) == month
+                    ? null
+                    : scheme.outline,
+              ),
             ),
             if (has)
               Container(

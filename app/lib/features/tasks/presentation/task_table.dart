@@ -535,7 +535,12 @@ class _TaskTableState extends ConsumerState<TaskTable> {
         if (widget.canUpdate)
           IconButton(
             key: Key('rename-btn-${task.id}'),
-            tooltip: withShortcut(ref, 'Rename', 'task.rename'),
+            tooltip: withShortcut(
+              ref,
+              context.l10n.grpJRename,
+              'task.rename',
+              l10n: context.l10n,
+            ),
             iconSize: 16,
             visualDensity: VisualDensity.compact,
             icon: const Icon(Icons.edit_outlined),

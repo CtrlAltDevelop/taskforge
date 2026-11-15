@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:taskforge/core/i18n/jalali.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
 /// A calendar day with no time and no zone: UTC midnight, so adding days never
@@ -38,18 +39,58 @@ enum CalendarMode { month, week, day }
 Day weekStartOf(Day d, int weekStart) =>
     addDays(d, -((d.weekday - weekStart + 7) % 7));
 
+/// The Jalali date of [d] (display and navigation only).
+JalaliDate jalaliOf(Day d) =>
+    JalaliDate.fromGregorian(DateTime(d.year, d.month, d.day));
+
+/// The Gregorian [Day] a Jalali date falls on.
+Day dayOfJalali(JalaliDate j) {
+  final g = j.toGregorian();
+  return day(g.year, g.month, g.day);
+}
+
+/// The first and last Gregorian day of the Jalali month that holds [d].
+({Day first, Day last}) jalaliMonthSpan(Day d) {
+  final j = jalaliOf(d);
+  return (
+    first: dayOfJalali(JalaliDate(j.year, j.month, 1)),
+    last: dayOfJalali(
+      JalaliDate(j.year, j.month, jalaliMonthLength(j.year, j.month)),
+    ),
+  );
+}
+
+/// The whole weeks (from [weekStart]) that cover the Jalali month holding
+/// [anchor]: first grid day and last grid day.
+({Day first, Day last}) jalaliMonthGrid(Day anchor, int weekStart) {
+  final span = jalaliMonthSpan(anchor);
+  return (
+    first: weekStartOf(span.first, weekStart),
+    last: addDays(weekStartOf(span.last, weekStart), 6),
+  );
+}
+
+/// The first day of the Jalali month [months] away from the one holding [d].
+Day jalaliMonthStep(Day d, int months) {
+  final j = jalaliOf(d);
+  final index = j.year * 12 + (j.month - 1) + months;
+  return dayOfJalali(JalaliDate(index ~/ 12, index % 12 + 1, 1));
+}
+
 /// The days a screen shows around [anchor]: a month grid is whole weeks, a
-/// week is seven days, a day is itself.
+/// week is seven days, a day is itself. With [jalali] a month is a Jalali one.
 ({Day first, Day last}) visibleRange(
   CalendarMode mode,
   Day anchor,
-  int weekStart,
-) => switch (mode) {
+  int weekStart, {
+  bool jalali = false,
+}) => switch (mode) {
   CalendarMode.day => (first: anchor, last: anchor),
   CalendarMode.week => (
     first: weekStartOf(anchor, weekStart),
     last: addDays(weekStartOf(anchor, weekStart), 6),
   ),
+  CalendarMode.month when jalali => jalaliMonthGrid(anchor, weekStart),
   CalendarMode.month => () {
     final first = weekStartOf(day(anchor.year, anchor.month, 1), weekStart);
     final end = day(anchor.year, anchor.month + 1, 0); // the month's last day
@@ -59,11 +100,13 @@ Day weekStartOf(Day d, int weekStart) =>
 };
 
 /// [anchor] one [mode] step forward (or back with a negative [steps]).
-Day step(CalendarMode mode, Day anchor, int steps) => switch (mode) {
-  CalendarMode.day => addDays(anchor, steps),
-  CalendarMode.week => addDays(anchor, 7 * steps),
-  CalendarMode.month => day(anchor.year, anchor.month + steps, 1),
-};
+Day step(CalendarMode mode, Day anchor, int steps, {bool jalali = false}) =>
+    switch (mode) {
+      CalendarMode.day => addDays(anchor, steps),
+      CalendarMode.week => addDays(anchor, 7 * steps),
+      CalendarMode.month when jalali => jalaliMonthStep(anchor, steps),
+      CalendarMode.month => day(anchor.year, anchor.month + steps, 1),
+    };
 
 /// The days [task] covers: its start to its due date, or the one day it has.
 /// Null for a task with neither.

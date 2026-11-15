@@ -150,13 +150,23 @@ String attachmentErrorMessage(AttachmentException e, [AppLocalizations? l10n]) {
     AttachmentFailure.incomplete => t.grpLAttIncomplete,
     AttachmentFailure.expired => t.grpLAttExpired,
     AttachmentFailure.unreadable => t.grpLAttUnreadable,
-    AttachmentFailure.denied => e.detail ?? t.grpLAttNotAllowed,
+    AttachmentFailure.denied => _deniedText(e.detail, t),
     AttachmentFailure.forbidden => t.grpLAttNotAllowed,
     AttachmentFailure.archived => t.grpLAttArchived,
     AttachmentFailure.notFound => t.grpLAttGone,
     AttachmentFailure.network => t.grpLNoConn,
     AttachmentFailure.other => t.grpLGeneric,
   };
+}
+
+final _needPermission = RegExp(r'^You need permission "(.+)"$');
+
+/// The server's refusal text; "You need permission "x"" is said in the
+/// language of [t], anything else as the server wrote it.
+String _deniedText(String? detail, AppLocalizations t) {
+  if (detail == null) return t.grpLAttNotAllowed;
+  final match = _needPermission.firstMatch(detail);
+  return match == null ? detail : t.grpRDenyNeed(match.group(1)!);
 }
 
 enum UploadState { queued, uploading, done, failed, cancelled }
@@ -272,9 +282,17 @@ class BytesSource implements UploadSource {
   );
 }
 
-/// "1.4 MB" for [bytes].
-String formatBytes(int bytes) {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+/// "1.4 MB" for [bytes]; the unit is in the language of [l10n] (English when
+/// null).
+String formatBytes(int bytes, [AppLocalizations? l10n]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  final units = [
+    l.grpRUnitB,
+    l.grpRUnitKB,
+    l.grpRUnitMB,
+    l.grpRUnitGB,
+    l.grpRUnitTB,
+  ];
   var value = bytes.toDouble();
   var unit = 0;
   while (value >= 1024 && unit < units.length - 1) {

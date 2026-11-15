@@ -286,7 +286,9 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
                       _files[i].name,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    deleteButtonTooltipMessage: 'Remove ${_files[i].name}',
+                    deleteButtonTooltipMessage: context.l10n.grpJRemoveMember(
+                      _files[i].name,
+                    ),
                     onDeleted: _sending
                         ? null
                         : () => setState(() => _files.removeAt(i)),

@@ -33,6 +33,10 @@ class DocNode {
   final String updatedAt;
 
   String get label => title.trim().isEmpty ? 'Untitled' : title;
+
+  /// [label] as shown: the untitled name in the language of [l10n].
+  String labelIn(AppLocalizations l10n) =>
+      title.trim().isEmpty ? l10n.grpBUntitled : title;
 }
 
 @immutable

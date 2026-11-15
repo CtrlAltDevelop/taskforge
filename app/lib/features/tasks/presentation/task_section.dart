@@ -1023,7 +1023,12 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
       maxLength: maxTitleLength,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-        hintText: withShortcut(ref, 'Add a task and press Enter', 'task.new'),
+        hintText: withShortcut(
+          ref,
+          context.l10n.taskAddHint,
+          'task.new',
+          l10n: context.l10n,
+        ),
         prefixIcon: const Icon(Icons.add),
         counterText: '',
         border: const OutlineInputBorder(),

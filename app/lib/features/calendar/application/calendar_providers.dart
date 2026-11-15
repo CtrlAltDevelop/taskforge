@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/grpc/grpc_providers.dart';
+import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:taskforge/core/permissions/refusals.dart';
 import 'package:taskforge/features/calendar/data/calendar_client.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
@@ -141,6 +142,12 @@ CalendarMode shownMode(CalendarLayout layout, {required bool compact}) =>
 
 // -------------------------------------------------------------------- cursor
 
+/// Whether the person's calendar is Jalali (months and weeks follow it; days
+/// are still stored and sent as Gregorian).
+final calendarJalaliProvider = Provider<bool>(
+  (ref) => ref.watch(localePrefsProvider.select((p) => p.isJalali)),
+);
+
 /// The day the calendar is looking at (any day of the month or week shown).
 final calendarAnchorProvider = NotifierProvider.autoDispose
     .family<CalendarAnchor, Day, String>(CalendarAnchor.new);
@@ -161,7 +168,12 @@ class CalendarAnchor extends Notifier<Day> {
 
   void today() => state = ref.read(todayProvider);
 
-  void shift(CalendarMode mode, int steps) => state = step(mode, state, steps);
+  void shift(CalendarMode mode, int steps) => state = step(
+    mode,
+    state,
+    steps,
+    jalali: ref.read(calendarJalaliProvider),
+  );
 }
 
 /// The projects hidden from the workspace calendar (their ids).
@@ -231,11 +243,13 @@ class CalendarNotifier extends Notifier<CalendarState> {
     final filter = ref.watch(filterJsonProvider(projectId));
     final anchor = ref.watch(calendarAnchorProvider(projectId));
     final weekStart = ref.watch(weekStartProvider(projectId));
+    final jalali = ref.watch(calendarJalaliProvider);
     if (loaded && ref.watch(filterReadyProvider(projectId))) {
       final range = visibleRange(
         shownMode(CalendarLayout(mode: mode), compact: compact),
         anchor,
         weekStart,
+        jalali: jalali,
       );
       Future.microtask(() => _load(range.first, range.last, hideDone, filter));
     }
@@ -284,6 +298,7 @@ class CalendarNotifier extends Notifier<CalendarState> {
       shownMode(layout, compact: ref.read(compactCalendarProvider)),
       ref.read(calendarAnchorProvider(projectId)),
       ref.read(weekStartProvider(projectId)),
+      jalali: ref.read(calendarJalaliProvider),
     );
     unawaited(
       _load(

@@ -6111,6 +6111,378 @@ class AppLocalizationsPs extends AppLocalizations {
   String get grp1UseIsoDate => 'د YYYY-MM-DD بڼه وکاروئ.';
 
   @override
+  String get taskAddHint => 'یو کار اضافه کړئ او Enter کېکاږئ';
+
+  @override
+  String grpRMnAdded(String name) {
+    return 'د بل چا لخوا ورزیاته شو: $name.';
+  }
+
+  @override
+  String grpRMnKept(String name) {
+    return '$name وساتل شو: تاسو حذف کړ، خو بل چا مخکې بدل کړ. که لا هم غواړئ، بیا یې حذف کړئ.';
+  }
+
+  @override
+  String grpRMnDeleted(String name) {
+    return 'د بل چا لخوا حذف شو: $name.';
+  }
+
+  @override
+  String grpRMnDeletedEdited(String name) {
+    return 'د بل چا لخوا حذف شو: $name. ستاسو بدلونونه پرېښودل شول.';
+  }
+
+  @override
+  String grpRMnFieldAdopted(String what, String status, String value) {
+    return 'بل چا د «$status» $what په $value بدل کړ.';
+  }
+
+  @override
+  String grpRMnFieldDropped(
+    String what,
+    String status,
+    String mine,
+    String value,
+  ) {
+    return 'ستاسو د «$status» د $what بدلون ($mine) پرېښودل شو: بل چا هغه په $value بدل کړ.';
+  }
+
+  @override
+  String grpRMnSwitchAdopted(String what, String state) {
+    return 'بل چا «$what» $state کړ.';
+  }
+
+  @override
+  String grpRMnSwitchDropped(String what, String state) {
+    return 'ستاسو د «$what» بدلون پرېښودل شو: بل چا هغه $state کړ.';
+  }
+
+  @override
+  String get grpRMnOrderDropped =>
+      'ستاسو د حالتونو نوی ترتیب پرېښودل شو: بل چا هم هغوی بیا ترتیب کړل.';
+
+  @override
+  String get grpRMnReordered => 'بل چا حالتونه بیا ترتیب کړل.';
+
+  @override
+  String grpRMnMigrationLost(String name) {
+    return 'هغه حالت چې تاسو د «$name» دندو لپاره غوره کړ د بل چا لخوا حذف شو: د هغو لپاره بل ځای غوره کړئ.';
+  }
+
+  @override
+  String get grpRMnDeletedStatus => 'یوه حذف شوې حالت';
+
+  @override
+  String grpRMnMoveAllowed(String name) {
+    return 'بل چا د $name لېږدول اجازه کړل.';
+  }
+
+  @override
+  String grpRMnMoveRemoved(String name) {
+    return 'بل چا د $name لېږدول لرې کړل.';
+  }
+
+  @override
+  String grpRMnConditionsAdopted(String name) {
+    return 'بل چا د $name د لېږدولو شرطونه بدل کړل.';
+  }
+
+  @override
+  String grpRMnConditionsDropped(String name) {
+    return 'ستاسو د $name د لېږدولو د شرطونو بدلون پرېښودل شو: بل چا هم هغه بدل کړل.';
+  }
+
+  @override
+  String grpRMnMovesDropped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'ستاسو $count لېږدولونه پرېښودل شول ځکه چې هغه حالت چې کارولو یې له منځه تللی دی.',
+      one: 'ستاسو یو لېږدول پرېښودل شو ځکه چې هغه حالت چې کارولو یې له منځه تللی دی.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpRMnWhatName => 'نوم';
+
+  @override
+  String get grpRMnWhatColour => 'رنګ';
+
+  @override
+  String get grpRMnWhatCategory => 'کټګوري';
+
+  @override
+  String get grpRMnWhatDefault => 'تلواله';
+
+  @override
+  String get grpRMnNone => 'هیڅ';
+
+  @override
+  String get grpRMnIsDefault => 'تلواله';
+
+  @override
+  String get grpRMnNotDefault => 'نه تلواله';
+
+  @override
+  String get grpRMnOn => 'چالان';
+
+  @override
+  String get grpRMnOff => 'بند';
+
+  @override
+  String get grpRKeyCtrl => 'Ctrl';
+
+  @override
+  String get grpRKeyAlt => 'Alt';
+
+  @override
+  String get grpRKeyShift => 'Shift';
+
+  @override
+  String get grpRKeyEnter => 'Enter';
+
+  @override
+  String get grpRKeyEsc => 'Esc';
+
+  @override
+  String get grpRKeySpace => 'تشه';
+
+  @override
+  String get grpRKeyTab => 'Tab';
+
+  @override
+  String get grpRKeyBackspace => 'Backspace';
+
+  @override
+  String get grpRKeyDelete => 'Delete';
+
+  @override
+  String get grpRKeyHome => 'Home';
+
+  @override
+  String get grpRKeyEnd => 'End';
+
+  @override
+  String get grpRKeyPgUp => 'PgUp';
+
+  @override
+  String get grpRKeyPgDn => 'PgDn';
+
+  @override
+  String get grpRCmForbidden => 'تاسو نور پر دې دنده نظر نشئ ورکولی.';
+
+  @override
+  String get grpRCmGone => 'دنده حذف شوه.';
+
+  @override
+  String get grpRCmArchived => 'پروژه ارشیف شوه.';
+
+  @override
+  String get grpRCmInvalid => 'نظر معتبر نه دی.';
+
+  @override
+  String get grpRCmMention => 'یو یادشوی کس دا دنده نشي لیدلی.';
+
+  @override
+  String get grpRCmRefused => 'سرور نظر رد کړ.';
+
+  @override
+  String grpRDependsRefused(String reason) {
+    return 'دا په یو بدلون پورې اړه لري چې رد شو: $reason';
+  }
+
+  @override
+  String get grpRKeepUnreadable => 'ولوستل نشو. بیا هڅه وکړئ.';
+
+  @override
+  String grpRDenyNeed(String permission) {
+    return 'تاسو ته د «$permission» اجازه ضروري ده';
+  }
+
+  @override
+  String grpRDenyNeedRole(String permission, String role) {
+    return 'تاسو ته د «$permission» اجازه ضروري ده — ستاسو رول $role دی';
+  }
+
+  @override
+  String get grpRRequestFailed => 'غوښتنه ناکامه شوه.';
+
+  @override
+  String get grpRUnitB => 'بایټ';
+
+  @override
+  String get grpRUnitKB => 'کیلوبایټ';
+
+  @override
+  String get grpRUnitMB => 'میګابایټ';
+
+  @override
+  String get grpRUnitGB => 'ګیګابایټ';
+
+  @override
+  String get grpRUnitTB => 'ترابایټ';
+
+  @override
+  String grpRStorageOf(String used, String quota) {
+    return '$used له $quota څخه کارول شوي';
+  }
+
+  @override
+  String grpRStorageUsed(String used) {
+    return '$used کارول شوي';
+  }
+
+  @override
+  String grpRChartBars(String label, int count) {
+    return '$label، $count ستنې';
+  }
+
+  @override
+  String grpRChartSlices(String label, int count) {
+    return '$label، $count ټوټې';
+  }
+
+  @override
+  String grpRChartLines(String label, int lines, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      lines,
+      locale: localeName,
+      other: '$lines کربې',
+      one: '۱ کربه',
+    );
+    return '$label، $_temp0، $points نقطې';
+  }
+
+  @override
+  String grpRChartPercent(String label, String shown, int percent) {
+    return '$label، $shown، $percent سلنه';
+  }
+
+  @override
+  String get grpRAuCreated => 'دا دنده یې جوړه کړه';
+
+  @override
+  String get grpRAuTrashed => 'دا دنده یې کثافاتو ته واړوله';
+
+  @override
+  String get grpRAuRestored => 'دا دنده یې بیرته راوستله';
+
+  @override
+  String grpRAuStatus(String from, String to) {
+    return 'حالت یې له $from څخه $to ته بدل کړ';
+  }
+
+  @override
+  String grpRAuAssigned(String names) {
+    return '$names ته یې وسپارله';
+  }
+
+  @override
+  String grpRAuUnassigned(String names) {
+    return 'د $names سپارنه یې لغوه کړه';
+  }
+
+  @override
+  String grpRAuAnd(String a, String b) {
+    return '$a او $b';
+  }
+
+  @override
+  String get grpRAuCommented => 'نظر یې ورکړ';
+
+  @override
+  String get grpRAuCommentEdited => 'یو نظر یې سم کړ';
+
+  @override
+  String get grpRAuCommentDeleted => 'یو نظر یې حذف کړ';
+
+  @override
+  String grpRAuReacted(String emoji) {
+    return 'پر یو نظر یې د $emoji غبرګون وښود';
+  }
+
+  @override
+  String grpRAuUnreacted(String emoji) {
+    return 'له یو نظر څخه یې $emoji بیرته واخیست';
+  }
+
+  @override
+  String grpRAuAttached(String file) {
+    return '$file یې ضمیمه کړ';
+  }
+
+  @override
+  String grpRAuFileRemoved(String file) {
+    return 'فایل $file یې لرې کړ';
+  }
+
+  @override
+  String get grpRAuTimeLogged => 'وخت یې ثبت کړ';
+
+  @override
+  String get grpRAuTimeUpdated => 'د وخت یو ننوتنه یې تازه کړه';
+
+  @override
+  String get grpRAuTimeDeleted => 'د وخت یو ننوتنه یې حذف کړه';
+
+  @override
+  String grpRAuLinked(String type, String task) {
+    return '$type $task یې وتاره';
+  }
+
+  @override
+  String get grpRAuLinkRemoved => 'یو لینک یې لرې کړ';
+
+  @override
+  String get grpRAuFieldSet => 'یوه دودیزه ساحه یې تنظیم کړه';
+
+  @override
+  String get grpRAuDocLinked => 'یوه پاڼه یې وتړله';
+
+  @override
+  String get grpRAuDocUnlinked => 'د یوې پاڼې تړاو یې لرې کړ';
+
+  @override
+  String get grpRAuEdited => 'دا دنده یې سمه کړه';
+
+  @override
+  String grpRAuChanged(String parts) {
+    return '$parts یې بدل کړل';
+  }
+
+  @override
+  String grpRAuPart(String label, String from, String to) {
+    return '$label $from ← $to';
+  }
+
+  @override
+  String get grpRAuSomething => 'یو کار یې وکړ';
+
+  @override
+  String get grpRAuFStatus => 'حالت';
+
+  @override
+  String get grpRAuFSprint => 'سپرینټ';
+
+  @override
+  String get grpRAuFParent => 'مورنۍ دنده';
+
+  @override
+  String get grpRAuFDueDate => 'د پای نیټه';
+
+  @override
+  String get grpRAuFDueTime => 'د پای وخت';
+
+  @override
+  String get grpRAuFStartDate => 'د پیل نیټه';
+
+  @override
+  String get grpRAuFEstimate => 'اټکل';
+
+  @override
   String get devTitle => 'پراختیاګر';
 
   @override

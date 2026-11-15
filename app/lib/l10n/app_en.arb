@@ -3615,6 +3615,399 @@
   "grp1EnterCurrency": "Enter a 3-letter currency, e.g. USD.",
   "grp1EnterUrl": "Enter a web address starting with http(s)://",
   "grp1UseIsoDate": "Use YYYY-MM-DD.",
+  "taskAddHint": "Add a task and press Enter",
+  "grpRMnAdded": "Added by someone else: {name}.",
+  "@grpRMnAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnKept": "Kept {name}: you deleted it, but someone else changed it first. Delete it again if you still want to.",
+  "@grpRMnKept": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnDeleted": "Deleted by someone else: {name}.",
+  "@grpRMnDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnDeletedEdited": "Deleted by someone else: {name}. Your changes to it were dropped.",
+  "@grpRMnDeletedEdited": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnFieldAdopted": "Someone else changed the {what} of {status} to {value}.",
+  "@grpRMnFieldAdopted": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnFieldDropped": "Your change to the {what} of {status} ({mine}) was dropped: someone else changed it to {value}.",
+  "@grpRMnFieldDropped": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      },
+      "mine": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnSwitchAdopted": "Someone else turned \"{what}\" {state}.",
+  "@grpRMnSwitchAdopted": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnSwitchDropped": "Your change to \"{what}\" was dropped: someone else turned it {state}.",
+  "@grpRMnSwitchDropped": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnOrderDropped": "Your new order of the statuses was dropped: someone else reordered them too.",
+  "grpRMnReordered": "Someone else reordered the statuses.",
+  "grpRMnMigrationLost": "The status you chose for the tasks of {name} was deleted by someone else: choose another place for them.",
+  "@grpRMnMigrationLost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnDeletedStatus": "a deleted status",
+  "grpRMnMoveAllowed": "Someone else allowed the move {name}.",
+  "@grpRMnMoveAllowed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnMoveRemoved": "Someone else removed the move {name}.",
+  "@grpRMnMoveRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnConditionsAdopted": "Someone else changed the conditions of the move {name}.",
+  "@grpRMnConditionsAdopted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnConditionsDropped": "Your change to the conditions of the move {name} was dropped: someone else changed them too.",
+  "@grpRMnConditionsDropped": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRMnMovesDropped": "{count, plural, =1{One of your moves was dropped because a status it used is gone.} other{{count} of your moves were dropped because a status they used is gone.}}",
+  "@grpRMnMovesDropped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpRMnWhatName": "name",
+  "grpRMnWhatColour": "colour",
+  "grpRMnWhatCategory": "category",
+  "grpRMnWhatDefault": "default",
+  "grpRMnNone": "none",
+  "grpRMnIsDefault": "the default",
+  "grpRMnNotDefault": "not the default",
+  "grpRMnOn": "on",
+  "grpRMnOff": "off",
+  "grpRKeyCtrl": "Ctrl",
+  "grpRKeyAlt": "Alt",
+  "grpRKeyShift": "Shift",
+  "grpRKeyEnter": "Enter",
+  "grpRKeyEsc": "Esc",
+  "grpRKeySpace": "Space",
+  "grpRKeyTab": "Tab",
+  "grpRKeyBackspace": "Backspace",
+  "grpRKeyDelete": "Delete",
+  "grpRKeyHome": "Home",
+  "grpRKeyEnd": "End",
+  "grpRKeyPgUp": "PgUp",
+  "grpRKeyPgDn": "PgDn",
+  "grpRCmForbidden": "You can no longer comment on this task.",
+  "grpRCmGone": "The task was deleted.",
+  "grpRCmArchived": "The project was archived.",
+  "grpRCmInvalid": "The comment is not valid.",
+  "grpRCmMention": "Someone mentioned cannot see this task.",
+  "grpRCmRefused": "The server refused the comment.",
+  "grpRDependsRefused": "This depends on a change that was refused: {reason}",
+  "@grpRDependsRefused": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRKeepUnreadable": "It could not be read. Try again.",
+  "grpRDenyNeed": "You need permission \"{permission}\"",
+  "@grpRDenyNeed": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRDenyNeedRole": "You need permission \"{permission}\" — your role is {role}",
+  "@grpRDenyNeedRole": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      },
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRRequestFailed": "Request failed.",
+  "grpRUnitB": "B",
+  "grpRUnitKB": "KB",
+  "grpRUnitMB": "MB",
+  "grpRUnitGB": "GB",
+  "grpRUnitTB": "TB",
+  "grpRStorageOf": "{used} of {quota} used",
+  "@grpRStorageOf": {
+    "placeholders": {
+      "used": {
+        "type": "String"
+      },
+      "quota": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRStorageUsed": "{used} used",
+  "@grpRStorageUsed": {
+    "placeholders": {
+      "used": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRChartBars": "{label}, {count} bars",
+  "@grpRChartBars": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpRChartSlices": "{label}, {count} slices",
+  "@grpRChartSlices": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "grpRChartLines": "{label}, {lines, plural, =1{1 line} other{{lines} lines}}, {points} points",
+  "@grpRChartLines": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "lines": {
+        "type": "int"
+      },
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "grpRChartPercent": "{label}, {shown}, {percent} percent",
+  "@grpRChartPercent": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "shown": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "grpRAuCreated": "created this task",
+  "grpRAuTrashed": "moved this task to the trash",
+  "grpRAuRestored": "restored this task",
+  "grpRAuStatus": "changed status {from} → {to}",
+  "@grpRAuStatus": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuAssigned": "assigned {names}",
+  "@grpRAuAssigned": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuUnassigned": "unassigned {names}",
+  "@grpRAuUnassigned": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuAnd": "{a} and {b}",
+  "@grpRAuAnd": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuCommented": "commented",
+  "grpRAuCommentEdited": "edited a comment",
+  "grpRAuCommentDeleted": "deleted a comment",
+  "grpRAuReacted": "reacted {emoji} to a comment",
+  "@grpRAuReacted": {
+    "placeholders": {
+      "emoji": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuUnreacted": "took back {emoji} on a comment",
+  "@grpRAuUnreacted": {
+    "placeholders": {
+      "emoji": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuAttached": "attached {file}",
+  "@grpRAuAttached": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuFileRemoved": "removed the file {file}",
+  "@grpRAuFileRemoved": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuTimeLogged": "logged time",
+  "grpRAuTimeUpdated": "updated a time entry",
+  "grpRAuTimeDeleted": "deleted a time entry",
+  "grpRAuLinked": "linked {type} {task}",
+  "@grpRAuLinked": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "task": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuLinkRemoved": "removed a link",
+  "grpRAuFieldSet": "set a custom field",
+  "grpRAuDocLinked": "linked a page",
+  "grpRAuDocUnlinked": "unlinked a page",
+  "grpRAuEdited": "edited this task",
+  "grpRAuChanged": "changed {parts}",
+  "@grpRAuChanged": {
+    "placeholders": {
+      "parts": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuPart": "{label} {from} → {to}",
+  "@grpRAuPart": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "grpRAuSomething": "did something",
+  "grpRAuFStatus": "status",
+  "grpRAuFSprint": "sprint",
+  "grpRAuFParent": "parent task",
+  "grpRAuFDueDate": "due date",
+  "grpRAuFDueTime": "due time",
+  "grpRAuFStartDate": "start date",
+  "grpRAuFEstimate": "estimate",
   "devTitle": "Developer",
   "devSub": "API tokens and webhooks",
   "devTokensTab": "API tokens",

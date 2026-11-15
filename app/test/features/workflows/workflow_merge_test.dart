@@ -73,7 +73,7 @@ void main() {
         edit: (d) => d.rename('doing', 'Doing'),
       );
 
-      expect(r.notes, isEmpty);
+      expect(r.english, isEmpty);
       expect(nameOf(r, 'doing'), 'Doing');
       expect(r.draft.differsFrom(defaultWorkflow(version: 2)), isTrue);
     },
@@ -90,7 +90,7 @@ void main() {
 
         final s = r.draft.statuses[1];
         expect((s.name, s.color), ('Doing', '#E53935'));
-        expect(r.notes, [
+        expect(r.english, [
           'Someone else changed the colour of In progress to #E53935.',
         ]);
       },
@@ -104,10 +104,10 @@ void main() {
 
       expect(nameOf(r, 'doing'), 'Active');
       expect(
-        r.notes.single,
+        r.english.single,
         contains('Your change to the name of Active ("Doing") was dropped'),
       );
-      expect(r.notes.single, contains('"Active"'));
+      expect(r.english.single, contains('"Active"'));
     });
 
     test('both made the same change: no conflict, no note', () {
@@ -117,7 +117,7 @@ void main() {
       );
 
       expect(nameOf(r, 'doing'), 'Doing');
-      expect(r.notes, isEmpty);
+      expect(r.english, isEmpty);
     });
 
     test('the category and the default follow the same rule', () {
@@ -139,7 +139,7 @@ void main() {
       );
 
       expect(r.draft.statuses[1].category, StatusCategory.cancelled);
-      expect(r.notes.single, contains('category'));
+      expect(r.english.single, contains('category'));
     });
   });
 
@@ -154,7 +154,7 @@ void main() {
         'done',
         'qa',
       ]);
-      expect(r.notes, ['Added by someone else: QA.']);
+      expect(r.english, ['Added by someone else: QA.']);
     });
 
     test('a status someone else added is never lost to my save', () {
@@ -192,9 +192,12 @@ void main() {
       );
 
       expect(untouched.draft.statuses.map((s) => s.key), ['todo', 'done']);
-      expect(untouched.notes, ['Deleted by someone else: In progress.']);
+      expect(untouched.english, ['Deleted by someone else: In progress.']);
       expect(edited.draft.statuses.map((s) => s.key), ['todo', 'done']);
-      expect(edited.notes.single, contains('Your changes to it were dropped'));
+      expect(
+        edited.english.single,
+        contains('Your changes to it were dropped'),
+      );
     });
 
     test('a status I deleted stays deleted when they left it alone', () {
@@ -208,7 +211,7 @@ void main() {
       expect(r.draft.statuses.map((s) => s.key), ['todo', 'done']);
       expect(r.draft.removed.map((s) => s.key), ['doing']);
       expect(r.draft.migrations, {'doing': 'todo'});
-      expect(r.notes, isEmpty);
+      expect(r.english, isEmpty);
     });
 
     test('a status I deleted but they edited is kept, and I am told', () {
@@ -220,7 +223,7 @@ void main() {
       expect(r.draft.statuses.map((s) => s.key), ['todo', 'doing', 'done']);
       expect(nameOf(r, 'doing'), 'Active');
       expect(r.draft.removed, isEmpty);
-      expect(r.notes.single, startsWith('Kept Active'));
+      expect(r.english.single, startsWith('Kept Active'));
     });
 
     test(
@@ -238,7 +241,10 @@ void main() {
         );
 
         expect(r.draft.migrations, isEmpty);
-        expect(r.notes.any((n) => n.contains('choose another place')), isTrue);
+        expect(
+          r.english.any((n) => n.contains('choose another place')),
+          isTrue,
+        );
       },
     );
 
@@ -261,14 +267,14 @@ void main() {
       final r = merge(theirs: theirs(), edit: (d) => d.moveTo(0, 2));
 
       expect(r.draft.statuses.map((s) => s.key), ['doing', 'done', 'todo']);
-      expect(r.notes, isEmpty);
+      expect(r.english, isEmpty);
     });
 
     test('their order stands when only they reordered, and it is said', () {
       final r = merge(theirs: theirs(statuses: [done, todo, doing]));
 
       expect(r.draft.statuses.map((s) => s.key), ['done', 'todo', 'doing']);
-      expect(r.notes, ['Someone else reordered the statuses.']);
+      expect(r.english, ['Someone else reordered the statuses.']);
     });
 
     test(
@@ -281,7 +287,7 @@ void main() {
 
         expect(r.draft.statuses.map((s) => s.key), ['done', 'todo', 'doing']);
         expect(
-          r.notes.single,
+          r.english.single,
           contains('Your new order of the statuses was dropped'),
         );
       },
@@ -312,9 +318,9 @@ void main() {
       final theirsOnly = merge(theirs: theirs(restrictCreation: true));
 
       expect(mineOnly.draft.restrict, isTrue);
-      expect(mineOnly.notes, isEmpty);
+      expect(mineOnly.english, isEmpty);
       expect(theirsOnly.draft.restrictCreation, isTrue);
-      expect(theirsOnly.notes, [
+      expect(theirsOnly.english, [
         'Someone else turned "New tasks start in the default status only" on.',
       ]);
     });
@@ -349,7 +355,7 @@ void main() {
       // Same change on creation: no clash. restrict only mine: stays.
       expect(r.draft.restrictCreation, isTrue);
       expect(r.draft.restrict, isTrue);
-      expect(r.notes, isEmpty);
+      expect(r.english, isEmpty);
     });
   });
 
@@ -367,9 +373,9 @@ void main() {
       final theirAdds = merge(theirs: theirs(transitions: arrow));
 
       expect(mineAdds.draft.transitions, hasLength(1));
-      expect(mineAdds.notes, isEmpty);
+      expect(mineAdds.english, isEmpty);
       expect(theirAdds.draft.transitions, hasLength(2));
-      expect(theirAdds.notes, [
+      expect(theirAdds.english, [
         'Someone else allowed the move To do → In progress.',
         'Someone else allowed the move In progress → Done.',
       ]);
@@ -401,7 +407,7 @@ void main() {
       );
 
       expect(r.draft.transitions.map((t) => t.from), ['doing']);
-      expect(r.notes, ['Someone else removed the move To do → In progress.']);
+      expect(r.english, ['Someone else removed the move To do → In progress.']);
     });
 
     test('conditions I changed stay; ones we both changed go to theirs', () {
@@ -432,9 +438,9 @@ void main() {
       );
 
       expect(mineOnly.draft.transitions.first.requireAssignee, isTrue);
-      expect(mineOnly.notes, isEmpty);
+      expect(mineOnly.english, isEmpty);
       expect(both.draft.transitions.first.requiredRoleId, '2');
-      expect(both.notes.single, contains('Your change to the conditions'));
+      expect(both.english.single, contains('Your change to the conditions'));
     });
 
     test('the subtasks condition merges like the other conditions', () {
@@ -463,9 +469,9 @@ void main() {
       final theirsOnly = merge(base: base, theirs: withRule(true));
 
       expect(mineOnly.draft.transitions.last.requireSubtasksDone, isTrue);
-      expect(mineOnly.notes, isEmpty);
+      expect(mineOnly.english, isEmpty);
       expect(theirsOnly.draft.transitions.last.requireSubtasksDone, isTrue);
-      expect(theirsOnly.notes.single, contains('changed the conditions'));
+      expect(theirsOnly.english.single, contains('changed the conditions'));
     });
 
     test('a move to a status that is gone is dropped and counted', () {
@@ -476,7 +482,7 @@ void main() {
 
       expect(r.draft.transitions, isEmpty);
       expect(
-        r.notes.any((n) => n.contains('One of your moves was dropped')),
+        r.english.any((n) => n.contains('One of your moves was dropped')),
         isTrue,
       );
     });

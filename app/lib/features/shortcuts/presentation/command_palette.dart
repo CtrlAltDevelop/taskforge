@@ -351,7 +351,10 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
                             action: actions[i],
                             keys: bindings
                                 .chordOf(actions[i].id)
-                                ?.label(isMac: isApplePlatform),
+                                ?.label(
+                                  isMac: isApplePlatform,
+                                  l10n: context.l10n,
+                                ),
                             selected: i == highlighted,
                             onTap: () => _choose(actions, i),
                           ),

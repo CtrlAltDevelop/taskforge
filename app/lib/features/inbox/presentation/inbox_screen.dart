@@ -110,9 +110,11 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
             padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
             child: Row(
               children: [
-                Text(
-                  context.l10n.grpHInbox,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Flexible(
+                  child: Text(
+                    context.l10n.grpHInbox,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
                 if (state.unread > 0) ...[
                   const SizedBox(width: 8),

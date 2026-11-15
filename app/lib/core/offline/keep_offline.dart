@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/offline/offline_providers.dart';
+import 'package:taskforge/core/offline/offline_reason.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
@@ -68,9 +69,9 @@ class KeepOffline extends Notifier<Map<String, KeepProgress>> {
       ref.invalidate(keptProjectsProvider);
       _set(projectId, null);
     } on TaskException catch (e) {
-      _set(projectId, (fetched: 0, error: taskErrorMessage(e)));
+      _set(projectId, (fetched: 0, error: taskReason(e)));
     } on Object {
-      _set(projectId, (fetched: 0, error: 'It could not be read. Try again.'));
+      _set(projectId, (fetched: 0, error: unreadableReason()));
     }
   }
 

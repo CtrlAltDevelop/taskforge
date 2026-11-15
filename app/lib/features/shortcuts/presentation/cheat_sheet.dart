@@ -127,7 +127,7 @@ class _Row extends ConsumerWidget {
             style: Theme.of(context).textTheme.labelSmall,
           )
         else
-          Keycap(chord!.label(isMac: isApplePlatform)),
+          Keycap(chord!.label(isMac: isApplePlatform, l10n: context.l10n)),
         IconButton(
           key: Key('rebind-${action.id}'),
           tooltip: context.l10n.grpGChangeKeysFor(action.titleIn(context.l10n)),
@@ -171,7 +171,9 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
     setState(() {
       _chord = chord;
       _problem = chord.isBrowserReserved
-          ? context.l10n.grpGBrowserKeeps(chord.label(isMac: isApplePlatform))
+          ? context.l10n.grpGBrowserKeeps(
+              chord.label(isMac: isApplePlatform, l10n: context.l10n),
+            )
           : clash == null
           ? null
           : context.l10n.grpGAlreadyUsedBy(clash.titleIn(context.l10n));
@@ -269,7 +271,9 @@ class _RebindDialogState extends ConsumerState<RebindDialog> {
             Text(context.l10n.grpGPressKeys),
             const SizedBox(height: 12),
             Text(
-              _chord == null ? '…' : _chord!.label(isMac: isApplePlatform),
+              _chord == null
+                  ? '…'
+                  : _chord!.label(isMac: isApplePlatform, l10n: context.l10n),
               key: const Key('rebind-chord'),
               style: Theme.of(context).textTheme.headlineSmall,
             ),

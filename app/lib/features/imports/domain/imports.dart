@@ -429,11 +429,16 @@ String importErrorMessage(Object error, [AppLocalizations? l10n]) {
   };
 }
 
-String humanSize(int bytes) {
-  if (bytes < 1024) return '$bytes B';
-  if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(0)} KB';
-  if (bytes < 1024 * 1024 * 1024) {
-    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+/// "5.0 MB" for [bytes]; the unit is in the language of [l10n] (English when
+/// null).
+String humanSize(int bytes, [AppLocalizations? l10n]) {
+  final l = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (bytes < 1024) return '$bytes ${l.grpRUnitB}';
+  if (bytes < 1024 * 1024) {
+    return '${(bytes / 1024).toStringAsFixed(0)} ${l.grpRUnitKB}';
   }
-  return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
+  if (bytes < 1024 * 1024 * 1024) {
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} ${l.grpRUnitMB}';
+  }
+  return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} ${l.grpRUnitGB}';
 }

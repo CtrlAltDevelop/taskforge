@@ -39,7 +39,7 @@ class WorkflowEditorState {
   /// After someone else saved first: what was taken from them, kept from this
   /// draft, or given up, one sentence each. Save stays off until the person has
   /// read them (see [WorkflowEditor.acknowledgeMerge]), so nothing changes silently.
-  final List<String> mergeNotes;
+  final List<MergeNote> mergeNotes;
 
   bool get needsReview => mergeNotes.isNotEmpty;
 
@@ -73,7 +73,7 @@ class WorkflowEditorState {
     bool? saving,
     List<WorkflowProblem>? serverProblems,
     WorkflowException? Function()? saveError,
-    List<String>? mergeNotes,
+    List<MergeNote>? mergeNotes,
   }) => WorkflowEditorState(
     base: base ?? this.base,
     draft: draft ?? this.draft,

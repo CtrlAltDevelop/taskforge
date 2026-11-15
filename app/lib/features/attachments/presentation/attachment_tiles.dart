@@ -76,7 +76,7 @@ class AttachmentTile extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    context.localDigits(formatBytes(file.size)),
+                    context.localDigits(formatBytes(file.size, context.l10n)),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ],
@@ -159,7 +159,9 @@ class AttachmentChip extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
-                              context.localDigits(formatBytes(file.size)),
+                              context.localDigits(
+                                formatBytes(file.size, context.l10n),
+                              ),
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
                           ],
@@ -227,7 +229,7 @@ class UploadRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${item.filename} · ${context.localDigits(formatBytes(item.size))}',
+                  '${item.filename} · ${context.localDigits(formatBytes(item.size, context.l10n))}',
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (item.active && !item.kept)

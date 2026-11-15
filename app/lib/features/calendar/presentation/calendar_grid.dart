@@ -29,6 +29,7 @@ class CalendarGrid extends StatelessWidget {
     required this.onMore,
     this.maxLanes = 3,
     this.month,
+    this.jalali = false,
     this.canMove = false,
     this.longPress = false,
     this.openTaskId,
@@ -42,8 +43,10 @@ class CalendarGrid extends StatelessWidget {
   final List<Task> tasks;
   final Day today;
 
-  /// Days of other months are dimmed (null: none are).
+  /// Days of other months are dimmed (null: none are). With [jalali] this is a
+  /// Jalali month number and the day numbers are Jalali too.
   final int? month;
+  final bool jalali;
   final int maxLanes;
   final bool canMove;
 
@@ -169,7 +172,9 @@ class _DayCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isToday = day == grid.today;
-    final dim = grid.month != null && day.month != grid.month;
+    final shown = grid.jalali ? jalaliOf(day) : null;
+    final number = shown?.day ?? day.day;
+    final dim = grid.month != null && (shown?.month ?? day.month) != grid.month;
     return DragTarget<CalDrag>(
       key: Key('day-${formatDay(day)}'),
       onWillAcceptWithDetails: (_) => grid.canMove,
@@ -197,12 +202,12 @@ class _DayCell extends StatelessWidget {
                       radius: 9,
                       backgroundColor: scheme.primary,
                       child: Text(
-                        context.localDigits('${day.day}'),
+                        context.localDigits('$number'),
                         style: TextStyle(fontSize: 11, color: scheme.onPrimary),
                       ),
                     )
                   : Text(
-                      context.localDigits('${day.day}'),
+                      context.localDigits('$number'),
                       style: TextStyle(
                         fontSize: 12,
                         color: dim ? scheme.outline : null,

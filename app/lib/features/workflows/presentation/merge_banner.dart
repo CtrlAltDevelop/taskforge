@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/workflows/domain/workflow_merge.dart';
 
 /// Shown after someone else saved first and the editor merged their work with
 /// the draft: everything that was taken, kept or given up, in words. Saving is
@@ -13,7 +14,7 @@ class MergeBanner extends StatelessWidget {
     required this.onReload,
   });
 
-  final List<String> notes;
+  final List<MergeNote> notes;
 
   /// "I have read this; keep my draft with these changes."
   final VoidCallback onKeep;
@@ -47,7 +48,12 @@ class MergeBanner extends StatelessWidget {
                   children: [
                     const Icon(Icons.subdirectory_arrow_right, size: 18),
                     const SizedBox(width: 6),
-                    Expanded(child: Text(note, key: Key('merge-note-$i'))),
+                    Expanded(
+                      child: Text(
+                        note.text(context.l10n),
+                        key: Key('merge-note-$i'),
+                      ),
+                    ),
                   ],
                 ),
               ),

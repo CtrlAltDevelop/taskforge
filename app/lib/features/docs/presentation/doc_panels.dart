@@ -231,7 +231,7 @@ class BacklinksPanel extends ConsumerWidget {
             key: Key('backlink-${d.id}'),
             dense: true,
             leading: Text(d.icon.isEmpty ? '📄' : d.icon),
-            title: Text(d.label),
+            title: Text(d.labelIn(context.l10n)),
             onTap: () => onOpen(d.id),
           ),
       ],

@@ -64,6 +64,14 @@ from `app_en.arb`. It shows hardcoded text (it stays plain English), strings tha
 not fit when text grows, and clipped layouts. Regenerate it with
 `dart run tool/pseudo_locale.dart` from `app/` after changing `app_en.arb`.
 
+## Fonts
+
+Persian, Arabic and Pashto text is drawn with **Vazirmatn**, bundled in
+`app/assets/fonts/` (SIL Open Font License 1.1, license file beside it) and set as
+the first Arabic-script fallback in `app/lib/app.dart`, so it looks the same on
+every platform and on the web. To change the face, replace the file, update the
+`fonts:` section of `app/pubspec.yaml`, and keep the license text with it.
+
 ## Review status
 
 The Persian, Arabic and Pashto text was drafted by machine and has not been reviewed

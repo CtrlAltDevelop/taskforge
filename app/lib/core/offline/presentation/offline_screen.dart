@@ -7,6 +7,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/offline/codecs.dart';
 import 'package:taskforge/core/offline/keep_offline.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
+import 'package:taskforge/core/offline/offline_reason.dart';
 import 'package:taskforge/core/offline/offline_store.dart';
 import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/offline/outbox.dart';
@@ -216,7 +217,7 @@ class _AttentionCard extends ConsumerWidget {
               child: _Summary(entry: entry),
             ),
             const SizedBox(height: 4),
-            Text(entry.error),
+            Text(reasonText(entry.error, context.l10n)),
             if (conflict && info.field.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(
@@ -466,7 +467,7 @@ class _KeptProjects extends ConsumerWidget {
                 subtitle: working == null
                     ? null
                     : working.error != null
-                    ? Text(working.error!)
+                    ? Text(reasonText(working.error!, context.l10n))
                     : Text(context.l10n.grpACopying(working.fetched)),
                 onChanged: working != null && working.error == null
                     ? null

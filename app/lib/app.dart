@@ -17,8 +17,8 @@ import 'package:taskforge/features/inbox/application/live_alerts.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/time/application/timer_notification.dart';
 
-/// Arabic-script faces tried after the platform font. Bundle one (see
-/// docs/phases/phase-31-i18n-rtl.md) so the web build does not depend on system fonts.
+/// Arabic-script faces tried after the platform font. Vazirmatn is bundled
+/// (assets/fonts, see docs/translating.md) so no platform depends on system fonts.
 const _arabicScriptFonts = [
   'Vazirmatn',
   'Noto Naskh Arabic',

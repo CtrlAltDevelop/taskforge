@@ -10,6 +10,10 @@ import 'package:taskforge/core/auth/trusted_device_store.dart';
 
 /// The server refused or failed a request. [title] is the response `title`
 /// (e.g. `INVALID_CREDENTIALS`, `REFRESH_RACE`) for code to branch on.
+/// The message of an error the server sent without any text of its own;
+/// `authErrorMessage` shows it in the language on screen.
+const requestFailedMessage = 'Request failed.';
+
 class AuthApiException implements Exception {
   const AuthApiException({
     required this.status,
@@ -272,7 +276,7 @@ class HttpAuthApi implements AuthApi {
       title: (body['title'] as String?) ?? 'ERROR',
       message: errors.isNotEmpty
           ? errors.join('\n')
-          : ((body['description'] as String?) ?? 'Request failed.'),
+          : ((body['description'] as String?) ?? requestFailedMessage),
     );
   }
 }

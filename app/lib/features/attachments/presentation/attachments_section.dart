@@ -20,9 +20,12 @@ import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 
 /// "12 MB of 10 GB used" (or "12 MB used" when the workspace has no limit).
-String usageLine(StorageUsage usage) => usage.limited
-    ? '${formatBytes(usage.usedBytes)} of ${formatBytes(usage.quotaBytes)} used'
-    : '${formatBytes(usage.usedBytes)} used';
+String usageLine(StorageUsage usage, AppLocalizations l10n) => usage.limited
+    ? l10n.grpRStorageOf(
+        formatBytes(usage.usedBytes, l10n),
+        formatBytes(usage.quotaBytes, l10n),
+      )
+    : l10n.grpRStorageUsed(formatBytes(usage.usedBytes, l10n));
 
 /// The files of a task: a drop zone and buttons to add more, the uploads on
 /// their way with progress, cancel and retry, and a grid of what is there.
@@ -204,7 +207,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              context.localDigits(usageLine(usage)),
+              context.localDigits(usageLine(usage, context.l10n)),
               key: const Key('storage-usage'),
               style: Theme.of(context).textTheme.labelSmall,
             ),

@@ -88,7 +88,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
       context: context,
       builder: (context) => SimpleDialog(
         key: const Key('move-to-dialog'),
-        title: Text(context.l10n.grpBMoveUnder(doc.label)),
+        title: Text(context.l10n.grpBMoveUnder(doc.labelIn(context.l10n))),
         children: [
           SimpleDialogOption(
             key: const Key('move-to-top'),
@@ -100,7 +100,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
               SimpleDialogOption(
                 key: Key('move-to-${d.id}'),
                 onPressed: () => Navigator.pop(context, d.id),
-                child: Text(d.label),
+                child: Text(d.labelIn(context.l10n)),
               ),
         ],
       ),
@@ -181,7 +181,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  doc.label,
+                  doc.labelIn(context.l10n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: selected ? FontWeight.w600 : null,
@@ -249,7 +249,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(doc.label),
+          child: Text(doc.labelIn(context.l10n)),
         ),
       ),
       childWhenDragging: Opacity(opacity: 0.4, child: tile),
@@ -264,7 +264,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
               elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(doc.label),
+                child: Text(doc.labelIn(context.l10n)),
               ),
             ),
             childWhenDragging: Opacity(opacity: 0.4, child: tile),

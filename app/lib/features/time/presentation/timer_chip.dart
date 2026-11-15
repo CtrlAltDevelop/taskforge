@@ -111,6 +111,7 @@ class _TimerChipState extends ConsumerState<TimerChip> {
                 ref,
                 context.l10n.grpJStopTheTimer,
                 'timer.stop',
+                l10n: context.l10n,
               ),
               color: theme.colorScheme.onInverseSurface,
               icon: const Icon(Icons.stop_circle_outlined),

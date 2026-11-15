@@ -6199,6 +6199,387 @@ class AppLocalizationsAr extends AppLocalizations {
   String get grp1UseIsoDate => 'استخدم الصيغة YYYY-MM-DD.';
 
   @override
+  String get taskAddHint => 'أضف مهمة واضغط Enter';
+
+  @override
+  String grpRMnAdded(String name) {
+    return 'أضافه شخص آخر: $name.';
+  }
+
+  @override
+  String grpRMnKept(String name) {
+    return 'تم الإبقاء على $name: لقد حذفته، لكن شخصاً آخر غيّره أولاً. احذفه مرة أخرى إن كنت لا تزال ترغب في ذلك.';
+  }
+
+  @override
+  String grpRMnDeleted(String name) {
+    return 'حذفه شخص آخر: $name.';
+  }
+
+  @override
+  String grpRMnDeletedEdited(String name) {
+    return 'حذفه شخص آخر: $name. تم إسقاط تعديلاتك عليه.';
+  }
+
+  @override
+  String grpRMnFieldAdopted(String what, String status, String value) {
+    return 'غيّر شخص آخر $what «$status» إلى $value.';
+  }
+
+  @override
+  String grpRMnFieldDropped(
+    String what,
+    String status,
+    String mine,
+    String value,
+  ) {
+    return 'تم إسقاط تغييرك على $what «$status» ($mine): غيّره شخص آخر إلى $value.';
+  }
+
+  @override
+  String grpRMnSwitchAdopted(String what, String state) {
+    return 'قام شخص آخر بجعل «$what» $state.';
+  }
+
+  @override
+  String grpRMnSwitchDropped(String what, String state) {
+    return 'تم إسقاط تغييرك على «$what»: جعله شخص آخر $state.';
+  }
+
+  @override
+  String get grpRMnOrderDropped =>
+      'تم إسقاط ترتيبك الجديد للحالات: أعاد شخص آخر ترتيبها أيضاً.';
+
+  @override
+  String get grpRMnReordered => 'أعاد شخص آخر ترتيب الحالات.';
+
+  @override
+  String grpRMnMigrationLost(String name) {
+    return 'الحالة التي اخترتها لمهام «$name» حذفها شخص آخر: اختر مكاناً آخر لها.';
+  }
+
+  @override
+  String get grpRMnDeletedStatus => 'حالة محذوفة';
+
+  @override
+  String grpRMnMoveAllowed(String name) {
+    return 'سمح شخص آخر بالانتقال $name.';
+  }
+
+  @override
+  String grpRMnMoveRemoved(String name) {
+    return 'أزال شخص آخر الانتقال $name.';
+  }
+
+  @override
+  String grpRMnConditionsAdopted(String name) {
+    return 'غيّر شخص آخر شروط الانتقال $name.';
+  }
+
+  @override
+  String grpRMnConditionsDropped(String name) {
+    return 'تم إسقاط تغييرك على شروط الانتقال $name: غيّرها شخص آخر أيضاً.';
+  }
+
+  @override
+  String grpRMnMovesDropped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'تم إسقاط $count انتقال من انتقالاتك لأن حالة كانت تستخدمها لم تعد موجودة.',
+      many:
+          'تم إسقاط $count انتقالاً من انتقالاتك لأن حالة كانت تستخدمها لم تعد موجودة.',
+      few:
+          'تم إسقاط $count انتقالات من انتقالاتك لأن حالة كانت تستخدمها لم تعد موجودة.',
+      two: 'تم إسقاط انتقالين من انتقالاتك لأن حالة كانا يستخدمانها لم تعد موجودة.',
+      one: 'تم إسقاط أحد انتقالاتك لأن حالة كان يستخدمها لم تعد موجودة.',
+      zero: 'لم يتم إسقاط أي انتقال.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get grpRMnWhatName => 'اسم';
+
+  @override
+  String get grpRMnWhatColour => 'لون';
+
+  @override
+  String get grpRMnWhatCategory => 'فئة';
+
+  @override
+  String get grpRMnWhatDefault => 'الافتراضي';
+
+  @override
+  String get grpRMnNone => 'لا شيء';
+
+  @override
+  String get grpRMnIsDefault => 'الافتراضية';
+
+  @override
+  String get grpRMnNotDefault => 'غير الافتراضية';
+
+  @override
+  String get grpRMnOn => 'قيد التشغيل';
+
+  @override
+  String get grpRMnOff => 'متوقف';
+
+  @override
+  String get grpRKeyCtrl => 'Ctrl';
+
+  @override
+  String get grpRKeyAlt => 'Alt';
+
+  @override
+  String get grpRKeyShift => 'Shift';
+
+  @override
+  String get grpRKeyEnter => 'Enter';
+
+  @override
+  String get grpRKeyEsc => 'Esc';
+
+  @override
+  String get grpRKeySpace => 'مسافة';
+
+  @override
+  String get grpRKeyTab => 'Tab';
+
+  @override
+  String get grpRKeyBackspace => 'Backspace';
+
+  @override
+  String get grpRKeyDelete => 'Delete';
+
+  @override
+  String get grpRKeyHome => 'Home';
+
+  @override
+  String get grpRKeyEnd => 'End';
+
+  @override
+  String get grpRKeyPgUp => 'PgUp';
+
+  @override
+  String get grpRKeyPgDn => 'PgDn';
+
+  @override
+  String get grpRCmForbidden => 'لم يعد بإمكانك التعليق على هذه المهمة.';
+
+  @override
+  String get grpRCmGone => 'تم حذف المهمة.';
+
+  @override
+  String get grpRCmArchived => 'تمت أرشفة المشروع.';
+
+  @override
+  String get grpRCmInvalid => 'التعليق غير صالح.';
+
+  @override
+  String get grpRCmMention => 'لا يستطيع شخص تمت الإشارة إليه رؤية هذه المهمة.';
+
+  @override
+  String get grpRCmRefused => 'رفض الخادم التعليق.';
+
+  @override
+  String grpRDependsRefused(String reason) {
+    return 'هذا يعتمد على تغيير تم رفضه: $reason';
+  }
+
+  @override
+  String get grpRKeepUnreadable => 'تعذّرت قراءته. حاول مرة أخرى.';
+
+  @override
+  String grpRDenyNeed(String permission) {
+    return 'تحتاج إلى الإذن «$permission»';
+  }
+
+  @override
+  String grpRDenyNeedRole(String permission, String role) {
+    return 'تحتاج إلى الإذن «$permission» — دورك هو $role';
+  }
+
+  @override
+  String get grpRRequestFailed => 'فشل الطلب.';
+
+  @override
+  String get grpRUnitB => 'بايت';
+
+  @override
+  String get grpRUnitKB => 'ك.ب';
+
+  @override
+  String get grpRUnitMB => 'م.ب';
+
+  @override
+  String get grpRUnitGB => 'ج.ب';
+
+  @override
+  String get grpRUnitTB => 'ت.ب';
+
+  @override
+  String grpRStorageOf(String used, String quota) {
+    return '$used من $quota مستخدم';
+  }
+
+  @override
+  String grpRStorageUsed(String used) {
+    return '$used مستخدم';
+  }
+
+  @override
+  String grpRChartBars(String label, int count) {
+    return '$label، $count أعمدة';
+  }
+
+  @override
+  String grpRChartSlices(String label, int count) {
+    return '$label، $count شرائح';
+  }
+
+  @override
+  String grpRChartLines(String label, int lines, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      lines,
+      locale: localeName,
+      other: '$lines خط',
+      many: '$lines خطاً',
+      few: '$lines خطوط',
+      two: 'خطان',
+      one: 'خط واحد',
+    );
+    return '$label، $_temp0، $points نقطة';
+  }
+
+  @override
+  String grpRChartPercent(String label, String shown, int percent) {
+    return '$label، $shown، $percent بالمئة';
+  }
+
+  @override
+  String get grpRAuCreated => 'أنشأ هذه المهمة';
+
+  @override
+  String get grpRAuTrashed => 'نقل هذه المهمة إلى سلة المهملات';
+
+  @override
+  String get grpRAuRestored => 'استعاد هذه المهمة';
+
+  @override
+  String grpRAuStatus(String from, String to) {
+    return 'غيّر الحالة $from → $to';
+  }
+
+  @override
+  String grpRAuAssigned(String names) {
+    return 'أسند إلى $names';
+  }
+
+  @override
+  String grpRAuUnassigned(String names) {
+    return 'ألغى إسناد $names';
+  }
+
+  @override
+  String grpRAuAnd(String a, String b) {
+    return '$a و$b';
+  }
+
+  @override
+  String get grpRAuCommented => 'علّق';
+
+  @override
+  String get grpRAuCommentEdited => 'عدّل تعليقاً';
+
+  @override
+  String get grpRAuCommentDeleted => 'حذف تعليقاً';
+
+  @override
+  String grpRAuReacted(String emoji) {
+    return 'تفاعل بـ $emoji مع تعليق';
+  }
+
+  @override
+  String grpRAuUnreacted(String emoji) {
+    return 'سحب $emoji من تعليق';
+  }
+
+  @override
+  String grpRAuAttached(String file) {
+    return 'أرفق $file';
+  }
+
+  @override
+  String grpRAuFileRemoved(String file) {
+    return 'أزال الملف $file';
+  }
+
+  @override
+  String get grpRAuTimeLogged => 'سجّل وقتاً';
+
+  @override
+  String get grpRAuTimeUpdated => 'حدّث إدخال وقت';
+
+  @override
+  String get grpRAuTimeDeleted => 'حذف إدخال وقت';
+
+  @override
+  String grpRAuLinked(String type, String task) {
+    return 'ربط $type $task';
+  }
+
+  @override
+  String get grpRAuLinkRemoved => 'أزال رابطاً';
+
+  @override
+  String get grpRAuFieldSet => 'ضبط حقلاً مخصصاً';
+
+  @override
+  String get grpRAuDocLinked => 'ربط صفحة';
+
+  @override
+  String get grpRAuDocUnlinked => 'فك ربط صفحة';
+
+  @override
+  String get grpRAuEdited => 'عدّل هذه المهمة';
+
+  @override
+  String grpRAuChanged(String parts) {
+    return 'غيّر $parts';
+  }
+
+  @override
+  String grpRAuPart(String label, String from, String to) {
+    return '$label $from ← $to';
+  }
+
+  @override
+  String get grpRAuSomething => 'قام بإجراء ما';
+
+  @override
+  String get grpRAuFStatus => 'الحالة';
+
+  @override
+  String get grpRAuFSprint => 'السبرنت';
+
+  @override
+  String get grpRAuFParent => 'المهمة الأم';
+
+  @override
+  String get grpRAuFDueDate => 'تاريخ الاستحقاق';
+
+  @override
+  String get grpRAuFDueTime => 'وقت الاستحقاق';
+
+  @override
+  String get grpRAuFStartDate => 'تاريخ البدء';
+
+  @override
+  String get grpRAuFEstimate => 'التقدير';
+
+  @override
   String get devTitle => 'المطور';
 
   @override
@@ -6918,7 +7299,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام أُضيفت يدويًا',
+      other: '$count مهمة أُضيفت يدويًا',
+      many: '$count مهمة أُضيفت يدويًا',
+      few: '$count مهام أُضيفت يدويًا',
+      two: 'مهمتان أُضيفتا يدويًا',
       one: 'مهمة واحدة أُضيفت يدويًا',
     );
     return '$_temp0';
@@ -7235,7 +7619,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام بلا تقدير',
+      other: '$count مهمة بلا تقدير',
+      many: '$count مهمة بلا تقدير',
+      few: '$count مهام بلا تقدير',
+      two: 'مهمتان بلا تقدير',
       one: 'مهمة واحدة بلا تقدير',
     );
     return '$_temp0';
@@ -7246,7 +7633,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مهام بلا تواريخ',
+      other: '$count مهمة بلا تواريخ',
+      many: '$count مهمة بلا تواريخ',
+      few: '$count مهام بلا تواريخ',
+      two: 'مهمتان بلا تواريخ',
       one: 'مهمة واحدة بلا تواريخ',
     );
     return '$_temp0';
@@ -7404,7 +7794,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count رموز متبقية',
+      other: '$count رمز متبقٍ',
+      many: '$count رمزًا متبقيًا',
+      few: '$count رموز متبقية',
+      two: 'رمزان متبقيان',
       one: 'رمز واحد متبقٍ',
       zero: 'لا توجد رموز متبقية',
     );

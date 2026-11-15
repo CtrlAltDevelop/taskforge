@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/i18n/l10n_context.dart';
+
 import 'package:taskforge/core/permissions/permission_denied.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 
@@ -25,7 +27,12 @@ class PermissionGate extends ConsumerWidget {
     if (permissions.can(permission)) return child;
     if (!disabledWhenDenied) return const SizedBox.shrink();
     return Tooltip(
-      message: denialMessage(permission, permissions.roleName),
+      message: denialMessage(
+        permission,
+        permissions.roleName,
+        '',
+        context.l10n,
+      ),
       child: ExcludeFocus(
         child: IgnorePointer(child: Opacity(opacity: 0.5, child: child)),
       ),

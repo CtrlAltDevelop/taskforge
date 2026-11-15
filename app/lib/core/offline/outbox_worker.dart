@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart' show Locale;
+
 import 'package:taskforge/core/offline/codecs.dart';
+import 'package:taskforge/core/offline/offline_reason.dart';
 import 'package:taskforge/core/offline/offline_store.dart';
 import 'package:taskforge/core/offline/outbox.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
@@ -9,6 +12,7 @@ import 'package:taskforge/features/comments/data/comments_client.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What one pass over the outbox did.
 class DrainResult {
@@ -107,7 +111,7 @@ class OutboxWorker {
         await db.setState(
           entry.id,
           OutboxState.rejected,
-          error: 'This depends on a change that was refused: $reason',
+          error: dependentReason(reason),
         );
         rejected++;
         continue;
@@ -148,7 +152,7 @@ class OutboxWorker {
           rejected++;
           if (entry.entity == OutboxEntity.task &&
               entry.op == OutboxOp.create) {
-            refused[entry.entityId] = taskErrorMessage(e);
+            refused[entry.entityId] = taskReason(e);
           }
         }
         blocked.add(key);
@@ -167,7 +171,7 @@ class OutboxWorker {
         await db.setState(
           entry.id,
           OutboxState.rejected,
-          error: attachmentErrorMessage(e),
+          error: attachmentReason(e),
         );
         rejected++;
       } on CommentException catch (e) {
@@ -185,7 +189,7 @@ class OutboxWorker {
         await db.setState(
           entry.id,
           OutboxState.rejected,
-          error: commentErrorText(e),
+          error: commentReason(e),
         );
         rejected++;
       }
@@ -218,7 +222,7 @@ class OutboxWorker {
         await db.setState(
           entry.id,
           OutboxState.conflict,
-          error: taskErrorMessage(error),
+          error: taskReason(error),
           theirs: jsonEncode({
             'field': c?.field ?? '',
             'current': c?.current ?? '',
@@ -230,7 +234,7 @@ class OutboxWorker {
         await db.setState(
           entry.id,
           OutboxState.rejected,
-          error: taskErrorMessage(error),
+          error: taskReason(error),
         );
         return _Outcome.rejected;
     }
@@ -428,13 +432,16 @@ class ConflictInfo {
   }
 }
 
-/// What to tell the person about a refused comment.
-String commentErrorText(CommentException e) => switch (e.failure) {
-  CommentFailure.denied ||
-  CommentFailure.forbidden => 'You can no longer comment on this task.',
-  CommentFailure.notFound => 'The task was deleted.',
-  CommentFailure.archived => 'The project was archived.',
-  CommentFailure.invalid => e.detail ?? 'The comment is not valid.',
-  CommentFailure.mentionNoAccess => 'Someone mentioned cannot see this task.',
-  _ => 'The server refused the comment.',
-};
+/// What to tell the person about a refused comment, in the language of [l10n]
+/// (English when null).
+String commentErrorText(CommentException e, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (e.failure) {
+    CommentFailure.denied || CommentFailure.forbidden => t.grpRCmForbidden,
+    CommentFailure.notFound => t.grpRCmGone,
+    CommentFailure.archived => t.grpRCmArchived,
+    CommentFailure.invalid => e.detail ?? t.grpRCmInvalid,
+    CommentFailure.mentionNoAccess => t.grpRCmMention,
+    _ => t.grpRCmRefused,
+  };
+}

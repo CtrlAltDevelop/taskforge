@@ -1,7 +1,133 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show Locale;
 
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
+import 'package:taskforge/l10n/gen/app_localizations.dart';
+
+/// What a merge note says; the words come from [MergeNote.text].
+enum MergeNoteKind {
+  added,
+  keptDeleted,
+  deleted,
+  deletedEdited,
+  fieldAdopted,
+  fieldDropped,
+  switchAdopted,
+  switchDropped,
+  orderDropped,
+  reordered,
+  migrationLost,
+  moveAllowed,
+  moveRemoved,
+  conditionsAdopted,
+  conditionsDropped,
+  movesDropped,
+}
+
+/// The status field a field note is about.
+enum MergeField { name, colour, category, isDefault }
+
+/// The workflow switch a switch note is about.
+enum MergeSwitch { restrict, creation }
+
+/// One thing the merge did, as data: the sentence is built at display time in
+/// the language on screen, so nothing English is stored in the editor state.
+@immutable
+class MergeNote {
+  const MergeNote(
+    this.kind, {
+    this.name = '',
+    this.field,
+    this.toggle,
+    this.value,
+    this.mine,
+    this.count = 0,
+  });
+
+  final MergeNoteKind kind;
+
+  /// The status (or the move, "A → B") the note is about.
+  final String name;
+  final MergeField? field;
+  final MergeSwitch? toggle;
+
+  /// The value now (a String, a [StatusCategory] or a bool) and mine before.
+  final Object? value;
+  final Object? mine;
+  final int count;
+
+  @override
+  bool operator ==(Object other) =>
+      other is MergeNote &&
+      other.kind == kind &&
+      other.name == name &&
+      other.field == field &&
+      other.toggle == toggle &&
+      other.value == value &&
+      other.mine == mine &&
+      other.count == count;
+
+  @override
+  int get hashCode =>
+      Object.hash(kind, name, field, toggle, value, mine, count);
+
+  String _show(AppLocalizations l, Object? v) => switch (v) {
+    StatusCategory c => c.labelIn(l),
+    bool b => b ? l.grpRMnIsDefault : l.grpRMnNotDefault,
+    String t when field == MergeField.name => '"$t"',
+    String t when t.isEmpty => l.grpRMnNone,
+    _ => '$v',
+  };
+
+  String _what(AppLocalizations l) => switch (field) {
+    MergeField.colour => l.grpRMnWhatColour,
+    MergeField.category => l.grpRMnWhatCategory,
+    MergeField.isDefault => l.grpRMnWhatDefault,
+    _ => l.grpRMnWhatName,
+  };
+
+  String _switchName(AppLocalizations l) => toggle == MergeSwitch.creation
+      ? l.grpIRestrictCreation
+      : l.grpIRestrictTransitions;
+
+  /// The sentence in the language of [l].
+  String text(AppLocalizations l) => switch (kind) {
+    MergeNoteKind.added => l.grpRMnAdded(name),
+    MergeNoteKind.keptDeleted => l.grpRMnKept(name),
+    MergeNoteKind.deleted => l.grpRMnDeleted(name),
+    MergeNoteKind.deletedEdited => l.grpRMnDeletedEdited(name),
+    MergeNoteKind.fieldAdopted => l.grpRMnFieldAdopted(
+      _what(l),
+      name,
+      _show(l, value),
+    ),
+    MergeNoteKind.fieldDropped => l.grpRMnFieldDropped(
+      _what(l),
+      name,
+      _show(l, mine),
+      _show(l, value),
+    ),
+    MergeNoteKind.switchAdopted => l.grpRMnSwitchAdopted(
+      _switchName(l),
+      value == true ? l.grpRMnOn : l.grpRMnOff,
+    ),
+    MergeNoteKind.switchDropped => l.grpRMnSwitchDropped(
+      _switchName(l),
+      value == true ? l.grpRMnOn : l.grpRMnOff,
+    ),
+    MergeNoteKind.orderDropped => l.grpRMnOrderDropped,
+    MergeNoteKind.reordered => l.grpRMnReordered,
+    MergeNoteKind.migrationLost => l.grpRMnMigrationLost(
+      name.isEmpty ? l.grpRMnDeletedStatus : name,
+    ),
+    MergeNoteKind.moveAllowed => l.grpRMnMoveAllowed(name),
+    MergeNoteKind.moveRemoved => l.grpRMnMoveRemoved(name),
+    MergeNoteKind.conditionsAdopted => l.grpRMnConditionsAdopted(name),
+    MergeNoteKind.conditionsDropped => l.grpRMnConditionsDropped(name),
+    MergeNoteKind.movesDropped => l.grpRMnMovesDropped(count),
+  };
+}
 
 /// What a three-way merge produced: the draft to keep editing, and one
 /// sentence for everything that was taken from the other person, kept from the
@@ -11,7 +137,13 @@ class MergeResult {
   const MergeResult(this.draft, this.notes);
 
   final WorkflowDraft draft;
-  final List<String> notes;
+  final List<MergeNote> notes;
+
+  /// The notes as English sentences (what the tests read).
+  List<String> get english {
+    final l = lookupAppLocalizations(const Locale('en'));
+    return [for (final n in notes) n.text(l)];
+  }
 }
 
 typedef _Attrs = (String, String, StatusCategory, bool);
@@ -49,7 +181,7 @@ MergeResult mergeWorkflows({
   required Workflow theirs,
   required WorkflowDraft mine,
 }) {
-  final notes = <String>[];
+  final notes = <MergeNote>[];
   final oldById = {for (final s in base.statuses) s.id: s};
   final newById = {for (final s in theirs.statuses) s.id: s};
   final mineByKey = {for (final s in mine.statuses) s.key: s};
@@ -64,16 +196,13 @@ MergeResult mergeWorkflows({
     if (o == null) {
       kept[n.id] = DraftStatus.of(n);
       addedByOthers.add(n.id);
-      notes.add('Added by someone else: ${n.name}.');
+      notes.add(MergeNote(MergeNoteKind.added, name: n.name));
     } else if (m == null) {
       if (_attrsOf(n) == _attrsOf(o)) {
         removed.add(DraftStatus.of(n));
       } else {
         kept[n.id] = DraftStatus.of(n);
-        notes.add(
-          'Kept ${n.name}: you deleted it, but someone else changed it first. '
-          'Delete it again if you still want to.',
-        );
+        notes.add(MergeNote(MergeNoteKind.keptDeleted, name: n.name));
       }
     } else {
       kept[n.id] = _mergeStatus(o, m, n, notes);
@@ -84,9 +213,10 @@ MergeResult mergeWorkflows({
     final m = mineByKey[o.id];
     final edited = m != null && _attrsOfDraft(m) != _attrsOf(o);
     notes.add(
-      edited
-          ? 'Deleted by someone else: ${o.name}. Your changes to it were dropped.'
-          : 'Deleted by someone else: ${o.name}.',
+      MergeNote(
+        edited ? MergeNoteKind.deletedEdited : MergeNoteKind.deleted,
+        name: o.name,
+      ),
     );
   }
   for (final m in mine.statuses) {
@@ -109,13 +239,13 @@ MergeResult mergeWorkflows({
   };
 
   final restrict = _pick(base.restrict, mine.restrict, theirs.restrict);
-  _noteSwitch(notes, restrict, 'Restrict transitions');
+  _noteSwitch(notes, restrict, MergeSwitch.restrict);
   final creation = _pick(
     base.restrictCreation,
     mine.restrictCreation,
     theirs.restrictCreation,
   );
-  _noteSwitch(notes, creation, 'New tasks start in the default status only');
+  _noteSwitch(notes, creation, MergeSwitch.creation);
 
   final transitions = _mergeTransitions(
     base,
@@ -134,8 +264,7 @@ MergeResult mergeWorkflows({
       migrations[e.key] = e.value;
     } else {
       notes.add(
-        'The status you chose for the tasks of ${names[e.key] ?? 'a deleted status'} '
-        'was deleted by someone else: choose another place for them.',
+        MergeNote(MergeNoteKind.migrationLost, name: names[e.key] ?? ''),
       );
     }
   }
@@ -157,7 +286,7 @@ DraftStatus _mergeStatus(
   WorkflowStatus o,
   DraftStatus m,
   WorkflowStatus n,
-  List<String> notes,
+  List<MergeNote> notes,
 ) {
   final name = _pick(o.name, m.name, n.name);
   final color = _pick(o.color, m.color, n.color);
@@ -165,31 +294,35 @@ DraftStatus _mergeStatus(
   final isDefault = _pick(o.isDefault, m.isDefault, n.isDefault);
   void say<T>(
     ({T value, bool adopted, bool conflict}) r,
-    String what,
+    MergeField f,
     T mine,
-    String Function(T) show,
   ) {
     if (r.adopted) {
       notes.add(
-        'Someone else changed the $what of ${n.name} to ${show(r.value)}.',
+        MergeNote(
+          MergeNoteKind.fieldAdopted,
+          name: n.name,
+          field: f,
+          value: r.value,
+        ),
       );
     } else if (r.conflict) {
       notes.add(
-        'Your change to the $what of ${n.name} (${show(mine)}) was dropped: '
-        'someone else changed it to ${show(r.value)}.',
+        MergeNote(
+          MergeNoteKind.fieldDropped,
+          name: n.name,
+          field: f,
+          value: r.value,
+          mine: mine,
+        ),
       );
     }
   }
 
-  say(name, 'name', m.name, (v) => '"$v"');
-  say(color, 'colour', m.color, (v) => v.isEmpty ? 'none' : v);
-  say(category, 'category', m.category, (v) => v.label);
-  say(
-    isDefault,
-    'default',
-    m.isDefault,
-    (v) => v ? 'the default' : 'not the default',
-  );
+  say(name, MergeField.name, m.name);
+  say(color, MergeField.colour, m.color);
+  say(category, MergeField.category, m.category);
+  say(isDefault, MergeField.isDefault, m.isDefault);
   return DraftStatus(
     key: o.id,
     name: name.value,
@@ -201,17 +334,17 @@ DraftStatus _mergeStatus(
 }
 
 void _noteSwitch(
-  List<String> notes,
+  List<MergeNote> notes,
   ({bool value, bool adopted, bool conflict}) r,
-  String what,
+  MergeSwitch which,
 ) {
-  String state(bool v) => v ? 'on' : 'off';
   if (r.adopted) {
-    notes.add('Someone else turned "$what" ${state(r.value)}.');
+    notes.add(
+      MergeNote(MergeNoteKind.switchAdopted, toggle: which, value: r.value),
+    );
   } else if (r.conflict) {
     notes.add(
-      'Your change to "$what" was dropped: someone else turned it '
-      '${state(r.value)}.',
+      MergeNote(MergeNoteKind.switchDropped, toggle: which, value: r.value),
     );
   }
 }
@@ -224,7 +357,7 @@ List<String> _order(
   WorkflowDraft mine,
   Set<String> present,
   List<String> addedByOthers,
-  List<String> notes,
+  List<MergeNote> notes,
 ) {
   final common = {
     for (final s in base.statuses)
@@ -252,12 +385,9 @@ List<String> _order(
     ];
   }
   if (iMoved && theyMoved && !listEquals(myOrder, theirOrder)) {
-    notes.add(
-      'Your new order of the statuses was dropped: someone else reordered '
-      'them too.',
-    );
+    notes.add(const MergeNote(MergeNoteKind.orderDropped));
   } else if (theyMoved && !iMoved) {
-    notes.add('Someone else reordered the statuses.');
+    notes.add(const MergeNote(MergeNoteKind.reordered));
   }
   return [
     for (final s in theirs.statuses)
@@ -274,7 +404,7 @@ List<WorkflowTransition> _mergeTransitions(
   WorkflowDraft mine,
   Set<String> present,
   Map<String, String> names,
-  List<String> notes,
+  List<MergeNote> notes,
 ) {
   String key(WorkflowTransition t) => '${t.from}>${t.to}';
   final o = {for (final t in base.transitions) key(t): t};
@@ -296,9 +426,12 @@ List<WorkflowTransition> _mergeTransitions(
     );
     if (presence.adopted) {
       notes.add(
-        presence.value
-            ? 'Someone else allowed the move $arrow.'
-            : 'Someone else removed the move $arrow.',
+        MergeNote(
+          presence.value
+              ? MergeNoteKind.moveAllowed
+              : MergeNoteKind.moveRemoved,
+          name: arrow,
+        ),
       );
     }
     if (!presence.value) continue;
@@ -325,13 +458,10 @@ List<WorkflowTransition> _mergeTransitions(
       theirs0.requireSubtasksDone,
     );
     if (role.adopted || assignee.adopted || subtasks.adopted) {
-      notes.add('Someone else changed the conditions of the move $arrow.');
+      notes.add(MergeNote(MergeNoteKind.conditionsAdopted, name: arrow));
     }
     if (role.conflict || assignee.conflict || subtasks.conflict) {
-      notes.add(
-        'Your change to the conditions of the move $arrow was dropped: '
-        'someone else changed them too.',
-      );
+      notes.add(MergeNote(MergeNoteKind.conditionsDropped, name: arrow));
     }
     out.add(
       WorkflowTransition(
@@ -344,12 +474,7 @@ List<WorkflowTransition> _mergeTransitions(
     );
   }
   if (dropped > 0) {
-    notes.add(
-      dropped == 1
-          ? 'One of your moves was dropped because a status it used is gone.'
-          : '$dropped of your moves were dropped because a status they used '
-                'is gone.',
-    );
+    notes.add(MergeNote(MergeNoteKind.movesDropped, count: dropped));
   }
   return out;
 }

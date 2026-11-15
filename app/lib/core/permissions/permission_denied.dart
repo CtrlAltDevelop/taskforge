@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:grpc/grpc.dart' show GrpcError, StatusCode;
+
+import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Why the server refused an action to a member who lacks a permission.
 @immutable
@@ -18,15 +21,25 @@ class PermissionDenied {
 
   /// What to tell the user.
   String get message => denialMessage(permission, role, hint);
+
+  /// [message] in the language of [l10n].
+  String messageIn(AppLocalizations l10n) =>
+      denialMessage(permission, role, hint, l10n);
 }
 
 /// 'You need permission "x" - your role is Viewer'; also used by disabled gates.
-String denialMessage(String permission, String role, [String hint = '']) {
-  if (permission.isEmpty) {
-    return hint.isEmpty ? 'You do not have permission to do that.' : hint;
-  }
-  final base = 'You need permission "$permission"';
-  return role.isEmpty ? base : '$base — your role is $role';
+/// In the language of [l10n] (English when null).
+String denialMessage(
+  String permission,
+  String role, [
+  String hint = '',
+  AppLocalizations? l10n,
+]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  if (permission.isEmpty) return hint.isEmpty ? t.grpLNoPermDo : hint;
+  return role.isEmpty
+      ? t.grpRDenyNeed(permission)
+      : t.grpRDenyNeedRole(permission, role);
 }
 
 final _reason = RegExp(

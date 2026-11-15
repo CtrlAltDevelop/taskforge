@@ -4,6 +4,7 @@ import 'package:taskforge/features/workflows/application/workflow_editor.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/features/workflows/domain/workflow_merge.dart';
 
 import 'fakes.dart';
 
@@ -311,7 +312,9 @@ void main() {
           'Done',
           'QA',
         ]);
-        expect(state.mergeNotes, ['Added by someone else: QA.']);
+        expect(state.mergeNotes, [
+          const MergeNote(MergeNoteKind.added, name: 'QA'),
+        ]);
         expect(state.needsReview, isTrue);
         expect(state.canSave, isFalse, reason: 'not until it has been read');
       },

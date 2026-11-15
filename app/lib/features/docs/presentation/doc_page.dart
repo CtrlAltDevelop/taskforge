@@ -164,7 +164,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
               : () => context.go(
                   '/docs/${d.id}${widget.project.isEmpty ? '' : '?project=${widget.project}'}',
                 ),
-          child: Text(d.label),
+          child: Text(d.labelIn(context.l10n)),
         ),
       ],
     ],
