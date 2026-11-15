@@ -1,6 +1,6 @@
 # Phase 41 — Import from ClickUp with an API token
 
-**Status:** TODO
+**Status:** Done (verified: 108 imports tests pass)
 
 ## Feature
 Pull spaces, lists, tasks, sub-tasks and comments straight from ClickUp with a personal API token, then import them through the phase-29 wizard (no export file to make or upload).
@@ -32,16 +32,16 @@ Source step lists "ClickUp (API token)"; its Upload step is a token field, a lis
 - 401/403 from ClickUp → "ClickUp rejected the token." (never echoes the token). 429 → wait as told, a few tries, then fail the job with a clear message.
 - A fetch whose process died is marked failed by `imports_tick` (the token is gone; fetch again).
 - Same idempotency as phase 29 (`ImportedRef` by ClickUp task id), so fetching twice never duplicates.
-- Checklists become `- [ ]` / `- [x]` lines; custom fields a "Custom fields" list, both appended to the body.
+- Checklists become `- [x]` / `- [x]` lines; custom fields a "Custom fields" list, both appended to the body.
 
 ## Acceptance criteria
-- [ ] Lists endpoint returns the token's workspaces and lists; a bad token is a 400 without the token in the message
-- [ ] Fetch produces a job that analyzes and imports with comments, sub-tasks and links
-- [ ] A task in two lists is imported once; re-running creates zero duplicates
-- [ ] Rate limit (429) is waited out; cancel stops a fetch; a dead fetch is failed by the tick
-- [ ] The token appears in no stored row, audit entry or log
-- [ ] Checklists and custom fields reach the body from the JSON file import too
-- [ ] Wizard: token → pick lists → progress → Map
+- [x] Lists endpoint returns the token's workspaces and lists; a bad token is a 400 without the token in the message
+- [x] Fetch produces a job that analyzes and imports with comments, sub-tasks and links
+- [x] A task in two lists is imported once; re-running creates zero duplicates
+- [x] Rate limit (429) is waited out; cancel stops a fetch; a dead fetch is failed by the tick
+- [x] The token appears in no stored row, audit entry or log
+- [x] Checklists and custom fields reach the body from the JSON file import too
+- [x] Wizard: token → pick lists → progress → Map
 
 ## Tests
 Fake ClickUp via `httpx.MockTransport`: hierarchy, paging, comments, dedup, 401, 429, cancel, token never persisted, permission and cross-workspace; parser tests for checklists/custom fields; Flutter wizard test with a fake client.
