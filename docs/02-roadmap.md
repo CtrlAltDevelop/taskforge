@@ -107,6 +107,9 @@ Groups are just for reading — a phase is still exactly one feature.
 - [38 Release and deployment](phases/phase-38-release-deploy.md)
 - [39 DPoP token binding](phases/phase-39-dpop-token-binding.md)
 - [40 Device info and named sessions](phases/phase-40-device-info-sessions.md)
+- [41 Import from ClickUp with an API token](phases/phase-41-clickup-api-import.md)
+- [42 Task chat with change messages](phases/phase-42-task-chat-activity.md)
+- [43 Chat spaces (channels, groups, direct messages)](phases/phase-43-chat-spaces.md)
 
 ## Milestones
 
