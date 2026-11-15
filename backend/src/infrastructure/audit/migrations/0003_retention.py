@@ -26,12 +26,12 @@ $$ LANGUAGE plpgsql;
 
 def forwards(apps, schema_editor):  # type: ignore[no-untyped-def]
     if schema_editor.connection.vendor == "postgresql":
-        schema_editor.execute(ALLOW_PURGE)
+        schema_editor.execute(ALLOW_PURGE, params=None)
 
 
 def backwards(apps, schema_editor):  # type: ignore[no-untyped-def]
     if schema_editor.connection.vendor == "postgresql":
-        schema_editor.execute(STRICT)
+        schema_editor.execute(STRICT, params=None)
 
 
 class Migration(migrations.Migration):

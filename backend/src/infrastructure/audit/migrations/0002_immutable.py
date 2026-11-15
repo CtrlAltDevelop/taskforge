@@ -23,12 +23,12 @@ DROP FUNCTION IF EXISTS audit_entry_immutable();
 
 def forwards(apps, schema_editor):  # type: ignore[no-untyped-def]
     if schema_editor.connection.vendor == "postgresql":
-        schema_editor.execute(CREATE)
+        schema_editor.execute(CREATE, params=None)  # params=None: the SQL has a literal %
 
 
 def backwards(apps, schema_editor):  # type: ignore[no-untyped-def]
     if schema_editor.connection.vendor == "postgresql":
-        schema_editor.execute(DROP)
+        schema_editor.execute(DROP, params=None)
 
 
 class Migration(migrations.Migration):

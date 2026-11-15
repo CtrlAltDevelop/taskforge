@@ -59,7 +59,7 @@ def not_found() -> ApiError:
     return ApiError("No such task.", status=404)
 
 
-def _with_assignees() -> Prefetch[Any]:
+def _with_assignees() -> "Prefetch[Any]":
     return Prefetch("assignees", queryset=TaskAssignee.objects.only("task_id", "user_id"))
 
 
