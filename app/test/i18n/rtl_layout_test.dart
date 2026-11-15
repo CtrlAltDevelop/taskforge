@@ -15,6 +15,8 @@ import 'package:taskforge/features/auth/validators.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
+import 'tolerant_golden.dart';
+
 /// Right-to-left checks on real screens: where things sit, not only the text.
 /// The golden images pin the whole picture; the position checks say why when
 /// one of them breaks.
@@ -83,6 +85,8 @@ Widget _signIn() => CredentialsForm(
 );
 
 void main() {
+  setUpAll(useTolerantGoldens);
+
   group('the language screen', () {
     for (final language in ['en', 'fa', 'ar', 'ps']) {
       testWidgets('looks the same every run in $language', (tester) async {

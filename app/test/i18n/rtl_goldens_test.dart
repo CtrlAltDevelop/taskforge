@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
 
 import 'rtl_screens_test.dart' show ScreenEnv;
+import 'tolerant_golden.dart';
 
 /// Pictures of the key screens in English (left to right) and Persian (right
 /// to left) on a phone. Fixed size, fixed clock, nothing moving: the same
@@ -19,6 +20,8 @@ Future<void> _picture(WidgetTester tester, String name, String language) =>
     );
 
 void main() {
+  setUpAll(useTolerantGoldens);
+
   final screens = <String, Future<void> Function(WidgetTester, ScreenEnv)>{
     'task_list': (t, e) => e.open(t, '/projects/p1'),
     'board': (t, e) => e.open(t, '/projects/p1?view=board'),

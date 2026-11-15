@@ -16444,56 +16444,202 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get dpopKeyChanged =>
-      '[Ţĥîś ðévîçé’ś ķéý ĉĥáñĝéð, ƥĺéáśé śîĝñ îñ áĝáîñ. ~~~]';
+      '[Ţĥíš ðéṽíçé\'š ķéý çĥåñĝéð, þłéåšé šíĝñ íñ åĝåíñ. ~~~~~~~~~~~~~~~~]';
 
   @override
-  String get dpopSessionBound => '[Ţîéð ţó ţĥîś ðévîçé’ś ķéý ~~]';
+  String get dpopSessionBound => '[Ţíéð ţö ţĥíš ðéṽíçé\'š ķéý ~~~~~~~~]';
 
   @override
-  String get devSessionRename => '[Rëñåmë ~~]';
+  String get devSessionRename => '[Ŕéñåɱé ~~]';
 
   @override
-  String get devSessionRenameTitle => '[Rëñåmë thïs sëssïøñ ~~~~~~]';
+  String get devSessionRenameTitle => '[Ŕéñåɱé ţĥíš šéššíöñ ~~~~~~]';
 
   @override
-  String get devSessionNameLabel => '[Ñåmë ~~]';
+  String get devSessionNameLabel => '[Ñåɱé ~]';
 
   @override
-  String get devSessionNameInvalid => '[Úsë 1 tø 80 çhåråçtërs. ~~~~~~~]';
+  String get devSessionNameInvalid => '[Ûšé 1 ţö 80 çĥåŕåçţéŕš. ~~~~~~~]';
 
   @override
   String get devSessionRenameFailed =>
-      '[Çøüld ñøt rëñåmë thë sëssïøñ. Trý ågåïñ. ~~~~~~~~~~~~~]';
+      '[Çöûłð ñöţ ŕéñåɱé ţĥé šéššíöñ. Ţŕý åĝåíñ. ~~~~~~~~~~~~~]';
 
   @override
-  String get devSessionNew => '[Ñëw ~~]';
+  String get devSessionNew => '[Ñéŵ ~]';
 
   @override
-  String get devSessionKeyChanged => '[Këý çhåñgëd ~~~]';
+  String get devSessionKeyChanged => '[Ķéý çĥåñĝéð ~~~]';
 
   @override
   String devSessionLastUsed(String when) {
-    return '[Låst üsëd $when ~~~~~]';
+    return '[Łåšţ ûšéð $when ~~~~~]';
   }
 
   @override
-  String get devPrivacyTitle => '[Dëvïçë ïñførmåtïøñ ~~~~~~]';
+  String get devPrivacyTitle => '[Ðéṽíçé íñƒöŕɱåţíöñ ~~~~~~]';
 
   @override
   String get devPrivacyBody =>
-      '[Whëñ ýøü sïgñ ïñ, sïgñ üp ør rëfrësh ýøür sëssïøñ, thïs åpp sëñds ýøür dëvïçë mødël, øpëråtïñg sýstëm åñd vërsïøñ, åpp büïld, sçrëëñ sïzë, låñgüågë åñd tïmë zøñë, sø ýøür sëssïøñs gët å rëådåblë ñåmë. Thë sërvër måý ïgñørë ït, åñd ýøü çåñ rëñåmë åñý sëssïøñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+      '[Ŵĥéñ ýöû šíĝñ íñ, šíĝñ ûþ öŕ ŕéƒŕéšĥ ýöûŕ šéššíöñ, ţĥíš åþþ šéñðš ýöûŕ ðéṽíçé ɱöðéł, öþéŕåţíñĝ šýšţéɱ åñð ṽéŕšíöñ, åþþ ƀûíłð, šçŕééñ šížé, łåñĝûåĝé åñð ţíɱé žöñé, šö ýöûŕ šéššíöñš ĝéţ å ŕéåðåƀłé ñåɱé. Ţĥé šéŕṽéŕ ɱåý íĝñöŕé íţ, åñð ýöû çåñ ŕéñåɱé åñý šéššíöñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
 
   @override
-  String get devAdminCollectTitle => '[Çøllëçt dëvïçë ïñfø ~~~~~~]';
+  String get devAdminCollectTitle => '[Çöłłéçţ ðéṽíçé íñƒö ~~~~~~]';
 
   @override
   String get devAdminCollectSubtitle =>
-      '[Ñåmë sëssïøñs åñd flåg ñëw dëvïçës frøm whåt thë åpp rëpørts. Óff bý dëfåült. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
+      '[Ñåɱé šéššíöñš åñð ƒłåĝ ñéŵ ðéṽíçéš ƒŕöɱ ŵĥåţ ţĥé åþþ ŕéþöŕţš. Öƒƒ ƀý ðéƒåûłţ. ~~~~~~~~~~~~~~~~~~~~~~~~~]';
 
   @override
   String get devAdminPepperMissing =>
-      '[Sët DJÅÑGÓ_DÉVÍÇÉ_FÍÑGÉRPRÍÑT_PÉPPÉR øñ thë sërvër fïrst. ~~~~~~~~~~~~~~~~~~~]';
+      '[Šéţ ÐĴÅÑĜÖ_ÐÉṼÍÇÉ_FÍÑĜÉŔÞŔÍÑŢ_ÞÉÞÞÉŔ öñ ţĥé šéŕṽéŕ ƒíŕšţ. ~~~~~~~~~~~~~~~~~~~]';
 
   @override
-  String get devAdminSaveFailed => '[Çøüld ñøt såvë thë sëttïñg. ~~~~~~~~~]';
+  String get devAdminSaveFailed => '[Çöûłð ñöţ šåṽé ţĥé šéţţíñĝ. ~~~~~~~~~]';
+
+  @override
+  String get audTokenCreated => '[çŕéåţéð åñ ÅÞÍ ţöķéñ ~~~~~~]';
+
+  @override
+  String get audTokenRevoked => '[ŕéṽöķéð åñ ÅÞÍ ţöķéñ ~~~~~~]';
+
+  @override
+  String get audWebhookCreated => '[åððéð å ŵéƀĥööķ ~~~~~]';
+
+  @override
+  String get audWebhookUpdated => '[çĥåñĝéð å ŵéƀĥööķ ~~~~~]';
+
+  @override
+  String get audWebhookDeleted => '[ðéłéţéð å ŵéƀĥööķ ~~~~~]';
+
+  @override
+  String get audWebhookDisabled =>
+      '[ĥåð å ŵéƀĥööķ šŵíţçĥéð öƒƒ åƒţéŕ ŕéþéåţéð ƒåíłûŕéš ~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get audFormCreated => '[çŕéåţéð åñ íñţåķé ƒöŕɱ ~~~~~~~]';
+
+  @override
+  String get audFormUpdated => '[çĥåñĝéð åñ íñţåķé ƒöŕɱ ~~~~~~~]';
+
+  @override
+  String get audFormDeleted => '[ðéłéţéð åñ íñţåķé ƒöŕɱ ~~~~~~~]';
+
+  @override
+  String get audFormSubmitted => '[šûƀɱíţţéð åñ íñţåķé ƒöŕɱ ~~~~~~~~]';
+
+  @override
+  String get audGoalCreated => '[çŕéåţéð å ĝöåł ~~~~]';
+
+  @override
+  String get audGoalUpdated => '[çĥåñĝéð å ĝöåł ~~~~]';
+
+  @override
+  String get audGoalDeleted => '[ðéłéţéð å ĝöåł ~~~~]';
+
+  @override
+  String audGoalFolderCreated(String name) {
+    return '[çŕéåţéð ţĥé ĝöåł ƒöłðéŕ $name ~~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalFolderRenamed(String before, String after) {
+    return '[ŕéñåɱéð ţĥé ĝöåł ƒöłðéŕ $before ţö $after ~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalFolderDeleted(String name) {
+    return '[ðéłéţéð ţĥé ĝöåł ƒöłðéŕ $name ~~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalKrCreated(String name) {
+    return '[åððéð ţĥé ķéý ŕéšûłţ $name ~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalKrUpdated(String name) {
+    return '[çĥåñĝéð ţĥé ķéý ŕéšûłţ $name ~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalKrDeleted(String name) {
+    return '[ðéłéţéð ţĥé ķéý ŕéšûłţ $name ~~~~~~~~~]';
+  }
+
+  @override
+  String audGoalCheckedIn(String value, String name) {
+    return '[çĥéçķéð íñ $value öñ $name ~~~~~~~~~]';
+  }
+
+  @override
+  String get audTemplateCreated => '[çŕéåţéð å ţéɱþłåţé ~~~~~~]';
+
+  @override
+  String get audTemplateUpdated => '[çĥåñĝéð å ţéɱþłåţé ~~~~~~]';
+
+  @override
+  String get audTemplateDeleted => '[ðéłéţéð å ţéɱþłåţé ~~~~~~]';
+
+  @override
+  String get audTemplateApplied => '[ûšéð å ţéɱþłåţé ~~~~~]';
+
+  @override
+  String get audWorkloadCapacity => '[šéţ å çåþåçíţý ~~~~]';
+
+  @override
+  String get audWorkloadTimeOffCreated => '[åððéð ţíɱé öƒƒ ~~~~]';
+
+  @override
+  String get audWorkloadTimeOffUpdated => '[çĥåñĝéð ţíɱé öƒƒ ~~~~~]';
+
+  @override
+  String get audWorkloadTimeOffDeleted => '[ŕéɱöṽéð ţíɱé öƒƒ ~~~~~]';
+
+  @override
+  String get audWorkloadHolidayCreated => '[åððéð å ĥöłíðåý ~~~~~]';
+
+  @override
+  String get audWorkloadHolidayUpdated => '[çĥåñĝéð å ĥöłíðåý ~~~~~]';
+
+  @override
+  String get audWorkloadHolidayDeleted => '[ŕéɱöṽéð å ĥöłíðåý ~~~~~]';
+
+  @override
+  String get audWorkloadEstimateSet => '[šéţ åñ éšţíɱåţé ~~~~~]';
+
+  @override
+  String get audSecuritySsoConfigured => '[šéţ ûþ šíñĝłé šíĝñ-öñ ~~~~~~~]';
+
+  @override
+  String get audSecuritySsoRemoved => '[ŕéɱöṽéð šíñĝłé šíĝñ-öñ ~~~~~~~]';
+
+  @override
+  String get audSecuritySsoMemberJoined =>
+      '[ĵöíñéð ţĥŕöûĝĥ šíñĝłé šíĝñ-öñ ~~~~~~~~~]';
+
+  @override
+  String get audSecuritySsoRoleChanged =>
+      '[ĥåð ţĥéíŕ ŕöłé çĥåñĝéð ƀý šíñĝłé šíĝñ-öñ ~~~~~~~~~~~~~]';
+
+  @override
+  String get audSecurityPolicyChanged =>
+      '[çĥåñĝéð ţĥé šéçûŕíţý þöłíçý ~~~~~~~~~]';
+
+  @override
+  String get devWebhookProject => '[Þŕöĵéçţ ~~]';
+
+  @override
+  String get devWebhookWholeWorkspace => '[Ŵĥöłé ŵöŕķšþåçé ~~~~~]';
+
+  @override
+  String updNoticeText(String version) {
+    return '[Ṽéŕšíöñ $version íš åṽåíłåƀłé. ~~~~~~~~~~]';
+  }
+
+  @override
+  String get updNoticeGet => '[Ðöŵñłöåð ~~]';
+
+  @override
+  String get updNoticeDismiss => '[Ðíšɱíšš ~~]';
 }
