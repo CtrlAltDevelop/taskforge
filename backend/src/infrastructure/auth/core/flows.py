@@ -181,9 +181,9 @@ def send_code_challenge(
 ) -> str:
     """Mint a code, send it, and return the ticket that redeems it."""
     from infrastructure.auth.core.codes import generate_numeric_code
-    from infrastructure.common.messages import locale_for_email, tr_auth
     from infrastructure.auth.core.delivery import send_email, send_sms
     from infrastructure.auth.core.throttling import guard_delivery
+    from infrastructure.common.messages import locale_for_email, tr_auth
 
     guard_delivery(f"{method}:{channel}", destination)
     code = generate_numeric_code()

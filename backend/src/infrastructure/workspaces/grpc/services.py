@@ -104,9 +104,7 @@ class WorkspaceService(generics.GenericService):
             request.expected_version,
             name=request.name if request.HasField("name") else None,
             slug=request.slug if request.HasField("slug") else None,
-            default_locale=(
-                request.default_locale if request.HasField("default_locale") else None
-            ),
+            default_locale=(request.default_locale if request.HasField("default_locale") else None),
         )
         return await sync_to_async(_one)(row, user)
 

@@ -20,7 +20,6 @@ from infrastructure.accounts.profiles import confirm_email
 from infrastructure.auth.core.challenges import get_challenge_store
 from infrastructure.auth.core.delivery import send_email
 from infrastructure.auth.core.errors import AuthError
-from infrastructure.common.messages import locale_for_email, tr, tr_auth
 from infrastructure.auth.core.flows import (
     LoginResult,
     complete_login,
@@ -36,6 +35,7 @@ from infrastructure.auth.core.models import AuthEventType
 from infrastructure.auth.core.services import masking_service
 from infrastructure.auth.core.sessions import revoke_credentials
 from infrastructure.auth.core.throttling import guard_delivery
+from infrastructure.common.messages import locale_for_email, tr, tr_auth
 from infrastructure.common.responses import ResponseTitle
 
 METHOD = "magic_link"

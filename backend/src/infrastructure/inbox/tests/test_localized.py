@@ -13,9 +13,19 @@ from infrastructure.inbox.tests.test_notify import assign
 
 
 def _row(kind: str, **payload: Any) -> Any:
-    base = {"key": "WEB-1", "title": "Fix login", "from": "a", "to": "b", "hours": 3,
-            "due_date": "2026-01-02", "automation": "Auto", "reason": "r"}
-    return SimpleNamespace(type=kind, payload={**base, **payload}, count=2, user=None, workspace=None)
+    base = {
+        "key": "WEB-1",
+        "title": "Fix login",
+        "from": "a",
+        "to": "b",
+        "hours": 3,
+        "due_date": "2026-01-02",
+        "automation": "Auto",
+        "reason": "r",
+    }
+    return SimpleNamespace(
+        type=kind, payload={**base, **payload}, count=2, user=None, workspace=None
+    )
 
 
 def test_every_catalog_entry_has_all_four_languages() -> None:

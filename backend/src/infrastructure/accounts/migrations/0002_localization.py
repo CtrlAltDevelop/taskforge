@@ -4,25 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0001_initial'),
+        ("accounts", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='calendar_system',
-            field=models.CharField(default='gregorian', max_length=10),
+            model_name="profile",
+            name="calendar_system",
+            field=models.CharField(default="gregorian", max_length=10),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='numerals',
+            model_name="profile",
+            name="numerals",
             field=models.CharField(blank=True, max_length=6),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='week_start',
+            model_name="profile",
+            name="week_start",
             field=models.CharField(blank=True, max_length=3),
         ),
     ]

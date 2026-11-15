@@ -759,6 +759,7 @@ class Workspace(_message.Message):
     DELETED_AT_FIELD_NUMBER: _builtins.int
     VERSION_FIELD_NUMBER: _builtins.int
     IS_OWNER_FIELD_NUMBER: _builtins.int
+    DEFAULT_LOCALE_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     name: _builtins.str
     slug: _builtins.str
@@ -768,6 +769,7 @@ class Workspace(_message.Message):
     deleted_at: _builtins.str
     version: _builtins.int
     is_owner: _builtins.bool
+    default_locale: _builtins.str
     def __init__(
         self,
         *,
@@ -780,10 +782,11 @@ class Workspace(_message.Message):
         deleted_at: _builtins.str = ...,
         version: _builtins.int = ...,
         is_owner: _builtins.bool = ...,
+        default_locale: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["created_at", b"created_at", "created_by", b"created_by", "deleted_at", b"deleted_at", "id", b"id", "is_owner", b"is_owner", "logo", b"logo", "name", b"name", "slug", b"slug", "version", b"version"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["created_at", b"created_at", "created_by", b"created_by", "default_locale", b"default_locale", "deleted_at", b"deleted_at", "id", b"id", "is_owner", b"is_owner", "logo", b"logo", "name", b"name", "slug", b"slug", "version", b"version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -880,10 +883,12 @@ class WorkspaceUpdateRequest(_message.Message):
     EXPECTED_VERSION_FIELD_NUMBER: _builtins.int
     NAME_FIELD_NUMBER: _builtins.int
     SLUG_FIELD_NUMBER: _builtins.int
+    DEFAULT_LOCALE_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     expected_version: _builtins.int
     name: _builtins.str
     slug: _builtins.str
+    default_locale: _builtins.str
     def __init__(
         self,
         *,
@@ -891,15 +896,20 @@ class WorkspaceUpdateRequest(_message.Message):
         expected_version: _builtins.int = ...,
         name: _builtins.str | None = ...,
         slug: _builtins.str | None = ...,
+        default_locale: _builtins.str | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["_name", b"_name", "_slug", b"_slug", "name", b"name", "slug", b"slug"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_default_locale", b"_default_locale", "_name", b"_name", "_slug", b"_slug", "default_locale", b"default_locale", "name", b"name", "slug", b"slug"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["_name", b"_name", "_slug", b"_slug", "expected_version", b"expected_version", "id", b"id", "name", b"name", "slug", b"slug"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_default_locale", b"_default_locale", "_name", b"_name", "_slug", b"_slug", "default_locale", b"default_locale", "expected_version", b"expected_version", "id", b"id", "name", b"name", "slug", b"slug"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__default_locale: _TypeAlias = _typing.Literal["default_locale"]  # noqa: Y015
+    _WhichOneofArgType__default_locale: _TypeAlias = _typing.Literal["_default_locale", b"_default_locale"]  # noqa: Y015
     _WhichOneofReturnType__name: _TypeAlias = _typing.Literal["name"]  # noqa: Y015
     _WhichOneofArgType__name: _TypeAlias = _typing.Literal["_name", b"_name"]  # noqa: Y015
     _WhichOneofReturnType__slug: _TypeAlias = _typing.Literal["slug"]  # noqa: Y015
     _WhichOneofArgType__slug: _TypeAlias = _typing.Literal["_slug", b"_slug"]  # noqa: Y015
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__default_locale) -> _WhichOneofReturnType__default_locale | None: ...
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__name) -> _WhichOneofReturnType__name | None: ...
     @_typing.overload

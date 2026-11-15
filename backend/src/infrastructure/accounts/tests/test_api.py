@@ -327,7 +327,9 @@ def test_language_calendar_and_week_start_are_saved_and_come_back(token: str) ->
         "sat",
         "native",
     )
-    assert Client().get(ME, **_bearer(token)).json()["data"]["profile"]["calendar_system"] == "jalali"
+    assert (
+        Client().get(ME, **_bearer(token)).json()["data"]["profile"]["calendar_system"] == "jalali"
+    )
 
 
 @pytest.mark.parametrize(

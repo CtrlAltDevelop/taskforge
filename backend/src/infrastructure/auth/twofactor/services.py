@@ -24,7 +24,6 @@ from infrastructure.auth.core.challenges import Challenge, InvalidCode, get_chal
 from infrastructure.auth.core.codes import generate_numeric_code
 from infrastructure.auth.core.delivery import send_email, send_sms
 from infrastructure.auth.core.errors import AuthError
-from infrastructure.common.messages import recipient_locale, tr
 from infrastructure.auth.core.flows import (
     PENDING_PURPOSE,
     pending_methods,
@@ -42,6 +41,7 @@ from infrastructure.auth.core.throttling import (
     record_failed_attempt,
 )
 from infrastructure.auth.twofactor.models import RecoveryCode, SecondFactor, SecondFactorMethod
+from infrastructure.common.messages import recipient_locale, tr
 from infrastructure.common.responses import ResponseTitle
 
 CODE_PURPOSE = "second_factor_code"

@@ -71,6 +71,9 @@ class Profile(_message.Message):
     TIMEZONE_FIELD_NUMBER: _builtins.int
     DATE_OF_BIRTH_FIELD_NUMBER: _builtins.int
     MARKETING_OPT_IN_FIELD_NUMBER: _builtins.int
+    CALENDAR_SYSTEM_FIELD_NUMBER: _builtins.int
+    WEEK_START_FIELD_NUMBER: _builtins.int
+    NUMERALS_FIELD_NUMBER: _builtins.int
     display_name: _builtins.str
     avatar_url: _builtins.str
     bio: _builtins.str
@@ -78,6 +81,9 @@ class Profile(_message.Message):
     timezone: _builtins.str
     date_of_birth: _builtins.str
     marketing_opt_in: _builtins.bool
+    calendar_system: _builtins.str
+    week_start: _builtins.str
+    numerals: _builtins.str
     def __init__(
         self,
         *,
@@ -88,10 +94,13 @@ class Profile(_message.Message):
         timezone: _builtins.str = ...,
         date_of_birth: _builtins.str = ...,
         marketing_opt_in: _builtins.bool = ...,
+        calendar_system: _builtins.str = ...,
+        week_start: _builtins.str = ...,
+        numerals: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["avatar_url", b"avatar_url", "bio", b"bio", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "timezone", b"timezone"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["avatar_url", b"avatar_url", "bio", b"bio", "calendar_system", b"calendar_system", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "numerals", b"numerals", "timezone", b"timezone", "week_start", b"week_start"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -108,6 +117,9 @@ class ProfileUpdate(_message.Message):
     TIMEZONE_FIELD_NUMBER: _builtins.int
     DATE_OF_BIRTH_FIELD_NUMBER: _builtins.int
     MARKETING_OPT_IN_FIELD_NUMBER: _builtins.int
+    CALENDAR_SYSTEM_FIELD_NUMBER: _builtins.int
+    WEEK_START_FIELD_NUMBER: _builtins.int
+    NUMERALS_FIELD_NUMBER: _builtins.int
     display_name: _builtins.str
     avatar_url: _builtins.str
     bio: _builtins.str
@@ -115,6 +127,9 @@ class ProfileUpdate(_message.Message):
     timezone: _builtins.str
     date_of_birth: _builtins.str
     marketing_opt_in: _builtins.bool
+    calendar_system: _builtins.str
+    week_start: _builtins.str
+    numerals: _builtins.str
     def __init__(
         self,
         *,
@@ -125,15 +140,20 @@ class ProfileUpdate(_message.Message):
         timezone: _builtins.str | None = ...,
         date_of_birth: _builtins.str | None = ...,
         marketing_opt_in: _builtins.bool | None = ...,
+        calendar_system: _builtins.str | None = ...,
+        week_start: _builtins.str | None = ...,
+        numerals: _builtins.str | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["_avatar_url", b"_avatar_url", "_bio", b"_bio", "_date_of_birth", b"_date_of_birth", "_display_name", b"_display_name", "_locale", b"_locale", "_marketing_opt_in", b"_marketing_opt_in", "_timezone", b"_timezone", "avatar_url", b"avatar_url", "bio", b"bio", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "timezone", b"timezone"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_avatar_url", b"_avatar_url", "_bio", b"_bio", "_calendar_system", b"_calendar_system", "_date_of_birth", b"_date_of_birth", "_display_name", b"_display_name", "_locale", b"_locale", "_marketing_opt_in", b"_marketing_opt_in", "_numerals", b"_numerals", "_timezone", b"_timezone", "_week_start", b"_week_start", "avatar_url", b"avatar_url", "bio", b"bio", "calendar_system", b"calendar_system", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "numerals", b"numerals", "timezone", b"timezone", "week_start", b"week_start"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["_avatar_url", b"_avatar_url", "_bio", b"_bio", "_date_of_birth", b"_date_of_birth", "_display_name", b"_display_name", "_locale", b"_locale", "_marketing_opt_in", b"_marketing_opt_in", "_timezone", b"_timezone", "avatar_url", b"avatar_url", "bio", b"bio", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "timezone", b"timezone"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_avatar_url", b"_avatar_url", "_bio", b"_bio", "_calendar_system", b"_calendar_system", "_date_of_birth", b"_date_of_birth", "_display_name", b"_display_name", "_locale", b"_locale", "_marketing_opt_in", b"_marketing_opt_in", "_numerals", b"_numerals", "_timezone", b"_timezone", "_week_start", b"_week_start", "avatar_url", b"avatar_url", "bio", b"bio", "calendar_system", b"calendar_system", "date_of_birth", b"date_of_birth", "display_name", b"display_name", "locale", b"locale", "marketing_opt_in", b"marketing_opt_in", "numerals", b"numerals", "timezone", b"timezone", "week_start", b"week_start"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     _WhichOneofReturnType__avatar_url: _TypeAlias = _typing.Literal["avatar_url"]  # noqa: Y015
     _WhichOneofArgType__avatar_url: _TypeAlias = _typing.Literal["_avatar_url", b"_avatar_url"]  # noqa: Y015
     _WhichOneofReturnType__bio: _TypeAlias = _typing.Literal["bio"]  # noqa: Y015
     _WhichOneofArgType__bio: _TypeAlias = _typing.Literal["_bio", b"_bio"]  # noqa: Y015
+    _WhichOneofReturnType__calendar_system: _TypeAlias = _typing.Literal["calendar_system"]  # noqa: Y015
+    _WhichOneofArgType__calendar_system: _TypeAlias = _typing.Literal["_calendar_system", b"_calendar_system"]  # noqa: Y015
     _WhichOneofReturnType__date_of_birth: _TypeAlias = _typing.Literal["date_of_birth"]  # noqa: Y015
     _WhichOneofArgType__date_of_birth: _TypeAlias = _typing.Literal["_date_of_birth", b"_date_of_birth"]  # noqa: Y015
     _WhichOneofReturnType__display_name: _TypeAlias = _typing.Literal["display_name"]  # noqa: Y015
@@ -142,12 +162,18 @@ class ProfileUpdate(_message.Message):
     _WhichOneofArgType__locale: _TypeAlias = _typing.Literal["_locale", b"_locale"]  # noqa: Y015
     _WhichOneofReturnType__marketing_opt_in: _TypeAlias = _typing.Literal["marketing_opt_in"]  # noqa: Y015
     _WhichOneofArgType__marketing_opt_in: _TypeAlias = _typing.Literal["_marketing_opt_in", b"_marketing_opt_in"]  # noqa: Y015
+    _WhichOneofReturnType__numerals: _TypeAlias = _typing.Literal["numerals"]  # noqa: Y015
+    _WhichOneofArgType__numerals: _TypeAlias = _typing.Literal["_numerals", b"_numerals"]  # noqa: Y015
     _WhichOneofReturnType__timezone: _TypeAlias = _typing.Literal["timezone"]  # noqa: Y015
     _WhichOneofArgType__timezone: _TypeAlias = _typing.Literal["_timezone", b"_timezone"]  # noqa: Y015
+    _WhichOneofReturnType__week_start: _TypeAlias = _typing.Literal["week_start"]  # noqa: Y015
+    _WhichOneofArgType__week_start: _TypeAlias = _typing.Literal["_week_start", b"_week_start"]  # noqa: Y015
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__avatar_url) -> _WhichOneofReturnType__avatar_url | None: ...
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__bio) -> _WhichOneofReturnType__bio | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__calendar_system) -> _WhichOneofReturnType__calendar_system | None: ...
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__date_of_birth) -> _WhichOneofReturnType__date_of_birth | None: ...
     @_typing.overload
@@ -157,6 +183,10 @@ class ProfileUpdate(_message.Message):
     @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__marketing_opt_in) -> _WhichOneofReturnType__marketing_opt_in | None: ...
     @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__numerals) -> _WhichOneofReturnType__numerals | None: ...
+    @_typing.overload
     def WhichOneof(self, oneof_group: _WhichOneofArgType__timezone) -> _WhichOneofReturnType__timezone | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__week_start) -> _WhichOneofReturnType__week_start | None: ...
 
 Global___ProfileUpdate: _TypeAlias = ProfileUpdate  # noqa: Y015

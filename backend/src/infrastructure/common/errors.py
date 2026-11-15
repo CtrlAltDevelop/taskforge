@@ -63,7 +63,9 @@ def _validation_messages(errors: list[dict[str, Any]]) -> list[str]:
     return messages
 
 
-def _described(request: HttpRequest, title: ResponseTitle, description: str, *, generic: bool) -> str:
+def _described(
+    request: HttpRequest, title: ResponseTitle, description: str, *, generic: bool
+) -> str:
     """The sentence in the caller's language -- but only when it is the generic one.
 
     A specific message ("slug must be 3-40 characters") carries detail that a

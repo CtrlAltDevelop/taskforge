@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('workspaces', '0019_data_permission'),
+        ("workspaces", "0019_data_permission"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='workspace',
-            name='default_locale',
-            field=models.CharField(default='en', max_length=5),
+            model_name="workspace",
+            name="default_locale",
+            field=models.CharField(default="en", max_length=5),
         ),
     ]
