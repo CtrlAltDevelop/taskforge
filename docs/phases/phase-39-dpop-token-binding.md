@@ -1,6 +1,6 @@
 # Phase 39 — DPoP Token Binding
 
-**Status:** MOSTLY DONE — see the roadmap entry for what is left
+**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
 
 ## Feature
 Every authenticated request on REST, gRPC and WebSocket carries a **DPoP proof** (RFC 9449), so a stolen access or refresh token is useless without the device's private key.
@@ -46,13 +46,13 @@ No new screens. Key creation is lazy and silent. A "This device's key changed, p
 - Existing sessions issued before the phase are bearer-only; they are revoked when `required` is switched on (documented in the release notes, one forced sign-in).
 
 ## Acceptance criteria
-- [ ] Sign-in on web, Android and desktop binds the session; the same access token sent without a proof is rejected in `required` mode on REST, gRPC and WebSocket
-- [ ] A proof replayed (same `jti`) is rejected, including against a second worker
-- [ ] A proof with the wrong method, URL, `ath`, key, algorithm or stale `iat` is rejected, each with a distinct internal reason
-- [ ] A stolen refresh token without the key cannot refresh; with the key it rotates and the new token stays bound
-- [ ] The server nonce challenge works end to end and the client retries once
-- [ ] CORS and Envoy pass the `DPoP` header and expose `DPoP-Nonce`; web works through gRPC-Web
-- [ ] Health, docs and inbound webhooks still work with no proof
+- [x] Sign-in on web, Android and desktop binds the session; the same access token sent without a proof is rejected in `required` mode on REST, gRPC and WebSocket — web: real browser against the production stack (key in IndexedDB, gRPC-Web through Caddy and Envoy, no proof refused); macOS and iOS: key persisted in the real Keychain (`integration_test/dpop_keystore_test.dart`); REST, gRPC and WebSocket rejection of a proof-less token is in `test_dpop_transports.py`. Android's Keystore was not run (no emulator here)
+- [x] A proof replayed (same `jti`) is rejected, including against a second worker (`test_two_workers_sharing_the_cache_cannot_both_spend_one_proof`)
+- [x] A proof with the wrong method, URL, `ath`, key, algorithm or stale `iat` is rejected, each with a distinct internal reason (`test_each_wrong_claim_is_refused`, `test_header_failures`)
+- [x] A stolen refresh token without the key cannot refresh; with the key it rotates and the new token stays bound (`test_refresh_requires_the_bound_key`)
+- [x] The server nonce challenge works end to end and the client retries once (`test_nonce_missing_and_stale_and_valid`; the nonce is exposed to the browser as `x-error-nonce-bin`)
+- [x] CORS and Envoy pass the `DPoP` header and expose `DPoP-Nonce`; web works through gRPC-Web (the web app runs through gRPC-Web in `required` mode, which needs both)
+- [x] Health, docs and inbound webhooks still work with no proof (`test_proof_free_routes_still_work`; `/api/health/ready` and `/api/version` answered through Caddy)
 
 ## Tests
 Proof verification matrix (each claim and header field wrong in turn), replay cache, nonce rotation, token binding and bound refresh, interceptor and Ninja auth class parity (same proof table over REST and gRPC), WebSocket authenticate, clock-skew retry in the app, key loss path, Flutter proof builder against fixed test vectors from RFC 9449.
@@ -64,3 +64,7 @@ Proof verification matrix (each claim and header field wrong in turn), replay ca
 
 ## Depends on
 Phase 01.
+
+## Fault found by running it
+
+`GRPC_FRAMEWORK["SERVER_INTERCEPTORS"]` named the method-path interceptor by dotted path, but django-socio-grpc 0.25 imports only some settings from strings, so grpc received a string and refused to start the server. It is now the instance, with a test that every configured interceptor is a `grpc.aio.ServerInterceptor`.

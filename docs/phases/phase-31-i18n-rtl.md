@@ -1,6 +1,6 @@
 # Phase 31 — Localization and RTL
 
-**Status:** MOSTLY DONE — see the roadmap entry for what is left
+**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
 
 ## Feature
 Full **multi-language UI** with right-to-left layout support (Persian/Dari, Pashto, Arabic) plus localized dates, numbers and calendars.
@@ -33,10 +33,10 @@ Language picker (onboarding + settings), calendar/week-start settings, all date 
 - Pseudo-localization build flag to catch hardcoded/truncated strings.
 
 ## Acceptance criteria
-- [ ] Every screen from phases 01–30 renders correctly in RTL (golden/visual check list)
-- [ ] Switching language is instant without restart
-- [ ] Jalali ⇄ Gregorian conversion verified against reference fixtures
-- [ ] No hardcoded user-visible strings (lint rule/CI check)
+- [x] Every screen from phases 01–30 renders correctly in RTL (`rtl_screens_test.dart` builds each screen in en/fa/ar on a phone and a desktop: no overflow, the language's direction; goldens for seven key screens)
+- [x] Switching language is instant without restart (`language_screen_test.dart`)
+- [x] Jalali ⇄ Gregorian conversion verified against reference fixtures (`jalali_test.dart`)
+- [x] No hardcoded user-visible strings (`l10n_checks_test.dart`; the three left are a URL, a TFQL query and date syntax used as hint examples)
 
 ## Tests
 Date-conversion fixtures, locale-based golden tests, plural tests, l10n completeness check (missing keys fail CI).

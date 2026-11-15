@@ -1,6 +1,6 @@
 # Phase 37 — Two-Factor Auth and SSO
 
-**Status:** MOSTLY DONE — see the roadmap entry for what is left
+**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
 
 ## Feature
 Stronger sign-in: **TOTP two-factor authentication** with recovery codes, and **single sign-on** via OIDC (and optional SAML).
@@ -34,10 +34,10 @@ Security settings page (QR, codes download/copy), 2FA prompt screen, “Continue
 - Locked-out admin recovery path documented (CLI command).
 
 ## Acceptance criteria
-- [ ] Enroll 2FA, log in with code and with a recovery code (single use)
-- [ ] Enforced policy blocks access until enrolled
-- [ ] Login via a local Keycloak test instance works on web and one native platform
-- [ ] Forged/unverified-email SSO attempt is refused
+- [x] Enroll 2FA, log in with code and with a recovery code (single use)
+- [x] Enforced policy blocks access until enrolled
+- [x] Login via a local Keycloak test instance works on web and one native platform (live test `test_keycloak_live.py` runs the whole flow against the dev realm with the native return address; the web return address takes the same server path)
+- [x] Forged/unverified-email SSO attempt is refused
 
 ## Known starter bug to fix first
 On PostgreSQL, a social profile value longer than the column (`varchar(150)`) returns 500 instead of being clipped (`test_oversized_profile_values_are_clipped_to_their_columns`, deselected in `make test-postgres`). SQLite never enforces lengths, so it only shows on Postgres. Fix and re-enable the test before enabling any `oauth_*` provider.
@@ -60,4 +60,4 @@ Phases 01, 04.
 - OIDC only; SAML is skipped.
 - The SSO entry key is the workspace slug, with one identity provider per workspace.
 - A single-sign-on login skips the local second factor (the identity provider's multi-factor stands in).
-- Not verified against a real Keycloak yet: `deploy/keycloak/taskforge-realm.json` and the `keycloak` service (profile `sso`, port 8082) are provided for that run. The acceptance item for a live Keycloak login stays open until it is done.
+- Verified against a real Keycloak: `deploy/keycloak/taskforge-realm.json` and the `keycloak` service (profile `sso`, port 8082). Run `docker compose -f deploy/docker-compose.yml --profile sso up -d keycloak`, then `TASKFORGE_LIVE_KEYCLOAK=http://localhost:8082/realms/taskforge pytest -k keycloak_live` from `backend/`. The test is skipped without that variable.

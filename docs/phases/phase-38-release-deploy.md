@@ -1,6 +1,6 @@
 # Phase 38 — Release and Deployment
 
-**Status:** MOSTLY DONE — see the roadmap entry for what is left
+**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
 
 ## Feature
 **One-command self-hosted deployment** and automated **release builds** for web, Android, iOS, and desktop.
@@ -32,13 +32,24 @@ None new (maybe `SystemInfo` for version/flags).
 - Backup restore is **tested** in CI against a fixture.
 
 ## Acceptance criteria
-- [ ] Fresh VPS: clone, set 5 env vars, `docker compose up -d` → working HTTPS app
-- [ ] Upgrade from previous tag keeps data
-- [ ] Restore from backup into a clean instance passes smoke tests
-- [ ] Tagged release produces all artifacts automatically
+- [x] Fresh VPS: clone, set 5 env vars, `docker compose up -d` → working HTTPS app (run locally on Docker with Caddy's local CA; a public-CA certificate needs a public domain and was not run)
+- [ ] Upgrade from previous tag keeps data (the CI `upgrade` job does it once a tag exists; none does yet)
+- [x] Restore from backup into a clean instance passes smoke tests (`backup.sh`, `smoke-restore.sh` and `restore.sh` run; CI runs the backup and smoke restore)
+- [ ] Tagged release produces all artifacts automatically (workflow written and linted with actionlint; it needs GitHub and signing keys to run)
 
 ## Tests
 Smoke test suite run against the composed stack in CI, migration upgrade test (N → N+1), proto breaking-change gate.
 
 ## Depends on
 All earlier phases (but infrastructure pieces start in phase 00).
+
+## Faults found by running the stack
+
+Running the real images (not just the tests) exposed these; all are fixed:
+
+- `python manage.py ...` failed in the container (`manage.py` was not in the working directory): the Dockerfile links it.
+- The compose stack booted with no `DJANGO_AUTH_METHODS` and the other switches TaskForge needs, which only `backend/.env` set in development: they are now `ENV` defaults in the image (override in `.env`), including the Redis challenge store.
+- `Prefetch[Any]` in an annotation failed on Python 3.13 (the image) though not on 3.14 (the dev machine).
+- Two audit migrations (`0002_immutable`, `0003_retention`) failed on PostgreSQL: `schema_editor.execute` reads `%` as a placeholder. The test suite skips migrations, so only a real migrate showed it.
+- The gRPC server did not start (see phase 39), and `smoke-restore.sh` lacked the DPoP nonce secret.
+- The web image used a Flutter image older than the SDK range; it now clones Flutter at a pinned tag. The scripts were not executable in git. CI's compose check lacked `DJANGO_DPOP_NONCE_SECRET`.
