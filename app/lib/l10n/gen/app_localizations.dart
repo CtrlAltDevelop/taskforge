@@ -14597,6 +14597,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fetching from ClickUp…'**
   String get grpCImpCuFetching;
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatTitle;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet — changes and talk will show up here'**
+  String get chatEmpty;
+
+  /// No description provided for @chatHideChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide changes'**
+  String get chatHideChanges;
+
+  /// No description provided for @chatLoadEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Load earlier messages'**
+  String get chatLoadEarlier;
+
+  /// No description provided for @chatEvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'renamed this task from “{from}” to “{to}”'**
+  String chatEvTitle(String from, String to);
+
+  /// No description provided for @chatEvStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'changed status from {from} to {to}'**
+  String chatEvStatus(String from, String to);
+
+  /// No description provided for @chatEvPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'changed priority from {from} to {to}'**
+  String chatEvPriority(String from, String to);
+
+  /// No description provided for @chatEvStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'changed the start date from {from} to {to}'**
+  String chatEvStartDate(String from, String to);
+
+  /// No description provided for @chatEvDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'changed the due date from {from} to {to}'**
+  String chatEvDueDate(String from, String to);
+
+  /// No description provided for @chatEvEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'changed the estimate from {from} to {to}'**
+  String chatEvEstimate(String from, String to);
+
+  /// No description provided for @chatEvSubtask.
+  ///
+  /// In en, this message translates to:
+  /// **'added the subtask “{title}”'**
+  String chatEvSubtask(String title);
+
+  /// No description provided for @chatEvOther.
+  ///
+  /// In en, this message translates to:
+  /// **'changed a field'**
+  String get chatEvOther;
+
+  /// No description provided for @chatActorAutomation.
+  ///
+  /// In en, this message translates to:
+  /// **'an automation'**
+  String get chatActorAutomation;
+
+  /// No description provided for @chatActorForm.
+  ///
+  /// In en, this message translates to:
+  /// **'a form'**
+  String get chatActorForm;
+
+  /// No description provided for @chatActorImport.
+  ///
+  /// In en, this message translates to:
+  /// **'an import'**
+  String get chatActorImport;
+
+  /// No description provided for @chatActorSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'the system'**
+  String get chatActorSystem;
+
+  /// No description provided for @chatTitleCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat ({count})'**
+  String chatTitleCount(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -2413,5 +2413,22 @@
   "grpCImpCuLoad": "عرض قوائمي",
   "grpCImpCuPick": "اختر القوائم المراد استيرادها",
   "grpCImpCuFetch": "جلب القوائم المحددة",
-  "grpCImpCuFetching": "جارٍ الجلب من ClickUp…"
+  "grpCImpCuFetching": "جارٍ الجلب من ClickUp…",
+  "chatTitle": "الدردشة",
+  "chatEmpty": "لا توجد رسائل بعد — ستظهر هنا التغييرات والمحادثات",
+  "chatHideChanges": "إخفاء التغييرات",
+  "chatLoadEarlier": "تحميل الرسائل الأقدم",
+  "chatEvTitle": "غيّر عنوان هذه المهمة من «{from}» إلى «{to}»",
+  "chatEvStatus": "غيّر الحالة من {from} إلى {to}",
+  "chatEvPriority": "غيّر الأولوية من {from} إلى {to}",
+  "chatEvStartDate": "غيّر تاريخ البدء من {from} إلى {to}",
+  "chatEvDueDate": "غيّر تاريخ الاستحقاق من {from} إلى {to}",
+  "chatEvEstimate": "غيّر التقدير من {from} إلى {to}",
+  "chatEvSubtask": "أضاف المهمة الفرعية «{title}»",
+  "chatEvOther": "غيّر حقلًا",
+  "chatActorAutomation": "عملية أتمتة",
+  "chatActorForm": "نموذج",
+  "chatActorImport": "عملية استيراد",
+  "chatActorSystem": "النظام",
+  "chatTitleCount": "الدردشة ({count})"
 }

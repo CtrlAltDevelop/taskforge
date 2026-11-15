@@ -39,6 +39,8 @@ const Comment$json = {
       '10': 'reactions'
     },
     {'1': 'edit_count', '3': 13, '4': 1, '5': 5, '10': 'editCount'},
+    {'1': 'kind', '3': 14, '4': 1, '5': 9, '10': 'kind'},
+    {'1': 'event', '3': 15, '4': 1, '5': 9, '10': 'event'},
   ],
 };
 
@@ -51,7 +53,7 @@ final $typed_data.Uint8List commentDescriptor = $convert.base64Decode(
     'ZWQYCSABKAhSBnBpbm5lZBIYCgd2ZXJzaW9uGAogASgFUgd2ZXJzaW9uEh8KC21lbnRpb25faW'
     'RzGAsgAygJUgptZW50aW9uSWRzEj8KCXJlYWN0aW9ucxgMIAMoCzIhLmNvbmZpZy5jb21tZW50'
     'cy5SZWFjdGlvblJlc3BvbnNlUglyZWFjdGlvbnMSHQoKZWRpdF9jb3VudBgNIAEoBVIJZWRpdE'
-    'NvdW50');
+    'NvdW50EhIKBGtpbmQYDiABKAlSBGtpbmQSFAoFZXZlbnQYDyABKAlSBWV2ZW50');
 
 @$core.Deprecated('Use commentCreateRequestDescriptor instead')
 const CommentCreateRequest$json = {

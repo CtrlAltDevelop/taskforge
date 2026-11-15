@@ -169,6 +169,8 @@ Map<String, dynamic> commentToMap(Comment c) => {
   'mentionIds': c.mentionIds,
   'reactions': c.reactions,
   'editCount': c.editCount,
+  'kind': c.kind,
+  'event': c.event?.toJson(),
 };
 
 String commentToJson(Comment c) => jsonEncode(commentToMap(c));
@@ -197,6 +199,8 @@ Comment commentFromMap(
   }),
   editCount: (m['editCount'] as num?)?.toInt() ?? 0,
   sendState: sendState,
+  kind: m['kind'] == 'system' ? 'system' : 'user',
+  event: ChatEvent.tryParse('${m['event'] ?? ''}'),
 );
 
 Comment commentFromJson(String json, {SendState sendState = SendState.sent}) =>

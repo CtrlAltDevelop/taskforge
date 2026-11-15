@@ -31,6 +31,8 @@ class Comment extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? mentionIds,
     $core.Iterable<ReactionResponse>? reactions,
     $core.int? editCount,
+    $core.String? kind,
+    $core.String? event,
   }) {
     final result = Comment._();
     if (id != null) result.id = id;
@@ -46,6 +48,8 @@ class Comment extends $pb.GeneratedMessage {
     if (mentionIds != null) result.mentionIds.addAll(mentionIds);
     if (reactions != null) result.reactions.addAll(reactions);
     if (editCount != null) result.editCount = editCount;
+    if (kind != null) result.kind = kind;
+    if (event != null) result.event = event;
     return result;
   }
 
@@ -77,6 +81,8 @@ class Comment extends $pb.GeneratedMessage {
     ..pPM<ReactionResponse>(12, _omitFieldNames ? '' : 'reactions',
         subBuilder: ReactionResponse.$_createMessage)
     ..aI(13, _omitFieldNames ? '' : 'editCount')
+    ..aOS(14, _omitFieldNames ? '' : 'kind')
+    ..aOS(15, _omitFieldNames ? '' : 'event')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -203,6 +209,24 @@ class Comment extends $pb.GeneratedMessage {
   $core.bool hasEditCount() => $_has(12);
   @$pb.TagNumber(13)
   void clearEditCount() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get kind => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set kind($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasKind() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearKind() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get event => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set event($core.String value) => $_setString(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasEvent() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearEvent() => $_clearField(15);
 }
 
 class CommentCreateRequest extends $pb.GeneratedMessage {

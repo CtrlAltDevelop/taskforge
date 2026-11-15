@@ -8272,6 +8272,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grpCImpCuFetching => 'Fetching from ClickUp…';
+
+  @override
+  String get chatTitle => 'Chat';
+
+  @override
+  String get chatEmpty =>
+      'No messages yet — changes and talk will show up here';
+
+  @override
+  String get chatHideChanges => 'Hide changes';
+
+  @override
+  String get chatLoadEarlier => 'Load earlier messages';
+
+  @override
+  String chatEvTitle(String from, String to) {
+    return 'renamed this task from “$from” to “$to”';
+  }
+
+  @override
+  String chatEvStatus(String from, String to) {
+    return 'changed status from $from to $to';
+  }
+
+  @override
+  String chatEvPriority(String from, String to) {
+    return 'changed priority from $from to $to';
+  }
+
+  @override
+  String chatEvStartDate(String from, String to) {
+    return 'changed the start date from $from to $to';
+  }
+
+  @override
+  String chatEvDueDate(String from, String to) {
+    return 'changed the due date from $from to $to';
+  }
+
+  @override
+  String chatEvEstimate(String from, String to) {
+    return 'changed the estimate from $from to $to';
+  }
+
+  @override
+  String chatEvSubtask(String title) {
+    return 'added the subtask “$title”';
+  }
+
+  @override
+  String get chatEvOther => 'changed a field';
+
+  @override
+  String get chatActorAutomation => 'an automation';
+
+  @override
+  String get chatActorForm => 'a form';
+
+  @override
+  String get chatActorImport => 'an import';
+
+  @override
+  String get chatActorSystem => 'the system';
+
+  @override
+  String chatTitleCount(int count) {
+    return 'Chat ($count)';
+  }
 }
 
 /// The translations for English (`en_XA`).
@@ -16666,24 +16734,87 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   String get updNoticeDismiss => '[Ðíšɱíšš ~~]';
 
   @override
-  String get grpMImpClickupApi => '[ÇłíçķÛþ (ÅÞÍ ţöķéñ) ~~~~~]';
+  String get grpMImpClickupApi => '[ÇłíçķÛþ (ÅÞÍ ţöķéñ) ~~~~~~]';
 
   @override
-  String get grpCImpCuTokenHint => '[ÇłíçķÛþ þéŕšöñåł ÅÞÍ ţöķéñ ~~~~~~~]';
+  String get grpCImpCuTokenHint => '[ÇłíçķÛþ þéŕšöñåł ÅÞÍ ţöķéñ ~~~~~~~~]';
 
   @override
   String get grpCImpCuTokenNote =>
-      '[Ûšéð öñłý ţö ŕéåð ýöûŕ łíšţš. Íţ íš ñöţ šţöŕéð. ~~~~~~~~~~]';
+      '[Ûšéð öñłý ţö ŕéåð ýöûŕ łíšţš. Íţ íš ñöţ šţöŕéð. ~~~~~~~~~~~~~~~]';
 
   @override
-  String get grpCImpCuLoad => '[Šĥöŵ ṃý łíšţš ~~~]';
+  String get grpCImpCuLoad => '[Šĥöŵ ɱý łíšţš ~~~~]';
 
   @override
-  String get grpCImpCuPick => '[Çĥööšé ţĥé łíšţš ţö íṃþöŕţ ~~~~~~]';
+  String get grpCImpCuPick => '[Çĥööšé ţĥé łíšţš ţö íɱþöŕţ ~~~~~~~~]';
 
   @override
-  String get grpCImpCuFetch => '[Ƒéţçĥ šéłéçţéð łíšţš ~~~~]';
+  String get grpCImpCuFetch => '[Féţçĥ šéłéçţéð łíšţš ~~~~~~]';
 
   @override
-  String get grpCImpCuFetching => '[Ƒéţçĥíñĝ ƒŕöṃ ÇłíçķÛþ… ~~~~]';
+  String get grpCImpCuFetching => '[Féţçĥíñĝ ƒŕöɱ ÇłíçķÛþ… ~~~~~~~]';
+
+  @override
+  String get chatTitle => '[Çĥåţ ~]';
+
+  @override
+  String get chatEmpty =>
+      '[Ñö ɱéššåĝéš ýéţ — çĥåñĝéš åñð ţåłķ ŵíłł šĥöŵ ûþ ĥéŕé ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get chatHideChanges => '[Ĥíðé çĥåñĝéš ~~~~]';
+
+  @override
+  String get chatLoadEarlier => '[Łöåð éåŕłíéŕ ɱéššåĝéš ~~~~~~~]';
+
+  @override
+  String chatEvTitle(String from, String to) {
+    return '[ŕéñåɱéð ţĥíš ţåšķ ƒŕöɱ “$from” ţö “$to” ~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvStatus(String from, String to) {
+    return '[çĥåñĝéð šţåţûš ƒŕöɱ $from ţö $to ~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvPriority(String from, String to) {
+    return '[çĥåñĝéð þŕíöŕíţý ƒŕöɱ $from ţö $to ~~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvStartDate(String from, String to) {
+    return '[çĥåñĝéð ţĥé šţåŕţ ðåţé ƒŕöɱ $from ţö $to ~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvDueDate(String from, String to) {
+    return '[çĥåñĝéð ţĥé ðûé ðåţé ƒŕöɱ $from ţö $to ~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvEstimate(String from, String to) {
+    return '[çĥåñĝéð ţĥé éšţíɱåţé ƒŕöɱ $from ţö $to ~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String chatEvSubtask(String title) {
+    return '[åððéð ţĥé šûƀţåšķ “$title” ~~~~~~~~~]';
+  }
+
+  @override
+  String get chatEvOther => '[çĥåñĝéð å ƒíéłð ~~~~~]';
+
+  @override
+  String get chatActorAutomation => '[åñ åûţöɱåţíöñ ~~~~]';
+
+  @override
+  String get chatActorForm => '[å ƒöŕɱ ~~]';
+
+  @override
+  String get chatActorImport => '[åñ íɱþöŕţ ~~~]';
+
+  @override
+  String get chatActorSystem => '[ţĥé šýšţéɱ ~~~]';
 }

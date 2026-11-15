@@ -8243,4 +8243,72 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get grpCImpCuFetching => 'له ClickUp څخه راوړل کیږي…';
+
+  @override
+  String get chatTitle => 'چت';
+
+  @override
+  String get chatEmpty =>
+      'تر اوسه هیڅ پیغام نشته — بدلونونه او خبرې به دلته ښکاره شي';
+
+  @override
+  String get chatHideChanges => 'بدلونونه پټ کړه';
+
+  @override
+  String get chatLoadEarlier => 'پخواني پیغامونه راوړه';
+
+  @override
+  String chatEvTitle(String from, String to) {
+    return 'د دې دندې سرلیک یې له «$from» څخه «$to» ته بدل کړ';
+  }
+
+  @override
+  String chatEvStatus(String from, String to) {
+    return 'حالت یې له $from څخه $to ته بدل کړ';
+  }
+
+  @override
+  String chatEvPriority(String from, String to) {
+    return 'لومړیتوب یې له $from څخه $to ته بدل کړ';
+  }
+
+  @override
+  String chatEvStartDate(String from, String to) {
+    return 'د پیل نېټه یې له $from څخه $to ته بدله کړه';
+  }
+
+  @override
+  String chatEvDueDate(String from, String to) {
+    return 'د پای نېټه یې له $from څخه $to ته بدله کړه';
+  }
+
+  @override
+  String chatEvEstimate(String from, String to) {
+    return 'اټکل یې له $from څخه $to ته بدل کړ';
+  }
+
+  @override
+  String chatEvSubtask(String title) {
+    return 'فرعي دنده «$title» یې اضافه کړه';
+  }
+
+  @override
+  String get chatEvOther => 'یو ډګر یې بدل کړ';
+
+  @override
+  String get chatActorAutomation => 'یو اتومات عمل';
+
+  @override
+  String get chatActorForm => 'یو فورمه';
+
+  @override
+  String get chatActorImport => 'یو واردول';
+
+  @override
+  String get chatActorSystem => 'سیستم';
+
+  @override
+  String chatTitleCount(int count) {
+    return 'چت ($count)';
+  }
 }

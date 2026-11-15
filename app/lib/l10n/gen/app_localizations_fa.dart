@@ -8282,4 +8282,72 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get grpCImpCuFetching => 'در حال دریافت از ClickUp…';
+
+  @override
+  String get chatTitle => 'گفتگو';
+
+  @override
+  String get chatEmpty =>
+      'هنوز پیامی نیست — تغییرها و گفتگوها اینجا نشان داده می‌شوند';
+
+  @override
+  String get chatHideChanges => 'پنهان کردن تغییرها';
+
+  @override
+  String get chatLoadEarlier => 'بارگذاری پیام‌های قبلی';
+
+  @override
+  String chatEvTitle(String from, String to) {
+    return 'عنوان این وظیفه را از «$from» به «$to» تغییر داد';
+  }
+
+  @override
+  String chatEvStatus(String from, String to) {
+    return 'وضعیت را از $from به $to تغییر داد';
+  }
+
+  @override
+  String chatEvPriority(String from, String to) {
+    return 'اولویت را از $from به $to تغییر داد';
+  }
+
+  @override
+  String chatEvStartDate(String from, String to) {
+    return 'تاریخ شروع را از $from به $to تغییر داد';
+  }
+
+  @override
+  String chatEvDueDate(String from, String to) {
+    return 'تاریخ سررسید را از $from به $to تغییر داد';
+  }
+
+  @override
+  String chatEvEstimate(String from, String to) {
+    return 'برآورد را از $from به $to تغییر داد';
+  }
+
+  @override
+  String chatEvSubtask(String title) {
+    return 'زیروظیفه «$title» را اضافه کرد';
+  }
+
+  @override
+  String get chatEvOther => 'یک فیلد را تغییر داد';
+
+  @override
+  String get chatActorAutomation => 'یک اتوماسیون';
+
+  @override
+  String get chatActorForm => 'یک فرم';
+
+  @override
+  String get chatActorImport => 'یک درون‌ریزی';
+
+  @override
+  String get chatActorSystem => 'سیستم';
+
+  @override
+  String chatTitleCount(int count) {
+    return 'گفتگو ($count)';
+  }
 }

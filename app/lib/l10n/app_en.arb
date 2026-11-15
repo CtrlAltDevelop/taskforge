@@ -4867,5 +4867,62 @@
   "grpCImpCuLoad": "Show my lists",
   "grpCImpCuPick": "Choose the lists to import",
   "grpCImpCuFetch": "Fetch selected lists",
-  "grpCImpCuFetching": "Fetching from ClickUp…"
+  "grpCImpCuFetching": "Fetching from ClickUp…",
+  "chatTitle": "Chat",
+  "chatEmpty": "No messages yet — changes and talk will show up here",
+  "chatHideChanges": "Hide changes",
+  "chatLoadEarlier": "Load earlier messages",
+  "chatEvTitle": "renamed this task from “{from}” to “{to}”",
+  "@chatEvTitle": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvStatus": "changed status from {from} to {to}",
+  "@chatEvStatus": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvPriority": "changed priority from {from} to {to}",
+  "@chatEvPriority": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvStartDate": "changed the start date from {from} to {to}",
+  "@chatEvStartDate": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvDueDate": "changed the due date from {from} to {to}",
+  "@chatEvDueDate": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvEstimate": "changed the estimate from {from} to {to}",
+  "@chatEvEstimate": {
+    "placeholders": {
+      "from": { "type": "String" }, "to": { "type": "String" }
+    }
+  },
+  "chatEvSubtask": "added the subtask “{title}”",
+  "@chatEvSubtask": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "chatEvOther": "changed a field",
+  "chatActorAutomation": "an automation",
+  "chatActorForm": "a form",
+  "chatActorImport": "an import",
+  "chatActorSystem": "the system",
+  "chatTitleCount": "Chat ({count})",
+  "@chatTitleCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
 }

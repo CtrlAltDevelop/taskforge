@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,67 @@ import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// Where a comment is on its way to the server.
 enum SendState { sent, sending, failed }
+
+/// What a system message in the chat says happened: who, which field, and the
+/// raw values (ids, wire values, dates; never display text). The sentence is
+/// written by the client, in the reader's language.
+@immutable
+class ChatEvent {
+  const ChatEvent({
+    required this.actorType,
+    this.actorId = '',
+    required this.field,
+    this.from,
+    this.to,
+  });
+
+  /// `user`, `automation`, `form` or `import`.
+  final String actorType;
+  final String actorId;
+  final String field;
+
+  /// A string, a number, a list of ids or null.
+  final Object? from;
+  final Object? to;
+
+  bool get byPerson => actorType == 'user';
+
+  /// Null for text that is not an event (a user message's empty string).
+  static ChatEvent? tryParse(String json) {
+    if (json.isEmpty) return null;
+    try {
+      final m = jsonDecode(json);
+      if (m is! Map<String, dynamic>) return null;
+      return ChatEvent(
+        actorType: '${m['actor_type'] ?? 'user'}',
+        actorId: '${m['actor_id'] ?? ''}',
+        field: '${m['field'] ?? ''}',
+        from: _frozen(m['from']),
+        to: _frozen(m['to']),
+      );
+    } on FormatException {
+      return null;
+    }
+  }
+
+  String toJson() => jsonEncode({
+    'actor_type': actorType,
+    'actor_id': actorId,
+    'field': field,
+    'from': from,
+    'to': to,
+  });
+
+  static Object? _frozen(Object? v) =>
+      v is List ? List<Object?>.unmodifiable(v) : v;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ChatEvent && other.toJson() == toJson();
+
+  @override
+  int get hashCode => toJson().hashCode;
+}
 
 /// One comment, or a reply (one level deep). [body] is the rich-text document
 /// as JSON, empty once the comment was removed ([deleted]).
@@ -25,6 +87,8 @@ class Comment {
     this.reactions = const {},
     this.editCount = 0,
     this.sendState = SendState.sent,
+    this.kind = 'user',
+    this.event,
   });
 
   final String id;
@@ -46,6 +110,11 @@ class Comment {
   final int editCount;
   final SendState sendState;
 
+  /// `user` or `system` (a change to the task, written by the server).
+  final String kind;
+  final ChatEvent? event;
+
+  bool get isSystem => kind == 'system';
   bool get isReply => parentId.isNotEmpty;
   bool get edited => editedAt != null;
   bool get isLocal => sendState != SendState.sent;
@@ -74,6 +143,8 @@ class Comment {
     reactions: reactions,
     editCount: editCount,
     sendState: sendState ?? this.sendState,
+    kind: kind,
+    event: event,
   );
 }
 

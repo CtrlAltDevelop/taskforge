@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,14 +10,19 @@ import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart'
     show UploadSource;
 import 'package:taskforge/features/attachments/presentation/comment_attachments.dart';
+import 'package:taskforge/features/audit/presentation/activity_section.dart';
+import 'package:taskforge/features/comments/application/chat_prefs.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
+import 'package:taskforge/features/comments/domain/chat_sentence.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
+import 'package:taskforge/features/comments/presentation/chat_system_line.dart';
 import 'package:taskforge/features/comments/presentation/comment_composer.dart';
 import 'package:taskforge/features/comments/presentation/comment_dialogs.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 String _two(int n) => n.toString().padLeft(2, '0');
@@ -72,6 +79,22 @@ class CommentsSection extends ConsumerStatefulWidget {
 class _CommentsSectionState extends ConsumerState<CommentsSection> {
   String? _replyingTo;
   String? _editing;
+  Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    // Relative times ("5 min ago") move on while the chat is open.
+    _tick = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    super.dispose();
+  }
 
   TaskRef get _ref => (project: widget.projectId, task: widget.taskId);
 
@@ -93,6 +116,38 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       }
     }
     return context.l10n.grpBSomeone;
+  }
+
+  String _statusName(String id) {
+    final workflow = ref.read(workflowProvider(widget.projectId)).value;
+    for (final s in workflow?.statuses ?? const []) {
+      if (s.id == id) return s.name;
+    }
+    return context.l10n.grpRMnDeletedStatus;
+  }
+
+  Widget _systemLine(Comment c, DateTime now, String me) {
+    final event = c.event;
+    final l10n = context.l10n;
+    if (event == null) return const SizedBox.shrink();
+    final actor = event.byPerson
+        ? _nameOf(event.actorId)
+        : chatNonPersonActor(event.actorType, l10n);
+    return ChatSystemLine(
+      key: Key('system-${c.id}'),
+      comment: c,
+      now: now,
+      actor: actor,
+      isMe: event.byPerson && event.actorId == me,
+      prefs: context.localePrefs,
+      phrase: chatPhrase(
+        event,
+        l: l10n,
+        userName: _nameOf,
+        statusName: _statusName,
+        prefs: context.localePrefs,
+      ),
+    );
   }
 
   /// Sends and says what went wrong. A mention of somebody who cannot see the
@@ -187,19 +242,26 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
         !widget.archived && (canModerate || permissions.can(Perm.taskUpdate));
     final canSubtask = !widget.archived && permissions.can(Perm.taskCreate);
 
-    final top = [
+    final hideChanges = ref.watch(hideChatChangesProvider);
+    ref.watch(workflowProvider(widget.projectId)); // status names
+    final talk = [
       for (final c in state.comments)
+        if (!c.isSystem) c,
+    ];
+    final shown = hideChanges ? talk : state.comments;
+    final top = [
+      for (final c in shown)
         if (!c.isReply || !state.comments.any((p) => p.id == c.parentId)) c,
     ];
     final replies = <String, List<Comment>>{};
-    for (final c in state.comments) {
+    for (final c in shown) {
       if (c.isReply) (replies[c.parentId] ??= []).add(c);
     }
     final pinned = [
       for (final c in top)
         if (c.pinned && !c.deleted) c,
     ];
-    final now = DateTime.now();
+    final now = ref.watch(chatNowProvider)();
     var lastDay = '';
 
     Widget tile(Comment c, {bool reply = false}) => _CommentTile(
@@ -248,11 +310,25 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
       key: const Key('comments'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          state.comments.isEmpty
-              ? context.l10n.grpBComments
-              : context.l10n.grpBCommentsCount(state.comments.length),
-          style: Theme.of(context).textTheme.titleSmall,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                talk.isEmpty
+                    ? context.l10n.chatTitle
+                    : context.l10n.chatTitleCount(talk.length),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+            FilterChip(
+              key: const Key('hide-changes'),
+              visualDensity: VisualDensity.compact,
+              label: Text(context.l10n.chatHideChanges),
+              selected: hideChanges,
+              onSelected: (v) =>
+                  ref.read(hideChatChangesProvider.notifier).set(hidden: v),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         if (state.error != null && state.comments.isEmpty)
@@ -270,13 +346,10 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
           )
         else if (state.loading && state.comments.isEmpty)
           const _Skeleton(key: Key('comments-loading'))
-        else if (state.comments.isEmpty)
+        else if (shown.isEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              context.l10n.grpBNoComments,
-              key: const Key('no-comments'),
-            ),
+            child: Text(context.l10n.chatEmpty, key: const Key('no-comments')),
           ),
         if (state.hasEarlier)
           Align(
@@ -287,7 +360,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
               child: Text(
                 state.loadingEarlier
                     ? context.l10n.grpBLoading
-                    : context.l10n.grpBLoadEarlier,
+                    : context.l10n.chatLoadEarlier,
               ),
             ),
           ),
@@ -331,27 +404,31 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ),
-          tile(c),
-          for (final r in replies[c.id] ?? const <Comment>[])
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 28),
-              child: tile(r, reply: true),
-            ),
-          if (_replyingTo == c.id)
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 28, top: 4),
-              child: CommentComposer(
-                key: const Key('reply-composer'),
-                task: _ref,
-                autofocus: true,
-                hint: context.l10n.grpBReplyHint,
-                sendLabel: context.l10n.grpBReply,
-                onCancel: () => setState(() => _replyingTo = null),
-                allowFiles: !widget.archived,
-                onSend: (body, _, files) =>
-                    _send(body, parentId: c.id, files: files),
+          if (c.isSystem)
+            _systemLine(c, now, me)
+          else ...[
+            tile(c),
+            for (final r in replies[c.id] ?? const <Comment>[])
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 28),
+                child: tile(r, reply: true),
               ),
-            ),
+            if (_replyingTo == c.id)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 28, top: 4),
+                child: CommentComposer(
+                  key: const Key('reply-composer'),
+                  task: _ref,
+                  autofocus: true,
+                  hint: context.l10n.grpBReplyHint,
+                  sendLabel: context.l10n.grpBReply,
+                  onCancel: () => setState(() => _replyingTo = null),
+                  allowFiles: !widget.archived,
+                  onSend: (body, _, files) =>
+                      _send(body, parentId: c.id, files: files),
+                ),
+              ),
+          ],
         ],
         const SizedBox(height: 12),
         if (canComment)
@@ -369,6 +446,13 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
             key: const Key('comments-readonly'),
             style: Theme.of(context).textTheme.bodySmall,
           ),
+        // The complete record, including what happened before the chat showed
+        // changes.
+        ActivitySection(
+          key: ValueKey('activity-${widget.taskId}'),
+          projectId: widget.projectId,
+          taskId: widget.taskId,
+        ),
       ],
     );
   }

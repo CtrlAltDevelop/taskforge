@@ -1,6 +1,6 @@
 # Phase 43 — Chat spaces (channels, groups, direct messages)
 
-**Status:** TODO
+**Status:** Backend done and tested (72 chat tests, SQLite only). Flutter Chat area not started (waiting for a working Flutter SDK). See backend/docs/chat.md.
 
 ## Feature
 A **Chat** area where the team talks outside any one task: every workspace and every project gets a default channel, and members can create more channels, private groups and direct messages, with `@` notifications.

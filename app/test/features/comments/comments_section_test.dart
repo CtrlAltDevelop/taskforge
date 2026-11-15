@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
@@ -49,6 +50,7 @@ Future<Opened> open(
   bool private = false,
   FakeCommentsClient? client,
   int pageSize = 50,
+  List<Override> overrides = const [],
 }) async {
   final fake = (client ?? FakeCommentsClient(initial: comments))
     ..pageSize = pageSize;
@@ -60,6 +62,7 @@ Future<Opened> open(
     tasks: server,
     workflows: FakeWorkflowsClient(defaultWorkflow()),
     comments: fake,
+    overrides: overrides,
     size: const Size(1400, 2000), // the files section sits above the comments
   );
   await pumped.go(tester, '/projects/p1');
@@ -107,7 +110,7 @@ void main() {
     );
 
     expect(find.byKey(const Key('comments')), findsOneWidget);
-    expect(find.text('Comments (2)'), findsOneWidget);
+    expect(find.text('Chat (2)'), findsOneWidget);
     expect(find.byKey(const Key('day-Yesterday')), findsOneWidget);
     expect(find.byKey(const Key('day-Today')), findsOneWidget);
     expect(
@@ -154,7 +157,7 @@ void main() {
     expect(find.byKey(const Key('sending-local-1')), findsNothing);
     expect(fake.created.single.parentId, '');
     expect(plainTextOf(fake.created.single.body), 'Looks good');
-    expect(find.text('Comments (1)'), findsOneWidget);
+    expect(find.text('Chat (1)'), findsOneWidget);
     expect(
       tester
           .widget<TextField>(find.byKey(const Key('comment-input')))
@@ -182,7 +185,7 @@ void main() {
 
     expect(find.byKey(const Key('failed-local-1')), findsNothing);
     expect(fake.created, hasLength(2));
-    expect(find.text('Comments (1)'), findsOneWidget);
+    expect(find.text('Chat (1)'), findsOneWidget);
 
     fake.failNext = const CommentException(CommentFailure.network);
     await type(tester, 'Again');
@@ -253,7 +256,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(fake.created.last.grant, isTrue);
-      expect(find.text('Comments (1)'), findsOneWidget);
+      expect(find.text('Chat (1)'), findsOneWidget);
       // Posted, so the box is empty: another send cannot post it twice.
       expect(
         tester
@@ -284,7 +287,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(fake.created, hasLength(1)); // nothing was sent again
-      expect(find.text('Comments (0)'), findsNothing);
+      expect(find.text('Chat (0)'), findsNothing);
     },
   );
 
@@ -501,7 +504,7 @@ void main() {
     final fake = FakeCommentsClient(initial: all);
     await open(tester, client: fake, pageSize: 2);
 
-    expect(find.text('Comments (2)'), findsOneWidget);
+    expect(find.text('Chat (2)'), findsOneWidget);
     expect(find.byKey(const Key('load-earlier')), findsOneWidget);
 
     await tester.ensureVisible(find.byKey(const Key('load-earlier')));
@@ -509,13 +512,13 @@ void main() {
     await tester.tap(find.byKey(const Key('load-earlier')));
     await tester.pumpAndSettle();
 
-    expect(find.text('Comments (4)'), findsOneWidget);
+    expect(find.text('Chat (4)'), findsOneWidget);
     expect(fake.lists.last, isNotEmpty);
     await tester.ensureVisible(find.byKey(const Key('load-earlier')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('load-earlier')));
     await tester.pumpAndSettle();
-    expect(find.text('Comments (5)'), findsOneWidget);
+    expect(find.text('Chat (5)'), findsOneWidget);
     expect(find.byKey(const Key('load-earlier')), findsNothing);
   });
 

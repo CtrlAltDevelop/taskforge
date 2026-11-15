@@ -2413,5 +2413,22 @@
   "grpCImpCuLoad": "زما لیستونه وښیه",
   "grpCImpCuPick": "هغه لیستونه وټاکئ چې واردول یې غواړئ",
   "grpCImpCuFetch": "ټاکل شوي لیستونه راوړه",
-  "grpCImpCuFetching": "له ClickUp څخه راوړل کیږي…"
+  "grpCImpCuFetching": "له ClickUp څخه راوړل کیږي…",
+  "chatTitle": "چت",
+  "chatEmpty": "تر اوسه هیڅ پیغام نشته — بدلونونه او خبرې به دلته ښکاره شي",
+  "chatHideChanges": "بدلونونه پټ کړه",
+  "chatLoadEarlier": "پخواني پیغامونه راوړه",
+  "chatEvTitle": "د دې دندې سرلیک یې له «{from}» څخه «{to}» ته بدل کړ",
+  "chatEvStatus": "حالت یې له {from} څخه {to} ته بدل کړ",
+  "chatEvPriority": "لومړیتوب یې له {from} څخه {to} ته بدل کړ",
+  "chatEvStartDate": "د پیل نېټه یې له {from} څخه {to} ته بدله کړه",
+  "chatEvDueDate": "د پای نېټه یې له {from} څخه {to} ته بدله کړه",
+  "chatEvEstimate": "اټکل یې له {from} څخه {to} ته بدل کړ",
+  "chatEvSubtask": "فرعي دنده «{title}» یې اضافه کړه",
+  "chatEvOther": "یو ډګر یې بدل کړ",
+  "chatActorAutomation": "یو اتومات عمل",
+  "chatActorForm": "یو فورمه",
+  "chatActorImport": "یو واردول",
+  "chatActorSystem": "سیستم",
+  "chatTitleCount": "چت ({count})"
 }

@@ -2413,5 +2413,22 @@
   "grpCImpCuLoad": "نمایش فهرست‌های من",
   "grpCImpCuPick": "فهرست‌هایی را که می‌خواهید وارد کنید انتخاب کنید",
   "grpCImpCuFetch": "دریافت فهرست‌های انتخاب‌شده",
-  "grpCImpCuFetching": "در حال دریافت از ClickUp…"
+  "grpCImpCuFetching": "در حال دریافت از ClickUp…",
+  "chatTitle": "گفتگو",
+  "chatEmpty": "هنوز پیامی نیست — تغییرها و گفتگوها اینجا نشان داده می‌شوند",
+  "chatHideChanges": "پنهان کردن تغییرها",
+  "chatLoadEarlier": "بارگذاری پیام‌های قبلی",
+  "chatEvTitle": "عنوان این وظیفه را از «{from}» به «{to}» تغییر داد",
+  "chatEvStatus": "وضعیت را از {from} به {to} تغییر داد",
+  "chatEvPriority": "اولویت را از {from} به {to} تغییر داد",
+  "chatEvStartDate": "تاریخ شروع را از {from} به {to} تغییر داد",
+  "chatEvDueDate": "تاریخ سررسید را از {from} به {to} تغییر داد",
+  "chatEvEstimate": "برآورد را از {from} به {to} تغییر داد",
+  "chatEvSubtask": "زیروظیفه «{title}» را اضافه کرد",
+  "chatEvOther": "یک فیلد را تغییر داد",
+  "chatActorAutomation": "یک اتوماسیون",
+  "chatActorForm": "یک فرم",
+  "chatActorImport": "یک درون‌ریزی",
+  "chatActorSystem": "سیستم",
+  "chatTitleCount": "گفتگو ({count})"
 }

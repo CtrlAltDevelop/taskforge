@@ -3,7 +3,6 @@ import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/offline/presentation/offline_banner.dart';
-import 'package:taskforge/features/audit/presentation/activity_section.dart';
 import 'package:taskforge/features/docs/presentation/related_docs_panel.dart';
 import 'package:taskforge/features/goals/presentation/contributes_panel.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_section.dart';
@@ -357,13 +356,6 @@ class TaskDetail extends ConsumerWidget {
           taskId: task.id,
           archived: project.isArchived,
           isPrivate: project.isPrivate,
-        ),
-        const SizedBox(height: 16),
-        const Divider(),
-        ActivitySection(
-          key: ValueKey('activity-${task.id}'),
-          projectId: project.id,
-          taskId: task.id,
         ),
       ],
     );

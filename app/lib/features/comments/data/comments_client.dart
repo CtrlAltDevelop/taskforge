@@ -129,6 +129,8 @@ Comment commentFromPb(pb.Comment c) => Comment(
     for (final r in c.reactions) r.emoji: List.unmodifiable(r.userIds),
   },
   editCount: c.editCount,
+  kind: c.kind == 'system' ? 'system' : 'user',
+  event: ChatEvent.tryParse(c.event),
 );
 
 class GrpcCommentsClient implements CommentsClient {

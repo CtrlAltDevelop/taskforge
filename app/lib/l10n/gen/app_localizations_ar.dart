@@ -8348,4 +8348,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get grpCImpCuFetching => 'جارٍ الجلب من ClickUp…';
+
+  @override
+  String get chatTitle => 'الدردشة';
+
+  @override
+  String get chatEmpty => 'لا توجد رسائل بعد — ستظهر هنا التغييرات والمحادثات';
+
+  @override
+  String get chatHideChanges => 'إخفاء التغييرات';
+
+  @override
+  String get chatLoadEarlier => 'تحميل الرسائل الأقدم';
+
+  @override
+  String chatEvTitle(String from, String to) {
+    return 'غيّر عنوان هذه المهمة من «$from» إلى «$to»';
+  }
+
+  @override
+  String chatEvStatus(String from, String to) {
+    return 'غيّر الحالة من $from إلى $to';
+  }
+
+  @override
+  String chatEvPriority(String from, String to) {
+    return 'غيّر الأولوية من $from إلى $to';
+  }
+
+  @override
+  String chatEvStartDate(String from, String to) {
+    return 'غيّر تاريخ البدء من $from إلى $to';
+  }
+
+  @override
+  String chatEvDueDate(String from, String to) {
+    return 'غيّر تاريخ الاستحقاق من $from إلى $to';
+  }
+
+  @override
+  String chatEvEstimate(String from, String to) {
+    return 'غيّر التقدير من $from إلى $to';
+  }
+
+  @override
+  String chatEvSubtask(String title) {
+    return 'أضاف المهمة الفرعية «$title»';
+  }
+
+  @override
+  String get chatEvOther => 'غيّر حقلًا';
+
+  @override
+  String get chatActorAutomation => 'عملية أتمتة';
+
+  @override
+  String get chatActorForm => 'نموذج';
+
+  @override
+  String get chatActorImport => 'عملية استيراد';
+
+  @override
+  String get chatActorSystem => 'النظام';
+
+  @override
+  String chatTitleCount(int count) {
+    return 'الدردشة ($count)';
+  }
 }
