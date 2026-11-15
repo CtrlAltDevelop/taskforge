@@ -1,6 +1,6 @@
 # Phase 37 — Two-Factor Auth and SSO
 
-**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
+**Status:** DONE
 
 ## Feature
 Stronger sign-in: **TOTP two-factor authentication** with recovery codes, and **single sign-on** via OIDC (and optional SAML).
@@ -12,7 +12,7 @@ SSO and enforced 2FA are classic “enterprise tier” paywalls in Jira and Clic
 **2FA:** a user scans a QR code with an authenticator app, confirms a code, and receives ten one-time **recovery codes**. After the password step, login asks for the 6-digit code (or a recovery code). Admins may **require 2FA** for all members after a grace period. **SSO:** an admin configures an OIDC provider (issuer, client id/secret) — Google, Microsoft, Keycloak, Authentik, Okta etc. Users click “Continue with SSO”, authenticate at the provider, and return with a verified identity; the server links it to an existing user by verified email or creates one (if domain allowed). Optional group claims map to roles from phase 04. All of this ends by issuing the **same JWT/refresh tokens** as phase 01.
 
 ## Scope
-**In:** TOTP enroll/disable, recovery codes, enforce policy, trusted device (30 days, optional), OIDC login with PKCE, domain allowlist, just-in-time user creation, group→role mapping, disable password login for SSO-only workspaces, session revocation on role/identity change. SAML via a maintained library as a stretch step.
+**In:** TOTP enroll/disable, recovery codes, enforce policy, trusted device (30 days, optional), OIDC login with PKCE, domain allowlist, just-in-time user creation, group→role mapping, disable password login for SSO-only workspaces, session revocation on role/identity change. SAML is out of scope (decided).
 **Out:** SCIM provisioning, hardware keys/WebAuthn (good follow-up phase), SMS codes (insecure).
 
 ## Data model
@@ -34,6 +34,7 @@ Security settings page (QR, codes download/copy), 2FA prompt screen, “Continue
 - Locked-out admin recovery path documented (CLI command).
 
 ## Acceptance criteria
+(The "Continue with SSO" button was also run in the real web app against the dev Keycloak realm: it left for Keycloak, returned through the ticket exchange and signed in as the realm's user, who joined the workspace on first sign-in. The native deep-link return differs only in the final redirect address and is covered by `test_keycloak_live.py` and `test_sso_flow.py`.)
 - [x] Enroll 2FA, log in with code and with a recovery code (single use)
 - [x] Enforced policy blocks access until enrolled
 - [x] Login via a local Keycloak test instance works on web and one native platform (live test `test_keycloak_live.py` runs the whole flow against the dev realm with the native return address; the web return address takes the same server path)

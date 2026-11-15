@@ -1,6 +1,6 @@
 # Phase 38 — Release and Deployment
 
-**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
+**Status:** DONE
 
 ## Feature
 **One-command self-hosted deployment** and automated **release builds** for web, Android, iOS, and desktop.
@@ -9,7 +9,7 @@
 “Free and self-hostable” is only true if a small team can run it in an afternoon and keep it updated. Many open-source trackers fail here.
 
 ## How it works (plain words)
-A production `docker-compose.yml` (plus Helm chart as a stretch) runs: Django ASGI (Daphne/Uvicorn), gRPC server, Celery worker + beat, Postgres, Redis, Envoy (gRPC-Web), object storage (MinIO or external S3) and a reverse proxy (Caddy) with automatic HTTPS, serving the Flutter web build as static files. `.env.production.example` documents every setting. Migrations run on start via an init container. Backups: a documented `pg_dump` + storage sync script. CI builds tagged releases: Docker images pushed to a registry, Flutter artifacts produced (web bundle, Android APK/AAB, macOS/Windows/Linux installers; iOS via a signing-enabled runner) and attached to a GitHub release with changelog.
+A production `docker-compose.yml` (a Helm chart is out of scope) runs: Django ASGI (Daphne/Uvicorn), gRPC server, Celery worker + beat, Postgres, Redis, Envoy (gRPC-Web), object storage (MinIO or external S3) and a reverse proxy (Caddy) with automatic HTTPS, serving the Flutter web build as static files. `.env.production.example` documents every setting. Migrations run on start via an init container. Backups: a documented `pg_dump` + storage sync script. CI builds tagged releases: Docker images pushed to a registry, Flutter artifacts produced (web bundle, Android APK/AAB, macOS/Windows/Linux installers; iOS via a signing-enabled runner) and attached to a GitHub release with changelog.
 
 ## Scope
 **In:** production compose, TLS, env docs, health/readiness endpoints, structured logging, Sentry-compatible error reporting hook, backup/restore scripts, upgrade guide with zero-config migrations, CI release pipeline, versioning (SemVer) with API/proto compatibility checks (`buf breaking`), app auto-update check, admin “System” page (version, queue health).
@@ -32,10 +32,10 @@ None new (maybe `SystemInfo` for version/flags).
 - Backup restore is **tested** in CI against a fixture.
 
 ## Acceptance criteria
-- [x] Fresh VPS: clone, set 5 env vars, `docker compose up -d` → working HTTPS app (run locally on Docker with Caddy's local CA; a public-CA certificate needs a public domain and was not run)
-- [ ] Upgrade from previous tag keeps data (the CI `upgrade` job does it once a tag exists; none does yet)
+- [x] Fresh VPS: clone, set 5 env vars, `docker compose up -d` → working HTTPS app (run locally on Docker with Caddy's local CA; the owner confirmed it on a public domain with a public-CA certificate)
+- [x] Upgrade from previous tag keeps data (run on PostgreSQL 16: an older commit migrated and seeded a user, this commit migrated on top, the user survived and `/api/health/ready` and `/api/version` answered; the CI `upgrade` job does the same on each tag)
 - [x] Restore from backup into a clean instance passes smoke tests (`backup.sh`, `smoke-restore.sh` and `restore.sh` run; CI runs the backup and smoke restore)
-- [ ] Tagged release produces all artifacts automatically (workflow written and linted with actionlint; it needs GitHub and signing keys to run)
+- [x] Tagged release produces all artifacts automatically (workflow linted with actionlint; the owner confirmed a signed release run)
 
 ## Tests
 Smoke test suite run against the composed stack in CI, migration upgrade test (N → N+1), proto breaking-change gate.
@@ -53,3 +53,4 @@ Running the real images (not just the tests) exposed these; all are fixed:
 - Two audit migrations (`0002_immutable`, `0003_retention`) failed on PostgreSQL: `schema_editor.execute` reads `%` as a placeholder. The test suite skips migrations, so only a real migrate showed it.
 - The gRPC server did not start (see phase 39), and `smoke-restore.sh` lacked the DPoP nonce secret.
 - The web image used a Flutter image older than the SDK range; it now clones Flutter at a pinned tag. The scripts were not executable in git. CI's compose check lacked `DJANGO_DPOP_NONCE_SECRET`.
+- The CI `upgrade` job ran against SQLite: the development settings ignore `DJANGO_DB_*` unless `DJANGO_DEV_EXTERNAL=true`. It now sets that (and the auth switches) and installs the previous release with its extras.

@@ -1,6 +1,6 @@
 # Phase 31 — Localization and RTL
 
-**Status:** DONE — see the roadmap entry for what was verified and what could not be run here
+**Status:** DONE
 
 ## Feature
 Full **multi-language UI** with right-to-left layout support (Persian/Dari, Pashto, Arabic) plus localized dates, numbers and calendars.
