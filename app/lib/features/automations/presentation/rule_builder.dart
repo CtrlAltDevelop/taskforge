@@ -209,6 +209,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
               children: [
                 if (_rule?.wasSwitchedOffByServer ?? false)
                   DisabledBanner(reason: _rule!.disabledReason),
+                const SizedBox(height: 12),
                 TextField(
                   key: const Key('rule-name'),
                   controller: _name,
@@ -219,6 +220,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                     border: const OutlineInputBorder(),
                   ),
                 ),
+                const SizedBox(height: 12),
                 _Section(
                   keyName: 'when',
                   label: context.l10n.grpGWhen,

@@ -301,25 +301,29 @@ class _Row extends StatelessWidget {
   final DateTime now;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-    key: Key('audit-row-${entry.id}'),
-    dense: true,
-    contentPadding: EdgeInsets.zero,
-    title: Text(
-      '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels, context.l10n)}',
-    ),
-    subtitle: Text(
-      '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
-    ),
-    trailing: entry.batchId.isEmpty
-        ? null
-        : Tooltip(
-            message: context.l10n.grpBBulkChange,
-            child: const Icon(Icons.layers, size: 16),
-          ),
-    onTap: () => showDialog<void>(
-      context: context,
-      builder: (_) => DiffDialog(entry: entry, labels: labels),
+  Widget build(BuildContext context) => Card(
+    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    clipBehavior: Clip.antiAlias,
+    child: ListTile(
+      key: Key('audit-row-${entry.id}'),
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels, context.l10n)}',
+      ),
+      subtitle: Text(
+        '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
+      ),
+      trailing: entry.batchId.isEmpty
+          ? null
+          : Tooltip(
+              message: context.l10n.grpBBulkChange,
+              child: const Icon(Icons.layers, size: 16),
+            ),
+      onTap: () => showDialog<void>(
+        context: context,
+        builder: (_) => DiffDialog(entry: entry, labels: labels),
+      ),
     ),
   );
 }

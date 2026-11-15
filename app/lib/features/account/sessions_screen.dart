@@ -148,55 +148,59 @@ class _SessionTile extends ConsumerWidget {
       if (session.ipAddress.isNotEmpty) session.ipAddress,
       if (session.fingerprintShort.isNotEmpty) '#${session.fingerprintShort}',
     ].join(' · ');
-    return ListTile(
-      key: Key('session-${session.id}'),
-      leading: _device(context),
-      title: Row(
-        children: [
-          Flexible(
-            child: Text(_title(context), overflow: TextOverflow.ellipsis),
-          ),
-          IconButton(
-            key: Key('rename-${session.id}'),
-            tooltip: l10n.devSessionRename,
-            icon: const Icon(Icons.edit_outlined, size: 18),
-            onPressed: () => _rename(context, ref),
-          ),
-        ],
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        key: Key('session-${session.id}'),
+        leading: _device(context),
+        title: Row(
+          children: [
+            Flexible(
+              child: Text(_title(context), overflow: TextOverflow.ellipsis),
+            ),
+            IconButton(
+              key: Key('rename-${session.id}'),
+              tooltip: l10n.devSessionRename,
+              icon: const Icon(Icons.edit_outlined, size: 18),
+              onPressed: () => _rename(context, ref),
+            ),
+          ],
+        ),
+        subtitle: Wrap(
+          spacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            if (session.current)
+              Chip(
+                key: const Key('chip-current'),
+                label: Text(l10n.grpIThisDevice),
+                visualDensity: VisualDensity.compact,
+              ),
+            if (session.newDevice)
+              Chip(
+                key: const Key('chip-new'),
+                label: Text(l10n.devSessionNew),
+                visualDensity: VisualDensity.compact,
+              ),
+            if (session.keyChanged)
+              Chip(
+                key: const Key('chip-key-changed'),
+                label: Text(l10n.devSessionKeyChanged),
+                visualDensity: VisualDensity.compact,
+              ),
+            if (details.isNotEmpty) Text(details),
+          ],
+        ),
+        trailing: session.current
+            ? null
+            : IconButton(
+                key: Key('revoke-${session.id}'),
+                tooltip: l10n.grpISignOutThis,
+                icon: const Icon(Icons.close),
+                onPressed: () => onRevoke(context, ref, [session.id]),
+              ),
       ),
-      subtitle: Wrap(
-        spacing: 8,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          if (session.current)
-            Chip(
-              key: const Key('chip-current'),
-              label: Text(l10n.grpIThisDevice),
-              visualDensity: VisualDensity.compact,
-            ),
-          if (session.newDevice)
-            Chip(
-              key: const Key('chip-new'),
-              label: Text(l10n.devSessionNew),
-              visualDensity: VisualDensity.compact,
-            ),
-          if (session.keyChanged)
-            Chip(
-              key: const Key('chip-key-changed'),
-              label: Text(l10n.devSessionKeyChanged),
-              visualDensity: VisualDensity.compact,
-            ),
-          if (details.isNotEmpty) Text(details),
-        ],
-      ),
-      trailing: session.current
-          ? null
-          : IconButton(
-              key: Key('revoke-${session.id}'),
-              tooltip: l10n.grpISignOutThis,
-              icon: const Icon(Icons.close),
-              onPressed: () => onRevoke(context, ref, [session.id]),
-            ),
     );
   }
 }

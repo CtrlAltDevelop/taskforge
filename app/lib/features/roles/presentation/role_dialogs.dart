@@ -61,6 +61,7 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
                   decoration: InputDecoration(labelText: context.l10n.grpEName),
                   validator: (v) => _validateName(context, v),
                 ),
+                const SizedBox(height: 12),
                 for (final area in widget.registry) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 12),

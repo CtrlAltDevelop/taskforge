@@ -34,21 +34,25 @@ class ArchivedProjectsScreen extends ConsumerWidget {
         AsyncData() => ListView(
           children: [
             for (final p in archived)
-              ListTile(
-                key: Key('archived-${p.id}'),
-                leading: ProjectAvatar(project: p),
-                title: Text(p.name),
-                subtitle: Text(p.key),
-                onTap: () => context.go('/projects/${p.id}'),
-                trailing: PermissionGate(
-                  permission: Perm.projectArchive,
-                  child: TextButton(
-                    key: Key('restore-${p.id}'),
-                    onPressed: () => runProjectAction(
-                      context,
-                      () => ref.read(projectsControllerProvider).restore(p),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('archived-${p.id}'),
+                  leading: ProjectAvatar(project: p),
+                  title: Text(p.name),
+                  subtitle: Text(p.key),
+                  onTap: () => context.go('/projects/${p.id}'),
+                  trailing: PermissionGate(
+                    permission: Perm.projectArchive,
+                    child: TextButton(
+                      key: Key('restore-${p.id}'),
+                      onPressed: () => runProjectAction(
+                        context,
+                        () => ref.read(projectsControllerProvider).restore(p),
+                      ),
+                      child: Text(context.l10n.grpHRestore),
                     ),
-                    child: Text(context.l10n.grpHRestore),
                   ),
                 ),
               ),

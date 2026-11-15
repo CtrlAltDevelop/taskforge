@@ -174,6 +174,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                   ? null
                   : (t) => t == null ? null : _setType(t),
             ),
+            const SizedBox(height: 12),
             if (_type.hasOptions) ...[
               const SizedBox(height: 16),
               Text(

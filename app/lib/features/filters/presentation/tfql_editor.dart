@@ -217,6 +217,7 @@ class TfqlEditorState extends State<TfqlEditor> {
         onTap: () =>
             widget.onCursor(controller.text, controller.selection.baseOffset),
       ),
+      const SizedBox(height: 12),
       if (widget.problems.isNotEmpty)
         Padding(
           padding: const EdgeInsets.only(top: 6),

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Brand seed; every colour in the app derives from it.
@@ -143,19 +142,27 @@ ThemeData buildAppTheme({
   );
 }
 
-/// Phones slide pages along the x axis (shared axis); larger screens, where
-/// the sidebar stays put, cross-fade the content (fade through).
+/// Route changes fade (opacity only) on every platform.
+class _FadePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _FadePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => FadeTransition(opacity: animation, child: child);
+}
+
 const _pageTransitions = PageTransitionsTheme(
   builders: {
-    TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-      transitionType: SharedAxisTransitionType.horizontal,
-    ),
-    TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
-      transitionType: SharedAxisTransitionType.horizontal,
-    ),
-    TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
-    TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
-    TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
-    TargetPlatform.fuchsia: FadeThroughPageTransitionsBuilder(),
+    TargetPlatform.android: _FadePageTransitionsBuilder(),
+    TargetPlatform.iOS: _FadePageTransitionsBuilder(),
+    TargetPlatform.macOS: _FadePageTransitionsBuilder(),
+    TargetPlatform.windows: _FadePageTransitionsBuilder(),
+    TargetPlatform.linux: _FadePageTransitionsBuilder(),
+    TargetPlatform.fuchsia: _FadePageTransitionsBuilder(),
   },
 );

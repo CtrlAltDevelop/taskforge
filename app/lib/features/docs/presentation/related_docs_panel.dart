@@ -95,27 +95,31 @@ class RelatedDocsPanel extends ConsumerWidget {
         if (docs.isEmpty)
           Text(context.l10n.grpJNoPagesYet, style: theme.textTheme.bodySmall),
         for (final r in docs)
-          ListTile(
-            key: Key('related-doc-${r.doc.id}'),
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Text(r.doc.icon.isEmpty ? '📄' : r.doc.icon),
-            title: Text(r.doc.labelIn(context.l10n)),
-            subtitle: Text(
-              r.kind == 'link'
-                  ? context.l10n.grpJLinked
-                  : context.l10n.grpJEmbedded,
-            ),
-            trailing: canEdit && r.kind == 'link'
-                ? IconButton(
-                    key: Key('unlink-doc-${r.doc.id}'),
-                    tooltip: context.l10n.grpJUnlink,
-                    icon: const Icon(Icons.link_off, size: 18),
-                    onPressed: () => _unlink(context, ref, r.doc.id),
-                  )
-                : null,
-            onTap: () => context.go(
-              '/docs/${r.doc.id}${r.doc.projectId.isEmpty ? '' : '?project=${r.doc.projectId}'}',
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              key: Key('related-doc-${r.doc.id}'),
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              leading: Text(r.doc.icon.isEmpty ? '📄' : r.doc.icon),
+              title: Text(r.doc.labelIn(context.l10n)),
+              subtitle: Text(
+                r.kind == 'link'
+                    ? context.l10n.grpJLinked
+                    : context.l10n.grpJEmbedded,
+              ),
+              trailing: canEdit && r.kind == 'link'
+                  ? IconButton(
+                      key: Key('unlink-doc-${r.doc.id}'),
+                      tooltip: context.l10n.grpJUnlink,
+                      icon: const Icon(Icons.link_off, size: 18),
+                      onPressed: () => _unlink(context, ref, r.doc.id),
+                    )
+                  : null,
+              onTap: () => context.go(
+                '/docs/${r.doc.id}${r.doc.projectId.isEmpty ? '' : '?project=${r.doc.projectId}'}',
+              ),
             ),
           ),
       ],

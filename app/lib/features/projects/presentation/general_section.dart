@@ -106,6 +106,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             context.l10n.grpHGeneral,
             style: Theme.of(context).textTheme.titleLarge,
           ),
+          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-name'),
             controller: _name,

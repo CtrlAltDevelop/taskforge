@@ -144,6 +144,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 decoration: InputDecoration(labelText: context.l10n.grpITitle),
                 onChanged: (v) => setState(() => _w = _w.copyWith(title: v)),
               ),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 12,
                 runSpacing: 8,
@@ -214,6 +215,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 ],
               ),
               if (_w.kind == WidgetKind.burndown) _sprintPicker(project),
+              const SizedBox(height: 12),
               if (_w.kind != WidgetKind.burndown)
                 TextField(
                   key: const Key('widget-tfql'),

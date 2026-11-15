@@ -555,6 +555,7 @@ class _QuestionDialogState extends State<_QuestionDialog> {
               value: _required || isTitle,
               onChanged: isTitle ? null : (v) => setState(() => _required = v),
             ),
+            const SizedBox(height: 12),
             if (widget.question.kind == QuestionKind.file)
               DropdownButtonFormField<int>(
                 key: const Key('question-max-files'),

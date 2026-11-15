@@ -279,6 +279,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
               ],
               onChanged: _busy ? null : (k) => setState(() => _kind = k!),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('link-search'),
               decoration: InputDecoration(

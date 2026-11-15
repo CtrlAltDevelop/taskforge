@@ -177,58 +177,62 @@ class FormsScreen extends ConsumerWidget {
                 child: Text(context.l10n.formsEmpty),
               ),
             for (final f in rows)
-              ListTile(
-                key: Key('form-${f.id}'),
-                leading: const Icon(Icons.dynamic_form_outlined),
-                title: Text(f.name),
-                subtitle: Text(
-                  [
-                    projectName(f.projectId),
-                    context.l10n.formsSubmissionCount(f.submissionCount),
-                    if (f.problem.isNotEmpty) f.problem,
-                  ].where((s) => s.isNotEmpty).join(' · '),
-                ),
-                onTap: () => _pick(context, ref, f, _Action.edit),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Switch(
-                      key: Key('enable-${f.id}'),
-                      value: f.enabled,
-                      onChanged: (on) => _run(context, ref, (ws) async {
-                        await ref
-                            .read(formsClientProvider)
-                            .setEnabled(ws, f, enabled: on);
-                        return null;
-                      }),
-                    ),
-                    PopupMenuButton<_Action>(
-                      key: Key('menu-${f.id}'),
-                      onSelected: (a) => _pick(context, ref, f, a),
-                      itemBuilder: (c) => [
-                        PopupMenuItem(
-                          value: _Action.copy,
-                          child: Text(c.l10n.formsCopyLink),
-                        ),
-                        PopupMenuItem(
-                          value: _Action.submissions,
-                          child: Text(c.l10n.formsSubmissions),
-                        ),
-                        PopupMenuItem(
-                          value: _Action.edit,
-                          child: Text(c.l10n.formsEdit),
-                        ),
-                        PopupMenuItem(
-                          value: _Action.rotate,
-                          child: Text(c.l10n.formsRotateLink),
-                        ),
-                        PopupMenuItem(
-                          value: _Action.delete,
-                          child: Text(c.l10n.formsDelete),
-                        ),
-                      ],
-                    ),
-                  ],
+              Card(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('form-${f.id}'),
+                  leading: const Icon(Icons.dynamic_form_outlined),
+                  title: Text(f.name),
+                  subtitle: Text(
+                    [
+                      projectName(f.projectId),
+                      context.l10n.formsSubmissionCount(f.submissionCount),
+                      if (f.problem.isNotEmpty) f.problem,
+                    ].where((s) => s.isNotEmpty).join(' · '),
+                  ),
+                  onTap: () => _pick(context, ref, f, _Action.edit),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Switch(
+                        key: Key('enable-${f.id}'),
+                        value: f.enabled,
+                        onChanged: (on) => _run(context, ref, (ws) async {
+                          await ref
+                              .read(formsClientProvider)
+                              .setEnabled(ws, f, enabled: on);
+                          return null;
+                        }),
+                      ),
+                      PopupMenuButton<_Action>(
+                        key: Key('menu-${f.id}'),
+                        onSelected: (a) => _pick(context, ref, f, a),
+                        itemBuilder: (c) => [
+                          PopupMenuItem(
+                            value: _Action.copy,
+                            child: Text(c.l10n.formsCopyLink),
+                          ),
+                          PopupMenuItem(
+                            value: _Action.submissions,
+                            child: Text(c.l10n.formsSubmissions),
+                          ),
+                          PopupMenuItem(
+                            value: _Action.edit,
+                            child: Text(c.l10n.formsEdit),
+                          ),
+                          PopupMenuItem(
+                            value: _Action.rotate,
+                            child: Text(c.l10n.formsRotateLink),
+                          ),
+                          PopupMenuItem(
+                            value: _Action.delete,
+                            child: Text(c.l10n.formsDelete),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
           ],

@@ -474,6 +474,7 @@ class _ShareDialogState extends State<_ShareDialog> {
           maxLength: 80,
           decoration: InputDecoration(labelText: context.l10n.grpCDashName),
         ),
+        const SizedBox(height: 12),
         RadioGroup<d.DashVisibility>(
           groupValue: _visibility,
           onChanged: (x) => setState(() => _visibility = x ?? _visibility),

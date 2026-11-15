@@ -131,19 +131,25 @@ class _Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final e = line.entry;
-    return ListTile(
-      key: Key('activity-${e.id}'),
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        e.actorType == 'user' ? Icons.person_outline : Icons.smart_toy_outlined,
-        size: 18,
-      ),
-      title: Text(
-        '${e.whoIn(context.l10n)} ${describeEntry(e, labels, context.l10n)}',
-      ),
-      subtitle: Text(
-        relativeTime(now, e.at, context.l10n, context.localePrefs),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        key: Key('activity-${e.id}'),
+        dense: true,
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          e.actorType == 'user'
+              ? Icons.person_outline
+              : Icons.smart_toy_outlined,
+          size: 18,
+        ),
+        title: Text(
+          '${e.whoIn(context.l10n)} ${describeEntry(e, labels, context.l10n)}',
+        ),
+        subtitle: Text(
+          relativeTime(now, e.at, context.l10n, context.localePrefs),
+        ),
       ),
     );
   }

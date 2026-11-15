@@ -91,17 +91,25 @@ class _Body extends ConsumerWidget {
     return ContentWidth(
       child: ListView(
         children: [
-          ListTile(
-            title: Text(t.sysServerVersion),
-            subtitle: Text(
-              info.commit.isEmpty
-                  ? info.version
-                  : '${info.version} (${info.commit.substring(0, info.commit.length.clamp(0, 8))})',
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              title: Text(t.sysServerVersion),
+              subtitle: Text(
+                info.commit.isEmpty
+                    ? info.version
+                    : '${info.version} (${info.commit.substring(0, info.commit.length.clamp(0, 8))})',
+              ),
             ),
           ),
-          ListTile(
-            title: Text(t.sysMinClient),
-            subtitle: Text(info.minClientVersion),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              title: Text(t.sysMinClient),
+              subtitle: Text(info.minClientVersion),
+            ),
           ),
           const Divider(),
           _StatusTile(
@@ -120,16 +128,20 @@ class _Body extends ConsumerWidget {
             good: info.eager || info.workers > 0,
           ),
           const Divider(),
-          ListTile(
-            key: const Key('system-backlog'),
-            title: Text(t.sysBacklog),
-            subtitle: Text(
-              info.backlogTotal == 0
-                  ? t.sysBacklogNone
-                  : info.backlog.entries
-                        .where((e) => e.value > 0)
-                        .map((e) => '${e.key}: ${e.value}')
-                        .join('\n'),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              key: const Key('system-backlog'),
+              title: Text(t.sysBacklog),
+              subtitle: Text(
+                info.backlogTotal == 0
+                    ? t.sysBacklogNone
+                    : info.backlog.entries
+                          .where((e) => e.value > 0)
+                          .map((e) => '${e.key}: ${e.value}')
+                          .join('\n'),
+              ),
             ),
           ),
           const Divider(),
@@ -164,12 +176,16 @@ class _StatusTile extends StatelessWidget {
   final bool good;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-    leading: Icon(
-      good ? Icons.check_circle_outline : Icons.error_outline,
-      color: good ? Colors.green : Theme.of(context).colorScheme.error,
+  Widget build(BuildContext context) => Card(
+    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    clipBehavior: Clip.antiAlias,
+    child: ListTile(
+      leading: Icon(
+        good ? Icons.check_circle_outline : Icons.error_outline,
+        color: good ? Colors.green : Theme.of(context).colorScheme.error,
+      ),
+      title: Text(label),
+      subtitle: Text(text),
     ),
-    title: Text(label),
-    subtitle: Text(text),
   );
 }

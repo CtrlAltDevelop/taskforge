@@ -35,14 +35,18 @@ class RecentlyDeleted extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           for (final w in deleted)
-            ListTile(
-              key: Key('deleted-${w.id}'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(w.name),
-              trailing: OutlinedButton(
-                key: Key('restore-${w.id}'),
-                onPressed: () => _restore(context, ref, w.id),
-                child: Text(context.l10n.grpJRestore),
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                key: Key('deleted-${w.id}'),
+                contentPadding: EdgeInsets.zero,
+                title: Text(w.name),
+                trailing: OutlinedButton(
+                  key: Key('restore-${w.id}'),
+                  onPressed: () => _restore(context, ref, w.id),
+                  child: Text(context.l10n.grpJRestore),
+                ),
               ),
             ),
         ],

@@ -89,26 +89,33 @@ class MembersSection extends ConsumerWidget {
           AsyncData(:final value) => Column(
             children: [
               for (final m in value)
-                ListTile(
-                  key: Key('project-member-${m.userId}'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(m.label),
-                  subtitle: m.displayName.isEmpty ? null : Text(m.email),
-                  trailing: allowed
-                      ? IconButton(
-                          key: Key('remove-project-member-${m.userId}'),
-                          tooltip: context.l10n.grpHRemove,
-                          icon: const Icon(Icons.person_remove),
-                          onPressed: canManage
-                              ? () => runProjectAction(
-                                  context,
-                                  () => ref
-                                      .read(projectsControllerProvider)
-                                      .removeMember(project.id, m.userId),
-                                )
-                              : null,
-                        )
-                      : null,
+                Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    key: Key('project-member-${m.userId}'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(m.label),
+                    subtitle: m.displayName.isEmpty ? null : Text(m.email),
+                    trailing: allowed
+                        ? IconButton(
+                            key: Key('remove-project-member-${m.userId}'),
+                            tooltip: context.l10n.grpHRemove,
+                            icon: const Icon(Icons.person_remove),
+                            onPressed: canManage
+                                ? () => runProjectAction(
+                                    context,
+                                    () => ref
+                                        .read(projectsControllerProvider)
+                                        .removeMember(project.id, m.userId),
+                                  )
+                                : null,
+                          )
+                        : null,
+                  ),
                 ),
             ],
           ),

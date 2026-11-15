@@ -182,6 +182,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 maxLength: 2000,
                 decoration: InputDecoration(labelText: t.goalsDescription),
               ),
+              const SizedBox(height: 12),
               OutlinedButton.icon(
                 key: const Key('goal-period'),
                 onPressed: _pickPeriod,
@@ -245,6 +246,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 ],
                 onChanged: (v) => setState(() => _weight = v ?? '1'),
               ),
+              const SizedBox(height: 12),
               if (editing)
                 DropdownButtonFormField<String>(
                   key: const Key('goal-status'),
@@ -375,16 +377,18 @@ class _KrDialogState extends State<_KrDialog> {
     );
   }
 
-  Widget _number(String key, TextEditingController c, String label) =>
-      TextField(
-        key: Key(key),
-        controller: c,
-        keyboardType: const TextInputType.numberWithOptions(
-          decimal: true,
-          signed: true,
-        ),
-        decoration: InputDecoration(labelText: label),
-      );
+  Widget _number(String key, TextEditingController c, String label) => Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: TextField(
+      key: Key(key),
+      controller: c,
+      keyboardType: const TextInputType.numberWithOptions(
+        decimal: true,
+        signed: true,
+      ),
+      decoration: InputDecoration(labelText: label),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -418,12 +422,13 @@ class _KrDialogState extends State<_KrDialog> {
                     ? null
                     : (v) => setState(() => _type = v ?? _type),
               ),
+              const SizedBox(height: 12),
               if (_type == KrType.number) ...[
                 _number('kr-start', _start, t.goalsKrStart),
                 _number('kr-target', _target, t.goalsKrTarget),
                 if (!editing) _number('kr-current', _current, t.goalsKrCurrent),
                 Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
                     t.goalsKrDirectionHint,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -446,6 +451,7 @@ class _KrDialogState extends State<_KrDialog> {
                     child: Text(t.goalsKrPicked(widget.kr!.taskIds.length)),
                   ),
               ],
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 key: const Key('kr-weight'),
                 initialValue: goalWeights.contains(_weight) ? _weight : '1',
@@ -583,6 +589,7 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
                 maxLength: 2000,
                 decoration: InputDecoration(labelText: t.goalsCheckInNote),
               ),
+              const SizedBox(height: 12),
               if (_error != null)
                 Text(
                   _error!,

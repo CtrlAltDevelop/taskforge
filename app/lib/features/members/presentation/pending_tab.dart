@@ -106,53 +106,57 @@ class _InvitationTile extends ConsumerWidget {
     final uses = i.maxUses == 0
         ? context.l10n.grpJUsesCount(i.uses)
         : context.l10n.grpJUsesOfMax(i.uses, i.maxUses);
-    return ListTile(
-      key: Key('invite-${i.id}'),
-      leading: Icon(i.isLink ? Icons.link : Icons.mail_outline),
-      title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
-      subtitle: Text(
-        '${i.isLink ? '$uses · ' : ''}'
-        '${context.l10n.grpJInvitationMeta(i.createdByName, context.localDateOrEmpty(i.expiresAt))}',
-      ),
-      trailing: Wrap(
-        spacing: 4,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          if (i.roleName.isNotEmpty)
-            Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
-          Chip(
-            key: Key('state-${i.id}'),
-            label: Text(stateLabel(i.state, context.l10n)),
-          ),
-          PermissionGate(
-            permission: Perm.memberInvite,
-            child: Wrap(
-              children: [
-                if (i.isLink && token.isNotEmpty && live)
-                  IconButton(
-                    key: Key('copy-${i.id}'),
-                    tooltip: context.l10n.grpJCopyLink,
-                    icon: const Icon(Icons.copy),
-                    onPressed: () => copyInviteLink(context, token),
-                  ),
-                if (!i.isLink && i.state != InviteState.revoked)
-                  IconButton(
-                    key: Key('resend-${i.id}'),
-                    tooltip: context.l10n.grpJResend,
-                    icon: const Icon(Icons.send),
-                    onPressed: () => _resend(context, ref),
-                  ),
-                if (live)
-                  IconButton(
-                    key: Key('revoke-${i.id}'),
-                    tooltip: context.l10n.grpJRevoke,
-                    icon: const Icon(Icons.block),
-                    onPressed: () => _revoke(context, ref),
-                  ),
-              ],
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        key: Key('invite-${i.id}'),
+        leading: Icon(i.isLink ? Icons.link : Icons.mail_outline),
+        title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
+        subtitle: Text(
+          '${i.isLink ? '$uses · ' : ''}'
+          '${context.l10n.grpJInvitationMeta(i.createdByName, context.localDateOrEmpty(i.expiresAt))}',
+        ),
+        trailing: Wrap(
+          spacing: 4,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            if (i.roleName.isNotEmpty)
+              Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
+            Chip(
+              key: Key('state-${i.id}'),
+              label: Text(stateLabel(i.state, context.l10n)),
             ),
-          ),
-        ],
+            PermissionGate(
+              permission: Perm.memberInvite,
+              child: Wrap(
+                children: [
+                  if (i.isLink && token.isNotEmpty && live)
+                    IconButton(
+                      key: Key('copy-${i.id}'),
+                      tooltip: context.l10n.grpJCopyLink,
+                      icon: const Icon(Icons.copy),
+                      onPressed: () => copyInviteLink(context, token),
+                    ),
+                  if (!i.isLink && i.state != InviteState.revoked)
+                    IconButton(
+                      key: Key('resend-${i.id}'),
+                      tooltip: context.l10n.grpJResend,
+                      icon: const Icon(Icons.send),
+                      onPressed: () => _resend(context, ref),
+                    ),
+                  if (live)
+                    IconButton(
+                      key: Key('revoke-${i.id}'),
+                      tooltip: context.l10n.grpJRevoke,
+                      icon: const Icon(Icons.block),
+                      onPressed: () => _revoke(context, ref),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

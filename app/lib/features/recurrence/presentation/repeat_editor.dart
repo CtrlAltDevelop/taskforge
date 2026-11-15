@@ -334,6 +334,7 @@ class _Monthly extends StatelessWidget {
           ],
         ),
       ),
+      const SizedBox(height: 12),
       if (draft.monthlyBy == MonthlyBy.dayOfMonth)
         DropdownButton<int>(
           key: const Key('repeat-month-day'),

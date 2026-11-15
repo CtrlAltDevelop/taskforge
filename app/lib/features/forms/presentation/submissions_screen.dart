@@ -61,30 +61,38 @@ class SubmissionsScreen extends ConsumerWidget {
             : ListView(
                 children: [
                   for (final s in data.submissions)
-                    ListTile(
-                      key: Key('submission-${s.id}'),
-                      leading: const Icon(Icons.inbox_outlined),
-                      title: Text(
-                        s.taskTitle.isEmpty
-                            ? context.l10n.formsTaskGone
-                            : '${s.taskKey} ${s.taskTitle}',
+                    Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
                       ),
-                      subtitle: Text(
-                        [
-                          s.reference,
-                          if (s.statusName.isNotEmpty) s.statusName,
-                          if (s.email.isNotEmpty) s.email,
-                          _when(context, s.at),
-                        ].join(' · '),
-                      ),
-                      onTap: s.taskTitle.isEmpty
-                          ? null
-                          : () => context.go('/projects/${s.projectId}'),
-                      trailing: IconButton(
-                        tooltip: context.l10n.formsCopyReference,
-                        icon: const Icon(Icons.copy),
-                        onPressed: () =>
-                            Clipboard.setData(ClipboardData(text: s.reference)),
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        key: Key('submission-${s.id}'),
+                        leading: const Icon(Icons.inbox_outlined),
+                        title: Text(
+                          s.taskTitle.isEmpty
+                              ? context.l10n.formsTaskGone
+                              : '${s.taskKey} ${s.taskTitle}',
+                        ),
+                        subtitle: Text(
+                          [
+                            s.reference,
+                            if (s.statusName.isNotEmpty) s.statusName,
+                            if (s.email.isNotEmpty) s.email,
+                            _when(context, s.at),
+                          ].join(' · '),
+                        ),
+                        onTap: s.taskTitle.isEmpty
+                            ? null
+                            : () => context.go('/projects/${s.projectId}'),
+                        trailing: IconButton(
+                          tooltip: context.l10n.formsCopyReference,
+                          icon: const Icon(Icons.copy),
+                          onPressed: () => Clipboard.setData(
+                            ClipboardData(text: s.reference),
+                          ),
+                        ),
                       ),
                     ),
                 ],

@@ -245,14 +245,21 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 for (final f in archived)
-                  ListTile(
-                    key: Key('archived-${f.id}'),
-                    leading: Icon(fieldTypeIcon(f.type)),
-                    title: Text(f.name),
-                    trailing: TextButton(
-                      key: Key('restore-${f.id}'),
-                      onPressed: () => _restore(f),
-                      child: Text(context.l10n.grpIRestore),
+                  Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      key: Key('archived-${f.id}'),
+                      leading: Icon(fieldTypeIcon(f.type)),
+                      title: Text(f.name),
+                      trailing: TextButton(
+                        key: Key('restore-${f.id}'),
+                        onPressed: () => _restore(f),
+                        child: Text(context.l10n.grpIRestore),
+                      ),
                     ),
                   ),
               ],

@@ -247,54 +247,58 @@ class _CellDialog extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final e in entries)
-              ListTile(
-                key: Key('cell-entry-${e.id}'),
-                dense: true,
-                title: Text(
-                  e.running
-                      ? context.l10n.grpARunning
-                      : durationText(e.durationSec),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('cell-entry-${e.id}'),
+                  dense: true,
+                  title: Text(
+                    e.running
+                        ? context.l10n.grpARunning
+                        : durationText(e.durationSec),
+                  ),
+                  subtitle: e.note.isEmpty ? null : Text(e.note),
+                  trailing: e.running
+                      ? null
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              key: Key('cell-edit-${e.id}'),
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: context.l10n.grpAEdit,
+                              onPressed: () async {
+                                final input = await askEntry(
+                                  context,
+                                  existing: e,
+                                );
+                                if (input == null || !context.mounted) return;
+                                await _run(
+                                  context,
+                                  () => actions.edit(
+                                    e.id,
+                                    startedAt: input.startedAt,
+                                    durationSec: input.durationSec,
+                                    note: input.note,
+                                    billable: input.billable,
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              key: Key('cell-delete-${e.id}'),
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: context.l10n.grpADelete,
+                              onPressed: () async {
+                                if (!await confirmDelete(context)) return;
+                                if (!context.mounted) return;
+                                await _run(context, () => actions.remove(e.id));
+                              },
+                            ),
+                          ],
+                        ),
                 ),
-                subtitle: e.note.isEmpty ? null : Text(e.note),
-                trailing: e.running
-                    ? null
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            key: Key('cell-edit-${e.id}'),
-                            icon: const Icon(Icons.edit_outlined),
-                            tooltip: context.l10n.grpAEdit,
-                            onPressed: () async {
-                              final input = await askEntry(
-                                context,
-                                existing: e,
-                              );
-                              if (input == null || !context.mounted) return;
-                              await _run(
-                                context,
-                                () => actions.edit(
-                                  e.id,
-                                  startedAt: input.startedAt,
-                                  durationSec: input.durationSec,
-                                  note: input.note,
-                                  billable: input.billable,
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            key: Key('cell-delete-${e.id}'),
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: context.l10n.grpADelete,
-                            onPressed: () async {
-                              if (!await confirmDelete(context)) return;
-                              if (!context.mounted) return;
-                              await _run(context, () => actions.remove(e.id));
-                            },
-                          ),
-                        ],
-                      ),
               ),
             TextButton.icon(
               key: const Key('cell-add'),
@@ -408,6 +412,7 @@ class _TotalsState extends ConsumerState<_Totals> {
             context.l10n.grpAProjectTotals,
             style: theme.textTheme.titleMedium,
           ),
+          const SizedBox(height: 12),
           DropdownButton<String>(
             key: const Key('totals-project'),
             isExpanded: true,
@@ -425,6 +430,7 @@ class _TotalsState extends ConsumerState<_Totals> {
             ],
             onChanged: (id) => setState(() => _project = id),
           ),
+          const SizedBox(height: 12),
           if (totals != null)
             switch (totals) {
               AsyncData(:final value) when value.isEmpty => Text(
@@ -434,17 +440,24 @@ class _TotalsState extends ConsumerState<_Totals> {
               AsyncData(:final value) => Column(
                 children: [
                   for (final t in value)
-                    ListTile(
-                      key: Key('total-${t.userId}'),
-                      dense: true,
-                      title: Text(t.name),
-                      trailing: Text(
-                        durationText(t.seconds) +
-                            (t.billable > 0
-                                ? context.l10n.grpABillableAmount(
-                                    durationText(t.billable),
-                                  )
-                                : ''),
+                    Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        key: Key('total-${t.userId}'),
+                        dense: true,
+                        title: Text(t.name),
+                        trailing: Text(
+                          durationText(t.seconds) +
+                              (t.billable > 0
+                                  ? context.l10n.grpABillableAmount(
+                                      durationText(t.billable),
+                                    )
+                                  : ''),
+                        ),
                       ),
                     ),
                 ],

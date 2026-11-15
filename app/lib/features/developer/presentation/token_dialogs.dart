@@ -141,6 +141,7 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
                 ],
                 onChanged: (v) => setState(() => _days = v ?? 0),
               ),
+              const SizedBox(height: 12),
               if (_error != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),

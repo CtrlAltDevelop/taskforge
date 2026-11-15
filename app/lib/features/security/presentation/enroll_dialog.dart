@@ -125,6 +125,7 @@ class _EnrollDialogState extends ConsumerState<_EnrollDialog> {
                       decoration: InputDecoration(labelText: t.secEnterCode),
                       onSubmitted: (_) => _busy ? null : _confirm(),
                     ),
+                    const SizedBox(height: 12),
                     if (_error != null) ...[
                       const SizedBox(height: 8),
                       Text(

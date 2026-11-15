@@ -414,16 +414,23 @@ class _Unplaced extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for (final task in data.unplaced)
-                ListTile(
-                  dense: true,
-                  title: Text('${task.displayId}  ${task.title}'),
-                  subtitle: Text(
-                    task.reason == UnplacedReason.noDates
-                        ? t.wlReasonNoDates
-                        : t.wlReasonNoEstimate,
+                Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
                   ),
-                  onTap: () => context.push(
-                    '/projects/${task.projectId}?task=${task.id}',
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    dense: true,
+                    title: Text('${task.displayId}  ${task.title}'),
+                    subtitle: Text(
+                      task.reason == UnplacedReason.noDates
+                          ? t.wlReasonNoDates
+                          : t.wlReasonNoEstimate,
+                    ),
+                    onTap: () => context.push(
+                      '/projects/${task.projectId}?task=${task.id}',
+                    ),
                   ),
                 ),
             ],

@@ -45,20 +45,24 @@ class DayTasks extends StatelessWidget {
       key: const Key('day-tasks'),
       children: [
         for (final task in onDay)
-          ListTile(
-            key: Key('agenda-${task.id}'),
-            leading: CircleAvatar(radius: 6, backgroundColor: colorOf(task)),
-            title: Text(task.title),
-            subtitle: Text(_span(context, task)),
-            onTap: () => onOpen(task),
-            trailing: canMove
-                ? IconButton(
-                    key: Key('reschedule-${task.id}'),
-                    tooltip: context.l10n.grpFReschedule,
-                    icon: const Icon(Icons.edit_calendar_outlined),
-                    onPressed: () => onReschedule(task),
-                  )
-                : null,
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              key: Key('agenda-${task.id}'),
+              leading: CircleAvatar(radius: 6, backgroundColor: colorOf(task)),
+              title: Text(task.title),
+              subtitle: Text(_span(context, task)),
+              onTap: () => onOpen(task),
+              trailing: canMove
+                  ? IconButton(
+                      key: Key('reschedule-${task.id}'),
+                      tooltip: context.l10n.grpFReschedule,
+                      icon: const Icon(Icons.edit_calendar_outlined),
+                      onPressed: () => onReschedule(task),
+                    )
+                  : null,
+            ),
           ),
         for (final ghost in ghostsToday) GhostTile(ghost: ghost),
       ],

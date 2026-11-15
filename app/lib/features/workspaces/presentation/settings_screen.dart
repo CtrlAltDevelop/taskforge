@@ -97,19 +97,33 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     ),
                   ),
                   if (ref.watch(permissionSetProvider).can(Perm.formManage))
-                    ListTile(
-                      key: const Key('open-forms'),
-                      leading: const Icon(Icons.dynamic_form_outlined),
-                      title: Text(context.l10n.formsTitle),
-                      subtitle: Text(context.l10n.formsSub),
-                      onTap: () => context.push('/forms'),
+                    Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        key: const Key('open-forms'),
+                        leading: const Icon(Icons.dynamic_form_outlined),
+                        title: Text(context.l10n.formsTitle),
+                        subtitle: Text(context.l10n.formsSub),
+                        onTap: () => context.push('/forms'),
+                      ),
                     ),
-                  ListTile(
-                    key: const Key('open-developer'),
-                    leading: const Icon(Icons.code),
-                    title: Text(context.l10n.devTitle),
-                    subtitle: Text(context.l10n.devSub),
-                    onTap: () => context.push('/developer'),
+                  Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      key: const Key('open-developer'),
+                      leading: const Icon(Icons.code),
+                      title: Text(context.l10n.devTitle),
+                      subtitle: Text(context.l10n.devSub),
+                      onTap: () => context.push('/developer'),
+                    ),
                   ),
                 ],
               ),
@@ -251,6 +265,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             ),
             validator: validateSlug,
           ),
+          const SizedBox(height: 12),
           if (_error != null) ...[
             const SizedBox(height: 16),
             Text(

@@ -264,6 +264,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpACapacityHoursOptional,
                 ),
               ),
+              const SizedBox(height: 12),
               if (clash.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),

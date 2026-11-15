@@ -72,12 +72,16 @@ class SecurityScreen extends ConsumerWidget {
             if (canManage) ...[
               const Divider(),
               if (policy != null) _PolicySection(policy: policy),
-              ListTile(
-                key: const Key('open-sso-setup'),
-                leading: const Icon(Icons.badge_outlined),
-                title: Text(t.ssoTitle),
-                subtitle: Text(t.ssoSub),
-                onTap: () => context.push('/settings/sso'),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: const Key('open-sso-setup'),
+                  leading: const Icon(Icons.badge_outlined),
+                  title: Text(t.ssoTitle),
+                  subtitle: Text(t.ssoSub),
+                  onTap: () => context.push('/settings/sso'),
+                ),
               ),
             ],
             const Divider(),
@@ -172,69 +176,85 @@ class _TwoFactorSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          leading: Icon(
-            status.enabled ? Icons.verified_user : Icons.shield_outlined,
-          ),
-          title: Text(t.secTwoStep),
-          subtitle: Text(status.enabled ? t.secOn : t.secOff),
-          trailing: status.enabled
-              ? OutlinedButton(
-                  key: const Key('sec-disable'),
-                  onPressed: () => _disable(context, ref),
-                  child: Text(t.secDisable),
-                )
-              : FilledButton(
-                  key: const Key('sec-enable'),
-                  onPressed: () async {
-                    final done = await showEnrollDialog(context);
-                    if (done == true) {
-                      ref.invalidate(secondFactorStatusProvider);
-                      ref.invalidate(securityPolicyProvider);
-                    }
-                  },
-                  child: Text(t.secEnable),
-                ),
-        ),
-        if (status.enabled) ...[
-          ListTile(
-            leading: const Icon(Icons.password),
-            title: Text(t.secRecoveryTitle),
-            subtitle: Text(t.secCodesLeft(status.unusedRecoveryCodes)),
-            trailing: TextButton(
-              key: const Key('sec-regenerate'),
-              onPressed: () => _regenerate(context, ref),
-              child: Text(t.secRegenerate),
+        Card(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          clipBehavior: Clip.antiAlias,
+          child: ListTile(
+            leading: Icon(
+              status.enabled ? Icons.verified_user : Icons.shield_outlined,
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.devices_other),
-            title: Text(t.secDevices),
-            subtitle: Text(
-              status.devices.isEmpty ? t.secNoDevices : t.secDevicesSub,
-            ),
-            trailing: status.devices.isEmpty
-                ? null
-                : TextButton(
-                    key: const Key('sec-forget-all'),
-                    onPressed: () => _revoke(context, ref, ''),
-                    child: Text(t.secForgetAll),
+            title: Text(t.secTwoStep),
+            subtitle: Text(status.enabled ? t.secOn : t.secOff),
+            trailing: status.enabled
+                ? OutlinedButton(
+                    key: const Key('sec-disable'),
+                    onPressed: () => _disable(context, ref),
+                    child: Text(t.secDisable),
+                  )
+                : FilledButton(
+                    key: const Key('sec-enable'),
+                    onPressed: () async {
+                      final done = await showEnrollDialog(context);
+                      if (done == true) {
+                        ref.invalidate(secondFactorStatusProvider);
+                        ref.invalidate(securityPolicyProvider);
+                      }
+                    },
+                    child: Text(t.secEnable),
                   ),
           ),
-          for (final d in status.devices)
-            ListTile(
-              contentPadding: const EdgeInsetsDirectional.only(
-                start: 72,
-                end: 16,
+        ),
+        if (status.enabled) ...[
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: const Icon(Icons.password),
+              title: Text(t.secRecoveryTitle),
+              subtitle: Text(t.secCodesLeft(status.unusedRecoveryCodes)),
+              trailing: TextButton(
+                key: const Key('sec-regenerate'),
+                onPressed: () => _regenerate(context, ref),
+                child: Text(t.secRegenerate),
               ),
-              title: Text(d.label.isEmpty ? t.secUnnamedDevice : d.label),
-              subtitle: d.expiresAt == null
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: const Icon(Icons.devices_other),
+              title: Text(t.secDevices),
+              subtitle: Text(
+                status.devices.isEmpty ? t.secNoDevices : t.secDevicesSub,
+              ),
+              trailing: status.devices.isEmpty
                   ? null
-                  : Text(t.secDeviceUntil(context.localDate(d.expiresAt!))),
-              trailing: IconButton(
-                tooltip: t.secForget,
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () => _revoke(context, ref, d.id),
+                  : TextButton(
+                      key: const Key('sec-forget-all'),
+                      onPressed: () => _revoke(context, ref, ''),
+                      child: Text(t.secForgetAll),
+                    ),
+            ),
+          ),
+          for (final d in status.devices)
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                contentPadding: const EdgeInsetsDirectional.only(
+                  start: 72,
+                  end: 16,
+                ),
+                title: Text(d.label.isEmpty ? t.secUnnamedDevice : d.label),
+                subtitle: d.expiresAt == null
+                    ? null
+                    : Text(t.secDeviceUntil(context.localDate(d.expiresAt!))),
+                trailing: IconButton(
+                  tooltip: t.secForget,
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: () => _revoke(context, ref, d.id),
+                ),
               ),
             ),
         ],
@@ -313,6 +333,7 @@ class _PolicySectionState extends ConsumerState<_PolicySection> {
             value: _require,
             onChanged: _busy ? null : (v) => setState(() => _require = v),
           ),
+          const SizedBox(height: 12),
           TextField(
             key: const Key('sec-grace'),
             controller: _grace,

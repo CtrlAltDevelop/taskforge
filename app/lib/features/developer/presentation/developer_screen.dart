@@ -144,28 +144,32 @@ class _TokensTab extends ConsumerWidget {
               child: Text(context.l10n.devTokensEmpty),
             ),
           for (final t in rows)
-            ListTile(
-              key: Key('token-${t.id}'),
-              leading: const Icon(Icons.key),
-              title: Text(t.name),
-              subtitle: Text(
-                [
-                  context.l10n.devTokenPrefix(t.prefix),
-                  _status(context, t),
-                  t.lastUsedAt.isEmpty
-                      ? context.l10n.devTokenNeverUsed
-                      : context.l10n.devTokenUsed(
-                          whenText(context, t.lastUsedAt),
-                        ),
-                ].join(' · '),
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                key: Key('token-${t.id}'),
+                leading: const Icon(Icons.key),
+                title: Text(t.name),
+                subtitle: Text(
+                  [
+                    context.l10n.devTokenPrefix(t.prefix),
+                    _status(context, t),
+                    t.lastUsedAt.isEmpty
+                        ? context.l10n.devTokenNeverUsed
+                        : context.l10n.devTokenUsed(
+                            whenText(context, t.lastUsedAt),
+                          ),
+                  ].join(' · '),
+                ),
+                trailing: t.isActive
+                    ? TextButton(
+                        key: Key('revoke-${t.id}'),
+                        onPressed: () => _revoke(context, ref, t),
+                        child: Text(context.l10n.devTokenRevoke),
+                      )
+                    : null,
               ),
-              trailing: t.isActive
-                  ? TextButton(
-                      key: Key('revoke-${t.id}'),
-                      onPressed: () => _revoke(context, ref, t),
-                      child: Text(context.l10n.devTokenRevoke),
-                    )
-                  : null,
             ),
         ],
       ),

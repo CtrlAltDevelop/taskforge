@@ -36,21 +36,27 @@ class PrivateProjectsScreen extends ConsumerWidget {
         AsyncData(:final value) => ListView(
           children: [
             for (final p in value)
-              ListTile(
-                key: Key('private-project-${p.id}'),
-                leading: ProjectAvatar(project: p),
-                title: Text(p.name),
-                subtitle: Text(
-                  context.l10n.grpHKeyAndMembers(p.key, p.memberCount),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('private-project-${p.id}'),
+                  leading: ProjectAvatar(project: p),
+                  title: Text(p.name),
+                  subtitle: Text(
+                    context.l10n.grpHKeyAndMembers(p.key, p.memberCount),
+                  ),
+                  onTap: p.canOpen
+                      ? () => context.go('/projects/${p.id}')
+                      : null,
+                  trailing: p.canOpen
+                      ? null
+                      : OutlinedButton(
+                          key: Key('add-me-${p.id}'),
+                          onPressed: () => _addMe(context, ref, p),
+                          child: Text(context.l10n.grpHAddMe),
+                        ),
                 ),
-                onTap: p.canOpen ? () => context.go('/projects/${p.id}') : null,
-                trailing: p.canOpen
-                    ? null
-                    : OutlinedButton(
-                        key: Key('add-me-${p.id}'),
-                        onPressed: () => _addMe(context, ref, p),
-                        child: Text(context.l10n.grpHAddMe),
-                      ),
               ),
           ],
         ),

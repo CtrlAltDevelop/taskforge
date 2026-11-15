@@ -568,6 +568,7 @@ class _HolidayDialogState extends State<_HolidayDialog> {
             maxLength: 120,
             decoration: InputDecoration(labelText: t.wlHolidayName),
           ),
+          const SizedBox(height: 12),
           OutlinedButton.icon(
             icon: const Icon(Icons.event),
             label: Text(context.localDate(_date)),

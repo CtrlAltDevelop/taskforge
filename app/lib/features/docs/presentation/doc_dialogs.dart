@@ -255,6 +255,7 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
                 _search(v);
               },
             ),
+            const SizedBox(height: 12),
             if (pasted != null)
               ListTile(
                 key: const Key('task-use-pasted'),

@@ -170,6 +170,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
             if (widget.onAdd != null)
               _AddField(columnKey: key, onAdd: widget.onAdd!),
           ],

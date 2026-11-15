@@ -369,6 +369,7 @@ class _SaveDialogState extends State<_SaveDialog> {
           decoration: InputDecoration(labelText: context.l10n.grpGName),
           onSubmitted: (_) => _done(),
         ),
+        const SizedBox(height: 12),
         if (widget.canShare)
           DropdownButton<String>(
             key: const Key('filter-visibility'),

@@ -113,15 +113,19 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTile(
-              title: Text(context.l10n.grpBHistory),
-              trailing: picked == null
-                  ? null
-                  : TextButton(
-                      key: const Key('revision-back'),
-                      onPressed: () => setState(() => _picked = null),
-                      child: Text(context.l10n.grpBAllRevisions),
-                    ),
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                title: Text(context.l10n.grpBHistory),
+                trailing: picked == null
+                    ? null
+                    : TextButton(
+                        key: const Key('revision-back'),
+                        onPressed: () => setState(() => _picked = null),
+                        child: Text(context.l10n.grpBAllRevisions),
+                      ),
+              ),
             ),
             const Divider(height: 1),
             Expanded(child: picked == null ? _list() : _preview(picked)),
@@ -143,19 +147,23 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
       AsyncData(:final value) => ListView(
         children: [
           for (final r in value)
-            ListTile(
-              key: Key('revision-${r.id}'),
-              dense: true,
-              title: Text(
-                r.title.isEmpty
-                    ? context.l10n.grpBVersionN(r.version)
-                    : r.title,
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                key: Key('revision-${r.id}'),
+                dense: true,
+                title: Text(
+                  r.title.isEmpty
+                      ? context.l10n.grpBVersionN(r.version)
+                      : r.title,
+                ),
+                subtitle: Text(
+                  '${_memberName(ref, r.authorId, context.l10n.grpBSomeone)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
+                ),
+                trailing: Text(context.l10n.grpBVersionShort(r.version)),
+                onTap: () => setState(() => _picked = r.id),
               ),
-              subtitle: Text(
-                '${_memberName(ref, r.authorId, context.l10n.grpBSomeone)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
-              ),
-              trailing: Text(context.l10n.grpBVersionShort(r.version)),
-              onTap: () => setState(() => _picked = r.id),
             ),
         ],
       ),

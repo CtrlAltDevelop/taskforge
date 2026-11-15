@@ -228,38 +228,46 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
             ),
             const SizedBox(height: 8),
             for (final m in shown)
-              ListTile(
-                key: Key('member-${m.userId}'),
-                onTap: () => _showProfile(workspace.id, m),
-                leading: CircleAvatar(child: Text(m.initials)),
-                title: Text(m.label),
-                subtitle: Text(
-                  '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
-                  '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    RolePicker(key: Key('role-${m.userId}'), member: m),
-                    if (!m.isOwner)
-                      PermissionGate(
-                        permission: Perm.memberRemove,
-                        child: IconButton(
-                          key: Key('remove-${m.userId}'),
-                          tooltip: context.l10n.grpJRemoveMember(m.label),
-                          icon: const Icon(Icons.person_remove),
-                          onPressed: () => _remove(workspace.id, m),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('member-${m.userId}'),
+                  onTap: () => _showProfile(workspace.id, m),
+                  leading: CircleAvatar(child: Text(m.initials)),
+                  title: Text(m.label),
+                  subtitle: Text(
+                    '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
+                    '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RolePicker(key: Key('role-${m.userId}'), member: m),
+                      if (!m.isOwner)
+                        PermissionGate(
+                          permission: Perm.memberRemove,
+                          child: IconButton(
+                            key: Key('remove-${m.userId}'),
+                            tooltip: context.l10n.grpJRemoveMember(m.label),
+                            icon: const Icon(Icons.person_remove),
+                            onPressed: () => _remove(workspace.id, m),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             const Divider(),
             if (workspace.isOwner)
-              ListTile(
-                key: const Key('owner-cannot-leave'),
-                leading: const Icon(Icons.info_outline),
-                title: Text(context.l10n.grpJOwnerCannotLeave),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: const Key('owner-cannot-leave'),
+                  leading: const Icon(Icons.info_outline),
+                  title: Text(context.l10n.grpJOwnerCannotLeave),
+                ),
               )
             else
               OutlinedButton(

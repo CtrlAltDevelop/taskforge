@@ -57,35 +57,47 @@ class TimelineList extends StatelessWidget {
         final row = rows[i];
         final task = row.task;
         if (task == null) {
-          return ListTile(
-            dense: true,
-            title: Text(
-              row.header!,
-              style: Theme.of(context).textTheme.titleSmall,
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              dense: true,
+              title: Text(
+                row.header!,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ),
           );
         }
         final isCritical = critical.contains(task.id);
-        return ListTile(
-          key: Key('timeline-row-${task.id}'),
-          contentPadding: EdgeInsetsDirectional.only(
-            start: 16.0 + 16 * row.depth,
-            end: 16,
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          clipBehavior: Clip.antiAlias,
+          child: ListTile(
+            key: Key('timeline-row-${task.id}'),
+            contentPadding: EdgeInsetsDirectional.only(
+              start: 16.0 + 16 * row.depth,
+              end: 16,
+            ),
+            title: Text(
+              task.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              [
+                task.displayId,
+                datesText(task, context.l10n),
+                if (lengthText(task, context.l10n).isNotEmpty)
+                  lengthText(task, context.l10n),
+                if (isCritical) context.l10n.grpIOnCriticalPath,
+                if (task.isBlocked) context.l10n.grpIBlocked,
+              ].join(' · '),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: () => onOpen(task),
           ),
-          title: Text(task.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(
-            [
-              task.displayId,
-              datesText(task, context.l10n),
-              if (lengthText(task, context.l10n).isNotEmpty)
-                lengthText(task, context.l10n),
-              if (isCritical) context.l10n.grpIOnCriticalPath,
-              if (task.isBlocked) context.l10n.grpIBlocked,
-            ].join(' · '),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          onTap: () => onOpen(task),
         );
       },
     );

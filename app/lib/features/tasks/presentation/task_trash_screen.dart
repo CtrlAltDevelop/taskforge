@@ -30,16 +30,20 @@ class TaskTrashScreen extends ConsumerWidget {
           key: const Key('trash-list'),
           children: [
             for (final task in value)
-              ListTile(
-                key: Key('trashed-${task.id}'),
-                title: Text(task.title),
-                subtitle: Text(context.l10n.grpFTrashedRow(task.displayId)),
-                trailing: TextButton(
-                  key: Key('restore-${task.id}'),
-                  onPressed: project.isArchived
-                      ? null
-                      : () => _restore(context, ref, task),
-                  child: Text(context.l10n.grpFRestore),
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  key: Key('trashed-${task.id}'),
+                  title: Text(task.title),
+                  subtitle: Text(context.l10n.grpFTrashedRow(task.displayId)),
+                  trailing: TextButton(
+                    key: Key('restore-${task.id}'),
+                    onPressed: project.isArchived
+                        ? null
+                        : () => _restore(context, ref, task),
+                    child: Text(context.l10n.grpFRestore),
+                  ),
                 ),
               ),
           ],

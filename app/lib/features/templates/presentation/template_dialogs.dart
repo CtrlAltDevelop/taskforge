@@ -361,6 +361,7 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                 t.tplSaveTitle,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 key: const Key('tpl-save-name'),
                 controller: _name,
@@ -476,6 +477,7 @@ Future<bool> showEditTemplateDialog(
                 maxLines: 2,
                 decoration: InputDecoration(labelText: ctx.l10n.tplDescription),
               ),
+              const SizedBox(height: 12),
               SegmentedButton<TemplateVisibility>(
                 segments: [
                   ButtonSegment(

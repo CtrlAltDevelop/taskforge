@@ -145,6 +145,7 @@ class _EntryDialogState extends State<_EntryDialog> {
               ),
               onSubmitted: (_) => _save(),
             ),
+          const SizedBox(height: 12),
           if (widget.day == null && widget.existing?.running != true)
             ListTile(
               key: const Key('entry-date'),
@@ -153,6 +154,7 @@ class _EntryDialogState extends State<_EntryDialog> {
               trailing: const Icon(Icons.calendar_today),
               onTap: _pickDate,
             ),
+          const SizedBox(height: 12),
           TextField(
             key: const Key('entry-note'),
             controller: _note,

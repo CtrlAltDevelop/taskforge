@@ -96,13 +96,17 @@ class ContributesPanel extends ConsumerWidget {
           ],
         ),
         for (final c in rows ?? const <Contribution>[])
-          ListTile(
-            key: Key('contribution-${c.krId}'),
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.flag_outlined, size: 18),
-            title: Text('${c.goalName} › ${c.krName}'),
-            onTap: () => context.push('/goals/${c.goalId}'),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              key: Key('contribution-${c.krId}'),
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.flag_outlined, size: 18),
+              title: Text('${c.goalName} › ${c.krName}'),
+              onTap: () => context.push('/goals/${c.goalId}'),
+            ),
           ),
       ],
     );

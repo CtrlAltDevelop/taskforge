@@ -261,104 +261,109 @@ class NotificationTile extends StatelessWidget {
     return Semantics(
       label: unread ? context.l10n.grpHUnreadPrefix(title) : title,
       container: true,
-      child: ListTile(
-        onTap: onTap,
-        tileColor: unread
-            ? theme.colorScheme.primaryContainer.withAlpha(60)
-            : null,
-        leading: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            CircleAvatar(child: Icon(n.kind.icon)),
-            if (unread)
-              PositionedDirectional(
-                end: -2,
-                top: -2,
-                child: Container(
-                  key: Key('unread-${n.id}'),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    shape: BoxShape.circle,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        clipBehavior: Clip.antiAlias,
+        color: unread ? theme.colorScheme.primaryContainer.withAlpha(60) : null,
+        child: ListTile(
+          onTap: onTap,
+          leading: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              CircleAvatar(child: Icon(n.kind.icon)),
+              if (unread)
+                PositionedDirectional(
+                  end: -2,
+                  top: -2,
+                  child: Container(
+                    key: Key('unread-${n.id}'),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
-              ),
-          ],
-        ),
-        title: Text(
-          title,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: unread ? const TextStyle(fontWeight: FontWeight.w700) : null,
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (detail != null)
-              Text(detail, maxLines: 2, overflow: TextOverflow.ellipsis),
-            Row(
-              children: [
-                Text(
-                  relativeTime(
-                    n.updatedAt,
-                    now,
-                    context.l10n,
-                    context.localePrefs,
+            ],
+          ),
+          title: Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: unread ? const TextStyle(fontWeight: FontWeight.w700) : null,
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (detail != null)
+                Text(detail, maxLines: 2, overflow: TextOverflow.ellipsis),
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      relativeTime(
+                        n.updatedAt,
+                        now,
+                        context.l10n,
+                        context.localePrefs,
+                      ),
+                      key: Key('time-${n.id}'),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  key: Key('time-${n.id}'),
-                ),
-                if (n.count > 1) ...[
-                  const SizedBox(width: 8),
-                  Chip(
-                    key: Key('count-${n.id}'),
-                    visualDensity: VisualDensity.compact,
-                    label: Text(context.l10n.grpHMoreCount(n.count - 1)),
-                  ),
+                  if (n.count > 1) ...[
+                    const SizedBox(width: 8),
+                    Chip(
+                      key: Key('count-${n.id}'),
+                      visualDensity: VisualDensity.compact,
+                      label: Text(context.l10n.grpHMoreCount(n.count - 1)),
+                    ),
+                  ],
                 ],
-              ],
-            ),
-          ],
-        ),
-        trailing: PopupMenuButton<NotificationMenu>(
-          key: Key('menu-${n.id}'),
-          tooltip: context.l10n.grpHMore,
-          onSelected: onMenu,
-          itemBuilder: (_) => [
-            PopupMenuItem(
-              key: const Key('menu-toggle-read'),
-              value: NotificationMenu.toggleRead,
-              child: Text(
-                n.isRead
-                    ? context.l10n.grpHMarkUnread
-                    : context.l10n.grpHMarkRead,
               ),
-            ),
-            if (n.isSnoozed(now))
+            ],
+          ),
+          trailing: PopupMenuButton<NotificationMenu>(
+            key: Key('menu-${n.id}'),
+            tooltip: context.l10n.grpHMore,
+            onSelected: onMenu,
+            itemBuilder: (_) => [
               PopupMenuItem(
-                key: const Key('menu-unsnooze'),
-                value: NotificationMenu.unsnooze,
-                child: Text(context.l10n.grpHStopSnoozing),
-              )
-            else
-              PopupMenuItem(
-                key: const Key('menu-snooze'),
-                value: NotificationMenu.snooze,
-                child: Text(context.l10n.grpHSnoozeEllipsis),
+                key: const Key('menu-toggle-read'),
+                value: NotificationMenu.toggleRead,
+                child: Text(
+                  n.isRead
+                      ? context.l10n.grpHMarkUnread
+                      : context.l10n.grpHMarkRead,
+                ),
               ),
-            if (n.isArchived)
-              PopupMenuItem(
-                key: const Key('menu-unarchive'),
-                value: NotificationMenu.unarchive,
-                child: Text(context.l10n.grpHMoveToInbox),
-              )
-            else
-              PopupMenuItem(
-                key: const Key('menu-archive'),
-                value: NotificationMenu.archive,
-                child: Text(context.l10n.grpHArchive),
-              ),
-          ],
+              if (n.isSnoozed(now))
+                PopupMenuItem(
+                  key: const Key('menu-unsnooze'),
+                  value: NotificationMenu.unsnooze,
+                  child: Text(context.l10n.grpHStopSnoozing),
+                )
+              else
+                PopupMenuItem(
+                  key: const Key('menu-snooze'),
+                  value: NotificationMenu.snooze,
+                  child: Text(context.l10n.grpHSnoozeEllipsis),
+                ),
+              if (n.isArchived)
+                PopupMenuItem(
+                  key: const Key('menu-unarchive'),
+                  value: NotificationMenu.unarchive,
+                  child: Text(context.l10n.grpHMoveToInbox),
+                )
+              else
+                PopupMenuItem(
+                  key: const Key('menu-archive'),
+                  value: NotificationMenu.archive,
+                  child: Text(context.l10n.grpHArchive),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -261,58 +261,62 @@ class _EntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final day = entry.startedAt.toLocal();
     final when = context.localIso(day);
-    return ListTile(
-      key: Key('entry-${entry.id}'),
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        entry.running ? Icons.timer : Icons.schedule,
-        semanticLabel: entry.running
-            ? context.l10n.grpJRunning
-            : context.l10n.grpJLoggedLabel,
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        key: Key('entry-${entry.id}'),
+        dense: true,
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          entry.running ? Icons.timer : Icons.schedule,
+          semanticLabel: entry.running
+              ? context.l10n.grpJRunning
+              : context.l10n.grpJLoggedLabel,
+        ),
+        title: Text(
+          '${entry.running ? context.l10n.grpJRunning : durationText(entry.durationSec)}'
+          ' · ${mine ? context.l10n.grpJYou : entry.userName} · $when'
+          '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
+        ),
+        subtitle: Wrap(
+          spacing: 8,
+          children: [
+            if (entry.note.isNotEmpty) Text(entry.note),
+            if (entry.overlaps)
+              Chip(
+                key: Key('overlap-${entry.id}'),
+                label: Text(context.l10n.grpJOverlapsEntry),
+                visualDensity: VisualDensity.compact,
+              ),
+            if (entry.isLong)
+              Chip(
+                key: Key('long-${entry.id}'),
+                label: Text(context.l10n.grpJOver24h),
+                visualDensity: VisualDensity.compact,
+              ),
+          ],
+        ),
+        trailing: canChange
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    key: Key('edit-${entry.id}'),
+                    tooltip: context.l10n.grpJEdit,
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: onEdit,
+                  ),
+                  IconButton(
+                    key: Key('delete-${entry.id}'),
+                    tooltip: context.l10n.grpJDelete,
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: onDelete,
+                  ),
+                ],
+              )
+            : null,
       ),
-      title: Text(
-        '${entry.running ? context.l10n.grpJRunning : durationText(entry.durationSec)}'
-        ' · ${mine ? context.l10n.grpJYou : entry.userName} · $when'
-        '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
-      ),
-      subtitle: Wrap(
-        spacing: 8,
-        children: [
-          if (entry.note.isNotEmpty) Text(entry.note),
-          if (entry.overlaps)
-            Chip(
-              key: Key('overlap-${entry.id}'),
-              label: Text(context.l10n.grpJOverlapsEntry),
-              visualDensity: VisualDensity.compact,
-            ),
-          if (entry.isLong)
-            Chip(
-              key: Key('long-${entry.id}'),
-              label: Text(context.l10n.grpJOver24h),
-              visualDensity: VisualDensity.compact,
-            ),
-        ],
-      ),
-      trailing: canChange
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  key: Key('edit-${entry.id}'),
-                  tooltip: context.l10n.grpJEdit,
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: onEdit,
-                ),
-                IconButton(
-                  key: Key('delete-${entry.id}'),
-                  tooltip: context.l10n.grpJDelete,
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: onDelete,
-                ),
-              ],
-            )
-          : null,
     );
   }
 }

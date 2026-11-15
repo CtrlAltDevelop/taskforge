@@ -190,7 +190,9 @@ class _PublicFormViewState extends State<PublicFormView> {
           _question(q),
           const SizedBox(height: 16),
         ],
+        const SizedBox(height: 12),
         _emailField(),
+        const SizedBox(height: 12),
         if (widget.form.captcha case final captcha?) ...[
           const SizedBox(height: 16),
           if (widget.preview)
