@@ -8327,4 +8327,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updNoticeDismiss => 'إغلاق';
+
+  @override
+  String get grpMImpClickupApi => 'ClickUp (رمز API)';
+
+  @override
+  String get grpCImpCuTokenHint => 'رمز API الشخصي في ClickUp';
+
+  @override
+  String get grpCImpCuTokenNote => 'يُستخدم فقط لقراءة قوائمك ولا يتم حفظه.';
+
+  @override
+  String get grpCImpCuLoad => 'عرض قوائمي';
+
+  @override
+  String get grpCImpCuPick => 'اختر القوائم المراد استيرادها';
+
+  @override
+  String get grpCImpCuFetch => 'جلب القوائم المحددة';
+
+  @override
+  String get grpCImpCuFetching => 'جارٍ الجلب من ClickUp…';
 }

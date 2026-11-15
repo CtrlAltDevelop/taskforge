@@ -14555,6 +14555,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dismiss'**
   String get updNoticeDismiss;
+
+  /// No description provided for @grpMImpClickupApi.
+  ///
+  /// In en, this message translates to:
+  /// **'ClickUp (API token)'**
+  String get grpMImpClickupApi;
+
+  /// No description provided for @grpCImpCuTokenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ClickUp personal API token'**
+  String get grpCImpCuTokenHint;
+
+  /// No description provided for @grpCImpCuTokenNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Used only to read your lists. It is not stored.'**
+  String get grpCImpCuTokenNote;
+
+  /// No description provided for @grpCImpCuLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my lists'**
+  String get grpCImpCuLoad;
+
+  /// No description provided for @grpCImpCuPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the lists to import'**
+  String get grpCImpCuPick;
+
+  /// No description provided for @grpCImpCuFetch.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch selected lists'**
+  String get grpCImpCuFetch;
+
+  /// No description provided for @grpCImpCuFetching.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching from ClickUp…'**
+  String get grpCImpCuFetching;
 }
 
 class _AppLocalizationsDelegate

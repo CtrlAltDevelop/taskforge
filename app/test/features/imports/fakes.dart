@@ -278,6 +278,33 @@ class FakeImportFiles implements ImportFiles {
         );
   }
 
+  final clickupAsked = <({String token, List<String> lists})>[];
+
+  @override
+  Future<List<ClickUpWorkspace>> clickupLists({
+    required String workspaceId,
+    required String token,
+  }) async => const [
+    ClickUpWorkspace(
+      id: '9',
+      name: 'Acme',
+      lists: [
+        ClickUpList(id: 'L1', path: 'Eng › Q4 › Launch'),
+        ClickUpList(id: 'L2', path: 'Eng › Loose'),
+      ],
+    ),
+  ];
+
+  @override
+  Future<ImportJob> clickupFetch({
+    required String workspaceId,
+    required String token,
+    required List<String> listIds,
+  }) async {
+    clickupAsked.add((token: token, lists: listIds));
+    return job('j1', status: 'uploaded', source: 'clickup_json');
+  }
+
   @override
   Future<Uint8List> fetch(String path) async {
     fetched.add(path);

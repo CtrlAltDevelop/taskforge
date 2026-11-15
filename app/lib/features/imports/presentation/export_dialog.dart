@@ -87,6 +87,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
             if (!_everything)
               DropdownButton<String>(
                 key: const Key('export-project'),

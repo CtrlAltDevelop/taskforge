@@ -2406,5 +2406,12 @@
   "devWebhookWholeWorkspace": "ټوله کاري ځای",
   "updNoticeText": "{version} نسخه شتون لري.",
   "updNoticeGet": "ډاونلوډ",
-  "updNoticeDismiss": "بندول"
+  "updNoticeDismiss": "بندول",
+  "grpMImpClickupApi": "ClickUp (د API ټوکن)",
+  "grpCImpCuTokenHint": "په ClickUp کې ستاسو شخصي API ټوکن",
+  "grpCImpCuTokenNote": "یوازې ستاسو د لیستونو لوستلو لپاره کارول کیږي او ساتل کیږي نه.",
+  "grpCImpCuLoad": "زما لیستونه وښیه",
+  "grpCImpCuPick": "هغه لیستونه وټاکئ چې واردول یې غواړئ",
+  "grpCImpCuFetch": "ټاکل شوي لیستونه راوړه",
+  "grpCImpCuFetching": "له ClickUp څخه راوړل کیږي…"
 }

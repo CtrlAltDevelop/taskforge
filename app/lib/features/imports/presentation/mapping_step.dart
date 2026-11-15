@@ -277,6 +277,7 @@ class _Target extends ConsumerWidget {
             ],
           ),
         ),
+        const SizedBox(height: 12),
         if (existing)
           DropdownButton<String>(
             key: const Key('map-project'),

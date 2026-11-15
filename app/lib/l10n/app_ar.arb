@@ -2406,5 +2406,12 @@
   "devWebhookWholeWorkspace": "مساحة العمل بأكملها",
   "updNoticeText": "الإصدار {version} متاح.",
   "updNoticeGet": "تنزيل",
-  "updNoticeDismiss": "إغلاق"
+  "updNoticeDismiss": "إغلاق",
+  "grpMImpClickupApi": "ClickUp (رمز API)",
+  "grpCImpCuTokenHint": "رمز API الشخصي في ClickUp",
+  "grpCImpCuTokenNote": "يُستخدم فقط لقراءة قوائمك ولا يتم حفظه.",
+  "grpCImpCuLoad": "عرض قوائمي",
+  "grpCImpCuPick": "اختر القوائم المراد استيرادها",
+  "grpCImpCuFetch": "جلب القوائم المحددة",
+  "grpCImpCuFetching": "جارٍ الجلب من ClickUp…"
 }

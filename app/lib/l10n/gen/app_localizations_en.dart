@@ -8250,6 +8250,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updNoticeDismiss => 'Dismiss';
+
+  @override
+  String get grpMImpClickupApi => 'ClickUp (API token)';
+
+  @override
+  String get grpCImpCuTokenHint => 'ClickUp personal API token';
+
+  @override
+  String get grpCImpCuTokenNote =>
+      'Used only to read your lists. It is not stored.';
+
+  @override
+  String get grpCImpCuLoad => 'Show my lists';
+
+  @override
+  String get grpCImpCuPick => 'Choose the lists to import';
+
+  @override
+  String get grpCImpCuFetch => 'Fetch selected lists';
+
+  @override
+  String get grpCImpCuFetching => 'Fetching from ClickUp…';
 }
 
 /// The translations for English (`en_XA`).
@@ -16642,4 +16664,26 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get updNoticeDismiss => '[Ðíšɱíšš ~~]';
+
+  @override
+  String get grpMImpClickupApi => '[ÇłíçķÛþ (ÅÞÍ ţöķéñ) ~~~~~]';
+
+  @override
+  String get grpCImpCuTokenHint => '[ÇłíçķÛþ þéŕšöñåł ÅÞÍ ţöķéñ ~~~~~~~]';
+
+  @override
+  String get grpCImpCuTokenNote =>
+      '[Ûšéð öñłý ţö ŕéåð ýöûŕ łíšţš. Íţ íš ñöţ šţöŕéð. ~~~~~~~~~~]';
+
+  @override
+  String get grpCImpCuLoad => '[Šĥöŵ ṃý łíšţš ~~~]';
+
+  @override
+  String get grpCImpCuPick => '[Çĥööšé ţĥé łíšţš ţö íṃþöŕţ ~~~~~~]';
+
+  @override
+  String get grpCImpCuFetch => '[Ƒéţçĥ šéłéçţéð łíšţš ~~~~]';
+
+  @override
+  String get grpCImpCuFetching => '[Ƒéţçĥíñĝ ƒŕöṃ ÇłíçķÛþ… ~~~~]';
 }

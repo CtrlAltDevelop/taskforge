@@ -14,6 +14,10 @@ enum ImportSource {
   jiraJson('jira_json', 'Jira (JSON)', false),
   clickupCsv('clickup_csv', 'ClickUp (CSV export)', true),
   clickupJson('clickup_json', 'ClickUp (JSON)', false),
+
+  /// Not a file: lists are pulled from ClickUp with a token (the job it makes
+  /// is a `clickup_json` one).
+  clickupApi('clickup_api', 'ClickUp (API token)', false),
   csv('csv', 'Any CSV file', true),
   taskforge('taskforge', 'TaskForge export (tasks.json)', false);
 
@@ -28,6 +32,7 @@ enum ImportSource {
     jiraJson => l.grpMImpJiraJson,
     clickupCsv => l.grpMImpClickupCsv,
     clickupJson => l.grpMImpClickupJson,
+    clickupApi => l.grpMImpClickupApi,
     csv => l.grpMImpCsv,
     taskforge => l.grpMImpTaskforge,
   };
@@ -39,6 +44,9 @@ enum ImportSource {
 
 /// The statuses of a job (the server's words).
 const activeStatuses = {'queued', 'running'};
+
+/// A ClickUp fetch still writing the job's file.
+const fetchingStatus = 'fetching';
 
 @immutable
 class ImportJob {
@@ -441,4 +449,40 @@ String humanSize(int bytes, [AppLocalizations? l10n]) {
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} ${l.grpRUnitMB}';
   }
   return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} ${l.grpRUnitGB}';
+}
+
+/// A ClickUp list the token can read; [path] is `Space › Folder › List`.
+@immutable
+class ClickUpList {
+  const ClickUpList({required this.id, required this.path});
+
+  final String id;
+  final String path;
+}
+
+/// A ClickUp workspace and the lists in it.
+@immutable
+class ClickUpWorkspace {
+  const ClickUpWorkspace({
+    required this.id,
+    required this.name,
+    this.lists = const [],
+  });
+
+  factory ClickUpWorkspace.fromJson(Map<String, dynamic> j) => ClickUpWorkspace(
+    id: '${j['id']}',
+    name: '${j['name'] ?? ''}',
+    lists: List.unmodifiable(
+      (j['lists'] as List<dynamic>? ?? const []).map(
+        (l) => ClickUpList(
+          id: '${(l as Map<String, dynamic>)['id']}',
+          path: '${l['path'] ?? l['name'] ?? ''}',
+        ),
+      ),
+    ),
+  );
+
+  final String id;
+  final String name;
+  final List<ClickUpList> lists;
 }

@@ -20,6 +20,20 @@ abstract interface class ImportFiles {
     String source = '',
   });
 
+  /// The ClickUp workspaces and lists [token] can read (the server keeps no
+  /// copy of it).
+  Future<List<ClickUpWorkspace>> clickupLists({
+    required String workspaceId,
+    required String token,
+  });
+
+  /// Starts fetching [listIds] into a new job (status `fetching`).
+  Future<ImportJob> clickupFetch({
+    required String workspaceId,
+    required String token,
+    required List<String> listIds,
+  });
+
   /// The bytes behind a signed [path] (as `Export.Status` returns it).
   Future<Uint8List> fetch(String path);
 
@@ -122,6 +136,78 @@ class HttpImportFiles implements ImportFiles {
     } on Object {
       throw const ImportException(ImportFailure.network);
     }
+  }
+
+  Future<dynamic> _post(String path, Map<String, Object?> body) async {
+    try {
+      final token = await _session.accessToken();
+      if (token == null) throw const ImportException(ImportFailure.denied);
+      final response = await _http
+          .post(
+            Uri.parse('$restUrl/api/v1$path'),
+            headers: {
+              ...scopedHeaders(token, _selected()),
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(body),
+          )
+          .timeout(timeout);
+      Map<String, dynamic>? parsed;
+      try {
+        parsed = jsonDecode(response.body) as Map<String, dynamic>;
+      } on Object {
+        parsed = null;
+      }
+      if (response.statusCode >= 400) {
+        final message = '${parsed?['message'] ?? parsed?['detail'] ?? ''}';
+        throw switch (response.statusCode) {
+          403 => const ImportException(ImportFailure.denied),
+          400 ||
+          422 ||
+          429 => ImportException(ImportFailure.invalid, detail: message),
+          _ => const ImportException(ImportFailure.other),
+        };
+      }
+      return parsed?['data'] ?? parsed;
+    } on ImportException {
+      rethrow;
+    } on Object {
+      throw const ImportException(ImportFailure.network);
+    }
+  }
+
+  @override
+  Future<List<ClickUpWorkspace>> clickupLists({
+    required String workspaceId,
+    required String token,
+  }) async {
+    final data = await _post('/imports/clickup/lists', {
+      'workspace_id': workspaceId,
+      'token': token,
+    });
+    return List.unmodifiable(
+      (data as List<dynamic>? ?? const []).map(
+        (w) => ClickUpWorkspace.fromJson(w as Map<String, dynamic>),
+      ),
+    );
+  }
+
+  @override
+  Future<ImportJob> clickupFetch({
+    required String workspaceId,
+    required String token,
+    required List<String> listIds,
+  }) async {
+    final d = await _post('/imports/clickup/fetch', {
+      'workspace_id': workspaceId,
+      'token': token,
+      'list_ids': listIds,
+    }) as Map<String, dynamic>;
+    return ImportJob(
+      id: '${d['id']}',
+      source: 'clickup_json',
+      status: '${d['status']}',
+    );
   }
 
   @override

@@ -143,11 +143,13 @@ class _UploadStep extends ConsumerWidget {
     final busy = ref.watch(importWizardProvider.select((w) => w.busy));
     final source = ref.watch(importWizardProvider.select((w) => w.source));
     final choices = ref.watch(importWizardProvider.select((w) => w.choices));
+    if (source == ImportSource.clickupApi) return const _ClickUpStep();
     if (choices.isNotEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.grpCImpZipSeveral),
+          const SizedBox(height: 12),
           DropdownButton<String>(
             key: const Key('upload-member'),
             isExpanded: true,
@@ -453,5 +455,102 @@ class _Stats extends StatelessWidget {
       ],
     ];
     return Text(lines.join(' · '), key: const Key('import-stats'));
+  }
+}
+
+/// ClickUp source: a token, then the lists to bring, then the server fetches.
+class _ClickUpStep extends ConsumerStatefulWidget {
+  const _ClickUpStep();
+
+  @override
+  ConsumerState<_ClickUpStep> createState() => _ClickUpStepState();
+}
+
+class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
+  final _token = TextEditingController();
+  final _picked = <String>{};
+
+  @override
+  void dispose() {
+    _token.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final wizard = ref.watch(importWizardProvider);
+    final notifier = ref.read(importWizardProvider.notifier);
+    final fetching = wizard.job?.status == fetchingStatus;
+    final lists = [for (final w in wizard.clickup) ...w.lists];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          key: const Key('clickup-token'),
+          controller: _token,
+          obscureText: true,
+          onChanged: (_) => setState(() {}),
+          enabled: !wizard.busy,
+          decoration: InputDecoration(
+            labelText: context.l10n.grpCImpCuTokenHint,
+            helperText: context.l10n.grpCImpCuTokenNote,
+          ),
+        ),
+        if (lists.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Text(context.l10n.grpCImpCuPick),
+          for (final l in lists)
+            CheckboxListTile(
+              key: Key('clickup-list-${l.id}'),
+              dense: true,
+              title: Text(l.path),
+              value: _picked.contains(l.id),
+              onChanged: wizard.busy
+                  ? null
+                  : (on) => setState(
+                      () =>
+                          on == true ? _picked.add(l.id) : _picked.remove(l.id),
+                    ),
+            ),
+        ],
+        if (fetching) ...[
+          const SizedBox(height: 12),
+          Text(
+            '${context.l10n.grpCImpCuFetching} ${wizard.job?.done ?? 0}',
+            key: const Key('clickup-progress'),
+          ),
+        ],
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            TextButton(
+              key: const Key('clickup-back'),
+              onPressed: wizard.busy ? null : notifier.back,
+              child: Text(context.l10n.grpCBack),
+            ),
+            const Spacer(),
+            if (lists.isEmpty)
+              FilledButton(
+                key: const Key('clickup-load'),
+                onPressed: wizard.busy || _token.text.trim().isEmpty
+                    ? null
+                    : () => notifier.loadClickUp(_token.text.trim()),
+                child: Text(context.l10n.grpCImpCuLoad),
+              )
+            else
+              FilledButton(
+                key: const Key('clickup-fetch'),
+                onPressed: wizard.busy || _picked.isEmpty
+                    ? null
+                    : () => notifier.fetchClickUp(
+                        _token.text.trim(),
+                        _picked.toList(),
+                      ),
+                child: Text(context.l10n.grpCImpCuFetch),
+              ),
+          ],
+        ),
+      ],
+    );
   }
 }

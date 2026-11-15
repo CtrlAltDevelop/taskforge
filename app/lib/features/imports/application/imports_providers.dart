@@ -70,6 +70,9 @@ final placeholdersProvider = FutureProvider.autoDispose<List<WaitingPerson>>((
 
 // -------------------------------------------------------------------- wizard
 
+/// How often a ClickUp fetch is asked how far it got.
+const clickupPoll = Duration(seconds: 2);
+
 enum ImportStep { source, upload, map, review, run }
 
 @immutable
@@ -85,6 +88,7 @@ class ImportWizardState {
     this.error,
     this.pendingJob = '',
     this.choices = const [],
+    this.clickup = const [],
   });
 
   final ImportStep step;
@@ -103,6 +107,9 @@ class ImportWizardState {
   final String pendingJob;
   final List<String> choices;
 
+  /// The ClickUp workspaces a token can read (the ClickUp source only).
+  final List<ClickUpWorkspace> clickup;
+
   /// The source the file turned out to be (the server's detection or the
   /// choice).
   ImportSource? get detected =>
@@ -120,6 +127,7 @@ class ImportWizardState {
     String? Function()? error,
     String? pendingJob,
     List<String>? choices,
+    List<ClickUpWorkspace>? clickup,
   }) => ImportWizardState(
     step: step ?? this.step,
     source: source == null ? this.source : source(),
@@ -131,6 +139,7 @@ class ImportWizardState {
     error: error == null ? this.error : error(),
     pendingJob: pendingJob ?? this.pendingJob,
     choices: choices ?? this.choices,
+    clickup: clickup ?? this.clickup,
   );
 }
 
@@ -215,6 +224,46 @@ class ImportWizard extends Notifier<ImportWizardState> {
         step: ImportStep.map,
         pendingJob: '',
         choices: const [],
+      );
+    });
+  }
+
+  /// ClickUp source: reads the lists the [token] can see (not kept).
+  Future<void> loadClickUp(String token) async {
+    await _guard((ws) async {
+      final found = await ref
+          .read(importFilesProvider)
+          .clickupLists(workspaceId: ws, token: token);
+      if (ref.mounted) state = state.copyWith(clickup: found);
+    });
+  }
+
+  /// ClickUp source: fetches the chosen lists on the server, waits for the
+  /// file to be written, then reads it for a proposed mapping.
+  Future<void> fetchClickUp(String token, List<String> listIds) async {
+    await _guard((ws) async {
+      var job = await ref
+          .read(importFilesProvider)
+          .clickupFetch(workspaceId: ws, token: token, listIds: listIds);
+      if (!ref.mounted) return;
+      state = state.copyWith(job: job);
+      while (job.status == fetchingStatus) {
+        await Future<void>.delayed(clickupPoll);
+        if (!ref.mounted) return;
+        job = (await _client.get(ws, job.id)).job;
+        if (!ref.mounted) return;
+        state = state.copyWith(job: job);
+      }
+      if (job.status != 'uploaded') {
+        throw ImportException(ImportFailure.invalid, detail: job.error);
+      }
+      final proposal = await _client.analyze(ws, job.id);
+      if (!ref.mounted) return;
+      state = state.copyWith(
+        job: proposal.job,
+        proposal: proposal,
+        mapping: proposal.mapping,
+        step: ImportStep.map,
       );
     });
   }

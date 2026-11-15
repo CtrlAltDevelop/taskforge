@@ -2406,5 +2406,12 @@
   "devWebhookWholeWorkspace": "کل فضای کار",
   "updNoticeText": "نسخه {version} در دسترس است.",
   "updNoticeGet": "دریافت",
-  "updNoticeDismiss": "بستن"
+  "updNoticeDismiss": "بستن",
+  "grpMImpClickupApi": "ClickUp (توکن API)",
+  "grpCImpCuTokenHint": "توکن شخصی API در ClickUp",
+  "grpCImpCuTokenNote": "فقط برای خواندن فهرست‌های شما استفاده می‌شود و ذخیره نمی‌شود.",
+  "grpCImpCuLoad": "نمایش فهرست‌های من",
+  "grpCImpCuPick": "فهرست‌هایی را که می‌خواهید وارد کنید انتخاب کنید",
+  "grpCImpCuFetch": "دریافت فهرست‌های انتخاب‌شده",
+  "grpCImpCuFetching": "در حال دریافت از ClickUp…"
 }

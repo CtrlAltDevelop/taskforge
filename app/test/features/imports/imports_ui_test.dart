@@ -81,6 +81,25 @@ Future<void> _toMapping(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets('ClickUp by token: token, pick lists, fetch, then Map', (
+    tester,
+  ) async {
+    final o = await _open(tester);
+    await _tap(tester, 'source-clickup_api');
+    await _tap(tester, 'source-next');
+    expect(key('import-pick'), findsNothing);
+    await tester.enterText(key('clickup-token'), 'pk_abc');
+    await tester.pump();
+    await _tap(tester, 'clickup-load');
+    expect(find.text('Eng › Q4 › Launch'), findsOneWidget);
+    await _tap(tester, 'clickup-list-L1');
+    await _tap(tester, 'clickup-fetch');
+    expect(o.files.clickupAsked.single.token, 'pk_abc');
+    expect(o.files.clickupAsked.single.lists, ['L1']);
+    expect(o.client.calls.last, startsWith('analyze j1'));
+    expect(key('step-map'), findsOneWidget);
+  });
+
   testWidgets('a member without data.manage sees nothing to do', (
     tester,
   ) async {

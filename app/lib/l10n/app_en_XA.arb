@@ -2406,5 +2406,12 @@
   "devWebhookWholeWorkspace": "[Ŵĥöłé ŵöŕķšþåçé ~~~~~]",
   "updNoticeText": "[Ṽéŕšíöñ {version} íš åṽåíłåƀłé. ~~~~~~~~~~]",
   "updNoticeGet": "[Ðöŵñłöåð ~~]",
-  "updNoticeDismiss": "[Ðíšɱíšš ~~]"
+  "updNoticeDismiss": "[Ðíšɱíšš ~~]",
+  "grpMImpClickupApi": "[ÇłíçķÛþ (ÅÞÍ ţöķéñ) ~~~~~]",
+  "grpCImpCuTokenHint": "[ÇłíçķÛþ þéŕšöñåł ÅÞÍ ţöķéñ ~~~~~~~]",
+  "grpCImpCuTokenNote": "[Ûšéð öñłý ţö ŕéåð ýöûŕ łíšţš. Íţ íš ñöţ šţöŕéð. ~~~~~~~~~~]",
+  "grpCImpCuLoad": "[Šĥöŵ ṃý łíšţš ~~~]",
+  "grpCImpCuPick": "[Çĥööšé ţĥé łíšţš ţö íṃþöŕţ ~~~~~~]",
+  "grpCImpCuFetch": "[Ƒéţçĥ šéłéçţéð łíšţš ~~~~]",
+  "grpCImpCuFetching": "[Ƒéţçĥíñĝ ƒŕöṃ ÇłíçķÛþ… ~~~~]"
 }

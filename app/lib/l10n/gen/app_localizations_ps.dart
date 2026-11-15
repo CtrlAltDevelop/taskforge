@@ -8221,4 +8221,26 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get updNoticeDismiss => 'بندول';
+
+  @override
+  String get grpMImpClickupApi => 'ClickUp (د API ټوکن)';
+
+  @override
+  String get grpCImpCuTokenHint => 'په ClickUp کې ستاسو شخصي API ټوکن';
+
+  @override
+  String get grpCImpCuTokenNote =>
+      'یوازې ستاسو د لیستونو لوستلو لپاره کارول کیږي او ساتل کیږي نه.';
+
+  @override
+  String get grpCImpCuLoad => 'زما لیستونه وښیه';
+
+  @override
+  String get grpCImpCuPick => 'هغه لیستونه وټاکئ چې واردول یې غواړئ';
+
+  @override
+  String get grpCImpCuFetch => 'ټاکل شوي لیستونه راوړه';
+
+  @override
+  String get grpCImpCuFetching => 'له ClickUp څخه راوړل کیږي…';
 }

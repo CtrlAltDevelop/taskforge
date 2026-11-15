@@ -4860,5 +4860,12 @@
     }
   },
   "updNoticeGet": "Download",
-  "updNoticeDismiss": "Dismiss"
+  "updNoticeDismiss": "Dismiss",
+  "grpMImpClickupApi": "ClickUp (API token)",
+  "grpCImpCuTokenHint": "ClickUp personal API token",
+  "grpCImpCuTokenNote": "Used only to read your lists. It is not stored.",
+  "grpCImpCuLoad": "Show my lists",
+  "grpCImpCuPick": "Choose the lists to import",
+  "grpCImpCuFetch": "Fetch selected lists",
+  "grpCImpCuFetching": "Fetching from ClickUp…"
 }

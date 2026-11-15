@@ -8259,4 +8259,27 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get updNoticeDismiss => 'بستن';
+
+  @override
+  String get grpMImpClickupApi => 'ClickUp (توکن API)';
+
+  @override
+  String get grpCImpCuTokenHint => 'توکن شخصی API در ClickUp';
+
+  @override
+  String get grpCImpCuTokenNote =>
+      'فقط برای خواندن فهرست‌های شما استفاده می‌شود و ذخیره نمی‌شود.';
+
+  @override
+  String get grpCImpCuLoad => 'نمایش فهرست‌های من';
+
+  @override
+  String get grpCImpCuPick =>
+      'فهرست‌هایی را که می‌خواهید وارد کنید انتخاب کنید';
+
+  @override
+  String get grpCImpCuFetch => 'دریافت فهرست‌های انتخاب‌شده';
+
+  @override
+  String get grpCImpCuFetching => 'در حال دریافت از ClickUp…';
 }

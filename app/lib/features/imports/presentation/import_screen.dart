@@ -110,50 +110,58 @@ class ImportHistory extends ConsumerWidget {
               : Column(
                   children: [
                     for (final job in list)
-                      ListTile(
-                        key: Key('job-${job.id}'),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(job.filename),
-                        subtitle: Text(
-                          '${job.kind?.labelIn(context.l10n) ?? job.source} · ${job.status}'
-                          '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
-                          '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
+                      Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
                         ),
-                        trailing: Wrap(
-                          spacing: 4,
-                          children: [
-                            if (job.canResume || job.status == 'analyzed')
-                              TextButton(
-                                key: Key('job-resume-${job.id}'),
-                                onPressed: () => ref
-                                    .read(importWizardProvider.notifier)
-                                    .resume(job),
-                                child: Text(
-                                  job.canResume
-                                      ? context.l10n.grpCImpResume
-                                      : context.l10n.grpCImpContinue,
+                        clipBehavior: Clip.antiAlias,
+                        child: ListTile(
+                          key: Key('job-${job.id}'),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(job.filename),
+                          subtitle: Text(
+                            '${job.kind?.labelIn(context.l10n) ?? job.source} · ${job.status}'
+                            '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
+                            '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
+                          ),
+                          trailing: Wrap(
+                            spacing: 4,
+                            children: [
+                              if (job.canResume || job.status == 'analyzed')
+                                TextButton(
+                                  key: Key('job-resume-${job.id}'),
+                                  onPressed: () => ref
+                                      .read(importWizardProvider.notifier)
+                                      .resume(job),
+                                  child: Text(
+                                    job.canResume
+                                        ? context.l10n.grpCImpResume
+                                        : context.l10n.grpCImpContinue,
+                                  ),
                                 ),
-                              ),
-                            if (job.canUndo)
-                              TextButton(
-                                key: Key('job-undo-${job.id}'),
-                                onPressed: () => _confirmUndo(
-                                  context,
-                                  () => _run(context, () => actions.undo(job)),
+                              if (job.canUndo)
+                                TextButton(
+                                  key: Key('job-undo-${job.id}'),
+                                  onPressed: () => _confirmUndo(
+                                    context,
+                                    () =>
+                                        _run(context, () => actions.undo(job)),
+                                  ),
+                                  child: Text(context.l10n.grpCUndo),
                                 ),
-                                child: Text(context.l10n.grpCUndo),
-                              ),
-                            if (job.status == 'uploaded' ||
-                                job.status == 'analyzed' ||
-                                job.status == 'undone')
-                              IconButton(
-                                key: Key('job-discard-${job.id}'),
-                                tooltip: context.l10n.grpCImpForget,
-                                onPressed: () =>
-                                    _run(context, () => actions.discard(job)),
-                                icon: const Icon(Icons.delete_outline),
-                              ),
-                          ],
+                              if (job.status == 'uploaded' ||
+                                  job.status == 'analyzed' ||
+                                  job.status == 'undone')
+                                IconButton(
+                                  key: Key('job-discard-${job.id}'),
+                                  tooltip: context.l10n.grpCImpForget,
+                                  onPressed: () =>
+                                      _run(context, () => actions.discard(job)),
+                                  icon: const Icon(Icons.delete_outline),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                   ],
@@ -270,20 +278,24 @@ class PlaceholdersPanel extends ConsumerWidget {
         ),
         Text(context.l10n.grpCImpWaitingBody),
         for (final who in people)
-          ListTile(
-            key: Key('placeholder-${who.id}'),
-            contentPadding: EdgeInsets.zero,
-            title: Text(who.name),
-            subtitle: Text(
-              context.l10n.grpCImpPersonSub(
-                who.email.isEmpty ? context.l10n.grpCImpNoEmail : who.email,
-                who.tasks,
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              key: Key('placeholder-${who.id}'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(who.name),
+              subtitle: Text(
+                context.l10n.grpCImpPersonSub(
+                  who.email.isEmpty ? context.l10n.grpCImpNoEmail : who.email,
+                  who.tasks,
+                ),
               ),
-            ),
-            trailing: TextButton(
-              key: Key('claim-${who.id}'),
-              onPressed: () => _claim(context, ref, who),
-              child: Text(context.l10n.grpCImpAssignTo),
+              trailing: TextButton(
+                key: Key('claim-${who.id}'),
+                onPressed: () => _claim(context, ref, who),
+                child: Text(context.l10n.grpCImpAssignTo),
+              ),
             ),
           ),
       ],
