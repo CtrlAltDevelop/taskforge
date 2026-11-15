@@ -46,6 +46,8 @@ def render(row: Any, actor_name: str, locale: str | None = None) -> tuple[str, s
                 tr("notify.status_changed.title", lang, who=who, more=more),
                 tr("notify.status_changed.body", lang, task=task, moved=moved),
             )
+        case kinds.TASK_CHANGED:
+            return tr("notify.task_changed.title", lang, who=who, more=more), task
         case kinds.DUE_SOON:
             date = clean(payload.get("due_date", ""))
             return (

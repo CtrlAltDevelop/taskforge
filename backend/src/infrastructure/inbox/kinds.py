@@ -9,6 +9,7 @@ ASSIGNED: Final = "task.assigned"
 MENTIONED: Final = "user.mentioned"
 COMMENTED: Final = "comment.added"
 STATUS_CHANGED: Final = "status.changed"
+TASK_CHANGED: Final = "task.changed"
 DUE_SOON: Final = "task.due_soon"
 TIMER_LONG: Final = "timer.long"
 AUTOMATION: Final = "automation.notice"
@@ -29,6 +30,7 @@ KINDS: Final = (
     Kind(MENTIONED, "Someone mentions you", push=True),
     Kind(COMMENTED, "A comment on a task you watch"),
     Kind(STATUS_CHANGED, "The status of a task you watch changes"),
+    Kind(TASK_CHANGED, "A task you watch or work on is changed"),
     Kind(DUE_SOON, "A task assigned to you is due soon", push=True),
     Kind(TIMER_LONG, "Your timer has been running for a long time", push=True),
     Kind(AUTOMATION, "An automation sends you a message"),

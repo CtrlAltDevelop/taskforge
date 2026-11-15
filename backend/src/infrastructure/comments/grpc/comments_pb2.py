@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n+infrastructure/comments/grpc/comments.proto\x12\x0f\x63onfig.comments\"\x92\x02\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07task_id\x18\x02 \x01(\t\x12\x11\n\tauthor_id\x18\x03 \x01(\t\x12\x11\n\tparent_id\x18\x04 \x01(\t\x12\x0c\n\x04\x62ody\x18\x05 \x01(\t\x12\x12\n\ncreated_at\x18\x06 \x01(\t\x12\x11\n\tedited_at\x18\x07 \x01(\t\x12\x0f\n\x07\x64\x65leted\x18\x08 \x01(\x08\x12\x0e\n\x06pinned\x18\t \x01(\x08\x12\x0f\n\x07version\x18\n \x01(\x05\x12\x13\n\x0bmention_ids\x18\x0b \x03(\t\x12\x34\n\treactions\x18\x0c \x03(\x0b\x32!.config.comments.ReactionResponse\x12\x12\n\nedit_count\x18\r \x01(\x05\"\xb7\x01\n\x14\x43ommentCreateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\x0c\n\x04\x62ody\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x14\n\x0cgrant_access\x18\x06 \x01(\x08\x12\x11\n\tclient_id\x18\x07 \x01(\t\x12\x1a\n\x12\x63lient_mutation_id\x18\x08 \x01(\t\"L\n\x14\x43ommentDeleteRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"\x88\x01\n\x12\x43ommentEditRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x0c\n\x04\x62ody\x18\x05 \x01(\t\x12\x14\n\x0cgrant_access\x18\x06 \x01(\x08\"E\n\x0e\x43ommentHistory\x12\x33\n\trevisions\x18\x01 \x03(\x0b\x32 .config.comments.CommentRevision\"M\n\x15\x43ommentHistoryRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"r\n\x12\x43ommentListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\x0e\n\x06\x62\x65\x66ore\x18\x04 \x01(\t\x12\x11\n\tpage_size\x18\x05 \x01(\x05\"B\n\x12\x43ommentMentionable\x12,\n\x06people\x18\x01 \x03(\x0b\x32\x1c.config.comments.Mentionable\"e\n\x19\x43ommentMentionableRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\r\n\x05query\x18\x04 \x01(\t\"I\n\x0b\x43ommentPage\x12*\n\x08\x63omments\x18\x01 \x03(\x0b\x32\x18.config.comments.Comment\x12\x0e\n\x06\x63ursor\x18\x02 \x01(\t\"Y\n\x11\x43ommentPinRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x0e\n\x06pinned\x18\x04 \x01(\x08\"f\n\x13\x43ommentReactRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\r\n\x05\x65moji\x18\x04 \x01(\t\x12\n\n\x02on\x18\x05 \x01(\x08\"<\n\x0f\x43ommentRevision\x12\x0c\n\x04\x62ody\x18\x01 \x01(\t\x12\n\n\x02\x61t\x18\x02 \x01(\t\x12\x0f\n\x07\x63urrent\x18\x03 \x01(\x08\"!\n\x0e\x43ommentSubtask\x12\x0f\n\x07task_id\x18\x01 \x01(\t\"O\n\x17\x43ommentToSubtaskRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"4\n\x0bMentionable\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\"+\n\x08Reaction\x12\r\n\x05\x65moji\x18\x01 \x01(\t\x12\x10\n\x08user_ids\x18\x02 \x03(\t\"3\n\x10ReactionResponse\x12\r\n\x05\x65moji\x18\x01 \x01(\t\x12\x10\n\x08user_ids\x18\x02 \x03(\t2\xe7\x05\n\x11\x43ommentController\x12K\n\x06\x43reate\x12%.config.comments.CommentCreateRequest\x1a\x18.config.comments.Comment\"\x00\x12K\n\x06\x44\x65lete\x12%.config.comments.CommentDeleteRequest\x1a\x18.config.comments.Comment\"\x00\x12G\n\x04\x45\x64it\x12#.config.comments.CommentEditRequest\x1a\x18.config.comments.Comment\"\x00\x12T\n\x07History\x12&.config.comments.CommentHistoryRequest\x1a\x1f.config.comments.CommentHistory\"\x00\x12K\n\x04List\x12#.config.comments.CommentListRequest\x1a\x1c.config.comments.CommentPage\"\x00\x12`\n\x0bMentionable\x12*.config.comments.CommentMentionableRequest\x1a#.config.comments.CommentMentionable\"\x00\x12\x45\n\x03Pin\x12\".config.comments.CommentPinRequest\x1a\x18.config.comments.Comment\"\x00\x12I\n\x05React\x12$.config.comments.CommentReactRequest\x1a\x18.config.comments.Comment\"\x00\x12X\n\tToSubtask\x12(.config.comments.CommentToSubtaskRequest\x1a\x1f.config.comments.CommentSubtask\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n+infrastructure/comments/grpc/comments.proto\x12\x0f\x63onfig.comments\"\xaf\x02\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07task_id\x18\x02 \x01(\t\x12\x11\n\tauthor_id\x18\x03 \x01(\t\x12\x11\n\tparent_id\x18\x04 \x01(\t\x12\x0c\n\x04\x62ody\x18\x05 \x01(\t\x12\x12\n\ncreated_at\x18\x06 \x01(\t\x12\x11\n\tedited_at\x18\x07 \x01(\t\x12\x0f\n\x07\x64\x65leted\x18\x08 \x01(\x08\x12\x0e\n\x06pinned\x18\t \x01(\x08\x12\x0f\n\x07version\x18\n \x01(\x05\x12\x13\n\x0bmention_ids\x18\x0b \x03(\t\x12\x34\n\treactions\x18\x0c \x03(\x0b\x32!.config.comments.ReactionResponse\x12\x12\n\nedit_count\x18\r \x01(\x05\x12\x0c\n\x04kind\x18\x0e \x01(\t\x12\r\n\x05\x65vent\x18\x0f \x01(\t\"\xb7\x01\n\x14\x43ommentCreateRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\x0c\n\x04\x62ody\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x14\n\x0cgrant_access\x18\x06 \x01(\x08\x12\x11\n\tclient_id\x18\x07 \x01(\t\x12\x1a\n\x12\x63lient_mutation_id\x18\x08 \x01(\t\"L\n\x14\x43ommentDeleteRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"\x88\x01\n\x12\x43ommentEditRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x18\n\x10\x65xpected_version\x18\x04 \x01(\x05\x12\x0c\n\x04\x62ody\x18\x05 \x01(\t\x12\x14\n\x0cgrant_access\x18\x06 \x01(\x08\"E\n\x0e\x43ommentHistory\x12\x33\n\trevisions\x18\x01 \x03(\x0b\x32 .config.comments.CommentRevision\"M\n\x15\x43ommentHistoryRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"r\n\x12\x43ommentListRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\x0e\n\x06\x62\x65\x66ore\x18\x04 \x01(\t\x12\x11\n\tpage_size\x18\x05 \x01(\x05\"B\n\x12\x43ommentMentionable\x12,\n\x06people\x18\x01 \x03(\x0b\x32\x1c.config.comments.Mentionable\"e\n\x19\x43ommentMentionableRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\x0f\n\x07task_id\x18\x03 \x01(\t\x12\r\n\x05query\x18\x04 \x01(\t\"I\n\x0b\x43ommentPage\x12*\n\x08\x63omments\x18\x01 \x03(\x0b\x32\x18.config.comments.Comment\x12\x0e\n\x06\x63ursor\x18\x02 \x01(\t\"Y\n\x11\x43ommentPinRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\x0e\n\x06pinned\x18\x04 \x01(\x08\"f\n\x13\x43ommentReactRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\x12\r\n\x05\x65moji\x18\x04 \x01(\t\x12\n\n\x02on\x18\x05 \x01(\x08\"<\n\x0f\x43ommentRevision\x12\x0c\n\x04\x62ody\x18\x01 \x01(\t\x12\n\n\x02\x61t\x18\x02 \x01(\t\x12\x0f\n\x07\x63urrent\x18\x03 \x01(\x08\"!\n\x0e\x43ommentSubtask\x12\x0f\n\x07task_id\x18\x01 \x01(\t\"O\n\x17\x43ommentToSubtaskRequest\x12\x14\n\x0cworkspace_id\x18\x01 \x01(\t\x12\x12\n\nproject_id\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\t\"4\n\x0bMentionable\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\"+\n\x08Reaction\x12\r\n\x05\x65moji\x18\x01 \x01(\t\x12\x10\n\x08user_ids\x18\x02 \x03(\t\"3\n\x10ReactionResponse\x12\r\n\x05\x65moji\x18\x01 \x01(\t\x12\x10\n\x08user_ids\x18\x02 \x03(\t2\xe7\x05\n\x11\x43ommentController\x12K\n\x06\x43reate\x12%.config.comments.CommentCreateRequest\x1a\x18.config.comments.Comment\"\x00\x12K\n\x06\x44\x65lete\x12%.config.comments.CommentDeleteRequest\x1a\x18.config.comments.Comment\"\x00\x12G\n\x04\x45\x64it\x12#.config.comments.CommentEditRequest\x1a\x18.config.comments.Comment\"\x00\x12T\n\x07History\x12&.config.comments.CommentHistoryRequest\x1a\x1f.config.comments.CommentHistory\"\x00\x12K\n\x04List\x12#.config.comments.CommentListRequest\x1a\x1c.config.comments.CommentPage\"\x00\x12`\n\x0bMentionable\x12*.config.comments.CommentMentionableRequest\x1a#.config.comments.CommentMentionable\"\x00\x12\x45\n\x03Pin\x12\".config.comments.CommentPinRequest\x1a\x18.config.comments.Comment\"\x00\x12I\n\x05React\x12$.config.comments.CommentReactRequest\x1a\x18.config.comments.Comment\"\x00\x12X\n\tToSubtask\x12(.config.comments.CommentToSubtaskRequest\x1a\x1f.config.comments.CommentSubtask\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,41 +32,41 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'infrastructure.comments.grp
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_COMMENT']._serialized_start=65
-  _globals['_COMMENT']._serialized_end=339
-  _globals['_COMMENTCREATEREQUEST']._serialized_start=342
-  _globals['_COMMENTCREATEREQUEST']._serialized_end=525
-  _globals['_COMMENTDELETEREQUEST']._serialized_start=527
-  _globals['_COMMENTDELETEREQUEST']._serialized_end=603
-  _globals['_COMMENTEDITREQUEST']._serialized_start=606
-  _globals['_COMMENTEDITREQUEST']._serialized_end=742
-  _globals['_COMMENTHISTORY']._serialized_start=744
-  _globals['_COMMENTHISTORY']._serialized_end=813
-  _globals['_COMMENTHISTORYREQUEST']._serialized_start=815
-  _globals['_COMMENTHISTORYREQUEST']._serialized_end=892
-  _globals['_COMMENTLISTREQUEST']._serialized_start=894
-  _globals['_COMMENTLISTREQUEST']._serialized_end=1008
-  _globals['_COMMENTMENTIONABLE']._serialized_start=1010
-  _globals['_COMMENTMENTIONABLE']._serialized_end=1076
-  _globals['_COMMENTMENTIONABLEREQUEST']._serialized_start=1078
-  _globals['_COMMENTMENTIONABLEREQUEST']._serialized_end=1179
-  _globals['_COMMENTPAGE']._serialized_start=1181
-  _globals['_COMMENTPAGE']._serialized_end=1254
-  _globals['_COMMENTPINREQUEST']._serialized_start=1256
-  _globals['_COMMENTPINREQUEST']._serialized_end=1345
-  _globals['_COMMENTREACTREQUEST']._serialized_start=1347
-  _globals['_COMMENTREACTREQUEST']._serialized_end=1449
-  _globals['_COMMENTREVISION']._serialized_start=1451
-  _globals['_COMMENTREVISION']._serialized_end=1511
-  _globals['_COMMENTSUBTASK']._serialized_start=1513
-  _globals['_COMMENTSUBTASK']._serialized_end=1546
-  _globals['_COMMENTTOSUBTASKREQUEST']._serialized_start=1548
-  _globals['_COMMENTTOSUBTASKREQUEST']._serialized_end=1627
-  _globals['_MENTIONABLE']._serialized_start=1629
-  _globals['_MENTIONABLE']._serialized_end=1681
-  _globals['_REACTION']._serialized_start=1683
-  _globals['_REACTION']._serialized_end=1726
-  _globals['_REACTIONRESPONSE']._serialized_start=1728
-  _globals['_REACTIONRESPONSE']._serialized_end=1779
-  _globals['_COMMENTCONTROLLER']._serialized_start=1782
-  _globals['_COMMENTCONTROLLER']._serialized_end=2525
+  _globals['_COMMENT']._serialized_end=368
+  _globals['_COMMENTCREATEREQUEST']._serialized_start=371
+  _globals['_COMMENTCREATEREQUEST']._serialized_end=554
+  _globals['_COMMENTDELETEREQUEST']._serialized_start=556
+  _globals['_COMMENTDELETEREQUEST']._serialized_end=632
+  _globals['_COMMENTEDITREQUEST']._serialized_start=635
+  _globals['_COMMENTEDITREQUEST']._serialized_end=771
+  _globals['_COMMENTHISTORY']._serialized_start=773
+  _globals['_COMMENTHISTORY']._serialized_end=842
+  _globals['_COMMENTHISTORYREQUEST']._serialized_start=844
+  _globals['_COMMENTHISTORYREQUEST']._serialized_end=921
+  _globals['_COMMENTLISTREQUEST']._serialized_start=923
+  _globals['_COMMENTLISTREQUEST']._serialized_end=1037
+  _globals['_COMMENTMENTIONABLE']._serialized_start=1039
+  _globals['_COMMENTMENTIONABLE']._serialized_end=1105
+  _globals['_COMMENTMENTIONABLEREQUEST']._serialized_start=1107
+  _globals['_COMMENTMENTIONABLEREQUEST']._serialized_end=1208
+  _globals['_COMMENTPAGE']._serialized_start=1210
+  _globals['_COMMENTPAGE']._serialized_end=1283
+  _globals['_COMMENTPINREQUEST']._serialized_start=1285
+  _globals['_COMMENTPINREQUEST']._serialized_end=1374
+  _globals['_COMMENTREACTREQUEST']._serialized_start=1376
+  _globals['_COMMENTREACTREQUEST']._serialized_end=1478
+  _globals['_COMMENTREVISION']._serialized_start=1480
+  _globals['_COMMENTREVISION']._serialized_end=1540
+  _globals['_COMMENTSUBTASK']._serialized_start=1542
+  _globals['_COMMENTSUBTASK']._serialized_end=1575
+  _globals['_COMMENTTOSUBTASKREQUEST']._serialized_start=1577
+  _globals['_COMMENTTOSUBTASKREQUEST']._serialized_end=1656
+  _globals['_MENTIONABLE']._serialized_start=1658
+  _globals['_MENTIONABLE']._serialized_end=1710
+  _globals['_REACTION']._serialized_start=1712
+  _globals['_REACTION']._serialized_end=1755
+  _globals['_REACTIONRESPONSE']._serialized_start=1757
+  _globals['_REACTIONRESPONSE']._serialized_end=1808
+  _globals['_COMMENTCONTROLLER']._serialized_start=1811
+  _globals['_COMMENTCONTROLLER']._serialized_end=2554
 # @@protoc_insertion_point(module_scope)

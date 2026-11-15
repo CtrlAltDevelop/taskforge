@@ -105,7 +105,7 @@ def _comment(sender: Any, **kw: Any) -> None:
     if kw["action"] != "created":
         return
     task, comment = _task(kw["task_id"]), Comment.objects.filter(pk=kw["comment_id"]).first()
-    if task is None or comment is None or comment.is_deleted:
+    if task is None or comment is None or comment.is_deleted or comment.is_system:
         return
     watchers.ensure(task.pk, [comment.author_id])
     told_as_mentioned = set(
@@ -123,7 +123,36 @@ def _comment(sender: Any, **kw: Any) -> None:
     )
 
 
+# status moves and assignment already have their own notification kinds
+_OWN_KIND = frozenset({"status_id", "assignees"})
+
+
+@_guarded
+def _system_message(sender: Any, **kw: Any) -> None:
+    """A change message in a task's chat tells the assignees and watchers, once (a coalesced
+    message is an update, not a new notification)."""
+    if kw["action"] != "created":
+        return
+    comment = Comment.objects.filter(pk=kw["comment_id"], kind="system").first()
+    task = _task(kw["task_id"])
+    if comment is None or task is None or (comment.event or {}).get("field") in _OWN_KIND:
+        return
+    event = comment.event or {}
+    recipients = {*watchers.watcher_ids(task.pk), *task.assignee_ids()}
+    notify.notify(
+        kind=kinds.TASK_CHANGED,
+        recipients=list(recipients),
+        workspace=task.workspace,
+        project=task.project,
+        task=task,
+        actor_id=comment.author_id,
+        payload={**_about(task), "field": event.get("field", "")},
+        dedupe=f"taskchanged:{comment.pk}",
+    )
+
+
 def connect() -> None:
     task_activity.connect(_activity, dispatch_uid=f"{UID}.activity")
     user_mentioned.connect(_mentioned, dispatch_uid=f"{UID}.mentioned")
     comment_changed.connect(_comment, dispatch_uid=f"{UID}.comment")
+    comment_changed.connect(_system_message, dispatch_uid=f"{UID}.system")

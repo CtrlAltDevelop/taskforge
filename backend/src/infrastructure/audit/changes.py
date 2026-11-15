@@ -72,6 +72,10 @@ def updated(instance: Any, before: dict[str, Any] | None) -> None:
     }
     if changed:
         _write(instance, track, _name_update(track, changed), changed)
+        if instance._meta.label == "tasks.Task" and track.when(instance):
+            from infrastructure.comments import system_messages
+
+            system_messages.from_task_change(instance, changed)
 
 
 def deleted(instance: Any) -> None:

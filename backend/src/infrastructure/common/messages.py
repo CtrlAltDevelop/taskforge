@@ -46,6 +46,12 @@ TEXT: dict[str, dict[str, str]] = {
         "ar": "{who} نقل مهمة{more}",
         "ps": "{who} یو کار ولېږداوه{more}",
     },
+    "notify.task_changed.title": {
+        "en": "{who} changed a task{more}",
+        "fa": "{who} یک کار را تغییر داد{more}",
+        "ar": "{who} غيّر مهمة{more}",
+        "ps": "{who} یو کار بدل کړ{more}",
+    },
     "notify.status_changed.body": {
         "en": "{task}: {moved}",
         "fa": "{task}: {moved}",

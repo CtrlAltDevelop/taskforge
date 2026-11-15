@@ -1,6 +1,6 @@
 # Phase 42 — Task chat with change messages
 
-**Status:** TODO
+**Status:** Backend done; Flutter in progress
 
 ## Feature
 Every task's comment stream becomes its **chat**: besides what people write, it shows a system message for each change to the task ("@Sara changed priority to High · 38 min ago"), visible to everyone who can see the task, who can answer in the same stream and `@` anyone.

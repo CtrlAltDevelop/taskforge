@@ -28,6 +28,8 @@ message Comment {
     repeated string mention_ids = 11;
     repeated ReactionResponse reactions = 12;
     int32 edit_count = 13;
+    string kind = 14;
+    string event = 15;
 }
 
 message CommentCreateRequest {

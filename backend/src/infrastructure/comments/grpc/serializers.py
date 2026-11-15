@@ -29,6 +29,8 @@ class Comment(serializers.Serializer[dict[str, object]]):
     mention_ids = serializers.ListField(child=serializers.CharField())
     reactions = Reaction(many=True)
     edit_count = serializers.IntegerField()
+    kind = serializers.CharField()  # "user" or "system" (a change message; ``body`` is empty)
+    event = serializers.CharField()  # JSON {actor_type, actor_id, field, from, to}; "" for user
 
 
 class CommentRevision(serializers.Serializer[dict[str, object]]):

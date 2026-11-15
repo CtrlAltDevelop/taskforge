@@ -49,7 +49,9 @@ def _message(comment: CommentRow) -> Any:
     return _pb().Comment(
         id=str(comment.pk),
         task_id=str(comment.task_id),
-        author_id=str(comment.author_id),
+        author_id=str(comment.author_id or ""),
+        kind=comment.kind,
+        event=json.dumps(comment.event) if comment.event else "",
         parent_id=str(comment.parent_id or ""),
         body=json.dumps(comment.body) if comment.body else "",
         created_at=comment.created_at.isoformat(),

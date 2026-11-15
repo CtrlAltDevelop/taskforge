@@ -11,6 +11,10 @@ from infrastructure.tasks.models import Task
 from infrastructure.workspaces.models import Workspace
 
 
+USER = "user"
+SYSTEM = "system"
+
+
 class Comment(models.Model):
     """``body`` is the shared rich-text document, rebuilt by ``body.clean`` (never as sent).
     ``deleted_at`` is a soft delete: the row stays so replies keep their place, and its body is
@@ -19,9 +23,17 @@ class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
+    # Null for a system message made by an automation, form, import or the system itself.
     author = models.ForeignKey(
-        django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
+        django_settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="+",
+        null=True,
+        blank=True,
     )
+    kind = models.CharField(max_length=6, default="user")  # "user" | "system" (phase 42)
+    # System messages only: {actor_type, actor_id, field, from, to}; ids and raw values.
+    event = models.JSONField(null=True, blank=True)
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.CASCADE, related_name="replies"
     )
@@ -37,6 +49,10 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return f"comment {self.pk} on {self.task_id}"
+
+    @property
+    def is_system(self) -> bool:
+        return self.kind == SYSTEM
 
     @property
     def is_deleted(self) -> bool:

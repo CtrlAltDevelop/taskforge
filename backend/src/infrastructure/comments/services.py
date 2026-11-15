@@ -100,6 +100,8 @@ def _load(
     comment = (rows.select_for_update(of=("self",)) if lock else rows).first()
     if comment is None:
         raise not_found()
+    if comment.is_system and (write or lock):
+        raise ApiError("A change message cannot be edited, removed, reacted to or pinned.")
     return project, comment
 
 
@@ -256,6 +258,8 @@ def _parent(task: Task, parent_id: str) -> Comment | None:
     parent = Comment.objects.filter(pk=pk, task=task).first()
     if parent is None:
         raise not_found()
+    if parent.is_system:
+        raise ApiError("Reply with a new message under the change, not to it.")
     if parent.parent_id is not None:
         raise ApiError(
             "Replies go one level deep: reply to the comment above.",

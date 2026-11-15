@@ -324,6 +324,10 @@ def create(
         tree.refresh_above(task)
         announce(task, "created")
         announce_activity(task, "created", actor)
+        if parent is not None:
+            from infrastructure.comments import system_messages
+
+            system_messages.record(parent, "subtask_added", None, task.title)
         if users:
             announce_activity(task, "assigned", actor, user_ids=[str(u.pk) for u in users])
     return _reload(task, actor, workspace)
@@ -434,6 +438,11 @@ def _announce_changes(
 ) -> None:
     """Tell the notifications who was newly assigned and whether the status moved."""
     if users is not None:
+        now = sorted(str(u.pk) for u in users)
+        if now != sorted(was_assigned):
+            from infrastructure.comments import system_messages
+
+            system_messages.record(task, "assignees", sorted(was_assigned), now)
         added = [str(u.pk) for u in users if str(u.pk) not in was_assigned]
         if added:
             announce_activity(task, "assigned", actor, user_ids=added)
