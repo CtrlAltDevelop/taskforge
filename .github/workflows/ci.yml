@@ -195,6 +195,14 @@ jobs:
           --health-cmd "pg_isready -U taskforge" --health-interval 5s --health-retries 10
     env:
       DJANGO_SETTINGS_MODULE: config.settings.development
+      # Without this the development settings ignore DJANGO_DB_* and migrate SQLite instead.
+      DJANGO_DEV_EXTERNAL: "true"
+      DJANGO_AUTH_METHODS: password
+      DJANGO_AUTH_TOKEN_MODE: rotation
+      DJANGO_OAUTH_MODE: rotation
+      DJANGO_NOTIFICATIONS_ENABLED: "true"
+      DJANGO_AUTH_CHALLENGE_STORE: infrastructure.auth.core.challenges.LocMemChallengeStore
+      DJANGO_REDIS_URL: redis://127.0.0.1:6379/0
       DJANGO_DB_ENGINE: django.db.backends.postgresql
       DJANGO_DB_NAME: taskforge
       DJANGO_DB_USER: taskforge
@@ -220,7 +228,7 @@ jobs:
         run: |
           git worktree add ../previous "${{ steps.previous.outputs.tag }}"
           python -m venv ../previous-venv
-          ../previous-venv/bin/pip install -e '../previous/backend'
+          ../previous-venv/bin/pip install -e '../previous/backend[dev,oauth,redis,s3,totp,asgi,media,sentry]'
           cd ../previous/backend
           ../../previous-venv/bin/python manage.py migrate --noinput
       - name: Migrate with this commit (N+1)
