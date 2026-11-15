@@ -107,9 +107,9 @@ void main() {
   ) async {
     final o = await open(
       tester,
-      comments: [change('s1', 'priority', 'low', 'medium')],
+      comments: [change('s1', 'priority', 'low', 'normal')],
     );
-    expect(find.textContaining('from Low to Medium'), findsOneWidget);
+    expect(find.textContaining('from Low to Normal'), findsOneWidget);
 
     o.comments.comments[0] = change('s1', 'priority', 'low', 'high');
     await o.pumped.container
@@ -119,6 +119,6 @@ void main() {
 
     expect(find.byKey(const Key('system-s1')), findsOneWidget);
     expect(find.textContaining('from Low to High'), findsOneWidget);
-    expect(find.textContaining('to Medium'), findsNothing);
+    expect(find.textContaining('to Normal'), findsNothing);
   });
 }
