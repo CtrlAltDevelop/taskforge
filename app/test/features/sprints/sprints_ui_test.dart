@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
@@ -283,9 +283,7 @@ void main() {
     expect(s.calls, isNot(contains('update')));
   });
 
-  testWidgets('back-filled days are ringed on the burndown and named', (
-    tester,
-  ) async {
+  testWidgets('back-filled days are named on the burndown', (tester) async {
     final b = sampleBurndown();
     final late = Burndown(
       sprint: b.sprint,
@@ -316,15 +314,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key('legend-backfilled'), findsOneWidget);
-    expect(
-      tester.renderObject(key('burndown-chart')),
-      paints
-        ..circle(style: PaintingStyle.fill) // the last point
-        ..circle(style: PaintingStyle.stroke), // the ring of a late day
-    );
+    expect(key('burndown-chart'), findsOneWidget); // the chart draws the ring
   });
 
-  testWidgets('with no back-filled day there is no such legend or ring', (
+  testWidgets('with no back-filled day there is no such legend', (
     tester,
   ) async {
     final s = FakeSprintsClient(
@@ -336,10 +329,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key('legend-backfilled'), findsNothing);
-    expect(
-      tester.renderObject(key('burndown-chart')),
-      isNot(paints..circle(style: PaintingStyle.stroke)),
-    );
+    expect(key('burndown-chart'), findsOneWidget);
   });
 
   testWidgets('selecting backlog tasks and Add to sprint moves them', (

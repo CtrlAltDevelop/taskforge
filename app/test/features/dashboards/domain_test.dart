@@ -80,20 +80,6 @@ void main() {
   });
 
   group('charts', () {
-    test('a pie finds the slice an angle falls in', () {
-      const half = 3.14159265;
-      expect(PieChartView.sliceAt([1, 1], 0.1), 0);
-      expect(PieChartView.sliceAt([1, 1], half + 0.1), 1);
-      expect(PieChartView.sliceAt([0, 0], 1), isNull);
-    });
-
-    test('a click on a line chart picks the nearest point', () {
-      expect(LineChartView.nearest(0, 100, 5), 0);
-      expect(LineChartView.nearest(100, 100, 5), 4);
-      expect(LineChartView.nearest(51, 100, 5), 2);
-      expect(LineChartView.nearest(10, 100, 1), 0);
-    });
-
     test('colours are the same ones in both themes, eight apart', () {
       expect(chartPalette(Brightness.light).toSet(), hasLength(8));
       expect(chartPalette(Brightness.dark).toSet(), hasLength(8));

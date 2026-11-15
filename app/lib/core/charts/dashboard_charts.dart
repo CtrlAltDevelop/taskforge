@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:ohlcv_chart/ohlcv_chart.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 
@@ -174,7 +175,7 @@ class _BarRow extends StatelessWidget {
 }
 
 /// A pie with a legend; both a slice and a legend row report their bucket.
-class PieChartView extends StatelessWidget {
+class PieChartView extends StatefulWidget {
   const PieChartView({
     super.key,
     required this.data,
@@ -188,31 +189,28 @@ class PieChartView extends StatelessWidget {
   /// The name read out first; the chart's own kind when null.
   final String? semanticsLabel;
 
-  double get _sum => data.fold<double>(0, (s, d) => s + math.max(d.value, 0));
+  @override
+  State<PieChartView> createState() => _PieChartViewState();
+}
 
-  /// The slice an angle (clockwise from the top, in radians) falls in.
-  static int? sliceAt(List<double> values, double angle) {
-    final sum = values.fold<double>(0, (s, v) => s + math.max(v, 0));
-    if (sum <= 0) return null;
-    var from = 0.0;
-    for (var i = 0; i < values.length; i++) {
-      final sweep = math.max(values[i], 0) / sum * 2 * math.pi;
-      if (angle >= from && angle < from + sweep) return i;
-      from += sweep;
-    }
-    return null;
-  }
+class _PieChartViewState extends State<PieChartView> {
+  /// The slice under the pointer (the chart reports hover and press).
+  int? _touched;
+
+  List<ChartDatum> get _data => widget.data;
 
   @override
   Widget build(BuildContext context) {
+    final onTap = widget.onTap;
     final colors = [
-      for (var i = 0; i < data.length; i++) chartColor(context, i),
+      for (var i = 0; i < _data.length; i++) chartColor(context, i),
     ];
-    final sum = _sum;
+    final sum = _data.fold<double>(0, (s, d) => s + math.max(d.value, 0));
+    final text = Theme.of(context).textTheme.bodySmall;
     return Semantics(
       label: context.l10n.grpRChartSlices(
-        semanticsLabel ?? context.l10n.grpMWkPie,
-        data.length,
+        widget.semanticsLabel ?? context.l10n.grpMWkPie,
+        _data.length,
       ),
       container: true,
       child: Row(
@@ -222,24 +220,20 @@ class PieChartView extends StatelessWidget {
             height: 120,
             child: GestureDetector(
               key: const Key('pie'),
-              onTapUp: onTap == null
+              onTap: onTap == null || _touched == null
                   ? null
-                  : (d) {
-                      final centre = const Offset(60, 60);
-                      final v = d.localPosition - centre;
-                      if (v.distance > 60) return;
-                      final angle =
-                          (math.atan2(v.dx, -v.dy) + 2 * math.pi) %
-                          (2 * math.pi);
-                      final i = sliceAt([for (final d in data) d.value], angle);
-                      if (i != null) onTap!(data[i]);
-                    },
-              child: CustomPaint(
-                painter: _PiePainter(
-                  [for (final d in data) d.value],
-                  colors,
-                  Theme.of(context).colorScheme.surface,
-                ),
+                  : () => onTap(_data[_touched!]),
+              child: PieChart(
+                sections: [
+                  for (var i = 0; i < _data.length; i++)
+                    PieSection(
+                      value: math.max(_data[i].value, 0),
+                      color: colors[i],
+                    ),
+                ],
+                sectionsSpace: 1.5,
+                touchedSectionGrowth: 4,
+                onTouch: (d) => _touched = d?.index,
               ),
             ),
           ),
@@ -248,20 +242,20 @@ class PieChartView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var i = 0; i < data.length; i++)
+                for (var i = 0; i < _data.length; i++)
                   Semantics(
                     button: onTap != null,
                     label: sum <= 0
-                        ? '${data[i].label}, ${data[i].shown}'
+                        ? '${_data[i].label}, ${_data[i].shown}'
                         : context.l10n.grpRChartPercent(
-                            data[i].label,
-                            data[i].shown,
-                            (data[i].value / sum * 100).round(),
+                            _data[i].label,
+                            _data[i].shown,
+                            (_data[i].value / sum * 100).round(),
                           ),
                     excludeSemantics: true,
                     child: InkWell(
-                      key: Key('slice-${data[i].key}'),
-                      onTap: onTap == null ? null : () => onTap!(data[i]),
+                      key: Key('slice-${_data[i].key}'),
+                      onTap: onTap == null ? null : () => onTap(_data[i]),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: Row(
@@ -270,16 +264,13 @@ class PieChartView extends StatelessWidget {
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                data[i].label,
+                                _data[i].label,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.bodySmall,
+                                style: text,
                               ),
                             ),
-                            Text(
-                              data[i].shown,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
+                            Text(_data[i].shown, style: text),
                           ],
                         ),
                       ),
@@ -292,56 +283,6 @@ class PieChartView extends StatelessWidget {
       ),
     );
   }
-}
-
-class _PiePainter extends CustomPainter {
-  _PiePainter(this.values, this.colors, this.gap);
-
-  final List<double> values;
-  final List<Color> colors;
-  final Color gap;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final sum = values.fold<double>(0, (s, v) => s + math.max(v, 0));
-    final rect = Offset.zero & size;
-    if (sum <= 0) {
-      canvas.drawCircle(
-        rect.center,
-        size.shortestSide / 2,
-        Paint()..color = gap,
-      );
-      return;
-    }
-    var start = -math.pi / 2;
-    for (var i = 0; i < values.length; i++) {
-      final sweep = math.max(values[i], 0) / sum * 2 * math.pi;
-      canvas.drawArc(rect, start, sweep, true, Paint()..color = colors[i]);
-      canvas.drawArc(
-        rect,
-        start,
-        sweep,
-        true,
-        Paint()
-          ..color = gap
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5,
-      );
-      start += sweep;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_PiePainter old) =>
-      !listEquals(old.values, values) || !listEquals(old.colors, colors);
-}
-
-bool listEquals<T>(List<T> a, List<T> b) {
-  if (a.length != b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] != b[i]) return false;
-  }
-  return true;
 }
 
 /// One line on a [LineChartView]: its name and values, aligned with the
@@ -371,13 +312,6 @@ class LineChartView extends StatelessWidget {
   /// The name read out first; the chart's own kind when null.
   final String? semanticsLabel;
 
-  /// The x position (0..count-1) nearest to [dx] of [width] pixels.
-  static int nearest(double dx, double width, int count) {
-    if (count <= 1 || width <= 0) return 0;
-    final i = (dx / width * (count - 1)).round();
-    return i.clamp(0, count - 1);
-  }
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -385,6 +319,7 @@ class LineChartView extends StatelessWidget {
       for (var i = 0; i < series.length; i++) chartColor(context, i),
     ];
     final text = Theme.of(context).textTheme.bodySmall;
+    final last = xLabels.length - 1;
     return Semantics(
       label: context.l10n.grpRChartLines(
         semanticsLabel ?? context.l10n.grpMWkLine,
@@ -396,34 +331,42 @@ class LineChartView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: LayoutBuilder(
-              builder: (_, c) => GestureDetector(
-                key: const Key('line-chart'),
-                onTapUp: onTap == null
-                    ? null
-                    : (d) => onTap!(
-                        nearest(d.localPosition.dx, c.maxWidth, xLabels.length),
-                      ),
-                child: CustomPaint(
-                  size: Size.infinite,
-                  painter: _LinePainter(
-                    series,
-                    colors,
-                    scheme.outlineVariant,
-                    scheme.onSurface,
+            child: SeriesChart(
+              key: const Key('line-chart'),
+              series: [
+                for (var i = 0; i < series.length; i++)
+                  LineSeries.values(
+                    series[i].values,
+                    label: series[i].name,
+                    color: colors[i],
+                    dot: const SeriesDot(radius: 2.5),
                   ),
-                ),
+              ],
+              // Only the ends are named; the middle stays quiet.
+              xAxis: SeriesXAxis(
+                labels: [
+                  for (var i = 0; i <= last; i++)
+                    i == 0 || i == last ? xLabels[i] : '',
+                ],
+                style: text,
               ),
+              yAxis: const SeriesYAxis(),
+              grid: SeriesGrid(color: scheme.outlineVariant),
+              includeZero: true,
+              touch: SeriesTouch(
+                trigger: onTap == null
+                    ? SeriesTouchTrigger.press
+                    : SeriesTouchTrigger.tap,
+                hover: true,
+                tooltip: SeriesTooltip(title: (d) => xLabels[d.index.round()]),
+              ),
+              onTouch: onTap == null
+                  ? null
+                  : (d) {
+                      if (d != null) onTap!(d.index.round());
+                    },
             ),
           ),
-          if (xLabels.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(xLabels.first, style: text),
-                Text(xLabels.last, style: text),
-              ],
-            ),
           if (series.length > 1)
             Wrap(
               spacing: 12,
@@ -443,62 +386,6 @@ class LineChartView extends StatelessWidget {
       ),
     );
   }
-}
-
-class _LinePainter extends CustomPainter {
-  _LinePainter(this.series, this.colors, this.grid, this.text);
-
-  final List<ChartSeries> series;
-  final List<Color> colors;
-  final Color grid;
-  final Color text;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final all = [for (final s in series) ...s.values.nonNulls];
-    final count = series.fold<int>(0, (m, s) => math.max(m, s.values.length));
-    if (all.isEmpty || count == 0) return;
-    final top = all.reduce(math.max);
-    final low = math.min(0.0, all.reduce(math.min));
-    final span = (top - low) == 0 ? 1.0 : top - low;
-    final axis = Paint()
-      ..color = grid
-      ..strokeWidth = 1;
-    canvas.drawLine(
-      Offset(0, size.height),
-      Offset(size.width, size.height),
-      axis,
-    );
-    canvas.drawLine(Offset.zero, Offset(0, size.height), axis);
-    Offset at(int i, double v) => Offset(
-      count == 1 ? size.width / 2 : i / (count - 1) * size.width,
-      size.height - (v - low) / span * (size.height - 4) - 2,
-    );
-    for (var s = 0; s < series.length; s++) {
-      final paint = Paint()
-        ..color = colors[s]
-        ..strokeWidth = 2
-        ..style = PaintingStyle.stroke;
-      final path = Path();
-      var open = false;
-      for (var i = 0; i < series[s].values.length; i++) {
-        final v = series[s].values[i];
-        if (v == null) {
-          open = false;
-          continue;
-        }
-        final p = at(i, v);
-        open ? path.lineTo(p.dx, p.dy) : path.moveTo(p.dx, p.dy);
-        open = true;
-        canvas.drawCircle(p, 2.5, Paint()..color = colors[s]);
-      }
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_LinePainter old) =>
-      old.series != series || old.colors != colors;
 }
 
 /// Rows of label and value; a row is a button.

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:taskforge/core/charts/chart_paint.dart';
+import 'package:ohlcv_chart/ohlcv_chart.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
@@ -118,16 +118,13 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
                       : context.l10n.grpABurndownBackfilled(
                           chart.backfilledDays,
                         )),
-              child: CustomPaint(
+              child: _BurndownChart(
                 key: const Key('burndown-chart'),
-                size: Size.infinite,
-                painter: BurndownPainter(
-                  chart,
-                  actual: theme.colorScheme.primary,
-                  ideal: theme.colorScheme.outline,
-                  scope: theme.colorScheme.error,
-                  text: theme.colorScheme.onSurface,
-                ),
+                data: chart,
+                actual: theme.colorScheme.primary,
+                ideal: theme.colorScheme.outline,
+                scope: theme.colorScheme.error,
+                grid: theme.colorScheme.outlineVariant,
               ),
             ),
           ),
@@ -189,132 +186,77 @@ class _Legend extends StatelessWidget {
 }
 
 /// Draws a [ChartData]: x is the day, y the remaining work.
-class BurndownPainter extends CustomPainter {
-  BurndownPainter(
-    this.data, {
+class _BurndownChart extends StatelessWidget {
+  const _BurndownChart({
+    super.key,
+    required this.data,
     required this.actual,
     required this.ideal,
     required this.scope,
-    required this.text,
+    required this.grid,
   });
 
   final ChartData data;
   final Color actual;
   final Color ideal;
   final Color scope;
-  final Color text;
+  final Color grid;
 
-  static const _left = 32.0;
-  static const _bottom = 20.0;
-
-  Offset _at(Size size, int i, double v) {
-    final w = size.width - _left - 8;
-    final h = size.height - _bottom - 8;
-    final n = data.points.length;
-    final x = _left + (n <= 1 ? 0 : w * i / (n - 1));
-    return Offset(x, 8 + h * (1 - v / data.maxY));
-  }
+  static String _short(DateTime d) => '${d.month}/${d.day}';
 
   @override
-  void paint(Canvas canvas, Size size) {
-    paintChartAxes(
-      canvas,
-      Rect.fromLTRB(_left, 8, size.width - 8, size.height - _bottom),
-      text,
+  Widget build(BuildContext context) {
+    final points = data.points;
+    final last = points.length - 1;
+    final lastMeasured = points.lastIndexWhere((p) => p.actual != null);
+    return SeriesChart(
+      series: [
+        LineSeries.values(
+          [for (final p in points) p.ideal],
+          label: context.l10n.grpALegendIdeal,
+          color: ideal,
+          dashPattern: const [6, 4],
+        ),
+        // Stops at the last day with a measurement (future days stay blank).
+        LineSeries.values(
+          [for (final p in points) p.actual],
+          label: context.l10n.grpALegendRemaining,
+          color: actual,
+          width: 2.5,
+          dotBuilder: (i, _) => i == lastMeasured
+              ? SeriesDot(radius: 4, color: actual)
+              // A day written late: a ring.
+              : points[i].backfilled
+              ? SeriesDot(
+                  radius: 4,
+                  color: Colors.transparent,
+                  strokeColor: actual,
+                  strokeWidth: 1.5,
+                )
+              : null,
+        ),
+      ],
+      xAxis: SeriesXAxis(
+        labels: [
+          for (var i = 0; i <= last; i++)
+            i == 0 || i == last ? _short(points[i].date) : '',
+        ],
+      ),
+      yAxis: SeriesYAxis(formatter: pointsText),
+      grid: SeriesGrid(color: grid),
+      minY: 0,
+      maxY: data.maxY,
+      // Steps where scope changed: a marker line labelled with the change.
+      referenceLines: [
+        for (final s in data.steps)
+          SeriesReferenceLine.vertical(
+            s.index.toDouble(),
+            color: scope,
+            label: (s.delta > 0 ? '+' : '') + pointsText(s.delta),
+          ),
+      ],
     );
-    _label(canvas, pointsText(data.maxY), const Offset(0, 2));
-    _label(canvas, '0', Offset(14, size.height - _bottom - 12));
-    final n = data.points.length;
-    if (n > 0) {
-      _label(
-        canvas,
-        _short(data.points.first.date),
-        Offset(_left, size.height - 14),
-      );
-      if (n > 1) {
-        _label(
-          canvas,
-          _short(data.points.last.date),
-          Offset(size.width - 40, size.height - 14),
-        );
-      }
-    }
-
-    final idealPaint = Paint()
-      ..color = ideal
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-    final idealPath = Path();
-    for (var i = 0; i < n; i++) {
-      final p = _at(size, i, data.points[i].ideal);
-      i == 0 ? idealPath.moveTo(p.dx, p.dy) : idealPath.lineTo(p.dx, p.dy);
-    }
-    canvas.drawPath(idealPath, idealPaint);
-
-    // Steps where scope changed: a marker line with an arrow-ish label.
-    final stepPaint = Paint()
-      ..color = scope
-      ..strokeWidth = 1.5;
-    for (final s in data.steps) {
-      final x = _at(size, s.index, 0).dx;
-      canvas.drawLine(
-        Offset(x, 8),
-        Offset(x, size.height - _bottom),
-        stepPaint,
-      );
-      _label(
-        canvas,
-        (s.delta > 0 ? '+' : '') + pointsText(s.delta),
-        Offset(x + 2, 8),
-      );
-    }
-
-    // Actual: stops at the last day with a measurement (future days blank).
-    final actualPaint = Paint()
-      ..color = actual
-      ..strokeWidth = 2.5
-      ..style = PaintingStyle.stroke;
-    final path = Path();
-    var started = false;
-    Offset? last;
-    for (var i = 0; i < n; i++) {
-      final v = data.points[i].actual;
-      if (v == null) continue;
-      final p = _at(size, i, v);
-      started ? path.lineTo(p.dx, p.dy) : path.moveTo(p.dx, p.dy);
-      started = true;
-      last = p;
-    }
-    canvas.drawPath(path, actualPaint);
-    if (last != null) {
-      canvas.drawCircle(last, 4, Paint()..color = actual);
-    }
-
-    // A day written late (its remaining count is as of the late run): a ring.
-    final ring = Paint()
-      ..color = actual
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-    for (var i = 0; i < n; i++) {
-      final p = data.points[i];
-      final v = p.actual;
-      if (p.backfilled && v != null) {
-        canvas.drawCircle(_at(size, i, v), 4, ring);
-      }
-    }
   }
-
-  String _short(DateTime d) => '${d.month}/${d.day}';
-
-  void _label(Canvas canvas, String s, Offset at) =>
-      paintChartLabel(canvas, s, at, text);
-
-  @override
-  bool shouldRepaint(BurndownPainter old) =>
-      old.data != data ||
-      old.actual != actual ||
-      old.ideal != ideal ||
-      old.scope != scope;
 }
 
 /// Committed against completed points of the last six sprints.
@@ -377,15 +319,24 @@ class VelocityPanel extends ConsumerWidget {
           height: 160,
           child: Semantics(
             label: context.l10n.grpAVelocityChart(items.length),
-            child: CustomPaint(
+            child: SeriesChart(
               key: const Key('velocity-chart'),
-              size: Size.infinite,
-              painter: VelocityPainter(
-                items,
-                committed: theme.colorScheme.outline,
-                completed: theme.colorScheme.primary,
-                text: theme.colorScheme.onSurface,
-              ),
+              series: [
+                BarSeries.values(
+                  [for (final v in items) v.committedPoints],
+                  label: context.l10n.grpALegendCommitted,
+                  color: theme.colorScheme.outline,
+                ),
+                BarSeries.values(
+                  [for (final v in items) v.completedPoints],
+                  label: context.l10n.grpALegendCompleted,
+                  color: theme.colorScheme.primary,
+                ),
+              ],
+              xAxis: SeriesXAxis(labels: [for (final v in items) v.name]),
+              yAxis: SeriesYAxis(formatter: pointsText),
+              grid: SeriesGrid(color: theme.colorScheme.outlineVariant),
+              minY: 0,
             ),
           ),
         ),
@@ -405,63 +356,4 @@ class VelocityPanel extends ConsumerWidget {
       ],
     );
   }
-}
-
-class VelocityPainter extends CustomPainter {
-  VelocityPainter(
-    this.items, {
-    required this.committed,
-    required this.completed,
-    required this.text,
-  });
-
-  final List<VelocityItem> items;
-  final Color committed;
-  final Color completed;
-  final Color text;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var top = 1.0;
-    for (final v in items) {
-      if (v.committedPoints > top) top = v.committedPoints;
-      if (v.completedPoints > top) top = v.completedPoints;
-    }
-    final slot = size.width / items.length;
-    final h = size.height - 18;
-    paintChartAxes(canvas, Rect.fromLTRB(0, 0, size.width, h), text);
-    for (var i = 0; i < items.length; i++) {
-      final v = items[i];
-      final bar = slot * 0.3;
-      final x = slot * i + slot * 0.15;
-      canvas.drawRect(
-        Rect.fromLTWH(
-          x,
-          h * (1 - v.committedPoints / top),
-          bar,
-          h * v.committedPoints / top,
-        ),
-        Paint()..color = committed,
-      );
-      canvas.drawRect(
-        Rect.fromLTWH(
-          x + bar + 2,
-          h * (1 - v.completedPoints / top),
-          bar,
-          h * v.completedPoints / top,
-        ),
-        Paint()..color = completed,
-      );
-      paintChartLabel(
-        canvas,
-        v.name,
-        Offset(slot * i + 2, size.height - 14),
-        text,
-        maxWidth: slot - 4,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(VelocityPainter old) => old.items != items;
 }

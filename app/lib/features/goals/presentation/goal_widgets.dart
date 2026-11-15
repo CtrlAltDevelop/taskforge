@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:ohlcv_chart/ohlcv_chart.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/goals/domain/goals.dart';
@@ -92,59 +93,33 @@ class Sparkline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return SizedBox(
       height: height,
       width: double.infinity,
-      child: CustomPaint(
-        painter: _SparklinePainter(
-          points,
-          Theme.of(context).colorScheme.primary,
-          Theme.of(context).colorScheme.outlineVariant,
-        ),
-      ),
+      child: points.isEmpty
+          ? null
+          : SeriesChart(
+              series: [
+                LineSeries.values(
+                  points,
+                  color: scheme.primary,
+                  width: 2,
+                  dotBuilder: (i, _) => i == points.length - 1
+                      ? SeriesDot(radius: 3, color: scheme.primary)
+                      : null,
+                ),
+              ],
+              // Nothing but the line: no axes, no grid, no readout.
+              xAxis: SeriesXAxis.hidden,
+              yAxis: const SeriesYAxis(show: false),
+              grid: SeriesGrid.none,
+              minY: 0,
+              maxY: 1,
+              touch: null,
+            ),
     );
   }
-}
-
-class _SparklinePainter extends CustomPainter {
-  _SparklinePainter(this.points, this.line, this.base);
-
-  final List<double> points;
-  final Color line;
-  final Color base;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawLine(
-      Offset(0, size.height),
-      Offset(size.width, size.height),
-      Paint()
-        ..color = base
-        ..strokeWidth = 1,
-    );
-    if (points.isEmpty) return;
-    Offset at(int i) => Offset(
-      points.length == 1
-          ? size.width / 2
-          : size.width * i / (points.length - 1),
-      size.height - 4 - (size.height - 8) * points[i].clamp(0, 1),
-    );
-    final paint = Paint()
-      ..color = line
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke
-      ..strokeJoin = StrokeJoin.round;
-    final path = Path()..moveTo(at(0).dx, at(0).dy);
-    for (var i = 1; i < points.length; i++) {
-      path.lineTo(at(i).dx, at(i).dy);
-    }
-    canvas.drawPath(path, paint);
-    canvas.drawCircle(at(points.length - 1), 3, Paint()..color = line);
-  }
-
-  @override
-  bool shouldRepaint(_SparklinePainter old) =>
-      old.points != points || old.line != line;
 }
 
 void sayGoals(BuildContext context, String text) =>

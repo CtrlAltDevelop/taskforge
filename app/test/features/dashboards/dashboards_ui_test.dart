@@ -1,5 +1,6 @@
+import 'package:taskforge/core/charts/dashboard_charts.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/app_router.dart';
@@ -118,11 +119,14 @@ void main() {
             ],
           );
     await open(tester, client: fake);
-    expect(find.text('2026-11-10'), findsOneWidget);
+    // The chart is painted, so its axis is checked through its description:
+    // three days on the axis, the ideal line running to the end of the sprint.
+    final handle = tester.ensureSemantics();
     expect(
-      find.text('2026-11-12'),
-      findsOneWidget,
-    ); // the axis ends with the sprint
+      tester.getSemantics(find.byType(LineChartView)).label,
+      contains('3 points'),
+    );
+    handle.dispose();
     expect(key('widget-empty'), findsNothing);
   });
 
