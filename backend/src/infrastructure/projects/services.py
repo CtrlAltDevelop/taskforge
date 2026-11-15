@@ -53,6 +53,12 @@ class ProjectView:
     can_open: bool  # false only in the admin list, for a private project the caller is not in
 
 
+def _chat() -> Any:
+    from infrastructure.chat import services as chat
+
+    return chat
+
+
 def not_found() -> ApiError:
     return ApiError("No such project.", status=404)
 
@@ -228,6 +234,7 @@ def create(
             project = Project.objects.create(workspace=workspace, created_by=actor, **fields)
             if project.visibility == Visibility.PRIVATE:
                 ProjectMember.objects.create(project=project, user=actor)
+            _chat().project_created(project)  # its channel, in the same transaction
             announce(project, "created")
     except IntegrityError:
         raise _key_taken() from None
@@ -259,6 +266,7 @@ def update(
             ProjectMember.objects.get_or_create(project=updated, user=actor)
         if "visibility" in cleaned:
             announce_access(workspace)  # first: the sockets re-check, then hear of it
+        _chat().project_changed(updated)
         announce(updated, "updated")
     return view_of(actor, workspace, updated)
 
@@ -270,6 +278,7 @@ def archive(
         project = authorize(actor, workspace, project_id, "project.archive", lock=True)
         writable(project)
         updated = _bump(project, expected_version, archived_at=timezone.now())
+        _chat().project_changed(updated)  # its channel becomes read-only
         announce(updated, "archived")
     return view_of(actor, workspace, updated)
 
@@ -284,6 +293,7 @@ def restore(
         )
         if project.archived_at is not None:
             project = _bump(project, expected_version, archived_at=None)
+            _chat().project_changed(project)
             announce(project, "restored")
     return views(actor, workspace, [project], admin_list=True)[0]
 

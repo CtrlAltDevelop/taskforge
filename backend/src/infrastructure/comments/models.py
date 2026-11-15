@@ -1,6 +1,7 @@
 """Comments on a task: one level of replies, mentions, reactions and the history of edits."""
 
 import uuid
+from collections.abc import Iterable
 from typing import Any
 
 from django.conf import settings as django_settings
@@ -9,7 +10,6 @@ from django.utils import timezone
 
 from infrastructure.tasks.models import Task
 from infrastructure.workspaces.models import Workspace
-
 
 USER = "user"
 SYSTEM = "system"
@@ -115,4 +115,13 @@ def reaction_summary(comment: Any) -> dict[str, list[str]]:
     out: dict[str, list[str]] = {}
     for r in comment.reactions.all():
         out.setdefault(r.emoji, []).append(str(r.user_id))
+    return out
+
+
+def group_reactions(rows: Iterable[tuple[Any, str, Any]]) -> dict[Any, dict[str, list[str]]]:
+    """``{message id: {emoji: [user ids]}}`` from ``(message id, emoji, user id)`` rows, oldest
+    first. Shared with chat, whose messages react the same way."""
+    out: dict[Any, dict[str, list[str]]] = {}
+    for message_id, emoji, user_id in rows:
+        out.setdefault(message_id, {}).setdefault(emoji, []).append(str(user_id))
     return out

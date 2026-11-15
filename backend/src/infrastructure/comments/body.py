@@ -22,6 +22,7 @@ MAX_MENTIONS: Final = 20
 LABEL_MAX: Final = 80
 MARKS: Final = frozenset({"bold", "italic", "code", "link"})
 LINK_SCHEMES: Final = frozenset({"http", "https", "mailto"})
+BROADCASTS: Final = frozenset({"channel", "here"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,6 +33,8 @@ class Cleaned:
     document: dict[str, Any]
     plain_text: str
     mention_ids: list[uuid.UUID]
+    # Only where broadcasts are allowed (chat): ``"channel"`` and/or ``"here"``, as written.
+    broadcasts: frozenset[str] = frozenset()
 
 
 def invalid(message: str) -> ApiError:
@@ -83,7 +86,9 @@ def _attrs(kind: str, raw: Any) -> dict[str, Any]:
 
 
 class _Walker:
-    def __init__(self) -> None:
+    def __init__(self, *, allow_broadcast: bool = False) -> None:
+        self.allow_broadcast = allow_broadcast
+        self.broadcasts: set[str] = set()
         self.mentions: list[uuid.UUID] = []
         self.lines: list[str] = []
         self._line = ""
@@ -127,6 +132,10 @@ class _Walker:
     def _mention(self, node: dict[str, Any]) -> dict[str, Any]:
         attrs = node.get("attrs")
         raw = attrs.get("id") if isinstance(attrs, dict) else None
+        if self.allow_broadcast and raw in BROADCASTS:
+            self.broadcasts.add(raw)
+            self._line += f"@{raw}"
+            return {"type": "mention", "attrs": {"id": raw, "label": raw}}
         try:
             user = uuid.UUID(str(raw))
         except ValueError:
@@ -140,12 +149,15 @@ class _Walker:
         return {"type": "mention", "attrs": {"id": str(user), "label": label}}
 
 
-def clean(value: str) -> Cleaned:
-    """Parse and rebuild ``value`` (the document as JSON), or raise ``ApiError``."""
+def clean(value: str, *, allow_broadcast: bool = False, max_bytes: int = MAX_BYTES) -> Cleaned:
+    """Parse and rebuild ``value`` (the document as JSON), or raise ``ApiError``.
+
+    ``allow_broadcast`` (chat) also accepts ``@channel`` / ``@here`` mention nodes, reported in
+    ``Cleaned.broadcasts``; ``max_bytes`` lowers the size cap."""
     if not value.strip():
         raise invalid("Write something first.")
-    if len(value.encode()) > MAX_BYTES:
-        raise invalid(f"A comment can be at most {MAX_BYTES // 1024} KB.")
+    if len(value.encode()) > max_bytes:
+        raise invalid(f"A message can be at most {max_bytes // 1024} KB.")
     try:
         document = json.loads(value)
     except (ValueError, RecursionError):
@@ -155,18 +167,25 @@ def clean(value: str) -> Cleaned:
     content = document.get("content", [])
     if not isinstance(content, list):
         raise invalid("The document content must be a list.")
-    walker = _Walker()
+    walker = _Walker(allow_broadcast=allow_broadcast)
     built = [walker.node(child, 1) for child in content]
     walker._flush()
     plain = "\n".join(walker.lines)
     if not plain.strip():
         raise invalid("Write something first.")
-    return Cleaned({"type": "doc", "content": built}, plain, walker.mentions)
+    return Cleaned(
+        {"type": "doc", "content": built}, plain, walker.mentions, frozenset(walker.broadcasts)
+    )
 
 
-def plain_text(document: dict[str, Any]) -> str:
+def plain_text(document: dict[str, Any], *, allow_broadcast: bool = False) -> str:
     """The text of a stored (already clean) document."""
-    return clean(json.dumps(document)).plain_text
+    return clean(json.dumps(document), allow_broadcast=allow_broadcast).plain_text
+
+
+def mentions_of(document: dict[str, Any], *, allow_broadcast: bool = False) -> Cleaned:
+    """What a stored (already clean) document mentions: the same walk as ``clean``."""
+    return clean(json.dumps(document), allow_broadcast=allow_broadcast)
 
 
 def relabel(document: dict[str, Any], labels: dict[str, str]) -> dict[str, Any]:

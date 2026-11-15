@@ -30,6 +30,8 @@ def render(row: Any, actor_name: str, locale: str | None = None) -> tuple[str, s
     lang = locale or recipient_locale(getattr(row, "user", None), getattr(row, "workspace", None))
     payload = row.payload
     who = clean(actor_name) or tr("notify.someone", lang)
+    if row.type in kinds.CHAT_KINDS:
+        return _chat_words(row, who, lang)
     task = subject_of(row)
     more = tr("notify.more", lang, n=row.count - 1) if row.count > 1 else ""
     note = f"{task}\n{clean(payload.get('excerpt', ''))}".strip()
@@ -70,3 +72,17 @@ def render(row: Any, actor_name: str, locale: str | None = None) -> tuple[str, s
                 clean(payload.get("reason", "")),
             )
     return tr("notify.fallback.title", lang), task
+
+
+_CHAT_TITLES = {
+    kinds.CHAT_MENTIONED: "notify.chat_mentioned.title",
+    kinds.CHAT_DM: "notify.chat_dm.title",
+    kinds.CHAT_CHANNEL_ALL: "notify.chat_channel_all.title",
+    kinds.CHAT_MESSAGE: "notify.chat_message.title",
+}
+
+
+def _chat_words(row: Any, who: str, lang: str) -> tuple[str, str]:
+    payload = row.payload
+    space = clean(payload.get("space_name", ""))
+    return tr(_CHAT_TITLES[row.type], lang, who=who, space=space), clean(payload.get("excerpt", ""))

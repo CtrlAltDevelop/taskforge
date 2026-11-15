@@ -30,6 +30,9 @@ RECRUITER = [
     "goal.create",  # the built-in Member also holds these three (phases 34, 35, 36)
     "template.create",
     "workload.view",
+    "chat.read",  # and the three of chat (phase 43)
+    "chat.post",
+    "chat.manage",
 ]
 
 

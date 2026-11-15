@@ -8,6 +8,7 @@ plans the push and email the person asked for, outside their quiet hours; and te
 apps.
 """
 
+import dataclasses
 import logging
 import uuid
 from collections.abc import Iterable
@@ -98,15 +99,22 @@ def notify(
     payload: dict[str, Any],
     dedupe: str,
     fold: bool = True,
+    allowed: set[Any] | None = None,
+    quiet: set[Any] | None = None,
 ) -> list[Notification]:
-    """Create (or fold into) a notification of ``kind`` for each of ``recipients`` (user ids)."""
+    """Create (or fold into) a notification of ``kind`` for each of ``recipients`` (user ids).
+    Chat passes no task or project, the people who may see the space as ``allowed`` and the ones
+    who muted it as ``quiet`` (they get no push for this one)."""
     candidates = [
         u for u in dict.fromkeys(uuid.UUID(str(r)) for r in recipients) if str(u) != str(actor_id)
     ]
     if not candidates:
         return []
-    allowed = mentions.can_see(workspace, project)
-    chosen = prefs.effective_many([u for u in candidates if u in allowed], kind)
+    seeing = allowed if allowed is not None else mentions.can_see(workspace, project)
+    chosen = prefs.effective_many([u for u in candidates if u in seeing], kind)
+    for user_id in quiet or ():
+        if user_id in chosen:
+            chosen[user_id] = dataclasses.replace(chosen[user_id], push=False)
     made: list[Notification] = []
     for user_id, have in chosen.items():
         if not (have.inbox or have.push or have.email_mode != EmailMode.OFF):
@@ -166,7 +174,7 @@ def _one(
                     workspace=workspace,
                     type=kind,
                     task=task,
-                    project_id=project.pk,
+                    project_id=project.pk if project is not None else None,
                     actor_id=actor_id,
                     payload=payload,
                     dedupe_key=key,

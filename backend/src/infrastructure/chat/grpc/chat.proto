@@ -1,0 +1,222 @@
+syntax = "proto3";
+
+package config.chat;
+
+service ChatController {
+    rpc AddMembers(ChatAddMembersRequest) returns (Space) {}
+    rpc CreateSpace(ChatCreateSpaceRequest) returns (Space) {}
+    rpc Delete(ChatDeleteRequest) returns (Message) {}
+    rpc Edit(ChatEditRequest) returns (Message) {}
+    rpc Join(ChatJoinRequest) returns (Space) {}
+    rpc Leave(ChatLeaveRequest) returns (ChatDone) {}
+    rpc ListMessages(ChatListMessagesRequest) returns (ChatMessagePage) {}
+    rpc ListSpaces(ChatListSpacesRequest) returns (ChatSpaceList) {}
+    rpc MarkRead(ChatMarkReadRequest) returns (Space) {}
+    rpc Mentionable(ChatMentionableRequest) returns (ChatMentionable) {}
+    rpc Mute(ChatMuteRequest) returns (Space) {}
+    rpc Notify(ChatNotifyRequest) returns (Space) {}
+    rpc OpenDm(ChatOpenDmRequest) returns (Space) {}
+    rpc React(ChatReactRequest) returns (Message) {}
+    rpc RemoveMember(ChatRemoveMemberRequest) returns (ChatDone) {}
+    rpc Send(ChatSendRequest) returns (Message) {}
+    rpc UpdateSpace(ChatUpdateSpaceRequest) returns (Space) {}
+}
+
+message ChatAddMembersRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    repeated string user_ids = 3;
+}
+
+message ChatCreateSpaceRequest {
+    string workspace_id = 1;
+    string kind = 2;
+    string name = 3;
+    repeated string member_ids = 4;
+}
+
+message ChatDeleteRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string id = 3;
+}
+
+message ChatDone {
+    bool ok = 1;
+}
+
+message ChatEditRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string id = 3;
+    int32 expected_version = 4;
+    string body = 5;
+    bool confirm_broadcast = 6;
+    bool grant_access = 7;
+}
+
+message ChatJoinRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+}
+
+message ChatLeaveRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+}
+
+message ChatListMessagesRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string before = 3;
+    int32 page_size = 4;
+    string thread_id = 5;
+}
+
+message ChatListSpacesRequest {
+    string workspace_id = 1;
+    string query = 2;
+    bool include_archived = 3;
+}
+
+message ChatMarkReadRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string message_id = 3;
+}
+
+message ChatMentionable {
+    repeated Person people = 1;
+    int32 member_count = 2;
+}
+
+message ChatMentionableRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string query = 3;
+}
+
+message ChatMessagePage {
+    repeated Message messages = 1;
+    string cursor = 2;
+}
+
+message ChatMuteRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string until = 3;
+    bool forever = 4;
+    bool completely = 5;
+}
+
+message ChatNotifyRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    bool all_messages = 3;
+}
+
+message ChatOpenDmRequest {
+    string workspace_id = 1;
+    string user_id = 2;
+}
+
+message ChatReactRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string id = 3;
+    string emoji = 4;
+    bool on = 5;
+}
+
+message ChatRemoveMemberRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string user_id = 3;
+}
+
+message ChatSendRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string body = 3;
+    string parent_id = 4;
+    string client_id = 5;
+    string client_mutation_id = 6;
+    bool confirm_broadcast = 7;
+    bool grant_access = 8;
+}
+
+message ChatSpaceList {
+    repeated Space channels = 1;
+    repeated Space groups = 2;
+    repeated Space dms = 3;
+    repeated TaskChat task_chats = 4;
+}
+
+message ChatUpdateSpaceRequest {
+    string workspace_id = 1;
+    string space_id = 2;
+    string name = 3;
+    bool set_archived = 4;
+    bool archived = 5;
+}
+
+message Message {
+    string id = 1;
+    string space_id = 2;
+    string author_id = 3;
+    string author_name = 4;
+    string parent_id = 5;
+    string body = 6;
+    string created_at = 7;
+    string edited_at = 8;
+    bool deleted = 9;
+    int32 version = 10;
+    repeated ReactionResponse reactions = 11;
+}
+
+message Person {
+    string user_id = 1;
+    string display_name = 2;
+}
+
+message Reaction {
+    string emoji = 1;
+    repeated string user_ids = 2;
+}
+
+message ReactionResponse {
+    string emoji = 1;
+    repeated string user_ids = 2;
+}
+
+message Space {
+    string id = 1;
+    string kind = 2;
+    string name = 3;
+    string project_id = 4;
+    bool is_default = 5;
+    bool archived = 6;
+    bool joined = 7;
+    string role = 8;
+    int32 unread_count = 9;
+    string last_message_at = 10;
+    string last_read_at = 11;
+    int32 member_count = 12;
+    string muted_until = 13;
+    bool muted_completely = 14;
+    bool notify_all = 15;
+    bool read_only = 16;
+    string peer_id = 17;
+    int32 version = 18;
+    string created_at = 19;
+    string created_by = 20;
+}
+
+message TaskChat {
+    string task_id = 1;
+    string project_id = 2;
+    string display_id = 3;
+    string title = 4;
+    string last_message_at = 5;
+}
+

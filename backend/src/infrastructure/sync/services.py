@@ -62,15 +62,33 @@ def since(
     visible = {
         pk for pk in Project.objects.visible_to(actor, workspace).values_list("pk", flat=True)
     }
-    entries = [r for r in raw if _listed(r, actor, workspace, visible)]
+    spaces = (
+        _readable_spaces(actor, workspace) if any(r.entity_type == "chat" for r in raw) else set()
+    )
+    entries = [r for r in raw if _listed(r, actor, workspace, visible, spaces)]
     return Page(entries, raw[-1].pk if raw else max(cursor, 0), more, False)
 
 
-def _listed(row: ChangeLog, actor: Any, workspace: Workspace, visible: set[Any]) -> bool:
+def _readable_spaces(actor: Any, workspace: Workspace) -> set[str]:
+    from infrastructure.chat import access as chat_access
+
+    if "chat.read" not in (g.keys if (g := access.grant_of(actor, workspace)) else ()):
+        return set()
+    ids = chat_access.visible_spaces(actor, workspace).values_list("pk", flat=True)
+    return {str(i) for i in ids}
+
+
+def _listed(
+    row: ChangeLog, actor: Any, workspace: Workspace, visible: set[Any], spaces: set[str]
+) -> bool:
     """A project's entries for those who can open it; a workspace-level one for everyone, except an
-    access change aimed at somebody else."""
+    access change aimed at somebody else and a chat entry for a space the caller cannot read."""
     if row.project is not None:
         return row.project in visible
+    if row.entity_type == "chat":
+        if row.action == "read":
+            return row.actor == str(actor.pk)
+        return str(row.entity_id) in spaces
     if row.entity_type in ("notification", "timer"):
         return str(row.entity_id) == str(actor.pk)  # only ever about the person themselves
     if row.entity_type == "access":

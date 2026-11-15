@@ -62,6 +62,9 @@ def event_type(entity_type: str, action: str) -> str:
     ``fields.updated`` and ``access.changed``."""
     if entity_type == "access":
         return "access.changed"
+    if entity_type == "chat":
+        # chat.message.created|updated|deleted, chat.space.updated, chat.read (entity: the space)
+        return f"chat.{action}"
     if entity_type == "timer":
         return "timer.changed"  # your own timer or entries changed (entity: you)
     if entity_type == "notification":

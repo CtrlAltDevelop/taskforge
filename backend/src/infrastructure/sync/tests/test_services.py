@@ -26,11 +26,13 @@ def test_since_lists_what_happened_after_the_cursor_oldest_first(team: Any, proj
 
     found = services.since(team.viewer, team.ws, head)
 
-    assert [(e.event_type, str(e.entity_id)) for e in found.entries] == [
+    # the title change also writes a change message into the task's chat (phase 42)
+    entries = [e for e in found.entries if e.event_type.startswith("task.")]
+    assert [(e.event_type, str(e.entity_id)) for e in entries] == [
         ("task.created", str(second.pk)),
         ("task.updated", str(first.pk)),
     ]
-    assert found.entries[0].pk < found.entries[1].pk
+    assert entries[0].pk < entries[1].pk
     assert found.latest == found.entries[-1].pk and not found.gap
 
 

@@ -29,6 +29,10 @@ from infrastructure.automations import services as automation_services
 from infrastructure.automations.grpc import automations_pb2 as aupb
 from infrastructure.automations.grpc import automations_pb2_grpc as austubs
 from infrastructure.automations.models import AutomationRun
+from infrastructure.chat import messages as chat_messages
+from infrastructure.chat import services as chat_services
+from infrastructure.chat.grpc import chat_pb2 as chpb
+from infrastructure.chat.grpc import chat_pb2_grpc as chstubs
 from infrastructure.comments import services as comment_services
 from infrastructure.comments.grpc import comments_pb2 as cpb
 from infrastructure.comments.grpc import comments_pb2_grpc as cstubs
@@ -131,6 +135,9 @@ class World:
     import_mapping: str = ""  # the mapping the analysis proposed, as JSON
     placeholder_id: str = ""  # a person an import named who is not a member
     export_id: str = ""  # a finished export of the open project
+    chat_general_id: str = ""  # #general (the chat prepares)
+    chat_channel_id: str = ""  # a channel the Owner made
+    chat_message_id: str = ""  # the Owner's message in #general
 
     @property
     def ws(self) -> str:
@@ -1720,10 +1727,101 @@ ENDPOINTS += (
     ),
 )
 
+
+def _make_chat(w: World) -> None:
+    owner = w.workspace.created_by
+    general = chat_services.ensure_general(w.workspace)
+    channel = chat_services.create_space(owner, w.workspace, "channel", "random", [])
+    sent = chat_messages.send(owner, w.workspace, str(general.pk), _body())
+    w.chat_general_id, w.chat_channel_id = str(general.pk), str(channel.pk)
+    w.chat_message_id = str(sent.pk)
+
+
+CH = chstubs.ChatControllerStub
+
+
+def _chat(method: str, permission: str, build: Callable[[World], Any]) -> Endpoint:
+    return Endpoint(f"ChatController.{method}", permission, _grpc(CH, method, build), _make_chat)
+
+
+ENDPOINTS += (
+    _chat("ListSpaces", "chat.read", lambda w: chpb.ChatListSpacesRequest(workspace_id=w.ws)),
+    _chat(
+        "CreateSpace",
+        "chat.manage",
+        lambda w: chpb.ChatCreateSpaceRequest(workspace_id=w.ws, kind="channel", name="ideas"),
+    ),
+    _chat(
+        "Join",
+        "chat.post",
+        lambda w: chpb.ChatJoinRequest(workspace_id=w.ws, space_id=w.chat_channel_id),
+    ),
+    _chat(
+        "Leave",
+        "chat.read",
+        lambda w: chpb.ChatLeaveRequest(workspace_id=w.ws, space_id=w.chat_channel_id),
+    ),
+    _chat(
+        "AddMembers",
+        "chat.post",
+        lambda w: chpb.ChatAddMembersRequest(
+            workspace_id=w.ws, space_id=w.chat_channel_id, user_ids=[str(w.target.pk)]
+        ),
+    ),
+    _chat(
+        "OpenDm",
+        "chat.post",
+        lambda w: chpb.ChatOpenDmRequest(workspace_id=w.ws, user_id=str(w.target.pk)),
+    ),
+    _chat(
+        "ListMessages",
+        "chat.read",
+        lambda w: chpb.ChatListMessagesRequest(workspace_id=w.ws, space_id=w.chat_general_id),
+    ),
+    _chat(
+        "Send",
+        "chat.read",  # the first check: reading; posting is checked next
+        lambda w: chpb.ChatSendRequest(workspace_id=w.ws, space_id=w.chat_general_id, body=_body()),
+    ),
+    _chat(
+        "React",
+        "chat.read",
+        lambda w: chpb.ChatReactRequest(
+            workspace_id=w.ws, space_id=w.chat_general_id, id=w.chat_message_id, emoji="👍", on=True
+        ),
+    ),
+    _chat(
+        "MarkRead",
+        "chat.read",
+        lambda w: chpb.ChatMarkReadRequest(workspace_id=w.ws, space_id=w.chat_general_id),
+    ),
+    _chat(
+        "Mute",
+        "chat.read",
+        lambda w: chpb.ChatMuteRequest(workspace_id=w.ws, space_id=w.chat_general_id, forever=True),
+    ),
+    _chat(
+        "Notify",
+        "chat.read",
+        lambda w: chpb.ChatNotifyRequest(
+            workspace_id=w.ws, space_id=w.chat_general_id, all_messages=True
+        ),
+    ),
+    _chat(
+        "Mentionable",
+        "chat.read",
+        lambda w: chpb.ChatMentionableRequest(workspace_id=w.ws, space_id=w.chat_general_id),
+    ),
+)
+
 EXEMPT = {
     "ShortcutController.Get": "personal, not workspace data: a caller reads only their own rows",
     "ShortcutController.Set": "personal, not workspace data: a caller writes only their own rows",
     "CommentController.Edit": "the author only: ownership, not the matrix (service tests)",
+    "ChatController.Edit": "the author only: ownership, not the matrix (chat tests)",
+    "ChatController.Delete": "the author, or an Owner/Admin: ownership (chat tests)",
+    "ChatController.UpdateSpace": "the space's owner, or an Owner/Admin (chat tests)",
+    "ChatController.RemoveMember": "the space's owner, or an Owner/Admin (chat tests)",
     "GET /uploads/{upload_id}": "the uploader only: ownership, not the matrix (service tests)",
     "PUT /uploads/{upload_id}/chunk/{n}": "the uploader only (service tests)",
     "POST /uploads/{upload_id}/complete": "the uploader only (service tests)",
@@ -2039,6 +2137,12 @@ EXEMPT.update(
             ("POST", "/{webhook_id}/test"),
         )
     }
+)
+# These two call api.clickup.com with the caller's own token, so the matrix cannot run them; the
+# permission check (data.manage) is tested in imports/tests/test_clickup_api.py.
+_CLICKUP = "calls the ClickUp API with a personal token (tested in imports)"
+EXEMPT.update(
+    {"POST /imports/clickup/lists": _CLICKUP, "POST /imports/clickup/fetch": _CLICKUP}
 )
 _PROJECTS = "/workspaces/{workspace_id}/projects"
 EXEMPT.update(

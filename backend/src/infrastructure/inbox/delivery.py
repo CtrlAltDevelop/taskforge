@@ -28,7 +28,7 @@ from django.utils.module_loading import import_string
 
 from infrastructure.comments import mentions
 from infrastructure.common.messages import recipient_locale, tr
-from infrastructure.inbox import prefs, push, render, schedule
+from infrastructure.inbox import kinds, prefs, push, render, schedule
 from infrastructure.inbox.models import (
     Channel,
     Delivery,
@@ -129,6 +129,8 @@ def _still_owed(row: Notification, channel: str) -> bool:
         return False
     if channel == Channel.DIGEST and have.email_mode != EmailMode.DIGEST:
         return False
+    if row.type in kinds.CHAT_KINDS:
+        return _chat_owed(row)
     if row.task_id is None:
         return True
     if row.task.deleted_at is not None:
@@ -137,6 +139,23 @@ def _still_owed(row: Notification, channel: str) -> bool:
 
     project = Project.objects.filter(pk=row.project_id).first()
     return project is not None and row.user_id in mentions.can_see(row.workspace, project)
+
+
+def _chat_owed(row: Notification) -> bool:
+    """A chat push still owed: the person can still read the space and has not muted it
+    completely."""
+    from infrastructure.chat import access
+    from infrastructure.chat.models import ChatMember, ChatSpace
+
+    space = (
+        ChatSpace.objects.select_related("workspace", "project")
+        .filter(pk=row.payload.get("space_id"))
+        .first()
+    )
+    if space is None or not access.can_read(row.user_id, space):
+        return False
+    mine = ChatMember.objects.filter(space=space, user_id=row.user_id).first()
+    return not (mine is not None and mine.muted and mine.muted_completely)
 
 
 def _data(row: Notification) -> dict[str, str]:

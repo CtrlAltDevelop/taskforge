@@ -100,6 +100,7 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/filters/grpc/filters.proto \
 	infrastructure/sync/grpc/sync.proto \
 	infrastructure/comments/grpc/comments.proto \
+	infrastructure/chat/grpc/chat.proto \
 	infrastructure/attachments/grpc/attachments.proto \
 	infrastructure/inbox/grpc/inbox.proto \
 	infrastructure/search/grpc/search.proto \

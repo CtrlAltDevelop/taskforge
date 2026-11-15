@@ -14,6 +14,11 @@ DUE_SOON: Final = "task.due_soon"
 TIMER_LONG: Final = "timer.long"
 AUTOMATION: Final = "automation.notice"
 AUTOMATION_DISABLED: Final = "automation.disabled"
+CHAT_MENTIONED: Final = "chat.mentioned"
+CHAT_DM: Final = "chat.dm"
+CHAT_CHANNEL_ALL: Final = "chat.channel_all"
+CHAT_MESSAGE: Final = "chat.message"
+CHAT_KINDS: Final = frozenset({CHAT_MENTIONED, CHAT_DM, CHAT_CHANNEL_ALL, CHAT_MESSAGE})
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,11 +40,15 @@ KINDS: Final = (
     Kind(TIMER_LONG, "Your timer has been running for a long time", push=True),
     Kind(AUTOMATION, "An automation sends you a message"),
     Kind(AUTOMATION_DISABLED, "An automation of yours was switched off", push=True),
+    Kind(CHAT_MENTIONED, "Someone mentions you in chat", push=True),
+    Kind(CHAT_DM, "Someone sends you a direct message", push=True),
+    Kind(CHAT_CHANNEL_ALL, "Someone writes @channel or @here in a space of yours", push=True),
+    Kind(CHAT_MESSAGE, "A message in a space you asked to follow closely", push=True),
 )
 BY_KEY: Final = {k.key: k for k in KINDS}
 
 # The inbox filters: which kinds each one shows.
 FILTERS: Final = {
-    "mentions": (MENTIONED,),
+    "mentions": (MENTIONED, CHAT_MENTIONED),
     "assigned": (ASSIGNED,),
 }

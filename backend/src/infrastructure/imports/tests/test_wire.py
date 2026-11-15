@@ -233,3 +233,23 @@ def test_a_file_larger_than_the_server_accepts_is_refused_with_413(
     world = _world(people, 0)
     settings.IMPORTS_MAX_BYTES = 5
     assert _upload(world, data=b"title\nabcdefghij\n").status_code == 413
+
+
+@pytest.mark.parametrize(
+    ("path", "extra"), [("lists", {}), ("fetch", {"list_ids": ["L1"]})]
+)
+def test_the_clickup_routes_need_data_manage(
+    people: dict[str, Any],  # noqa: F811
+    path: str,
+    extra: dict[str, Any],
+) -> None:
+    world = _world(people, 0)
+    for role in ("Viewer", "Member"):
+        response = Client().post(
+            f"/api/v1/imports/clickup/{path}",
+            {"workspace_id": world.ws, "token": "pk_x", **extra},
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {world.tokens[role]}",
+        )
+        assert response.status_code == 403
+        assert "pk_x" not in response.content.decode()

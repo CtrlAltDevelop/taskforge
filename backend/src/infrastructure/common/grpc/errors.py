@@ -40,6 +40,8 @@ async def abort(context: Any, error: ApiError) -> None:
         ResponseTitle.TRANSITION_NOT_ALLOWED,
         ResponseTitle.TASK_BLOCKED,
         ResponseTitle.OPTION_NEEDS_REMAP,
+        ResponseTitle.CHAT_READ_ONLY,
+        ResponseTitle.CHAT_BROADCAST_CONFIRM,
     ):
         code = grpc.StatusCode.FAILED_PRECONDITION
     if error.data:

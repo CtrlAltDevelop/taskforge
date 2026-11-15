@@ -9,6 +9,7 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
+from infrastructure.chat.signals import chat_notice
 from infrastructure.comments import body as comment_body
 from infrastructure.comments.models import Comment, CommentMention
 from infrastructure.comments.signals import comment_changed, user_mentioned
@@ -151,7 +152,15 @@ def _system_message(sender: Any, **kw: Any) -> None:
     )
 
 
+@_guarded
+def _chat(sender: Any, **kw: Any) -> None:
+    from infrastructure.inbox import chat_notices
+
+    chat_notices.handle(**kw)
+
+
 def connect() -> None:
+    chat_notice.connect(_chat, dispatch_uid=f"{UID}.chat")
     task_activity.connect(_activity, dispatch_uid=f"{UID}.activity")
     user_mentioned.connect(_mentioned, dispatch_uid=f"{UID}.mentioned")
     comment_changed.connect(_comment, dispatch_uid=f"{UID}.comment")

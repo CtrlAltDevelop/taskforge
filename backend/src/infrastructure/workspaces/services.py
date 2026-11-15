@@ -98,6 +98,9 @@ def create(actor: Any, name: str, slug: str) -> Workspace:
             WorkspaceMember.objects.create(
                 workspace=workspace, user=actor, role=access.builtin_role(OWNER)
             )
+            from infrastructure.chat import services as chat
+
+            chat.workspace_created(workspace)  # #general, in the same transaction
     except IntegrityError:
         raise _slug_taken() from None
     return workspace

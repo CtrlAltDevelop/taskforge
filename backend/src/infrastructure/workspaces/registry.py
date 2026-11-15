@@ -72,6 +72,9 @@ PERMISSIONS: Final = (
     Permission("template.manage", "Edit and delete every shared template"),
     Permission("workload.view", "See other people's workload, capacity and time off"),
     Permission("workload.manage", "Set capacity for anyone, edit anyone's time off and holidays"),
+    Permission("chat.read", "Read chat channels, groups and direct messages"),
+    Permission("chat.post", "Write in chat, react, open direct messages"),
+    Permission("chat.manage", "Create channels and groups, archive them, moderate chat"),
     Permission("security.manage", "Require two-factor, set up single sign-on and its role mapping"),
 )
 ALL_KEYS: Final = frozenset(p.key for p in PERMISSIONS)
@@ -92,6 +95,9 @@ BUILTIN_GRANTS: Final[dict[str, frozenset[str]]] = {
         "goal.create",
         "template.create",
         "workload.view",
+        "chat.read",
+        "chat.post",
+        "chat.manage",
         *TASK_KEYS,
     },  # 03: any member may invite
     VIEWER: _VIEWER_KEYS,

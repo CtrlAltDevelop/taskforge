@@ -26,6 +26,7 @@ from infrastructure.comments.models import (
     CommentMention,
     CommentReaction,
     CommentRevision,
+    group_reactions,
 )
 from infrastructure.comments.signals import announce, announce_mentions
 from infrastructure.common.errors import ApiError
@@ -120,13 +121,11 @@ def present(comments: list[Comment]) -> list[Comment]:
         "comment_id", "user_id"
     ):
         mentioned.setdefault(comment_id, []).append(str(user_id))
-    reacted: dict[Any, dict[str, list[str]]] = {}
-    for comment_id, emoji, user_id in (
+    reacted = group_reactions(
         CommentReaction.objects.filter(comment_id__in=ids)
         .order_by("at", "id")
         .values_list("comment_id", "emoji", "user_id")
-    ):
-        reacted.setdefault(comment_id, {}).setdefault(emoji, []).append(str(user_id))
+    )
     edits = dict(
         CommentRevision.objects.filter(comment_id__in=ids)
         .values_list("comment_id")
@@ -140,7 +139,7 @@ def present(comments: list[Comment]) -> list[Comment]:
     return comments
 
 
-def _cursor(raw: str) -> tuple[datetime, uuid.UUID] | None:
+def parse_cursor(raw: str) -> tuple[datetime, uuid.UUID] | None:
     if not raw:
         return None
     try:
@@ -163,7 +162,7 @@ def list_page(
     _, task = _task(actor, workspace, project_id, task_id)
     size = max(1, min(limit or PAGE_DEFAULT, PAGE_MAX))
     rows = Comment.objects.filter(task=task).order_by("-created_at", "-id")
-    mark = _cursor(before)
+    mark = parse_cursor(before)
     if mark is not None:
         stamp, ident = mark
         rows = rows.filter(Q(created_at__lt=stamp) | Q(created_at=stamp, id__lt=ident))
@@ -343,7 +342,7 @@ def delete(actor: Any, workspace: Workspace, project_id: str, comment_id: str) -
 # -- reactions, pins, history, subtasks -----------------------------------------------------------
 
 
-def _emoji(raw: str) -> str:
+def emoji_token(raw: str) -> str:
     """One short token with no spaces or control characters (a ZWJ sequence is one token)."""
     if (
         not raw
@@ -382,7 +381,7 @@ def react(
 ) -> Comment:
     """Give (``on``) or take back ``emoji``. Setting rather than toggling, so a request repeated
     or racing with itself ends in the same place."""
-    token = _emoji(emoji)
+    token = emoji_token(emoji)
     with transaction.atomic():
         _, comment = _load(actor, workspace, project_id, comment_id, write=True)
         if comment.is_deleted:

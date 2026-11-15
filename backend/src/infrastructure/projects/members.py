@@ -57,6 +57,9 @@ def grant(workspace: Workspace, project: Any, user_id: Any) -> bool:
     Project.objects.filter(pk=project.pk).select_for_update().first()
     _, created = ProjectMember.objects.get_or_create(project=project, user_id=user_id)
     if created:
+        from infrastructure.chat import services as chat
+
+        chat.project_member_added(project, user_id)  # same transaction
         announce_access(workspace, user_id)  # first: the sockets re-check, then hear of it
         announce(project, "member_added")
     return created
@@ -98,6 +101,9 @@ def remove_member(actor: Any, workspace: Workspace, project_id: str, user_id: st
                 title=ResponseTitle.LAST_MEMBER,
             )
         row.delete()
+        from infrastructure.chat import services as chat
+
+        chat.project_member_removed(project, pk)  # same transaction: no channel access left
         announce_access(workspace, user_id)  # first: the sockets re-check, then hear of it
         announce(project, "member_removed")
 

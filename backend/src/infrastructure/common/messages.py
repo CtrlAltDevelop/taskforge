@@ -94,6 +94,30 @@ TEXT: dict[str, dict[str, str]] = {
         "ar": "تم إيقاف الأتمتة: {name}",
         "ps": "اتومات بند شو: {name}",
     },
+    "notify.chat_mentioned.title": {
+        "en": "{who} mentioned you in {space}",
+        "fa": "{who} شما را در {space} نام برد",
+        "ar": "{who} أشار إليك في {space}",
+        "ps": "{who} تاسو په {space} کې یاد کړل",
+    },
+    "notify.chat_dm.title": {
+        "en": "{who} sent you a message",
+        "fa": "{who} برای شما پیام فرستاد",
+        "ar": "{who} أرسل إليك رسالة",
+        "ps": "{who} تاسو ته پیغام واستاوه",
+    },
+    "notify.chat_channel_all.title": {
+        "en": "{who} notified everyone in {space}",
+        "fa": "{who} همه را در {space} مطلع کرد",
+        "ar": "{who} نبّه الجميع في {space}",
+        "ps": "{who} په {space} کې ټول خبر کړل",
+    },
+    "notify.chat_message.title": {
+        "en": "{who} wrote in {space}",
+        "fa": "{who} در {space} نوشت",
+        "ar": "{who} كتب في {space}",
+        "ps": "{who} په {space} کې ولیکل",
+    },
     "notify.fallback.title": {
         "en": "Notification",
         "fa": "اعلان",

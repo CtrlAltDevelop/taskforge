@@ -1060,6 +1060,7 @@ INSTALLED_APPS = [
     "infrastructure.filters.apps.FiltersConfig",
     "infrastructure.sync.apps.SyncConfig",
     "infrastructure.comments.apps.CommentsConfig",
+    "infrastructure.chat.apps.ChatConfig",
     "infrastructure.search.apps.SearchConfig",
     "infrastructure.timetracking.apps.TimeTrackingConfig",
     "infrastructure.sprints.apps.SprintsConfig",
@@ -1221,6 +1222,14 @@ DEVICE_FINGERPRINT_PEPPER = os.getenv("DJANGO_DEVICE_FINGERPRINT_PEPPER", "")
 
 # Phase 17: how long an author may edit a comment after writing it (hours; 0 = no limit).
 COMMENT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_COMMENT_EDIT_WINDOW_HOURS", "24"))
+
+# Phase 43: chat. The edit window (hours; 0 = no limit), the most a person may send to one space in
+# a minute, the largest message (KB) and the member count above which @channel / @here must be
+# confirmed.
+CHAT_EDIT_WINDOW_HOURS = int(os.getenv("DJANGO_CHAT_EDIT_WINDOW_HOURS", "24"))
+CHAT_SENDS_PER_MINUTE = int(os.getenv("DJANGO_CHAT_SENDS_PER_MINUTE", "30"))
+CHAT_MAX_MESSAGE_KB = int(os.getenv("DJANGO_CHAT_MAX_MESSAGE_KB", "16"))
+CHAT_BROADCAST_CONFIRM_ABOVE = int(os.getenv("DJANGO_CHAT_BROADCAST_CONFIRM_ABOVE", "50"))
 
 CORS_ALLOW_HEADERS = (
     *default_cors_headers,

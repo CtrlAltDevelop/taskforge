@@ -192,6 +192,13 @@ class ResponseTitle(StrEnum):
     DOC_CYCLE = "DOC_CYCLE"
     MENTION_NO_ACCESS = "MENTION_NO_ACCESS"
 
+    # Chat
+    CHAT_INVALID = "CHAT_INVALID"
+    CHAT_LOCKED = "CHAT_LOCKED"
+    CHAT_READ_ONLY = "CHAT_READ_ONLY"
+    CHAT_RATE_LIMITED = "CHAT_RATE_LIMITED"
+    CHAT_BROADCAST_CONFIRM = "CHAT_BROADCAST_CONFIRM"
+
     # Attachments
     ATTACHMENT_TOO_BIG = "ATTACHMENT_TOO_BIG"
     ATTACHMENT_REFUSED = "ATTACHMENT_REFUSED"
@@ -272,6 +279,11 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ResponseTitle.DOC_ARCHIVED: "That page is archived. Restore it first.",
     ResponseTitle.DOC_CYCLE: "A page cannot be put under itself or one of its own subpages.",
     ResponseTitle.MENTION_NO_ACCESS: "Somebody mentioned cannot see this task.",
+    ResponseTitle.CHAT_INVALID: "The space or message is not valid (the detail says why).",
+    ResponseTitle.CHAT_LOCKED: "That message can no longer be edited.",
+    ResponseTitle.CHAT_READ_ONLY: "That space is archived or its other person left.",
+    ResponseTitle.CHAT_RATE_LIMITED: "You are sending too fast in this space. Wait a moment.",
+    ResponseTitle.CHAT_BROADCAST_CONFIRM: "Confirm notifying everyone (data.member_count).",
     ResponseTitle.ATTACHMENT_TOO_BIG: "That file is larger than an attachment may be.",
     ResponseTitle.ATTACHMENT_REFUSED: "That kind of file is not accepted (the detail says why).",
     ResponseTitle.ATTACHMENT_QUOTA: "The workspace has used all its storage.",

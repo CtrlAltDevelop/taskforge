@@ -5,6 +5,7 @@ import logging
 from typing import Any
 
 from infrastructure.attachments.signals import attachment_changed
+from infrastructure.chat.signals import chat_changed
 from infrastructure.comments.signals import comment_changed
 from infrastructure.customfields.signals import fields_changed
 from infrastructure.projects.signals import project_changed
@@ -107,6 +108,34 @@ def _attachment(sender: Any, **kw: Any) -> None:
     )
 
 
+@_guarded
+def _chat(sender: Any, **kw: Any) -> None:
+    """Only the people who can read the space hear of it (never a ws or project room), plus the
+    ones just removed from it. A read mark is for the reader's own devices alone."""
+    from infrastructure.chat import access
+    from infrastructure.chat.models import ChatSpace
+
+    if kw["only_user"]:
+        users: tuple[str, ...] = (kw["only_user"],)
+    else:
+        space = (
+            ChatSpace.objects.select_related("workspace", "project")
+            .filter(pk=kw["space_id"])
+            .first()
+        )
+        if space is None:
+            return
+        users = tuple(sorted({str(u) for u in access.audience(space)} | set(kw["users"])))
+    publish.record(
+        entity_type="chat",
+        entity_id=kw["space_id"],
+        workspace_id=kw["workspace_id"],
+        version=kw["version"],
+        action=kw["action"],
+        users=users,
+    )
+
+
 _workflow = _project_part("workflow")
 _fields = _project_part("fields")
 
@@ -119,3 +148,4 @@ def connect() -> None:
     access_changed.connect(_access, dispatch_uid=f"{UID}.access")
     comment_changed.connect(_comment, dispatch_uid=f"{UID}.comment")
     attachment_changed.connect(_attachment, dispatch_uid=f"{UID}.attachment")
+    chat_changed.connect(_chat, dispatch_uid=f"{UID}.chat")

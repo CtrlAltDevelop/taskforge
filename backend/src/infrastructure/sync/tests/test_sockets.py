@@ -260,9 +260,16 @@ def test_losing_a_private_project_drops_that_room_only(team: Any, project: Any) 
         await sync_to_async(project_members.remove_member)(
             team.pm, team.ws, str(secret.pk), str(team.member.pk)
         )
-        frames = [await client.next_frame(), await client.next_frame()]
+
+        async def next_non_chat() -> dict[str, Any]:
+            while True:  # the channel of the private project also tells the person (chat.*)
+                frame = await client.next_frame()
+                if not str(frame.get("event", {}).get("type", "")).startswith("chat."):
+                    return frame
+
+        frames = [await next_non_chat(), await next_non_chat()]
         await make_task(team, project, "still open")
-        frames.append(await client.next_frame())
+        frames.append(await next_non_chat())
         await client.close()
         return frames
 

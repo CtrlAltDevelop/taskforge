@@ -202,6 +202,11 @@ translated it. `description` may be reworded freely — nothing should depend on
 | `DOC_ARCHIVED` | That page is archived. Restore it first. |
 | `DOC_CYCLE` | A page cannot be put under itself or one of its own subpages. |
 | `MENTION_NO_ACCESS` | Somebody mentioned cannot see this task. |
+| `CHAT_INVALID` | The space or message is not valid (the detail says why). |
+| `CHAT_LOCKED` | That message can no longer be edited. |
+| `CHAT_READ_ONLY` | That space is archived or its other person left. |
+| `CHAT_RATE_LIMITED` | You are sending too fast in this space. Wait a moment. |
+| `CHAT_BROADCAST_CONFIRM` | Confirm notifying everyone (data.member_count). |
 | `ATTACHMENT_TOO_BIG` | That file is larger than an attachment may be. |
 | `ATTACHMENT_REFUSED` | That kind of file is not accepted (the detail says why). |
 | `ATTACHMENT_QUOTA` | The workspace has used all its storage. |

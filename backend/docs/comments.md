@@ -20,7 +20,9 @@ _This app publishes no routes of its own._
 | `id` | UUID | primary key, not editable |
 | `workspace` | ForeignKey | → `workspaces.Workspace` |
 | `task` | ForeignKey | → `tasks.Task` |
-| `author` | ForeignKey | → `accounts.User` |
+| `author` | ForeignKey | → `accounts.User`, nullable |
+| `kind` | Char |  |
+| `event` | JSON | nullable |
 | `parent` | ForeignKey | → `comments.Comment`, nullable |
 | `body` | JSON |  |
 | `created_at` | DateTime |  |
