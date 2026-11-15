@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,7 @@ class AboutScreen extends ConsumerWidget {
     final t = context.l10n;
     final server = ref.watch(serverVersionProvider);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.sysAboutTitle),
         leading: IconButton(
           tooltip: t.grpBClose,

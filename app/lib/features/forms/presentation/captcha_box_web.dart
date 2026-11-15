@@ -3,7 +3,7 @@ import 'dart:js_interop_unsafe';
 import 'dart:math';
 import 'dart:ui_web' as ui_web;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/features/forms/domain/forms.dart';
 

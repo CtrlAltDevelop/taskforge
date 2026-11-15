@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,7 +65,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Scaffold(
       appBar: widget.firstWorkspace
           ? null
-          : AppBar(title: Text(context.l10n.grpJNewWorkspace)),
+          : TfAppBar(title: Text(context.l10n.grpJNewWorkspace)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),

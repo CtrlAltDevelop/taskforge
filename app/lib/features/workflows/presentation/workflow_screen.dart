@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,6 +22,12 @@ const wideWorkflowBreakpoint = 900.0;
 
 /// Project settings → Workflow: the statuses of a project, which statuses may
 /// move to which, and what is wrong with the draft. Nothing is saved until Save.
+/// App bar buttons that still fit a 320dp wide phone in every language.
+final _tightButton = ButtonStyle(
+  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
+  minimumSize: WidgetStatePropertyAll(Size(48, 40)),
+);
+
 class WorkflowScreen extends ConsumerWidget {
   const WorkflowScreen({super.key, required this.projectId});
 
@@ -37,7 +44,7 @@ class WorkflowScreen extends ConsumerWidget {
         canManageProject(permissions, Perm.projectUpdate);
     final notifier = ref.read(workflowEditorProvider(projectId).notifier);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-to-settings'),
           tooltip: context.l10n.grpIBack,
@@ -48,6 +55,7 @@ class WorkflowScreen extends ConsumerWidget {
         actions: [
           if (canEdit) ...[
             TextButton(
+              style: _tightButton,
               key: const Key('workflow-discard'),
               onPressed: editor.dirty && !editor.saving
                   ? notifier.discard
@@ -55,8 +63,9 @@ class WorkflowScreen extends ConsumerWidget {
               child: Text(context.l10n.grpIDiscard),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: FilledButton(
+                style: _tightButton,
                 key: const Key('workflow-save'),
                 onPressed: editor.canSave
                     ? () async {

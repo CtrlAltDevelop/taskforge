@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
@@ -423,7 +423,11 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.ensureVisible(find.byKey(const Key('open-change-password')));
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('open-change-password')),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
     await tester.pumpAndSettle();
@@ -456,7 +460,11 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.ensureVisible(find.byKey(const Key('open-change-password')));
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('open-change-password')),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
     await tester.pumpAndSettle();

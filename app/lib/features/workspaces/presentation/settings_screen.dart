@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,7 +23,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
     final workspace = ref.watch(currentWorkspaceProvider);
     final failed = ref.watch(workspacesProvider).hasError;
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-home'),
           tooltip: context.l10n.grpEBack,
@@ -40,75 +42,77 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     )
                   : const CircularProgressIndicator(),
             )
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                // Keyed so a save, a refresh or a switch starts the form afresh.
-                GeneralSection(
-                  key: ValueKey('${workspace.id}/${workspace.version}'),
-                  workspace: workspace,
-                ),
-                PermissionGate(
-                  permission: Perm.workspaceDelete,
-                  child: DangerZone(workspace: workspace),
-                ),
-                const RecentlyDeleted(),
-                PermissionGate(
-                  permission: Perm.memberView,
-                  child: ListTile(
-                    key: const Key('open-members'),
-                    leading: const Icon(Icons.group),
-                    title: Text(context.l10n.grpEMembers),
-                    subtitle: Text(context.l10n.grpEMembersSub),
-                    onTap: () => context.push('/members'),
+          : ContentWidth(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  // Keyed so a save, a refresh or a switch starts the form afresh.
+                  GeneralSection(
+                    key: ValueKey('${workspace.id}/${workspace.version}'),
+                    workspace: workspace,
                   ),
-                ),
-                PermissionGate(
-                  permission: Perm.roleView,
-                  child: ListTile(
-                    key: const Key('open-roles'),
-                    leading: const Icon(Icons.admin_panel_settings),
-                    title: Text(context.l10n.grpERolesPerms),
-                    subtitle: Text(context.l10n.grpERolesPermsSub),
-                    onTap: () => context.push('/workspaces/roles'),
+                  PermissionGate(
+                    permission: Perm.workspaceDelete,
+                    child: DangerZone(workspace: workspace),
                   ),
-                ),
-                PermissionGate(
-                  permission: Perm.auditView,
-                  child: ListTile(
-                    key: const Key('open-audit'),
-                    leading: const Icon(Icons.fact_check_outlined),
-                    title: Text(context.l10n.grpEAuditLog),
-                    subtitle: Text(context.l10n.grpEAuditLogSub),
-                    onTap: () => context.push('/audit'),
+                  const RecentlyDeleted(),
+                  PermissionGate(
+                    permission: Perm.memberView,
+                    child: ListTile(
+                      key: const Key('open-members'),
+                      leading: const Icon(Icons.group),
+                      title: Text(context.l10n.grpEMembers),
+                      subtitle: Text(context.l10n.grpEMembersSub),
+                      onTap: () => context.push('/members'),
+                    ),
                   ),
-                ),
-                PermissionGate(
-                  permission: Perm.dataManage,
-                  child: ListTile(
-                    key: const Key('open-import'),
-                    leading: const Icon(Icons.swap_vert),
-                    title: Text(context.l10n.grpEImportExport),
-                    subtitle: Text(context.l10n.grpEImportExportSub),
-                    onTap: () => context.push('/import'),
+                  PermissionGate(
+                    permission: Perm.roleView,
+                    child: ListTile(
+                      key: const Key('open-roles'),
+                      leading: const Icon(Icons.admin_panel_settings),
+                      title: Text(context.l10n.grpERolesPerms),
+                      subtitle: Text(context.l10n.grpERolesPermsSub),
+                      onTap: () => context.push('/workspaces/roles'),
+                    ),
                   ),
-                ),
-                if (ref.watch(permissionSetProvider).can(Perm.formManage))
+                  PermissionGate(
+                    permission: Perm.auditView,
+                    child: ListTile(
+                      key: const Key('open-audit'),
+                      leading: const Icon(Icons.fact_check_outlined),
+                      title: Text(context.l10n.grpEAuditLog),
+                      subtitle: Text(context.l10n.grpEAuditLogSub),
+                      onTap: () => context.push('/audit'),
+                    ),
+                  ),
+                  PermissionGate(
+                    permission: Perm.dataManage,
+                    child: ListTile(
+                      key: const Key('open-import'),
+                      leading: const Icon(Icons.swap_vert),
+                      title: Text(context.l10n.grpEImportExport),
+                      subtitle: Text(context.l10n.grpEImportExportSub),
+                      onTap: () => context.push('/import'),
+                    ),
+                  ),
+                  if (ref.watch(permissionSetProvider).can(Perm.formManage))
+                    ListTile(
+                      key: const Key('open-forms'),
+                      leading: const Icon(Icons.dynamic_form_outlined),
+                      title: Text(context.l10n.formsTitle),
+                      subtitle: Text(context.l10n.formsSub),
+                      onTap: () => context.push('/forms'),
+                    ),
                   ListTile(
-                    key: const Key('open-forms'),
-                    leading: const Icon(Icons.dynamic_form_outlined),
-                    title: Text(context.l10n.formsTitle),
-                    subtitle: Text(context.l10n.formsSub),
-                    onTap: () => context.push('/forms'),
+                    key: const Key('open-developer'),
+                    leading: const Icon(Icons.code),
+                    title: Text(context.l10n.devTitle),
+                    subtitle: Text(context.l10n.devSub),
+                    onTap: () => context.push('/developer'),
                   ),
-                ListTile(
-                  key: const Key('open-developer'),
-                  leading: const Icon(Icons.code),
-                  title: Text(context.l10n.devTitle),
-                  subtitle: Text(context.l10n.devSub),
-                  onTap: () => context.push('/developer'),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }

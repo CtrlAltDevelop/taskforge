@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -48,7 +48,12 @@ Future<Opened> _open(
     size: size,
   );
   await pumped.go(tester, '/projects/p1');
-  await tester.tap(find.text('Board'));
+  await tester.tap(
+    find.descendant(
+      of: find.byKey(const Key('view-switch')),
+      matching: find.byIcon(Icons.view_kanban_outlined),
+    ),
+  );
   await tester.pumpAndSettle();
   return (board: board, views: saved);
 }
@@ -545,7 +550,12 @@ void main() {
       board: board,
     );
     await pumped.go(tester, '/projects/p1');
-    await tester.tap(find.text('Board'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('view-switch')),
+        matching: find.byIcon(Icons.view_kanban_outlined),
+      ),
+    );
     await tester.pump();
     await tester.pump();
 
@@ -560,12 +570,22 @@ void main() {
   testWidgets('List and Board switch back and forth', (tester) async {
     await _open(tester);
 
-    await tester.tap(find.text('List'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('view-switch')),
+        matching: find.byIcon(Icons.table_rows_outlined),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('card-a')), findsNothing);
     expect(find.byKey(const Key('task-a')), findsOneWidget);
 
-    await tester.tap(find.text('Board'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('view-switch')),
+        matching: find.byIcon(Icons.view_kanban_outlined),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('card-a')), findsOneWidget);
   });

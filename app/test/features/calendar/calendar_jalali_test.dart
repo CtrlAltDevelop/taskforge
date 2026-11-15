@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'
+    show GlobalWidgetsLocalizations;
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/core/i18n/jalali.dart';
@@ -37,7 +40,12 @@ Widget _app(LocalePrefs prefs, Widget child) => ProviderScope(
   overrides: [localePrefsProvider.overrideWith(() => _FixedPrefs(prefs))],
   child: MaterialApp(
     locale: prefs.locale,
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    localizationsDelegates: const [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(body: child),
   ),

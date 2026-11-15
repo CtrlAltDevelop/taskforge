@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,7 +24,7 @@ class SsoSetupScreen extends ConsumerWidget {
     final provider = ref.watch(ssoProviderProvider);
     final roles = ref.watch(rolesProvider);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.ssoTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
@@ -232,6 +233,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               controller: _name,
               decoration: InputDecoration(labelText: t.ssoName),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('sso-issuer'),
               controller: _issuer,
@@ -241,11 +243,13 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 helperText: t.ssoIssuerHelp,
               ),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('sso-client-id'),
               controller: _clientId,
               decoration: InputDecoration(labelText: t.ssoClientId),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('sso-client-secret'),
               controller: _secret,
@@ -257,11 +261,13 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                     : t.ssoSecretNeeded,
               ),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('sso-scopes'),
               controller: _scopes,
               decoration: InputDecoration(labelText: t.ssoScopes),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const Key('sso-domains'),
               controller: _domains,
@@ -270,6 +276,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 helperText: t.ssoDomainsHelp,
               ),
             ),
+            const SizedBox(height: 12),
             SwitchListTile(
               key: const Key('sso-auto-create'),
               contentPadding: EdgeInsets.zero,

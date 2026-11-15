@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -180,7 +181,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
         ? ref.watch(archivedFieldsProvider(widget.projectId)).value ?? const []
         : const <CustomField>[];
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-to-settings'),
           tooltip: context.l10n.grpIBack,

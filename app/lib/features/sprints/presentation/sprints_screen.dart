@@ -1,4 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/scroll_if_short.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+
+import 'dart:math';
+
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,6 +23,9 @@ import 'package:taskforge/features/sprints/presentation/sprint_dialogs.dart';
 /// Width from which the backlog and the sprint sit side by side.
 const planningBreakpoint = 820.0;
 
+/// Least height of one planning pane when the two are stacked.
+const _stackedPaneHeight = 360.0;
+
 /// A project's sprints: planning (backlog | sprint) and reports.
 class SprintsScreen extends ConsumerWidget {
   const SprintsScreen({super.key, required this.projectId});
@@ -29,7 +37,7 @@ class SprintsScreen extends ConsumerWidget {
     final project = ref.watch(projectProvider(projectId));
     final catalog = ref.watch(projectCatalogProvider(true));
     return ShellScaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(
           project == null
               ? context.l10n.grpASprintsTitle
@@ -242,69 +250,72 @@ class _SprintsState extends ConsumerState<_Sprints> {
   Widget _loaded(BuildContext context, List<Sprint> all) {
     final current = _current(all);
     final canManage = ref.watch(permissionSetProvider).can(Perm.sprintManage);
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SegmentedButton<bool>(
-                key: const Key('sprints-tabs'),
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(
-                    value: false,
-                    label: Text(context.l10n.grpAPlanning),
-                  ),
-                  ButtonSegment(
-                    value: true,
-                    label: Text(context.l10n.grpAReports),
-                  ),
-                ],
-                selected: {_reports},
-                onSelectionChanged: (s) => setState(() => _reports = s.first),
-              ),
-              if (all.length > 1)
-                DropdownButton<String>(
-                  key: const Key('sprint-picker'),
-                  value: current?.id,
-                  items: [
-                    for (final s in all)
-                      DropdownMenuItem(value: s.id, child: Text(s.name)),
+    return ScrollIfShort(
+      minHeight: 900,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                SegmentedButton<bool>(
+                  key: const Key('sprints-tabs'),
+                  showSelectedIcon: false,
+                  segments: [
+                    ButtonSegment(
+                      value: false,
+                      label: Text(context.l10n.grpAPlanning),
+                    ),
+                    ButtonSegment(
+                      value: true,
+                      label: Text(context.l10n.grpAReports),
+                    ),
                   ],
-                  onChanged: (v) => setState(() {
-                    _picked = v;
-                    _selected.clear();
-                  }),
+                  selected: {_reports},
+                  onSelectionChanged: (s) => setState(() => _reports = s.first),
                 ),
-              if (canManage)
-                FilledButton.tonalIcon(
-                  key: const Key('new-sprint'),
-                  icon: const Icon(Icons.add),
-                  label: Text(context.l10n.grpANewSprint),
-                  onPressed: () => _form(all),
-                ),
-            ],
+                if (all.length > 1)
+                  DropdownButton<String>(
+                    key: const Key('sprint-picker'),
+                    value: current?.id,
+                    items: [
+                      for (final s in all)
+                        DropdownMenuItem(value: s.id, child: Text(s.name)),
+                    ],
+                    onChanged: (v) => setState(() {
+                      _picked = v;
+                      _selected.clear();
+                    }),
+                  ),
+                if (canManage)
+                  FilledButton.tonalIcon(
+                    key: const Key('new-sprint'),
+                    icon: const Icon(Icons.add),
+                    label: Text(context.l10n.grpANewSprint),
+                    onPressed: () => _form(all),
+                  ),
+              ],
+            ),
           ),
-        ),
-        if (current != null)
-          _Header(
-            sprint: current,
-            canManage: canManage,
-            onEdit: () => _form(all, sprint: current),
-            onStart: () => _start(current),
-            onComplete: () => _complete(current, all),
+          if (current != null)
+            _Header(
+              sprint: current,
+              canManage: canManage,
+              onEdit: () => _form(all, sprint: current),
+              onStart: () => _start(current),
+              onComplete: () => _complete(current, all),
+            ),
+          const Divider(height: 1),
+          Expanded(
+            child: _reports
+                ? _Reports(projectId: _pid, sprint: current ?? all.firstOrNull)
+                : _planning(context, current, canManage),
           ),
-        const Divider(height: 1),
-        Expanded(
-          child: _reports
-              ? _Reports(projectId: _pid, sprint: current ?? all.firstOrNull)
-              : _planning(context, current, canManage),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -394,12 +405,22 @@ class _SprintsState extends ConsumerState<_Sprints> {
                 Expanded(child: sprintPane),
               ],
             )
-          : Column(
-              children: [
-                Expanded(child: backlogPane),
-                const Divider(height: 1),
-                Expanded(child: sprintPane),
-              ],
+          // Stacked on a phone: each pane keeps a usable height and the page
+          // scrolls, instead of squeezing both into one screen.
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: max(box.maxHeight / 2, _stackedPaneHeight),
+                    child: backlogPane,
+                  ),
+                  const Divider(height: 1),
+                  SizedBox(
+                    height: max(box.maxHeight / 2, _stackedPaneHeight),
+                    child: sprintPane,
+                  ),
+                ],
+              ),
             ),
     );
   }

@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
 /// Width from which the switcher is a dropdown rather than a bottom sheet.
-const desktopBreakpoint = 1024.0;
+const desktopBreakpoint = ScreenSize.expandedFrom;
 
 /// App-bar title: the current workspace's name, tapping it lists all of them.
 class WorkspaceSwitcher extends ConsumerWidget {

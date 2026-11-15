@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/scroll_if_short.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -22,7 +23,7 @@ import 'package:taskforge/features/workflows/application/workflows_providers.dar
 
 /// Below this width the calendar is an agenda: a month of dots and the tasks of
 /// the chosen day. From [trayBreakpoint] the unscheduled tasks sit beside it.
-const phoneBreakpoint = 700.0;
+const phoneBreakpoint = 640.0;
 const trayBreakpoint = 900.0;
 const trayWidth = 260.0;
 
@@ -244,32 +245,35 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         final Widget body;
         if (phone) {
           final selected = _picked ?? anchor;
-          body = Column(
-            children: [
-              MonthDots(
-                first: range.first,
-                weeks: weeks,
-                month: anchorMonth,
-                jalali: jalali,
-                tasks: state.tasks,
-                ghosts: ghosts,
-                today: today,
-                selected: selected,
-                onSelect: (d) => setState(() => _picked = d),
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: DayTasks(
-                  day: selected,
+          body = ScrollIfShort(
+            minHeight: 560,
+            child: Column(
+              children: [
+                MonthDots(
+                  first: range.first,
+                  weeks: weeks,
+                  month: anchorMonth,
+                  jalali: jalali,
                   tasks: state.tasks,
                   ghosts: ghosts,
-                  colorOf: colorOf,
-                  canMove: canMove,
-                  onOpen: widget.onOpen,
-                  onReschedule: _schedule,
+                  today: today,
+                  selected: selected,
+                  onSelect: (d) => setState(() => _picked = d),
                 ),
-              ),
-            ],
+                const Divider(height: 1),
+                Expanded(
+                  child: DayTasks(
+                    day: selected,
+                    tasks: state.tasks,
+                    ghosts: ghosts,
+                    colorOf: colorOf,
+                    canMove: canMove,
+                    onOpen: widget.onOpen,
+                    onReschedule: _schedule,
+                  ),
+                ),
+              ],
+            ),
           );
         } else if (mode == CalendarMode.day) {
           body = DayTasks(

@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/foundation.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/app_theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'
+    hide GlobalMaterialLocalizations, GlobalCupertinoLocalizations;
 import 'package:taskforge/core/i18n/cupertino_fallback.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,6 +32,13 @@ const _arabicScriptFonts = [
 /// (docs/translating.md): accented, padded English that shows clipped layouts
 /// and any text that is still hardcoded.
 const _pseudoLocale = bool.fromEnvironment('PSEUDO_LOCALE');
+
+/// Pointer platforms get tighter rows; touch platforms keep 48dp targets.
+final _desktopPlatform = const {
+  TargetPlatform.macOS,
+  TargetPlatform.windows,
+  TargetPlatform.linux,
+}.contains(defaultTargetPlatform);
 
 class TaskForgeApp extends ConsumerWidget {
   const TaskForgeApp({super.key});
@@ -75,16 +85,15 @@ class TaskForgeApp extends ConsumerWidget {
         FallbackCupertinoDelegate(),
       ],
       themeMode: ref.watch(themeModeProvider),
-      theme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
-        useMaterial3: true,
-        fontFamilyFallback: _arabicScriptFonts,
+      theme: buildAppTheme(
+        brightness: Brightness.light,
+        fontFallback: _arabicScriptFonts,
+        compactDensity: _desktopPlatform,
       ),
-      darkTheme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
+      darkTheme: buildAppTheme(
         brightness: Brightness.dark,
-        useMaterial3: true,
-        fontFamilyFallback: _arabicScriptFonts,
+        fontFallback: _arabicScriptFonts,
+        compactDensity: _desktopPlatform,
       ),
       routerConfig: router,
     );

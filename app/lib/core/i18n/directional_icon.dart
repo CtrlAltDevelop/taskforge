@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// An icon that points along the reading direction (a chevron to "next", an
 /// arrow to "forward") and so turns around in right-to-left layouts.

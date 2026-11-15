@@ -2,7 +2,7 @@ import 'package:taskforge/features/views/application/views_providers.dart';
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';

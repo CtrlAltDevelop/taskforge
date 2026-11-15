@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
@@ -58,6 +58,9 @@ import '../features/time/fakes.dart';
 
 const _phone = Size(390, 844);
 const _desktop = Size(1280, 800);
+
+/// Smallest phone still in use: catches overflows the 390 wide case hides.
+const _smallPhone = Size(320, 568);
 const _languages = ['en', 'fa', 'ar'];
 
 /// A mixed-direction title: Persian text around a Latin key, and one long word.
@@ -264,7 +267,7 @@ const skipLocationCheck = {
 void main() {
   for (final entry in screenCases().entries) {
     group(entry.key, () {
-      for (final size in [_phone, _desktop]) {
+      for (final size in [_smallPhone, _phone, _desktop]) {
         for (final language in _languages) {
           final label =
               '$language ${size.width.toInt()}x${size.height.toInt()}';
@@ -317,7 +320,7 @@ void main() {
   };
   for (final entry in signedOut.entries) {
     group(entry.key, () {
-      for (final size in [_phone, _desktop]) {
+      for (final size in [_smallPhone, _phone, _desktop]) {
         for (final language in _languages) {
           testWidgets(
             '$language ${size.width.toInt()}x${size.height.toInt()}',

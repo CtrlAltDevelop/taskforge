@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,14 +36,14 @@ class FormBuilderScreen extends ConsumerWidget {
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(
-        appBar: AppBar(),
+        appBar: TfAppBar(),
         body: Center(child: Text(formsErrorMessage(e, context.l10n))),
       ),
       data: (rows) {
         final found = rows.where((f) => f.id == id).firstOrNull;
         if (found == null) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: TfAppBar(),
             body: Center(child: Text(context.l10n.formsGone)),
           );
         }
@@ -266,7 +267,7 @@ class _BuilderState extends ConsumerState<_Builder> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: TfAppBar(
           leading: IconButton(
             key: const Key('back-forms'),
             tooltip: t.grpEBack,
@@ -546,6 +547,7 @@ class _QuestionDialogState extends State<_QuestionDialog> {
               controller: _help,
               decoration: InputDecoration(labelText: t.formsQuestionHelp),
             ),
+            const SizedBox(height: 12),
             SwitchListTile(
               key: const Key('question-required'),
               contentPadding: EdgeInsets.zero,

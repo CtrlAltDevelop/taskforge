@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -159,6 +159,7 @@ class _EntryDialogState extends State<_EntryDialog> {
             maxLength: 500,
             decoration: InputDecoration(labelText: context.l10n.grpANote),
           ),
+          const SizedBox(height: 12),
           SwitchListTile(
             key: const Key('entry-billable'),
             contentPadding: EdgeInsets.zero,

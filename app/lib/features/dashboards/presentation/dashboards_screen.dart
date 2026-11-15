@@ -1,7 +1,9 @@
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -239,7 +241,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         : ref.watch(projectProvider(widget.projectId));
     final list = ref.watch(dashboardsProvider(widget.projectId));
     return ShellScaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(
           project == null
               ? context.l10n.grpCDashTitle

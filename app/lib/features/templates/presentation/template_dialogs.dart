@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -147,6 +147,7 @@ class _ApplyState extends ConsumerState<_ApplyDialog> {
                       }
                     },
                   ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     key: const Key('tpl-project-key'),
                     controller: _key,
@@ -368,6 +369,7 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                 validator: (v) =>
                     (v ?? '').trim().isEmpty ? t.tplRequired : null,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _description,
                 maxLength: 500,
@@ -467,6 +469,7 @@ Future<bool> showEditTemplateDialog(
                 maxLength: 80,
                 decoration: InputDecoration(labelText: ctx.l10n.tplName),
               ),
+              const SizedBox(height: 12),
               TextField(
                 controller: description,
                 maxLength: 500,

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,7 +34,7 @@ class DeveloperScreen extends ConsumerWidget {
     return DefaultTabController(
       length: canHooks ? 2 : 1,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: TfAppBar(
           leading: IconButton(
             key: const Key('back-settings'),
             tooltip: context.l10n.grpEBack,

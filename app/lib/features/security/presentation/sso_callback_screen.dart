@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -77,7 +78,7 @@ class _SsoCallbackScreenState extends ConsumerState<SsoCallbackScreen> {
     final t = context.l10n;
     final message = _message;
     return Scaffold(
-      appBar: AppBar(title: Text(t.ssoTitleShort)),
+      appBar: TfAppBar(title: Text(t.ssoTitleShort)),
       body: Center(
         child: message == null
             ? const CircularProgressIndicator()

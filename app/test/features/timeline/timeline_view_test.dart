@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -84,7 +84,12 @@ Future<Opened> _open(
     size: size,
   );
   await pumped.go(tester, '/projects/p1');
-  await tester.tap(find.text('Timeline'));
+  await tester.tap(
+    find.descendant(
+      of: find.byKey(const Key('view-switch')),
+      matching: find.byIcon(Icons.stacked_bar_chart),
+    ),
+  );
   await tester.pumpAndSettle();
   return (tasks: server, timeline: timeline, views: views);
 }

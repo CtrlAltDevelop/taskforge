@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,7 +51,7 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
     final colors = projectColors(projects);
     final hidden = ref.watch(hiddenProjectsProvider);
     return ShellScaffold(
-      appBar: AppBar(title: Text(context.l10n.calendar)),
+      appBar: TfAppBar(title: Text(context.l10n.calendar)),
       body: CalendarView(
         scope: '',
         projectColor: (t) => colors[t.projectId] ?? Colors.blueGrey,

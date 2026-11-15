@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
@@ -232,11 +232,21 @@ void main() {
       await tester.pumpAndSettle();
       expect(s.board.filters.last, expected);
 
-      await tester.tap(find.text('Calendar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const Key('view-switch')),
+          matching: find.byIcon(Icons.calendar_month_outlined),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(s.calendar.filters.last, expected);
 
-      await tester.tap(find.text('List'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const Key('view-switch')),
+          matching: find.byIcon(Icons.table_rows_outlined),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(s.tasks.queries.last.filterAst, expected);
       expect(find.byKey(const Key('active-filter')), findsOneWidget);
@@ -300,7 +310,12 @@ void main() {
       tester,
     ) async {
       final s = await _open(tester);
-      await tester.tap(find.text('Calendar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const Key('view-switch')),
+          matching: find.byIcon(Icons.calendar_month_outlined),
+        ),
+      );
       await tester.pumpAndSettle();
       final before = s.calendar.filters.length;
 
@@ -380,7 +395,12 @@ void main() {
       await tester.tap(find.text('Board'));
       await tester.pumpAndSettle();
       expect(s.board.filters.every((f) => f.isNotEmpty), isTrue);
-      await tester.tap(find.text('Calendar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const Key('view-switch')),
+          matching: find.byIcon(Icons.calendar_month_outlined),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(s.calendar.filters.every((f) => f.isNotEmpty), isTrue);
       expect(s.pumped.container.read(activeFilterProvider('p1')).savedId, 'f9');

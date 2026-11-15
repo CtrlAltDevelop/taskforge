@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -90,7 +91,7 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
     final t = context.l10n;
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.secVerifyTitle),
         actions: const [LanguageMenuButton()],
       ),
@@ -117,6 +118,7 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
                 ),
                 onSubmitted: (_) => _busy ? null : _submit(),
               ),
+              const SizedBox(height: 12),
               CheckboxListTile(
                 key: const Key('two-factor-remember'),
                 contentPadding: EdgeInsets.zero,

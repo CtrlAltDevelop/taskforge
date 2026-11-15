@@ -10,7 +10,7 @@ import 'package:taskforge/features/comments/application/comments_providers.dart'
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/app_router.dart';

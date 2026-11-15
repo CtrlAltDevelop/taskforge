@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/account/language_menu.dart';
@@ -125,7 +126,7 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(widget.title),
         actions: const [LanguageMenuButton()],
       ),

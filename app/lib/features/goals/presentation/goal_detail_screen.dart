@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -161,7 +162,7 @@ class GoalDetailScreen extends ConsumerWidget {
     final cat = catalog.value ?? GoalCatalog.empty;
     final goal = cat.byId(goalId);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-goals'),
           tooltip: t.grpEBack,

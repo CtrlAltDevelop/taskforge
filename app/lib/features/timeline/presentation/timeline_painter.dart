@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';

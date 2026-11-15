@@ -1,5 +1,6 @@
+import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -236,41 +237,46 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
       builder: (context, box) {
         final narrow = box.maxWidth < timelineListBreakpoint;
         final listMode = _listChoice ?? narrow;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TimelineToolbar(
-              projectId: _id,
-              listMode: listMode,
-              onListMode: (v) => setState(() => _listChoice = v),
-              onExport: () => _export(scene, zoom),
-              onWorkingDays: permissions.can(Perm.workspaceUpdate)
-                  ? () => _editWorkingDays(days)
-                  : null,
-            ),
-            if (state.loading) const LinearProgressIndicator(minHeight: 2),
-            if (state.error != null)
-              MaterialBanner(
-                content: Text(taskErrorMessage(state.error!, context.l10n)),
-                actions: [
-                  TextButton(
-                    key: const Key('timeline-retry'),
-                    onPressed: ref.read(timelineProvider(_id).notifier).refresh,
-                    child: Text(context.l10n.grpIRetry),
-                  ),
-                ],
+        return ScrollIfShort(
+          minHeight: 480,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TimelineToolbar(
+                projectId: _id,
+                listMode: listMode,
+                onListMode: (v) => setState(() => _listChoice = v),
+                onExport: () => _export(scene, zoom),
+                onWorkingDays: permissions.can(Perm.workspaceUpdate)
+                    ? () => _editWorkingDays(days)
+                    : null,
               ),
-            Expanded(
-              child: listMode
-                  ? TimelineList(
-                      rows: rows,
-                      critical: critical,
-                      onOpen: widget.onOpen,
-                    )
-                  : _chart(scene, zoom, today, canMove),
-            ),
-            _footer(canMove, archived),
-          ],
+              if (state.loading) const LinearProgressIndicator(minHeight: 2),
+              if (state.error != null)
+                MaterialBanner(
+                  content: Text(taskErrorMessage(state.error!, context.l10n)),
+                  actions: [
+                    TextButton(
+                      key: const Key('timeline-retry'),
+                      onPressed: ref
+                          .read(timelineProvider(_id).notifier)
+                          .refresh,
+                      child: Text(context.l10n.grpIRetry),
+                    ),
+                  ],
+                ),
+              Expanded(
+                child: listMode
+                    ? TimelineList(
+                        rows: rows,
+                        critical: critical,
+                        onOpen: widget.onOpen,
+                      )
+                    : _chart(scene, zoom, today, canMove),
+              ),
+              _footer(canMove, archived),
+            ],
+          ),
         );
       },
     );

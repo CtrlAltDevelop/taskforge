@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
@@ -160,6 +160,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
           ],
           onChanged: (v) => setState(() => _role = v ?? ''),
         ),
+        const SizedBox(height: 12),
         SwitchListTile(
           key: const Key('condition-assignee'),
           contentPadding: EdgeInsets.zero,

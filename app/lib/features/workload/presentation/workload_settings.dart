@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -141,7 +142,7 @@ class WorkloadSettingsScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: TfAppBar(
           title: Text(t.wlSettings),
           bottom: TabBar(
             tabs: [
@@ -414,6 +415,7 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
               ],
               onChanged: (v) => setState(() => _kind = v ?? _kind),
             ),
+            const SizedBox(height: 12),
             TextField(
               controller: _note,
               maxLength: 300,

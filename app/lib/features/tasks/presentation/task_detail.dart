@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
@@ -181,7 +181,12 @@ class TaskDetail extends ConsumerWidget {
                               size: 18,
                             ),
                             const SizedBox(width: 8),
-                            Text(p.labelIn(context.l10n)),
+                            Flexible(
+                              child: Text(
+                                p.labelIn(context.l10n),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ],
                         ),
                       ),

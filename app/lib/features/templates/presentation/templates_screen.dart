@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,7 +50,7 @@ class _State extends ConsumerState<TemplatesScreen> {
     final query = (text: _text, kind: _kind);
     final gallery = ref.watch(templatesProvider(query));
     return ShellScaffold(
-      appBar: AppBar(title: Text(t.tplTitle)),
+      appBar: TfAppBar(title: Text(t.tplTitle)),
       body: Column(
         children: [
           Padding(

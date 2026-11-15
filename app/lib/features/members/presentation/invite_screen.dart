@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -65,7 +66,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   Widget build(BuildContext context) {
     final preview = ref.watch(invitePreviewProvider(widget.token));
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.grpJInvitationTitle)),
+      appBar: TfAppBar(title: Text(context.l10n.grpJInvitationTitle)),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),

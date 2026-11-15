@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show IconData, Icons;
+import 'package:material_ui/material_ui.dart' show IconData, Icons;
 
 import 'package:taskforge/core/i18n/formatting.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';

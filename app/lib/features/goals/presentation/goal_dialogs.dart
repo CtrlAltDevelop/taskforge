@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -174,6 +174,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 maxLength: 160,
                 decoration: InputDecoration(labelText: t.goalsName),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('goal-description'),
                 controller: _description,
@@ -205,6 +206,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 ],
                 onChanged: (v) => setState(() => _owner = v ?? _owner),
               ),
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 key: const Key('goal-parent'),
                 initialValue: parents.any((g) => g.id == _parent)
@@ -218,6 +220,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 ],
                 onChanged: (v) => setState(() => _parent = v ?? ''),
               ),
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 key: const Key('goal-folder'),
                 initialValue: widget.catalog.folders.any((f) => f.id == _folder)
@@ -231,6 +234,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 ],
                 onChanged: (v) => setState(() => _folder = v ?? ''),
               ),
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 key: const Key('goal-weight'),
                 initialValue: goalWeights.contains(_weight) ? _weight : '1',
@@ -256,6 +260,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                   ],
                   onChanged: (v) => setState(() => _override = v ?? ''),
                 ),
+              const SizedBox(height: 12),
               SwitchListTile(
                 key: const Key('goal-private'),
                 contentPadding: EdgeInsets.zero,
@@ -400,6 +405,7 @@ class _KrDialogState extends State<_KrDialog> {
                 maxLength: 160,
                 decoration: InputDecoration(labelText: t.goalsKrName),
               ),
+              const SizedBox(height: 12),
               DropdownButtonFormField<KrType>(
                 key: const Key('kr-type'),
                 initialValue: _type,
@@ -569,6 +575,7 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
                   ),
                   decoration: InputDecoration(labelText: t.goalsCheckInValue),
                 ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('checkin-note'),
                 controller: _note,

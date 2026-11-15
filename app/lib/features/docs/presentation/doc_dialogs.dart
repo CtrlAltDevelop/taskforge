@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -164,6 +164,7 @@ class _ImageDialogState extends State<_ImageDialog> {
             errorText: _error,
           ),
         ),
+        const SizedBox(height: 12),
         TextField(
           key: const Key('image-alt'),
           controller: _alt,

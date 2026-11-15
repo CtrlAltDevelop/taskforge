@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -68,7 +69,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     final project = ref.watch(projectProvider(widget.projectId));
     final catalog = ref.watch(projectCatalogProvider(true));
     return ShellScaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(
           project == null
               ? context.l10n.grpCAutoTitle

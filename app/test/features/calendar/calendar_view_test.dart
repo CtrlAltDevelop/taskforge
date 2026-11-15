@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
@@ -114,7 +114,12 @@ Future<Opened> _open(
     size: size,
   );
   await pumped.go(tester, '/projects/p1');
-  await tester.tap(find.text('Calendar'));
+  await tester.tap(
+    find.descendant(
+      of: find.byKey(const Key('view-switch')),
+      matching: find.byIcon(Icons.calendar_month_outlined),
+    ),
+  );
   await tester.pumpAndSettle();
   return (tasks: server, calendar: calendar, views: saved);
 }
@@ -703,7 +708,12 @@ void main() {
       today: _today,
     );
     await pumped.go(tester, '/projects/p1');
-    await tester.tap(find.text('Calendar'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('view-switch')),
+        matching: find.byIcon(Icons.calendar_month_outlined),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('calendar-error')), findsOneWidget);
 
@@ -716,7 +726,12 @@ void main() {
   testWidgets('Calendar and List switch back and forth', (tester) async {
     await _open(tester);
 
-    await tester.tap(find.text('List'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('view-switch')),
+        matching: find.byIcon(Icons.table_rows_outlined),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('cal-title')), findsNothing);
     expect(find.byKey(const Key('task-a')), findsOneWidget);

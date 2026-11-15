@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +23,7 @@ class ArchivedProjectsScreen extends ConsumerWidget {
         if (p.isArchived) p,
     ];
     return ShellScaffold(
-      appBar: AppBar(title: Text(context.l10n.grpHArchivedProjects)),
+      appBar: TfAppBar(title: Text(context.l10n.grpHArchivedProjects)),
       body: switch (catalog) {
         AsyncData() when archived.isEmpty => Center(
           child: Text(

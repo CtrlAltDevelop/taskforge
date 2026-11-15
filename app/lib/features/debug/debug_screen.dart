@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +16,7 @@ class DebugScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final clients = ref.watch(pingClientsProvider);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           tooltip: context.l10n.grpJBack,
           icon: const BackButtonIcon(),
@@ -22,9 +24,11 @@ class DebugScreen extends ConsumerWidget {
         ),
         title: Text(context.l10n.grpJDebugTitle),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [for (final client in clients) PingTile(client: client)],
+      body: ContentWidth(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [for (final client in clients) PingTile(client: client)],
+        ),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:taskforge/core/i18n/l10n_context.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Says why before the system asks: nobody should meet a permission box
 /// without knowing what it is for. True when the person wants to go on.

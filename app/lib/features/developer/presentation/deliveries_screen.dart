@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -75,7 +76,7 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
   Widget build(BuildContext context) {
     final first = ref.watch(deliveriesProvider(widget.webhookId));
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-developer'),
           tooltip: context.l10n.grpEBack,

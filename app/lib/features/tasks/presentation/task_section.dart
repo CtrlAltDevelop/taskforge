@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,6 +49,10 @@ import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
 
 /// Width from which the detail opens as a side panel instead of a page.
 const wideBreakpoint = 900.0;
+
+/// The detail pane beside a wide list: 38% of the width, within these bounds.
+const _paneMinWidth = 380.0;
+const _paneMaxWidth = 560.0;
 
 /// A project's tasks: quick-add bar, the list, and the detail of the selected one.
 class TaskSection extends ConsumerStatefulWidget {
@@ -147,11 +153,17 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
     await Navigator.of(context).push<void>(
       MaterialPageRoute(
         builder: (_) => Scaffold(
-          appBar: AppBar(title: Text(isolateLtr(task.displayId))),
-          body: TaskDetail(
-            project: widget.project,
-            taskId: task.id,
-            onOpen: (t) => _open(t, false),
+          appBar: TfAppBar(title: Text(isolateLtr(task.displayId))),
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: contentMaxWidth),
+              child: TaskDetail(
+                project: widget.project,
+                taskId: task.id,
+                onOpen: (t) => _open(t, false),
+              ),
+            ),
           ),
         ),
       ),
@@ -213,6 +225,7 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                 selected: wide ? _selected : null,
                 onOpen: (t) => _open(t, wide),
               );
+        final compact = ScreenSize.of(context).isCompact;
         final switcher = Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
           child: Wrap(
@@ -227,22 +240,26 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                   ButtonSegment(
                     value: _TaskView.list,
                     icon: const Icon(Icons.table_rows_outlined),
-                    label: Text(context.l10n.grpFViewList),
+                    tooltip: context.l10n.grpFViewList,
+                    label: compact ? null : Text(context.l10n.grpFViewList),
                   ),
                   ButtonSegment(
                     value: _TaskView.board,
                     icon: const Icon(Icons.view_kanban_outlined),
-                    label: Text(context.l10n.grpFViewBoard),
+                    tooltip: context.l10n.grpFViewBoard,
+                    label: compact ? null : Text(context.l10n.grpFViewBoard),
                   ),
                   ButtonSegment(
                     value: _TaskView.calendar,
                     icon: const Icon(Icons.calendar_month_outlined),
-                    label: Text(context.l10n.calendar),
+                    tooltip: context.l10n.calendar,
+                    label: compact ? null : Text(context.l10n.calendar),
                   ),
                   ButtonSegment(
                     value: _TaskView.timeline,
                     icon: const Icon(Icons.stacked_bar_chart),
-                    label: Text(context.l10n.grpFViewTimeline),
+                    tooltip: context.l10n.grpFViewTimeline,
+                    label: compact ? null : Text(context.l10n.grpFViewTimeline),
                   ),
                 ],
                 selected: {_view},
@@ -279,7 +296,10 @@ class _TaskSectionState extends ConsumerState<TaskSection> {
                         if (_selected != null) ...[
                           const VerticalDivider(width: 1),
                           SizedBox(
-                            width: 420,
+                            width: (box.maxWidth * 0.38).clamp(
+                              _paneMinWidth,
+                              _paneMaxWidth,
+                            ),
                             child: TaskDetail(
                               key: ValueKey(_selected),
                               project: widget.project,
@@ -789,7 +809,16 @@ class TaskTile extends StatelessWidget {
   final VoidCallback? onPick;
 
   @override
-  Widget build(BuildContext context) => ListTile(
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
+    ),
+    child: _tile(context),
+  );
+
+  Widget _tile(BuildContext context) => ListTile(
     key: Key('task-${task.id}'),
     selected: selected || picked == true,
     onTap: onTap,
@@ -843,7 +872,7 @@ class TaskTile extends StatelessWidget {
         Icon(
           Icons.circle,
           size: 10,
-          color: statusColor ?? Colors.grey,
+          color: statusColor ?? Theme.of(context).colorScheme.outline,
           semanticLabel: task.statusName,
         ),
         const SizedBox(width: 6),

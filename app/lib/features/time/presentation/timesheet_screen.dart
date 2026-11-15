@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,7 +45,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
     final me = ref.watch(currentUserIdProvider);
     final last = addDays(_week, 6);
     return ShellScaffold(
-      appBar: AppBar(title: Text(context.l10n.grpATimesheetTitle)),
+      appBar: TfAppBar(title: Text(context.l10n.grpATimesheetTitle)),
       body: Column(
         children: [
           Padding(
@@ -343,24 +344,27 @@ class _PersonPicker extends ConsumerWidget {
     if (members.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: DropdownButton<String>(
-        key: const Key('sheet-person'),
-        isExpanded: false,
-        value: members.any((m) => m.userId == value) ? value : me,
-        items: [
-          for (final m in members)
-            DropdownMenuItem(
-              value: m.userId,
-              child: Text(
-                m.userId == me
-                    ? context.l10n.grpAYou
-                    : (m.displayName.isEmpty ? m.email : m.displayName),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 220),
+        child: DropdownButton<String>(
+          key: const Key('sheet-person'),
+          isExpanded: true,
+          value: members.any((m) => m.userId == value) ? value : me,
+          items: [
+            for (final m in members)
+              DropdownMenuItem(
+                value: m.userId,
+                child: Text(
+                  m.userId == me
+                      ? context.l10n.grpAYou
+                      : (m.displayName.isEmpty ? m.email : m.displayName),
+                ),
               ),
-            ),
-        ],
-        onChanged: (id) {
-          if (id != null) onChanged(id);
-        },
+          ],
+          onChanged: (id) {
+            if (id != null) onChanged(id);
+          },
+        ),
       ),
     );
   }
@@ -406,13 +410,17 @@ class _TotalsState extends ConsumerState<_Totals> {
           ),
           DropdownButton<String>(
             key: const Key('totals-project'),
+            isExpanded: true,
             hint: Text(context.l10n.grpAChooseProject),
             value: chosen,
             items: [
               for (final p in projects)
                 DropdownMenuItem(
                   value: p.id,
-                  child: Text('${p.key} ${p.name}'),
+                  child: Text(
+                    '${p.key} ${p.name}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
             ],
             onChanged: (id) => setState(() => _project = id),

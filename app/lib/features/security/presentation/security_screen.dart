@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,7 +32,7 @@ class SecurityScreen extends ConsumerWidget {
     final policy = ref.watch(securityPolicyProvider).value;
     final canManage = ref.watch(permissionSetProvider).can(Perm.securityManage);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.secTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
@@ -38,48 +40,50 @@ class SecurityScreen extends ConsumerWidget {
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
-      body: ListView(
-        children: [
-          if (policy != null && policy.blocked)
-            _Banner(text: t.secBlocked, error: true)
-          else if (policy != null &&
-              policy.inGrace &&
-              !policy.enrolled &&
-              policy.enforcedFrom != null)
-            _Banner(
-              text: t.secGraceUntil(
-                context.localDate(policy.enforcedFrom!.toLocal()),
+      body: ContentWidth(
+        child: ListView(
+          children: [
+            if (policy != null && policy.blocked)
+              _Banner(text: t.secBlocked, error: true)
+            else if (policy != null &&
+                policy.inGrace &&
+                !policy.enrolled &&
+                policy.enforcedFrom != null)
+              _Banner(
+                text: t.secGraceUntil(
+                  context.localDate(policy.enforcedFrom!.toLocal()),
+                ),
+              ),
+            status.when(
+              data: (s) => _TwoFactorSection(status: s),
+              loading: () => const Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (e, _) => ListTile(
+                leading: const Icon(Icons.error_outline),
+                title: Text(securityErrorMessage(e, t)),
+                trailing: TextButton(
+                  onPressed: () => ref.invalidate(secondFactorStatusProvider),
+                  child: Text(t.grpBRetry),
+                ),
               ),
             ),
-          status.when(
-            data: (s) => _TwoFactorSection(status: s),
-            loading: () => const Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            error: (e, _) => ListTile(
-              leading: const Icon(Icons.error_outline),
-              title: Text(securityErrorMessage(e, t)),
-              trailing: TextButton(
-                onPressed: () => ref.invalidate(secondFactorStatusProvider),
-                child: Text(t.grpBRetry),
+            if (canManage) ...[
+              const Divider(),
+              if (policy != null) _PolicySection(policy: policy),
+              ListTile(
+                key: const Key('open-sso-setup'),
+                leading: const Icon(Icons.badge_outlined),
+                title: Text(t.ssoTitle),
+                subtitle: Text(t.ssoSub),
+                onTap: () => context.push('/settings/sso'),
               ),
-            ),
-          ),
-          if (canManage) ...[
+            ],
             const Divider(),
-            if (policy != null) _PolicySection(policy: policy),
-            ListTile(
-              key: const Key('open-sso-setup'),
-              leading: const Icon(Icons.badge_outlined),
-              title: Text(t.ssoTitle),
-              subtitle: Text(t.ssoSub),
-              onTap: () => context.push('/settings/sso'),
-            ),
+            const DevicePrivacyNote(),
           ],
-          const Divider(),
-          const DevicePrivacyNote(),
-        ],
+        ),
       ),
     );
   }

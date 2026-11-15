@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,7 +19,7 @@ class SystemScreen extends ConsumerWidget {
     final t = context.l10n;
     final info = ref.watch(systemInfoProvider);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.sysTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
@@ -86,64 +88,66 @@ class _Body extends ConsumerWidget {
     final workers = info.eager
         ? t.sysInline
         : (info.workers > 0 ? '${info.workers}' : t.sysNoWorkers);
-    return ListView(
-      children: [
-        ListTile(
-          title: Text(t.sysServerVersion),
-          subtitle: Text(
-            info.commit.isEmpty
-                ? info.version
-                : '${info.version} (${info.commit.substring(0, info.commit.length.clamp(0, 8))})',
+    return ContentWidth(
+      child: ListView(
+        children: [
+          ListTile(
+            title: Text(t.sysServerVersion),
+            subtitle: Text(
+              info.commit.isEmpty
+                  ? info.version
+                  : '${info.version} (${info.commit.substring(0, info.commit.length.clamp(0, 8))})',
+            ),
           ),
-        ),
-        ListTile(
-          title: Text(t.sysMinClient),
-          subtitle: Text(info.minClientVersion),
-        ),
-        const Divider(),
-        _StatusTile(
-          label: t.sysRedis,
-          text: _state(info.redis),
-          good: _good(info.redis),
-        ),
-        _StatusTile(
-          label: t.sysBroker,
-          text: _state(info.broker),
-          good: _good(info.broker),
-        ),
-        _StatusTile(
-          label: t.sysWorkers,
-          text: workers,
-          good: info.eager || info.workers > 0,
-        ),
-        const Divider(),
-        ListTile(
-          key: const Key('system-backlog'),
-          title: Text(t.sysBacklog),
-          subtitle: Text(
-            info.backlogTotal == 0
-                ? t.sysBacklogNone
-                : info.backlog.entries
-                      .where((e) => e.value > 0)
-                      .map((e) => '${e.key}: ${e.value}')
-                      .join('\n'),
+          ListTile(
+            title: Text(t.sysMinClient),
+            subtitle: Text(info.minClientVersion),
           ),
-        ),
-        const Divider(),
-        SwitchListTile(
-          key: const Key('collect-device-info'),
-          title: Text(t.devAdminCollectTitle),
-          subtitle: Text(
-            info.devicePepperSet
-                ? t.devAdminCollectSubtitle
-                : t.devAdminPepperMissing,
+          const Divider(),
+          _StatusTile(
+            label: t.sysRedis,
+            text: _state(info.redis),
+            good: _good(info.redis),
           ),
-          value: info.collectDeviceInfo,
-          onChanged: info.devicePepperSet || info.collectDeviceInfo
-              ? (on) => _toggle(context, ref, on)
-              : null,
-        ),
-      ],
+          _StatusTile(
+            label: t.sysBroker,
+            text: _state(info.broker),
+            good: _good(info.broker),
+          ),
+          _StatusTile(
+            label: t.sysWorkers,
+            text: workers,
+            good: info.eager || info.workers > 0,
+          ),
+          const Divider(),
+          ListTile(
+            key: const Key('system-backlog'),
+            title: Text(t.sysBacklog),
+            subtitle: Text(
+              info.backlogTotal == 0
+                  ? t.sysBacklogNone
+                  : info.backlog.entries
+                        .where((e) => e.value > 0)
+                        .map((e) => '${e.key}: ${e.value}')
+                        .join('\n'),
+            ),
+          ),
+          const Divider(),
+          SwitchListTile(
+            key: const Key('collect-device-info'),
+            title: Text(t.devAdminCollectTitle),
+            subtitle: Text(
+              info.devicePepperSet
+                  ? t.devAdminCollectSubtitle
+                  : t.devAdminPepperMissing,
+            ),
+            value: info.collectDeviceInfo,
+            onChanged: info.devicePepperSet || info.collectDeviceInfo
+                ? (on) => _toggle(context, ref, on)
+                : null,
+          ),
+        ],
+      ),
     );
   }
 }

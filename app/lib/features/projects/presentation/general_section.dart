@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -113,6 +113,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             decoration: InputDecoration(labelText: context.l10n.grpHName),
             validator: validateProjectName,
           ),
+          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-key'),
             controller: _key,
@@ -131,6 +132,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             ),
             validator: validateProjectKey,
           ),
+          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-description'),
             controller: _description,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -103,6 +103,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
                 validator: validateProjectName,
                 onChanged: _nameChanged,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 key: const Key('project-key'),
                 controller: _key,
@@ -123,6 +124,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
                   if (_keyError != null) setState(() => _keyError = null);
                 },
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 key: const Key('project-description'),
                 controller: _description,

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// How close to an edge (in pixels) a dragged card starts scrolling, and how
 /// far it scrolls every frame.

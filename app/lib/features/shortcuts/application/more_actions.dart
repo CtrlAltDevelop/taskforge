@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/features/shortcuts/application/action_groups.dart';

@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
@@ -43,7 +45,7 @@ class SessionsScreen extends ConsumerWidget {
         sessions.value?.where((s) => !s.current).toList() ??
         const <SessionInfo>[];
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-home'),
           tooltip: context.l10n.grpIBack,
@@ -62,12 +64,15 @@ class SessionsScreen extends ConsumerWidget {
         ],
       ),
       body: sessions.when(
-        data: (items) => ListView(
-          children: [
-            for (final s in items) _SessionTile(session: s, onRevoke: _revoke),
-            const Divider(),
-            const DevicePrivacyNote(),
-          ],
+        data: (items) => ContentWidth(
+          child: ListView(
+            children: [
+              for (final s in items)
+                _SessionTile(session: s, onRevoke: _revoke),
+              const Divider(),
+              const DevicePrivacyNote(),
+            ],
+          ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(

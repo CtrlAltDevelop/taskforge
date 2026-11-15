@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 import 'package:taskforge/features/dashboards/presentation/widget_card.dart';

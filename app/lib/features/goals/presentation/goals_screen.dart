@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -100,7 +101,7 @@ class GoalsScreen extends ConsumerWidget {
     final perms = ref.watch(permissionSetProvider);
     final catalog = goals.value ?? GoalCatalog.empty;
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(t.goalsTitle),
         actions: [
           if (perms.can(Perm.goalManage))

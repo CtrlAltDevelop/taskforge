@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,7 +60,7 @@ class OfflineScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final workspace = ref.watch(workspaceScopeProvider);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-home'),
           tooltip: context.l10n.grpAOfflineBack,
@@ -69,15 +71,17 @@ class OfflineScreen extends ConsumerWidget {
       ),
       body: workspace == null
           ? Center(child: Text(context.l10n.grpAOfflineChooseWorkspace))
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _Changes(workspace: workspace),
-                const SizedBox(height: 24),
-                const _Storage(),
-                const SizedBox(height: 24),
-                const _KeptProjects(),
-              ],
+          : ContentWidth(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _Changes(workspace: workspace),
+                  const SizedBox(height: 24),
+                  const _Storage(),
+                  const SizedBox(height: 24),
+                  const _KeptProjects(),
+                ],
+              ),
             ),
     );
   }

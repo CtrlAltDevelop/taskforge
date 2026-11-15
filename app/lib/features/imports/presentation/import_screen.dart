@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -19,7 +21,7 @@ class ImportScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final allowed = ref.watch(permissionSetProvider).can(Perm.dataManage);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         title: Text(context.l10n.grpCImpTitle),
         actions: [
           if (allowed)
@@ -38,15 +40,17 @@ class ImportScreen extends ConsumerWidget {
                 key: const Key('import-denied'),
               ),
             )
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: const [
-                ImportWizardCard(),
-                SizedBox(height: 24),
-                ImportHistory(),
-                SizedBox(height: 24),
-                PlaceholdersPanel(),
-              ],
+          : ContentWidth(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: const [
+                  ImportWizardCard(),
+                  SizedBox(height: 24),
+                  ImportHistory(),
+                  SizedBox(height: 24),
+                  PlaceholdersPanel(),
+                ],
+              ),
             ),
     );
   }

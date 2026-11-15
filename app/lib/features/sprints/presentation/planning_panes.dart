@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/scroll_if_short.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -251,44 +252,47 @@ class TaskListPane extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final list = tasks.value;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 8, 0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  list == null
-                      ? title
-                      : context.l10n.grpGTitleWithCount(title, list.length),
-                  style: theme.textTheme.titleMedium,
+    return ScrollIfShort(
+      minHeight: 480,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 8, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    list == null
+                        ? title
+                        : context.l10n.grpGTitleWithCount(title, list.length),
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                ...actions,
+              ],
+            ),
+          ),
+          ?header,
+          Expanded(
+            child: switch (tasks) {
+              AsyncData(:final value) when value.isEmpty => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(emptyText, textAlign: TextAlign.center),
                 ),
               ),
-              ...actions,
-            ],
-          ),
-        ),
-        ?header,
-        Expanded(
-          child: switch (tasks) {
-            AsyncData(:final value) when value.isEmpty => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(emptyText, textAlign: TextAlign.center),
+              AsyncData(:final value) => ListView(
+                children: [for (final t in value) rowBuilder(t)],
               ),
-            ),
-            AsyncData(:final value) => ListView(
-              children: [for (final t in value) rowBuilder(t)],
-            ),
-            AsyncError(:final error) => Center(
-              child: Text(sprintErrorMessage(error, context.l10n)),
-            ),
-            _ => const Center(child: CircularProgressIndicator()),
-          },
-        ),
-      ],
+              AsyncError(:final error) => Center(
+                child: Text(sprintErrorMessage(error, context.l10n)),
+              ),
+              _ => const Center(child: CircularProgressIndicator()),
+            },
+          ),
+        ],
+      ),
     );
   }
 }

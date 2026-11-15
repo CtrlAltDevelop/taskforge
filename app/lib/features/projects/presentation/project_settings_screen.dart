@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +24,7 @@ class ProjectSettingsScreen extends ConsumerWidget {
     final catalog = ref.watch(projectCatalogProvider(true));
     final project = ref.watch(projectProvider(projectId));
     return Scaffold(
-      appBar: AppBar(
+      appBar: TfAppBar(
         leading: IconButton(
           key: const Key('back-to-project'),
           tooltip: context.l10n.grpHBack,
@@ -65,44 +67,46 @@ class _Sections extends StatelessWidget {
     children: [
       if (project.isArchived) ArchivedBanner(project: project),
       Expanded(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Keyed so a save, a refresh or a conflict starts the form afresh.
-            GeneralSection(
-              key: ValueKey('${project.id}/${project.version}'),
-              project: project,
-            ),
-            const SizedBox(height: 24),
-            Card(
-              child: ListTile(
-                key: const Key('open-workflow'),
-                leading: const Icon(Icons.account_tree_outlined),
-                title: Text(context.l10n.grpHWorkflow),
-                subtitle: Text(context.l10n.grpHWorkflowHint),
-                trailing: const DirectionalIcon(Icons.chevron_right),
-                onTap: () => context.go('/projects/${project.id}/workflow'),
+        child: ContentWidth(
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Keyed so a save, a refresh or a conflict starts the form afresh.
+              GeneralSection(
+                key: ValueKey('${project.id}/${project.version}'),
+                project: project,
               ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                key: const Key('open-fields'),
-                leading: const Icon(Icons.tune),
-                title: Text(context.l10n.grpHFields),
-                subtitle: Text(context.l10n.grpHFieldsHint),
-                trailing: const DirectionalIcon(Icons.chevron_right),
-                onTap: () => context.go('/projects/${project.id}/fields'),
-              ),
-            ),
-            const SizedBox(height: 24),
-            FeaturesSection(project: project, info: featureInfo),
-            if (project.isPrivate) ...[
               const SizedBox(height: 24),
-              MembersSection(project: project),
+              Card(
+                child: ListTile(
+                  key: const Key('open-workflow'),
+                  leading: const Icon(Icons.account_tree_outlined),
+                  title: Text(context.l10n.grpHWorkflow),
+                  subtitle: Text(context.l10n.grpHWorkflowHint),
+                  trailing: const DirectionalIcon(Icons.chevron_right),
+                  onTap: () => context.go('/projects/${project.id}/workflow'),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: ListTile(
+                  key: const Key('open-fields'),
+                  leading: const Icon(Icons.tune),
+                  title: Text(context.l10n.grpHFields),
+                  subtitle: Text(context.l10n.grpHFieldsHint),
+                  trailing: const DirectionalIcon(Icons.chevron_right),
+                  onTap: () => context.go('/projects/${project.id}/fields'),
+                ),
+              ),
+              const SizedBox(height: 24),
+              FeaturesSection(project: project, info: featureInfo),
+              if (project.isPrivate) ...[
+                const SizedBox(height: 24),
+                MembersSection(project: project),
+              ],
+              ArchiveZone(project: project),
             ],
-            ArchiveZone(project: project),
-          ],
+          ),
         ),
       ),
     ],

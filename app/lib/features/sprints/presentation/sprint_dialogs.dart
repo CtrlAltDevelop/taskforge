@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
@@ -206,6 +206,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpASprintName,
                 ),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('sprint-goal'),
                 controller: _goal,
@@ -213,6 +214,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpASprintGoal,
                 ),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('sprint-start'),
                 controller: _start,
@@ -226,6 +228,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('sprint-end'),
                 controller: _end,
@@ -239,6 +242,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('sprint-capacity-points'),
                 controller: _capacityPoints,
@@ -249,6 +253,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpACapacityPointsOptional,
                 ),
               ),
+              const SizedBox(height: 12),
               TextField(
                 key: const Key('sprint-capacity-hours'),
                 controller: _capacityHours,

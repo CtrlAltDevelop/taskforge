@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -18,7 +20,7 @@ class NotificationPrefsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(prefsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.grpENotifSettings)),
+      appBar: TfAppBar(title: Text(context.l10n.grpENotifSettings)),
       body: switch (prefs) {
         AsyncData(:final value) => _Body(prefs: value),
         AsyncError(:final error) => Center(
@@ -173,46 +175,48 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final settings = widget.prefs.settings;
     final theme = Theme.of(context);
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Text(
-          context.l10n.grpEWhatReachesYou,
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        for (final row in widget.prefs.rows)
-          Card(
-            key: Key('pref-${row.eventType}'),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
-                    child: Text(row.label, style: theme.textTheme.titleSmall),
-                  ),
-                  SwitchListTile(
-                    key: Key('pref-inbox-${row.eventType}'),
-                    title: Text(context.l10n.grpEInbox),
-                    value: row.inbox,
-                    onChanged: (v) => _setRow(row.copyWith(inbox: v)),
-                  ),
-                  SwitchListTile(
-                    key: Key('pref-push-${row.eventType}'),
-                    title: Text(context.l10n.grpEPush),
-                    value: row.push,
-                    onChanged: (v) => _setPush(row, v),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Text(context.l10n.grpEEmail),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SegmentedButton<EmailMode>(
+    return ContentWidth(
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            context.l10n.grpEWhatReachesYou,
+            style: theme.textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          for (final row in widget.prefs.rows)
+            Card(
+              key: Key('pref-${row.eventType}'),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
+                      child: Text(row.label, style: theme.textTheme.titleSmall),
+                    ),
+                    SwitchListTile(
+                      key: Key('pref-inbox-${row.eventType}'),
+                      title: Text(context.l10n.grpEInbox),
+                      value: row.inbox,
+                      onChanged: (v) => _setRow(row.copyWith(inbox: v)),
+                    ),
+                    SwitchListTile(
+                      key: Key('pref-push-${row.eventType}'),
+                      title: Text(context.l10n.grpEPush),
+                      value: row.push,
+                      onChanged: (v) => _setPush(row, v),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 12,
+                        runSpacing: 8,
+                        children: [
+                          Text(context.l10n.grpEEmail),
+                          SegmentedButton<EmailMode>(
                             key: Key('pref-email-${row.eventType}'),
                             showSelectedIcon: false,
                             segments: [
@@ -226,111 +230,112 @@ class _BodyState extends ConsumerState<_Body> {
                             onSelectionChanged: (s) =>
                                 _setRow(row.copyWith(email: s.first)),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+          const SizedBox(height: 16),
+          Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
+          SwitchListTile(
+            key: const Key('quiet-switch'),
+            title: Text(context.l10n.grpEQuietHold),
+            subtitle: Text(context.l10n.grpEQuietHoldSub),
+            value: settings.quietOn,
+            onChanged: _toggleQuiet,
+          ),
+          if (settings.quietOn)
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    key: const Key('quiet-start'),
+                    title: Text(context.l10n.grpEFrom),
+                    subtitle: Text(context.localDigits(settings.quietStart)),
+                    onTap: () => _pickQuiet(start: true),
                   ),
-                ],
+                ),
+                Expanded(
+                  child: ListTile(
+                    key: const Key('quiet-end'),
+                    title: Text(context.l10n.grpEUntil),
+                    subtitle: Text(context.localDigits(settings.quietEnd)),
+                    onTap: () => _pickQuiet(start: false),
+                  ),
+                ),
+              ],
+            ),
+          if (_quietError != null)
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                _quietError!,
+                key: const Key('quiet-error'),
+                style: TextStyle(color: theme.colorScheme.error),
               ),
             ),
+          const SizedBox(height: 16),
+          Text(
+            context.l10n.grpETimeZoneDigest,
+            style: theme.textTheme.titleMedium,
           ),
-        const SizedBox(height: 16),
-        Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
-        SwitchListTile(
-          key: const Key('quiet-switch'),
-          title: Text(context.l10n.grpEQuietHold),
-          subtitle: Text(context.l10n.grpEQuietHoldSub),
-          value: settings.quietOn,
-          onChanged: _toggleQuiet,
-        ),
-        if (settings.quietOn)
-          Row(
-            children: [
-              Expanded(
-                child: ListTile(
-                  key: const Key('quiet-start'),
-                  title: Text(context.l10n.grpEFrom),
-                  subtitle: Text(context.localDigits(settings.quietStart)),
-                  onTap: () => _pickQuiet(start: true),
+          const SizedBox(height: 8),
+          Autocomplete<String>(
+            initialValue: TextEditingValue(text: settings.timezone),
+            optionsBuilder: (value) {
+              final q = value.text.trim().toLowerCase();
+              return commonTimezones.keys.where(
+                (z) => z.toLowerCase().contains(q),
+              );
+            },
+            onSelected: _saveZone,
+            fieldViewBuilder: (context, controller, focus, onSubmit) =>
+                TextField(
+                  key: const Key('timezone-field'),
+                  controller: controller,
+                  focusNode: focus,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.grpETimeZone,
+                    helperText: context.l10n.grpETimeZoneHelper,
+                    errorText: _zoneError,
+                  ),
+                  onSubmitted: _saveZone,
+                  onEditingComplete: () => _saveZone(controller.text),
                 ),
-              ),
-              Expanded(
-                child: ListTile(
-                  key: const Key('quiet-end'),
-                  title: Text(context.l10n.grpEUntil),
-                  subtitle: Text(context.localDigits(settings.quietEnd)),
-                  onTap: () => _pickQuiet(start: false),
-                ),
-              ),
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              key: const Key('timezone-device'),
+              icon: const Icon(Icons.phone_android),
+              label: Text(context.l10n.grpEUseDeviceZone),
+              onPressed: () {
+                final zone = timezoneForOffset(DateTime.now().timeZoneOffset);
+                if (zone == null) {
+                  _say(context.l10n.grpETypeZone);
+                  return;
+                }
+                _saveZone(zone);
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          DropdownButtonFormField<int>(
+            key: const Key('digest-hour'),
+            initialValue: settings.digestHour,
+            decoration: InputDecoration(labelText: context.l10n.grpEDigestAt),
+            items: [
+              for (var h = 0; h < 24; h++)
+                DropdownMenuItem(value: h, child: Text(hhmm(h, 0))),
             ],
-          ),
-        if (_quietError != null)
-          Semantics(
-            liveRegion: true,
-            child: Text(
-              _quietError!,
-              key: const Key('quiet-error'),
-              style: TextStyle(color: theme.colorScheme.error),
-            ),
-          ),
-        const SizedBox(height: 16),
-        Text(
-          context.l10n.grpETimeZoneDigest,
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        Autocomplete<String>(
-          initialValue: TextEditingValue(text: settings.timezone),
-          optionsBuilder: (value) {
-            final q = value.text.trim().toLowerCase();
-            return commonTimezones.keys.where(
-              (z) => z.toLowerCase().contains(q),
-            );
-          },
-          onSelected: _saveZone,
-          fieldViewBuilder: (context, controller, focus, onSubmit) => TextField(
-            key: const Key('timezone-field'),
-            controller: controller,
-            focusNode: focus,
-            decoration: InputDecoration(
-              labelText: context.l10n.grpETimeZone,
-              helperText: context.l10n.grpETimeZoneHelper,
-              errorText: _zoneError,
-            ),
-            onSubmitted: _saveZone,
-            onEditingComplete: () => _saveZone(controller.text),
-          ),
-        ),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: TextButton.icon(
-            key: const Key('timezone-device'),
-            icon: const Icon(Icons.phone_android),
-            label: Text(context.l10n.grpEUseDeviceZone),
-            onPressed: () {
-              final zone = timezoneForOffset(DateTime.now().timeZoneOffset);
-              if (zone == null) {
-                _say(context.l10n.grpETypeZone);
-                return;
-              }
-              _saveZone(zone);
+            onChanged: (h) {
+              if (h != null) _saveSettings(settings.copyWith(digestHour: h));
             },
           ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<int>(
-          key: const Key('digest-hour'),
-          initialValue: settings.digestHour,
-          decoration: InputDecoration(labelText: context.l10n.grpEDigestAt),
-          items: [
-            for (var h = 0; h < 24; h++)
-              DropdownMenuItem(value: h, child: Text(hhmm(h, 0))),
-          ],
-          onChanged: (h) {
-            if (h != null) _saveSettings(settings.copyWith(digestHour: h));
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

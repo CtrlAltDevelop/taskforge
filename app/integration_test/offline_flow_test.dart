@@ -1,7 +1,7 @@
 // The main offline flow through the whole app with a fake network: browse,
 // lose the connection, create, edit and comment, come back, and find it all on
 // the server. Run with `flutter test integration_test`.
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
