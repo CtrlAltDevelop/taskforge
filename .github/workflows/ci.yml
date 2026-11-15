@@ -114,7 +114,7 @@ jobs:
       - name: Production compose is valid
         working-directory: deploy
         run: |
-          printf 'TASKFORGE_DOMAIN=ci.example.test\nACME_EMAIL=ci@example.test\nDJANGO_SECRET_KEY=x\nDJANGO_FIELD_ENCRYPTION_KEY=y\nPOSTGRES_PASSWORD=p\nCOMPOSE_PROFILES=minio\n' > .env
+          printf 'TASKFORGE_DOMAIN=ci.example.test\nACME_EMAIL=ci@example.test\nDJANGO_SECRET_KEY=x\nDJANGO_FIELD_ENCRYPTION_KEY=y\nDJANGO_DPOP_NONCE_SECRET=z\nPOSTGRES_PASSWORD=p\nCOMPOSE_PROFILES=minio\n' > .env
           docker compose -f docker-compose.prod.yml config -q
       - run: for f in deploy/scripts/*.sh; do bash -n "$f"; done
       - run: docker build -f backend/Dockerfile -t taskforge-backend:ci .
@@ -163,6 +163,14 @@ jobs:
           grep -q '"status": "ok"' ready.json
           probe /api/version | tee version.json
           grep -q '"min_client_version"' version.json
+      - name: Backup, then prove the backup restores into a clean database
+        run: |
+          docker compose -f docker-compose.prod.yml exec -T backend python manage.py shell -c \
+            "from django.contrib.auth import get_user_model as g; g().objects.create_user('ci-restore', 'ci@example.test', 'Ci-Restore-9-pass')"
+          ./scripts/backup.sh /tmp/backups
+          TASKFORGE_BACKEND_IMAGE=taskforge-backend TASKFORGE_VERSION=ci \
+            ./scripts/smoke-restore.sh "$(ls -d /tmp/backups/*/ | head -n 1)" | tee restore.txt
+          grep -q 'users: 1' restore.txt
       - name: Logs on failure
         if: failure()
         run: docker compose -f docker-compose.prod.yml logs --tail=200
