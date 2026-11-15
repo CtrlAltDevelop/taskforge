@@ -137,6 +137,13 @@ class Session(_message.Message):
     USER_AGENT_FIELD_NUMBER: _builtins.int
     AUTH_METHOD_FIELD_NUMBER: _builtins.int
     CURRENT_FIELD_NUMBER: _builtins.int
+    DPOP_BOUND_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    DEVICE_LABEL_FIELD_NUMBER: _builtins.int
+    FINGERPRINT_SHORT_FIELD_NUMBER: _builtins.int
+    IS_CURRENT_FIELD_NUMBER: _builtins.int
+    NEW_DEVICE_FIELD_NUMBER: _builtins.int
+    KEY_CHANGED_FIELD_NUMBER: _builtins.int
     session_id: _builtins.str
     created_at: _builtins.str
     last_used_at: _builtins.str
@@ -145,6 +152,13 @@ class Session(_message.Message):
     user_agent: _builtins.str
     auth_method: _builtins.str
     current: _builtins.bool
+    dpop_bound: _builtins.bool
+    name: _builtins.str
+    device_label: _builtins.str
+    fingerprint_short: _builtins.str
+    is_current: _builtins.bool
+    new_device: _builtins.bool
+    key_changed: _builtins.bool
     def __init__(
         self,
         *,
@@ -156,10 +170,17 @@ class Session(_message.Message):
         user_agent: _builtins.str = ...,
         auth_method: _builtins.str = ...,
         current: _builtins.bool = ...,
+        dpop_bound: _builtins.bool = ...,
+        name: _builtins.str = ...,
+        device_label: _builtins.str = ...,
+        fingerprint_short: _builtins.str = ...,
+        is_current: _builtins.bool = ...,
+        new_device: _builtins.bool = ...,
+        key_changed: _builtins.bool = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_method", b"auth_method", "created_at", b"created_at", "current", b"current", "expires_at", b"expires_at", "ip_address", b"ip_address", "last_used_at", b"last_used_at", "session_id", b"session_id", "user_agent", b"user_agent"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_method", b"auth_method", "created_at", b"created_at", "current", b"current", "device_label", b"device_label", "dpop_bound", b"dpop_bound", "expires_at", b"expires_at", "fingerprint_short", b"fingerprint_short", "ip_address", b"ip_address", "is_current", b"is_current", "key_changed", b"key_changed", "last_used_at", b"last_used_at", "name", b"name", "new_device", b"new_device", "session_id", b"session_id", "user_agent", b"user_agent"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
