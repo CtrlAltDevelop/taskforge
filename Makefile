@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run serve grpc migrate purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
+.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -40,6 +40,23 @@ run:
 	$(LITE_ENV) ../$(VENV)/python -m uvicorn config.asgi:application --reload --app-dir src --port 8010 & \
 	$(LITE_ENV) ../$(VENV)/python manage.py grpcrunaioserver & \
 	wait
+
+# No Docker at all: like `run`, but live-sync events use the in-memory broker. Fine for one
+# client; the REST and gRPC processes do not share it, so a second client will not see live
+# changes (use `make dev` + `make run` for that). Native clients talk gRPC directly, no Envoy.
+run-lite:
+	$(MAKE) run REDIS_BROKER=DJANGO_NOTIFICATIONS_BROKER=apps.notifications.broadcast.MemoryBroker
+
+# The Flutter app as a macOS desktop app (backend must be running: `make run-lite`).
+macos:
+	cd app && flutter run -d macos
+
+# Backend (no Docker) and the macOS app together; closing the app stops the backend.
+dev-macos:
+	trap 'kill 0' INT TERM EXIT; \
+	$(MAKE) run-lite & \
+	until curl -s -o /dev/null localhost:8010; do sleep 1; done; \
+	$(MAKE) macos
 
 serve:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development $(REDIS_BROKER) ../$(VENV)/python -m uvicorn config.asgi:application --reload --app-dir src --port 8010

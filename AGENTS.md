@@ -107,6 +107,9 @@ Run (three terminals, from the repo root):
 | `make dev` / `make down` | Start/stop Postgres, Redis, Envoy (gRPC-Web proxy) in Docker | 5432, 6379, 8081 |
 | `make serve` | Django REST + WebSocket (uvicorn, development settings) | 8010 |
 | `make grpc` | gRPC server | 50051 |
+| `make run-lite` | No Docker: migrate, then REST + gRPC together (SQLite, in-memory live-sync broker, so live updates reach one client only) | 8010, 50051 |
+| `make macos` | Flutter app as a macOS desktop app (talks gRPC directly, no Envoy) | |
+| `make dev-macos` | `run-lite` then the macOS app; closing the app stops the backend | |
 | `make web` | Flutter web dev server in Chrome | 5173 |
 | `make tick` | The notifications' clock: snoozes ending, tasks due soon, pushes/emails held for quiet hours or digests, retries; sprint snapshots; automations' due dates; recurring tasks' due instances; imports whose process died. Run it every minute from cron (no Celery yet) | |
 | `make purge` | Remove expired uploads, old change-log entries and old export zips. Nothing schedules it yet (no Celery): run it daily from cron | |
