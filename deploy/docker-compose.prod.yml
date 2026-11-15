@@ -25,6 +25,10 @@ x-backend: &backend
     DJANGO_DB_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
     DJANGO_DB_HOST: postgres
     DJANGO_REDIS_URL: redis://redis:6379/0
+    # Sign-in challenges and live-sync events go through the shared Redis, so the API and the
+    # gRPC process (different containers) see each other's. The feature switches are in the image.
+    DJANGO_AUTH_REDIS_URL: redis://redis:6379/0
+    DJANGO_NOTIFICATIONS_REDIS_URL: redis://redis:6379/0
     DJANGO_AUDIT_TRUSTED_PROXY_HOPS: ${DJANGO_AUDIT_TRUSTED_PROXY_HOPS:-1}
   volumes:
     - media:/data/media

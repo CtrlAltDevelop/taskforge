@@ -21,6 +21,7 @@ docker run --rm --network "$NET" \
   -e DJANGO_SETTINGS_MODULE=config.settings.production \
   -e DJANGO_SECRET_KEY="smoke-$(head -c 48 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 60)" \
   -e DJANGO_FIELD_ENCRYPTION_KEY=WKFDTWKLw3-iB-HY-UhDvkeFS-kiuclhvZeTd7VbFQQ= \
+  -e DJANGO_DPOP_NONCE_SECRET="smoke-$(head -c 48 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 48)" \
   -e DJANGO_PUBLIC_ORIGIN=https://smoke.example.test -e DJANGO_ALLOWED_HOSTS=smoke.example.test \
   -e DJANGO_INBOX_UNSUBSCRIBE_URL=https://smoke.example.test/u?token={token} \
   -e DJANGO_DB_NAME=taskforge -e DJANGO_DB_USER=taskforge -e DJANGO_DB_PASSWORD=smoke -e DJANGO_DB_HOST="$PG" \

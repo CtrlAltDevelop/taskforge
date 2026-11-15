@@ -22,6 +22,8 @@ RUN pip install -r /tmp/requirements.txt
 
 COPY backend/manage.py ./
 COPY backend/src ./src
+# Commands run from /app/src (where `config` lives): `python manage.py ...` must work there too.
+RUN ln -s /app/manage.py /app/src/manage.py
 COPY VERSION ./VERSION
 RUN pip install --no-deps -e . \
  && useradd --system --uid 10001 --home /app taskforge \
@@ -30,6 +32,12 @@ RUN pip install --no-deps -e . \
 COPY deploy/scripts/healthcheck.py /usr/local/bin/tf-healthcheck
 
 ARG COMMIT=""
+# What TaskForge needs switched on (the same set as backend/Makefile ALL_APPS); override in .env.
+ENV DJANGO_AUTH_METHODS=password DJANGO_AUTH_SECOND_FACTORS=totp,recovery \
+    DJANGO_AUTH_TOKEN_MODE=rotation DJANGO_OAUTH_MODE=rotation \
+    DJANGO_NOTIFICATIONS_ENABLED=true \
+    DJANGO_AUTH_CHALLENGE_STORE=infrastructure.auth.core.challenges.RedisChallengeStore \
+    DJANGO_NOTIFICATIONS_BROKER=apps.notifications.broadcast.RedisBroker
 ENV DJANGO_BUILD_COMMIT=${COMMIT} DJANGO_MEDIA_ROOT=/data/media
 USER taskforge
 WORKDIR /app/src
