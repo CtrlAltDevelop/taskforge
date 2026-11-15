@@ -1,22 +1,16 @@
-import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
-
-import 'package:crypto/crypto.dart';
+import 'package:dpop_client/dpop_client.dart';
 
 import 'package:taskforge/core/auth/dpop/dpop_key.dart';
 
-/// Builds DPoP proofs (RFC 9449): a small JWT, signed by the device key, saying which method and
-/// URL it is for, when, a unique id, and (on resource calls) a hash of the access token. The
-/// signature comes from the [DpopKeyStore]'s signer; this class only assembles the JWS.
+/// Builds DPoP proofs (RFC 9449) with the device key. The claims and the JWS come from
+/// `dpop_client`; the signature comes from the [DpopKeyStore]'s signer, so the private key is
+/// never read. This class only adds the server clock offset to `iat`.
 class DpopProofBuilder {
-  DpopProofBuilder(this._keys, {DateTime Function()? now, Random? random})
-    : _now = now ?? DateTime.now,
-      _random = random ?? Random.secure();
+  DpopProofBuilder(this._keys, {DateTime Function()? now})
+    : _now = now ?? DateTime.now;
 
   final DpopKeyStore _keys;
   final DateTime Function() _now;
-  final Random _random;
 
   /// Server time minus this device's time, learned from a `Date` header after a refused `iat`.
   Duration clockOffset = Duration.zero;
@@ -30,39 +24,15 @@ class DpopProofBuilder {
     String? nonce,
     String? jti,
   }) async {
-    final signer = await _keys.signer();
-    final issuedAt =
-        _now().add(clockOffset).millisecondsSinceEpoch ~/
-        Duration.millisecondsPerSecond;
-    final header = {'typ': 'dpop+jwt', 'alg': 'ES256', 'jwk': signer.publicJwk};
-    final claims = <String, Object>{
-      'jti': jti ?? _newId(),
-      'htm': method,
-      'htu': htuOf(url),
-      'iat': issuedAt,
-      'ath': ?(accessToken == null ? null : accessTokenHash(accessToken)),
-      'nonce': ?((nonce == null || nonce.isEmpty) ? null : nonce),
-    };
-    final signingInput = '${_segment(header)}.${_segment(claims)}';
-    final signature = await signer.sign(
-      Uint8List.fromList(utf8.encode(signingInput)),
+    final client = DPoPSignerClient(await _keys.signer());
+    final proof = await client.createProof(
+      url: Uri.parse(url),
+      method: method,
+      accessToken: accessToken,
+      nonce: nonce,
+      issuedAt: _now().add(clockOffset),
+      jwtId: jti,
     );
-    return '$signingInput.${base64UrlNoPad(signature)}';
+    return proof.token;
   }
-
-  String _newId() =>
-      base64UrlNoPad([for (var i = 0; i < 18; i++) _random.nextInt(256)]);
-
-  static String _segment(Object json) =>
-      base64UrlNoPad(utf8.encode(jsonEncode(json)));
 }
-
-/// The `htu` claim for [url]: scheme, authority and path only.
-String htuOf(String url) {
-  final uri = Uri.parse(url);
-  return '${uri.scheme}://${uri.authority}${uri.path}';
-}
-
-/// The `ath` claim: base64url SHA-256 of the exact access token.
-String accessTokenHash(String token) =>
-    base64UrlNoPad(sha256.convert(utf8.encode(token)).bytes);

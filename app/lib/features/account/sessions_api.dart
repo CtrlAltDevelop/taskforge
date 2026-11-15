@@ -1,3 +1,5 @@
+import 'package:safe_json_cast/safe_json_cast.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -28,7 +30,7 @@ class HttpSessionsApi implements SessionsApi {
   @override
   Future<List<SessionInfo>> list() async {
     final body = await _send('GET', '/api/v1/auth/token/sessions');
-    final data = body['data'] as Map<String, dynamic>;
+    final data = body.asMap('data');
     return [
       for (final item in (data['sessions'] as List? ?? const []))
         SessionInfo.fromJson(item as Map<String, dynamic>),
@@ -42,7 +44,7 @@ class HttpSessionsApi implements SessionsApi {
       '/api/v1/auth/token/sessions/$sessionId',
       json: {'name': name},
     );
-    return (body['data'] as Map<String, dynamic>)['name'] as String;
+    return body.asMap('data').asString('name');
   }
 
   Future<Map<String, dynamic>> _send(

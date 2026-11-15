@@ -45,21 +45,6 @@ void main() {
   const rfcToken = 'Kz~8mXK1EalYznwH-LC-1fBAo.4Ljp~zsPE_NeO.gxU';
   const rfcAth = 'fUHyO2r2Z3DZ53EsNrWBb0xWXoaNy59IiKCAqksmQEo';
 
-  test('accessTokenHash matches the RFC 9449 example', () {
-    expect(accessTokenHash(rfcToken), rfcAth);
-  });
-
-  test('htuOf drops query and fragment', () {
-    expect(
-      htuOf('https://server.example.com/resource?a=1#frag'),
-      'https://server.example.com/resource',
-    );
-    expect(
-      htuOf('http://localhost:8010/api/v1/x'),
-      'http://localhost:8010/api/v1/x',
-    );
-  });
-
   test('jwkThumbprint is 43 base64url characters without padding', () {
     final t = jwkThumbprint(_FakeSigner().publicJwk);
     expect(t.length, 43);

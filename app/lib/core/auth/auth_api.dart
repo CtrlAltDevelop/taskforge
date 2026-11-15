@@ -1,3 +1,5 @@
+import 'package:safe_json_cast/safe_json_cast.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -126,7 +128,7 @@ class HttpAuthApi implements AuthApi {
       json: {'identifier': email, 'email': email, 'password': password},
       withDeviceInfo: true,
     );
-    return _credentials(body['data']['credentials'] as Map<String, dynamic>);
+    return _credentials(body.asMap('data').asMap('credentials'));
   }
 
   @override
@@ -138,14 +140,16 @@ class HttpAuthApi implements AuthApi {
       trustedDevice: await trustedDevices?.read(),
       withDeviceInfo: true,
     );
-    final data = body['data'] as Map<String, dynamic>;
+    final data = body.asMap('data');
     if (data['requires_second_factor'] == true) {
       throw SecondFactorRequired(
-        loginTicket: (data['login_ticket'] as String?) ?? '',
-        methods: [...((data['methods'] as List?) ?? const []).cast<String>()],
+        loginTicket: data.asNullableString('login_ticket') ?? '',
+        methods: data['methods'] == null
+            ? const []
+            : data.asStringList('methods'),
       );
     }
-    return _credentials(data['credentials'] as Map<String, dynamic>);
+    return _credentials(data.asMap('credentials'));
   }
 
   @override
@@ -156,7 +160,7 @@ class HttpAuthApi implements AuthApi {
       json: {'refresh_token': refreshToken, 'request_id': ?requestId},
       withDeviceInfo: true,
     );
-    return _credentials(body['data'] as Map<String, dynamic>);
+    return _credentials(body.asMap('data'));
   }
 
   @override
@@ -198,7 +202,7 @@ class HttpAuthApi implements AuthApi {
       '/api/v1/auth/password/forgot',
       json: {'email': email},
     );
-    return (body['data'] as Map<String, dynamic>)['ticket'] as String;
+    return body.asMap('data').asString('ticket');
   }
 
   @override
@@ -215,9 +219,9 @@ class HttpAuthApi implements AuthApi {
   }
 
   AuthTokens _credentials(Map<String, dynamic> data) => AuthTokens(
-    accessToken: data['access_token'] as String,
-    refreshToken: data['refresh_token'] as String,
-    sessionId: data['session_id'] as String,
+    accessToken: data.asStrictString('access_token'),
+    refreshToken: data.asStrictString('refresh_token'),
+    sessionId: data.asStrictString('session_id'),
   );
 
   Future<Map<String, dynamic>> _send(

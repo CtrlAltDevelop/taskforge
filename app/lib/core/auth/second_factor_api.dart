@@ -1,3 +1,5 @@
+import 'package:safe_json_cast/safe_json_cast.dart';
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -127,7 +129,7 @@ class HttpSecondFactorApi implements SecondFactorApi {
       );
 
   SignInResult _result(Map<String, dynamic> data) {
-    final credentials = data['credentials'] as Map<String, dynamic>?;
+    final credentials = data.asNullableMap('credentials');
     if (credentials == null) {
       throw const AuthApiException(
         status: 400,
@@ -137,11 +139,11 @@ class HttpSecondFactorApi implements SecondFactorApi {
     }
     return SignInResult(
       AuthTokens(
-        accessToken: credentials['access_token'] as String,
-        refreshToken: credentials['refresh_token'] as String,
-        sessionId: credentials['session_id'] as String,
+        accessToken: credentials.asStrictString('access_token'),
+        refreshToken: credentials.asStrictString('refresh_token'),
+        sessionId: credentials.asStrictString('session_id'),
       ),
-      trustedDeviceToken: (data['trusted_device_token'] as String?) ?? '',
+      trustedDeviceToken: data.asNullableString('trusted_device_token') ?? '',
     );
   }
 
