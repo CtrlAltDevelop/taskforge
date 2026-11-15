@@ -167,7 +167,12 @@ def test_an_unknown_kid_is_refused(idp: Any) -> None:
 
 
 def test_alg_none_is_refused(idp: Any) -> None:
-    token = jwt.encode(claims(), None, algorithm="none", headers={"kid": "key-1"})
+    token = jwt.encode(
+        claims(),
+        None,  # type: ignore[arg-type]
+        algorithm="none",
+        headers={"kid": "key-1"},
+    )
     with pytest.raises(oidc.OidcError):
         validate(token)
 

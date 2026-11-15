@@ -303,7 +303,7 @@ DESCRIPTIONS: dict[ResponseTitle, str] = {
     ),
     ResponseTitle.SSO_DOMAIN_NOT_ALLOWED: "That email domain may not sign in to this workspace.",
     ResponseTitle.SSO_NO_ACCOUNT: "No account exists for this identity and sign-up is off.",
-    ResponseTitle.SSO_MEMBER_REMOVED: "You were removed from this workspace. Ask for an invitation.",
+    ResponseTitle.SSO_MEMBER_REMOVED: "You were removed from this workspace. Ask for an invitation.",  # noqa: E501
     ResponseTitle.TOKEN_REQUIRED: "A token is required and none was given.",
     ResponseTitle.TOKEN_INVALID: "The token is not one this deployment issued.",
     ResponseTitle.TOKEN_EXPIRED: "The token has expired.",

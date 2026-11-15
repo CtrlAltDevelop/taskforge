@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('oauth_session', '0002_token_dpop_binding'),
+        ("oauth_session", "0002_token_dpop_binding"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='oauthsession',
-            name='device_fingerprint',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=32),
+            model_name="oauthsession",
+            name="device_fingerprint",
+            field=models.CharField(blank=True, db_index=True, default="", max_length=32),
         ),
         migrations.AddField(
-            model_name='oauthsession',
-            name='device_label',
+            model_name="oauthsession",
+            name="device_label",
             field=models.CharField(blank=True, max_length=120),
         ),
         migrations.AddField(
-            model_name='oauthsession',
-            name='name',
+            model_name="oauthsession",
+            name="name",
             field=models.CharField(blank=True, max_length=80),
         ),
         migrations.AddField(
-            model_name='oauthsession',
-            name='name_edited',
+            model_name="oauthsession",
+            name="name_edited",
             field=models.BooleanField(default=False),
         ),
     ]

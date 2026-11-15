@@ -87,9 +87,7 @@ class TokenModeService:
         try:
             clean = device.clean_name(name)
         except ValueError as error:
-            raise ApiError(
-                str(error), status=422, title=ResponseTitle.VALIDATION_ERROR
-            ) from error
+            raise ApiError(str(error), status=422, title=ResponseTitle.VALIDATION_ERROR) from error
         session = self.find_session(user, session_id)
         if session is None:
             raise ApiError("No such session.", status=404, title=ResponseTitle.SESSION_NOT_FOUND)

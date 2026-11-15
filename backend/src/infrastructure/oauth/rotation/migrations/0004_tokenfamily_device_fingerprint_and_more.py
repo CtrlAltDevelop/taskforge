@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('oauth_rotation', '0003_token_dpop_binding'),
+        ("oauth_rotation", "0003_token_dpop_binding"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tokenfamily',
-            name='device_fingerprint',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=32),
+            model_name="tokenfamily",
+            name="device_fingerprint",
+            field=models.CharField(blank=True, db_index=True, default="", max_length=32),
         ),
         migrations.AddField(
-            model_name='tokenfamily',
-            name='device_label',
+            model_name="tokenfamily",
+            name="device_label",
             field=models.CharField(blank=True, max_length=120),
         ),
         migrations.AddField(
-            model_name='tokenfamily',
-            name='name',
+            model_name="tokenfamily",
+            name="name",
             field=models.CharField(blank=True, max_length=80),
         ),
         migrations.AddField(
-            model_name='tokenfamily',
-            name='name_edited',
+            model_name="tokenfamily",
+            name="name_edited",
             field=models.BooleanField(default=False),
         ),
     ]

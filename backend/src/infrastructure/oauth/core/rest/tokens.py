@@ -82,9 +82,7 @@ def shared_token_router(service: TokenModeService, *, noun: str) -> Router:
         summary=f"List this account's live {noun}s",
     )
     def sessions(request: HttpRequest) -> SessionListOut:
-        return session_list_out(
-            service.sessions(request.user, current_session_id(request))
-        )
+        return session_list_out(service.sessions(request.user, current_session_id(request)))
 
     @router.patch(
         "/sessions/{session_id}",
@@ -92,9 +90,7 @@ def shared_token_router(service: TokenModeService, *, noun: str) -> Router:
         auth=api_auth,
         summary=f"Rename one of this account's {noun}s",
     )
-    def rename_session(
-        request: HttpRequest, session_id: str, payload: RenameIn
-    ) -> SessionNameOut:
+    def rename_session(request: HttpRequest, session_id: str, payload: RenameIn) -> SessionNameOut:
         """Name a session. Scoped to the caller: another account's id is a 404."""
         return SessionNameOut(
             session_id=session_id,

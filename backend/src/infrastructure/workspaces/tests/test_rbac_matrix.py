@@ -2058,6 +2058,7 @@ EXEMPT.update(
     }
 )
 
+
 def _expect_denied(refusal: BaseException, endpoint: Endpoint, role: str) -> None:
     hint = f"missing: {endpoint.permission}; your role: {role}"
     if isinstance(refusal, RestRefusal):

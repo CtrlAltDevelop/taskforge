@@ -36,7 +36,7 @@ def make_task(
         str(project.pk),
         title,
         assignee_ids=[str(a.pk) for a in assignees],
-        **dates,
+        **dates,  # type: ignore[arg-type]
     )
     Task.objects.filter(pk=task.pk).update(estimate_sec=estimate_h * H)
     return Task.objects.get(pk=task.pk)

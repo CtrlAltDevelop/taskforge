@@ -117,7 +117,8 @@ class _Verifier:
     site_key = "k"
 
     def __init__(self, ok: bool) -> None:
-        self.ok, self.seen = ok, []
+        self.ok = ok
+        self.seen: list[str] = []
 
     def verify(self, token: str, remote_ip: str) -> bool:
         self.seen.append(token)

@@ -63,7 +63,9 @@ def _fixed_secrets(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(oidc, "new_secrets", lambda: ("state-" + "s" * 40, NONCE, "p" * 64))
 
 
-def callback(provider: IdentityProvider, idp_key: Any, monkeypatch: pytest.MonkeyPatch, **kw: Any):
+def callback(
+    provider: IdentityProvider, idp_key: Any, monkeypatch: pytest.MonkeyPatch, **kw: Any
+) -> str:
     """Run begin + complete with a token the mocked provider returns."""
     started = sso.begin(request_(), provider.workspace.slug, RETURN_TO, CHALLENGE)
     token = kw.pop("token", None) or sign(idp_key, token_claims(**kw))

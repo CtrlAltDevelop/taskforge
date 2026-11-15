@@ -198,10 +198,10 @@ TEXT: dict[str, dict[str, str]] = {
         "ps": "ستاسو غوښتنه ترلاسه شوه ({reference})",
     },
     "forms.confirm.body": {
-        "en": 'Thank you. Your request "{title}" was sent through {form}.\nYour reference is {reference}; quote it if you write to us.',
-        "fa": "سپاسگزاریم. درخواست «{title}» شما از طریق {form} ارسال شد.\nشمارهٔ پیگیری شما {reference} است؛ هنگام تماس آن را ذکر کنید.",
-        "ar": 'شكرًا لك. تم إرسال طلبك "{title}" عبر {form}.\nرقمك المرجعي {reference}؛ اذكره عند مراسلتنا.',
-        "ps": "مننه. ستاسو غوښتنه «{title}» د {form} له لارې ولېږل شوه.\nستاسو ریفرنس {reference} دی؛ کله چې موږ ته لیکئ یې یاد کړئ.",
+        "en": 'Thank you. Your request "{title}" was sent through {form}.\nYour reference is {reference}; quote it if you write to us.',  # noqa: E501
+        "fa": "سپاسگزاریم. درخواست «{title}» شما از طریق {form} ارسال شد.\nشمارهٔ پیگیری شما {reference} است؛ هنگام تماس آن را ذکر کنید.",  # noqa: E501
+        "ar": 'شكرًا لك. تم إرسال طلبك "{title}" عبر {form}.\nرقمك المرجعي {reference}؛ اذكره عند مراسلتنا.',  # noqa: E501
+        "ps": "مننه. ستاسو غوښتنه «{title}» د {form} له لارې ولېږل شوه.\nستاسو ریفرنس {reference} دی؛ کله چې موږ ته لیکئ یې یاد کړئ.",  # noqa: E501
     },
     "forms.status.subject": {
         "en": "Update on your request ({reference})",

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('oauth_session', '0001_initial'),
+        ("oauth_session", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='oauthsession',
-            name='dpop_jkt',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=64),
+            model_name="oauthsession",
+            name="dpop_jkt",
+            field=models.CharField(blank=True, db_index=True, default="", max_length=64),
         ),
     ]

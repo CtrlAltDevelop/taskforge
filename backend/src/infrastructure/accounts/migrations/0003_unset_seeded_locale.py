@@ -1,7 +1,7 @@
 from django.db import migrations
 
 
-def blank_seeded_locale(apps, schema_editor):
+def blank_seeded_locale(apps, schema_editor):  # type: ignore[no-untyped-def]
     """``en-us`` was only ever the signup seed (a chosen language is stored bare)."""
     apps.get_model("accounts", "Profile").objects.filter(locale="en-us").update(locale="")
 

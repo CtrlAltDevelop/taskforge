@@ -101,7 +101,8 @@ EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "true").lower() == "true"
 DEFAULT_FROM_EMAIL = os.getenv("DJANGO_DEFAULT_FROM_EMAIL", "TaskForge <no-reply@localhost>")
 
 LOGGING = logging_config(  # noqa: F405
-    fmt=os.getenv("DJANGO_LOG_FORMAT", "json").lower(), level=LOG_LEVEL  # noqa: F405
+    fmt=os.getenv("DJANGO_LOG_FORMAT", "json").lower(),
+    level=LOG_LEVEL,  # noqa: F405
 )
 
 REDIS_URL = _required("DJANGO_REDIS_URL")  # e.g. redis://redis:6379/0
@@ -114,7 +115,7 @@ DATABASES = {
         "PASSWORD": _required("DJANGO_DB_PASSWORD"),
         "HOST": _required("DJANGO_DB_HOST"),
         "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
-        "CONN_MAX_AGE": int(os.getenv("DJANGO_DB_CONN_MAX_AGE", "60")),
+        "CONN_MAX_AGE": int(os.getenv("DJANGO_DB_CONN_MAX_AGE", "60")),  # type: ignore[dict-item]
     }
 }
 

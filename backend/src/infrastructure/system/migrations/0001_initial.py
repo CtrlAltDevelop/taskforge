@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,12 +15,21 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ServerToggle',
+            name="ServerToggle",
             fields=[
-                ('key', models.CharField(max_length=64, primary_key=True, serialize=False)),
-                ('enabled', models.BooleanField(default=False)),
-                ('updated_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                ("key", models.CharField(max_length=64, primary_key=True, serialize=False)),
+                ("enabled", models.BooleanField(default=False)),
+                ("updated_at", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "updated_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
