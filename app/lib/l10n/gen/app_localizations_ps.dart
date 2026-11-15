@@ -8311,4 +8311,195 @@ class AppLocalizationsPs extends AppLocalizations {
   String chatTitleCount(int count) {
     return 'چت ($count)';
   }
+
+  @override
+  String get chatSectionChannels => 'چینلونه';
+
+  @override
+  String get chatSectionGroups => 'ډلې';
+
+  @override
+  String get chatSectionDms => 'مستقیم پیغامونه';
+
+  @override
+  String get chatSectionTaskChats => 'د دندو بحثونه';
+
+  @override
+  String get chatSearchHint => 'په بحثونو کې لټون';
+
+  @override
+  String get chatNoSpaces => 'تر اوسه بحث نشته. د «نوی» په مټ یو پیل کړئ.';
+
+  @override
+  String get chatNoMatches => 'ستاسو له لټون سره هېڅ نه برابرېږي';
+
+  @override
+  String get chatMuted => 'غلی شوی';
+
+  @override
+  String get chatNew => 'نوی';
+
+  @override
+  String get chatNewChannel => 'چینل';
+
+  @override
+  String get chatNewGroup => 'ډله';
+
+  @override
+  String get chatNewMessage => 'پیغام';
+
+  @override
+  String get chatNameLabel => 'نوم';
+
+  @override
+  String get chatMembersLabel => 'غړي';
+
+  @override
+  String get chatPickPerson => 'یو کس وټاکئ';
+
+  @override
+  String get chatCreate => 'جوړول';
+
+  @override
+  String get chatNameRequired => 'یو نوم ولیکئ';
+
+  @override
+  String get chatGroupNeedsMembers => 'لږ تر لږه یو بل کس وټاکئ';
+
+  @override
+  String get chatSayHi => 'سلام ووایئ';
+
+  @override
+  String get chatSelectSpace => 'د خبرو پیل لپاره یو بحث وټاکئ';
+
+  @override
+  String get chatUnreadDivider => 'نوي پیغامونه';
+
+  @override
+  String get chatJumpLatest => 'وروستي ته لاړ شئ';
+
+  @override
+  String get chatWriteMessage => 'یو پیغام ولیکئ…';
+
+  @override
+  String get chatSend => 'لېږل';
+
+  @override
+  String get chatReply => 'ځواب';
+
+  @override
+  String chatReplies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ځوابونه',
+      one: '۱ ځواب',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatThread => 'د بحث لړۍ';
+
+  @override
+  String get chatBack => 'شاته';
+
+  @override
+  String get chatEdit => 'سمون';
+
+  @override
+  String get chatDelete => 'ړنګول';
+
+  @override
+  String get chatRemoved => 'پیغام لرې شو';
+
+  @override
+  String get chatEdited => 'سمون شوی';
+
+  @override
+  String get chatMessageActions => 'د پیغام کړنې';
+
+  @override
+  String get chatSending => 'لېږل کېږي…';
+
+  @override
+  String get chatNotSent => 'ونه لېږل شو';
+
+  @override
+  String get chatDiscard => 'ردول';
+
+  @override
+  String get chatBroadcastTitle => 'ټول خبر کړو؟';
+
+  @override
+  String chatBroadcastBody(int count) {
+    return 'دا پیغام به $count کسانو ته خبر ورکړي. بیا هم یې ولېږو؟';
+  }
+
+  @override
+  String get chatBroadcastSend => 'بیا هم ولېږه';
+
+  @override
+  String get chatSettings => 'د بحث امستنې';
+
+  @override
+  String get chatUnmute => 'غږ پرانیستل';
+
+  @override
+  String get chatMute1h => 'د ۱ ساعت لپاره غلی کول';
+
+  @override
+  String get chatMute8h => 'د ۸ ساعتونو لپاره غلی کول';
+
+  @override
+  String get chatMuteWeek => 'د ۱ اونۍ لپاره غلی کول';
+
+  @override
+  String get chatMuteForever => 'تر هغه وخته غلی چې بیرته یې پرانیزم';
+
+  @override
+  String get chatMuteCompletely => 'بشپړ غلی، حتی زما @یادونې هم';
+
+  @override
+  String get chatNotifyAll => 'د هر پیغام لپاره ما ته خبر راکړه';
+
+  @override
+  String get chatLeave => 'پرېښودل';
+
+  @override
+  String get chatJoin => 'یوځای کېدل';
+
+  @override
+  String chatMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غړي',
+      one: '۱ غړی',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatReadOnlyArchived =>
+      'دا ځای ارشیف شوی. تاسو یې لوستلی شئ خو پکې لیکلی نشئ.';
+
+  @override
+  String get chatReadOnlyFormer => 'دا بحث یوازې د لوستلو دی.';
+
+  @override
+  String get chatNotMember => 'په دې چینل کې د لیکلو لپاره ورسره یوځای شئ.';
+
+  @override
+  String get chatFormerMember => 'پخوانی غړی';
+
+  @override
+  String chatUnreadLabel(int count) {
+    return '$count نالوستل شوي';
+  }
+
+  @override
+  String chatEntryMessage(String space) {
+    return 'په $space کې د بحث پیغام';
+  }
 }

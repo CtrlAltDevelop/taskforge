@@ -14,6 +14,7 @@ import 'package:taskforge/core/ping/rest_ping.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/attachments/application/uploader.dart';
+import 'package:taskforge/features/chat/application/chat_providers.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -35,6 +36,7 @@ final outboxWorkerProvider = Provider<OutboxWorker>(
     store: () => ref.read(offlineStoreFutureProvider),
     tasks: ref.watch(rawTasksClientProvider),
     comments: ref.watch(rawCommentsClientProvider),
+    chat: ref.watch(rawChatClientProvider),
     workspace: () => ref.read(authSessionProvider).status == AuthStatus.signedIn
         ? ref.read(workspaceScopeProvider)
         : null,

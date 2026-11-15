@@ -37,8 +37,10 @@ typedef ComposerSend = Future<void> Function(
 class CommentComposer extends ConsumerStatefulWidget {
   const CommentComposer({
     super.key,
-    required this.task,
+    this.task,
     required this.onSend,
+    this.mentionLookup,
+    this.broadcastNames = const [],
     this.initialText = '',
     this.initialPicks = const [],
     this.hint,
@@ -48,8 +50,17 @@ class CommentComposer extends ConsumerStatefulWidget {
     this.allowFiles = false,
   });
 
-  final TaskRef task;
+  /// The task whose people can be mentioned (unless [mentionLookup] says).
+  final TaskRef? task;
   final ComposerSend onSend;
+
+  /// Where the people to mention come from when it is not a task (a chat
+  /// space); called while building, so it may watch providers.
+  final List<Person> Function(WidgetRef ref, String query)? mentionLookup;
+
+  /// Extra everyone-mentions offered by `@` (a space's `channel`, `here`):
+  /// the person's id is the name.
+  final List<String> broadcastNames;
   final String initialText;
   final List<MentionPick> initialPicks;
 
@@ -209,14 +220,25 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
   @override
   Widget build(BuildContext context) {
     final open = _open;
-    final people = open == null
+    final lookup = widget.mentionLookup;
+    final task = widget.task;
+    final found = open == null
+        ? const <Person>[]
+        : lookup != null
+        ? lookup(ref, open.query)
+        : task == null
         ? const <Person>[]
         : ref
-                  .watch(
-                    mentionableProvider((task: widget.task, query: open.query)),
-                  )
+                  .watch(mentionableProvider((task: task, query: open.query)))
                   .value ??
               const <Person>[];
+    final people = open == null
+        ? const <Person>[]
+        : [
+            for (final n in widget.broadcastNames)
+              if (n.startsWith(open.query.toLowerCase())) Person(n, n),
+            ...found,
+          ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

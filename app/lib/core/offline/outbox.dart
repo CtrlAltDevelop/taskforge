@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 /// What an outbox entry is about.
-enum OutboxEntity { task, comment, attachment }
+enum OutboxEntity { task, comment, attachment, chat }
 
 enum OutboxOp { create, update, delete }
 

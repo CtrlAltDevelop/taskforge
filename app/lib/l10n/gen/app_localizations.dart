@@ -14699,6 +14699,342 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat ({count})'**
   String chatTitleCount(int count);
+
+  /// No description provided for @chatSectionChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'Channels'**
+  String get chatSectionChannels;
+
+  /// No description provided for @chatSectionGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get chatSectionGroups;
+
+  /// No description provided for @chatSectionDms.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct messages'**
+  String get chatSectionDms;
+
+  /// No description provided for @chatSectionTaskChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Task chats'**
+  String get chatSectionTaskChats;
+
+  /// No description provided for @chatSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search chats'**
+  String get chatSearchHint;
+
+  /// No description provided for @chatNoSpaces.
+  ///
+  /// In en, this message translates to:
+  /// **'No chats yet. Start one with New.'**
+  String get chatNoSpaces;
+
+  /// No description provided for @chatNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches your search'**
+  String get chatNoMatches;
+
+  /// No description provided for @chatMuted.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted'**
+  String get chatMuted;
+
+  /// No description provided for @chatNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get chatNew;
+
+  /// No description provided for @chatNewChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel'**
+  String get chatNewChannel;
+
+  /// No description provided for @chatNewGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get chatNewGroup;
+
+  /// No description provided for @chatNewMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get chatNewMessage;
+
+  /// No description provided for @chatNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get chatNameLabel;
+
+  /// No description provided for @chatMembersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get chatMembersLabel;
+
+  /// No description provided for @chatPickPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a person'**
+  String get chatPickPerson;
+
+  /// No description provided for @chatCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get chatCreate;
+
+  /// No description provided for @chatNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get chatNameRequired;
+
+  /// No description provided for @chatGroupNeedsMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one other person'**
+  String get chatGroupNeedsMembers;
+
+  /// No description provided for @chatSayHi.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hi'**
+  String get chatSayHi;
+
+  /// No description provided for @chatSelectSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a chat to start talking'**
+  String get chatSelectSpace;
+
+  /// No description provided for @chatUnreadDivider.
+  ///
+  /// In en, this message translates to:
+  /// **'New messages'**
+  String get chatUnreadDivider;
+
+  /// No description provided for @chatJumpLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to latest'**
+  String get chatJumpLatest;
+
+  /// No description provided for @chatWriteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a message…'**
+  String get chatWriteMessage;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get chatSend;
+
+  /// No description provided for @chatReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get chatReply;
+
+  /// No description provided for @chatReplies.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 reply} other{{count} replies}}'**
+  String chatReplies(int count);
+
+  /// No description provided for @chatThread.
+  ///
+  /// In en, this message translates to:
+  /// **'Thread'**
+  String get chatThread;
+
+  /// No description provided for @chatBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get chatBack;
+
+  /// No description provided for @chatEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get chatEdit;
+
+  /// No description provided for @chatDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDelete;
+
+  /// No description provided for @chatRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'message removed'**
+  String get chatRemoved;
+
+  /// No description provided for @chatEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited'**
+  String get chatEdited;
+
+  /// No description provided for @chatMessageActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Message actions'**
+  String get chatMessageActions;
+
+  /// No description provided for @chatSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get chatSending;
+
+  /// No description provided for @chatNotSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent'**
+  String get chatNotSent;
+
+  /// No description provided for @chatDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get chatDiscard;
+
+  /// No description provided for @chatBroadcastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify everyone?'**
+  String get chatBroadcastTitle;
+
+  /// No description provided for @chatBroadcastBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This message will notify {count} people. Send it anyway?'**
+  String chatBroadcastBody(int count);
+
+  /// No description provided for @chatBroadcastSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send anyway'**
+  String get chatBroadcastSend;
+
+  /// No description provided for @chatSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat settings'**
+  String get chatSettings;
+
+  /// No description provided for @chatUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get chatUnmute;
+
+  /// No description provided for @chatMute1h.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute for 1 hour'**
+  String get chatMute1h;
+
+  /// No description provided for @chatMute8h.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute for 8 hours'**
+  String get chatMute8h;
+
+  /// No description provided for @chatMuteWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute for 1 week'**
+  String get chatMuteWeek;
+
+  /// No description provided for @chatMuteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute until I turn it back on'**
+  String get chatMuteForever;
+
+  /// No description provided for @chatMuteCompletely.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute completely, even @mentions of me'**
+  String get chatMuteCompletely;
+
+  /// No description provided for @chatNotifyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify me of every message'**
+  String get chatNotifyAll;
+
+  /// No description provided for @chatLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get chatLeave;
+
+  /// No description provided for @chatJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get chatJoin;
+
+  /// No description provided for @chatMembersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 member} other{{count} members}}'**
+  String chatMembersCount(int count);
+
+  /// No description provided for @chatReadOnlyArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'This space is archived. You can read it but not write in it.'**
+  String get chatReadOnlyArchived;
+
+  /// No description provided for @chatReadOnlyFormer.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation is read-only.'**
+  String get chatReadOnlyFormer;
+
+  /// No description provided for @chatNotMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Join this channel to write in it.'**
+  String get chatNotMember;
+
+  /// No description provided for @chatFormerMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Former member'**
+  String get chatFormerMember;
+
+  /// No description provided for @chatUnreadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String chatUnreadLabel(int count);
+
+  /// No description provided for @chatEntryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat message in {space}'**
+  String chatEntryMessage(String space);
 }
 
 class _AppLocalizationsDelegate

@@ -25,6 +25,7 @@ import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/auth/sign_up_screen.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/calendar/presentation/workspace_calendar_screen.dart';
+import 'package:taskforge/features/chat/presentation/chat_screen.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_screen.dart';
 import 'package:taskforge/features/inbox/presentation/prefs_screen.dart';
 import 'package:taskforge/features/automations/presentation/automations_screen.dart';
@@ -241,6 +242,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
+      GoRoute(path: '/chat', builder: (_, _) => const ChatScreen()),
+      GoRoute(
+        path: '/chat/:spaceId',
+        builder: (_, state) =>
+            ChatScreen(spaceId: state.pathParameters['spaceId']),
+      ),
       GoRoute(path: '/timesheet', builder: (_, _) => const TimesheetScreen()),
       GoRoute(
         path: '/inbox/preferences',

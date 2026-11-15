@@ -345,7 +345,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
             ],
           )
         else if (state.loading && state.comments.isEmpty)
-          const _Skeleton(key: Key('comments-loading'))
+          const CommentsSkeleton(key: Key('comments-loading'))
         else if (shown.isEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
@@ -377,7 +377,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: _BodyView(c.body),
+                  child: BodyView(c.body),
                 ),
               ),
             ),
@@ -611,7 +611,7 @@ class _CommentTile extends StatelessWidget {
                 onSend: (body, picks, _) => onSaveEdit(body, picks),
               )
             else
-              _BodyView(c.body),
+              BodyView(c.body),
             if (c.sendState == SendState.sent)
               CommentAttachments(
                 task: task,
@@ -662,8 +662,9 @@ class _CommentTile extends StatelessWidget {
                 ],
               ),
             if (c.sendState == SendState.sent)
-              _Reactions(
-                comment: c,
+              ReactionsBar(
+                id: c.id,
+                reactions: c.reactions,
                 me: me,
                 names: names,
                 canReact: canReact,
@@ -676,16 +677,21 @@ class _CommentTile extends StatelessWidget {
   }
 }
 
-class _Reactions extends StatelessWidget {
-  const _Reactions({
-    required this.comment,
+class ReactionsBar extends StatelessWidget {
+  const ReactionsBar({
+    super.key,
+    required this.id,
+    required this.reactions,
     required this.me,
     required this.names,
     required this.canReact,
     required this.onReact,
   });
 
-  final Comment comment;
+  final String id;
+
+  /// Emoji -> ids of those who gave it.
+  final Map<String, List<String>> reactions;
   final String me;
   final String Function(String) names;
   final bool canReact;
@@ -693,17 +699,17 @@ class _Reactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (comment.reactions.isEmpty && !canReact) return const SizedBox.shrink();
+    if (reactions.isEmpty && !canReact) return const SizedBox.shrink();
     return Wrap(
       spacing: 4,
       runSpacing: 2,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        for (final e in comment.reactions.entries)
+        for (final e in reactions.entries)
           Tooltip(
             message: e.value.map(names).join(', '),
             child: FilterChip(
-              key: Key('reaction-${comment.id}-${e.key}'),
+              key: Key('reaction-$id-${e.key}'),
               visualDensity: VisualDensity.compact,
               label: Text('${e.key} ${e.value.length}'),
               selected: e.value.contains(me),
@@ -712,7 +718,7 @@ class _Reactions extends StatelessWidget {
           ),
         if (canReact)
           PopupMenuButton<String>(
-            key: Key('react-${comment.id}'),
+            key: Key('react-$id'),
             icon: const Icon(Icons.add_reaction_outlined, size: 18),
             tooltip: context.l10n.grpBAddReaction,
             onSelected: onReact,
@@ -727,8 +733,8 @@ class _Reactions extends StatelessWidget {
 }
 
 /// A comment's text: mentions in bold and colour, links underlined.
-class _BodyView extends StatelessWidget {
-  const _BodyView(this.body);
+class BodyView extends StatelessWidget {
+  const BodyView(this.body, {super.key});
 
   final String body;
 
@@ -766,8 +772,8 @@ class _BodyView extends StatelessWidget {
 }
 
 /// Grey placeholder rows shown while the first page of comments loads.
-class _Skeleton extends StatelessWidget {
-  const _Skeleton({super.key});
+class CommentsSkeleton extends StatelessWidget {
+  const CommentsSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {

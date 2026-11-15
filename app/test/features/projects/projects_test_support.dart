@@ -1,3 +1,7 @@
+import 'package:taskforge/features/chat/application/chat_providers.dart';
+
+import '../chat/fakes.dart' show FakeChatClient;
+
 import 'package:flutter_riverpod/misc.dart' show Override;
 
 import '../shortcuts/fakes.dart';
@@ -75,6 +79,7 @@ Future<Pumped> pumpProjects(
   FakeCalendarClient? calendar,
   FakeTimelineClient? timeline,
   FakeCommentsClient? comments,
+  FakeChatClient? chat,
   FakeAttachments? attachments,
   FakeInboxClient? inbox,
   FakeTimeClient? time,
@@ -127,6 +132,7 @@ Future<Pumped> pumpProjects(
           commentsClientProvider.overrideWithValue(
             comments ?? FakeCommentsClient(),
           ),
+      chatClientProvider.overrideWithValue(chat ?? FakeChatClient()),
       attachmentsClientProvider.overrideWithValue(files),
       uploadsClientProvider.overrideWithValue(files),
       timelineClientProvider.overrideWithValue(

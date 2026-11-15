@@ -8,6 +8,9 @@ import 'package:taskforge/core/offline/offline_reason.dart';
 import 'package:taskforge/core/offline/offline_store.dart';
 import 'package:taskforge/core/offline/outbox.dart';
 import 'package:taskforge/features/attachments/domain/attachments.dart';
+import 'package:taskforge/features/chat/data/chat_client.dart';
+import 'package:taskforge/features/chat/data/chat_codecs.dart';
+import 'package:taskforge/features/chat/domain/chat.dart';
 import 'package:taskforge/features/comments/data/comments_client.dart';
 import 'package:taskforge/features/comments/domain/comments.dart';
 import 'package:taskforge/features/tasks/data/tasks_client.dart';
@@ -47,6 +50,7 @@ class OutboxWorker {
     required this.store,
     required this.tasks,
     required this.comments,
+    this.chat,
     required this.workspace,
     required this.worked,
     required this.failed,
@@ -59,6 +63,9 @@ class OutboxWorker {
   /// The real clients (not the offline ones: this is what sends).
   final TasksClient tasks;
   final CommentsClient comments;
+
+  /// Where queued chat messages are sent (null: chat is not queued here).
+  final ChatClient? chat;
   final String? Function() workspace;
   final void Function() worked;
   final void Function() failed;
@@ -174,6 +181,20 @@ class OutboxWorker {
           error: attachmentReason(e),
         );
         rejected++;
+      } on ChatException catch (e) {
+        if (e.failure == ChatFailure.network) {
+          failed();
+          await db.setState(entry.id, OutboxState.pending);
+          return DrainResult(
+            sent: sent,
+            conflicts: conflicts,
+            rejected: rejected,
+            stoppedOffline: true,
+          );
+        }
+        worked(); // it answered, it only said no
+        await db.setState(entry.id, OutboxState.rejected, error: chatReason(e));
+        rejected++;
       } on CommentException catch (e) {
         if (e.failure == CommentFailure.network) {
           failed();
@@ -199,12 +220,17 @@ class OutboxWorker {
 
   /// What orders entries: those of one task (and the comments on it) stay in
   /// line; a comment is its own entry otherwise.
-  static String _key(OutboxEntry e) => e.entity == OutboxEntity.task
-      ? 'task:${e.entityId}'
-      : 'task:${e.payload['taskId']}';
+  static String _key(OutboxEntry e) => switch (e.entity) {
+    OutboxEntity.task => 'task:${e.entityId}',
+    OutboxEntity.chat => 'chat:${e.payload['spaceId']}',
+    _ => 'task:${e.payload['taskId']}',
+  };
 
-  static String _taskOf(OutboxEntry e) =>
-      e.entity == OutboxEntity.task ? e.entityId : '${e.payload['taskId']}';
+  static String _taskOf(OutboxEntry e) => switch (e.entity) {
+    OutboxEntity.task => e.entityId,
+    OutboxEntity.chat => 'chat:${e.payload['spaceId']}',
+    _ => '${e.payload['taskId']}',
+  };
 
   Future<_Outcome> _failed(
     OfflineStore db,
@@ -303,10 +329,34 @@ class OutboxWorker {
           scope: made.taskId,
           version: made.version,
         );
+      case (OutboxEntity.chat, OutboxOp.create):
+        final p = e.payload;
+        final made = await chat?.send(
+          ws,
+          '${p['spaceId']}',
+          '${p['body']}',
+          parentId: '${p['parentId'] ?? ''}',
+          clientId: e.entityId,
+          mutationId: e.mutationId,
+          confirmBroadcast: p['confirmBroadcast'] == true,
+          grantAccess: p['grantAccess'] == true,
+        );
+        if (made != null) {
+          await db.put(
+            ws,
+            Kinds.chatMessage,
+            made.id,
+            chatMessageToJson(made),
+            scope: made.spaceId,
+            version: made.version,
+          );
+        }
       case (OutboxEntity.attachment, OutboxOp.create):
         await uploadFile?.call(e);
         await dropFile?.call(e);
-      case (OutboxEntity.comment, _) || (OutboxEntity.attachment, _):
+      case (OutboxEntity.comment, _) ||
+          (OutboxEntity.attachment, _) ||
+          (OutboxEntity.chat, _):
         break; // these are only ever created offline
     }
     return null;
@@ -442,6 +492,19 @@ String commentErrorText(CommentException e, [AppLocalizations? l10n]) {
     CommentFailure.archived => t.grpRCmArchived,
     CommentFailure.invalid => e.detail ?? t.grpRCmInvalid,
     CommentFailure.mentionNoAccess => t.grpRCmMention,
+    _ => t.grpRCmRefused,
+  };
+}
+
+/// What to tell the person about a refused chat message.
+String chatReason(ChatException e, [AppLocalizations? l10n]) {
+  final t = l10n ?? lookupAppLocalizations(const Locale('en'));
+  return switch (e.failure) {
+    ChatFailure.denied || ChatFailure.forbidden => t.grpRCmForbidden,
+    ChatFailure.notFound => t.grpRCmGone,
+    ChatFailure.archived => t.grpRCmArchived,
+    ChatFailure.invalid => e.detail ?? t.grpRCmInvalid,
+    ChatFailure.mentionNoAccess => t.grpRCmMention,
     _ => t.grpRCmRefused,
   };
 }

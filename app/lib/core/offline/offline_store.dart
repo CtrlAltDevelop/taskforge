@@ -15,6 +15,8 @@ abstract final class Kinds {
   static const workflow = 'workflow';
   static const fields = 'fields';
   static const board = 'board';
+  static const chatSpace = 'chat_space';
+  static const chatMessage = 'chat_message';
 }
 
 /// How much the cache may hold unless the person chose another size.

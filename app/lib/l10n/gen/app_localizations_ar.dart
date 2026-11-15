@@ -8415,4 +8415,203 @@ class AppLocalizationsAr extends AppLocalizations {
   String chatTitleCount(int count) {
     return 'الدردشة ($count)';
   }
+
+  @override
+  String get chatSectionChannels => 'القنوات';
+
+  @override
+  String get chatSectionGroups => 'المجموعات';
+
+  @override
+  String get chatSectionDms => 'الرسائل المباشرة';
+
+  @override
+  String get chatSectionTaskChats => 'محادثات المهام';
+
+  @override
+  String get chatSearchHint => 'البحث في المحادثات';
+
+  @override
+  String get chatNoSpaces => 'لا توجد محادثات بعد. ابدأ واحدة بزر «جديد».';
+
+  @override
+  String get chatNoMatches => 'لا شيء يطابق بحثك';
+
+  @override
+  String get chatMuted => 'مكتومة';
+
+  @override
+  String get chatNew => 'جديد';
+
+  @override
+  String get chatNewChannel => 'قناة';
+
+  @override
+  String get chatNewGroup => 'مجموعة';
+
+  @override
+  String get chatNewMessage => 'رسالة';
+
+  @override
+  String get chatNameLabel => 'الاسم';
+
+  @override
+  String get chatMembersLabel => 'الأعضاء';
+
+  @override
+  String get chatPickPerson => 'اختر شخصًا';
+
+  @override
+  String get chatCreate => 'إنشاء';
+
+  @override
+  String get chatNameRequired => 'أدخل اسمًا';
+
+  @override
+  String get chatGroupNeedsMembers => 'اختر شخصًا آخر على الأقل';
+
+  @override
+  String get chatSayHi => 'قل مرحبًا';
+
+  @override
+  String get chatSelectSpace => 'اختر محادثة لتبدأ الحديث';
+
+  @override
+  String get chatUnreadDivider => 'رسائل جديدة';
+
+  @override
+  String get chatJumpLatest => 'انتقل إلى الأحدث';
+
+  @override
+  String get chatWriteMessage => 'اكتب رسالة…';
+
+  @override
+  String get chatSend => 'إرسال';
+
+  @override
+  String get chatReply => 'رد';
+
+  @override
+  String chatReplies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count رد',
+      many: '$count ردًا',
+      few: '$count ردود',
+      two: 'ردان',
+      one: 'رد واحد',
+      zero: 'لا ردود',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatThread => 'سلسلة الردود';
+
+  @override
+  String get chatBack => 'رجوع';
+
+  @override
+  String get chatEdit => 'تعديل';
+
+  @override
+  String get chatDelete => 'حذف';
+
+  @override
+  String get chatRemoved => 'تمت إزالة الرسالة';
+
+  @override
+  String get chatEdited => 'معدّلة';
+
+  @override
+  String get chatMessageActions => 'إجراءات الرسالة';
+
+  @override
+  String get chatSending => 'جارٍ الإرسال…';
+
+  @override
+  String get chatNotSent => 'لم تُرسل';
+
+  @override
+  String get chatDiscard => 'تجاهل';
+
+  @override
+  String get chatBroadcastTitle => 'إشعار الجميع؟';
+
+  @override
+  String chatBroadcastBody(int count) {
+    return 'ستُشعر هذه الرسالة $count شخصًا. هل ترسلها على أي حال؟';
+  }
+
+  @override
+  String get chatBroadcastSend => 'أرسل على أي حال';
+
+  @override
+  String get chatSettings => 'إعدادات المحادثة';
+
+  @override
+  String get chatUnmute => 'إلغاء الكتم';
+
+  @override
+  String get chatMute1h => 'كتم لمدة ساعة';
+
+  @override
+  String get chatMute8h => 'كتم لمدة 8 ساعات';
+
+  @override
+  String get chatMuteWeek => 'كتم لمدة أسبوع';
+
+  @override
+  String get chatMuteForever => 'كتم حتى أعيد تفعيلها';
+
+  @override
+  String get chatMuteCompletely => 'كتم كامل حتى إشارات @ إليّ';
+
+  @override
+  String get chatNotifyAll => 'أشعرني بكل رسالة';
+
+  @override
+  String get chatLeave => 'مغادرة';
+
+  @override
+  String get chatJoin => 'انضمام';
+
+  @override
+  String chatMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عضو',
+      many: '$count عضوًا',
+      few: '$count أعضاء',
+      two: 'عضوان',
+      one: 'عضو واحد',
+      zero: 'لا أعضاء',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatReadOnlyArchived =>
+      'هذه المساحة مؤرشفة. يمكنك قراءتها لكن لا يمكنك الكتابة فيها.';
+
+  @override
+  String get chatReadOnlyFormer => 'هذه المحادثة للقراءة فقط.';
+
+  @override
+  String get chatNotMember => 'انضم إلى هذه القناة للكتابة فيها.';
+
+  @override
+  String get chatFormerMember => 'عضو سابق';
+
+  @override
+  String chatUnreadLabel(int count) {
+    return '$count غير مقروءة';
+  }
+
+  @override
+  String chatEntryMessage(String space) {
+    return 'رسالة محادثة في $space';
+  }
 }

@@ -12,6 +12,7 @@ import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
+import 'package:taskforge/features/chat/application/chat_providers.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
@@ -49,6 +50,8 @@ final syncCoordinatorProvider = Provider<void>((ref) {
   final fileTasks = <TaskRef>{}; // tasks whose attachments to read again
   var everything = false;
   var inboxDirty = false; // the inbox and its badges to read again
+  var chatDirty = false; // the list of chat spaces to read again
+  final chatSpaces = <String>{}; // spaces whose messages to read again
   Timer? timer;
 
   void flush() {
@@ -75,6 +78,16 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     }
     if (fileTasks.isNotEmpty) ref.invalidate(storageUsageProvider);
     fileTasks.clear();
+    if (chatDirty) {
+      chatDirty = false;
+      unawaited(ref.read(spacesProvider.notifier).refresh());
+    }
+    for (final space in chatSpaces) {
+      if (ref.exists(messagesProvider(space))) {
+        unawaited(ref.read(messagesProvider(space).notifier).refresh());
+      }
+    }
+    chatSpaces.clear();
     if (inboxDirty) {
       inboxDirty = false;
       _readInboxAgain(ref);
@@ -99,12 +112,23 @@ final syncCoordinatorProvider = Provider<void>((ref) {
     if (event.isGap) {
       everything = true;
       inboxDirty = true;
+      chatDirty = true;
       readTimeAgain(ref);
       ref.invalidate(shortcutOverridesProvider);
       readSprintsAgain(ref);
       readDocsAgain(ref);
       readAutomationsAgain(ref);
       _everythingElse(ref);
+      soon();
+      return;
+    }
+    if (event.type.startsWith('chat.')) {
+      // The entity is the space: the list (unread counts) reads again, and
+      // the conversation if it is open.
+      chatDirty = true;
+      if (event.type.startsWith('chat.message.')) {
+        chatSpaces.add(event.entityId);
+      }
       soon();
       return;
     }

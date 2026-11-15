@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/chat/presentation/chat_badge.dart';
 import 'package:taskforge/features/inbox/presentation/inbox_badge.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -127,6 +128,14 @@ class ProjectSidebar extends ConsumerWidget {
           title: Text(context.l10n.grpEInbox),
           trailing: const ShortcutHint('nav.inbox'),
           onTap: () => _go(context, '/inbox'),
+        ),
+        ListTile(
+          key: const Key('open-chat'),
+          dense: true,
+          selected: current.startsWith('/chat'),
+          leading: const ChatBadge(child: Icon(Icons.forum_outlined)),
+          title: Text(context.l10n.chatTitle),
+          onTap: () => _go(context, '/chat'),
         ),
         ListTile(
           key: const Key('open-timesheet'),

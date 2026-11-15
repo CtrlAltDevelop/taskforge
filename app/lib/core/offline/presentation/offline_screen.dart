@@ -157,9 +157,11 @@ class _Summary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final task = entry.entity == OutboxEntity.task
-        ? entry.entityId
-        : '${entry.payload['taskId']}';
+    final task = switch (entry.entity) {
+      OutboxEntity.task => entry.entityId,
+      OutboxEntity.chat => '',
+      _ => '${entry.payload['taskId']}',
+    };
     final title =
         ref
             .watch(
@@ -192,6 +194,9 @@ String describeEntry(
     ),
     (OutboxEntity.task, OutboxOp.delete) => l.grpAEntryDelete(name),
     (OutboxEntity.comment, _) => l.grpAEntryComment(name),
+    (OutboxEntity.chat, _) => l.chatEntryMessage(
+      '${entry.payload['spaceName'] ?? ''}',
+    ),
     (OutboxEntity.attachment, _) => l.grpAEntryUpload(
       '${entry.payload['name'] ?? ''}',
       name,

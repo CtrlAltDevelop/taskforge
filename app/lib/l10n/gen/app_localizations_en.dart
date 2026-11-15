@@ -8340,6 +8340,197 @@ class AppLocalizationsEn extends AppLocalizations {
   String chatTitleCount(int count) {
     return 'Chat ($count)';
   }
+
+  @override
+  String get chatSectionChannels => 'Channels';
+
+  @override
+  String get chatSectionGroups => 'Groups';
+
+  @override
+  String get chatSectionDms => 'Direct messages';
+
+  @override
+  String get chatSectionTaskChats => 'Task chats';
+
+  @override
+  String get chatSearchHint => 'Search chats';
+
+  @override
+  String get chatNoSpaces => 'No chats yet. Start one with New.';
+
+  @override
+  String get chatNoMatches => 'Nothing matches your search';
+
+  @override
+  String get chatMuted => 'Muted';
+
+  @override
+  String get chatNew => 'New';
+
+  @override
+  String get chatNewChannel => 'Channel';
+
+  @override
+  String get chatNewGroup => 'Group';
+
+  @override
+  String get chatNewMessage => 'Message';
+
+  @override
+  String get chatNameLabel => 'Name';
+
+  @override
+  String get chatMembersLabel => 'Members';
+
+  @override
+  String get chatPickPerson => 'Choose a person';
+
+  @override
+  String get chatCreate => 'Create';
+
+  @override
+  String get chatNameRequired => 'Enter a name';
+
+  @override
+  String get chatGroupNeedsMembers => 'Pick at least one other person';
+
+  @override
+  String get chatSayHi => 'Say hi';
+
+  @override
+  String get chatSelectSpace => 'Choose a chat to start talking';
+
+  @override
+  String get chatUnreadDivider => 'New messages';
+
+  @override
+  String get chatJumpLatest => 'Jump to latest';
+
+  @override
+  String get chatWriteMessage => 'Write a message…';
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String get chatReply => 'Reply';
+
+  @override
+  String chatReplies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count replies',
+      one: '1 reply',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatThread => 'Thread';
+
+  @override
+  String get chatBack => 'Back';
+
+  @override
+  String get chatEdit => 'Edit';
+
+  @override
+  String get chatDelete => 'Delete';
+
+  @override
+  String get chatRemoved => 'message removed';
+
+  @override
+  String get chatEdited => 'edited';
+
+  @override
+  String get chatMessageActions => 'Message actions';
+
+  @override
+  String get chatSending => 'Sending…';
+
+  @override
+  String get chatNotSent => 'Not sent';
+
+  @override
+  String get chatDiscard => 'Discard';
+
+  @override
+  String get chatBroadcastTitle => 'Notify everyone?';
+
+  @override
+  String chatBroadcastBody(int count) {
+    return 'This message will notify $count people. Send it anyway?';
+  }
+
+  @override
+  String get chatBroadcastSend => 'Send anyway';
+
+  @override
+  String get chatSettings => 'Chat settings';
+
+  @override
+  String get chatUnmute => 'Unmute';
+
+  @override
+  String get chatMute1h => 'Mute for 1 hour';
+
+  @override
+  String get chatMute8h => 'Mute for 8 hours';
+
+  @override
+  String get chatMuteWeek => 'Mute for 1 week';
+
+  @override
+  String get chatMuteForever => 'Mute until I turn it back on';
+
+  @override
+  String get chatMuteCompletely => 'Mute completely, even @mentions of me';
+
+  @override
+  String get chatNotifyAll => 'Notify me of every message';
+
+  @override
+  String get chatLeave => 'Leave';
+
+  @override
+  String get chatJoin => 'Join';
+
+  @override
+  String chatMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatReadOnlyArchived =>
+      'This space is archived. You can read it but not write in it.';
+
+  @override
+  String get chatReadOnlyFormer => 'This conversation is read-only.';
+
+  @override
+  String get chatNotMember => 'Join this channel to write in it.';
+
+  @override
+  String get chatFormerMember => 'Former member';
+
+  @override
+  String chatUnreadLabel(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String chatEntryMessage(String space) {
+    return 'Chat message in $space';
+  }
 }
 
 /// The translations for English (`en_XA`).
@@ -16817,4 +17008,203 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get chatActorSystem => '[ţĥé šýšţéɱ ~~~]';
+
+  @override
+  String chatTitleCount(int count) {
+    return '[Çĥåţ ($count) ~~~~]';
+  }
+
+  @override
+  String get chatSectionChannels => '[Çĥåññéłš ~~]';
+
+  @override
+  String get chatSectionGroups => '[Ĝŕöûþš ~~]';
+
+  @override
+  String get chatSectionDms => '[Ðíŕéçţ ɱéššåĝéš ~~~~~]';
+
+  @override
+  String get chatSectionTaskChats => '[Ţåšķ çĥåţš ~~~]';
+
+  @override
+  String get chatSearchHint => '[Šéåŕçĥ çĥåţš ~~~~]';
+
+  @override
+  String get chatNoSpaces => '[Ñö çĥåţš ýéţ. Šţåŕţ öñé ŵíţĥ Ñéŵ. ~~~~~~~~~~~]';
+
+  @override
+  String get chatNoMatches => '[Ñöţĥíñĝ ɱåţçĥéš ýöûŕ šéåŕçĥ ~~~~~~~~~]';
+
+  @override
+  String get chatMuted => '[Mûţéð ~]';
+
+  @override
+  String get chatNew => '[Ñéŵ ~]';
+
+  @override
+  String get chatNewChannel => '[Çĥåññéł ~~]';
+
+  @override
+  String get chatNewGroup => '[Ĝŕöûþ ~]';
+
+  @override
+  String get chatNewMessage => '[Méššåĝé ~~]';
+
+  @override
+  String get chatNameLabel => '[Ñåɱé ~]';
+
+  @override
+  String get chatMembersLabel => '[Méɱƀéŕš ~~]';
+
+  @override
+  String get chatPickPerson => '[Çĥööšé å þéŕšöñ ~~~~~]';
+
+  @override
+  String get chatCreate => '[Çŕéåţé ~~]';
+
+  @override
+  String get chatNameRequired => '[Éñţéŕ å ñåɱé ~~~~]';
+
+  @override
+  String get chatGroupNeedsMembers =>
+      '[Þíçķ åţ łéåšţ öñé öţĥéŕ þéŕšöñ ~~~~~~~~~~]';
+
+  @override
+  String get chatSayHi => '[Šåý ĥí ~~]';
+
+  @override
+  String get chatSelectSpace => '[Çĥööšé å çĥåţ ţö šţåŕţ ţåłķíñĝ ~~~~~~~~~~]';
+
+  @override
+  String get chatUnreadDivider => '[Ñéŵ ɱéššåĝéš ~~~~]';
+
+  @override
+  String get chatJumpLatest => '[Ĵûɱþ ţö łåţéšţ ~~~~]';
+
+  @override
+  String get chatWriteMessage => '[Ŵŕíţé å ɱéššåĝé… ~~~~~]';
+
+  @override
+  String get chatSend => '[Šéñð ~]';
+
+  @override
+  String get chatReply => '[Ŕéþłý ~]';
+
+  @override
+  String chatReplies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ŕéþłíéš',
+      one: '1 ŕéþłý',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get chatThread => '[Ţĥŕéåð ~~]';
+
+  @override
+  String get chatBack => '[ßåçķ ~]';
+
+  @override
+  String get chatEdit => '[Éðíţ ~]';
+
+  @override
+  String get chatDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String get chatRemoved => '[ɱéššåĝé ŕéɱöṽéð ~~~~~]';
+
+  @override
+  String get chatEdited => '[éðíţéð ~~]';
+
+  @override
+  String get chatMessageActions => '[Méššåĝé åçţíöñš ~~~~~]';
+
+  @override
+  String get chatSending => '[Šéñðíñĝ… ~~]';
+
+  @override
+  String get chatNotSent => '[Ñöţ šéñţ ~~]';
+
+  @override
+  String get chatDiscard => '[Ðíšçåŕð ~~]';
+
+  @override
+  String get chatBroadcastTitle => '[Ñöţíƒý éṽéŕýöñé? ~~~~~]';
+
+  @override
+  String chatBroadcastBody(int count) {
+    return '[Ţĥíš ɱéššåĝé ŵíłł ñöţíƒý $count þéöþłé. Šéñð íţ åñýŵåý? ~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get chatBroadcastSend => '[Šéñð åñýŵåý ~~~]';
+
+  @override
+  String get chatSettings => '[Çĥåţ šéţţíñĝš ~~~~]';
+
+  @override
+  String get chatUnmute => '[Ûñɱûţé ~~]';
+
+  @override
+  String get chatMute1h => '[Mûţé ƒöŕ 1 ĥöûŕ ~~~~~]';
+
+  @override
+  String get chatMute8h => '[Mûţé ƒöŕ 8 ĥöûŕš ~~~~~]';
+
+  @override
+  String get chatMuteWeek => '[Mûţé ƒöŕ 1 ŵééķ ~~~~~]';
+
+  @override
+  String get chatMuteForever => '[Mûţé ûñţíł Í ţûŕñ íţ ƀåçķ öñ ~~~~~~~~~]';
+
+  @override
+  String get chatMuteCompletely =>
+      '[Mûţé çöɱþłéţéłý, éṽéñ @ɱéñţíöñš öƒ ɱé ~~~~~~~~~~~~]';
+
+  @override
+  String get chatNotifyAll => '[Ñöţíƒý ɱé öƒ éṽéŕý ɱéššåĝé ~~~~~~~~]';
+
+  @override
+  String get chatLeave => '[Łéåṽé ~]';
+
+  @override
+  String get chatJoin => '[Ĵöíñ ~]';
+
+  @override
+  String chatMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ɱéɱƀéŕš',
+      one: '1 ɱéɱƀéŕ',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get chatReadOnlyArchived =>
+      '[Ţĥíš šþåçé íš åŕçĥíṽéð. Ýöû çåñ ŕéåð íţ ƀûţ ñöţ ŵŕíţé íñ íţ. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get chatReadOnlyFormer =>
+      '[Ţĥíš çöñṽéŕšåţíöñ íš ŕéåð-öñłý. ~~~~~~~~~~]';
+
+  @override
+  String get chatNotMember => '[Ĵöíñ ţĥíš çĥåññéł ţö ŵŕíţé íñ íţ. ~~~~~~~~~~~]';
+
+  @override
+  String get chatFormerMember => '[Föŕɱéŕ ɱéɱƀéŕ ~~~~]';
+
+  @override
+  String chatUnreadLabel(int count) {
+    return '[$count ûñŕéåð ~~~~]';
+  }
+
+  @override
+  String chatEntryMessage(String space) {
+    return '[Çĥåţ ɱéššåĝé íñ $space ~~~~~~~]';
+  }
 }

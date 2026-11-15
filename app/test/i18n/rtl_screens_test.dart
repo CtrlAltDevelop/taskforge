@@ -34,7 +34,11 @@ import 'package:taskforge/features/time/application/time_providers.dart';
 
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 
+import 'package:taskforge/features/chat/application/chat_providers.dart';
+import 'package:taskforge/features/chat/domain/chat.dart';
+
 import '../features/audit/fakes.dart';
+import '../features/chat/fakes.dart' as chatfakes;
 import '../features/dashboards/fakes.dart';
 import '../features/docs/fakes.dart';
 import '../features/imports/fakes.dart';
@@ -94,6 +98,7 @@ class ScreenEnv {
     FakeSprintsClient? sprints,
     FakeInboxClient? inbox,
     FakeTimeClient? time,
+    chatfakes.FakeChatClient? chatServer,
     String role = 'Owner',
   }) async {
     final prefs = MemoryPrefs();
@@ -117,6 +122,7 @@ class ScreenEnv {
       docs: docs ?? _docs(),
       sprints: sprints ?? _sprints(),
       inbox: inbox ?? _inbox(),
+      chat: chatServer,
       time: time ?? _time(),
       overrides: [
         localPrefsProvider.overrideWithValue(prefs),
@@ -200,7 +206,35 @@ FakeDashboardsClient _dashboards() => (FakeDashboardsClient([
   dashboardOf('d1', 'Team', [widgetOf('w1', WidgetKind.number, title: 'Open')]),
 ]));
 
+chatfakes.FakeChatClient _chatServer() => chatfakes.FakeChatClient(
+  spaces: [
+    chatfakes.space('gen', _bidiTitle, unread: 2, isDefault: true),
+    chatfakes.space('rnd', _longWord),
+    chatfakes.space('g', 'Leads', kind: SpaceKind.group),
+    chatfakes.space('d', '', kind: SpaceKind.dm, peer: 'u2'),
+  ],
+  taskChats: const [
+    TaskChatRef(taskId: 'a', projectId: 'p1', title: _bidiTitle),
+  ],
+  messages: [
+    chatfakes.msg('m1', 'gen', 'متن فارسی with English WEB-12 inside.'),
+    chatfakes.msg('m2', 'gen', _longWord, author: 'u1'),
+  ],
+);
+
 Map<String, Opener> screenCases() => {
+  'chat': (t, e) => e.open(
+    t,
+    '/chat',
+    chatServer: _chatServer(),
+    overrides: [chatMeProvider.overrideWithValue('u1')],
+  ),
+  'chat conversation': (t, e) => e.open(
+    t,
+    '/chat/gen',
+    chatServer: _chatServer(),
+    overrides: [chatMeProvider.overrideWithValue('u1')],
+  ),
   'home': (t, e) => e.open(t, '/'),
   'language': (t, e) => e.open(t, '/settings/language'),
   'sessions': (t, e) => e.open(t, '/sessions'),

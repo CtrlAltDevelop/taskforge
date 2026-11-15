@@ -4924,5 +4924,86 @@
     "placeholders": {
       "count": { "type": "int" }
     }
+  },
+  "chatSectionChannels": "Channels",
+  "chatSectionGroups": "Groups",
+  "chatSectionDms": "Direct messages",
+  "chatSectionTaskChats": "Task chats",
+  "chatSearchHint": "Search chats",
+  "chatNoSpaces": "No chats yet. Start one with New.",
+  "chatNoMatches": "Nothing matches your search",
+  "chatMuted": "Muted",
+  "chatNew": "New",
+  "chatNewChannel": "Channel",
+  "chatNewGroup": "Group",
+  "chatNewMessage": "Message",
+  "chatNameLabel": "Name",
+  "chatMembersLabel": "Members",
+  "chatPickPerson": "Choose a person",
+  "chatCreate": "Create",
+  "chatNameRequired": "Enter a name",
+  "chatGroupNeedsMembers": "Pick at least one other person",
+  "chatSayHi": "Say hi",
+  "chatSelectSpace": "Choose a chat to start talking",
+  "chatUnreadDivider": "New messages",
+  "chatJumpLatest": "Jump to latest",
+  "chatWriteMessage": "Write a message…",
+  "chatSend": "Send",
+  "chatReply": "Reply",
+  "chatReplies": "{count, plural, one{1 reply} other{{count} replies}}",
+  "@chatReplies": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "chatThread": "Thread",
+  "chatBack": "Back",
+  "chatEdit": "Edit",
+  "chatDelete": "Delete",
+  "chatRemoved": "message removed",
+  "chatEdited": "edited",
+  "chatMessageActions": "Message actions",
+  "chatSending": "Sending…",
+  "chatNotSent": "Not sent",
+  "chatDiscard": "Discard",
+  "chatBroadcastTitle": "Notify everyone?",
+  "chatBroadcastBody": "This message will notify {count} people. Send it anyway?",
+  "@chatBroadcastBody": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "chatBroadcastSend": "Send anyway",
+  "chatSettings": "Chat settings",
+  "chatUnmute": "Unmute",
+  "chatMute1h": "Mute for 1 hour",
+  "chatMute8h": "Mute for 8 hours",
+  "chatMuteWeek": "Mute for 1 week",
+  "chatMuteForever": "Mute until I turn it back on",
+  "chatMuteCompletely": "Mute completely, even @mentions of me",
+  "chatNotifyAll": "Notify me of every message",
+  "chatLeave": "Leave",
+  "chatJoin": "Join",
+  "chatMembersCount": "{count, plural, one{1 member} other{{count} members}}",
+  "@chatMembersCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "chatReadOnlyArchived": "This space is archived. You can read it but not write in it.",
+  "chatReadOnlyFormer": "This conversation is read-only.",
+  "chatNotMember": "Join this channel to write in it.",
+  "chatFormerMember": "Former member",
+  "chatUnreadLabel": "{count} unread",
+  "@chatUnreadLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "chatEntryMessage": "Chat message in {space}",
+  "@chatEntryMessage": {
+    "placeholders": {
+      "space": { "type": "String" }
+    }
   }
 }
