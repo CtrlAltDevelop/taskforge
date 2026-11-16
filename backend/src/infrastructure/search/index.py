@@ -86,7 +86,9 @@ def put_task(task_id: Any) -> None:
 
 
 def put_comment(comment_id: Any) -> None:
-    comment = Comment.objects.filter(pk=comment_id, deleted_at__isnull=True).first()
+    comment = Comment.objects.filter(
+        pk=comment_id, deleted_at__isnull=True, kind="user"
+    ).first()
     if comment is None:
         drop(Kind.COMMENT, comment_id)
         return
@@ -122,7 +124,9 @@ def reindex(workspace_id: Any = None) -> int:
     """Rebuild every row (of one workspace, or all): what ``manage.py reindex`` runs after an
     import or a restore. Returns how many rows it wrote."""
     tasks = Task.objects.filter(deleted_at__isnull=True)
-    comments = Comment.objects.filter(deleted_at__isnull=True, task__deleted_at__isnull=True)
+    comments = Comment.objects.filter(
+        deleted_at__isnull=True, task__deleted_at__isnull=True, kind="user"
+    )
     stale = SearchEntry.objects.all()
     if workspace_id:
         tasks = tasks.filter(workspace_id=workspace_id)

@@ -12,6 +12,7 @@ from typing import Any
 
 from infrastructure.automations import engine, integrity, queue, spec
 from infrastructure.automations.models import Automation
+from infrastructure.comments.models import Comment
 from infrastructure.comments.signals import comment_changed
 from infrastructure.customfields.signals import fields_changed
 from infrastructure.tasks.models import Task
@@ -98,6 +99,8 @@ def _changed(sender: Any, **kw: Any) -> None:
 def _comment(sender: Any, **kw: Any) -> None:
     if kw["action"] != "created":
         return
+    if Comment.objects.filter(pk=kw["comment_id"], kind="system").exists():
+        return  # a change message is not a comment someone wrote
     dispatch(
         kw["workspace_id"],
         kw["project_id"],

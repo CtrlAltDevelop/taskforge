@@ -146,3 +146,13 @@ def test_a_change_notifies_assignee_once_never_the_actor_or_duplicates(
     assert not Notification.objects.filter(user=team.owner, type="task.changed").exists()
     # assignment keeps its own kind and is not announced twice as task.changed
     assert Notification.objects.filter(user=team.member, type="task.assigned").count() == 1
+
+
+def test_fields_outside_the_tracked_list_write_nothing(team: Any, project: Any, task: Any) -> None:
+    """Only the listed fields speak in the chat, so a custom field (which may be hidden from the
+    reader) and long text never leak into a message."""
+    from infrastructure.comments.system_messages import FIELDS
+
+    assert not any(name.startswith(("cf_", "custom")) for name in FIELDS)
+    _change(team, project, task, description=say("Long text"))
+    assert _system(task) == []

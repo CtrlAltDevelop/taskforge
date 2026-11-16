@@ -38,14 +38,14 @@ Open a task: the stream under it is called **Chat**. When someone changes a trac
 - Retention: system messages are purged with their task; they are not part of the audit retention (27).
 
 ## Acceptance criteria
-- [ ] Changing priority, status, assignee, due date and title each adds one system message with the right actor, field, from and to
-- [ ] Two priority changes by the same person within 5 minutes make one message (first `from`, last `to`); a user message in between, or a different person, breaks the group
-- [ ] System messages cannot be edited, deleted, reacted to or replied to (server refuses, UI hides the actions)
-- [ ] A person who cannot see the task never receives its messages (list, live event)
-- [ ] A hidden custom field's values never reach the client
-- [ ] Sentence is built on the client from `event` in the current language, relative time updates without reload
-- [ ] "Hide changes" toggle hides only system messages and is remembered per person
-- [ ] A change notifies the assignee and watchers (never the actor), once per coalesced message, and never duplicates `status.changed` / `task.assigned`
+- [x] Changing priority, status, assignee, due date and title each adds one system message with the right actor, field, from and to
+- [x] Two priority changes by the same person within 5 minutes make one message (first `from`, last `to`); a user message in between, or a different person, breaks the group
+- [x] System messages cannot be edited, deleted, reacted to or replied to (server refuses, UI hides the actions)
+- [ ] A person who cannot see the task never receives its messages (list, live event) — list is tested; the live event path is not tested separately
+- [x] A hidden custom field's values never reach the client
+- [x] Sentence is built on the client from `event` in the current language, relative time updates without reload
+- [x] "Hide changes" toggle hides only system messages and is remembered per person
+- [x] A change notifies the assignee and watchers (never the actor), once per coalesced message, and never duplicates `status.changed` / `task.assigned`
 
 ## Tests
 Receiver per tracked field, coalescing boundaries (5 min, other actor, interleaved message), refusal of edits, tenant isolation on list and live event, redaction of restricted fields, automation/form/import actors, widget tests for the sentence in two languages and the ticking time, a golden for the muted line.

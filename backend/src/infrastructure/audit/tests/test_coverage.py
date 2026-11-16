@@ -61,6 +61,13 @@ READS = frozenset(
         "CommentController.History",
         "CommentController.List",
         "CommentController.Mentionable",
+        "ChatController.ListSpaces",
+        "ChatController.ListMessages",
+        "ChatController.Mentionable",
+        # Personal state (read position, mute, notify): one person's own row, not workspace data.
+        "ChatController.MarkRead",
+        "ChatController.Mute",
+        "ChatController.Notify",
         "DocController.Backlinks",
         "DocController.ExportMarkdown",
         "DocController.ForTask",
@@ -141,6 +148,8 @@ def _is_read(name: str) -> bool:
 MATRIX_CALL_CHANGES_NOTHING = frozenset(
     {
         "TaskController.SetParent",
+        "ChatController.Leave",  # the matrix caller is not in the channel; chat test_audit
+        "ChatController.Join",  # the Owner who made the channel is in it; chat test_audit
         "TaskController.Move",
         "FieldController.Update",
         "FieldController.Reorder",

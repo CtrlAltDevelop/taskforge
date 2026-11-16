@@ -82,7 +82,7 @@ def _comment_changed(sender: Any, **kw: Any) -> None:
     from infrastructure.comments.body import plain_text
 
     comment = Comment.objects.filter(pk=kw["comment_id"]).first()
-    if comment is None:
+    if comment is None or comment.is_system:  # the change itself has its own event
         return
     text = "" if comment.deleted_at else plain_text(comment.body)
     delivery.dispatch(

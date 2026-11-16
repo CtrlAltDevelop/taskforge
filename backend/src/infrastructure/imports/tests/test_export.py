@@ -162,7 +162,7 @@ def test_export_then_import_into_a_fresh_workspace_reproduces_the_project(world:
     assert made["Epic"].description == original["Epic"].description
     assert made["Epic"].created_at == original["Epic"].created_at
     assert made["Epic"].status.name == original["Epic"].status.name
-    text = str(made["Epic"].comments.get().body)  # the author is not in Fresh: named in the text
+    text = str(made["Epic"].comments.get(kind="user").body)  # the author is not in Fresh: named in the text
     assert "A comment" in text and "owner wrote" in text
     link = TaskLink.objects.get(from_task=made["Child"])
     assert (link.to_task_id, link.type) == (made["Other"].pk, "blocks")

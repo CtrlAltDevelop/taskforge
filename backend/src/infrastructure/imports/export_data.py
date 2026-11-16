@@ -87,7 +87,7 @@ def _details(batch: list[Task]) -> dict[str, dict[str, Any]]:
     for row in TaskAssignee.objects.filter(task_id__in=ids).select_related("user").order_by("pk"):
         people[row.task_id].append(row.user)
     comments: dict[Any, list[Comment]] = defaultdict(list)
-    rows = Comment.objects.filter(task_id__in=ids, deleted_at__isnull=True)
+    rows = Comment.objects.filter(task_id__in=ids, deleted_at__isnull=True, kind="user")
     for c in rows.select_related("author").order_by("created_at"):
         comments[c.task_id].append(c)
     links: dict[Any, list[dict[str, str]]] = defaultdict(list)

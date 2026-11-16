@@ -134,7 +134,7 @@ def test_a_dry_run_shows_the_exact_changes_and_applies_nothing(team: Any, web: A
         before.priority,
         before.status_id,
     )
-    assert not Comment.objects.exists() and not AutomationRun.objects.exists()
+    assert not Comment.objects.filter(kind="user").exists() and not AutomationRun.objects.exists()
     assert tasks.list_children(team.owner, team.ws, str(web.pk), str(task.pk)) == []
     assert not Notification.objects.filter(type="automation.notice").exists()
 
@@ -241,7 +241,7 @@ def test_a_removed_owner_fails_the_run(team: Any, web: Any) -> None:
 
     (run,) = runs(rule)
     assert run.status == RunStatus.FAILED and "no longer a member" in run.error
-    assert not Comment.objects.exists()
+    assert not Comment.objects.filter(kind="user").exists()
 
 
 def test_a_run_is_refused_when_the_project_is_archived(team: Any, web: Any) -> None:
@@ -287,12 +287,12 @@ def test_a_tfql_condition_decides_whether_actions_run(team: Any, web: Any) -> No
     (skipped,) = runs(rule)
     assert skipped.status == RunStatus.SKIPPED_CONDITION
     assert "priority" in skipped.explanation and "title" not in skipped.explanation.split(":")[0]
-    assert not Comment.objects.exists()
+    assert not Comment.objects.filter(kind="user").exists()
 
     edit(team, web, task, priority="high")
     edit(team, web, task, title="Bug three")
     assert runs(rule)[-1].status == RunStatus.SUCCEEDED
-    assert Comment.objects.count() == 1
+    assert Comment.objects.filter(kind="user").count() == 1
 
 
 def test_a_condition_that_does_not_parse_is_refused(team: Any, web: Any) -> None:
@@ -410,7 +410,7 @@ def test_a_failing_action_is_recorded_and_the_rest_is_not_run(team: Any, web: An
     (run,) = runs(rule)
     assert run.status == RunStatus.FAILED and run.error.startswith("Step 1 (webhook)")
     assert [s["status"] for s in run.steps] == ["failed", "not_run"]
-    assert not Comment.objects.exists()
+    assert not Comment.objects.filter(kind="user").exists()
 
 
 def test_rules_have_limits(team: Any, web: Any) -> None:
@@ -481,7 +481,7 @@ def test_a_rule_never_touches_a_task_of_another_project(team: Any, web: Any, oth
         rule.pk, {"type": "task_created", "id": "x", "task_id": str(foreign.pk), "depth": 0}
     )
 
-    assert got is None and not AutomationRun.objects.exists() and not Comment.objects.exists()
+    assert got is None and not AutomationRun.objects.exists() and not Comment.objects.filter(kind="user").exists()
     assert not AutomationRun.objects.filter(automation=rule).exists()
 
 
@@ -580,7 +580,7 @@ def test_the_other_actions_do_their_work_as_the_rule(team: Any, web: Any) -> Non
     fresh = tasks.get(team.owner, team.ws, str(web.pk), str(task.pk))
     assert [str(u) for u in fresh.assignee_ids()] == [str(team.member.pk)]
     assert fresh.status.name == "In progress"
-    text = Comment.objects.get().body["content"][0]["content"][0]["text"]
+    text = Comment.objects.get(kind="user").body["content"][0]["content"][0]["text"]
     assert text == "[Automation: Triage] WEB-1 -> In progress"
     (child,) = tasks.list_children(team.owner, team.ws, str(web.pk), str(task.pk))
     assert child.title == "Check Fix"

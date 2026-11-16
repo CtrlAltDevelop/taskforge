@@ -14,6 +14,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.utils import timezone
 
+from infrastructure.audit import changes
 from infrastructure.chat import access
 from infrastructure.chat.models import DM, ChatMember, ChatMessage, ChatReaction, ChatSpace
 from infrastructure.chat.services import FORMER_MEMBER, invalid
@@ -406,9 +407,9 @@ def react(
             )
             if token not in kinds and len(kinds) >= MAX_EMOJIS:
                 raise invalid(f"A message holds at most {MAX_EMOJIS} different reactions.")
-            ChatReaction.objects.bulk_create(
-                [ChatReaction(message=message, user=actor, emoji=token)], ignore_conflicts=True
-            )
+            added = ChatReaction(message=message, user=actor, emoji=token)
+            ChatReaction.objects.bulk_create([added], ignore_conflicts=True)
+            changes.created(added)  # bulk_create sends no signal
             announce(space, "message.updated", version=message.version)
         elif not on and mine.exists():
             mine.delete()

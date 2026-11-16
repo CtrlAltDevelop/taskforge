@@ -17,6 +17,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count, F, Max, Q
 from django.utils import timezone
 
+from infrastructure.audit import changes
 from infrastructure.chat import access
 from infrastructure.chat.models import (
     CHANNEL,
@@ -367,7 +368,10 @@ def add_members(actor: Any, workspace: Workspace, space_id: str, user_ids: list[
         fresh = _rows_for_add(space, _people(workspace, user_ids))
         if space.kind == GROUP and len(access.members(space)) + len(fresh) > GROUP_MAX:
             raise invalid(f"A group holds at most {GROUP_MAX} people.")
-        ChatMember.objects.bulk_create([ChatMember(space=space, user=u) for u in fresh])
+        added = [ChatMember(space=space, user=u) for u in fresh]
+        ChatMember.objects.bulk_create(added)
+        for row in added:
+            changes.created(row)  # bulk_create sends no signal
         if fresh:
             announce(space, "space.updated", users=[u.pk for u in fresh])
     return _present_one(actor, space)
