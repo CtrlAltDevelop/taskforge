@@ -5392,6 +5392,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get grpLMentionNoAccess => 'شخص ذكرته لا يستطيع رؤية هذه المهمة.';
 
   @override
+  String get grpLCannotSeeSpace => 'لا يستطيعون رؤية هذه المحادثة';
+
+  @override
+  String grpLCannotSeeGrant(String names) {
+    return 'لا يستطيع $names رؤية هذه المحادثة. أضفهم وأرسل الرسالة، أو أزل الإشارة.';
+  }
+
+  @override
+  String grpLCannotSeeRefuse(String names) {
+    return 'لا يستطيع $names رؤية هذه المحادثة، لذلك لا يمكن الإشارة إليهم. أزل الإشارة، أو اطلب ممن يديرها إضافتهم.';
+  }
+
+  @override
   String get grpLCommentCheck => 'تحقق من التعليق وحاول مرة أخرى.';
 
   @override

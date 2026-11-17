@@ -6,6 +6,7 @@ import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/features/projects/presentation/project_sidebar.dart';
 import 'package:taskforge/features/shortcuts/presentation/shortcut_host.dart';
 import 'package:taskforge/features/time/presentation/timer_chip.dart';
+import 'package:taskforge/features/chat/presentation/chat_badge.dart';
 
 const sidebarWidth = 280.0;
 
@@ -24,6 +25,7 @@ const _destinations = [
   _Destination(Icons.dashboard_outlined, Icons.dashboard, '/dashboards'),
   _Destination(Icons.flag_outlined, Icons.flag, '/goals'),
   _Destination(Icons.description_outlined, Icons.description, '/docs'),
+  _Destination(Icons.forum_outlined, Icons.forum, '/chat'),
   _Destination(Icons.folder_outlined, Icons.folder, null),
 ];
 
@@ -114,11 +116,16 @@ void _open(BuildContext context, int index) {
   }
 }
 
+/// The icon of [d]; Chat carries its unread badge.
+Widget _icon(_Destination d, IconData data) =>
+    d.path == '/chat' ? ChatBadge(child: Icon(data)) : Icon(data);
+
 List<String> _labels(BuildContext context) => [
   context.l10n.grpEInbox,
   context.l10n.grpEDashboards,
   context.l10n.goalsTitle,
   context.l10n.grpEDocs,
+  context.l10n.chatTitle,
   context.l10n.grpEProjects,
 ];
 
@@ -135,8 +142,8 @@ class _BottomBar extends StatelessWidget {
       destinations: [
         for (final (i, d) in _destinations.indexed)
           NavigationDestination(
-            icon: Icon(d.icon),
-            selectedIcon: Icon(d.selectedIcon),
+            icon: _icon(d, d.icon),
+            selectedIcon: _icon(d, d.selectedIcon),
             label: labels[i],
           ),
       ],
@@ -157,8 +164,8 @@ class _Rail extends StatelessWidget {
       destinations: [
         for (final (i, d) in _destinations.indexed)
           NavigationRailDestination(
-            icon: Icon(d.icon),
-            selectedIcon: Icon(d.selectedIcon),
+            icon: _icon(d, d.icon),
+            selectedIcon: _icon(d, d.selectedIcon),
             label: Text(labels[i]),
           ),
       ],

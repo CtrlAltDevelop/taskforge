@@ -5305,6 +5305,19 @@ class AppLocalizationsPs extends AppLocalizations {
       'یو څوک چې تاسو یادونه کړې دا دنده نشي لیدلی.';
 
   @override
+  String get grpLCannotSeeSpace => 'دوی دا خبرې اتری نشي لیدلی';
+
+  @override
+  String grpLCannotSeeGrant(String names) {
+    return '$names دا خبرې اتری نشي لیدلی. دوی اضافه کړئ او پیغام ولیږئ، یا یادونه لرې کړئ.';
+  }
+
+  @override
+  String grpLCannotSeeRefuse(String names) {
+    return '$names دا خبرې اتری نشي لیدلی، نو یادونه یې نشي کیدلی. یادونه لرې کړئ، یا له هغه چا وغواړئ چې یې اداره کوي چې دوی اضافه کړي.';
+  }
+
+  @override
   String get grpLCommentCheck => 'تبصره وګورئ او بیا هڅه وکړئ.';
 
   @override

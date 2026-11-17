@@ -77,6 +77,10 @@ class FakeChatClient implements ChatClient {
   int broadcastLimit = 0;
   var memberCount = 80;
 
+  /// People outside the space: a send needs `grantAccess` while this is set.
+  List<String> outsiders = const [];
+  final grants = <bool>[];
+
   /// The next call that changes something fails with this.
   ChatException? failNext;
   var reachable = true;
@@ -279,6 +283,10 @@ class FakeChatClient implements ChatClient {
         memberCount: memberCount,
       );
     }
+    if (outsiders.isNotEmpty && !grantAccess) {
+      throw ChatException(ChatFailure.mentionNoAccess, people: outsiders);
+    }
+    grants.add(grantAccess);
     sent.add((
       body: body,
       parentId: parentId,

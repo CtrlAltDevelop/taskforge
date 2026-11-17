@@ -5314,6 +5314,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Somebody you mentioned cannot see this task.';
 
   @override
+  String get grpLCannotSeeSpace => 'They cannot see this chat';
+
+  @override
+  String grpLCannotSeeGrant(String names) {
+    return '$names cannot see this chat. Add them and send the message, or take the mention out.';
+  }
+
+  @override
+  String grpLCannotSeeRefuse(String names) {
+    return '$names cannot see this chat, so they cannot be mentioned. Take the mention out, or ask someone who manages it to add them.';
+  }
+
+  @override
   String get grpLCommentCheck => 'Check the comment and try again.';
 
   @override
@@ -13924,6 +13937,19 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   @override
   String get grpLMentionNoAccess =>
       '[Šöɱéƀöðý ýöû ɱéñţíöñéð çåññöţ šéé ţĥíš ţåšķ. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get grpLCannotSeeSpace => '[Ţĥéý çåññöţ šéé ţĥíš çĥåţ ~~~~~~]';
+
+  @override
+  String grpLCannotSeeGrant(String names) {
+    return '[$names çåññöţ šéé ţĥíš çĥåţ. Åðð ţĥéɱ åñð šéñð ţĥé ɱéššåĝé, öŕ ţåķé ţĥé ɱéñţíöñ öûţ. ~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String grpLCannotSeeRefuse(String names) {
+    return '[$names çåññöţ šéé ţĥíš çĥåţ, šö ţĥéý çåññöţ ƀé ɱéñţíöñéð. Ţåķé ţĥé ɱéñţíöñ öûţ, öŕ åšķ šöɱéöñé ŵĥö ɱåñåĝéš ít ţö åðð ţĥéɱ. ~~~~~~~~~~~~~]';
+  }
 
   @override
   String get grpLCommentCheck =>

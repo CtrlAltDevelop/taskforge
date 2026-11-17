@@ -1,6 +1,6 @@
 # Phase 43 — Chat spaces (channels, groups, direct messages)
 
-**Status:** Implemented, not yet signed off (full backend suite green apart from 6 Windows-only thumbnail tests; backend 72 tests, Flutter 83 tests; SQLite only, not run against a real backend or socket). Not done: "add to this group" offer when mentioning someone outside a space (the error shows), chat in the bottom bar/rail (sidebar and drawer only), golden images. See backend/docs/chat.md.
+**Status:** Done. Backend 72 tests and Flutter chat tests pass; analyze and format clean. Mentioning someone outside a space offers "add and send" to managers (refusal for others); Chat is in the bottom bar and rail with its unread badge. Not covered: golden images (chat text is font-dependent) and a run against a real Redis/socket (SQLite and the in-memory broker only). See backend/docs/chat.md.
 
 ## Feature
 A **Chat** area where the team talks outside any one task: every workspace and every project gets a default channel, and members can create more channels, private groups and direct messages, with `@` notifications.
@@ -41,14 +41,14 @@ A **Chat** entry in the sidebar (unread badge). Two panes on wide screens (space
 - Mute silences pushes but not `@` mentions of you unless "mute completely" is set.
 
 ## Acceptance criteria
-- [ ] New workspace has #general; new project has its channel with exactly its members; adding/removing a project member updates it
-- [ ] A person outside a private group/DM can neither list it, read it, post to it nor receive its live events
-- [ ] Create channel, create group, open DM (second `OpenDm` for the same pair returns the same space)
-- [ ] `@name` notifies exactly that person once per message version; `@channel`/`@here` follow the rules above; the author is never notified of their own message
-- [ ] Unread count per space is correct across devices after `MarkRead`
-- [ ] Thread replies, reactions, edit within 24 h, delete leaves a placeholder
-- [ ] Task chats appear in the same list and open the task's chat from phase 42
-- [ ] Offline sends queue and retry with idempotent client ids
+- [x] New workspace has #general; new project has its channel with exactly its members; adding/removing a project member updates it
+- [x] A person outside a private group/DM can neither list it, read it, post to it nor receive its live events
+- [x] Create channel, create group, open DM (second `OpenDm` for the same pair returns the same space)
+- [x] `@name` notifies exactly that person once per message version; `@channel`/`@here` follow the rules above; the author is never notified of their own message
+- [x] Unread count per space is correct across devices after `MarkRead`
+- [x] Thread replies, reactions, edit within 24 h, delete leaves a placeholder
+- [x] Task chats appear in the same list and open the task's chat from phase 42
+- [x] Offline sends queue and retry with idempotent client ids
 
 ## Tests
 Tenant and membership isolation for every RPC and event, default-space creation and project-membership sync, DM pair uniqueness under concurrency, mention parsing and notification fan-out, unread math, permission matrix, widget tests for the list, composer and unread divider, an integration test for send → live receive on a second client.

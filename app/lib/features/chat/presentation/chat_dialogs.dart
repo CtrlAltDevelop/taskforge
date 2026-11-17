@@ -34,6 +34,42 @@ Future<bool> confirmBroadcast(BuildContext context, int count) async {
   return ok ?? false;
 }
 
+/// Somebody mentioned cannot see the space. Those who manage it can add them
+/// and send; for everyone else it is a refusal. True means "add and send".
+Future<bool> askGrantMentioned(
+  BuildContext context, {
+  required String names,
+  required bool canGrant,
+}) async {
+  final l10n = context.l10n;
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      key: const Key('chat-grant-dialog'),
+      title: Text(l10n.grpLCannotSeeSpace),
+      content: Text(
+        canGrant
+            ? l10n.grpLCannotSeeGrant(names)
+            : l10n.grpLCannotSeeRefuse(names),
+      ),
+      actions: [
+        TextButton(
+          key: const Key('chat-grant-cancel'),
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(canGrant ? l10n.grpICancel : l10n.grpIOk),
+        ),
+        if (canGrant)
+          FilledButton(
+            key: const Key('chat-grant-add'),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.grpIAddThemAndSend),
+          ),
+      ],
+    ),
+  );
+  return ok ?? false;
+}
+
 enum NewKind { channel, group, message }
 
 /// The New dialog: a channel (a name), a group (a name and people) or a

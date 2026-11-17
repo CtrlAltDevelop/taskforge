@@ -9313,6 +9313,24 @@ abstract class AppLocalizations {
   /// **'Somebody you mentioned cannot see this task.'**
   String get grpLMentionNoAccess;
 
+  /// No description provided for @grpLCannotSeeSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'They cannot see this chat'**
+  String get grpLCannotSeeSpace;
+
+  /// No description provided for @grpLCannotSeeGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'{names} cannot see this chat. Add them and send the message, or take the mention out.'**
+  String grpLCannotSeeGrant(String names);
+
+  /// No description provided for @grpLCannotSeeRefuse.
+  ///
+  /// In en, this message translates to:
+  /// **'{names} cannot see this chat, so they cannot be mentioned. Take the mention out, or ask someone who manages it to add them.'**
+  String grpLCannotSeeRefuse(String names);
+
   /// No description provided for @grpLCommentCheck.
   ///
   /// In en, this message translates to:

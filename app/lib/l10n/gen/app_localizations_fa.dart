@@ -5322,6 +5322,19 @@ class AppLocalizationsFa extends AppLocalizations {
       'کسی که به او اشاره کردید نمی‌تواند این وظیفه را ببیند.';
 
   @override
+  String get grpLCannotSeeSpace => 'آن‌ها نمی‌توانند این گفتگو را ببینند';
+
+  @override
+  String grpLCannotSeeGrant(String names) {
+    return '$names نمی‌توانند این گفتگو را ببینند. آن‌ها را اضافه کنید و پیام را بفرستید، یا اشاره را بردارید.';
+  }
+
+  @override
+  String grpLCannotSeeRefuse(String names) {
+    return '$names نمی‌توانند این گفتگو را ببینند، بنابراین نمی‌توان به آن‌ها اشاره کرد. اشاره را بردارید یا از مدیر گفتگو بخواهید آن‌ها را اضافه کند.';
+  }
+
+  @override
   String get grpLCommentCheck => 'نظر را بررسی کنید و دوباره تلاش کنید.';
 
   @override

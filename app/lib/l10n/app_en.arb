@@ -3278,6 +3278,23 @@
   "grpLCommentConflict": "Someone changed this comment first.",
   "grpLCommentLocked": "That comment can no longer be edited.",
   "grpLMentionNoAccess": "Somebody you mentioned cannot see this task.",
+  "grpLCannotSeeSpace": "They cannot see this chat",
+  "grpLCannotSeeGrant": "{names} cannot see this chat. Add them and send the message, or take the mention out.",
+  "@grpLCannotSeeGrant": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "grpLCannotSeeRefuse": "{names} cannot see this chat, so they cannot be mentioned. Take the mention out, or ask someone who manages it to add them.",
+  "@grpLCannotSeeRefuse": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
   "grpLCommentCheck": "Check the comment and try again.",
   "grpLCommentGone": "That comment no longer exists.",
   "grpLSlugTaken": "That URL is taken",

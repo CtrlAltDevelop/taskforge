@@ -119,6 +119,35 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
         await _notifier.send(body, parentId: parentId, confirmBroadcast: true);
       }
     } on ChatException catch (e) {
+      if (e.failure == ChatFailure.mentionNoAccess && await _offerGrant(e)) {
+        await _sendGranted(body, parentId);
+        return;
+      }
+      if (mounted) chatSay(context, chatErrorMessage(e, l10n));
+      rethrow;
+    }
+  }
+
+  /// Asks whether to add the people mentioned who are outside the space.
+  Future<bool> _offerGrant(ChatException e) async {
+    if (!mounted) return false;
+    final members = ref.read(membersProvider).value ?? const <Member>[];
+    final me = ref.read(chatMeProvider);
+    final names = e.people
+        .map((id) => personName(id, me, members, context.l10n))
+        .join(', ');
+    return askGrantMentioned(
+      context,
+      names: names,
+      canGrant: _space.kind != SpaceKind.dm,
+    );
+  }
+
+  Future<void> _sendGranted(String body, String parentId) async {
+    final l10n = context.l10n;
+    try {
+      await _notifier.send(body, parentId: parentId, grantAccess: true);
+    } on ChatException catch (e) {
       if (mounted) chatSay(context, chatErrorMessage(e, l10n));
       rethrow;
     }

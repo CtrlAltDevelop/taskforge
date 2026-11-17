@@ -337,6 +337,32 @@ void main() {
       },
     );
 
+    testWidgets('mentioning someone outside the space offers to add them', (
+      tester,
+    ) async {
+      final chat = server()..outsiders = ['u2'];
+      await open(tester, chat, location: '/chat/rnd');
+      await write(tester, 'Hello');
+      await sendIt(tester);
+      expect(key('chat-grant-dialog'), findsOneWidget);
+      expect(chat.sent, isEmpty);
+      await tester.tap(key('chat-grant-add'));
+      await tester.pumpAndSettle();
+      expect(chat.sent.single.body, contains('Hello'));
+      expect(chat.grants.single, isTrue);
+    });
+
+    testWidgets('declining the offer sends nothing', (tester) async {
+      final chat = server()..outsiders = ['u2'];
+      await open(tester, chat, location: '/chat/rnd');
+      await write(tester, 'Hello');
+      await sendIt(tester);
+      await tester.tap(key('chat-grant-cancel'));
+      await tester.pumpAndSettle();
+      expect(chat.sent, isEmpty);
+      expect(key('chat-grant-dialog'), findsNothing);
+    });
+
     testWidgets('a refused send stays as failed, with retry and discard', (
       tester,
     ) async {
