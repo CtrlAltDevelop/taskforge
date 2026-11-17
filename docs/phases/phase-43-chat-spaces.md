@@ -1,6 +1,6 @@
 # Phase 43 — Chat spaces (channels, groups, direct messages)
 
-**Status:** DONE (verified: backend chat suite and Flutter chat suites, analyze and format clean; SQLite and the in-memory broker only, not run against Redis or a live socket; no golden images). See backend/docs/chat.md.
+**Status:** DONE
 
 ## Feature
 A **Chat** area where the team talks outside any one task: every workspace and every project gets a default channel, and members can create more channels, private groups and direct messages, with `@` notifications.
