@@ -1,6 +1,6 @@
 # Phase 43 — Chat spaces (channels, groups, direct messages)
 
-**Status:** Done. Backend 72 tests and Flutter chat tests pass; analyze and format clean. Mentioning someone outside a space offers "add and send" to managers (refusal for others); Chat is in the bottom bar and rail with its unread badge. Not covered: golden images (chat text is font-dependent) and a run against a real Redis/socket (SQLite and the in-memory broker only). See backend/docs/chat.md.
+**Status:** DONE (verified: backend chat suite and Flutter chat suites, analyze and format clean; SQLite and the in-memory broker only, not run against Redis or a live socket; no golden images). See backend/docs/chat.md.
 
 ## Feature
 A **Chat** area where the team talks outside any one task: every workspace and every project gets a default channel, and members can create more channels, private groups and direct messages, with `@` notifications.

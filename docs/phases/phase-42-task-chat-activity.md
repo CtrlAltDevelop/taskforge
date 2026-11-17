@@ -1,6 +1,6 @@
 # Phase 42 — Task chat with change messages
 
-**Status:** Backend done and tested. Flutter done: comments, audit, sync and i18n suites pass on Flutter 3.50, analyze and format clean. The old Activity section is kept collapsed at the bottom of the Chat panel for pre-phase history.
+**Status:** DONE (verified: backend comments and chat suites, Flutter comments, audit, sync and i18n suites; analyze and format clean). The old Activity section is kept collapsed at the bottom of the Chat panel for pre-phase history.
 
 ## Feature
 Every task's comment stream becomes its **chat**: besides what people write, it shows a system message for each change to the task ("@Sara changed priority to High · 38 min ago"), visible to everyone who can see the task, who can answer in the same stream and `@` anyone.
