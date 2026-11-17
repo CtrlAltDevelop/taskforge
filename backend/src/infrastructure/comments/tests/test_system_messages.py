@@ -156,3 +156,28 @@ def test_fields_outside_the_tracked_list_write_nothing(team: Any, project: Any, 
     assert not any(name.startswith(("cf_", "custom")) for name in FIELDS)
     _change(team, project, task, description=say("Long text"))
     assert _system(task) == []
+
+
+class _Broker:
+    def __init__(self) -> None:
+        self.sent: list[tuple[str, dict[str, Any]]] = []
+
+    def publish(self, channel: str, payload: dict[str, Any]) -> None:
+        self.sent.append((channel, payload))
+
+
+def test_live_events_of_a_private_task_chat_stay_in_its_project_room(
+    team: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    broker = _Broker()
+    monkeypatch.setattr("infrastructure.sync.publish.get_broker", lambda: broker)
+    secret = team.create(team.pm, "SEC", visibility="private", name="Secret")
+    task = tasks.create(team.pm, team.ws, str(secret.pk), "hidden")
+    broker.sent.clear()
+
+    services.create(team.pm, team.ws, str(secret.pk), str(task.pk), say("hi"))
+    _change(team, secret, task, who=team.pm, priority="high")
+
+    rooms = {p["room"] for _, p in broker.sent}
+    assert rooms == {f"proj:{secret.pk}"}
+    assert not any(r.startswith("ws:") for r in rooms)

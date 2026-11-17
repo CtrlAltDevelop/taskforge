@@ -41,7 +41,7 @@ Open a task: the stream under it is called **Chat**. When someone changes a trac
 - [x] Changing priority, status, assignee, due date and title each adds one system message with the right actor, field, from and to
 - [x] Two priority changes by the same person within 5 minutes make one message (first `from`, last `to`); a user message in between, or a different person, breaks the group
 - [x] System messages cannot be edited, deleted, reacted to or replied to (server refuses, UI hides the actions)
-- [ ] A person who cannot see the task never receives its messages (list, live event) — list is tested; the live event path is not tested separately
+- [x] A person who cannot see the task never receives its messages (list tested; live events of a private project go only to its project room, tested)
 - [x] A hidden custom field's values never reach the client
 - [x] Sentence is built on the client from `event` in the current language, relative time updates without reload
 - [x] "Hide changes" toggle hides only system messages and is remembered per person
