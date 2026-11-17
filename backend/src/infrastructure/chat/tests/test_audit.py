@@ -8,7 +8,9 @@ from infrastructure.chat.tests.conftest import doc
 
 
 def _actions(team: Any) -> list[str]:
-    return list(AuditEntry.objects.filter(workspace=str(team.ws.pk)).values_list("action", flat=True))
+    return list(
+        AuditEntry.objects.filter(workspace=str(team.ws.pk)).values_list("action", flat=True)
+    )
 
 
 def test_joining_and_leaving_a_channel_are_recorded(team: Any) -> None:
@@ -27,4 +29,7 @@ def test_a_message_is_recorded_without_its_text_and_a_dm_not_at_all(team: Any) -
     assert entries.count() == 1 and "secret plan" not in str(entries.first().changes)
     dm = services.open_dm(team.owner, team.ws, str(team.member.pk))
     messages.send(team.owner, team.ws, str(dm.pk), doc("private"))
-    assert AuditEntry.objects.filter(workspace=str(team.ws.pk), action="chat_message.created").count() == 1
+    assert (
+        AuditEntry.objects.filter(workspace=str(team.ws.pk), action="chat_message.created").count()
+        == 1
+    )
