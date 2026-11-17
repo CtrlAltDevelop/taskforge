@@ -31,10 +31,12 @@ class TimesheetScreen extends ConsumerStatefulWidget {
 }
 
 class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
-  late var _week = weekStartOf(widget.today ?? DateTime.now());
+  late var _week = weekStartOf(_today());
 
   /// Whose week is shown: empty for the caller.
   var _user = '';
+
+  DateTime _today() => widget.today ?? ref.read(timeNowProvider)();
 
   void _move(int weeks) => setState(() => _week = addDays(_week, 7 * weeks));
 
@@ -77,9 +79,8 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                   ),
                 TextButton(
                   key: const Key('week-this'),
-                  onPressed: () => setState(
-                    () => _week = weekStartOf(widget.today ?? DateTime.now()),
-                  ),
+                  onPressed: () =>
+                      setState(() => _week = weekStartOf(_today())),
                   child: Text(context.l10n.grpAThisWeek),
                 ),
               ],

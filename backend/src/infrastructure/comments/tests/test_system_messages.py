@@ -112,9 +112,7 @@ def test_system_messages_cannot_be_edited_deleted_reacted_or_replied_to(
         lambda: services.edit(team.owner, team.ws, pid, mid, 1, say("x")),
         lambda: services.delete(team.owner, team.ws, pid, mid),
         lambda: services.react(team.owner, team.ws, pid, mid, "👍", True),
-        lambda: services.create(
-            team.owner, team.ws, pid, str(task.pk), say("x"), parent_id=mid
-        ),
+        lambda: services.create(team.owner, team.ws, pid, str(task.pk), say("x"), parent_id=mid),
     ):
         with pytest.raises(ApiError):
             call()
