@@ -1,9 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/chart_palette.dart';
+export 'package:taskforge/core/ui/tokens/chart_palette.dart' show chartPalette;
 import 'package:ohlcv_chart/ohlcv_chart.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
 
 /// One value on a chart: [key] is what a click reports back (the bucket).
 class ChartDatum {
@@ -15,33 +18,6 @@ class ChartDatum {
 
   /// The number as the server wrote it, so the chart never rounds it again.
   final String shown;
-}
-
-/// The colours of a chart's series, the same in every chart and in both
-/// themes (picked to stay apart for the common kinds of colour blindness).
-List<Color> chartPalette(Brightness brightness) {
-  final dark = brightness == Brightness.dark;
-  return dark
-      ? const [
-          Color(0xFF6CA6FF),
-          Color(0xFFFFB454),
-          Color(0xFF5FD3A5),
-          Color(0xFFE88AB8),
-          Color(0xFFB8A2FF),
-          Color(0xFFE5E066),
-          Color(0xFF63D5E6),
-          Color(0xFFFF8A75),
-        ]
-      : const [
-          Color(0xFF1F6FEB),
-          Color(0xFFD97706),
-          Color(0xFF0E9F6E),
-          Color(0xFFC2417A),
-          Color(0xFF7C5CE6),
-          Color(0xFF9A8F00),
-          Color(0xFF0891B2),
-          Color(0xFFD9482B),
-        ];
 }
 
 Color chartColor(BuildContext context, int index) {
@@ -158,7 +134,7 @@ class _BarRow extends StatelessWidget {
                       width: math.max(2, c.maxWidth * fraction),
                       decoration: BoxDecoration(
                         color: color,
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: TfRadius.chip,
                       ),
                     ),
                   ),

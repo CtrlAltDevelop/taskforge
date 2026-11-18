@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/actions/chord.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart'
@@ -77,6 +78,9 @@ class TaskTable extends ConsumerStatefulWidget {
 
 class _TaskTableState extends ConsumerState<TaskTable> {
   final _vertical = ScrollController();
+
+  /// Rows that arrive after the first settled paint ease in; cached ones do not.
+  final _fresh = TfFreshIds();
   final _horizontal = ScrollController();
   final _focus = FocusNode(debugLabel: 'task-table');
 

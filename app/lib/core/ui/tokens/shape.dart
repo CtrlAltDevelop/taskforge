@@ -11,6 +11,12 @@ abstract final class TfRadius {
   static BorderRadius get control => BorderRadius.circular(sm);
   static BorderRadius get panel => BorderRadius.circular(md);
   static BorderRadius get dialog => BorderRadius.circular(lg);
+
+  /// A segment inside a bordered control (one hair tighter than [control]).
+  static BorderRadius get inset => BorderRadius.circular(sm - 1);
+
+  /// Fully rounded ends (switch track, progress bar).
+  static BorderRadius get pill => BorderRadius.circular(999);
 }
 
 /// Hairline border width.

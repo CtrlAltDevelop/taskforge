@@ -10,6 +10,7 @@ import 'package:taskforge/core/offline/offline_sync.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 
 /// Tells the person what the app is doing with their changes: offline (they
 /// are saved here), waiting to be sent, or needing a decision. Nothing
@@ -40,7 +41,7 @@ class OfflineBanner extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
           children: [
-            Icon(online ? Icons.sync : Icons.cloud_off_outlined, size: 16),
+            TfIcon(online ? TfIcons.refresh : TfIcons.cloudOff),
             const SizedBox(width: 10),
             Expanded(
               child: Text(_message(context.l10n, online, waiting, attention)),
@@ -104,10 +105,9 @@ class PendingMark extends ConsumerWidget {
     if (pending != true) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 6),
-      child: Icon(
-        Icons.schedule,
+      child: TfIcon(
+        TfIcons.clock,
         key: Key('pending-$id'),
-        size: 14,
         semanticLabel: context.l10n.grpHWaitingToBeSent,
       ),
     );

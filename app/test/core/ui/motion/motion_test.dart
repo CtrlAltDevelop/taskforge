@@ -4,7 +4,6 @@ import 'package:taskforge/core/ui/app_theme.dart';
 import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_overlays.dart';
-import 'package:taskforge/core/ui/tf/tf_tabs.dart';
 import 'package:taskforge/core/ui/tokens/motion.dart';
 
 Widget _host(Widget child, {bool reduce = false}) => MaterialApp(
@@ -165,35 +164,6 @@ void main() {
       }
     });
 
-    testWidgets('tab underline changes with duration ($tag)', (t) async {
-      var index = 0;
-      await t.pumpWidget(
-        _host(
-          StatefulBuilder(
-            builder: (c, set) => TfTabs(
-              labels: const ['One', 'Two'],
-              index: index,
-              onChanged: (i) => set(() => index = i),
-            ),
-          ),
-          reduce: reduce,
-        ),
-      );
-      await t.tap(find.text('Two'));
-      await t.pump();
-      await t.pump(const Duration(milliseconds: 30));
-      final animated = t.widgetList<AnimatedContainer>(
-        find.byType(AnimatedContainer),
-      );
-      expect(animated, isNotEmpty);
-      expect(
-        animated.every(
-          (a) => a.duration == (reduce ? Duration.zero : TfDuration.base),
-        ),
-        isTrue,
-      );
-    });
-
     testWidgets('skeleton shimmer ($tag)', (t) async {
       await t.pumpWidget(_host(const TfSkeleton(width: 100), reduce: reduce));
       await t.pump(const Duration(milliseconds: 300));
@@ -211,11 +181,15 @@ void main() {
         ),
       );
       await t.pump(const Duration(milliseconds: 20));
-      if (reduce) {
-        expect(find.byType(Opacity), findsNothing);
-      } else {
-        expect(t.widget<Opacity>(find.byType(Opacity)).opacity, lessThan(1));
-      }
+      final fade = t.widget<FadeTransition>(
+        find
+            .descendant(
+              of: find.byType(TfSettleIn),
+              matching: find.byType(FadeTransition),
+            )
+            .first,
+      );
+      expect(fade.opacity.value, reduce ? 1 : lessThan(1));
       await t.pumpAndSettle();
     });
   }

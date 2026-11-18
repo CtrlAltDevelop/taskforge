@@ -38,29 +38,77 @@ abstract final class TfMotion {
 }
 
 /// A freshly dropped or inserted thing eases into place: fade and a hair of
-/// scale. Off ([enabled] false) or with reduced motion it simply is there, so
-/// cached data never animates on first paint.
-class TfSettleIn extends StatelessWidget {
+/// scale. Decided once, when it is first built: [enabled] false, or reduced
+/// motion, and it simply is there, so cached data never animates on first
+/// paint. The wrapper stays in the tree either way, so a row keeps its state
+/// when it stops being "fresh".
+class TfSettleIn extends StatefulWidget {
   const TfSettleIn({super.key, required this.enabled, required this.child});
 
   final bool enabled;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final duration = enabled
-        ? TfMotion.of(context, TfDuration.base)
-        : Duration.zero;
-    if (duration == Duration.zero) return child;
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: duration,
-      curve: tfCurve,
-      builder: (context, v, child) => Opacity(
-        opacity: 0.5 + 0.5 * v,
-        child: Transform.scale(scale: 0.97 + 0.03 * v, child: child),
-      ),
-      child: child,
-    );
+  State<TfSettleIn> createState() => _TfSettleInState();
+}
+
+class _TfSettleInState extends State<TfSettleIn>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: TfDuration.base,
+    value: 1,
+  );
+  late final Animation<double> _eased = CurvedAnimation(
+    parent: _controller,
+    curve: tfCurve,
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    if (widget.enabled && !TfMotion.reduced(context)) {
+      _controller.forward(from: 0);
+    }
   }
+
+  bool _started = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: Tween<double>(begin: 0.5, end: 1).animate(_eased),
+    child: ScaleTransition(
+      scale: Tween<double>(begin: 0.97, end: 1).animate(_eased),
+      child: widget.child,
+    ),
+  );
+}
+
+/// Tells which ids of a list appeared after it was first shown. Call
+/// [update] with every id on each build (an id is fresh for that build only); ids present on the first settled
+/// build (cached data, or rows still streaming in) are never fresh.
+class TfFreshIds {
+  Set<String>? _seen;
+  Set<String> _fresh = const {};
+
+  void update(Iterable<String> ids, {bool settled = true}) {
+    final now = ids.toSet();
+    final seen = _seen;
+    if (seen == null) {
+      if (settled) _seen = now;
+      return;
+    }
+    _fresh = now.difference(seen);
+    _seen = {...seen, ...now};
+  }
+
+  bool isFresh(String id) => _fresh.contains(id);
 }

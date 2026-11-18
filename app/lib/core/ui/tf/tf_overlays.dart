@@ -6,6 +6,7 @@ import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// A centred modal: title, body, and a row of actions (cancel left of confirm).
 Future<T?> showTfDialog<T>(
@@ -22,7 +23,7 @@ Future<T?> showTfDialog<T>(
     final tf = context.tf;
     return Dialog(
       backgroundColor: tf.colors.raised,
-      surfaceTintColor: const Color(0x00000000),
+      surfaceTintColor: tfClear,
       shape: RoundedRectangleBorder(
         borderRadius: TfRadius.dialog,
         side: BorderSide(color: tf.colors.border),
@@ -76,7 +77,7 @@ Future<T?> showTfSideSheet<T>(
   context: context,
   barrierDismissible: true,
   barrierLabel: title,
-  barrierColor: const Color(0x66000000),
+  barrierColor: tfScrim,
   transitionDuration: TfMotion.of(context, TfDuration.slow),
   pageBuilder: (context, _, _) {
     final tf = context.tf;

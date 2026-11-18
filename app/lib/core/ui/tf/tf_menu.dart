@@ -5,8 +5,10 @@ import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_interactive.dart';
 import 'package:taskforge/core/ui/tf/tf_key_hint.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// One entry of a [TfMenu]. [shortcut] is shown as key caps.
 class TfMenuItem {
@@ -45,55 +47,100 @@ class TfMenu extends StatelessWidget {
       // A click outside only closes the menu; it does not also hit what is
       // under it (a window's backdrop, a row).
       consumeOutsideTap: true,
+      // The panel itself is drawn by _MenuPanelMotion (so it can fade and
+      // scale in); MenuAnchor only positions it.
       style: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(c.raised),
-        surfaceTintColor: const WidgetStatePropertyAll(Color(0x00000000)),
-        shadowColor: WidgetStatePropertyAll(TfShadow.popover.first.color),
-        elevation: const WidgetStatePropertyAll(6), // popover shadow
-        padding: const WidgetStatePropertyAll(EdgeInsets.all(TfSpace.xs)),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: TfRadius.panel,
-            side: BorderSide(color: c.border),
-          ),
-        ),
+        backgroundColor: WidgetStatePropertyAll(tfClear),
+        surfaceTintColor: WidgetStatePropertyAll(tfClear),
+        shadowColor: WidgetStatePropertyAll(tfClear),
+        elevation: WidgetStatePropertyAll(0),
+        padding: WidgetStatePropertyAll(EdgeInsets.zero),
       ),
       menuChildren: [
-        for (final item in items)
-          MenuItemButton(
-            key: item.key,
-            onPressed: item.onSelected,
-            leadingIcon: item.icon == null
-                ? null
-                : TfIcon(
-                    item.icon!,
-                    color: item.danger ? c.danger.fg : c.textMuted,
+        _MenuPanelMotion(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (final item in items)
+                MenuItemButton(
+                  key: item.key,
+                  onPressed: item.onSelected,
+                  leadingIcon: item.icon == null
+                      ? null
+                      : TfIcon(
+                          item.icon!,
+                          color: item.danger ? c.danger.fg : c.textMuted,
+                        ),
+                  trailingIcon: item.shortcut != null
+                      ? TfKeyHint(item.shortcut!)
+                      : (item.selected
+                            ? TfIcon(TfIcons.check, color: c.accent)
+                            : null),
+                  style: ButtonStyle(
+                    minimumSize: WidgetStatePropertyAll(
+                      Size(160, tf.density.rowHeight),
+                    ),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(borderRadius: TfRadius.control),
+                    ),
+                    overlayColor: WidgetStatePropertyAll(c.hover),
+                    foregroundColor: WidgetStatePropertyAll(
+                      item.danger ? c.danger.fg : c.text,
+                    ),
+                    textStyle: WidgetStatePropertyAll(tf.typography.body),
                   ),
-            trailingIcon: item.shortcut != null
-                ? TfKeyHint(item.shortcut!)
-                : (item.selected
-                      ? TfIcon(TfIcons.check, color: c.accent)
-                      : null),
-            style: ButtonStyle(
-              minimumSize: WidgetStatePropertyAll(
-                Size(160, tf.density.rowHeight),
-              ),
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: TfRadius.control),
-              ),
-              overlayColor: WidgetStatePropertyAll(c.hover),
-              foregroundColor: WidgetStatePropertyAll(
-                item.danger ? c.danger.fg : c.text,
-              ),
-              textStyle: WidgetStatePropertyAll(tf.typography.body),
-            ),
-            child: Text(item.label),
+                  child: Text(item.label),
+                ),
+            ],
           ),
+        ),
       ],
       builder: (context, controller, _) => builder(
         context,
         () => controller.isOpen ? controller.close() : controller.open(),
       ),
+    );
+  }
+}
+
+/// The menu's panel: surface, border and shadow, fading and scaling in from
+/// its top edge (instant when motion is reduced).
+class _MenuPanelMotion extends StatelessWidget {
+  const _MenuPanelMotion({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.tf.colors;
+    final panel = DecoratedBox(
+      decoration: BoxDecoration(
+        color: c.raised,
+        borderRadius: TfRadius.panel,
+        border: Border.all(color: c.border),
+        boxShadow: TfShadow.popover,
+      ),
+      child: Padding(padding: const EdgeInsets.all(TfSpace.xs), child: child),
+    );
+    final duration = TfMotion.of(context, TfDuration.base);
+    if (duration == Duration.zero) return panel;
+    return TweenAnimationBuilder<double>(
+      key: const Key('menu-motion'),
+      tween: Tween(begin: 0, end: 1),
+      duration: duration,
+      curve: tfCurve,
+      builder: (context, v, child) => Opacity(
+        opacity: v,
+        child: Transform.scale(
+          scale: 0.96 + 0.04 * v,
+          alignment: AlignmentDirectional.topStart.resolve(
+            Directionality.of(context),
+          ),
+          child: child,
+        ),
+      ),
+      child: panel,
     );
   }
 }

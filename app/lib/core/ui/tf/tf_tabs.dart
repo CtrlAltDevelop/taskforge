@@ -6,8 +6,10 @@ import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
-/// Underlined tabs: switch between views of the same thing.
-class TfTabs extends StatelessWidget {
+/// Underlined tabs: switch between views of the same thing. The underline
+/// slides to the chosen tab (instantly when motion is reduced, and on the
+/// first paint).
+class TfTabs extends StatefulWidget {
   const TfTabs({
     super.key,
     required this.labels,
@@ -20,9 +22,41 @@ class TfTabs extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   @override
+  State<TfTabs> createState() => _TfTabsState();
+}
+
+class _TfTabsState extends State<TfTabs> {
+  final _rowKey = GlobalKey();
+  List<GlobalKey> _tabKeys = const [];
+
+  /// The chosen tab's left edge and width inside the row, once measured.
+  ({double left, double width})? _span;
+  var _animate = false;
+
+  void _measure() {
+    if (!mounted || widget.index >= _tabKeys.length) return;
+    final row = _rowKey.currentContext?.findRenderObject() as RenderBox?;
+    final tab =
+        _tabKeys[widget.index].currentContext?.findRenderObject() as RenderBox?;
+    if (row == null || !row.attached || tab == null || !tab.attached) return;
+    final left = row.globalToLocal(tab.localToGlobal(Offset.zero)).dx;
+    final next = (left: left, width: tab.size.width);
+    if (next == _span) return;
+    setState(() {
+      _animate = _span != null;
+      _span = next;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tf = context.tf;
     final c = tf.colors;
+    if (_tabKeys.length != widget.labels.length) {
+      _tabKeys = [for (final _ in widget.labels) GlobalKey()];
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
+    final span = _span;
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -31,50 +65,61 @@ class TfTabs extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
+        child: Stack(
           children: [
-            for (var i = 0; i < labels.length; i++)
-              TfInteractive(
-                onTap: () => onChanged(i),
-                selected: i == index,
-                semanticLabel: labels[i],
-                builder: (context, states) => AnimatedContainer(
-                  duration: TfMotion.of(context, TfDuration.base),
-                  curve: tfCurve,
-                  constraints: BoxConstraints(
-                    minHeight: tfTarget(
-                      context,
-                      tf.density.controlHeight + TfSpace.xs,
-                    ),
-                  ),
-                  padding: EdgeInsetsDirectional.symmetric(
-                    horizontal: tf.density.padX + TfSpace.xs,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: states.contains(WidgetState.hovered)
-                        ? c.hover
-                        : null,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: i == index ? c.accent : const Color(0x00000000),
-                        width: 2,
+            Row(
+              key: _rowKey,
+              children: [
+                for (var i = 0; i < widget.labels.length; i++)
+                  TfInteractive(
+                    key: _tabKeys[i],
+                    onTap: () => widget.onChanged(i),
+                    selected: i == widget.index,
+                    semanticLabel: widget.labels[i],
+                    builder: (context, states) => Container(
+                      constraints: BoxConstraints(
+                        minHeight: tfTarget(
+                          context,
+                          tf.density.controlHeight + TfSpace.xs,
+                        ),
+                      ),
+                      padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: tf.density.padX + TfSpace.xs,
+                      ),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: states.contains(WidgetState.hovered)
+                            ? c.hover
+                            : null,
+                      ),
+                      foregroundDecoration: states.contains(WidgetState.focused)
+                          ? BoxDecoration(border: tfFocusRing(c))
+                          : null,
+                      child: Text(
+                        widget.labels[i],
+                        style: tf.typography.label.copyWith(
+                          color: i == widget.index ? c.text : c.textMuted,
+                          fontWeight: i == widget.index
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                  foregroundDecoration: states.contains(WidgetState.focused)
-                      ? BoxDecoration(border: tfFocusRing(c))
-                      : null,
-                  child: Text(
-                    labels[i],
-                    style: tf.typography.label.copyWith(
-                      color: i == index ? c.text : c.textMuted,
-                      fontWeight: i == index
-                          ? FontWeight.w600
-                          : FontWeight.w500,
-                    ),
-                  ),
-                ),
+              ],
+            ),
+            if (span != null)
+              AnimatedPositioned(
+                key: const Key('tab-underline'),
+                duration: _animate
+                    ? TfMotion.of(context, TfDuration.base)
+                    : Duration.zero,
+                curve: tfCurve,
+                left: span.left,
+                width: span.width,
+                bottom: 0,
+                height: 2,
+                child: ColoredBox(color: c.accent),
               ),
           ],
         ),
@@ -136,7 +181,7 @@ class TfSegmented<T> extends StatelessWidget {
                         : (states.contains(WidgetState.hovered)
                               ? c.hover
                               : null),
-                    borderRadius: BorderRadius.circular(TfRadius.sm - 1),
+                    borderRadius: TfRadius.inset,
                     border: states.contains(WidgetState.focused)
                         ? tfFocusRing(c)
                         : (e.key == value

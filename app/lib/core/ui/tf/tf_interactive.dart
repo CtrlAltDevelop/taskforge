@@ -24,10 +24,9 @@ double tfMinTarget(TfDensity density) => tfIsTouch
 /// Black or white, whichever reads better on [background] (text on a hue
 /// from the categorical palette).
 Color tfOnColor(Color background) =>
-    contrastRatio(const Color(0xFF000000), background) >=
-        contrastRatio(const Color(0xFFFFFFFF), background)
-    ? const Color(0xFF000000)
-    : const Color(0xFFFFFFFF);
+    contrastRatio(tfBlack, background) >= contrastRatio(tfWhite, background)
+    ? tfBlack
+    : tfWhite;
 
 /// [base] pushed toward black (light) or white (dark) for hover / pressed.
 Color tfShade(TfColors c, Color base, double amount) => Color.alphaBlend(

@@ -149,10 +149,7 @@ class TfBadge extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
       padding: const EdgeInsets.symmetric(horizontal: TfSpace.xs),
-      decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(color: fill, borderRadius: TfRadius.panel),
       alignment: Alignment.center,
       child: Text(
         count! > 99 ? '99+' : '$count',

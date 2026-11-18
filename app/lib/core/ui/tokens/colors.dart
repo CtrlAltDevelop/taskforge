@@ -217,3 +217,13 @@ double contrastRatio(Color a, Color b) {
   final lo = la > lb ? lb : la;
   return (hi + 0.05) / (lo + 0.05);
 }
+
+/// The few colours that are not part of a theme.
+const Color tfBlack = Color(0xFF000000);
+const Color tfWhite = Color(0xFFFFFFFF);
+
+/// Fully transparent (an unset fill or tint).
+const Color tfClear = Color(0x00000000);
+
+/// The dim behind a modal layer.
+const Color tfScrim = Color(0x66000000);

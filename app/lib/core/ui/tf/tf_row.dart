@@ -4,6 +4,7 @@ import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_interactive.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// A dense row for lists and tables: leading, title + subtitle, trailing.
 /// Height follows the density; hover and selection fill the whole row.
@@ -36,9 +37,7 @@ class TfRow extends StatelessWidget {
       builder: (context, states) {
         final fill = selected
             ? c.selected
-            : (states.contains(WidgetState.hovered)
-                  ? c.hover
-                  : const Color(0x00000000));
+            : (states.contains(WidgetState.hovered) ? c.hover : tfClear);
         return Container(
           constraints: BoxConstraints(
             minHeight: tfTarget(context, tf.density.rowHeight),

@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// The look of a [showTfDialog] modal as a widget, for dialogs that are their
 /// own (stateful) widgets and open with `showDialog`: title, [content] and a
@@ -38,7 +39,7 @@ class TfDialogFrame extends StatelessWidget {
     if (body != null && scrollable) body = SingleChildScrollView(child: body);
     return Dialog(
       backgroundColor: c.raised,
-      surfaceTintColor: const Color(0x00000000),
+      surfaceTintColor: tfClear,
       shape: RoundedRectangleBorder(
         borderRadius: TfRadius.dialog,
         side: BorderSide(color: c.border),

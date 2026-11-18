@@ -2,6 +2,9 @@ part of 'task_list.dart';
 
 mixin _TaskListPhone
     on ConsumerState<TaskListView>, _TaskListOps, _TaskListDrag {
+  /// Cards that arrive after the first settled paint ease in; cached ones do not.
+  final _fresh = TfFreshIds();
+
   /// The phone list: one card per task, long-press to start picking, swipe to
   /// complete or delete, pull to refresh.
   Widget _cards(
@@ -28,6 +31,10 @@ mixin _TaskListPhone
     );
     // Rows are built lazily (a list of thousands only builds what is on screen);
     // the inline add field counts as one more entry under its parent.
+    _fresh.update([
+      for (final e in entries)
+        if (e is TaskEntry) e.task.id,
+    ], settled: !state.loading);
     final items = <Object>[
       for (final entry in entries) ...[
         entry,
@@ -82,7 +89,11 @@ mixin _TaskListPhone
                 : null,
           );
           final row = _swipeable(task, tile, doneStatus, tree, can);
-          return canDrag ? _dropTarget(tree, task, layout.query, row) : row;
+          return TfSettleIn(
+            key: ValueKey('settle-${task.id}'),
+            enabled: _fresh.isFresh(task.id),
+            child: canDrag ? _dropTarget(tree, task, layout.query, row) : row,
+          );
         },
       ),
     );

@@ -88,6 +88,10 @@ class BoardColumnView extends StatefulWidget {
 class _BoardColumnViewState extends State<BoardColumnView> {
   final _scroll = ScrollController();
   final _area = GlobalKey();
+
+  /// Cards that arrive after the first paint with cards ease in; cached ones
+  /// (and a column still loading, so empty) do not.
+  final _fresh = TfFreshIds();
   late final _edge = EdgeScroller(
     controller: _scroll,
     axis: Axis.vertical,
@@ -292,6 +296,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
         key: Key('empty-${column.key}'),
       );
     }
+    _fresh.update([for (final t in tasks) t.id]);
     return ListView.builder(
       key: Key('cards-${column.key}'),
       controller: _scroll,
@@ -312,6 +317,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
           key: ValueKey(task.id),
           laneKey: widget.laneKey,
           task: task,
+          fresh: _fresh.isFresh(task.id),
           previousId: i > 0 ? tasks[i - 1].id : '',
           canMove: widget.canMove,
           longPress: widget.longPressDrag,
@@ -343,6 +349,7 @@ class _CardSlot extends StatefulWidget {
     super.key,
     required this.laneKey,
     required this.task,
+    required this.fresh,
     required this.previousId,
     required this.canMove,
     required this.longPress,
@@ -359,6 +366,9 @@ class _CardSlot extends StatefulWidget {
 
   final String laneKey;
   final Task task;
+
+  /// Arrived after the column was first shown.
+  final bool fresh;
   final String previousId;
   final bool canMove;
   final bool longPress;
@@ -381,7 +391,7 @@ class _CardSlotState extends State<_CardSlot> {
   /// into place once. Cards from cached data never do.
   static String? _justDropped;
 
-  late final bool _settle = _justDropped == widget.task.id;
+  late final bool _settle = _justDropped == widget.task.id || widget.fresh;
 
   @override
   void initState() {

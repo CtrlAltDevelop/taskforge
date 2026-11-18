@@ -4,6 +4,10 @@ part of 'task_table.dart';
 extension _TableRows on _TaskTableState {
   Widget _rows(BuildContext context, Set<String> selected) {
     final entries = widget.entries;
+    _fresh.update([
+      for (final e in entries)
+        if (e is TaskEntry) e.task.id,
+    ], settled: !widget.loading);
     final count = entries.length + (widget.loading ? 1 : 0);
     return ListView.builder(
       key: const Key('task-list'),
@@ -48,7 +52,7 @@ extension _TableRows on _TaskTableState {
 
   Widget _taskRow(BuildContext context, TaskEntry entry, bool picked) {
     final task = entry.task;
-    return TaskRow(
+    final row = TaskRow(
       entry: entry,
       layout: widget.layout,
       columns: _visible,
@@ -80,6 +84,11 @@ extension _TableRows on _TaskTableState {
       onRenameDone: _endRename,
       onAction: (a) => widget.onAction(a, task),
       wrap: widget.wrapRow,
+    );
+    return TfSettleIn(
+      key: ValueKey('settle-${task.id}'),
+      enabled: _fresh.isFresh(task.id),
+      child: row,
     );
   }
 }

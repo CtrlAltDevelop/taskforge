@@ -136,7 +136,7 @@ class _Changes extends ConsumerWidget {
             TextButton.icon(
               key: const Key('sync-now'),
               onPressed: () => ref.read(offlineSyncProvider.notifier).syncNow(),
-              icon: const Icon(Icons.sync),
+              icon: const TfIcon(TfIcons.refresh),
               label: Text(context.l10n.grpASyncNow),
             ),
           ],
@@ -146,7 +146,7 @@ class _Changes extends ConsumerWidget {
           TfTile(
             key: Key('waiting-${e.id}'),
             title: _Summary(entry: e),
-            leading: const Icon(Icons.schedule),
+            leading: const TfIcon(TfIcons.clock),
           ),
       ],
     );

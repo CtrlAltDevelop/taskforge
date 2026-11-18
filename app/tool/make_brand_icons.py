@@ -73,8 +73,6 @@ ico = Path('windows/runner/resources/app_icon.ico')
 if ico.parent.exists():
     mark(256, 'rounded').save(ico, sizes=[(s, s) for s in (16, 24, 32, 48, 64, 128, 256)])
 mark(512, 'rounded').save('linux/runner/app_icon.png')
-print('icons written')
-
 
 # ---- splash, wordmark and social card -------------------------------------
 from PIL import ImageFont  # noqa: E402
@@ -131,3 +129,22 @@ if Path('web').exists():
     card.convert('RGB').save('web/social-card.png')
 wordmark(120, INK).save('../docs/brand/taskforge-wordmark.png')
 print('splash, wordmark and social card written')
+
+# Android adaptive icon: ink background (launch_ink colour), bare mark in the
+# 66/108 safe zone, 432 px = 108 dp at xxxhdpi.
+res = Path('android/app/src/main/res')
+if res.exists():
+    (res / 'drawable-nodpi').mkdir(exist_ok=True)
+    (res / 'mipmap-anydpi-v26').mkdir(exist_ok=True)
+    fg = Image.new('RGBA', (432, 432), (0, 0, 0, 0))
+    art = bare_mark(432).resize((268, 268), Image.LANCZOS)
+    fg.paste(art, (82, 82), art)
+    fg.save(res / 'drawable-nodpi/ic_launcher_foreground.png')
+    (res / 'mipmap-anydpi-v26/ic_launcher.xml').write_text(
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
+        '    <background android:drawable="@color/launch_ink" />\n'
+        '    <foreground android:drawable="@drawable/ic_launcher_foreground" />\n'
+        '    <monochrome android:drawable="@drawable/ic_launcher_foreground" />\n'
+        '</adaptive-icon>\n')
+print('icons written')

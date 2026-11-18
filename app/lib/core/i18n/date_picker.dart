@@ -6,6 +6,7 @@ import 'package:taskforge/core/i18n/jalali.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/features/account/locale_providers.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -162,10 +163,7 @@ class _JalaliPickerDialogState extends State<_JalaliPickerDialog> {
                 IconButton(
                   key: const Key('jalali-next'),
                   tooltip: l10n.nextMonth,
-                  icon: Transform.flip(
-                    flipX: Directionality.of(context) == TextDirection.rtl,
-                    child: const Icon(Icons.chevron_right),
-                  ),
+                  icon: const TfIcon(TfIcons.chevronEnd),
                   onPressed: () => setState(() => _month = _month.addMonths(1)),
                 ),
               ],

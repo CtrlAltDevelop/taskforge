@@ -57,7 +57,7 @@ class TfButton extends StatelessWidget {
         c.borderStrong.withValues(alpha: 0.55),
       ),
       TfButtonVariant.ghost => (
-        hot > 0 ? tfShade(c, c.canvas, hot) : const Color(0x00000000),
+        hot > 0 ? tfShade(c, c.canvas, hot) : tfClear,
         c.text,
         null,
       ),

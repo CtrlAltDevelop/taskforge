@@ -108,7 +108,7 @@ class TfToggle extends StatelessWidget {
               : AlignmentDirectional.centerStart,
           decoration: BoxDecoration(
             color: value ? c.accent : c.borderStrong,
-            borderRadius: BorderRadius.circular(9),
+            borderRadius: TfRadius.pill,
             border: states.contains(WidgetState.focused)
                 ? tfFocusRing(c)
                 : null,

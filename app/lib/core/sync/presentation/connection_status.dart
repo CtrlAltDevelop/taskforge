@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 
 /// A small dot: green while changes arrive live, amber while reconnecting.
 /// Shows nothing when there is no connection to speak of.
@@ -31,7 +32,7 @@ class LiveIndicator extends ConsumerWidget {
         key: Key('live-${state.name}'),
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.circle, size: 10, color: color),
+          TfIcon(TfIcons.circle, size: 10, color: color),
           const SizedBox(width: 4),
           Text(label, style: Theme.of(context).textTheme.labelSmall),
         ],

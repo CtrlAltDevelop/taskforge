@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
 
 /// A horizontal bar for [value] from 0 to 1.
 class TfProgressBar extends StatelessWidget {
@@ -25,7 +26,7 @@ class TfProgressBar extends StatelessWidget {
       label: semanticLabel,
       value: '${(v * 100).round()}%',
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(height / 2),
+        borderRadius: TfRadius.pill,
         child: Stack(
           children: [
             Container(height: height, color: c.border),
