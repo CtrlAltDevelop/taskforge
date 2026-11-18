@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -59,7 +60,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     permission: Perm.memberView,
                     child: ListTile(
                       key: const Key('open-members'),
-                      leading: const Icon(Icons.group),
+                      leading: const TfIcon(TfIcons.users),
                       title: Text(context.l10n.grpEMembers),
                       subtitle: Text(context.l10n.grpEMembersSub),
                       onTap: () => context.push('/members'),
@@ -69,7 +70,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     permission: Perm.roleView,
                     child: ListTile(
                       key: const Key('open-roles'),
-                      leading: const Icon(Icons.admin_panel_settings),
+                      leading: const TfIcon(TfIcons.shield),
                       title: Text(context.l10n.grpERolesPerms),
                       subtitle: Text(context.l10n.grpERolesPermsSub),
                       onTap: () => context.push('/workspaces/roles'),
@@ -79,7 +80,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     permission: Perm.auditView,
                     child: ListTile(
                       key: const Key('open-audit'),
-                      leading: const Icon(Icons.fact_check_outlined),
+                      leading: const TfIcon(TfIcons.listChecks),
                       title: Text(context.l10n.grpEAuditLog),
                       subtitle: Text(context.l10n.grpEAuditLogSub),
                       onTap: () => context.push('/audit'),
@@ -89,7 +90,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     permission: Perm.dataManage,
                     child: ListTile(
                       key: const Key('open-import'),
-                      leading: const Icon(Icons.swap_vert),
+                      leading: const TfIcon(TfIcons.sort),
                       title: Text(context.l10n.grpEImportExport),
                       subtitle: Text(context.l10n.grpEImportExportSub),
                       onTap: () => context.push('/import'),
@@ -104,7 +105,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                       clipBehavior: Clip.antiAlias,
                       child: ListTile(
                         key: const Key('open-forms'),
-                        leading: const Icon(Icons.dynamic_form_outlined),
+                        leading: const TfIcon(TfIcons.form),
                         title: Text(context.l10n.formsTitle),
                         subtitle: Text(context.l10n.formsSub),
                         onTap: () => context.push('/forms'),
@@ -118,7 +119,7 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     clipBehavior: Clip.antiAlias,
                     child: ListTile(
                       key: const Key('open-developer'),
-                      leading: const Icon(Icons.code),
+                      leading: const TfIcon(TfIcons.code),
                       title: Text(context.l10n.devTitle),
                       subtitle: Text(context.l10n.devSub),
                       onTap: () => context.push('/developer'),

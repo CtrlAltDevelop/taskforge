@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -17,7 +18,7 @@ class ValidationPanel extends StatelessWidget {
       return Card(
         key: const Key('validation-ok'),
         child: ListTile(
-          leading: const Icon(Icons.check_circle, color: Colors.green),
+          leading: const TfIcon(TfIcons.success, color: Colors.green),
           title: Text(context.l10n.grpINoProblems),
           subtitle: Text(context.l10n.grpIEveryTaskValid),
         ),
@@ -42,8 +43,8 @@ class ValidationPanel extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.error_outline,
+                    TfIcon(
+                      TfIcons.error,
                       size: 18,
                       color: theme.colorScheme.error,
                     ),

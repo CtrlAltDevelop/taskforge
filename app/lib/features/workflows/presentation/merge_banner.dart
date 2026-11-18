@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -46,7 +47,7 @@ class MergeBanner extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.subdirectory_arrow_right, size: 18),
+                    const TfIcon(TfIcons.cornerDownRight, size: 18),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(

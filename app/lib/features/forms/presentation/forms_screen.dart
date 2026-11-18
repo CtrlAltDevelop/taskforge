@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -160,7 +161,7 @@ class FormsScreen extends ConsumerWidget {
               child: FilledButton.icon(
                 key: const Key('new-form'),
                 onPressed: projects.isEmpty ? null : () => _new(context, ref),
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 label: Text(context.l10n.formsNew),
               ),
             ),
@@ -176,7 +177,7 @@ class FormsScreen extends ConsumerWidget {
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: Key('form-${f.id}'),
-                  leading: const Icon(Icons.dynamic_form_outlined),
+                  leading: const TfIcon(TfIcons.form),
                   title: Text(f.name),
                   subtitle: Text(
                     [

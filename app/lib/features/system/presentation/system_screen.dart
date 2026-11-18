@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -24,14 +25,14 @@ class SystemScreen extends ConsumerWidget {
         title: Text(t.sysTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
-          icon: const Icon(Icons.arrow_back),
+          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         actions: [
           IconButton(
             key: const Key('system-refresh'),
             tooltip: t.sysCheckAgain,
-            icon: const Icon(Icons.refresh),
+            icon: const TfIcon(TfIcons.refresh),
             onPressed: () => ref.invalidate(systemInfoProvider),
           ),
         ],
@@ -181,7 +182,7 @@ class _StatusTile extends StatelessWidget {
     clipBehavior: Clip.antiAlias,
     child: ListTile(
       leading: Icon(
-        good ? Icons.check_circle_outline : Icons.error_outline,
+        good ? TfIcons.success.glyph : TfIcons.error.glyph,
         color: good ? Colors.green : Theme.of(context).colorScheme.error,
       ),
       title: Text(label),

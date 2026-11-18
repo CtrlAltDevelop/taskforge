@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -110,14 +112,14 @@ class GoalsScreen extends ConsumerWidget {
             IconButton(
               key: const Key('new-folder'),
               tooltip: t.goalsNewFolder,
-              icon: const Icon(Icons.create_new_folder_outlined),
+              icon: const TfIcon(TfIcons.folderPlus),
               onPressed: () => _newFolder(context, ref),
             ),
           if (perms.can(Perm.goalCreate))
             IconButton(
               key: const Key('new-goal'),
               tooltip: t.goalsNew,
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               onPressed: goals.hasValue
                   ? () => _newGoal(context, ref, catalog)
                   : null,
@@ -195,7 +197,7 @@ class _FolderHeader extends StatelessWidget {
       padding: const EdgeInsets.only(top: 12, bottom: 4),
       child: Row(
         children: [
-          const Icon(Icons.folder_outlined, size: 18),
+          const TfIcon(TfIcons.folder, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -242,7 +244,7 @@ class GoalTile extends StatelessWidget {
       child: Card(
         child: InkWell(
           key: Key('goal-${goal.id}'),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: TfRadius.dialog,
           onTap: () => context.push('/goals/${goal.id}'),
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -254,7 +256,7 @@ class GoalTile extends StatelessWidget {
                     if (goal.private)
                       const Padding(
                         padding: EdgeInsetsDirectional.only(end: 6),
-                        child: Icon(Icons.lock_outline, size: 16),
+                        child: TfIcon(TfIcons.lock, size: 16),
                       ),
                     Expanded(
                       child: Text(

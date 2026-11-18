@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -80,7 +81,7 @@ class MembersSection extends ConsumerWidget {
               TextButton.icon(
                 key: const Key('add-project-member'),
                 onPressed: canManage ? () => _add(context, ref) : null,
-                icon: const Icon(Icons.person_add),
+                icon: const TfIcon(TfIcons.userPlus),
                 label: Text(context.l10n.grpHAddMember),
               ),
           ],
@@ -104,7 +105,7 @@ class MembersSection extends ConsumerWidget {
                         ? IconButton(
                             key: Key('remove-project-member-${m.userId}'),
                             tooltip: context.l10n.grpHRemove,
-                            icon: const Icon(Icons.person_remove),
+                            icon: const TfIcon(TfIcons.userMinus),
                             onPressed: canManage
                                 ? () => runProjectAction(
                                     context,

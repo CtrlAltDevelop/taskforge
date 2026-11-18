@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -36,7 +37,7 @@ class SecurityScreen extends ConsumerWidget {
         title: Text(t.secTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
-          icon: const Icon(Icons.arrow_back),
+          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
@@ -61,7 +62,7 @@ class SecurityScreen extends ConsumerWidget {
                 child: Center(child: CircularProgressIndicator()),
               ),
               error: (e, _) => ListTile(
-                leading: const Icon(Icons.error_outline),
+                leading: const TfIcon(TfIcons.error),
                 title: Text(securityErrorMessage(e, t)),
                 trailing: TextButton(
                   onPressed: () => ref.invalidate(secondFactorStatusProvider),
@@ -77,7 +78,7 @@ class SecurityScreen extends ConsumerWidget {
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: const Key('open-sso-setup'),
-                  leading: const Icon(Icons.badge_outlined),
+                  leading: const TfIcon(TfIcons.idCard),
                   title: Text(t.ssoTitle),
                   subtitle: Text(t.ssoSub),
                   onTap: () => context.push('/settings/sso'),
@@ -106,7 +107,7 @@ class _Banner extends StatelessWidget {
       backgroundColor: error
           ? colors.errorContainer
           : colors.surfaceContainerHighest,
-      leading: Icon(error ? Icons.lock_outline : Icons.info_outline),
+      leading: Icon(error ? TfIcons.lock.glyph : TfIcons.info.glyph),
       content: Text(text),
       actions: const [SizedBox.shrink()],
     );
@@ -181,7 +182,7 @@ class _TwoFactorSection extends ConsumerWidget {
           clipBehavior: Clip.antiAlias,
           child: ListTile(
             leading: Icon(
-              status.enabled ? Icons.verified_user : Icons.shield_outlined,
+              status.enabled ? TfIcons.shield.glyph : TfIcons.shield.glyph,
             ),
             title: Text(t.secTwoStep),
             subtitle: Text(status.enabled ? t.secOn : t.secOff),
@@ -209,7 +210,7 @@ class _TwoFactorSection extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             clipBehavior: Clip.antiAlias,
             child: ListTile(
-              leading: const Icon(Icons.password),
+              leading: const TfIcon(TfIcons.key),
               title: Text(t.secRecoveryTitle),
               subtitle: Text(t.secCodesLeft(status.unusedRecoveryCodes)),
               trailing: TextButton(
@@ -223,7 +224,7 @@ class _TwoFactorSection extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             clipBehavior: Clip.antiAlias,
             child: ListTile(
-              leading: const Icon(Icons.devices_other),
+              leading: const TfIcon(TfIcons.devices),
               title: Text(t.secDevices),
               subtitle: Text(
                 status.devices.isEmpty ? t.secNoDevices : t.secDevicesSub,
@@ -252,7 +253,7 @@ class _TwoFactorSection extends ConsumerWidget {
                     : Text(t.secDeviceUntil(context.localDate(d.expiresAt!))),
                 trailing: IconButton(
                   tooltip: t.secForget,
-                  icon: const Icon(Icons.delete_outline),
+                  icon: const TfIcon(TfIcons.trash),
                   onPressed: () => _revoke(context, ref, d.id),
                 ),
               ),

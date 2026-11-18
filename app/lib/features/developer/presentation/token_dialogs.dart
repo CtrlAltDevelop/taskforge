@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -213,7 +214,7 @@ class _SecretDialogState extends State<_SecretDialog> {
         TextButton.icon(
           key: const Key('copy-secret'),
           onPressed: _copy,
-          icon: Icon(_copied ? Icons.check : Icons.copy),
+          icon: TfIcon(_copied ? TfIcons.check : TfIcons.copy),
           label: Text(_copied ? context.l10n.devCopied : context.l10n.devCopy),
         ),
         FilledButton(

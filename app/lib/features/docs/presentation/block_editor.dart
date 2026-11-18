@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -182,7 +183,7 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
     tooltip: context.l10n.grpJBlockOptions,
     iconSize: 18,
     padding: EdgeInsets.zero,
-    icon: const Icon(Icons.drag_indicator, size: 18),
+    icon: const TfIcon(TfIcons.grip, size: 18),
     onSelected: (a) => _menu(b, a),
     itemBuilder: (_) => [
       PopupMenuItem(value: 'up', child: Text(context.l10n.grpJMoveUp)),
@@ -313,7 +314,7 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               key: const Key('add-block'),
-              icon: const Icon(Icons.add, size: 16),
+              icon: const TfIcon(TfIcons.plus, size: 16),
               label: Text(context.l10n.grpJAddBlock),
               onPressed: () {
                 final b = DocBlock.create(BlockType.paragraph);

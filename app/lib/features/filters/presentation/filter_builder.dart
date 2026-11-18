@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
@@ -117,7 +119,7 @@ class _GroupView extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: scheme.outlineVariant),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: TfRadius.panel,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -154,7 +156,7 @@ class _GroupView extends StatelessWidget {
                 IconButton(
                   key: Key('remove-group-$_id'),
                   tooltip: context.l10n.grpDRemoveGroup,
-                  icon: const Icon(Icons.close),
+                  icon: const TfIcon(TfIcons.close),
                   onPressed: () => edit(path, (_) => null),
                 ),
             ],
@@ -189,7 +191,7 @@ class _GroupView extends StatelessWidget {
             children: [
               TextButton.icon(
                 key: Key('add-condition-$_id'),
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 label: Text(context.l10n.grpDCondition),
                 onPressed: () => edit(
                   path,
@@ -201,7 +203,7 @@ class _GroupView extends StatelessWidget {
               if (path.length < _maxDepth - 1)
                 TextButton.icon(
                   key: Key('add-group-$_id'),
-                  icon: const Icon(Icons.account_tree_outlined),
+                  icon: const TfIcon(TfIcons.workflow),
                   label: Text(context.l10n.grpDGroup),
                   onPressed: () => edit(
                     path,
@@ -306,7 +308,7 @@ class _ConditionRow extends StatelessWidget {
         IconButton(
           key: Key('remove-row-$id'),
           tooltip: context.l10n.grpDRemoveCondition,
-          icon: const Icon(Icons.delete_outline),
+          icon: const TfIcon(TfIcons.trash),
           onPressed: onRemove,
         ),
       ],
@@ -557,7 +559,7 @@ class _DateValueState extends State<_DateValue> {
         hintText: 'today, +7d, 2026-11-05',
         suffixIcon: IconButton(
           tooltip: context.l10n.grpDPickDate,
-          icon: const Icon(Icons.calendar_today, size: 16),
+          icon: const TfIcon(TfIcons.calendar, size: 16),
           onPressed: _pick,
         ),
       ),
@@ -629,7 +631,7 @@ class _OrderView extends StatelessWidget {
             IconButton(
               key: Key('remove-order-$i'),
               tooltip: context.l10n.grpDRemoveOrdering,
-              icon: const Icon(Icons.close),
+              icon: const TfIcon(TfIcons.close),
               onPressed: () => onChanged([
                 for (var k = 0; k < order.length; k++)
                   if (k != i) order[k],
@@ -640,7 +642,7 @@ class _OrderView extends StatelessWidget {
       if (fields.isNotEmpty)
         TextButton.icon(
           key: const Key('add-order'),
-          icon: const Icon(Icons.sort),
+          icon: const TfIcon(TfIcons.sort),
           label: Text(context.l10n.grpDOrderBy),
           onPressed: () => onChanged([...order, FilterOrder(fields.first.ref)]),
         ),

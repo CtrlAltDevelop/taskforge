@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +49,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
                 key: const Key('switcher-badge'),
                 isLabelVisible: elsewhere > 0,
                 label: Text('$elsewhere'),
-                child: const Icon(Icons.arrow_drop_down),
+                child: const TfIcon(TfIcons.chevronDown),
               ),
             ],
           );
@@ -91,7 +92,9 @@ class WorkspaceSwitcher extends ConsumerWidget {
                 ListTile(
                   key: Key('switch-${w.id}'),
                   title: Text(w.name),
-                  trailing: w.id == current.id ? const Icon(Icons.check) : null,
+                  trailing: w.id == current.id
+                      ? const TfIcon(TfIcons.check)
+                      : null,
                   onTap: () {
                     select(w.id);
                     Navigator.of(sheet).pop();
@@ -99,7 +102,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
                 ),
               ListTile(
                 key: const Key('new-workspace'),
-                leading: const Icon(Icons.add),
+                leading: const TfIcon(TfIcons.plus),
                 title: Text(context.l10n.grpJCreateWorkspace),
                 onTap: () {
                   Navigator.of(sheet).pop();

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -140,20 +141,20 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
                       key: const Key('time-stop'),
                       onPressed: () =>
                           _do(() async => ref.read(timeActionsProvider).stop()),
-                      icon: const Icon(Icons.stop),
+                      icon: const TfIcon(TfIcons.stop),
                       label: Text(context.l10n.grpJStop),
                     )
                   : FilledButton.tonalIcon(
                       key: const Key('time-start'),
                       onPressed: _busy ? null : _start,
-                      icon: const Icon(Icons.play_arrow),
+                      icon: const TfIcon(TfIcons.play),
                       label: Text(context.l10n.grpJStartTimer),
                     ),
             if (canLog)
               IconButton(
                 key: const Key('time-add'),
                 tooltip: context.l10n.grpJAddTime,
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 onPressed: _add,
               ),
           ],
@@ -269,7 +270,7 @@ class _EntryTile extends StatelessWidget {
         dense: true,
         contentPadding: EdgeInsets.zero,
         leading: Icon(
-          entry.running ? Icons.timer : Icons.schedule,
+          entry.running ? TfIcons.timer.glyph : TfIcons.clock.glyph,
           semanticLabel: entry.running
               ? context.l10n.grpJRunning
               : context.l10n.grpJLoggedLabel,
@@ -304,13 +305,13 @@ class _EntryTile extends StatelessWidget {
                   IconButton(
                     key: Key('edit-${entry.id}'),
                     tooltip: context.l10n.grpJEdit,
-                    icon: const Icon(Icons.edit_outlined),
+                    icon: const TfIcon(TfIcons.edit),
                     onPressed: onEdit,
                   ),
                   IconButton(
                     key: Key('delete-${entry.id}'),
                     tooltip: context.l10n.grpJDelete,
-                    icon: const Icon(Icons.delete_outline),
+                    icon: const TfIcon(TfIcons.trash),
                     onPressed: onDelete,
                   ),
                 ],

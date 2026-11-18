@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -96,7 +97,7 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                 if (task.parentId.isNotEmpty)
                   ListTile(
                     key: const Key('pick-parent-top'),
-                    leading: const Icon(Icons.vertical_align_top),
+                    leading: const TfIcon(TfIcons.arrowUpToLine),
                     title: Text(context.l10n.grpFTopLevel),
                     onTap: () => Navigator.pop(context, ''),
                   ),

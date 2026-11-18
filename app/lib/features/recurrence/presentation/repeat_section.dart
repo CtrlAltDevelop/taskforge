@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,7 +42,7 @@ class RepeatSection extends ConsumerWidget {
         alignment: AlignmentDirectional.centerStart,
         child: ActionChip(
           key: const Key('repeat-chip'),
-          avatar: const Icon(Icons.repeat, size: 18),
+          avatar: const TfIcon(TfIcons.repeat, size: 18),
           label: Text(context.l10n.grpHRepeat),
           onPressed: () => showRepeatEditor(context, task: task),
         ),
@@ -59,7 +60,7 @@ class RepeatSection extends ConsumerWidget {
             ActionChip(
               key: const Key('repeat-chip'),
               avatar: Icon(
-                found.paused ? Icons.pause_circle_outline : Icons.repeat,
+                found.paused ? TfIcons.circlePause.glyph : TfIcons.repeat.glyph,
                 size: 18,
               ),
               label: Text(found.summary),

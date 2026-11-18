@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
@@ -353,10 +354,10 @@ class _DateInput extends StatelessWidget {
         suffixIcon: clearable && value.isNotEmpty && enabled
             ? IconButton(
                 tooltip: context.l10n.grpIClear,
-                icon: const Icon(Icons.clear),
+                icon: const TfIcon(TfIcons.close),
                 onPressed: () => onChanged(''),
               )
-            : const Icon(Icons.calendar_today, size: 18),
+            : const TfIcon(TfIcons.calendar, size: 18),
       ),
       child: Text(value.isEmpty ? ' ' : value),
     ),
@@ -408,7 +409,7 @@ class _Choice<T> extends StatelessWidget {
           child: Row(
             children: [
               if (i.color != null) ...[
-                Icon(Icons.circle, size: 12, color: i.color),
+                TfIcon(TfIcons.circle, size: 12, color: i.color),
                 const SizedBox(width: 8),
               ],
               Flexible(child: Text(i.label, overflow: TextOverflow.ellipsis)),
@@ -453,7 +454,7 @@ class _MultiChoice extends StatelessWidget {
             key: Key('option-${o.id}'),
             avatar: optionColor(o) == null
                 ? null
-                : Icon(Icons.circle, size: 12, color: optionColor(o)),
+                : TfIcon(TfIcons.circle, size: 12, color: optionColor(o)),
             label: Text(o.label),
             selected: selected.contains(o.id),
             onSelected: enabled

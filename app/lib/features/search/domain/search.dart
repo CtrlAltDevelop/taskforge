@@ -1,25 +1,29 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
-import 'package:material_ui/material_ui.dart' show IconData, Icons;
+import 'package:material_ui/material_ui.dart' show IconData;
 
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// What can be found. [wire] is what the server calls it.
 enum SearchKind {
-  task('task', 'Tasks', Icons.check_circle_outline),
-  comment('comment', 'Comments', Icons.chat_bubble_outline),
-  project('project', 'Projects', Icons.folder_outlined),
-  member('member', 'People', Icons.person_outline),
-  doc('doc', 'Pages', Icons.description_outlined);
+  task('task', 'Tasks', TfIcons.success),
+  comment('comment', 'Comments', TfIcons.chat),
+  project('project', 'Projects', TfIcons.folder),
+  member('member', 'People', TfIcons.user),
+  doc('doc', 'Pages', TfIcons.file);
 
-  const SearchKind(this.wire, this.label, this.icon);
+  const SearchKind(this.wire, this.label, this.tfIcon);
 
   final String wire;
 
   /// The English name; [labelIn] gives it in the language on screen.
   final String label;
-  final IconData icon;
+  final TfIconData tfIcon;
+
+  IconData get icon => tfIcon.glyph;
 
   String labelIn(AppLocalizations l10n) => switch (this) {
     task => l10n.grpFKindTasks,

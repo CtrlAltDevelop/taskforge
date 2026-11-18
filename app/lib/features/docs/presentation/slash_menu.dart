@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -18,7 +20,7 @@ class SlashItem {
 
   final String id;
   final String label;
-  final IconData icon;
+  final TfIconData icon;
   final String type;
   final Map<String, Object?> attrs;
 
@@ -60,14 +62,14 @@ const slashItems = [
   SlashItem(
     'text',
     'Text',
-    Icons.notes,
+    TfIcons.alignLeft,
     BlockType.paragraph,
     words: 'paragraph',
   ),
   SlashItem(
     'h1',
     'Heading 1',
-    Icons.title,
+    TfIcons.heading,
     BlockType.heading,
     attrs: {'level': 1},
     words: 'heading',
@@ -75,7 +77,7 @@ const slashItems = [
   SlashItem(
     'h2',
     'Heading 2',
-    Icons.title,
+    TfIcons.heading,
     BlockType.heading,
     attrs: {'level': 2},
     words: 'heading',
@@ -83,7 +85,7 @@ const slashItems = [
   SlashItem(
     'h3',
     'Heading 3',
-    Icons.title,
+    TfIcons.heading,
     BlockType.heading,
     attrs: {'level': 3},
     words: 'heading',
@@ -91,52 +93,46 @@ const slashItems = [
   SlashItem(
     'bullet',
     'Bulleted list',
-    Icons.format_list_bulleted,
+    TfIcons.list,
     BlockType.bullet,
     words: 'list',
   ),
   SlashItem(
     'numbered',
     'Numbered list',
-    Icons.format_list_numbered,
+    TfIcons.listOrdered,
     BlockType.numbered,
     words: 'list',
   ),
   SlashItem(
     'todo',
     'Checklist',
-    Icons.checklist,
+    TfIcons.listChecks,
     BlockType.checklist,
     words: 'check task list',
   ),
-  SlashItem('quote', 'Quote', Icons.format_quote, BlockType.quote),
-  SlashItem('code', 'Code', Icons.code, BlockType.code),
-  SlashItem('table', 'Table', Icons.table_chart_outlined, BlockType.table),
+  SlashItem('quote', 'Quote', TfIcons.quote, BlockType.quote),
+  SlashItem('code', 'Code', TfIcons.code, BlockType.code),
+  SlashItem('table', 'Table', TfIcons.table, BlockType.table),
   SlashItem(
     'divider',
     'Divider',
-    Icons.horizontal_rule,
+    TfIcons.minus,
     BlockType.divider,
     words: 'line',
   ),
-  SlashItem(
-    'image',
-    'Image',
-    Icons.image_outlined,
-    BlockType.image,
-    words: 'picture',
-  ),
+  SlashItem('image', 'Image', TfIcons.image, BlockType.image, words: 'picture'),
   SlashItem(
     'callout',
     'Callout',
-    Icons.info_outline,
+    TfIcons.info,
     BlockType.callout,
     words: 'note',
   ),
   SlashItem(
     'task',
     'Task card',
-    Icons.task_alt,
+    TfIcons.success,
     BlockType.taskCard,
     words: 'embed task',
   ),
@@ -160,7 +156,7 @@ class SlashMenu extends StatelessWidget {
     return Material(
       key: const Key('slash-menu'),
       elevation: 3,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: TfRadius.panel,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty
@@ -175,7 +171,7 @@ class SlashMenu extends StatelessWidget {
                     ListTile(
                       key: Key('slash-${i.id}'),
                       dense: true,
-                      leading: Icon(i.icon, size: 20),
+                      leading: TfIcon(i.icon, size: 20),
                       title: Text(i.labelIn(context.l10n)),
                       onTap: () => onPick(i),
                     ),
@@ -210,7 +206,7 @@ class PagePicker extends StatelessWidget {
     return Material(
       key: const Key('page-picker'),
       elevation: 3,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: TfRadius.panel,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty

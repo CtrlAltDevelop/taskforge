@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,7 +113,7 @@ class WebhooksTab extends ConsumerWidget {
             child: FilledButton.icon(
               key: const Key('new-webhook'),
               onPressed: () => _edit(context, ref, null),
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               label: Text(context.l10n.devWebhookNew),
             ),
           ),
@@ -125,8 +126,8 @@ class WebhooksTab extends ConsumerWidget {
             Card(
               key: Key('webhook-${h.id}'),
               child: ListTile(
-                leading: Icon(
-                  h.active ? Icons.webhook : Icons.link_off,
+                leading: TfIcon(
+                  h.active ? TfIcons.webhook : TfIcons.unlink,
                   color: h.active ? null : Theme.of(context).disabledColor,
                 ),
                 title: Text(h.title),

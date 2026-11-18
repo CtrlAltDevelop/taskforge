@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -246,7 +247,7 @@ List<Widget> _listChildren(
         alignment: AlignmentDirectional.centerStart,
         child: OutlinedButton.icon(
           key: const Key('add-status'),
-          icon: const Icon(Icons.add),
+          icon: const TfIcon(TfIcons.plus),
           label: Text(context.l10n.grpIAddStatus),
           onPressed: () => notifier.edit(
             (d) => d.add(

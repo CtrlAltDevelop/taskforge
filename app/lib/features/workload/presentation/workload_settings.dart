@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -198,7 +199,7 @@ class _CapacityTab extends ConsumerWidget {
               trailing: manage
                   ? IconButton(
                       tooltip: t.wlSetCapacity,
-                      icon: const Icon(Icons.edit_outlined),
+                      icon: const TfIcon(TfIcons.edit),
                       onPressed: () => editCapacity(
                         context,
                         ref,
@@ -282,7 +283,7 @@ class _TimeOffTab extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('add-time-off'),
         onPressed: () => _add(context, ref, null),
-        icon: const Icon(Icons.add),
+        icon: const TfIcon(TfIcons.plus),
         label: Text(t.wlAddTimeOff),
       ),
       body: rows.when(
@@ -315,7 +316,7 @@ class _TimeOffTab extends ConsumerWidget {
                       trailing: manage || r.userId == me
                           ? IconButton(
                               tooltip: t.wlDelete,
-                              icon: const Icon(Icons.delete_outline),
+                              icon: const TfIcon(TfIcons.trash),
                               onPressed: () => _delete(context, ref, r),
                             )
                           : null,
@@ -412,7 +413,7 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
             const SizedBox(height: 8),
             OutlinedButton.icon(
               key: const Key('time-off-dates'),
-              icon: const Icon(Icons.date_range),
+              icon: const TfIcon(TfIcons.calendarRange),
               label: Text(
                 '${context.localDate(_start)} – ${context.localDate(_end)}',
               ),
@@ -507,7 +508,7 @@ class _HolidaysTab extends ConsumerWidget {
           ? FloatingActionButton.extended(
               key: const Key('add-holiday'),
               onPressed: () => _edit(context, ref, null),
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               label: Text(t.wlAddHoliday),
             )
           : null,
@@ -533,7 +534,7 @@ class _HolidaysTab extends ConsumerWidget {
                       trailing: manage
                           ? IconButton(
                               tooltip: t.wlDelete,
-                              icon: const Icon(Icons.delete_outline),
+                              icon: const TfIcon(TfIcons.trash),
                               onPressed: () => _delete(context, ref, h),
                             )
                           : null,
@@ -590,7 +591,7 @@ class _HolidayDialogState extends State<_HolidayDialog> {
           ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
-            icon: const Icon(Icons.event),
+            icon: const TfIcon(TfIcons.calendar),
             label: Text(context.localDate(_date)),
             onPressed: _pick,
           ),

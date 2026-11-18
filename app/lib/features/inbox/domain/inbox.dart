@@ -1,8 +1,10 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
-import 'package:material_ui/material_ui.dart' show IconData, Icons;
+import 'package:material_ui/material_ui.dart' show IconData;
 
 import 'package:taskforge/core/i18n/formatting.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
@@ -10,15 +12,15 @@ import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 /// The kinds of notification the server sends (its `type` and `event_type`).
 enum NotificationKind {
-  assigned('task.assigned', 'Assigned to you', Icons.assignment_ind_outlined),
-  mentioned('user.mentioned', 'Mentions', Icons.alternate_email),
-  commented('comment.added', 'Comments', Icons.chat_bubble_outline),
-  statusChanged('status.changed', 'Status changes', Icons.swap_horiz),
-  dueSoon('task.due_soon', 'Due soon', Icons.schedule),
-  timerLong('timer.long', 'Long timers', Icons.timer_outlined),
-  unknown('', 'Notification', Icons.notifications_none);
+  assigned('task.assigned', 'Assigned to you', TfIcons.idCard),
+  mentioned('user.mentioned', 'Mentions', TfIcons.atSign),
+  commented('comment.added', 'Comments', TfIcons.chat),
+  statusChanged('status.changed', 'Status changes', TfIcons.arrowLeftRight),
+  dueSoon('task.due_soon', 'Due soon', TfIcons.clock),
+  timerLong('timer.long', 'Long timers', TfIcons.timer),
+  unknown('', 'Notification', TfIcons.bell);
 
-  const NotificationKind(this.wire, this.label, this.icon);
+  const NotificationKind(this.wire, this.label, this.tfIcon);
 
   final String wire;
   final String label;
@@ -33,7 +35,9 @@ enum NotificationKind {
     timerLong => l.grpMNkTimerLong,
     unknown => l.grpMNkUnknown,
   };
-  final IconData icon;
+  final TfIconData tfIcon;
+
+  IconData get icon => tfIcon.glyph;
 
   static NotificationKind of(String type) => values.firstWhere(
     (k) => k.wire == type && k != unknown,

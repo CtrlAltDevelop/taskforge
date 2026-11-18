@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -50,7 +52,7 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
           child: TextField(
             key: const Key('chat-search'),
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: const TfIcon(TfIcons.search),
               hintText: l10n.chatSearchHint,
               isDense: true,
               border: const OutlineInputBorder(),
@@ -102,13 +104,13 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
         style: Theme.of(context).textTheme.labelLarge,
       ),
     );
-    Widget tile(Space s, IconData icon) {
+    Widget tile(Space s, TfIconData icon) {
       final title = spaceTitle(s, members, l10n);
       return ListTile(
         key: Key('space-${s.id}'),
         dense: true,
         selected: s.id == widget.selectedId,
-        leading: Icon(icon, size: 20),
+        leading: TfIcon(icon, size: 20),
         title: Text(
           title,
           overflow: TextOverflow.ellipsis,
@@ -120,11 +122,7 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (s.isMuted(now))
-              Icon(
-                Icons.notifications_off_outlined,
-                size: 16,
-                semanticLabel: l10n.chatMuted,
-              ),
+              TfIcon(TfIcons.bellOff, size: 16, semanticLabel: l10n.chatMuted),
             if (s.unreadCount > 0)
               Badge(
                 key: Key('unread-${s.id}'),
@@ -141,15 +139,15 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
       children: [
         if (list.channels.isNotEmpty) ...[
           header(l10n.chatSectionChannels, 'section-channels'),
-          for (final s in list.channels) tile(s, Icons.tag),
+          for (final s in list.channels) tile(s, TfIcons.tag),
         ],
         if (list.groups.isNotEmpty) ...[
           header(l10n.chatSectionGroups, 'section-groups'),
-          for (final s in list.groups) tile(s, Icons.lock_outline),
+          for (final s in list.groups) tile(s, TfIcons.lock),
         ],
         if (list.dms.isNotEmpty) ...[
           header(l10n.chatSectionDms, 'section-dms'),
-          for (final s in list.dms) tile(s, Icons.person_outline),
+          for (final s in list.dms) tile(s, TfIcons.user),
         ],
         if (list.taskChats.isNotEmpty) ...[
           header(l10n.chatSectionTaskChats, 'section-task-chats'),
@@ -157,7 +155,7 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
             ListTile(
               key: Key('task-chat-${t.taskId}'),
               dense: true,
-              leading: const Icon(Icons.check_circle_outline, size: 20),
+              leading: const TfIcon(TfIcons.success, size: 20),
               title: Text(t.title, overflow: TextOverflow.ellipsis),
               subtitle: t.displayId.isEmpty ? null : Text(t.displayId),
               onTap: () => widget.onOpenTask(t),
@@ -183,7 +181,7 @@ class _ListSkeleton extends StatelessWidget {
               height: 12,
               decoration: BoxDecoration(
                 color: grey,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: TfRadius.chip,
               ),
             ),
           ),

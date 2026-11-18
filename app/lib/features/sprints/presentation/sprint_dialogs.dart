@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -223,7 +224,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpASprintStartLabel,
                   suffixIcon: IconButton(
                     tooltip: context.l10n.grpAPickStartDate,
-                    icon: const Icon(Icons.calendar_today),
+                    icon: const TfIcon(TfIcons.calendar),
                     onPressed: () => _pick(_start),
                   ),
                 ),
@@ -237,7 +238,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpASprintEndLabel,
                   suffixIcon: IconButton(
                     tooltip: context.l10n.grpAPickEndDate,
-                    icon: const Icon(Icons.calendar_today),
+                    icon: const TfIcon(TfIcons.calendar),
                     onPressed: () => _pick(_end),
                   ),
                 ),

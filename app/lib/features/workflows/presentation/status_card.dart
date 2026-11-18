@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -74,8 +75,8 @@ class StatusCard extends StatelessWidget {
                   enabled: canEdit,
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.drag_handle,
+                    child: TfIcon(
+                      TfIcons.grip,
                       key: Key('status-handle-$key'),
                       semanticLabel: context.l10n.grpIDragToReorder,
                     ),
@@ -92,7 +93,7 @@ class StatusCard extends StatelessWidget {
                         value: c,
                         child: Row(
                           children: [
-                            Icon(Icons.circle, color: parseStatusColor(c)),
+                            TfIcon(TfIcons.circle, color: parseStatusColor(c)),
                             const SizedBox(width: 12),
                             Text(c),
                           ],
@@ -101,8 +102,8 @@ class StatusCard extends StatelessWidget {
                   ],
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.circle,
+                    child: TfIcon(
+                      TfIcons.circle,
                       color: parseStatusColor(status.color),
                     ),
                   ),
@@ -120,13 +121,15 @@ class StatusCard extends StatelessWidget {
                   tooltip: status.isDefault
                       ? context.l10n.grpINewTasksStartHere
                       : context.l10n.grpIMakeDefaultStatus,
-                  icon: Icon(status.isDefault ? Icons.star : Icons.star_border),
+                  icon: Icon(
+                    status.isDefault ? TfIcons.star.glyph : TfIcons.star.glyph,
+                  ),
                   onPressed: canEdit && !status.isDefault ? onDefault : null,
                 ),
                 IconButton(
                   key: Key('status-delete-$key'),
                   tooltip: context.l10n.grpIDeleteStatus,
-                  icon: const Icon(Icons.delete_outline),
+                  icon: const TfIcon(TfIcons.trash),
                   onPressed: canEdit ? onDelete : null,
                 ),
               ],
@@ -244,7 +247,7 @@ class _MoveChip extends StatelessWidget {
             key: Key('conditions-${from.key}-${to.key}'),
             tooltip: context.l10n.grpIConditionsForMove,
             visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.tune, size: 18),
+            icon: const TfIcon(TfIcons.tune, size: 18),
             onPressed: onConditions,
           ),
       ],

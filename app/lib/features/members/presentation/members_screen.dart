@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,7 @@ class MembersScreen extends ConsumerWidget {
               disabledWhenDenied: true,
               child: TextButton.icon(
                 key: const Key('open-invite'),
-                icon: const Icon(Icons.person_add),
+                icon: const TfIcon(TfIcons.userPlus),
                 label: Text(context.l10n.grpJInvite),
                 onPressed: () => showDialog<void>(
                   context: context,
@@ -159,7 +160,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                   permission: Perm.memberRemove,
                   child: TextButton.icon(
                     key: const Key('profile-remove'),
-                    icon: const Icon(Icons.person_remove),
+                    icon: const TfIcon(TfIcons.userMinus),
                     label: Text(context.l10n.grpJRemoveFromWorkspace),
                     onPressed: () {
                       Navigator.of(sheet).pop();
@@ -219,7 +220,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
             TextField(
               key: const Key('member-search'),
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const TfIcon(TfIcons.search),
                 labelText: context.l10n.grpJSearchMembers,
               ),
               onChanged: (v) => setState(() => _query = v),
@@ -248,7 +249,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                           child: IconButton(
                             key: Key('remove-${m.userId}'),
                             tooltip: context.l10n.grpJRemoveMember(m.label),
-                            icon: const Icon(Icons.person_remove),
+                            icon: const TfIcon(TfIcons.userMinus),
                             onPressed: () => _remove(workspace.id, m),
                           ),
                         ),
@@ -263,7 +264,7 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: const Key('owner-cannot-leave'),
-                  leading: const Icon(Icons.info_outline),
+                  leading: const TfIcon(TfIcons.info),
                   title: Text(context.l10n.grpJOwnerCannotLeave),
                 ),
               )

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -87,7 +88,7 @@ class RelatedDocsPanel extends ConsumerWidget {
               IconButton(
                 key: const Key('add-related-doc'),
                 tooltip: context.l10n.grpJLinkAPage,
-                icon: const Icon(Icons.post_add),
+                icon: const TfIcon(TfIcons.filePlus),
                 onPressed: () => _add(context, ref),
               ),
           ],
@@ -113,7 +114,7 @@ class RelatedDocsPanel extends ConsumerWidget {
                   ? IconButton(
                       key: Key('unlink-doc-${r.doc.id}'),
                       tooltip: context.l10n.grpJUnlink,
-                      icon: const Icon(Icons.link_off, size: 18),
+                      icon: const TfIcon(TfIcons.unlink, size: 18),
                       onPressed: () => _unlink(context, ref, r.doc.id),
                     )
                   : null,

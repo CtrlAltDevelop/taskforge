@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -178,13 +179,13 @@ class GoalDetailScreen extends ConsumerWidget {
             IconButton(
               key: const Key('edit-goal'),
               tooltip: t.goalsEdit,
-              icon: const Icon(Icons.edit_outlined),
+              icon: const TfIcon(TfIcons.edit),
               onPressed: () => _edit(context, ref, goal, cat, members),
             ),
             IconButton(
               key: const Key('delete-goal'),
               tooltip: t.goalsDelete,
-              icon: const Icon(Icons.delete_outline),
+              icon: const TfIcon(TfIcons.trash),
               onPressed: () => _delete(context, ref, goal),
             ),
           ],
@@ -261,7 +262,7 @@ class _Body extends StatelessWidget {
               ),
             if (goal.private) ...[
               const Spacer(),
-              const Icon(Icons.lock_outline, size: 16),
+              const TfIcon(TfIcons.lock, size: 16),
               const SizedBox(width: 4),
               Text(t.goalsPrivate),
             ],
@@ -306,7 +307,7 @@ class _Body extends StatelessWidget {
               TextButton.icon(
                 key: const Key('add-kr'),
                 onPressed: onAddKr,
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 label: Text(t.goalsAddKr),
               ),
           ],

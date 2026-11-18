@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,10 +12,10 @@ import 'package:taskforge/features/workspaces/application/workspace_providers.da
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 IconData linkIcon(LinkKind kind) => switch (kind) {
-  LinkKind.blocks => Icons.block,
-  LinkKind.blockedBy => Icons.lock_outline,
-  LinkKind.relates => Icons.link,
-  LinkKind.duplicates || LinkKind.duplicatedBy => Icons.content_copy,
+  LinkKind.blocks => TfIcons.blocked.glyph,
+  LinkKind.blockedBy => TfIcons.lock.glyph,
+  LinkKind.relates => TfIcons.link.glyph,
+  LinkKind.duplicates || LinkKind.duplicatedBy => TfIcons.copy.glyph,
 };
 
 /// The "Links" section of a task: its links grouped by kind, seen from both
@@ -49,7 +50,7 @@ class LinksPanel extends ConsumerWidget {
               IconButton(
                 key: const Key('add-link'),
                 tooltip: context.l10n.grpFAddLink,
-                icon: const Icon(Icons.add_link),
+                icon: const TfIcon(TfIcons.link),
                 onPressed: () => showDialog<void>(
                   context: context,
                   builder: (_) => AddLinkDialog(project: project, task: task),
@@ -153,7 +154,7 @@ class _Groups extends StatelessWidget {
                     ? IconButton(
                         key: Key('remove-link-${link.id}'),
                         tooltip: context.l10n.grpFRemoveLink,
-                        icon: const Icon(Icons.close, size: 18),
+                        icon: const TfIcon(TfIcons.close, size: 18),
                         onPressed: () => onRemove(link),
                       )
                     : null,
@@ -281,7 +282,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
             TextField(
               key: const Key('link-search'),
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const TfIcon(TfIcons.search),
                 hintText: context.l10n.grpFLinkSearchHint,
               ),
               onChanged: _search,

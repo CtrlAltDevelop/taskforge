@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,7 +60,7 @@ class CheatSheet extends ConsumerWidget {
                   IconButton(
                     key: const Key('cheat-close'),
                     tooltip: context.l10n.grpGClose,
-                    icon: const Icon(Icons.close),
+                    icon: const TfIcon(TfIcons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -143,7 +144,7 @@ class _Row extends ConsumerWidget {
         IconButton(
           key: Key('rebind-${action.id}'),
           tooltip: context.l10n.grpGChangeKeysFor(action.titleIn(context.l10n)),
-          icon: const Icon(Icons.edit_outlined, size: 18),
+          icon: const TfIcon(TfIcons.edit, size: 18),
           onPressed: () => showDialog<void>(
             context: context,
             builder: (_) => RebindDialog(action: action),

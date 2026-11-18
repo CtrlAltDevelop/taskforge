@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -212,10 +213,10 @@ class _NewChatDialogState extends ConsumerState<_NewChatDialog> {
                       key: Key('pick-${p.userId}'),
                       dense: true,
                       selected: _picked.contains(p.userId),
-                      leading: Icon(
+                      leading: TfIcon(
                         _picked.contains(p.userId)
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
+                            ? TfIcons.active
+                            : TfIcons.circle,
                       ),
                       title: Text(p.label),
                       onTap: () => setState(() {

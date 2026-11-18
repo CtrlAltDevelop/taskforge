@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:cupertino_ui/cupertino_ui.dart';
@@ -184,7 +186,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.drag(
-        find.byIcon(Icons.drag_handle).last,
+        find.byIcon(TfIcons.grip.glyph).last,
         const Offset(0, -60),
       );
       await tester.pumpAndSettle();

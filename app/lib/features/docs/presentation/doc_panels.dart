@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -211,7 +213,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             padding: const EdgeInsets.all(12),
             child: FilledButton.icon(
               key: const Key('revision-restore'),
-              icon: const Icon(Icons.restore),
+              icon: const TfIcon(TfIcons.undo),
               label: Text(context.l10n.grpBRestoreVersion),
               onPressed: _busy || !body.hasValue ? null : () => _restore(id),
             ),

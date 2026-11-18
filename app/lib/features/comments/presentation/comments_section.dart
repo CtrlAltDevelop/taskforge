@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/formatting.dart';
@@ -75,7 +77,7 @@ class ReactionsBar extends StatelessWidget {
         if (canReact)
           PopupMenuButton<String>(
             key: Key('react-$id'),
-            icon: const Icon(Icons.add_reaction_outlined, size: 18),
+            icon: const TfIcon(TfIcons.smile, size: 18),
             tooltip: context.l10n.grpBAddReaction,
             onSelected: onReact,
             itemBuilder: (_) => [
@@ -137,10 +139,7 @@ class CommentsSkeleton extends StatelessWidget {
     Widget bar(double width) => Container(
       width: width,
       height: 10,
-      decoration: BoxDecoration(
-        color: grey,
-        borderRadius: BorderRadius.circular(4),
-      ),
+      decoration: BoxDecoration(color: grey, borderRadius: TfRadius.chip),
     );
     return Column(
       children: [

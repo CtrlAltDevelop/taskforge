@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +18,7 @@ class LanguageMenuButton extends ConsumerWidget {
     return PopupMenuButton<String>(
       key: const Key('language-menu'),
       tooltip: context.l10n.languageLabel,
-      icon: const Icon(Icons.language),
+      icon: const TfIcon(TfIcons.globe),
       initialValue: current,
       onSelected: (code) => ref
           .read(localePrefsProvider.notifier)

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -77,8 +78,8 @@ class _RoleHeader extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       if (role.isBuiltin)
-        Icon(
-          Icons.lock,
+        TfIcon(
+          TfIcons.lock,
           key: Key('lock-${role.id}'),
           size: 14,
           semanticLabel: context.l10n.grpJBuiltInReadOnly,

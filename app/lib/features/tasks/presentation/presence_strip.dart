@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -114,8 +115,8 @@ class EditingHint extends ConsumerWidget {
       child: Row(
         key: const Key('editing-hint'),
         children: [
-          Icon(
-            Icons.edit_outlined,
+          TfIcon(
+            TfIcons.edit,
             size: 14,
             color: Theme.of(context).colorScheme.tertiary,
           ),

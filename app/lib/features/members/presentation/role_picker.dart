@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,7 +63,7 @@ class RolePicker extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(member.roleName),
-            const Icon(Icons.arrow_drop_down, size: 18),
+            const TfIcon(TfIcons.chevronDown, size: 18),
           ],
         ),
       ),

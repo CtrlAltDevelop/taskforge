@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -54,7 +56,7 @@ class _CodeBlockViewState extends State<CodeBlockView> {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: TfRadius.control,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +164,7 @@ class TableBlockView extends StatelessWidget {
             children: [
               TextButton.icon(
                 key: Key('table-add-row-${block.id}'),
-                icon: const Icon(Icons.add, size: 16),
+                icon: const TfIcon(TfIcons.plus, size: 16),
                 label: Text(context.l10n.grpJTableRow),
                 onPressed: () => onChanged(
                   block.withRows([
@@ -173,7 +175,7 @@ class TableBlockView extends StatelessWidget {
               ),
               TextButton.icon(
                 key: Key('table-add-column-${block.id}'),
-                icon: const Icon(Icons.add, size: 16),
+                icon: const TfIcon(TfIcons.plus, size: 16),
                 label: Text(context.l10n.grpJTableColumn),
                 onPressed: columns >= 20
                     ? null
@@ -185,7 +187,7 @@ class TableBlockView extends StatelessWidget {
               ),
               TextButton.icon(
                 key: Key('table-remove-row-${block.id}'),
-                icon: const Icon(Icons.remove, size: 16),
+                icon: const TfIcon(TfIcons.minus, size: 16),
                 label: Text(context.l10n.grpJTableRow),
                 onPressed: rows.length <= 1
                     ? null
@@ -195,7 +197,7 @@ class TableBlockView extends StatelessWidget {
               ),
               TextButton.icon(
                 key: Key('table-remove-column-${block.id}'),
-                icon: const Icon(Icons.remove, size: 16),
+                icon: const TfIcon(TfIcons.minus, size: 16),
                 label: Text(context.l10n.grpJTableColumn),
                 onPressed: columns <= 1
                     ? null
@@ -319,7 +321,7 @@ class ImageBlockView extends StatelessWidget {
           IconButton(
             key: Key('edit-image-${block.id}'),
             tooltip: context.l10n.grpJEditImage,
-            icon: const Icon(Icons.edit_outlined, size: 18),
+            icon: const TfIcon(TfIcons.edit, size: 18),
             onPressed: onEdit,
           ),
       ],
@@ -358,7 +360,7 @@ class TaskCardView extends StatelessWidget {
         color: theme.colorScheme.surfaceContainerHighest,
         child: ListTile(
           dense: true,
-          leading: const Icon(Icons.lock_outline),
+          leading: const TfIcon(TfIcons.lock),
           title: Text(context.l10n.grpJNoAccessTask),
         ),
       );
@@ -367,10 +369,8 @@ class TaskCardView extends StatelessWidget {
       key: Key('task-card-${c.taskId}'),
       child: ListTile(
         dense: true,
-        leading: Icon(
-          c.statusCategory == 'done'
-              ? Icons.check_circle
-              : Icons.radio_button_unchecked,
+        leading: TfIcon(
+          c.statusCategory == 'done' ? TfIcons.success : TfIcons.circle,
           color: c.statusCategory == 'done' ? Colors.green : null,
         ),
         title: Text('${c.key}  ${c.title}', overflow: TextOverflow.ellipsis),
@@ -397,11 +397,11 @@ class UnknownBlockView extends StatelessWidget {
     padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
       border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: TfRadius.control,
     ),
     child: Row(
       children: [
-        const Icon(Icons.extension_outlined, size: 18),
+        const TfIcon(TfIcons.puzzle, size: 18),
         const SizedBox(width: 8),
         Expanded(child: Text(context.l10n.grpJUnknownBlock(block.type))),
       ],

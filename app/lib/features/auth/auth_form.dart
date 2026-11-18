@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
@@ -103,9 +104,7 @@ class _AuthFormState extends State<AuthForm> {
                 tooltip: _hidden[index]
                     ? context.l10n.showPassword
                     : context.l10n.hidePassword,
-                icon: Icon(
-                  _hidden[index] ? Icons.visibility : Icons.visibility_off,
-                ),
+                icon: TfIcon(_hidden[index] ? TfIcons.eye : TfIcons.eyeOff),
                 onPressed: () =>
                     setState(() => _hidden[index] = !_hidden[index]),
               )

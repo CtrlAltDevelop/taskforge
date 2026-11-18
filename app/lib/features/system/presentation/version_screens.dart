@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class AboutScreen extends ConsumerWidget {
         title: Text(t.sysAboutTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
-          icon: const Icon(Icons.arrow_back),
+          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
@@ -31,13 +32,13 @@ class AboutScreen extends ConsumerWidget {
         children: [
           ListTile(
             key: const Key('about-client-version'),
-            leading: const Icon(Icons.phone_android),
+            leading: const TfIcon(TfIcons.smartphone),
             title: Text(t.sysClientVersion),
             subtitle: Text(clientVersion),
           ),
           ListTile(
             key: const Key('about-server-version'),
-            leading: const Icon(Icons.dns_outlined),
+            leading: const TfIcon(TfIcons.server),
             title: Text(t.sysServerVersion),
             subtitle: Text(
               server.when(
@@ -49,7 +50,7 @@ class AboutScreen extends ConsumerWidget {
           ),
           if (server.value case final s? when s.isNewerThan(clientVersion))
             ListTile(
-              leading: const Icon(Icons.system_update_alt),
+              leading: const TfIcon(TfIcons.download),
               title: Text(t.sysUpdateAvailable(s.version)),
             ),
           Padding(
@@ -58,7 +59,7 @@ class AboutScreen extends ConsumerWidget {
               alignment: AlignmentDirectional.centerStart,
               child: OutlinedButton.icon(
                 key: const Key('about-check'),
-                icon: const Icon(Icons.refresh),
+                icon: const TfIcon(TfIcons.refresh),
                 label: Text(t.sysCheckAgain),
                 onPressed: () => ref.invalidate(serverVersionProvider),
               ),
@@ -105,7 +106,7 @@ class DesktopUpdateNotice extends ConsumerWidget {
     final t = context.l10n;
     return MaterialBanner(
       key: const Key('desktop-update-notice'),
-      leading: const Icon(Icons.system_update_alt),
+      leading: const TfIcon(TfIcons.download),
       content: Text(t.updNoticeText(notice.version)),
       actions: [
         if (notice.downloadUrl.isNotEmpty)

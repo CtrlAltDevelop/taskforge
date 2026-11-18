@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -90,7 +91,7 @@ class ContributesPanel extends ConsumerWidget {
               TextButton.icon(
                 key: const Key('contribute-add'),
                 onPressed: () => _add(context, ref),
-                icon: const Icon(Icons.add, size: 18),
+                icon: const TfIcon(TfIcons.plus, size: 18),
                 label: Text(t.goalsAddToKr),
               ),
           ],
@@ -103,7 +104,7 @@ class ContributesPanel extends ConsumerWidget {
               key: Key('contribution-${c.krId}'),
               dense: true,
               contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.flag_outlined, size: 18),
+              leading: const TfIcon(TfIcons.flag, size: 18),
               title: Text('${c.goalName} › ${c.krName}'),
               onTap: () => context.push('/goals/${c.goalId}'),
             ),

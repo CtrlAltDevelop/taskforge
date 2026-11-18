@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -188,8 +189,8 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                     PopupMenuButton<String>(
                       key: Key('option-color-$i'),
                       tooltip: context.l10n.grpEColour,
-                      icon: Icon(
-                        Icons.circle,
+                      icon: TfIcon(
+                        TfIcons.circle,
                         color: optionColor(
                           FieldOption(id: '', label: '', color: o.color),
                         ),
@@ -199,8 +200,8 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                         for (final c in optionPalette)
                           PopupMenuItem(
                             value: c,
-                            child: Icon(
-                              Icons.circle,
+                            child: TfIcon(
+                              TfIcons.circle,
                               color: optionColor(
                                 FieldOption(id: '', label: '', color: c),
                               ),
@@ -220,7 +221,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                     IconButton(
                       key: Key('option-remove-$i'),
                       tooltip: context.l10n.grpERemoveOption,
-                      icon: const Icon(Icons.close),
+                      icon: const TfIcon(TfIcons.close),
                       onPressed: () => setState(() {
                         _options.removeAt(i).controller.dispose();
                         if (_default == o.id) _default = '';
@@ -230,7 +231,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 ),
               TextButton.icon(
                 key: const Key('option-add'),
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 label: Text(context.l10n.grpEAddOption),
                 onPressed: () => setState(
                   () => _options.add(

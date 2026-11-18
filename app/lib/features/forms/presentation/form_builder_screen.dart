@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -342,7 +343,7 @@ class _BuilderState extends ConsumerState<_Builder> {
                 key: ValueKey(_questions[i].id),
                 leading: ReorderableDragStartListener(
                   index: i,
-                  child: const Icon(Icons.drag_handle),
+                  child: const TfIcon(TfIcons.grip),
                 ),
                 title: Text(_questions[i].label),
                 subtitle: Text(_kindLabel(_questions[i], fields)),
@@ -352,7 +353,7 @@ class _BuilderState extends ConsumerState<_Builder> {
                     : IconButton(
                         key: Key('remove-q-${_questions[i].id}'),
                         tooltip: t.formsRemoveQuestion,
-                        icon: const Icon(Icons.delete_outline),
+                        icon: const TfIcon(TfIcons.trash),
                         onPressed: () => setState(
                           () => _questions = [..._questions]..removeAt(i),
                         ),

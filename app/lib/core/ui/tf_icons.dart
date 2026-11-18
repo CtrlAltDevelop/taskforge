@@ -134,6 +134,54 @@ abstract final class TfIcons {
   static const rows = TfIconData(LucideIcons.rows3);
   static const pin = TfIconData(LucideIcons.pin);
   static const pinOff = TfIconData(LucideIcons.pinOff);
+  static const camera = TfIconData(LucideIcons.camera);
+  static const images = TfIconData(LucideIcons.images);
+  static const clipboardPaste = TfIconData(LucideIcons.clipboardPaste);
+  static const video = TfIconData(LucideIcons.video);
+  static const fileText = TfIconData(LucideIcons.fileText);
+  static const pause = TfIconData(LucideIcons.pause);
+  static const play = TfIconData(LucideIcons.play);
+  static const bot = TfIconData(LucideIcons.bot);
+  static const layers = TfIconData(LucideIcons.layers);
+  static const eyeOff = TfIconData(LucideIcons.eyeOff);
+  static const bellOff = TfIconData(LucideIcons.bellOff);
+  static const arrowLeftRight = TfIconData(LucideIcons.arrowLeftRight);
+  static const timer = TfIconData(LucideIcons.timer);
+  static const quote = TfIconData(LucideIcons.quote);
+  static const maximize = TfIconData(LucideIcons.maximize2);
+  static const webhook = TfIconData(LucideIcons.webhook);
+  static const unlink = TfIconData(LucideIcons.unlink);
+  static const share = TfIconData(LucideIcons.share2);
+  static const puzzle = TfIconData(LucideIcons.puzzle);
+  static const filePlus = TfIconData(LucideIcons.filePlus);
+  static const alignLeft = TfIconData(LucideIcons.alignLeft);
+  static const heading = TfIconData(LucideIcons.heading);
+  static const listOrdered = TfIconData(LucideIcons.listOrdered);
+  static const listChecks = TfIconData(LucideIcons.listChecks);
+  static const table = TfIconData(LucideIcons.table);
+  static const textType = TfIconData(LucideIcons.type);
+  static const squareCheck = TfIconData(LucideIcons.squareCheck);
+  static const dollarSign = TfIconData(LucideIcons.dollarSign);
+  static const bold = TfIconData(LucideIcons.bold);
+  static const italic = TfIconData(LucideIcons.italic);
+  static const strikethrough = TfIconData(LucideIcons.strikethrough);
+  static const folderPlus = TfIconData(LucideIcons.folderPlus);
+  static const cornerDownRight = TfIconData(
+    LucideIcons.cornerDownRight,
+    mirrorsInRtl: true,
+  );
+  static const userMinus = TfIconData(LucideIcons.userMinus);
+  static const smartphone = TfIconData(LucideIcons.smartphone);
+  static const arrowUpToLine = TfIconData(LucideIcons.arrowUpToLine);
+  static const circleStop = TfIconData(LucideIcons.circleStop);
+  static const stop = TfIconData(LucideIcons.square);
+  static const snooze = TfIconData(LucideIcons.alarmClock);
+  static const circlePause = TfIconData(LucideIcons.circlePause);
+  static const mail = TfIconData(LucideIcons.mail);
+  static const command = TfIconData(LucideIcons.command);
+  static const idCard = TfIconData(LucideIcons.idCard);
+  static const atSign = TfIconData(LucideIcons.atSign);
+  static const network = TfIconData(LucideIcons.network);
 
   /// Every icon, by name, for the gallery and the completeness test.
   static const all = <String, TfIconData>{
@@ -245,6 +293,51 @@ abstract final class TfIcons {
     'rows': rows,
     'pin': pin,
     'pinOff': pinOff,
+    'camera': camera,
+    'images': images,
+    'clipboardPaste': clipboardPaste,
+    'video': video,
+    'fileText': fileText,
+    'pause': pause,
+    'play': play,
+    'bot': bot,
+    'layers': layers,
+    'eyeOff': eyeOff,
+    'bellOff': bellOff,
+    'arrowLeftRight': arrowLeftRight,
+    'timer': timer,
+    'quote': quote,
+    'maximize': maximize,
+    'webhook': webhook,
+    'unlink': unlink,
+    'share': share,
+    'puzzle': puzzle,
+    'filePlus': filePlus,
+    'alignLeft': alignLeft,
+    'heading': heading,
+    'listOrdered': listOrdered,
+    'listChecks': listChecks,
+    'table': table,
+    'textType': textType,
+    'squareCheck': squareCheck,
+    'dollarSign': dollarSign,
+    'bold': bold,
+    'italic': italic,
+    'strikethrough': strikethrough,
+    'folderPlus': folderPlus,
+    'cornerDownRight': cornerDownRight,
+    'userMinus': userMinus,
+    'smartphone': smartphone,
+    'arrowUpToLine': arrowUpToLine,
+    'circleStop': circleStop,
+    'stop': stop,
+    'snooze': snooze,
+    'circlePause': circlePause,
+    'mail': mail,
+    'command': command,
+    'idCard': idCard,
+    'atSign': atSign,
+    'network': network,
   };
 }
 

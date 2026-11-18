@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -331,7 +334,7 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: context.l10n.grpGPaletteHint,
-                    prefixIcon: const Icon(Icons.keyboard_command_key),
+                    prefixIcon: const TfIcon(TfIcons.command),
                     suffixIcon: _searching
                         ? const Padding(
                             padding: EdgeInsets.all(12),
@@ -414,7 +417,7 @@ class _ActionRow extends StatelessWidget {
       key: Key('palette-row-${action.id}'),
       dense: true,
       selected: selected,
-      leading: const Icon(Icons.bolt_outlined),
+      leading: const TfIcon(TfIcons.bolt),
       title: Text(action.titleIn(context.l10n)),
       subtitle: Text(action.groupIn(context.l10n)),
       trailing: keys == null ? null : _Keycap(keys!),
@@ -465,7 +468,7 @@ class _Keycap extends StatelessWidget {
   Widget build(BuildContext context) => DecoratedBox(
     decoration: BoxDecoration(
       border: Border.all(color: Theme.of(context).dividerColor),
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: TfRadius.chip,
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

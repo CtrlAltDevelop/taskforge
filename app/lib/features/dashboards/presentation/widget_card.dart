@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -52,7 +54,7 @@ class WidgetCard extends ConsumerWidget {
           children: [
             Row(
               children: [
-                if (editing) const Icon(Icons.drag_indicator, size: 18),
+                if (editing) const TfIcon(TfIcons.grip, size: 18),
                 Expanded(
                   child: Text(
                     title,
@@ -66,7 +68,7 @@ class WidgetCard extends ConsumerWidget {
                     key: Key('refresh-${widget.id}'),
                     tooltip: context.l10n.grpIRefresh,
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.refresh, size: 18),
+                    icon: const TfIcon(TfIcons.refresh, size: 18),
                     onPressed: () => ref
                         .read(dashboardActionsProvider)
                         .refreshWidgets([key]),

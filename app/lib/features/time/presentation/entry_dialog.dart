@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/date_picker.dart';
@@ -151,7 +152,7 @@ class _EntryDialogState extends State<_EntryDialog> {
               key: const Key('entry-date'),
               contentPadding: EdgeInsets.zero,
               title: Text(context.localIso(_date)),
-              trailing: const Icon(Icons.calendar_today),
+              trailing: const TfIcon(TfIcons.calendar),
               onTap: _pickDate,
             ),
           const SizedBox(height: 12),

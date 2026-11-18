@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -234,7 +235,7 @@ class RunTile extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: theme.colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: TfRadius.panel,
             ),
             child: Text(
               context.l10n.grpGWhyNotRun(

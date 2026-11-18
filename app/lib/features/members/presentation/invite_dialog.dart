@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -160,7 +161,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
             suffixIcon: IconButton(
               key: const Key('add-email'),
               tooltip: context.l10n.grpJAdd,
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               onPressed: _add,
             ),
           ),
@@ -347,7 +348,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             trailing: IconButton(
               key: const Key('copy-link'),
               tooltip: context.l10n.grpJCopyLink,
-              icon: const Icon(Icons.copy),
+              icon: const TfIcon(TfIcons.copy),
               onPressed: () => copyInviteLink(context, token),
             ),
           ),

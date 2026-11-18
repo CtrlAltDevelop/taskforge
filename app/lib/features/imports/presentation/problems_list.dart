@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +39,7 @@ class ProblemsList extends StatelessWidget {
             ListTile(
               dense: true,
               leading: Icon(
-                p.isError ? Icons.error_outline : Icons.warning_amber,
+                p.isError ? TfIcons.error.glyph : TfIcons.warning.glyph,
                 color: p.isError ? scheme.error : scheme.tertiary,
               ),
               title: Text(p.message),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -9,7 +10,7 @@ class DevicePrivacyNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
     key: const Key('device-privacy-note'),
-    leading: const Icon(Icons.privacy_tip_outlined),
+    leading: const TfIcon(TfIcons.shield),
     title: Text(context.l10n.devPrivacyTitle),
     subtitle: Text(context.l10n.devPrivacyBody),
   );

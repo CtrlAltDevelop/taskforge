@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +36,7 @@ class RolesScreen extends ConsumerWidget {
             permission: Perm.roleManage,
             child: TextButton.icon(
               key: const Key('new-role'),
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               label: Text(context.l10n.grpJNewRole),
               onPressed: roles.hasValue
                   ? () => createRoleFlow(context, ref, roles.requireValue)

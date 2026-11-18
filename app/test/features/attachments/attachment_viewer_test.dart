@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -80,15 +82,15 @@ void main() {
 
     await tapKey(tester, 'open-v1');
     expect(platform.created, ['https://files.test/v1']);
-    expect(find.byIcon(Icons.play_arrow), findsOneWidget);
+    expect(find.byIcon(TfIcons.play.glyph), findsOneWidget);
 
     await tapKey(tester, 'video-toggle');
     expect(platform.playing[1], isTrue);
-    expect(find.byIcon(Icons.pause), findsOneWidget);
+    expect(find.byIcon(TfIcons.pause.glyph), findsOneWidget);
 
     await tapKey(tester, 'video-toggle');
     expect(platform.playing[1], isFalse);
-    expect(find.byIcon(Icons.play_arrow), findsOneWidget);
+    expect(find.byIcon(TfIcons.play.glyph), findsOneWidget);
     await tapKey(tester, 'viewer-close');
   });
 

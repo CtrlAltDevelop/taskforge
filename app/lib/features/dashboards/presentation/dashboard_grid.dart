@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
@@ -192,7 +194,7 @@ class _CellState extends State<_Cell> {
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(4),
-                    child: Icon(Icons.open_in_full, size: 16),
+                    child: TfIcon(TfIcons.maximize, size: 16),
                   ),
                 ),
               ),

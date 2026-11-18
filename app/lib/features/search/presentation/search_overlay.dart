@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,7 +113,7 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     hintText: context.l10n.grpFSearchHint,
-                    prefixIcon: const Icon(Icons.search),
+                    prefixIcon: const TfIcon(TfIcons.search),
                     suffixIcon: state.loading
                         ? const Padding(
                             padding: EdgeInsets.all(12),
@@ -335,7 +336,7 @@ class _Recent extends StatelessWidget {
           ListTile(
             key: Key('recent-$q'),
             dense: true,
-            leading: const Icon(Icons.history),
+            leading: const TfIcon(TfIcons.history),
             title: Text(q),
             onTap: () => onPick(q),
           ),

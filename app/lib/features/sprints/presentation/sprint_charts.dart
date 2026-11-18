@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -141,8 +142,8 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
                 key: const Key('legend-backfilled'),
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.circle_outlined,
+                  TfIcon(
+                    TfIcons.circle,
                     size: 12,
                     color: theme.colorScheme.primary,
                   ),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -54,7 +55,11 @@ class ProjectLookPicker extends StatelessWidget {
                   radius: 14,
                   backgroundColor: parseProjectColor(c),
                   child: c == color
-                      ? const Icon(Icons.check, size: 16, color: Colors.white)
+                      ? const TfIcon(
+                          TfIcons.check,
+                          size: 16,
+                          color: Colors.white,
+                        )
                       : null,
                 ),
               ),
@@ -87,12 +92,12 @@ class VisibilityPicker extends StatelessWidget {
           ButtonSegment(
             value: ProjectVisibility.open,
             label: Text(context.l10n.grpHVisOpen),
-            icon: const Icon(Icons.public),
+            icon: const TfIcon(TfIcons.globe),
           ),
           ButtonSegment(
             value: ProjectVisibility.private,
             label: Text(context.l10n.grpHVisPrivate),
-            icon: const Icon(Icons.lock),
+            icon: const TfIcon(TfIcons.lock),
           ),
         ],
         selected: {value},

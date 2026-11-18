@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:desktop_drop/desktop_drop.dart';
@@ -148,7 +151,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
                   key: const Key('attachment-error-dismiss'),
                   tooltip: context.l10n.grpHDismiss,
                   onPressed: _notifier.clearError,
-                  icon: const Icon(Icons.close, size: 18),
+                  icon: const TfIcon(TfIcons.close, size: 18),
                 ),
               ],
             ),
@@ -250,13 +253,13 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
             child: InkWell(
               key: const Key('drop-zone'),
               onTap: _focus.requestFocus,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: TfRadius.panel,
               child: Container(
                 constraints: const BoxConstraints(minHeight: 48),
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: TfRadius.panel,
                   border: Border.all(
                     color: _dragging ? color.primary : color.outlineVariant,
                     width: _dragging ? 2 : 1,

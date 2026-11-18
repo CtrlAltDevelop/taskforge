@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,7 @@ class SsoSetupScreen extends ConsumerWidget {
         title: Text(t.ssoTitle),
         leading: IconButton(
           tooltip: t.grpBClose,
-          icon: const Icon(Icons.arrow_back),
+          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop()
               ? context.pop()
               : context.go('/settings/security'),
@@ -322,7 +323,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                   ),
                   IconButton(
                     tooltip: t.grpBDelete,
-                    icon: const Icon(Icons.close),
+                    icon: const TfIcon(TfIcons.close),
                     onPressed: () =>
                         setState(() => _rows.removeAt(i).group.dispose()),
                   ),
@@ -335,7 +336,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 onPressed: () => setState(
                   () => _rows.add(_Row(TextEditingController(), '')),
                 ),
-                icon: const Icon(Icons.add),
+                icon: const TfIcon(TfIcons.plus),
                 label: Text(t.ssoAddMapping),
               ),
             ),
@@ -357,7 +358,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 key: const Key('sso-test-result'),
                 contentPadding: EdgeInsets.zero,
                 leading: Icon(
-                  check.ok ? Icons.check_circle : Icons.error_outline,
+                  check.ok ? TfIcons.success.glyph : TfIcons.error.glyph,
                   color: check.ok ? Colors.green : colors.error,
                 ),
                 title: Text(

@@ -1,8 +1,8 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
@@ -168,8 +168,8 @@ class _PageTreeState extends ConsumerState<PageTree> {
                         tooltip: open
                             ? context.l10n.grpBCollapse
                             : context.l10n.grpBExpand,
-                        icon: DirectionalIcon(
-                          open ? Icons.expand_more : Icons.chevron_right,
+                        icon: TfIcon(
+                          open ? TfIcons.chevronDown : TfIcons.chevronEnd,
                         ),
                         onPressed: () => setState(() {
                           open
@@ -195,8 +195,8 @@ class _PageTreeState extends ConsumerState<PageTree> {
                 ),
               ),
               if (doc.restricted)
-                Icon(
-                  Icons.lock_outline,
+                TfIcon(
+                  TfIcons.lock,
                   key: Key('restricted-${doc.id}'),
                   size: 14,
                   semanticLabel: context.l10n.grpBRestricted,
@@ -328,8 +328,8 @@ class _PageTreeState extends ConsumerState<PageTree> {
                     ? context.l10n.grpBHideArchived
                     : context.l10n.grpBShowArchived,
                 isSelected: showArchived,
-                icon: const Icon(Icons.inventory_2_outlined),
-                selectedIcon: const Icon(Icons.inventory_2),
+                icon: const TfIcon(TfIcons.archive),
+                selectedIcon: const TfIcon(TfIcons.archive),
                 onPressed: () => ref
                     .read(docShowArchivedProvider.notifier)
                     .set(!showArchived),
@@ -338,7 +338,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
                 IconButton(
                   key: const Key('new-page'),
                   tooltip: context.l10n.grpBNewPage,
-                  icon: const Icon(Icons.add),
+                  icon: const TfIcon(TfIcons.plus),
                   onPressed: () => _create(''),
                 ),
             ],

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
 import 'dart:convert';
@@ -120,7 +121,7 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
             IconButton(
               key: const Key('audit-export'),
               tooltip: context.l10n.grpBExportCsv,
-              icon: const Icon(Icons.download),
+              icon: const TfIcon(TfIcons.download),
               onPressed: _exporting ? null : _export,
             ),
         ],
@@ -262,7 +263,7 @@ class _Filters extends ConsumerWidget {
         ),
         OutlinedButton.icon(
           key: const Key('filter-dates'),
-          icon: const Icon(Icons.date_range),
+          icon: const TfIcon(TfIcons.calendarRange),
           label: Text(
             filters.since == null
                 ? context.l10n.grpBAnyTime
@@ -311,7 +312,7 @@ class _Row extends StatelessWidget {
           ? null
           : Tooltip(
               message: context.l10n.grpBBulkChange,
-              child: const Icon(Icons.layers, size: 16),
+              child: const TfIcon(TfIcons.layers, size: 16),
             ),
       onTap: () => showDialog<void>(
         context: context,

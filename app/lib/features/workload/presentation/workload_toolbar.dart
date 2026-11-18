@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,7 +49,7 @@ class WorkloadToolbar extends ConsumerWidget {
           IconButton(
             key: const Key('workload-prev'),
             tooltip: t.wlPrevious,
-            icon: const Icon(Icons.chevron_left),
+            icon: const TfIcon(TfIcons.chevronStart),
             onPressed: () => notifier.page(-1),
           ),
           TextButton(
@@ -58,7 +60,7 @@ class WorkloadToolbar extends ConsumerWidget {
           IconButton(
             key: const Key('workload-next'),
             tooltip: t.wlNext,
-            icon: const Icon(Icons.chevron_right),
+            icon: const TfIcon(TfIcons.chevronEnd),
             onPressed: () => notifier.page(1),
           ),
           Text(
@@ -67,7 +69,7 @@ class WorkloadToolbar extends ConsumerWidget {
           ),
           _FilterMenu(
             key: const Key('workload-projects'),
-            icon: Icons.folder_outlined,
+            icon: TfIcons.folder.glyph,
             label: t.wlProjects,
             options: {
               for (final p in projects?.projects ?? const []) p.id: p.name,
@@ -77,7 +79,7 @@ class WorkloadToolbar extends ConsumerWidget {
           ),
           _FilterMenu(
             key: const Key('workload-people'),
-            icon: Icons.people_outline,
+            icon: TfIcons.users.glyph,
             label: t.wlPeople,
             options: {for (final m in members) m.userId: m.label},
             selected: query.userIds,
@@ -156,7 +158,7 @@ class WorkloadLegend extends StatelessWidget {
           height: 14,
           decoration: BoxDecoration(
             color: levelColor(theme, level),
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: TfRadius.chip,
           ),
         ),
         const SizedBox(width: 6),

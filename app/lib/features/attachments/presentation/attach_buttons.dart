@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -54,7 +55,7 @@ class AttachButtons extends ConsumerWidget {
         TextButton.icon(
           key: Key('$keyPrefix-add'),
           onPressed: () => _pick(ref, ref.read(filePickerProvider)),
-          icon: const Icon(Icons.attach_file, size: 18),
+          icon: const TfIcon(TfIcons.attachment, size: 18),
           label: Text(context.l10n.grpHAdd),
         )
       else
@@ -62,20 +63,20 @@ class AttachButtons extends ConsumerWidget {
           key: Key('$keyPrefix-add'),
           tooltip: context.l10n.grpHAttachFile,
           onPressed: () => _pick(ref, ref.read(filePickerProvider)),
-          icon: const Icon(Icons.attach_file, size: 20),
+          icon: const TfIcon(TfIcons.attachment, size: 20),
         ),
       if (isPhoneOrTablet) ...[
         IconButton(
           key: Key('$keyPrefix-camera'),
           tooltip: context.l10n.grpHTakePhoto,
           onPressed: () => _pick(ref, ref.read(cameraPickerProvider)),
-          icon: const Icon(Icons.photo_camera_outlined, size: 20),
+          icon: const TfIcon(TfIcons.camera, size: 20),
         ),
         IconButton(
           key: Key('$keyPrefix-gallery'),
           tooltip: context.l10n.grpHChooseGallery,
           onPressed: () => _pick(ref, ref.read(galleryPickerProvider)),
-          icon: const Icon(Icons.photo_library_outlined, size: 20),
+          icon: const TfIcon(TfIcons.images, size: 20),
         ),
       ],
       if (canReadClipboardImage)
@@ -83,7 +84,7 @@ class AttachButtons extends ConsumerWidget {
           key: Key('$keyPrefix-paste'),
           tooltip: context.l10n.grpHPasteImage,
           onPressed: () => _paste(ref),
-          icon: const Icon(Icons.content_paste, size: 20),
+          icon: const TfIcon(TfIcons.clipboardPaste, size: 20),
         ),
     ],
   );

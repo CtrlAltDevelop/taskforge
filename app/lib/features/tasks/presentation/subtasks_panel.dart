@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -258,7 +259,7 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         hintText: context.l10n.grpFAddSubtaskHint,
-        prefixIcon: const Icon(Icons.subdirectory_arrow_right),
+        prefixIcon: const TfIcon(TfIcons.cornerDownRight),
         counterText: '',
         isDense: true,
         border: const OutlineInputBorder(),

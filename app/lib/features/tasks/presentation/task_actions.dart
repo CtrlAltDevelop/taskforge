@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,11 +30,11 @@ enum TaskAction {
 }
 
 IconData priorityIcon(TaskPriority priority) => switch (priority) {
-  TaskPriority.urgent => Icons.priority_high,
-  TaskPriority.high => Icons.keyboard_double_arrow_up,
-  TaskPriority.normal => Icons.drag_handle,
-  TaskPriority.low => Icons.keyboard_arrow_down,
-  TaskPriority.none => Icons.remove,
+  TaskPriority.urgent => TfIcons.priorityUrgent.glyph,
+  TaskPriority.high => TfIcons.priorityHigh.glyph,
+  TaskPriority.normal => TfIcons.grip.glyph,
+  TaskPriority.low => TfIcons.chevronDown.glyph,
+  TaskPriority.none => TfIcons.minus.glyph,
 };
 
 Color priorityColor(TaskPriority priority) => switch (priority) {
@@ -60,8 +61,8 @@ class BlockedBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Tooltip(
     message: messageIn(context.l10n),
-    child: Icon(
-      Icons.lock,
+    child: TfIcon(
+      TfIcons.lock,
       key: const Key('blocked-badge'),
       size: 18,
       color: Colors.red,

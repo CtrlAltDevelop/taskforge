@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/formatting.dart';
@@ -7,15 +8,15 @@ import 'package:taskforge/features/audit/domain/activity_lines.dart'
     show relativeTime;
 import 'package:taskforge/features/comments/domain/comments.dart';
 
-IconData chatEventIcon(String field) => switch (field) {
-  'title' => Icons.edit_outlined,
-  'status_id' => Icons.swap_horiz,
-  'priority' => Icons.flag_outlined,
-  'start_date' || 'due_date' => Icons.event_outlined,
-  'estimate_sec' => Icons.timer_outlined,
-  'assignees' => Icons.person_add_alt_outlined,
-  'subtask_added' => Icons.subdirectory_arrow_right,
-  _ => Icons.edit_note,
+TfIconData chatEventIcon(String field) => switch (field) {
+  'title' => TfIcons.edit,
+  'status_id' => TfIcons.arrowLeftRight,
+  'priority' => TfIcons.flag,
+  'start_date' || 'due_date' => TfIcons.calendar,
+  'estimate_sec' => TfIcons.timer,
+  'assignees' => TfIcons.userPlus,
+  'subtask_added' => TfIcons.cornerDownRight,
+  _ => TfIcons.edit,
 };
 
 /// One change to the task, as a single muted line: no bubble, no actions.
@@ -57,7 +58,7 @@ class ChatSystemLine extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 8, top: 2),
-            child: Icon(
+            child: TfIcon(
               chatEventIcon(event?.field ?? ''),
               size: 14,
               color: muted,

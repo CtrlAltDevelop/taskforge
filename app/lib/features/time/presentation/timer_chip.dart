@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -69,14 +71,14 @@ class _TimerChipState extends ConsumerState<TimerChip> {
       key: const Key('timer-chip'),
       color: theme.colorScheme.inverseSurface,
       elevation: 4,
-      borderRadius: BorderRadius.circular(32),
+      shape: const StadiumBorder(),
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 4, 4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.fiber_manual_record,
+            TfIcon(
+              TfIcons.circle,
               size: 12,
               color: Colors.redAccent,
               semanticLabel: context.l10n.grpJTimerRunning,
@@ -114,7 +116,7 @@ class _TimerChipState extends ConsumerState<TimerChip> {
                 l10n: context.l10n,
               ),
               color: theme.colorScheme.onInverseSurface,
-              icon: const Icon(Icons.stop_circle_outlined),
+              icon: const TfIcon(TfIcons.circleStop),
               onPressed: _busy ? null : _stop,
             ),
           ],

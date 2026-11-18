@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,8 +26,8 @@ class WatchButton extends ConsumerWidget {
       key: const Key('watch-toggle'),
       tooltip: tip,
       isSelected: watching,
-      icon: const Icon(Icons.visibility_outlined),
-      selectedIcon: const Icon(Icons.visibility),
+      icon: const TfIcon(TfIcons.eye),
+      selectedIcon: const TfIcon(TfIcons.eye),
       onPressed: state.value == null
           ? null
           : () async {

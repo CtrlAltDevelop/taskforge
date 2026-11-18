@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -115,7 +116,7 @@ class MessageTile extends StatelessWidget {
                 if (m.sendState == SendState.sent && menu.isNotEmpty)
                   PopupMenuButton<MessageAction>(
                     key: Key('menu-${m.id}'),
-                    icon: const Icon(Icons.more_horiz, size: 18),
+                    icon: const TfIcon(TfIcons.more, size: 18),
                     tooltip: l10n.chatMessageActions,
                     onSelected: onAction,
                     itemBuilder: (_) => menu,
@@ -130,7 +131,7 @@ class MessageTile extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.schedule, size: 12),
+                  const TfIcon(TfIcons.clock, size: 12),
                   const SizedBox(width: 4),
                   Text(
                     l10n.chatSending,
@@ -144,8 +145,8 @@ class MessageTile extends StatelessWidget {
                 key: Key('failed-${m.id}'),
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error_outline,
+                  TfIcon(
+                    TfIcons.error,
                     size: 16,
                     color: theme.colorScheme.error,
                   ),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ohlcv_chart/ohlcv_chart.dart';
 
@@ -31,7 +32,7 @@ class GoalStatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: TfRadius.dialog,
         border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Text(
@@ -62,7 +63,7 @@ class GoalProgressBar extends StatelessWidget {
       children: [
         Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(height),
+            borderRadius: BorderRadius.all(Radius.circular(height)),
             child: LinearProgressIndicator(
               value: progress.clamp(0, 1),
               minHeight: height,

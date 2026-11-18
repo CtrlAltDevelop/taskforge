@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -83,10 +84,10 @@ class _Sections extends StatelessWidget {
               Card(
                 child: ListTile(
                   key: const Key('open-workflow'),
-                  leading: const Icon(Icons.account_tree_outlined),
+                  leading: const TfIcon(TfIcons.network),
                   title: Text(context.l10n.grpHWorkflow),
                   subtitle: Text(context.l10n.grpHWorkflowHint),
-                  trailing: const DirectionalIcon(Icons.chevron_right),
+                  trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
                   onTap: () => context.go('/projects/${project.id}/workflow'),
                 ),
               ),
@@ -94,10 +95,10 @@ class _Sections extends StatelessWidget {
               Card(
                 child: ListTile(
                   key: const Key('open-fields'),
-                  leading: const Icon(Icons.tune),
+                  leading: const TfIcon(TfIcons.tune),
                   title: Text(context.l10n.grpHFields),
                   subtitle: Text(context.l10n.grpHFieldsHint),
-                  trailing: const DirectionalIcon(Icons.chevron_right),
+                  trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
                   onTap: () => context.go('/projects/${project.id}/fields'),
                 ),
               ),

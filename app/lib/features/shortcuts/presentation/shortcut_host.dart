@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -128,7 +129,7 @@ class QuickActionsButton extends ConsumerWidget {
           // Judged and run from here, not from the sheet that closes first.
           builder: (_) => QuickActionsSheet(from: actionContextOf(context)),
         ),
-        child: const Icon(Icons.bolt),
+        child: const TfIcon(TfIcons.bolt),
       );
 }
 

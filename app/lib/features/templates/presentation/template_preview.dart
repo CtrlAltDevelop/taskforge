@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -72,8 +73,8 @@ class TemplatePreview extends StatelessWidget {
                 children: [
                   Icon(
                     row.depth == 0
-                        ? Icons.task_alt
-                        : Icons.subdirectory_arrow_right,
+                        ? TfIcons.success.glyph
+                        : TfIcons.cornerDownRight.glyph,
                     size: 16,
                   ),
                   const SizedBox(width: 6),

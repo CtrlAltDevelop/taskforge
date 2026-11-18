@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +73,7 @@ class WorkloadScreen extends ConsumerWidget {
           IconButton(
             key: const Key('workload-settings'),
             tooltip: t.wlSettings,
-            icon: const Icon(Icons.tune),
+            icon: const TfIcon(TfIcons.tune),
             onPressed: () => context.push('/workload/settings'),
           ),
         ],
@@ -133,12 +134,12 @@ class _Body extends StatelessWidget {
     return Column(
       children: [
         if (!data.canSeeAll)
-          _Note(text: t.wlOnlyYours, icon: Icons.lock_outline),
+          _Note(text: t.wlOnlyYours, icon: TfIcons.lock.glyph),
         if (anyUnset)
           _Note(
             key: const Key('workload-set-capacity-note'),
             text: t.wlSetCapacityHint,
-            icon: Icons.info_outline,
+            icon: TfIcons.info.glyph,
             action: canManage
                 ? TextButton(
                     onPressed: () => context.push('/workload/settings'),
@@ -147,7 +148,7 @@ class _Body extends StatelessWidget {
                 : null,
           ),
         if (data.truncated)
-          _Note(text: t.wlTruncated, icon: Icons.warning_amber),
+          _Note(text: t.wlTruncated, icon: TfIcons.warning.glyph),
         Expanded(
           child: data.people.isEmpty
               ? TfEmpty(

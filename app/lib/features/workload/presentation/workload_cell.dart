@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -257,10 +258,7 @@ class _Segment extends StatelessWidget {
     final bar = Container(
       height: height,
       margin: const EdgeInsets.only(top: 1),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(3),
-      ),
+      decoration: BoxDecoration(color: color, borderRadius: TfRadius.chip),
     );
     final drag = dragged;
     if (drag == null) return bar;

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,11 +63,11 @@ class PlanningTaskRow extends StatelessWidget {
                     ),
                     childWhenDragging: const Opacity(
                       opacity: 0.3,
-                      child: Icon(Icons.drag_indicator),
+                      child: TfIcon(TfIcons.grip),
                     ),
                     child: Tooltip(
                       message: context.l10n.grpGDragToOtherList,
-                      child: const Icon(Icons.drag_indicator),
+                      child: const TfIcon(TfIcons.grip),
                     ),
                   ),
                 ],
@@ -187,7 +188,7 @@ class CapacityBar extends StatelessWidget {
                 IconButton(
                   key: const Key('capacity-edit'),
                   tooltip: context.l10n.grpGSetCapacity,
-                  icon: const Icon(Icons.tune, size: 18),
+                  icon: const TfIcon(TfIcons.tune, size: 18),
                   onPressed: onEdit,
                 ),
               SegmentedButton<bool>(

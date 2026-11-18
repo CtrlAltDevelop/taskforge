@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,10 +141,8 @@ class _DeliveryTile extends StatelessWidget {
     };
     return ExpansionTile(
       key: Key('delivery-${d.id}'),
-      leading: Icon(
-        d.status == DeliveryStatus.delivered
-            ? Icons.check_circle
-            : Icons.error_outline,
+      leading: TfIcon(
+        d.status == DeliveryStatus.delivered ? TfIcons.success : TfIcons.error,
         color: color,
       ),
       title: Text(eventLabel(t, d.event)),
@@ -178,7 +177,7 @@ class _DeliveryTile extends StatelessWidget {
           child: OutlinedButton.icon(
             key: Key('resend-${d.id}'),
             onPressed: onResend,
-            icon: const Icon(Icons.replay),
+            icon: const TfIcon(TfIcons.undo),
             label: Text(t.devResend),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -260,7 +261,7 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
               ListTile(
                 key: const Key('task-use-pasted'),
                 dense: true,
-                leading: const Icon(Icons.link),
+                leading: const TfIcon(TfIcons.link),
                 title: Text(context.l10n.grpBUsePastedTask),
                 onTap: () => Navigator.pop(context, pasted),
               ),

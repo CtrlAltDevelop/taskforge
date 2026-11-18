@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -194,7 +196,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
               IconButton(
                 key: const Key('rule-close'),
                 tooltip: context.l10n.grpGClose,
-                icon: const Icon(Icons.close),
+                icon: const TfIcon(TfIcons.close),
                 onPressed: () => Navigator.of(context).pop(false),
               ),
             ],
@@ -273,7 +275,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                     alignment: AlignmentDirectional.centerStart,
                     child: OutlinedButton.icon(
                       key: const Key('add-action'),
-                      icon: const Icon(Icons.add),
+                      icon: const TfIcon(TfIcons.plus),
                       label: Text(
                         _actions.length >= maxActionsPerRule
                             ? context.l10n.grpGActionLimit(maxActionsPerRule)
@@ -403,19 +405,19 @@ class _CardTools extends StatelessWidget {
       IconButton(
         key: Key('action-up-$index'),
         tooltip: context.l10n.grpGMoveUp,
-        icon: const Icon(Icons.arrow_upward, size: 18),
+        icon: const TfIcon(TfIcons.arrowUp, size: 18),
         onPressed: index == 0 ? null : () => onMove(-1),
       ),
       IconButton(
         key: Key('action-down-$index'),
         tooltip: context.l10n.grpGMoveDown,
-        icon: const Icon(Icons.arrow_downward, size: 18),
+        icon: const TfIcon(TfIcons.arrowDown, size: 18),
         onPressed: index >= count - 1 ? null : () => onMove(1),
       ),
       IconButton(
         key: Key('action-remove-$index'),
         tooltip: context.l10n.grpGRemoveAction,
-        icon: const Icon(Icons.delete_outline, size: 18),
+        icon: const TfIcon(TfIcons.trash, size: 18),
         onPressed: onRemove,
       ),
     ],
@@ -428,7 +430,7 @@ class _Arrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Padding(
     padding: EdgeInsets.only(top: 4),
-    child: Icon(Icons.arrow_downward, size: 20),
+    child: TfIcon(TfIcons.arrowDown, size: 20),
   );
 }
 
@@ -447,7 +449,7 @@ class DisabledBanner extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: scheme.errorContainer,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: TfRadius.panel,
       ),
       child: Text(
         context.l10n.grpGSwitchedOff(reason),

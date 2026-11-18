@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -187,7 +188,7 @@ class _GoalDialogState extends State<_GoalDialog> {
               OutlinedButton.icon(
                 key: const Key('goal-period'),
                 onPressed: _pickPeriod,
-                icon: const Icon(Icons.date_range),
+                icon: const TfIcon(TfIcons.calendarRange),
                 label: Text(
                   t.goalsPeriod(
                     context.localDate(_start),

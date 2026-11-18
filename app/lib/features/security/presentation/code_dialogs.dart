@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -148,7 +150,7 @@ class CopyableValue extends StatelessWidget {
       IconButton(
         key: copyKey,
         tooltip: context.l10n.grpBCopy,
-        icon: const Icon(Icons.copy),
+        icon: const TfIcon(TfIcons.copy),
         onPressed: () async {
           final messenger = ScaffoldMessenger.of(context);
           final copied = context.l10n.secCopied;

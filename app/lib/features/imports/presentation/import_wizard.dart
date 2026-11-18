@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -196,7 +197,7 @@ class _UploadStep extends ConsumerWidget {
             FilledButton.icon(
               key: const Key('import-pick'),
               onPressed: busy ? null : () => _pick(ref),
-              icon: const Icon(Icons.upload_file),
+              icon: const TfIcon(TfIcons.upload),
               label: Text(context.l10n.grpCImpPickFile),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -298,7 +299,7 @@ class _BodyState extends ConsumerState<_Body> {
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               key: const Key('timezone-device'),
-              icon: const Icon(Icons.phone_android),
+              icon: const TfIcon(TfIcons.smartphone),
               label: Text(context.l10n.grpEUseDeviceZone),
               onPressed: () {
                 final zone = timezoneForOffset(DateTime.now().timeZoneOffset);

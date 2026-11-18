@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,7 +37,7 @@ class _ActivitySectionState extends State<ActivitySection> {
       context.l10n.grpJActivity,
       style: Theme.of(context).textTheme.titleMedium,
     ),
-    leading: const Icon(Icons.history),
+    leading: const TfIcon(TfIcons.history),
     onExpansionChanged: (v) => setState(() => _open = v),
     children: [
       if (_open)
@@ -140,10 +141,8 @@ class _Line extends StatelessWidget {
         key: Key('activity-${e.id}'),
         dense: true,
         contentPadding: EdgeInsets.zero,
-        leading: Icon(
-          e.actorType == 'user'
-              ? Icons.person_outline
-              : Icons.smart_toy_outlined,
+        leading: TfIcon(
+          e.actorType == 'user' ? TfIcons.user : TfIcons.bot,
           size: 18,
         ),
         title: Text(

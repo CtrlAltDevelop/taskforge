@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -20,14 +21,14 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
           for (final (i, p) in snoozePresets(now, l10n: sheet.l10n).indexed)
             ListTile(
               key: Key('snooze-preset-$i'),
-              leading: const Icon(Icons.snooze),
+              leading: const TfIcon(TfIcons.snooze),
               title: Text(p.label),
               subtitle: Text(sheet.localDigits(_describe(p.at, sheet.l10n))),
               onTap: () => Navigator.of(sheet).pop(p.at),
             ),
           ListTile(
             key: const Key('snooze-custom'),
-            leading: const Icon(Icons.edit_calendar_outlined),
+            leading: const TfIcon(TfIcons.calendarEdit),
             title: Text(sheet.l10n.grpHPickDateTime),
             onTap: () async {
               final custom = await _pickDateTime(sheet, now);

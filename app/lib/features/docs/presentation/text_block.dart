@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
@@ -302,31 +304,31 @@ class _TextBlockViewState extends State<TextBlockView> {
   Widget _toolbar() => Material(
     key: const Key('floating-toolbar'),
     elevation: 3,
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: TfRadius.panel,
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (final (id, icon, tip, mark) in [
-          ('bold', Icons.format_bold, context.l10n.grpJBold, boldMark),
-          ('italic', Icons.format_italic, context.l10n.grpJItalic, italicMark),
+          ('bold', TfIcons.bold, context.l10n.grpJBold, boldMark),
+          ('italic', TfIcons.italic, context.l10n.grpJItalic, italicMark),
           (
             'strike',
-            Icons.strikethrough_s,
+            TfIcons.strikethrough,
             context.l10n.grpJStrikethrough,
             strikeMark,
           ),
-          ('code', Icons.code, context.l10n.grpJCode, codeMark),
+          ('code', TfIcons.code, context.l10n.grpJCode, codeMark),
         ])
           IconButton(
             key: Key('tb-$id'),
             tooltip: tip,
-            icon: Icon(icon, size: 18),
+            icon: TfIcon(icon, size: 18),
             onPressed: () => _toggle(mark),
           ),
         IconButton(
           key: const Key('tb-link'),
           tooltip: context.l10n.grpJLink,
-          icon: const Icon(Icons.link, size: 18),
+          icon: const TfIcon(TfIcons.link, size: 18),
           onPressed: _link,
         ),
       ],
@@ -412,7 +414,7 @@ class _TextBlockViewState extends State<TextBlockView> {
           IconButton(
             key: Key('callout-tone-${_block.id}'),
             tooltip: context.l10n.grpJChangeTone(_block.tone),
-            icon: Icon(_toneIcon(_block.tone), color: tone),
+            icon: TfIcon(_toneIcon(_block.tone), color: tone),
             onPressed: widget.readOnly
                 ? null
                 : () {
@@ -432,7 +434,7 @@ class _TextBlockViewState extends State<TextBlockView> {
               key: Key('callout-${_block.id}'),
               decoration: BoxDecoration(
                 color: tone.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: TfRadius.panel,
               ),
               child: row,
             ),
@@ -503,7 +505,7 @@ class _TextBlockViewState extends State<TextBlockView> {
                   ActionChip(
                     key: Key('mention-${e.key}'),
                     visualDensity: VisualDensity.compact,
-                    avatar: const Icon(Icons.description_outlined, size: 14),
+                    avatar: const TfIcon(TfIcons.fileText, size: 14),
                     label: Text(e.value),
                     onPressed: () => widget.onOpenDoc(e.key),
                   ),
@@ -522,9 +524,9 @@ Color _toneColor(ColorScheme s, String tone) => switch (tone) {
   _ => s.primary,
 };
 
-IconData _toneIcon(String tone) => switch (tone) {
-  'warning' => Icons.warning_amber,
-  'success' => Icons.check_circle_outline,
-  'danger' => Icons.error_outline,
-  _ => Icons.info_outline,
+TfIconData _toneIcon(String tone) => switch (tone) {
+  'warning' => TfIcons.warning,
+  'success' => TfIcons.success,
+  'danger' => TfIcons.error,
+  _ => TfIcons.info,
 };

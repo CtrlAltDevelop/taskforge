@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -319,15 +321,11 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
             ),
           ),
           if (live.isMuted(now))
-            Icon(
-              Icons.notifications_off_outlined,
-              size: 18,
-              semanticLabel: l10n.chatMuted,
-            ),
+            TfIcon(TfIcons.bellOff, size: 18, semanticLabel: l10n.chatMuted),
           IconButton(
             key: const Key('chat-settings'),
             tooltip: l10n.chatSettings,
-            icon: const Icon(Icons.tune),
+            icon: const TfIcon(TfIcons.tune),
             onPressed: () => showSpaceSettings(context, _space.id),
           ),
         ],
@@ -400,7 +398,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
             child: FilledButton.tonalIcon(
               key: const Key('jump-to-latest'),
               onPressed: _jumpToLatest,
-              icon: const Icon(Icons.arrow_downward, size: 18),
+              icon: const TfIcon(TfIcons.arrowDown, size: 18),
               label: Text(l10n.chatJumpLatest),
             ),
           ),
@@ -425,7 +423,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
             IconButton(
               key: const Key('thread-back'),
               tooltip: l10n.chatBack,
-              icon: const Icon(Icons.arrow_back),
+              icon: const TfIcon(TfIcons.arrowStart),
               onPressed: () => setState(() => _thread = null),
             ),
             Text(

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,7 +110,7 @@ class _InvitationTile extends ConsumerWidget {
       clipBehavior: Clip.antiAlias,
       child: ListTile(
         key: Key('invite-${i.id}'),
-        leading: Icon(i.isLink ? Icons.link : Icons.mail_outline),
+        leading: Icon(i.isLink ? TfIcons.link.glyph : TfIcons.mail.glyph),
         title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
         subtitle: Text(
           '${i.isLink ? '$uses · ' : ''}'
@@ -133,21 +134,21 @@ class _InvitationTile extends ConsumerWidget {
                     IconButton(
                       key: Key('copy-${i.id}'),
                       tooltip: context.l10n.grpJCopyLink,
-                      icon: const Icon(Icons.copy),
+                      icon: const TfIcon(TfIcons.copy),
                       onPressed: () => copyInviteLink(context, token),
                     ),
                   if (!i.isLink && i.state != InviteState.revoked)
                     IconButton(
                       key: Key('resend-${i.id}'),
                       tooltip: context.l10n.grpJResend,
-                      icon: const Icon(Icons.send),
+                      icon: const TfIcon(TfIcons.send),
                       onPressed: () => _resend(context, ref),
                     ),
                   if (live)
                     IconButton(
                       key: Key('revoke-${i.id}'),
                       tooltip: context.l10n.grpJRevoke,
-                      icon: const Icon(Icons.block),
+                      icon: const TfIcon(TfIcons.blocked),
                       onPressed: () => _revoke(context, ref),
                     ),
                 ],

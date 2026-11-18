@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -389,7 +390,7 @@ class _PublicFormViewState extends State<PublicFormView> {
           if (value.isNotEmpty)
             IconButton(
               tooltip: t.formsClearDate,
-              icon: const Icon(Icons.clear),
+              icon: const TfIcon(TfIcons.close),
               onPressed: () => setState(() => _values[q.id] = ''),
             ),
         ],
@@ -410,11 +411,11 @@ class _PublicFormViewState extends State<PublicFormView> {
             ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.attach_file),
+              leading: const TfIcon(TfIcons.attachment),
               title: Text(files[i].name),
               trailing: IconButton(
                 tooltip: t.formsRemoveFile,
-                icon: const Icon(Icons.close),
+                icon: const TfIcon(TfIcons.close),
                 onPressed: () => setState(() {
                   _files[q.id] = [...files]..removeAt(i);
                 }),
@@ -422,7 +423,7 @@ class _PublicFormViewState extends State<PublicFormView> {
             ),
           OutlinedButton.icon(
             onPressed: files.length >= q.maxFiles ? null : () => _pickFiles(q),
-            icon: const Icon(Icons.upload_file),
+            icon: const TfIcon(TfIcons.upload),
             label: Text(t.formsAddFile(q.maxFiles)),
           ),
         ],

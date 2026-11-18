@@ -30,6 +30,7 @@ void main() {
       'undo',
       'sidebar',
       'signOut',
+      'cornerDownRight',
     });
   });
 

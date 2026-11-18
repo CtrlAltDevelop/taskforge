@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +57,7 @@ class SignInScreen extends ConsumerWidget {
           OutlinedButton.icon(
             key: const Key('go-sso'),
             onPressed: () => showSsoDialog(context, ref),
-            icon: const Icon(Icons.badge_outlined),
+            icon: const TfIcon(TfIcons.user),
             label: Text(context.l10n.ssoContinue),
           ),
           TextButton(

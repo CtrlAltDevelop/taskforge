@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -30,7 +31,7 @@ class ImportScreen extends ConsumerWidget {
             TextButton.icon(
               key: const Key('open-export'),
               onPressed: () => showExportDialog(context),
-              icon: const Icon(Icons.download),
+              icon: const TfIcon(TfIcons.download),
               label: Text(context.l10n.grpCImpExport),
             ),
         ],
@@ -156,7 +157,7 @@ class ImportHistory extends ConsumerWidget {
                                   tooltip: context.l10n.grpCImpForget,
                                   onPressed: () =>
                                       _run(context, () => actions.discard(job)),
-                                  icon: const Icon(Icons.delete_outline),
+                                  icon: const TfIcon(TfIcons.trash),
                                 ),
                             ],
                           ),

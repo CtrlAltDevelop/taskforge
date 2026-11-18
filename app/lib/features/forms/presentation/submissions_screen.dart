@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,7 @@ class SubmissionsScreen extends ConsumerWidget {
           IconButton(
             key: const Key('refresh-submissions'),
             tooltip: context.l10n.devRetry,
-            icon: const Icon(Icons.refresh),
+            icon: const TfIcon(TfIcons.refresh),
             onPressed: () => ref.invalidate(submissionsProvider(formId)),
           ),
         ],
@@ -67,7 +68,7 @@ class SubmissionsScreen extends ConsumerWidget {
                       clipBehavior: Clip.antiAlias,
                       child: ListTile(
                         key: Key('submission-${s.id}'),
-                        leading: const Icon(Icons.inbox_outlined),
+                        leading: const TfIcon(TfIcons.inbox),
                         title: Text(
                           s.taskTitle.isEmpty
                               ? context.l10n.formsTaskGone
@@ -86,7 +87,7 @@ class SubmissionsScreen extends ConsumerWidget {
                             : () => context.go('/projects/${s.projectId}'),
                         trailing: IconButton(
                           tooltip: context.l10n.formsCopyReference,
-                          icon: const Icon(Icons.copy),
+                          icon: const TfIcon(TfIcons.copy),
                           onPressed: () => Clipboard.setData(
                             ClipboardData(text: s.reference),
                           ),

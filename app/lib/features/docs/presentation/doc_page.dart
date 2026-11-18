@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -5,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
@@ -136,7 +138,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: TfRadius.control,
         ),
         child: Row(
           children: [
@@ -158,7 +160,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
         child: Text(context.l10n.grpBDocsCrumb),
       ),
       for (final d in trail) ...[
-        const DirectionalIcon(Icons.chevron_right, size: 16),
+        const TfIcon(TfIcons.chevronEnd, size: 16),
         TextButton(
           key: Key('crumb-${d.id}'),
           onPressed: d.id == widget.docId
@@ -282,7 +284,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.edit_outlined, size: 14),
+                        const TfIcon(TfIcons.edit, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           others.length == 1
@@ -299,7 +301,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                       IconButton(
                         key: const Key('open-page-tree'),
                         tooltip: context.l10n.grpBPages,
-                        icon: const Icon(Icons.account_tree_outlined),
+                        icon: const TfIcon(TfIcons.workflow),
                         onPressed: widget.onOpenTree,
                       ),
                     IconButton(
@@ -362,20 +364,20 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     if (page.node.restricted)
                       Chip(
                         key: const Key('restricted-badge'),
-                        avatar: const Icon(Icons.lock_outline, size: 14),
+                        avatar: const TfIcon(TfIcons.lock, size: 14),
                         label: Text(context.l10n.grpBRestricted),
                         visualDensity: VisualDensity.compact,
                       ),
                     IconButton(
                       key: const Key('open-revisions'),
                       tooltip: context.l10n.grpBHistory,
-                      icon: const Icon(Icons.history),
+                      icon: const TfIcon(TfIcons.history),
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                     ),
                     IconButton(
                       key: const Key('open-share'),
                       tooltip: context.l10n.grpBAccess,
-                      icon: const Icon(Icons.lock_person_outlined),
+                      icon: const TfIcon(TfIcons.lock),
                       onPressed: () => showDialog<void>(
                         context: context,
                         builder: (_) => ShareDialog(docId: id),
@@ -384,7 +386,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     IconButton(
                       key: const Key('export-md'),
                       tooltip: context.l10n.grpBExportMarkdown,
-                      icon: const Icon(Icons.ios_share),
+                      icon: const TfIcon(TfIcons.share),
                       onPressed: () => exportMarkdown(context, ref, id),
                     ),
                   ],

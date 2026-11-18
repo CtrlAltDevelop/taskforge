@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -96,20 +98,20 @@ class AttachmentViewer extends ConsumerWidget {
                     key: const Key('viewer-download'),
                     tooltip: context.l10n.grpHDownload,
                     onPressed: () => _open(context, ref),
-                    icon: const Icon(Icons.download),
+                    icon: const TfIcon(TfIcons.download),
                   ),
                   if (onDelete != null)
                     IconButton(
                       key: const Key('viewer-delete'),
                       tooltip: context.l10n.grpHDelete,
                       onPressed: () => _delete(context),
-                      icon: const Icon(Icons.delete_outline),
+                      icon: const TfIcon(TfIcons.trash),
                     ),
                   IconButton(
                     key: const Key('viewer-close'),
                     tooltip: context.l10n.grpHClose,
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
+                    icon: const TfIcon(TfIcons.close),
                   ),
                 ],
               ),
@@ -339,7 +341,7 @@ class _VideoPreviewState extends ConsumerState<_VideoPreview> {
           key: const Key('video-toggle'),
           tooltip: playing ? context.l10n.grpHPause : context.l10n.grpHPlay,
           onPressed: () => playing ? c.pause() : c.play(),
-          icon: Icon(playing ? Icons.pause : Icons.play_arrow),
+          icon: TfIcon(playing ? TfIcons.pause : TfIcons.play),
         ),
       ],
     );
@@ -354,7 +356,7 @@ class _Fallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const plain = Icon(Icons.insert_drive_file_outlined, size: 64);
+    const plain = TfIcon(TfIcons.file, size: 64);
     return Column(
       key: const Key('viewer-fallback'),
       mainAxisSize: MainAxisSize.min,

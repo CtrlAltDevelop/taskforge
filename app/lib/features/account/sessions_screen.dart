@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -96,9 +97,9 @@ class _SessionTile extends ConsumerWidget {
   Widget _device(BuildContext context) => session.dpopBound
       ? Tooltip(
           message: context.l10n.dpopSessionBound,
-          child: const Icon(Icons.lock_outline, key: Key('session-bound')),
+          child: const TfIcon(TfIcons.lock, key: Key('session-bound')),
         )
-      : const Icon(Icons.devices);
+      : const TfIcon(TfIcons.devices);
 
   String _title(BuildContext context) {
     if (session.name.isNotEmpty) return session.name;
@@ -161,7 +162,7 @@ class _SessionTile extends ConsumerWidget {
             IconButton(
               key: Key('rename-${session.id}'),
               tooltip: l10n.devSessionRename,
-              icon: const Icon(Icons.edit_outlined, size: 18),
+              icon: const TfIcon(TfIcons.edit, size: 18),
               onPressed: () => _rename(context, ref),
             ),
           ],
@@ -196,7 +197,7 @@ class _SessionTile extends ConsumerWidget {
             : IconButton(
                 key: Key('revoke-${session.id}'),
                 tooltip: l10n.grpISignOutThis,
-                icon: const Icon(Icons.close),
+                icon: const TfIcon(TfIcons.close),
                 onPressed: () => onRevoke(context, ref, [session.id]),
               ),
       ),

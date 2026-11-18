@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -504,7 +505,7 @@ class _Timing extends StatelessWidget {
         key: const Key('repeat-time'),
         dense: true,
         contentPadding: EdgeInsets.zero,
-        leading: const Icon(Icons.schedule),
+        leading: const TfIcon(TfIcons.clock),
         title: Text(
           context.l10n.grpDRepeatAt(context.localDigits(draft.atTime)),
         ),

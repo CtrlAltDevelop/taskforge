@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,16 +18,16 @@ import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
-IconData fieldTypeIcon(FieldType type) => switch (type) {
-  FieldType.text => Icons.text_fields,
-  FieldType.number => Icons.numbers,
-  FieldType.select => Icons.arrow_drop_down_circle_outlined,
-  FieldType.multiselect => Icons.checklist,
-  FieldType.date => Icons.calendar_today,
-  FieldType.checkbox => Icons.check_box_outlined,
-  FieldType.url => Icons.link,
-  FieldType.user => Icons.person_outline,
-  FieldType.money => Icons.attach_money,
+TfIconData fieldTypeIcon(FieldType type) => switch (type) {
+  FieldType.text => TfIcons.textType,
+  FieldType.number => TfIcons.hash,
+  FieldType.select => TfIcons.chevronDown,
+  FieldType.multiselect => TfIcons.listChecks,
+  FieldType.date => TfIcons.calendar,
+  FieldType.checkbox => TfIcons.squareCheck,
+  FieldType.url => TfIcons.link,
+  FieldType.user => TfIcons.user,
+  FieldType.money => TfIcons.dollarSign,
 };
 
 /// Project settings → Fields: add, edit, reorder, archive and restore the
@@ -195,7 +196,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           ? FloatingActionButton.extended(
               key: const Key('add-field'),
               onPressed: _add,
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus),
               label: Text(context.l10n.grpIAddField),
             )
           : null,
@@ -251,7 +252,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                     clipBehavior: Clip.antiAlias,
                     child: ListTile(
                       key: Key('archived-${f.id}'),
-                      leading: Icon(fieldTypeIcon(f.type)),
+                      leading: TfIcon(fieldTypeIcon(f.type)),
                       title: Text(f.name),
                       trailing: TextButton(
                         key: Key('restore-${f.id}'),
@@ -290,7 +291,7 @@ class _FieldTile extends StatelessWidget {
   Widget build(BuildContext context) => Card(
     child: ListTile(
       key: Key('field-tile-${field.id}'),
-      leading: Icon(fieldTypeIcon(field.type)),
+      leading: TfIcon(fieldTypeIcon(field.type)),
       title: Text(field.name),
       subtitle: Text(
         [
@@ -308,13 +309,13 @@ class _FieldTile extends StatelessWidget {
                 IconButton(
                   key: Key('edit-${field.id}'),
                   tooltip: context.l10n.grpIEdit,
-                  icon: const Icon(Icons.edit_outlined),
+                  icon: const TfIcon(TfIcons.edit),
                   onPressed: onEdit,
                 ),
                 IconButton(
                   key: Key('archive-${field.id}'),
                   tooltip: context.l10n.grpIArchive,
-                  icon: const Icon(Icons.archive_outlined),
+                  icon: const TfIcon(TfIcons.archive),
                   onPressed: onArchive,
                 ),
                 const SizedBox(width: 24),

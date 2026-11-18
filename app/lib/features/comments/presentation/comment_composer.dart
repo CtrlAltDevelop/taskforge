@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -177,35 +179,35 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
     mainAxisSize: MainAxisSize.min,
     children: [
       for (final (key, icon, tip, action)
-          in <(String, IconData, String, VoidCallback)>[
+          in <(String, TfIconData, String, VoidCallback)>[
             (
               'bullet',
-              Icons.format_list_bulleted,
+              TfIcons.list,
               context.l10n.grpIBulletList,
               () => _linePrefix('- '),
             ),
             (
               'quote',
-              Icons.format_quote,
+              TfIcons.quote,
               context.l10n.grpIQuote,
               () => _linePrefix('> '),
             ),
             (
               'code',
-              Icons.code,
+              TfIcons.code,
               context.l10n.grpICodeBlock,
               () => _wrapSelection('```\n', '\n```'),
             ),
             (
               'link',
-              Icons.link,
+              TfIcons.link,
               context.l10n.grpILink,
               () => _wrapSelection('[', '](https://)'),
             ),
           ])
         IconButton(
           key: Key('format-$key'),
-          icon: Icon(icon, size: 18),
+          icon: TfIcon(icon, size: 18),
           tooltip: tip,
           visualDensity: VisualDensity.compact,
           onPressed: action,
@@ -263,7 +265,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
           Material(
             key: const Key('mention-picker'),
             elevation: 2,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: TfRadius.panel,
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 180),
               child: ListView(
@@ -325,7 +327,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
                 for (var i = 0; i < _files.length; i++)
                   InputChip(
                     key: Key('chosen-file-$i'),
-                    avatar: const Icon(Icons.attach_file, size: 16),
+                    avatar: const TfIcon(TfIcons.attachment, size: 16),
                     label: Text(
                       _files[i].name,
                       overflow: TextOverflow.ellipsis,
