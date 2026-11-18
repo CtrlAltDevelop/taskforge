@@ -78,6 +78,45 @@ class AppLocalizationsPs extends AppLocalizations {
   String get languageAndRegionSubtitle => 'ژبه، کلیز، د اونۍ پیل او شمیرې';
 
   @override
+  String get appearance => 'بڼه';
+
+  @override
+  String get appearanceSubtitle => 'بڼه، کثافت او توپیر';
+
+  @override
+  String get themeLabel => 'بڼه';
+
+  @override
+  String get themeSystem => 'د سیسټم پیروي';
+
+  @override
+  String get themeLight => 'روښانه';
+
+  @override
+  String get themeDark => 'تیاره';
+
+  @override
+  String get densityLabel => 'کثافت';
+
+  @override
+  String get densityComfortable => 'آرام';
+
+  @override
+  String get densityCompact => 'ټینګ';
+
+  @override
+  String get contrastLabel => 'لوړ توپیر';
+
+  @override
+  String get contrastHelp => 'د اسانه لوستلو لپاره پیاوړی متن او کرښې';
+
+  @override
+  String get appearancePreview => 'مخکتنه';
+
+  @override
+  String get appearancePreviewTask => 'د خپرونې یادښتونه ولیکئ';
+
+  @override
   String get signIn => 'ننوتل';
 
   @override
@@ -8515,4 +8554,255 @@ class AppLocalizationsPs extends AppLocalizations {
   String chatEntryMessage(String space) {
     return 'په $space کې د بحث پیغام';
   }
+
+  @override
+  String get shellRecent => 'وروستي';
+
+  @override
+  String get shellRename => 'نوم بدلول';
+
+  @override
+  String get shellRenameProject => 'د پروژې نوم بدلول';
+
+  @override
+  String get shellGallery => 'د برخو ګالري';
+
+  @override
+  String get shellCrumbTask => 'دنده';
+
+  @override
+  String get shellCrumbDoc => 'سند';
+
+  @override
+  String get shellCrumbGoal => 'موخه';
+
+  @override
+  String get shellCrumbSpace => 'ځای';
+
+  @override
+  String get shellToggleSidebar => 'څنګ بار ښودل یا پټول';
+
+  @override
+  String get shellThen => 'بیا';
+
+  @override
+  String get shellWorkspaceGroup => 'کاري ځای';
+
+  @override
+  String get shellAdminGroup => 'مدیریت';
+
+  @override
+  String get shellExpandSidebar => 'څنګ بار پراخول';
+
+  @override
+  String get shellCollapseSidebar => 'څنګ بار راټولول';
+
+  @override
+  String get shellCreate => 'جوړول';
+
+  @override
+  String get shellMore => 'نور';
+
+  @override
+  String get shellFindProject => 'پروژه موندل';
+
+  @override
+  String get shellNoProjectMatch => 'هیڅ پروژه ونه موندل شوه';
+
+  @override
+  String get grpENavMenu => 'د نیویګیشن مینو پرانیستل';
+
+  @override
+  String shellMoreFor(String name) {
+    return 'د $name لپاره نور عملونه';
+  }
+
+  @override
+  String get wvClearAll => 'ټول پاکول';
+
+  @override
+  String get wvOverdue => 'ځنډېدلی';
+
+  @override
+  String get wvSearchHint => 'په دې لید کې لټون';
+
+  @override
+  String get wvSearchClear => 'لټون پاک کړه';
+
+  @override
+  String get wvAddTask => 'دنده';
+
+  @override
+  String get wvAddView => 'لید';
+
+  @override
+  String get wvNoSavedViews =>
+      'تر اوسه هیڅ ساتل شوی ترتیب نشته. له ترتیبونو یو وساتئ.';
+
+  @override
+  String get wvPinTab => 'د ټب په توګه ور وتړه';
+
+  @override
+  String get wvUnpinTab => 'ټب خلاص کړه';
+
+  @override
+  String get wvMoveEarlier => 'مخکې کړه';
+
+  @override
+  String get wvMoveLater => 'وروسته کړه';
+
+  @override
+  String get wvViewTabs => 'لیدونه';
+
+  @override
+  String get wvShare => 'شریکول';
+
+  @override
+  String get wvCopyLink => 'لینک کاپي کړه';
+
+  @override
+  String get wvLinkCopied => 'لینک کاپي شو';
+
+  @override
+  String get wvProjectMenu => 'د پروژې مینو';
+
+  @override
+  String get wvResetColumns => 'ستونونه بیا تنظیم کړه';
+
+  @override
+  String wvMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غړي',
+      one: '۱ غړی',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wvNoMatch => 'دا فلټرونه هیڅ دنده نه لري';
+
+  @override
+  String get wvClearFilters => 'فلټرونه پاکول';
+
+  @override
+  String get wvNoTasks => 'تر اوسه هیڅ دنده نشته';
+
+  @override
+  String get wvNoTasksHint => 'لومړۍ دنده اضافه کړئ چې دا پروژه پیل شي.';
+
+  @override
+  String get wvAddFirstTask => 'خپله لومړۍ دنده اضافه کړئ';
+
+  @override
+  String get wvLoadFailed => 'دندې نه شي پورته کېدای';
+
+  @override
+  String get tdActClose => 'پرانیستل شوې دنده تړل';
+
+  @override
+  String get tdActCloseSem => 'هغه دنده وتړه چې پرانیستل شوې';
+
+  @override
+  String get tdActPrev => 'مخکینۍ دنده';
+
+  @override
+  String get tdActPrevSem => 'په لیست کې مخکینۍ دنده پرانیزه';
+
+  @override
+  String get tdActNext => 'راتلونکې دنده';
+
+  @override
+  String get tdActNextSem => 'په لیست کې راتلونکې دنده پرانیزه';
+
+  @override
+  String get tdActSend => 'تبصره ولېږه';
+
+  @override
+  String get tdActSendSem => 'هغه تبصره ولېږه چې په پرانیستې دنده کې لیکل شوې';
+
+  @override
+  String get tdArchivedReadOnly =>
+      'دا پروژه آرشیف شوې، نو دندې یې یوازې د لوستلو دي.';
+
+  @override
+  String get tdComposerOffline =>
+      'آفلاین: پیغامونه ساتل کېږي او د بیا وصل کېدو وروسته لېږل کېږي';
+
+  @override
+  String get tdCopyLink => 'لینک کاپي کړه';
+
+  @override
+  String get tdDescriptionHint => 'یو تشریح اضافه کړه';
+
+  @override
+  String get tdDetails => 'توضیحات';
+
+  @override
+  String get tdDueTimeShort => 'د پای وخت';
+
+  @override
+  String get tdJumpToLatest => 'وروستی';
+
+  @override
+  String get tdKindModal => 'کړکۍ';
+
+  @override
+  String get tdKindPeek => 'اړخ پینل';
+
+  @override
+  String get tdKindPage => 'بشپړه پاڼه';
+
+  @override
+  String get tdLinkCopied => 'لینک کاپي شو';
+
+  @override
+  String get tdNeedsAssignee => 'ځینې لیږدونه لومړی د مسؤل اړتیا لري.';
+
+  @override
+  String get tdNextTask => 'راتلونکې دنده';
+
+  @override
+  String get tdNoPermission => 'تاسو د دندو د سمولو اجازه نه لرئ.';
+
+  @override
+  String get tdNotFoundHint =>
+      'ښايي ړنګه یا لېږدول شوې وي، یا تاسو لاسرسی ونه لرئ.';
+
+  @override
+  String get tdNotSet => 'نه دی ټاکل شوی';
+
+  @override
+  String tdOpenAs(String kind) {
+    return 'د $kind په توګه پرانیزه';
+  }
+
+  @override
+  String get tdPreviousTask => 'مخکینۍ دنده';
+
+  @override
+  String get tdQueuedOffline => 'په کتار کې، کله چې بیا آنلاین شئ لېږل کېږي';
+
+  @override
+  String tdTabNeedsInput(String label) {
+    return '$label !';
+  }
+
+  @override
+  String get tdTabTime => 'وخت';
+
+  @override
+  String tdTabWithCount(String label, String count) {
+    return '$label $count';
+  }
+
+  @override
+  String get tdTrashedBanner => 'دا دنده په ډنګر کې ده.';
+
+  @override
+  String get tdUnassigned => 'نه ټاکل شوی';
+
+  @override
+  String get tdUnsavedDraft => 'نه خوندي شوی مسوده';
 }

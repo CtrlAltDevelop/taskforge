@@ -235,6 +235,84 @@ abstract class AppLocalizations {
   /// **'Language, calendar, week start and digits'**
   String get languageAndRegionSubtitle;
 
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme, density and contrast'**
+  String get appearanceSubtitle;
+
+  /// No description provided for @themeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeLabel;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the system'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @densityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Density'**
+  String get densityLabel;
+
+  /// No description provided for @densityComfortable.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfortable'**
+  String get densityComfortable;
+
+  /// No description provided for @densityCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'Compact'**
+  String get densityCompact;
+
+  /// No description provided for @contrastLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'High contrast'**
+  String get contrastLabel;
+
+  /// No description provided for @contrastHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Stronger text and borders for easier reading'**
+  String get contrastHelp;
+
+  /// No description provided for @appearancePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get appearancePreview;
+
+  /// No description provided for @appearancePreviewTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Write the release notes'**
+  String get appearancePreviewTask;
+
   /// No description provided for @signIn.
   ///
   /// In en, this message translates to:
@@ -15053,6 +15131,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat message in {space}'**
   String chatEntryMessage(String space);
+
+  /// No description provided for @shellRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get shellRecent;
+
+  /// No description provided for @shellRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get shellRename;
+
+  /// No description provided for @shellRenameProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename project'**
+  String get shellRenameProject;
+
+  /// No description provided for @shellGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Component gallery'**
+  String get shellGallery;
+
+  /// No description provided for @shellCrumbTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Task'**
+  String get shellCrumbTask;
+
+  /// No description provided for @shellCrumbDoc.
+  ///
+  /// In en, this message translates to:
+  /// **'Doc'**
+  String get shellCrumbDoc;
+
+  /// No description provided for @shellCrumbGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get shellCrumbGoal;
+
+  /// No description provided for @shellCrumbSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Space'**
+  String get shellCrumbSpace;
+
+  /// No description provided for @shellToggleSidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show or hide the sidebar'**
+  String get shellToggleSidebar;
+
+  /// No description provided for @shellThen.
+  ///
+  /// In en, this message translates to:
+  /// **'then'**
+  String get shellThen;
+
+  /// No description provided for @shellWorkspaceGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace'**
+  String get shellWorkspaceGroup;
+
+  /// No description provided for @shellAdminGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get shellAdminGroup;
+
+  /// No description provided for @shellExpandSidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand sidebar'**
+  String get shellExpandSidebar;
+
+  /// No description provided for @shellCollapseSidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse sidebar'**
+  String get shellCollapseSidebar;
+
+  /// No description provided for @shellCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get shellCreate;
+
+  /// No description provided for @shellMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get shellMore;
+
+  /// No description provided for @shellFindProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a project'**
+  String get shellFindProject;
+
+  /// No description provided for @shellNoProjectMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No project matches'**
+  String get shellNoProjectMatch;
+
+  /// No description provided for @grpENavMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Open navigation menu'**
+  String get grpENavMenu;
+
+  /// No description provided for @shellMoreFor.
+  ///
+  /// In en, this message translates to:
+  /// **'More actions for {name}'**
+  String shellMoreFor(String name);
+
+  /// No description provided for @wvClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get wvClearAll;
+
+  /// No description provided for @wvOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get wvOverdue;
+
+  /// No description provided for @wvSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in view'**
+  String get wvSearchHint;
+
+  /// No description provided for @wvSearchClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get wvSearchClear;
+
+  /// No description provided for @wvAddTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Task'**
+  String get wvAddTask;
+
+  /// No description provided for @wvAddView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get wvAddView;
+
+  /// No description provided for @wvNoSavedViews.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved layouts yet. Save one from Layouts.'**
+  String get wvNoSavedViews;
+
+  /// No description provided for @wvPinTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin as tab'**
+  String get wvPinTab;
+
+  /// No description provided for @wvUnpinTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin tab'**
+  String get wvUnpinTab;
+
+  /// No description provided for @wvMoveEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Move earlier'**
+  String get wvMoveEarlier;
+
+  /// No description provided for @wvMoveLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Move later'**
+  String get wvMoveLater;
+
+  /// No description provided for @wvViewTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Views'**
+  String get wvViewTabs;
+
+  /// No description provided for @wvShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get wvShare;
+
+  /// No description provided for @wvCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get wvCopyLink;
+
+  /// No description provided for @wvLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get wvLinkCopied;
+
+  /// No description provided for @wvProjectMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Project menu'**
+  String get wvProjectMenu;
+
+  /// No description provided for @wvResetColumns.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset columns'**
+  String get wvResetColumns;
+
+  /// No description provided for @wvMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 member} other{{count} members}}'**
+  String wvMembers(int count);
+
+  /// No description provided for @wvNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks match these filters'**
+  String get wvNoMatch;
+
+  /// No description provided for @wvClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get wvClearFilters;
+
+  /// No description provided for @wvNoTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks yet'**
+  String get wvNoTasks;
+
+  /// No description provided for @wvNoTasksHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the first task to get this project moving.'**
+  String get wvNoTasksHint;
+
+  /// No description provided for @wvAddFirstTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first task'**
+  String get wvAddFirstTask;
+
+  /// No description provided for @wvLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the tasks'**
+  String get wvLoadFailed;
+
+  /// No description provided for @tdActClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the open task'**
+  String get tdActClose;
+
+  /// No description provided for @tdActCloseSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the task that is open'**
+  String get tdActCloseSem;
+
+  /// No description provided for @tdActPrev.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous task'**
+  String get tdActPrev;
+
+  /// No description provided for @tdActPrevSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the previous task in the list'**
+  String get tdActPrevSem;
+
+  /// No description provided for @tdActNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next task'**
+  String get tdActNext;
+
+  /// No description provided for @tdActNextSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the next task in the list'**
+  String get tdActNextSem;
+
+  /// No description provided for @tdActSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the comment'**
+  String get tdActSend;
+
+  /// No description provided for @tdActSendSem.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the comment written in the open task'**
+  String get tdActSendSem;
+
+  /// No description provided for @tdArchivedReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This project is archived, so its tasks are read-only.'**
+  String get tdArchivedReadOnly;
+
+  /// No description provided for @tdComposerOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline: messages are kept and sent when you reconnect'**
+  String get tdComposerOffline;
+
+  /// No description provided for @tdCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get tdCopyLink;
+
+  /// No description provided for @tdDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a description'**
+  String get tdDescriptionHint;
+
+  /// No description provided for @tdDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get tdDetails;
+
+  /// No description provided for @tdDueTimeShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Due time'**
+  String get tdDueTimeShort;
+
+  /// No description provided for @tdJumpToLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get tdJumpToLatest;
+
+  /// No description provided for @tdKindModal.
+  ///
+  /// In en, this message translates to:
+  /// **'window'**
+  String get tdKindModal;
+
+  /// No description provided for @tdKindPeek.
+  ///
+  /// In en, this message translates to:
+  /// **'side panel'**
+  String get tdKindPeek;
+
+  /// No description provided for @tdKindPage.
+  ///
+  /// In en, this message translates to:
+  /// **'full page'**
+  String get tdKindPage;
+
+  /// No description provided for @tdLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get tdLinkCopied;
+
+  /// No description provided for @tdNeedsAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Some moves need an assignee first.'**
+  String get tdNeedsAssignee;
+
+  /// No description provided for @tdNextTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Next task'**
+  String get tdNextTask;
+
+  /// No description provided for @tdNoPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to edit tasks.'**
+  String get tdNoPermission;
+
+  /// No description provided for @tdNotFoundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been deleted, moved, or you may not have access.'**
+  String get tdNotFoundHint;
+
+  /// No description provided for @tdNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get tdNotSet;
+
+  /// No description provided for @tdOpenAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Open as {kind}'**
+  String tdOpenAs(String kind);
+
+  /// No description provided for @tdPreviousTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous task'**
+  String get tdPreviousTask;
+
+  /// No description provided for @tdQueuedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued, sends when you are back online'**
+  String get tdQueuedOffline;
+
+  /// No description provided for @tdTabNeedsInput.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} !'**
+  String tdTabNeedsInput(String label);
+
+  /// No description provided for @tdTabTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get tdTabTime;
+
+  /// No description provided for @tdTabWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} {count}'**
+  String tdTabWithCount(String label, String count);
+
+  /// No description provided for @tdTrashedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'This task is in the trash.'**
+  String get tdTrashedBanner;
+
+  /// No description provided for @tdUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned'**
+  String get tdUnassigned;
+
+  /// No description provided for @tdUnsavedDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved draft'**
+  String get tdUnsavedDraft;
 }
 
 class _AppLocalizationsDelegate

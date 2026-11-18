@@ -79,6 +79,45 @@ class AppLocalizationsAr extends AppLocalizations {
       'اللغة والتقويم وبداية الأسبوع والأرقام';
 
   @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get appearanceSubtitle => 'السمة والكثافة والتباين';
+
+  @override
+  String get themeLabel => 'السمة';
+
+  @override
+  String get themeSystem => 'اتباع النظام';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get densityLabel => 'الكثافة';
+
+  @override
+  String get densityComfortable => 'مريح';
+
+  @override
+  String get densityCompact => 'مضغوط';
+
+  @override
+  String get contrastLabel => 'تباين عالٍ';
+
+  @override
+  String get contrastHelp => 'نص وحدود أوضح لقراءة أسهل';
+
+  @override
+  String get appearancePreview => 'معاينة';
+
+  @override
+  String get appearancePreviewTask => 'اكتب ملاحظات الإصدار';
+
+  @override
   String get signIn => 'تسجيل الدخول';
 
   @override
@@ -8627,4 +8666,258 @@ class AppLocalizationsAr extends AppLocalizations {
   String chatEntryMessage(String space) {
     return 'رسالة محادثة في $space';
   }
+
+  @override
+  String get shellRecent => 'الأخيرة';
+
+  @override
+  String get shellRename => 'إعادة تسمية';
+
+  @override
+  String get shellRenameProject => 'إعادة تسمية المشروع';
+
+  @override
+  String get shellGallery => 'معرض المكوّنات';
+
+  @override
+  String get shellCrumbTask => 'مهمة';
+
+  @override
+  String get shellCrumbDoc => 'مستند';
+
+  @override
+  String get shellCrumbGoal => 'هدف';
+
+  @override
+  String get shellCrumbSpace => 'مساحة';
+
+  @override
+  String get shellToggleSidebar => 'إظهار الشريط الجانبي أو إخفاؤه';
+
+  @override
+  String get shellThen => 'ثم';
+
+  @override
+  String get shellWorkspaceGroup => 'مساحة العمل';
+
+  @override
+  String get shellAdminGroup => 'الإدارة';
+
+  @override
+  String get shellExpandSidebar => 'توسيع الشريط الجانبي';
+
+  @override
+  String get shellCollapseSidebar => 'طيّ الشريط الجانبي';
+
+  @override
+  String get shellCreate => 'إنشاء';
+
+  @override
+  String get shellMore => 'المزيد';
+
+  @override
+  String get shellFindProject => 'البحث عن مشروع';
+
+  @override
+  String get shellNoProjectMatch => 'لا يوجد مشروع مطابق';
+
+  @override
+  String get grpENavMenu => 'فتح قائمة التنقل';
+
+  @override
+  String shellMoreFor(String name) {
+    return 'المزيد من الإجراءات لـ $name';
+  }
+
+  @override
+  String get wvClearAll => 'مسح الكل';
+
+  @override
+  String get wvOverdue => 'متأخرة';
+
+  @override
+  String get wvSearchHint => 'البحث في العرض';
+
+  @override
+  String get wvSearchClear => 'مسح البحث';
+
+  @override
+  String get wvAddTask => 'مهمة';
+
+  @override
+  String get wvAddView => 'عرض';
+
+  @override
+  String get wvNoSavedViews =>
+      'لا توجد تخطيطات محفوظة بعد. احفظ واحدًا من قائمة التخطيطات.';
+
+  @override
+  String get wvPinTab => 'تثبيت كعلامة تبويب';
+
+  @override
+  String get wvUnpinTab => 'إلغاء تثبيت التبويب';
+
+  @override
+  String get wvMoveEarlier => 'نقل للأمام';
+
+  @override
+  String get wvMoveLater => 'نقل للخلف';
+
+  @override
+  String get wvViewTabs => 'العروض';
+
+  @override
+  String get wvShare => 'مشاركة';
+
+  @override
+  String get wvCopyLink => 'نسخ الرابط';
+
+  @override
+  String get wvLinkCopied => 'تم نسخ الرابط';
+
+  @override
+  String get wvProjectMenu => 'قائمة المشروع';
+
+  @override
+  String get wvResetColumns => 'إعادة ضبط الأعمدة';
+
+  @override
+  String wvMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عضو',
+      many: '$count عضوًا',
+      few: '$count أعضاء',
+      two: 'عضوان',
+      one: 'عضو واحد',
+      zero: 'لا أعضاء',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wvNoMatch => 'لا توجد مهام تطابق هذه المرشحات';
+
+  @override
+  String get wvClearFilters => 'مسح المرشحات';
+
+  @override
+  String get wvNoTasks => 'لا توجد مهام بعد';
+
+  @override
+  String get wvNoTasksHint => 'أضف أول مهمة لبدء هذا المشروع.';
+
+  @override
+  String get wvAddFirstTask => 'أضف أول مهمة';
+
+  @override
+  String get wvLoadFailed => 'تعذر تحميل المهام';
+
+  @override
+  String get tdActClose => 'إغلاق المهمة المفتوحة';
+
+  @override
+  String get tdActCloseSem => 'إغلاق المهمة التي تم فتحها';
+
+  @override
+  String get tdActPrev => 'المهمة السابقة';
+
+  @override
+  String get tdActPrevSem => 'فتح المهمة السابقة في القائمة';
+
+  @override
+  String get tdActNext => 'المهمة التالية';
+
+  @override
+  String get tdActNextSem => 'فتح المهمة التالية في القائمة';
+
+  @override
+  String get tdActSend => 'إرسال التعليق';
+
+  @override
+  String get tdActSendSem => 'إرسال التعليق المكتوب في المهمة المفتوحة';
+
+  @override
+  String get tdArchivedReadOnly => 'هذا المشروع مؤرشف، لذا مهامه للقراءة فقط.';
+
+  @override
+  String get tdComposerOffline =>
+      'غير متصل: تُحفظ الرسائل وتُرسل عند عودة الاتصال';
+
+  @override
+  String get tdCopyLink => 'نسخ الرابط';
+
+  @override
+  String get tdDescriptionHint => 'أضف وصفًا';
+
+  @override
+  String get tdDetails => 'التفاصيل';
+
+  @override
+  String get tdDueTimeShort => 'وقت الاستحقاق';
+
+  @override
+  String get tdJumpToLatest => 'الأحدث';
+
+  @override
+  String get tdKindModal => 'نافذة';
+
+  @override
+  String get tdKindPeek => 'لوحة جانبية';
+
+  @override
+  String get tdKindPage => 'صفحة كاملة';
+
+  @override
+  String get tdLinkCopied => 'تم نسخ الرابط';
+
+  @override
+  String get tdNeedsAssignee => 'بعض الانتقالات تحتاج إلى مسؤول أولًا.';
+
+  @override
+  String get tdNextTask => 'المهمة التالية';
+
+  @override
+  String get tdNoPermission => 'ليست لديك صلاحية تعديل المهام.';
+
+  @override
+  String get tdNotFoundHint =>
+      'ربما حُذفت أو نُقلت، أو ليس لديك صلاحية الوصول.';
+
+  @override
+  String get tdNotSet => 'غير محدد';
+
+  @override
+  String tdOpenAs(String kind) {
+    return 'فتح في $kind';
+  }
+
+  @override
+  String get tdPreviousTask => 'المهمة السابقة';
+
+  @override
+  String get tdQueuedOffline => 'في الانتظار، يُرسل عند عودة الاتصال';
+
+  @override
+  String tdTabNeedsInput(String label) {
+    return '$label !';
+  }
+
+  @override
+  String get tdTabTime => 'الوقت';
+
+  @override
+  String tdTabWithCount(String label, String count) {
+    return '$label $count';
+  }
+
+  @override
+  String get tdTrashedBanner => 'هذه المهمة في سلة المحذوفات.';
+
+  @override
+  String get tdUnassigned => 'غير مسند';
+
+  @override
+  String get tdUnsavedDraft => 'مسودة غير محفوظة';
 }

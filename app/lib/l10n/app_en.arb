@@ -22,6 +22,19 @@
   "connectivity": "Connectivity",
   "languageAndRegion": "Language and region",
   "languageAndRegionSubtitle": "Language, calendar, week start and digits",
+  "appearance": "Appearance",
+  "appearanceSubtitle": "Theme, density and contrast",
+  "themeLabel": "Theme",
+  "themeSystem": "Follow the system",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "densityLabel": "Density",
+  "densityComfortable": "Comfortable",
+  "densityCompact": "Compact",
+  "contrastLabel": "High contrast",
+  "contrastHelp": "Stronger text and borders for easier reading",
+  "appearancePreview": "Preview",
+  "appearancePreviewTask": "Write the release notes",
   "signIn": "Sign in",
   "createAccount": "Create account",
   "forgotPassword": "Forgot your password?",
@@ -4810,45 +4823,63 @@
   "audGoalFolderCreated": "created the goal folder {name}",
   "@audGoalFolderCreated": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audGoalFolderRenamed": "renamed the goal folder {before} to {after}",
   "@audGoalFolderRenamed": {
     "placeholders": {
-      "before": { "type": "String" },
-      "after": { "type": "String" }
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
     }
   },
   "audGoalFolderDeleted": "deleted the goal folder {name}",
   "@audGoalFolderDeleted": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audGoalKrCreated": "added the key result {name}",
   "@audGoalKrCreated": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audGoalKrUpdated": "changed the key result {name}",
   "@audGoalKrUpdated": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audGoalKrDeleted": "deleted the key result {name}",
   "@audGoalKrDeleted": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audGoalCheckedIn": "checked in {value} on {name}",
   "@audGoalCheckedIn": {
     "placeholders": {
-      "value": { "type": "String" },
-      "name": { "type": "String" }
+      "value": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
     }
   },
   "audTemplateCreated": "created a template",
@@ -4873,7 +4904,9 @@
   "updNoticeText": "Version {version} is available.",
   "@updNoticeText": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "updNoticeGet": "Download",
@@ -4892,43 +4925,75 @@
   "chatEvTitle": "renamed this task from “{from}” to “{to}”",
   "@chatEvTitle": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvStatus": "changed status from {from} to {to}",
   "@chatEvStatus": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvPriority": "changed priority from {from} to {to}",
   "@chatEvPriority": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvStartDate": "changed the start date from {from} to {to}",
   "@chatEvStartDate": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvDueDate": "changed the due date from {from} to {to}",
   "@chatEvDueDate": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvEstimate": "changed the estimate from {from} to {to}",
   "@chatEvEstimate": {
     "placeholders": {
-      "from": { "type": "String" }, "to": { "type": "String" }
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   },
   "chatEvSubtask": "added the subtask “{title}”",
   "@chatEvSubtask": {
     "placeholders": {
-      "title": { "type": "String" }
+      "title": {
+        "type": "String"
+      }
     }
   },
   "chatEvOther": "changed a field",
@@ -4939,7 +5004,9 @@
   "chatTitleCount": "Chat ({count})",
   "@chatTitleCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "chatSectionChannels": "Channels",
@@ -4970,7 +5037,9 @@
   "chatReplies": "{count, plural, one{1 reply} other{{count} replies}}",
   "@chatReplies": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "chatThread": "Thread",
@@ -4987,7 +5056,9 @@
   "chatBroadcastBody": "This message will notify {count} people. Send it anyway?",
   "@chatBroadcastBody": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "chatBroadcastSend": "Send anyway",
@@ -5004,7 +5075,9 @@
   "chatMembersCount": "{count, plural, one{1 member} other{{count} members}}",
   "@chatMembersCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "chatReadOnlyArchived": "This space is archived. You can read it but not write in it.",
@@ -5014,13 +5087,132 @@
   "chatUnreadLabel": "{count} unread",
   "@chatUnreadLabel": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "chatEntryMessage": "Chat message in {space}",
   "@chatEntryMessage": {
     "placeholders": {
-      "space": { "type": "String" }
+      "space": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "shellRecent": "Recent",
+  "shellRename": "Rename",
+  "shellRenameProject": "Rename project",
+  "shellGallery": "Component gallery",
+  "shellCrumbTask": "Task",
+  "shellCrumbDoc": "Doc",
+  "shellCrumbGoal": "Goal",
+  "shellCrumbSpace": "Space",
+  "shellToggleSidebar": "Show or hide the sidebar",
+  "shellThen": "then",
+  "shellWorkspaceGroup": "Workspace",
+  "shellAdminGroup": "Admin",
+  "shellExpandSidebar": "Expand sidebar",
+  "shellCollapseSidebar": "Collapse sidebar",
+  "shellCreate": "Create",
+  "shellMore": "More",
+  "shellFindProject": "Find a project",
+  "shellNoProjectMatch": "No project matches",
+  "grpENavMenu": "Open navigation menu",
+  "shellMoreFor": "More actions for {name}",
+  "@shellMoreFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wvClearAll": "Clear all",
+  "wvOverdue": "Overdue",
+  "wvSearchHint": "Search in view",
+  "wvSearchClear": "Clear search",
+  "wvAddTask": "Task",
+  "wvAddView": "View",
+  "wvNoSavedViews": "No saved layouts yet. Save one from Layouts.",
+  "wvPinTab": "Pin as tab",
+  "wvUnpinTab": "Unpin tab",
+  "wvMoveEarlier": "Move earlier",
+  "wvMoveLater": "Move later",
+  "wvViewTabs": "Views",
+  "wvShare": "Share",
+  "wvCopyLink": "Copy link",
+  "wvLinkCopied": "Link copied",
+  "wvProjectMenu": "Project menu",
+  "wvResetColumns": "Reset columns",
+  "wvMembers": "{count, plural, =1{1 member} other{{count} members}}",
+  "@wvMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wvNoMatch": "No tasks match these filters",
+  "wvClearFilters": "Clear filters",
+  "wvNoTasks": "No tasks yet",
+  "wvNoTasksHint": "Add the first task to get this project moving.",
+  "wvAddFirstTask": "Add your first task",
+  "wvLoadFailed": "Could not load the tasks",
+  "tdActClose": "Close the open task",
+  "tdActCloseSem": "Close the task that is open",
+  "tdActPrev": "Previous task",
+  "tdActPrevSem": "Open the previous task in the list",
+  "tdActNext": "Next task",
+  "tdActNextSem": "Open the next task in the list",
+  "tdActSend": "Send the comment",
+  "tdActSendSem": "Send the comment written in the open task",
+  "tdArchivedReadOnly": "This project is archived, so its tasks are read-only.",
+  "tdComposerOffline": "Offline: messages are kept and sent when you reconnect",
+  "tdCopyLink": "Copy link",
+  "tdDescriptionHint": "Add a description",
+  "tdDetails": "Details",
+  "tdDueTimeShort": "Due time",
+  "tdJumpToLatest": "Latest",
+  "tdKindModal": "window",
+  "tdKindPeek": "side panel",
+  "tdKindPage": "full page",
+  "tdLinkCopied": "Link copied",
+  "tdNeedsAssignee": "Some moves need an assignee first.",
+  "tdNextTask": "Next task",
+  "tdNoPermission": "You do not have permission to edit tasks.",
+  "tdNotFoundHint": "It may have been deleted, moved, or you may not have access.",
+  "tdNotSet": "Not set",
+  "tdOpenAs": "Open as {kind}",
+  "@tdOpenAs": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "tdPreviousTask": "Previous task",
+  "tdQueuedOffline": "Queued, sends when you are back online",
+  "tdTabNeedsInput": "{label} !",
+  "@tdTabNeedsInput": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "tdTabTime": "Time",
+  "tdTabWithCount": "{label} {count}",
+  "@tdTabWithCount": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tdTrashedBanner": "This task is in the trash.",
+  "tdUnassigned": "Unassigned",
+  "tdUnsavedDraft": "Unsaved draft"
 }

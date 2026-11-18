@@ -80,6 +80,45 @@ class AppLocalizationsEn extends AppLocalizations {
       'Language, calendar, week start and digits';
 
   @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceSubtitle => 'Theme, density and contrast';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String get themeSystem => 'Follow the system';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get densityLabel => 'Density';
+
+  @override
+  String get densityComfortable => 'Comfortable';
+
+  @override
+  String get densityCompact => 'Compact';
+
+  @override
+  String get contrastLabel => 'High contrast';
+
+  @override
+  String get contrastHelp => 'Stronger text and borders for easier reading';
+
+  @override
+  String get appearancePreview => 'Preview';
+
+  @override
+  String get appearancePreviewTask => 'Write the release notes';
+
+  @override
   String get signIn => 'Sign in';
 
   @override
@@ -8544,6 +8583,256 @@ class AppLocalizationsEn extends AppLocalizations {
   String chatEntryMessage(String space) {
     return 'Chat message in $space';
   }
+
+  @override
+  String get shellRecent => 'Recent';
+
+  @override
+  String get shellRename => 'Rename';
+
+  @override
+  String get shellRenameProject => 'Rename project';
+
+  @override
+  String get shellGallery => 'Component gallery';
+
+  @override
+  String get shellCrumbTask => 'Task';
+
+  @override
+  String get shellCrumbDoc => 'Doc';
+
+  @override
+  String get shellCrumbGoal => 'Goal';
+
+  @override
+  String get shellCrumbSpace => 'Space';
+
+  @override
+  String get shellToggleSidebar => 'Show or hide the sidebar';
+
+  @override
+  String get shellThen => 'then';
+
+  @override
+  String get shellWorkspaceGroup => 'Workspace';
+
+  @override
+  String get shellAdminGroup => 'Admin';
+
+  @override
+  String get shellExpandSidebar => 'Expand sidebar';
+
+  @override
+  String get shellCollapseSidebar => 'Collapse sidebar';
+
+  @override
+  String get shellCreate => 'Create';
+
+  @override
+  String get shellMore => 'More';
+
+  @override
+  String get shellFindProject => 'Find a project';
+
+  @override
+  String get shellNoProjectMatch => 'No project matches';
+
+  @override
+  String get grpENavMenu => 'Open navigation menu';
+
+  @override
+  String shellMoreFor(String name) {
+    return 'More actions for $name';
+  }
+
+  @override
+  String get wvClearAll => 'Clear all';
+
+  @override
+  String get wvOverdue => 'Overdue';
+
+  @override
+  String get wvSearchHint => 'Search in view';
+
+  @override
+  String get wvSearchClear => 'Clear search';
+
+  @override
+  String get wvAddTask => 'Task';
+
+  @override
+  String get wvAddView => 'View';
+
+  @override
+  String get wvNoSavedViews => 'No saved layouts yet. Save one from Layouts.';
+
+  @override
+  String get wvPinTab => 'Pin as tab';
+
+  @override
+  String get wvUnpinTab => 'Unpin tab';
+
+  @override
+  String get wvMoveEarlier => 'Move earlier';
+
+  @override
+  String get wvMoveLater => 'Move later';
+
+  @override
+  String get wvViewTabs => 'Views';
+
+  @override
+  String get wvShare => 'Share';
+
+  @override
+  String get wvCopyLink => 'Copy link';
+
+  @override
+  String get wvLinkCopied => 'Link copied';
+
+  @override
+  String get wvProjectMenu => 'Project menu';
+
+  @override
+  String get wvResetColumns => 'Reset columns';
+
+  @override
+  String wvMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wvNoMatch => 'No tasks match these filters';
+
+  @override
+  String get wvClearFilters => 'Clear filters';
+
+  @override
+  String get wvNoTasks => 'No tasks yet';
+
+  @override
+  String get wvNoTasksHint => 'Add the first task to get this project moving.';
+
+  @override
+  String get wvAddFirstTask => 'Add your first task';
+
+  @override
+  String get wvLoadFailed => 'Could not load the tasks';
+
+  @override
+  String get tdActClose => 'Close the open task';
+
+  @override
+  String get tdActCloseSem => 'Close the task that is open';
+
+  @override
+  String get tdActPrev => 'Previous task';
+
+  @override
+  String get tdActPrevSem => 'Open the previous task in the list';
+
+  @override
+  String get tdActNext => 'Next task';
+
+  @override
+  String get tdActNextSem => 'Open the next task in the list';
+
+  @override
+  String get tdActSend => 'Send the comment';
+
+  @override
+  String get tdActSendSem => 'Send the comment written in the open task';
+
+  @override
+  String get tdArchivedReadOnly =>
+      'This project is archived, so its tasks are read-only.';
+
+  @override
+  String get tdComposerOffline =>
+      'Offline: messages are kept and sent when you reconnect';
+
+  @override
+  String get tdCopyLink => 'Copy link';
+
+  @override
+  String get tdDescriptionHint => 'Add a description';
+
+  @override
+  String get tdDetails => 'Details';
+
+  @override
+  String get tdDueTimeShort => 'Due time';
+
+  @override
+  String get tdJumpToLatest => 'Latest';
+
+  @override
+  String get tdKindModal => 'window';
+
+  @override
+  String get tdKindPeek => 'side panel';
+
+  @override
+  String get tdKindPage => 'full page';
+
+  @override
+  String get tdLinkCopied => 'Link copied';
+
+  @override
+  String get tdNeedsAssignee => 'Some moves need an assignee first.';
+
+  @override
+  String get tdNextTask => 'Next task';
+
+  @override
+  String get tdNoPermission => 'You do not have permission to edit tasks.';
+
+  @override
+  String get tdNotFoundHint =>
+      'It may have been deleted, moved, or you may not have access.';
+
+  @override
+  String get tdNotSet => 'Not set';
+
+  @override
+  String tdOpenAs(String kind) {
+    return 'Open as $kind';
+  }
+
+  @override
+  String get tdPreviousTask => 'Previous task';
+
+  @override
+  String get tdQueuedOffline => 'Queued, sends when you are back online';
+
+  @override
+  String tdTabNeedsInput(String label) {
+    return '$label !';
+  }
+
+  @override
+  String get tdTabTime => 'Time';
+
+  @override
+  String tdTabWithCount(String label, String count) {
+    return '$label $count';
+  }
+
+  @override
+  String get tdTrashedBanner => 'This task is in the trash.';
+
+  @override
+  String get tdUnassigned => 'Unassigned';
+
+  @override
+  String get tdUnsavedDraft => 'Unsaved draft';
 }
 
 /// The translations for English (`en_XA`).
@@ -8622,6 +8911,46 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   @override
   String get languageAndRegionSubtitle =>
       '[Łåñĝûåĝé, çåłéñðåŕ, ŵééķ šţåŕţ åñð ðíĝíţš ~~~~~~~~~~~~~]';
+
+  @override
+  String get appearance => '[Åþþéåŕåñçé ~~~]';
+
+  @override
+  String get appearanceSubtitle => '[Ţĥéɱé, ðéñšíţý åñð çöñţŕåšţ ~~~~~~~~~]';
+
+  @override
+  String get themeLabel => '[Ţĥéɱé ~]';
+
+  @override
+  String get themeSystem => '[Föłłöŵ ţĥé šýšţéɱ ~~~~~]';
+
+  @override
+  String get themeLight => '[Łíĝĥţ ~]';
+
+  @override
+  String get themeDark => '[Ðåŕķ ~]';
+
+  @override
+  String get densityLabel => '[Ðéñšíţý ~~]';
+
+  @override
+  String get densityComfortable => '[Çöɱƒöŕţåƀłé ~~~]';
+
+  @override
+  String get densityCompact => '[Çöɱþåçţ ~~]';
+
+  @override
+  String get contrastLabel => '[Ĥíĝĥ çöñţŕåšţ ~~~~]';
+
+  @override
+  String get contrastHelp =>
+      '[Šţŕöñĝéŕ ţéxţ åñð ƀöŕðéŕš ƒöŕ éåšíéŕ ŕéåðíñĝ ~~~~~~~~~~~~~~]';
+
+  @override
+  String get appearancePreview => '[Þŕéṽíéŵ ~~]';
+
+  @override
+  String get appearancePreviewTask => '[Ŵŕíţé ţĥé ŕéłéåšé ñöţéš ~~~~~~~]';
 
   @override
   String get signIn => '[Šíĝñ íñ ~~]';
@@ -13939,16 +14268,16 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
       '[Šöɱéƀöðý ýöû ɱéñţíöñéð çåññöţ šéé ţĥíš ţåšķ. ~~~~~~~~~~~~~~]';
 
   @override
-  String get grpLCannotSeeSpace => '[Ţĥéý çåññöţ šéé ţĥíš çĥåţ ~~~~~~]';
+  String get grpLCannotSeeSpace => '[Ţĥéý çåññöţ šéé ţĥíš çĥåţ ~~~~~~~~]';
 
   @override
   String grpLCannotSeeGrant(String names) {
-    return '[$names çåññöţ šéé ţĥíš çĥåţ. Åðð ţĥéɱ åñð šéñð ţĥé ɱéššåĝé, öŕ ţåķé ţĥé ɱéñţíöñ öûţ. ~~~~~~~~~~~~~]';
+    return '[$names çåññöţ šéé ţĥíš çĥåţ. Åðð ţĥéɱ åñð šéñð ţĥé ɱéššåĝé, öŕ ţåķé ţĥé ɱéñţíöñ öûţ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
   }
 
   @override
   String grpLCannotSeeRefuse(String names) {
-    return '[$names çåññöţ šéé ţĥíš çĥåţ, šö ţĥéý çåññöţ ƀé ɱéñţíöñéð. Ţåķé ţĥé ɱéñţíöñ öûţ, öŕ åšķ šöɱéöñé ŵĥö ɱåñåĝéš ít ţö åðð ţĥéɱ. ~~~~~~~~~~~~~]';
+    return '[$names çåññöţ šéé ţĥíš çĥåţ, šö ţĥéý çåññöţ ƀé ɱéñţíöñéð. Ţåķé ţĥé ɱéñţíöñ öûţ, öŕ åšķ šöɱéöñé ŵĥö ɱåñåĝéš íţ ţö åðð ţĥéɱ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
   }
 
   @override
@@ -17233,4 +17562,260 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   String chatEntryMessage(String space) {
     return '[Çĥåţ ɱéššåĝé íñ $space ~~~~~~~]';
   }
+
+  @override
+  String get shellRecent => '[Ŕéçéñţ ~~]';
+
+  @override
+  String get shellRename => '[Ŕéñåɱé ~~]';
+
+  @override
+  String get shellRenameProject => '[Ŕéñåɱé þŕöĵéçţ ~~~~]';
+
+  @override
+  String get shellGallery => '[Çöɱþöñéñţ ĝåłłéŕý ~~~~~]';
+
+  @override
+  String get shellCrumbTask => '[Ţåšķ ~]';
+
+  @override
+  String get shellCrumbDoc => '[Ðöç ~]';
+
+  @override
+  String get shellCrumbGoal => '[Ĝöåł ~]';
+
+  @override
+  String get shellCrumbSpace => '[Šþåçé ~]';
+
+  @override
+  String get shellToggleSidebar => '[Šĥöŵ öŕ ĥíðé ţĥé šíðéƀåŕ ~~~~~~~~]';
+
+  @override
+  String get shellThen => '[ţĥéñ ~]';
+
+  @override
+  String get shellWorkspaceGroup => '[Ŵöŕķšþåçé ~~~]';
+
+  @override
+  String get shellAdminGroup => '[Åðɱíñ ~]';
+
+  @override
+  String get shellExpandSidebar => '[Éxþåñð šíðéƀåŕ ~~~~]';
+
+  @override
+  String get shellCollapseSidebar => '[Çöłłåþšé šíðéƀåŕ ~~~~~]';
+
+  @override
+  String get shellCreate => '[Çŕéåţé ~~]';
+
+  @override
+  String get shellMore => '[Möŕé ~]';
+
+  @override
+  String get shellFindProject => '[Fíñð å þŕöĵéçţ ~~~~]';
+
+  @override
+  String get shellNoProjectMatch => '[Ñö þŕöĵéçţ ɱåţçĥéš ~~~~~~]';
+
+  @override
+  String get grpENavMenu => '[Öþéñ ñåṽíĝåţíöñ ɱéñû ~~~~~~]';
+
+  @override
+  String shellMoreFor(String name) {
+    return '[Möŕé åçţíöñš ƒöŕ $name ~~~~~~~]';
+  }
+
+  @override
+  String get wvClearAll => '[Çłéåŕ åłł ~~~]';
+
+  @override
+  String get wvOverdue => '[Öṽéŕðûé ~~]';
+
+  @override
+  String get wvSearchHint => '[Šéåŕçĥ íñ ṽíéŵ ~~~~]';
+
+  @override
+  String get wvSearchClear => '[Çłéåŕ šéåŕçĥ ~~~~]';
+
+  @override
+  String get wvAddTask => '[Ţåšķ ~]';
+
+  @override
+  String get wvAddView => '[Ṽíéŵ ~]';
+
+  @override
+  String get wvNoSavedViews =>
+      '[Ñö šåṽéð łåýöûţš ýéţ. Šåṽé öñé ƒŕöɱ Łåýöûţš. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get wvPinTab => '[Þíñ åš ţåƀ ~~~]';
+
+  @override
+  String get wvUnpinTab => '[Ûñþíñ ţåƀ ~~~]';
+
+  @override
+  String get wvMoveEarlier => '[Möṽé éåŕłíéŕ ~~~~]';
+
+  @override
+  String get wvMoveLater => '[Möṽé łåţéŕ ~~~]';
+
+  @override
+  String get wvViewTabs => '[Ṽíéŵš ~]';
+
+  @override
+  String get wvShare => '[Šĥåŕé ~]';
+
+  @override
+  String get wvCopyLink => '[Çöþý łíñķ ~~~]';
+
+  @override
+  String get wvLinkCopied => '[Łíñķ çöþíéð ~~~]';
+
+  @override
+  String get wvProjectMenu => '[Þŕöĵéçţ ɱéñû ~~~~]';
+
+  @override
+  String get wvResetColumns => '[Ŕéšéţ çöłûɱñš ~~~~]';
+
+  @override
+  String wvMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ɱéɱƀéŕš',
+      one: '1 ɱéɱƀéŕ',
+    );
+    return '[$_temp0 ~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get wvNoMatch => '[Ñö ţåšķš ɱåţçĥ ţĥéšé ƒíłţéŕš ~~~~~~~~~]';
+
+  @override
+  String get wvClearFilters => '[Çłéåŕ ƒíłţéŕš ~~~~]';
+
+  @override
+  String get wvNoTasks => '[Ñö ţåšķš ýéţ ~~~~]';
+
+  @override
+  String get wvNoTasksHint =>
+      '[Åðð ţĥé ƒíŕšţ ţåšķ ţö ĝéţ ţĥíš þŕöĵéçţ ɱöṽíñĝ. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wvAddFirstTask => '[Åðð ýöûŕ ƒíŕšţ ţåšķ ~~~~~~]';
+
+  @override
+  String get wvLoadFailed => '[Çöûłð ñöţ łöåð ţĥé ţåšķš ~~~~~~~~]';
+
+  @override
+  String get tdActClose => '[Çłöšé ţĥé öþéñ ţåšķ ~~~~~~]';
+
+  @override
+  String get tdActCloseSem => '[Çłöšé ţĥé ţåšķ ţĥåţ íš öþéñ ~~~~~~~~~]';
+
+  @override
+  String get tdActPrev => '[Þŕéṽíöûš ţåšķ ~~~~]';
+
+  @override
+  String get tdActPrevSem => '[Öþéñ ţĥé þŕéṽíöûš ţåšķ íñ ţĥé łíšţ ~~~~~~~~~~~]';
+
+  @override
+  String get tdActNext => '[Ñéxţ ţåšķ ~~~]';
+
+  @override
+  String get tdActNextSem => '[Öþéñ ţĥé ñéxţ ţåšķ íñ ţĥé łíšţ ~~~~~~~~~~]';
+
+  @override
+  String get tdActSend => '[Šéñð ţĥé çöɱɱéñţ ~~~~~]';
+
+  @override
+  String get tdActSendSem =>
+      '[Šéñð ţĥé çöɱɱéñţ ŵŕíţţéñ íñ ţĥé öþéñ ţåšķ ~~~~~~~~~~~~~]';
+
+  @override
+  String get tdArchivedReadOnly =>
+      '[Ţĥíš þŕöĵéçţ íš åŕçĥíṽéð, šö íţš ţåšķš åŕé ŕéåð-öñłý. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get tdComposerOffline =>
+      '[Öƒƒłíñé: ɱéššåĝéš åŕé ķéþţ åñð šéñţ ŵĥéñ ýöû ŕéçöññéçţ ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get tdCopyLink => '[Çöþý łíñķ ~~~]';
+
+  @override
+  String get tdDescriptionHint => '[Åðð å ðéšçŕíþţíöñ ~~~~~]';
+
+  @override
+  String get tdDetails => '[Ðéţåíłš ~~]';
+
+  @override
+  String get tdDueTimeShort => '[Ðûé ţíɱé ~~]';
+
+  @override
+  String get tdJumpToLatest => '[Łåţéšţ ~~]';
+
+  @override
+  String get tdKindModal => '[ŵíñðöŵ ~~]';
+
+  @override
+  String get tdKindPeek => '[šíðé þåñéł ~~~]';
+
+  @override
+  String get tdKindPage => '[ƒûłł þåĝé ~~~]';
+
+  @override
+  String get tdLinkCopied => '[Łíñķ çöþíéð ~~~]';
+
+  @override
+  String get tdNeedsAssignee =>
+      '[Šöɱé ɱöṽéš ñééð åñ åššíĝñéé ƒíŕšţ. ~~~~~~~~~~~]';
+
+  @override
+  String get tdNextTask => '[Ñéxţ ţåšķ ~~~]';
+
+  @override
+  String get tdNoPermission =>
+      '[Ýöû ðö ñöţ ĥåṽé þéŕɱíššíöñ ţö éðíţ ţåšķš. ~~~~~~~~~~~~~]';
+
+  @override
+  String get tdNotFoundHint =>
+      '[Íţ ɱåý ĥåṽé ƀééñ ðéłéţéð, ɱöṽéð, öŕ ýöû ɱåý ñöţ ĥåṽé åççéšš. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get tdNotSet => '[Ñöţ šéţ ~~]';
+
+  @override
+  String tdOpenAs(String kind) {
+    return '[Öþéñ åš $kind ~~~~]';
+  }
+
+  @override
+  String get tdPreviousTask => '[Þŕéṽíöûš ţåšķ ~~~~]';
+
+  @override
+  String get tdQueuedOffline =>
+      '[Qûéûéð, šéñðš ŵĥéñ ýöû åŕé ƀåçķ öñłíñé ~~~~~~~~~~~~]';
+
+  @override
+  String tdTabNeedsInput(String label) {
+    return '[$label ! ~~~]';
+  }
+
+  @override
+  String get tdTabTime => '[Ţíɱé ~]';
+
+  @override
+  String tdTabWithCount(String label, String count) {
+    return '[$label $count ~~~~~]';
+  }
+
+  @override
+  String get tdTrashedBanner => '[Ţĥíš ţåšķ íš íñ ţĥé ţŕåšĥ. ~~~~~~~~]';
+
+  @override
+  String get tdUnassigned => '[Ûñåššíĝñéð ~~~]';
+
+  @override
+  String get tdUnsavedDraft => '[Ûñšåṽéð ðŕåƒţ ~~~~]';
 }

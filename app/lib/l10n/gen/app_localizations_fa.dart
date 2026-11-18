@@ -78,6 +78,45 @@ class AppLocalizationsFa extends AppLocalizations {
   String get languageAndRegionSubtitle => 'زبان، تقویم، آغاز هفته و ارقام';
 
   @override
+  String get appearance => 'ظاهر';
+
+  @override
+  String get appearanceSubtitle => 'پوسته، تراکم و کنتراست';
+
+  @override
+  String get themeLabel => 'پوسته';
+
+  @override
+  String get themeSystem => 'مطابق سیستم';
+
+  @override
+  String get themeLight => 'روشن';
+
+  @override
+  String get themeDark => 'تیره';
+
+  @override
+  String get densityLabel => 'تراکم';
+
+  @override
+  String get densityComfortable => 'راحت';
+
+  @override
+  String get densityCompact => 'فشرده';
+
+  @override
+  String get contrastLabel => 'کنتراست بالا';
+
+  @override
+  String get contrastHelp => 'متن و کادرهای پررنگ‌تر برای خواندن آسان‌تر';
+
+  @override
+  String get appearancePreview => 'پیش‌نمایش';
+
+  @override
+  String get appearancePreviewTask => 'نوشتن یادداشت‌های انتشار';
+
+  @override
   String get signIn => 'ورود';
 
   @override
@@ -8554,4 +8593,255 @@ class AppLocalizationsFa extends AppLocalizations {
   String chatEntryMessage(String space) {
     return 'پیام گفتگو در $space';
   }
+
+  @override
+  String get shellRecent => 'اخیر';
+
+  @override
+  String get shellRename => 'تغییر نام';
+
+  @override
+  String get shellRenameProject => 'تغییر نام پروژه';
+
+  @override
+  String get shellGallery => 'نمایشگاه مؤلفه‌ها';
+
+  @override
+  String get shellCrumbTask => 'وظیفه';
+
+  @override
+  String get shellCrumbDoc => 'سند';
+
+  @override
+  String get shellCrumbGoal => 'هدف';
+
+  @override
+  String get shellCrumbSpace => 'فضا';
+
+  @override
+  String get shellToggleSidebar => 'نمایش یا پنهان کردن نوار کناری';
+
+  @override
+  String get shellThen => 'سپس';
+
+  @override
+  String get shellWorkspaceGroup => 'فضای کاری';
+
+  @override
+  String get shellAdminGroup => 'مدیریت';
+
+  @override
+  String get shellExpandSidebar => 'باز کردن نوار کناری';
+
+  @override
+  String get shellCollapseSidebar => 'جمع کردن نوار کناری';
+
+  @override
+  String get shellCreate => 'ایجاد';
+
+  @override
+  String get shellMore => 'بیشتر';
+
+  @override
+  String get shellFindProject => 'یافتن پروژه';
+
+  @override
+  String get shellNoProjectMatch => 'پروژه‌ای پیدا نشد';
+
+  @override
+  String get grpENavMenu => 'باز کردن منوی ناوبری';
+
+  @override
+  String shellMoreFor(String name) {
+    return 'گزینه‌های بیشتر برای $name';
+  }
+
+  @override
+  String get wvClearAll => 'پاک کردن همه';
+
+  @override
+  String get wvOverdue => 'عقب‌افتاده';
+
+  @override
+  String get wvSearchHint => 'جستجو در این نما';
+
+  @override
+  String get wvSearchClear => 'پاک کردن جستجو';
+
+  @override
+  String get wvAddTask => 'کار';
+
+  @override
+  String get wvAddView => 'نما';
+
+  @override
+  String get wvNoSavedViews =>
+      'هنوز چیدمانی ذخیره نشده است. از منوی چیدمان‌ها یکی ذخیره کنید.';
+
+  @override
+  String get wvPinTab => 'سنجاق به‌عنوان زبانه';
+
+  @override
+  String get wvUnpinTab => 'برداشتن سنجاق زبانه';
+
+  @override
+  String get wvMoveEarlier => 'انتقال به قبل';
+
+  @override
+  String get wvMoveLater => 'انتقال به بعد';
+
+  @override
+  String get wvViewTabs => 'نماها';
+
+  @override
+  String get wvShare => 'اشتراک‌گذاری';
+
+  @override
+  String get wvCopyLink => 'کپی پیوند';
+
+  @override
+  String get wvLinkCopied => 'پیوند کپی شد';
+
+  @override
+  String get wvProjectMenu => 'منوی پروژه';
+
+  @override
+  String get wvResetColumns => 'بازنشانی ستون‌ها';
+
+  @override
+  String wvMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عضو',
+      one: '۱ عضو',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wvNoMatch => 'هیچ وظیفه‌ای با این فیلترها مطابقت ندارد';
+
+  @override
+  String get wvClearFilters => 'پاک کردن فیلترها';
+
+  @override
+  String get wvNoTasks => 'هنوز وظیفه‌ای نیست';
+
+  @override
+  String get wvNoTasksHint => 'اولین وظیفه را اضافه کنید تا پروژه شروع شود.';
+
+  @override
+  String get wvAddFirstTask => 'اولین وظیفه را اضافه کنید';
+
+  @override
+  String get wvLoadFailed => 'بارگیری وظیفه‌ها ممکن نشد';
+
+  @override
+  String get tdActClose => 'بستن وظیفهٔ باز';
+
+  @override
+  String get tdActCloseSem => 'بستن وظیفه‌ای که باز است';
+
+  @override
+  String get tdActPrev => 'وظیفهٔ قبلی';
+
+  @override
+  String get tdActPrevSem => 'باز کردن وظیفهٔ قبلی در فهرست';
+
+  @override
+  String get tdActNext => 'وظیفهٔ بعدی';
+
+  @override
+  String get tdActNextSem => 'باز کردن وظیفهٔ بعدی در فهرست';
+
+  @override
+  String get tdActSend => 'ارسال نظر';
+
+  @override
+  String get tdActSendSem => 'ارسال نظری که در وظیفهٔ باز نوشته‌اید';
+
+  @override
+  String get tdArchivedReadOnly =>
+      'این پروژه بایگانی شده است، پس وظیفه‌های آن فقط خواندنی هستند.';
+
+  @override
+  String get tdComposerOffline =>
+      'آفلاین: پیام‌ها نگه داشته می‌شوند و پس از اتصال دوباره ارسال می‌شوند';
+
+  @override
+  String get tdCopyLink => 'کپی پیوند';
+
+  @override
+  String get tdDescriptionHint => 'توضیحی اضافه کنید';
+
+  @override
+  String get tdDetails => 'جزئیات';
+
+  @override
+  String get tdDueTimeShort => 'زمان سررسید';
+
+  @override
+  String get tdJumpToLatest => 'آخرین';
+
+  @override
+  String get tdKindModal => 'پنجره';
+
+  @override
+  String get tdKindPeek => 'پنل کناری';
+
+  @override
+  String get tdKindPage => 'صفحهٔ کامل';
+
+  @override
+  String get tdLinkCopied => 'پیوند کپی شد';
+
+  @override
+  String get tdNeedsAssignee => 'برخی انتقال‌ها ابتدا به مسئول نیاز دارند.';
+
+  @override
+  String get tdNextTask => 'وظیفهٔ بعدی';
+
+  @override
+  String get tdNoPermission => 'اجازهٔ ویرایش وظیفه‌ها را ندارید.';
+
+  @override
+  String get tdNotFoundHint =>
+      'ممکن است حذف یا منتقل شده باشد، یا دسترسی نداشته باشید.';
+
+  @override
+  String get tdNotSet => 'تعیین نشده';
+
+  @override
+  String tdOpenAs(String kind) {
+    return 'باز کردن به‌صورت $kind';
+  }
+
+  @override
+  String get tdPreviousTask => 'وظیفهٔ قبلی';
+
+  @override
+  String get tdQueuedOffline => 'در صف، با اتصال دوباره ارسال می‌شود';
+
+  @override
+  String tdTabNeedsInput(String label) {
+    return '$label !';
+  }
+
+  @override
+  String get tdTabTime => 'زمان';
+
+  @override
+  String tdTabWithCount(String label, String count) {
+    return '$label $count';
+  }
+
+  @override
+  String get tdTrashedBanner => 'این وظیفه در سطل زباله است.';
+
+  @override
+  String get tdUnassigned => 'بدون مسئول';
+
+  @override
+  String get tdUnsavedDraft => 'پیش‌نویس ذخیره‌نشده';
 }
