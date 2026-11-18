@@ -54,6 +54,7 @@ taskforge/
 7. Every query is workspace-scoped. Never trust a client-supplied workspace id
    without checking membership. (Multi-tenancy bugs are the #1 risk.)
 8. Immutable state on the Flutter side (freezed + Riverpod). No mutation of models.
+9. UI comes from the design system (`app/lib/core/ui/`, `docs/brand.md`): colours, type, spacing and density via `context.tf`, widgets from `Tf*`, icons from `TfIcons`. No hex colours, `BorderRadius.circular` or `Icons.*` in a migrated screen (`test/core/ui/ui_lint_test.dart`; remove a file from `ui_lint_allowlist.txt` when you migrate it). Show new components in `/debug/gallery`.
 
 ## Backend skeleton: reuse `django-ninja-starter`
 

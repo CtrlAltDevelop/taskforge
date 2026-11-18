@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
+.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate seed purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -68,6 +68,10 @@ web:
 migrate:
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py migrate
 	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py reindex
+
+# Demo user, workspace, project and tasks for local development (idempotent).
+seed: migrate
+	cd backend && DJANGO_SETTINGS_MODULE=config.settings.development ../$(VENV)/python manage.py seed_demo
 
 # The clean-ups no scheduler runs yet (there is no Celery): expired uploads, old change-log
 # entries, old export zips, audit entries past the optional retention. Put it in cron or a scheduled job, daily.

@@ -51,7 +51,11 @@ Groups are just for reading — a phase is still exactly one feature.
 - **Phase 41** — implemented on `develop`: ClickUp import with an API token (list picker, background fetch, rate-limit backoff, token never stored).
 - **Phase 42** — implemented on `develop`: system change messages in each task's chat (coalesced within 5 minutes, redacted, not editable), `task.changed` notice, Chat panel with a remembered "Hide changes" toggle. Custom-field changes write no message. The old Activity section stays collapsed under Chat for earlier history.
 - **Phase 43** — implemented on `develop`: chat spaces (channels, groups, DMs, default workspace and project channels), threads, reactions, mentions with `@channel`/`@here` (`@here` = read in the last 30 minutes), unread counts, mute, notices, live events, offline sends, Chat area in the app. Run on SQLite and fakes only; the fa/ar/ps text of 42 and 43 has not been reviewed by native speakers.
-- **Next:** review and push.
+- **Phase 44** — implemented on `develop`: tokens (colour, type, spacing, shape) with light, dark and high-contrast palettes and an AA contrast test, Inter bundled (Vazirmatn fallback), Lucide icon map with RTL flags, the `Tf*` component library, debug `/debug/gallery` with an overflow sweep (en/fa/ar, light/dark/high contrast, 100/200 % text, both densities), the screen lint with an allow-list that shrinks each phase, Settings → Appearance, `docs/brand.md`, new mark, icons, splash and social card. The Linux window icon wiring has not been compiled.
+- **Phase 45** — implemented on `develop`: app frame (sidebar open/strip/overlay, top bar with breadcrumbs, search, Create and live dot, phone bottom bar and More sheet, project switcher), favourites/recent/drag-reorder, `g`+letter and `[` keys, permitted-only entries without flicker, the 10 remaining screens moved to `TfIcons`. Local nav prefs only. Not done: My work, desktop title-bar drag area, named breadcrumbs for docs/goals/spaces/tasks, the integration test.
+- **Phase 46** — implemented on `develop`: project header, view tabs (incl. pinned saved-view tabs), one toolbar for list, board, calendar and timeline, filter chips, the list table split into parts with density row heights, restyled board cards and columns, calendar and timeline chrome, phone cards/board/agenda, skeleton/empty/error states, overflow sweep and goldens (light/dark, en/fa). Not measured: release-build frame times (the performance test shows frame cost does not grow with the task count, in the debug VM). Material `Checkbox`/`FilterChip` remain in list rows and the sprint toggle.
+- **Phase 47** — implemented on `develop`: task detail as a centred modal (default; a full page on phones, an optional resizable side peek), fields and content on the left, the whole conversation with a pinned composer on the right (one column with sticky composer under 900 px), `task_detail.dart` split into `detail/` parts, `s`/`a`/`Esc`/`[`/`]`/`Cmd+Enter` in the action registry. Deviations and deferred items are listed in the phase doc.
+- **Next:** phase 48.
 
 ## A. Foundation
 - [00 Foundation: monorepo, dev env, CI, hello-world on every transport](phases/phase-00-foundation.md)
@@ -114,6 +118,15 @@ Groups are just for reading — a phase is still exactly one feature.
 - [42 Task chat with change messages](phases/phase-42-task-chat-activity.md)
 - [43 Chat spaces (channels, groups, direct messages)](phases/phase-43-chat-spaces.md)
 
+## I. Product UI and rebrand (release polish)
+Backend is feature-complete; these phases rebuild the interface to Jira/ClickUp quality. Do them in order.
+- [44 Design system and brand](phases/phase-44-design-system.md)
+- [45 App shell and navigation](phases/phase-45-app-shell-navigation.md)
+- [46 Work views: List, Board, Calendar, Timeline](phases/phase-46-work-views.md)
+- [47 Task detail redesign](phases/phase-47-task-detail.md)
+- [48 Home, onboarding and empty states](phases/phase-48-home-onboarding-empty-states.md)
+- [49 Motion, accessibility and visual release QA](phases/phase-49-polish-motion-release-qa.md)
+
 ## Milestones
 
 | Milestone | Phases | You can… |
@@ -122,3 +135,4 @@ Groups are just for reading — a phase is still exactly one feature.
 | M2 "Jira-class" | 07–10, 12, 14, 16, 22 | Workflows, boards, queries, sprints, live sync |
 | M3 "ClickUp-class" | 13, 15, 17–21, 23–26 | All views, docs, automations, dashboards |
 | M4 "Switch over" | 27–38 | Import from Jira/ClickUp, offline, deploy for a team |
+| M5 "Release-grade UI" | 44–49 | A branded, consistent, accessible app you would ship publicly |
