@@ -14,7 +14,7 @@ void main() {
 
   test('the theme builds in both brightnesses with its own colour scheme', () {
     for (final b in Brightness.values) {
-      final theme = buildAppTheme(brightness: b, fontFallback: const []);
+      final theme = buildAppTheme(brightness: b);
       expect(theme.colorScheme.brightness, b);
       expect(theme.useMaterial3, isTrue);
     }

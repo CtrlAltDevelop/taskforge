@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/frame_scope.dart';
 
 /// The app bar every page uses: an [AppBar] that always has a way back (the
 /// previous page, else home) and, inside the router, a profile menu.
@@ -33,14 +35,17 @@ class TfAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final router = GoRouter.maybeOf(context);
     final atHome = _path(router) == '/';
+    // The frame has the account menu and the way home: a page keeps only its
+    // own title, actions and (pushed pages) the back button.
+    final framed = AppFrameScope.maybeOf(context)?.hasAccountMenu ?? false;
     return AppBar(
       title: title,
       bottom: bottom,
-      leading: leading ?? _back(context, router, atHome),
+      leading: leading ?? (framed ? null : _back(context, router, atHome)),
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: [
         ...?actions,
-        if (router != null && !atHome) const _ProfileMenu(),
+        if (router != null && !atHome && !framed) const _ProfileMenu(),
       ],
     );
   }
@@ -72,7 +77,7 @@ class _ProfileMenu extends ConsumerWidget {
     final router = GoRouter.of(context);
     return PopupMenuButton<String>(
       key: const Key('profile-menu'),
-      icon: const Icon(Icons.account_circle_outlined),
+      icon: const TfIcon(TfIcons.user, size: 24),
       tooltip: t.grpKGroupAccount,
       onSelected: (path) => path.isEmpty
           ? ref.read(authSessionProvider).signOut()

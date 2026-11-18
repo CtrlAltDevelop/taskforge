@@ -1,11 +1,11 @@
 {
-    "name": "taskforge",
-    "short_name": "taskforge",
+    "name": "TaskForge",
+    "short_name": "TaskForge",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#161618",
+    "theme_color": "#161618",
+    "description": "Free, self-hostable project and task manager.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

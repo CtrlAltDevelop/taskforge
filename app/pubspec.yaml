@@ -71,6 +71,7 @@ dependencies:
   dpop_client: ^2.3.0
   safe_json_cast: ^1.3.0
   ohlcv_chart: ^3.2.0
+  lucide_icons_flutter: ^4.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -102,7 +103,19 @@ flutter:
 
   # Vazirmatn (SIL OFL 1.1, assets/fonts/OFL.txt): the Arabic-script face for
   # Persian, Arabic and Pashto, so every platform draws them the same.
+  # Inter (SIL OFL 1.1, assets/fonts/OFL-Inter.txt): the UI face, bundled so
+  # nothing is downloaded at run time.
   fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/InterVariable.ttf
+          weight: 400
+        - asset: assets/fonts/InterVariable.ttf
+          weight: 500
+        - asset: assets/fonts/InterVariable.ttf
+          weight: 600
+        - asset: assets/fonts/InterVariable.ttf
+          weight: 700
     - family: Vazirmatn
       fonts:
         - asset: assets/fonts/Vazirmatn-Variable.ttf

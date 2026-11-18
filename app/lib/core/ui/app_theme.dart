@@ -1,146 +1,199 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Brand seed; every colour in the app derives from it.
-const _seed = Color(0xFF4F46E5);
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
 
-/// Corner radii used across the app, so cards, fields and buttons agree.
-const radiusSmall = 8.0;
-const radiusMedium = 12.0;
+/// Old radius names; screens move to [TfRadius] one phase at a time and
+/// phase 49 deletes these.
+const radiusSmall = TfRadius.md;
+const radiusMedium = TfRadius.lg;
 const radiusLarge = 16.0;
 
-/// Smallest button: 48dp tall is a comfortable touch target.
-const _tapTarget = Size(64, 48);
-
-/// Builds the light or dark theme. [fontFallback] carries the Arabic-script
-/// faces (see app.dart); [compactDensity] is true on desktop-class platforms,
-/// where pointers allow tighter rows.
+/// Builds the light, dark or high-contrast theme from the design tokens.
+/// [fontFallback] is kept for callers that pass their own; the tokens already
+/// carry the Arabic-script faces.
 ThemeData buildAppTheme({
   required Brightness brightness,
-  required List<String> fontFallback,
-  bool compactDensity = false,
+  List<String> fontFallback = tfArabicScriptFonts,
+  TfDensity density = TfDensity.comfortable,
+  bool highContrast = false,
 }) {
-  final scheme = ColorScheme.fromSeed(seedColor: _seed, brightness: brightness);
-  final base = ThemeData(
+  final c = TfColors.of(brightness, highContrast: highContrast);
+  final type = TfType.forDensity(density);
+  final scheme = _scheme(c);
+  final shape = RoundedRectangleBorder(borderRadius: TfRadius.control);
+  final line = BorderSide(color: c.border);
+  final compact = density == TfDensity.compact;
+  final textTheme = type.textTheme.apply(
+    bodyColor: c.text,
+    displayColor: c.text,
+    fontFamilyFallback: fontFallback,
+  );
+  return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
+    fontFamily: tfFontFamily,
     fontFamilyFallback: fontFallback,
-    visualDensity: compactDensity
-        ? VisualDensity.compact
-        : VisualDensity.standard,
-  );
-  final shape = RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(radiusSmall),
-  );
-  final outline = BorderSide(color: scheme.outlineVariant);
-  return base.copyWith(
+    textTheme: textTheme,
+    extensions: [TfTheme(colors: c, density: density, typography: type)],
+    visualDensity: compact ? VisualDensity.compact : VisualDensity.standard,
+    splashFactory: NoSplash.splashFactory,
+    hoverColor: c.hover,
+    focusColor: c.focus.withValues(alpha: 0.16),
+    scaffoldBackgroundColor: c.canvas,
+    canvasColor: c.canvas,
     pageTransitionsTheme: _pageTransitions,
-    scaffoldBackgroundColor: scheme.surface,
-    textTheme: base.textTheme.copyWith(
-      headlineSmall: base.textTheme.headlineSmall?.copyWith(
-        fontWeight: FontWeight.w700,
-      ),
-      titleLarge: base.textTheme.titleLarge?.copyWith(
-        fontWeight: FontWeight.w600,
-      ),
-      titleMedium: base.textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w600,
-      ),
-    ),
     appBarTheme: AppBarTheme(
       centerTitle: false,
       scrolledUnderElevation: 0,
-      backgroundColor: scheme.surface,
+      backgroundColor: c.surface,
       surfaceTintColor: Colors.transparent,
-      shape: Border(bottom: outline),
+      shape: Border(bottom: line),
+      titleTextStyle: type.lead.copyWith(color: c.text),
     ),
     cardTheme: CardThemeData(
       elevation: 0,
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      color: scheme.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radiusMedium),
-        side: outline,
-      ),
+      margin: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      color: c.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: TfRadius.panel, side: line),
     ),
-    dividerTheme: DividerThemeData(color: scheme.outlineVariant, space: 1),
+    dividerTheme: DividerThemeData(color: c.border, space: 1, thickness: 1),
     listTileTheme: ListTileThemeData(
       shape: shape,
-      selectedTileColor: scheme.secondaryContainer.withValues(alpha: 0.6),
-      selectedColor: scheme.onSecondaryContainer,
-      contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+      selectedTileColor: c.selected,
+      selectedColor: c.accentTone.fg,
+      contentPadding: EdgeInsetsDirectional.symmetric(horizontal: density.padX),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: scheme.surfaceContainerLowest,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radiusSmall),
-        borderSide: outline,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radiusSmall),
-        borderSide: outline,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radiusSmall),
-        borderSide: BorderSide(color: scheme.primary, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radiusSmall),
-        borderSide: BorderSide(color: scheme.error),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radiusSmall),
-        borderSide: BorderSide(color: scheme.error, width: 2),
-      ),
-      contentPadding: const EdgeInsetsDirectional.symmetric(
-        horizontal: 14,
-        vertical: 14,
-      ),
-      floatingLabelBehavior: FloatingLabelBehavior.auto,
-      isDense: compactDensity,
-    ),
+    inputDecorationTheme: _inputs(c, density),
     filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(shape: shape, minimumSize: _tapTarget),
+      style: FilledButton.styleFrom(
+        shape: shape,
+        minimumSize: Size(64, density.controlHeight),
+        backgroundColor: c.accent,
+        foregroundColor: c.onAccent,
+        textStyle: type.label,
+      ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         shape: shape,
-        side: outline,
-        minimumSize: _tapTarget,
+        side: BorderSide(color: c.borderStrong.withValues(alpha: 0.5)),
+        minimumSize: Size(64, density.controlHeight),
+        foregroundColor: c.text,
+        textStyle: type.label,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(shape: shape),
-    ),
-    chipTheme: ChipThemeData(shape: shape, side: outline),
-    dialogTheme: DialogThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radiusLarge),
+      style: TextButton.styleFrom(
+        shape: shape,
+        foregroundColor: c.accent,
+        textStyle: type.label,
       ),
     ),
-    bottomSheetTheme: const BottomSheetThemeData(
+    chipTheme: ChipThemeData(shape: shape, side: line, labelStyle: type.small),
+    dialogTheme: DialogThemeData(
+      backgroundColor: c.raised,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: TfRadius.dialog, side: line),
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: c.raised,
+      surfaceTintColor: Colors.transparent,
       showDragHandle: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(radiusLarge)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(TfRadius.lg)),
+        side: line,
       ),
     ),
-    popupMenuTheme: PopupMenuThemeData(shape: shape),
+    popupMenuTheme: PopupMenuThemeData(
+      shape: RoundedRectangleBorder(borderRadius: TfRadius.panel, side: line),
+      color: c.raised,
+      surfaceTintColor: Colors.transparent,
+    ),
     snackBarTheme: SnackBarThemeData(
       behavior: SnackBarBehavior.floating,
       shape: shape,
+      backgroundColor: c.isDark ? c.raised : c.text,
+      contentTextStyle: type.body.copyWith(
+        color: c.isDark ? c.text : c.surface,
+      ),
     ),
     navigationRailTheme: NavigationRailThemeData(
-      backgroundColor: scheme.surfaceContainerLow,
-      indicatorColor: scheme.secondaryContainer,
+      backgroundColor: c.surface,
+      indicatorColor: c.selected,
       labelType: NavigationRailLabelType.all,
     ),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: scheme.surfaceContainerLow,
-      indicatorColor: scheme.secondaryContainer,
+      backgroundColor: c.surface,
+      indicatorColor: c.selected,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
     ),
   );
 }
+
+InputDecorationTheme _inputs(TfColors c, TfDensity density) {
+  OutlineInputBorder edge(Color color, [double width = 1]) =>
+      OutlineInputBorder(
+        borderRadius: TfRadius.control,
+        borderSide: BorderSide(color: color, width: width),
+      );
+  return InputDecorationTheme(
+    filled: true,
+    fillColor: c.surface,
+    border: edge(c.border),
+    enabledBorder: edge(c.border),
+    focusedBorder: edge(c.focus, 2),
+    errorBorder: edge(c.danger.fg),
+    focusedErrorBorder: edge(c.danger.fg, 2),
+    contentPadding: EdgeInsetsDirectional.symmetric(
+      horizontal: TfSpace.md,
+      vertical: density == TfDensity.compact ? TfSpace.sm : TfSpace.md,
+    ),
+    hintStyle: TextStyle(color: c.textSubtle),
+    isDense: density == TfDensity.compact,
+  );
+}
+
+/// Material's scheme, filled from the tokens so untouched screens follow them.
+ColorScheme _scheme(TfColors c) => ColorScheme(
+  brightness: c.brightness,
+  primary: c.accent,
+  onPrimary: c.onAccent,
+  primaryContainer: c.accentTone.bg,
+  onPrimaryContainer: c.accentTone.fg,
+  secondary: c.textMuted,
+  onSecondary: c.surface,
+  secondaryContainer: c.selected,
+  onSecondaryContainer: c.accentTone.fg,
+  tertiary: c.info.fg,
+  onTertiary: c.surface,
+  tertiaryContainer: c.info.bg,
+  onTertiaryContainer: c.info.fg,
+  error: c.danger.fg,
+  onError: c.surface,
+  errorContainer: c.danger.bg,
+  onErrorContainer: c.danger.fg,
+  surface: c.canvas,
+  onSurface: c.text,
+  onSurfaceVariant: c.textMuted,
+  outline: c.borderStrong,
+  outlineVariant: c.border,
+  shadow: const Color(0xFF000000),
+  scrim: const Color(0xFF000000),
+  inverseSurface: c.text,
+  onInverseSurface: c.surface,
+  inversePrimary: c.accentTone.fg,
+  surfaceTint: Colors.transparent,
+  surfaceContainerLowest: c.surface,
+  surfaceContainerLow: c.surface,
+  surfaceContainer: c.sunken,
+  surfaceContainerHigh: c.hover,
+  surfaceContainerHighest: c.raised,
+);
 
 /// Route changes fade (opacity only) on every platform.
 class _FadePageTransitionsBuilder extends PageTransitionsBuilder {
