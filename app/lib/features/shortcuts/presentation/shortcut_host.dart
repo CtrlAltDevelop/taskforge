@@ -5,8 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/actions/app_action.dart';
 import 'package:taskforge/core/actions/chord.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/frame_scope.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
+import 'package:taskforge/features/tasks/application/task_detail_state.dart';
 import 'package:taskforge/features/shortcuts/presentation/command_palette.dart';
+
+/// How long after `g` the go-to letter is waited for.
+const goSequenceWindow = Duration(milliseconds: 1500);
 
 /// Runs the action a key press is bound to, from anywhere on the page. It
 /// listens to the keyboard itself, so it works even after a tap has taken
@@ -43,15 +48,52 @@ class _ShortcutHostState extends ConsumerState<ShortcutHost> {
 
   bool _onKey(KeyEvent event) {
     if (event is! KeyDownEvent || !mounted) return false;
-    // Only the page that is showing, never one under a dialog or the palette.
-    if (ModalRoute.of(context)?.isCurrent == false) return false;
+    // Only the page that is showing, never one under a dialog or the palette
+    // (the open task's window is the page then).
+    if (ModalRoute.of(context)?.isCurrent == false &&
+        !ref.read(taskCommandsProvider).onTop) {
+      return false;
+    }
     final chord = Chord.fromEvent(
       event,
       HardwareKeyboard.instance,
       isMac: isApplePlatform,
     );
     if (chord == null || (!chord.hasModifier && _typing())) return false;
-    final action = ref.read(bindingsProvider).actionFor(chord);
+    if (KeyClaim.holds(
+      FocusManager.instance.primaryFocus?.context,
+      chord.wire,
+    )) {
+      return false;
+    }
+    final armedAt = _goArmedAt;
+    _goArmedAt = null;
+    if (armedAt != null &&
+        !chord.hasModifier &&
+        DateTime.now().difference(armedAt) < goSequenceWindow) {
+      return _run(_goTarget(chord.key));
+    }
+    final action = ref
+        .read(bindingsProvider)
+        .actionFor(chord, within: actionContextOf(context));
+    if (action != null) return _run(action);
+    if (chord.wire == 'g') {
+      _goArmedAt = DateTime.now();
+      return true;
+    }
+    return false;
+  }
+
+  /// `g` was pressed: the next letter picks a go-to action.
+  DateTime? _goArmedAt;
+
+  AppAction? _goTarget(String key) => ref
+      .read(actionRegistryProvider)
+      .actions
+      .where((a) => a.goKey == key)
+      .firstOrNull;
+
+  bool _run(AppAction? action) {
     if (action == null) return false;
     final ctx = actionContextOf(context);
     if (!action.isAvailable(ctx)) return false;

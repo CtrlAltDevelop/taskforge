@@ -179,6 +179,7 @@ final List<AppAction> moreActions = [
     groupOf: groupProjects,
     semanticOf: (l) => l.tplCmdOpen,
     keywords: const ['template', 'gallery', 'blueprint'],
+    goKey: 'e',
     run: (c) => c.router.go('/templates'),
   ),
   AppAction(

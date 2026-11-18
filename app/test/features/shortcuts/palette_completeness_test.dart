@@ -456,7 +456,7 @@ void main() {
     testWidgets('closing it takes it out of the URL again', (tester) async {
       final h = await open(tester, at: '/projects/p1?task=a');
       expect(location(h.pumped), contains('task=a'));
-      await tester.tap(find.byIcon(Icons.close).first);
+      await tester.tap(key('close-detail'));
       await tester.pumpAndSettle();
       expect(location(h.pumped), isNot(contains('task=')));
     });

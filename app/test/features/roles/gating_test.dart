@@ -35,6 +35,9 @@ Future<FakeRolesClient> _openSettings(
 
 Future<void> _openMembers(WidgetTester tester) async {
   await tester.ensureVisible(byKey('open-members'));
+  await tester.pumpAndSettle();
+  await tester.ensureVisible(byKey('open-members'));
+  await tester.pumpAndSettle();
   await tester.tap(byKey('open-members'));
   await tester.pumpAndSettle();
 }

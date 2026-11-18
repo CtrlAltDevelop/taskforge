@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/scroll_if_short.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
 import 'dart:math';
@@ -11,7 +12,6 @@ import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
@@ -36,7 +36,7 @@ class SprintsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final project = ref.watch(projectProvider(projectId));
     final catalog = ref.watch(projectCatalogProvider(true));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
         title: Text(
           project == null
@@ -293,7 +293,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
                 if (canManage)
                   FilledButton.tonalIcon(
                     key: const Key('new-sprint'),
-                    icon: const Icon(Icons.add),
+                    icon: const TfIcon(TfIcons.plus, size: 24),
                     label: Text(context.l10n.grpANewSprint),
                     onPressed: () => _form(all),
                   ),
@@ -511,7 +511,7 @@ class _Header extends ConsumerWidget {
           if (sprint.isActive)
             TextButton.icon(
               key: const Key('sprint-on-board'),
-              icon: const Icon(Icons.view_kanban_outlined),
+              icon: const TfIcon(TfIcons.board, size: 24),
               label: Text(context.l10n.grpAShowOnBoard),
               onPressed: () {
                 ref
@@ -524,7 +524,7 @@ class _Header extends ConsumerWidget {
             IconButton(
               key: const Key('edit-sprint'),
               tooltip: context.l10n.grpAEditSprint,
-              icon: const Icon(Icons.edit_outlined),
+              icon: const TfIcon(TfIcons.edit, size: 24),
               onPressed: onEdit,
             ),
             if (sprint.isPlanned)

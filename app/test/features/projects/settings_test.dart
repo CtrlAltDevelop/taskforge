@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/features/projects/presentation/features_section.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 
 import 'fakes.dart';
@@ -59,7 +60,11 @@ void main() {
     testWidgets('lists each feature with its explanation', (tester) async {
       await _settings(tester, project('p1', 'Website', enabled: {'sprints'}));
 
-      expect(find.text('Sprints'), findsOneWidget);
+      final features = find.byType(FeaturesSection);
+      expect(
+        find.descendant(of: features, matching: find.text('Sprints')),
+        findsOneWidget,
+      );
       expect(find.text('Log time spent on tasks.'), findsOneWidget);
       expect(_switchOn(tester, 'feature-sprints'), isTrue);
       expect(_switchOn(tester, 'feature-time_tracking'), isFalse);

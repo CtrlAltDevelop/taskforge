@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -11,8 +12,6 @@ import 'package:taskforge/features/chat/presentation/chat_labels.dart';
 import 'package:taskforge/features/chat/presentation/conversation_pane.dart';
 import 'package:taskforge/features/chat/presentation/space_list.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
-import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 
 /// Where the list and the conversation sit side by side.
 const chatTwoPaneFrom = 720.0;
@@ -42,14 +41,14 @@ class ChatScreen extends ConsumerWidget {
     final spaces = ref.watch(spacesProvider);
     final members = ref.watch(membersProvider).value ?? const [];
     final open = spaceId == null ? null : spaces.list.byId(spaceId!);
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
-        title: const WorkspaceSwitcher(),
+        title: Text(l10n.chatTitle),
         actions: [
           IconButton(
             key: const Key('chat-new'),
             tooltip: l10n.chatNew,
-            icon: const Icon(Icons.add_comment_outlined),
+            icon: const TfIcon(TfIcons.chatPlus, size: 24),
             onPressed: () => _new(context),
           ),
         ],
@@ -87,7 +86,7 @@ class ChatScreen extends ConsumerWidget {
                   child: TextButton.icon(
                     key: const Key('chat-to-list'),
                     onPressed: () => context.go('/chat'),
-                    icon: const Icon(Icons.arrow_back),
+                    icon: const TfIcon(TfIcons.arrowStart, size: 24),
                     label: Text(spaceTitle(open, members, l10n)),
                   ),
                 ),

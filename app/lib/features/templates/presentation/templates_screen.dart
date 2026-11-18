@@ -1,10 +1,10 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/templates/application/templates_providers.dart';
 import 'package:taskforge/features/templates/domain/templates.dart';
 import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
@@ -49,7 +49,7 @@ class _State extends ConsumerState<TemplatesScreen> {
     final t = context.l10n;
     final query = (text: _text, kind: _kind);
     final gallery = ref.watch(templatesProvider(query));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(t.tplTitle)),
       body: Column(
         children: [
@@ -60,7 +60,7 @@ class _State extends ConsumerState<TemplatesScreen> {
               controller: _search,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const TfIcon(TfIcons.search, size: 24),
                 hintText: t.tplSearch,
               ),
               onChanged: (v) => setState(() => _text = v),
@@ -133,10 +133,11 @@ class _Card extends StatelessWidget {
     return Card(
       child: ListTile(
         key: Key('tpl-${template.id}'),
-        leading: Icon(
+        leading: TfIcon(
+          size: 24,
           template.kind == TemplateKind.project
-              ? Icons.folder_copy_outlined
-              : Icons.account_tree_outlined,
+              ? TfIcons.folder
+              : TfIcons.workflow,
         ),
         title: Text(template.name),
         subtitle: Text(

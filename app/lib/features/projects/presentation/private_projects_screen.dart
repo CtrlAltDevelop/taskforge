@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 
@@ -24,7 +23,7 @@ class PrivateProjectsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ref.watch(privateProjectsProvider);
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpHPrivateProjects)),
       body: switch (list) {
         AsyncData(:final value) when value.isEmpty => Center(

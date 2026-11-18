@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/app_theme.dart';
+import 'package:taskforge/core/ui/appearance.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'
     hide GlobalMaterialLocalizations, GlobalCupertinoLocalizations;
 import 'package:taskforge/core/i18n/cupertino_fallback.dart';
@@ -20,25 +20,10 @@ import 'package:taskforge/features/inbox/application/live_alerts.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/time/application/timer_notification.dart';
 
-/// Arabic-script faces tried after the platform font. Vazirmatn is bundled
-/// (assets/fonts, see docs/translating.md) so no platform depends on system fonts.
-const _arabicScriptFonts = [
-  'Vazirmatn',
-  'Noto Naskh Arabic',
-  'Noto Sans Arabic',
-];
-
 /// `--dart-define=PSEUDO_LOCALE=true` runs the app in the pseudo-language
 /// (docs/translating.md): accented, padded English that shows clipped layouts
 /// and any text that is still hardcoded.
 const _pseudoLocale = bool.fromEnvironment('PSEUDO_LOCALE');
-
-/// Pointer platforms get tighter rows; touch platforms keep 48dp targets.
-final _desktopPlatform = const {
-  TargetPlatform.macOS,
-  TargetPlatform.windows,
-  TargetPlatform.linux,
-}.contains(defaultTargetPlatform);
 
 class TaskForgeApp extends ConsumerWidget {
   const TaskForgeApp({super.key});
@@ -74,6 +59,8 @@ class TaskForgeApp extends ConsumerWidget {
     final current = ref.read(currentWorkspaceProvider);
     Future.microtask(() => applyDefault(current));
     final prefs = ref.watch(localePrefsProvider);
+    final density = ref.watch(densityProvider);
+    final highContrast = ref.watch(contrastProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       locale: _pseudoLocale ? const Locale('en', 'XA') : prefs.locale,
@@ -87,13 +74,13 @@ class TaskForgeApp extends ConsumerWidget {
       themeMode: ref.watch(themeModeProvider),
       theme: buildAppTheme(
         brightness: Brightness.light,
-        fontFallback: _arabicScriptFonts,
-        compactDensity: _desktopPlatform,
+        density: density,
+        highContrast: highContrast,
       ),
       darkTheme: buildAppTheme(
         brightness: Brightness.dark,
-        fontFallback: _arabicScriptFonts,
-        compactDensity: _desktopPlatform,
+        density: density,
+        highContrast: highContrast,
       ),
       routerConfig: router,
     );

@@ -1,5 +1,7 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -11,8 +13,6 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/inbox/presentation/snooze_sheet.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
-import 'package:taskforge/features/workspaces/presentation/workspace_switcher.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 
 enum NotificationMenu { toggleRead, snooze, unsnooze, archive, unarchive }
@@ -85,14 +85,14 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(inboxProvider(_filter));
     final now = ref.watch(inboxNowProvider)();
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
-        title: const WorkspaceSwitcher(),
+        title: Text(context.l10n.grpEInbox),
         actions: [
           IconButton(
             key: const Key('mark-all-read'),
             tooltip: context.l10n.grpHMarkAllRead,
-            icon: const Icon(Icons.done_all),
+            icon: const TfIcon(TfIcons.checkAll, size: 24),
             onPressed: state.unread == 0
                 ? null
                 : () => _guard(_notifier.markAllRead),
@@ -100,7 +100,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
           IconButton(
             key: const Key('open-notification-prefs'),
             tooltip: context.l10n.grpHNotificationSettings,
-            icon: const Icon(Icons.tune),
+            icon: const TfIcon(TfIcons.tune, size: 24),
             onPressed: () => context.push('/inbox/preferences'),
           ),
         ],

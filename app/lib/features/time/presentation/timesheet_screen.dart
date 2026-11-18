@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,12 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/weekday_names.dart';
-import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart'
     show currentUserIdProvider;
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
@@ -46,7 +45,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
     final permissions = ref.watch(permissionSetProvider);
     final me = ref.watch(currentUserIdProvider);
     final last = addDays(_week, 6);
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpATimesheetTitle)),
       body: Column(
         children: [
@@ -58,7 +57,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                 IconButton(
                   key: const Key('week-previous'),
                   tooltip: context.l10n.grpAPreviousWeek,
-                  icon: const DirectionalIcon(Icons.chevron_left),
+                  icon: const TfIcon(TfIcons.chevronStart, size: 24),
                   onPressed: () => _move(-1),
                 ),
                 Text(
@@ -68,7 +67,7 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                 IconButton(
                   key: const Key('week-next'),
                   tooltip: context.l10n.grpANextWeek,
-                  icon: const DirectionalIcon(Icons.chevron_right),
+                  icon: const TfIcon(TfIcons.chevronEnd, size: 24),
                   onPressed: () => _move(1),
                 ),
                 if (permissions.can(Perm.timeEditOthers))
@@ -267,7 +266,7 @@ class _CellDialog extends ConsumerWidget {
                           children: [
                             IconButton(
                               key: Key('cell-edit-${e.id}'),
-                              icon: const Icon(Icons.edit_outlined),
+                              icon: const TfIcon(TfIcons.edit, size: 24),
                               tooltip: context.l10n.grpAEdit,
                               onPressed: () async {
                                 final input = await askEntry(
@@ -289,7 +288,7 @@ class _CellDialog extends ConsumerWidget {
                             ),
                             IconButton(
                               key: Key('cell-delete-${e.id}'),
-                              icon: const Icon(Icons.delete_outline),
+                              icon: const TfIcon(TfIcons.trash, size: 24),
                               tooltip: context.l10n.grpADelete,
                               onPressed: () async {
                                 if (!await confirmDelete(context)) return;
@@ -303,7 +302,7 @@ class _CellDialog extends ConsumerWidget {
               ),
             TextButton.icon(
               key: const Key('cell-add'),
-              icon: const Icon(Icons.add),
+              icon: const TfIcon(TfIcons.plus, size: 24),
               label: Text(context.l10n.grpAAddTime),
               onPressed: () async {
                 final input = await askEntry(context, day: day);

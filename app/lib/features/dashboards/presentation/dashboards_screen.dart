@@ -1,5 +1,7 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
+import 'package:taskforge/core/ui/tf_icons.dart';
+
 import 'dart:async';
 import 'dart:math';
 
@@ -12,7 +14,6 @@ import 'package:taskforge/features/dashboards/domain/dashboards.dart' as d;
 import 'package:taskforge/features/dashboards/presentation/dashboard_grid.dart';
 import 'package:taskforge/features/dashboards/presentation/widget_editor.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 
@@ -240,7 +241,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         ? null
         : ref.watch(projectProvider(widget.projectId));
     final list = ref.watch(dashboardsProvider(widget.projectId));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
         title: Text(
           project == null
@@ -359,7 +360,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           PopupMenuButton<String>(
             key: const Key('new-dashboard'),
             tooltip: context.l10n.grpCDashNew,
-            icon: const Icon(Icons.add),
+            icon: const TfIcon(TfIcons.plus, size: 24),
             onSelected: (v) => v == 'blank' ? _newBlank() : _fromTemplate(v),
             itemBuilder: (_) => [
               PopupMenuItem(
@@ -380,7 +381,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         if (!_editing && current != null && current.canEdit)
           OutlinedButton.icon(
             key: const Key('edit-dashboard'),
-            icon: const Icon(Icons.edit),
+            icon: const TfIcon(TfIcons.edit, size: 24),
             label: Text(context.l10n.grpCDashEdit),
             onPressed: () => _startEditing(current),
           ),
@@ -388,7 +389,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           IconButton(
             key: const Key('refresh-all'),
             tooltip: context.l10n.grpCDashRefresh,
-            icon: const Icon(Icons.refresh),
+            icon: const TfIcon(TfIcons.refresh, size: 24),
             onPressed: () => ref.read(dashboardActionsProvider).refreshWidgets([
               for (final w in current.widgets)
                 if (!_unsaved.contains(w.id)) (id: w.id, version: w.version),
@@ -398,13 +399,13 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           IconButton(
             key: const Key('delete-dashboard'),
             tooltip: context.l10n.grpCDelete,
-            icon: const Icon(Icons.delete_outline),
+            icon: const TfIcon(TfIcons.trash, size: 24),
             onPressed: _busy ? null : () => _delete(current),
           ),
         if (_editing) ...[
           OutlinedButton.icon(
             key: const Key('add-widget'),
-            icon: const Icon(Icons.add_chart),
+            icon: const TfIcon(TfIcons.chart, size: 24),
             label: Text(context.l10n.grpCDashAddWidget),
             onPressed: _draft!.widgets.length >= d.maxWidgets
                 ? null
@@ -412,7 +413,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           ),
           OutlinedButton.icon(
             key: const Key('share-dashboard'),
-            icon: const Icon(Icons.group_outlined),
+            icon: const TfIcon(TfIcons.users, size: 24),
             label: Text(_draft!.visibility.labelIn(context.l10n)),
             onPressed: _share,
           ),

@@ -10,6 +10,7 @@ import 'package:taskforge/features/projects/application/projects_providers.dart'
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/features/tasks/application/task_detail_state.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
@@ -166,6 +167,7 @@ final List<AppAction> taskLevelActions = [
     groupOf: groupThisTask,
     semanticOf: (l) => l.grpKChangeStatusSem,
     keywords: const ['move', 'done', 'progress', 'workflow'],
+    defaultKeys: 's',
     available: (c) => _can(c, Perm.taskUpdate) && _task(c) != null,
     run: _changeStatus,
   ),
@@ -175,6 +177,7 @@ final List<AppAction> taskLevelActions = [
     groupOf: groupThisTask,
     semanticOf: (l) => l.grpKAssignMeSem,
     keywords: const ['take', 'own', 'mine'],
+    defaultKeys: 'a',
     available: (c) {
       final task = _task(c);
       return _can(c, Perm.taskUpdate) &&
@@ -182,6 +185,47 @@ final List<AppAction> taskLevelActions = [
           !task.assigneeIds.contains(c.container.read(currentUserIdProvider));
     },
     run: _assignMe,
+  ),
+  AppAction(
+    id: 'task.close',
+    titleOf: (l) => l.tdActClose,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.tdActCloseSem,
+    keywords: const ['dismiss', 'back', 'esc'],
+    defaultKeys: 'escape',
+    available: (c) => c.taskId != null,
+    run: (c) => c.container.read(taskCommandsProvider).close?.call(),
+  ),
+  AppAction(
+    id: 'task.prev',
+    titleOf: (l) => l.tdActPrev,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.tdActPrevSem,
+    keywords: const ['previous', 'up', 'back'],
+    defaultKeys: 'bracketleft',
+    sharesKeyWith: const {'nav.sidebar'},
+    available: (c) => c.taskId != null,
+    run: (c) => c.container.read(taskCommandsProvider).previous?.call(),
+  ),
+  AppAction(
+    id: 'task.next',
+    titleOf: (l) => l.tdActNext,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.tdActNextSem,
+    keywords: const ['down', 'following'],
+    defaultKeys: 'bracketright',
+    available: (c) => c.taskId != null,
+    run: (c) => c.container.read(taskCommandsProvider).next?.call(),
+  ),
+  AppAction(
+    id: 'task.send',
+    titleOf: (l) => l.tdActSend,
+    groupOf: groupThisTask,
+    semanticOf: (l) => l.tdActSendSem,
+    keywords: const ['comment', 'message', 'post', 'reply'],
+    defaultKeys: 'mod+enter',
+    available: (c) => c.taskId != null,
+    run: (c) => c.container.read(taskCommandsProvider).send?.call(),
   ),
   AppAction(
     id: 'timer.start',

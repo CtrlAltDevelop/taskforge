@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tf/tf_avatar.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
@@ -13,7 +14,10 @@ const desktopBreakpoint = ScreenSize.expandedFrom;
 
 /// App-bar title: the current workspace's name, tapping it lists all of them.
 class WorkspaceSwitcher extends ConsumerWidget {
-  const WorkspaceSwitcher({super.key});
+  const WorkspaceSwitcher({super.key, this.compact = false});
+
+  /// Only the workspace's avatar (the sidebar's icon strip).
+  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,18 +28,30 @@ class WorkspaceSwitcher extends ConsumerWidget {
     final elsewhere =
         (ref.watch(unreadTotalProvider).value ?? 0) -
         (ref.watch(unreadCountProvider).value ?? 0);
-    final label = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(child: Text(current.name, overflow: TextOverflow.ellipsis)),
-        Badge(
-          key: const Key('switcher-badge'),
-          isLabelVisible: elsewhere > 0,
-          label: Text('$elsewhere'),
-          child: const Icon(Icons.arrow_drop_down),
-        ),
-      ],
-    );
+    final label = compact
+        ? Badge(
+            key: const Key('switcher-badge'),
+            isLabelVisible: elsewhere > 0,
+            label: Text('$elsewhere'),
+            child: Tooltip(
+              message: current.name,
+              child: TfAvatar(name: current.name, size: 28),
+            ),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(current.name, overflow: TextOverflow.ellipsis),
+              ),
+              Badge(
+                key: const Key('switcher-badge'),
+                isLabelVisible: elsewhere > 0,
+                label: Text('$elsewhere'),
+                child: const Icon(Icons.arrow_drop_down),
+              ),
+            ],
+          );
     void select(String id) =>
         ref.read(selectedWorkspaceIdProvider.notifier).select(id);
 

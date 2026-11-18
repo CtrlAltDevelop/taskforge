@@ -104,14 +104,15 @@ void main() {
     final h = await open(tester);
 
     await chord(tester, LogicalKeyboardKey.keyK, ctrl: true);
-    await tester.enterText(key('palette-field'), '> go');
+    // Two places answer to "notif": the first row is the preferences page,
+    // the second the inbox.
+    await tester.enterText(key('palette-field'), '> notif');
     await tester.pump();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
 
-    // Home is where we are, so it is not offered; the second row ran.
-    expect(location(h.pumped), isNot('/'));
+    expect(location(h.pumped), '/inbox');
   });
 
   testWidgets('a project page is not offered outside a project', (

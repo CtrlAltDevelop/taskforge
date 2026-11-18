@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,7 +11,6 @@ import 'package:taskforge/features/automations/presentation/dry_run_dialog.dart'
 import 'package:taskforge/features/automations/presentation/rule_builder.dart';
 import 'package:taskforge/features/automations/presentation/runs_panel.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
@@ -68,7 +68,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
   Widget build(BuildContext context) {
     final project = ref.watch(projectProvider(widget.projectId));
     final catalog = ref.watch(projectCatalogProvider(true));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
         title: Text(
           project == null
@@ -124,7 +124,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
               if (canManage && !_history)
                 FilledButton.icon(
                   key: const Key('new-rule'),
-                  icon: const Icon(Icons.add),
+                  icon: const TfIcon(TfIcons.plus, size: 24),
                   label: Text(context.l10n.grpCAutoNew),
                   onPressed: full
                       ? null
@@ -136,7 +136,7 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
               if (!canManage)
                 Chip(
                   key: const Key('read-only'),
-                  avatar: const Icon(Icons.lock_outline, size: 16),
+                  avatar: const TfIcon(TfIcons.lock, size: 16),
                   label: Text(context.l10n.grpCAutoReadOnly),
                 ),
               if (full && !_history)
@@ -327,7 +327,7 @@ class RuleTile extends ConsumerWidget {
                   IconButton(
                     key: Key('delete-${rule.id}'),
                     tooltip: context.l10n.grpCDelete,
-                    icon: const Icon(Icons.delete_outline),
+                    icon: const TfIcon(TfIcons.trash, size: 24),
                     onPressed: onDelete,
                   ),
                 ],

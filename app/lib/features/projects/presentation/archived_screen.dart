@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
@@ -22,7 +21,7 @@ class ArchivedProjectsScreen extends ConsumerWidget {
       for (final p in catalog.value?.projects ?? const <Project>[])
         if (p.isArchived) p,
     ];
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpHArchivedProjects)),
       body: switch (catalog) {
         AsyncData() when archived.isEmpty => Center(

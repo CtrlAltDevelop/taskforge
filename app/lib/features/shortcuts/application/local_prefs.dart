@@ -71,6 +71,11 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
     return ThemeMode.system;
   }
 
+  void choose(ThemeMode mode) {
+    state = mode;
+    ref.read(localPrefsProvider).write(_key, mode.name);
+  }
+
   /// To the other theme than the one on screen now.
   void toggle(Brightness showing) {
     state = showing == Brightness.dark ? ThemeMode.light : ThemeMode.dark;

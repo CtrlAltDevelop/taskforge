@@ -229,6 +229,8 @@ void main() {
     final o = await open(tester);
     await o.pumped.go(tester, '/inbox');
 
+    await tester.tap(key('section-workspace')); // the group starts closed
+    await tester.pumpAndSettle();
     await tester.tap(key('open-timesheet'));
     await tester.pumpAndSettle();
 

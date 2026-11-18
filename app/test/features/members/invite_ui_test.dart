@@ -18,6 +18,8 @@ Future<void> _openMembers(
   );
   await tester.tap(byKey('open-workspace-settings'));
   await tester.pumpAndSettle();
+  await tester.ensureVisible(byKey('open-members'));
+  await tester.pumpAndSettle();
   await tester.tap(byKey('open-members'));
   await tester.pumpAndSettle();
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/features/roles/presentation/roles_screen.dart';
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 
@@ -54,10 +55,24 @@ void main() {
     ) async {
       await _openRoles(tester, await _withSupport());
 
-      expect(find.text('Workspace'), findsOneWidget);
+      // The sidebar has a "Workspace" group too: look inside the matrix page.
+      expect(
+        find.descendant(
+          of: find.byType(RolesScreen),
+          matching: find.text('Workspace'),
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Invite members'), findsOneWidget);
       for (final role in ['Owner', 'Admin', 'Member', 'Viewer', 'Support']) {
-        expect(find.text(role), findsOneWidget);
+        // "Admin" is also a sidebar group: look inside the page.
+        expect(
+          find.descendant(
+            of: find.byType(RolesScreen),
+            matching: find.text(role),
+          ),
+          findsOneWidget,
+        );
       }
       // Built-ins carry a lock, the custom role does not.
       expect(find.byKey(const Key('lock-1')), findsOneWidget);
@@ -230,7 +245,10 @@ void main() {
 
       await tester.tap(find.byKey(const Key('role-tile-100')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('cell-100-${Perm.memberInvite}')));
+      final cell = find.byKey(const Key('cell-100-${Perm.memberInvite}'));
+      await tester.ensureVisible(cell);
+      await tester.pumpAndSettle();
+      await tester.tap(cell);
       await tester.pumpAndSettle();
 
       expect(

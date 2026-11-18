@@ -16,6 +16,7 @@ import 'package:taskforge/features/templates/presentation/templates_screen.dart'
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
 import 'package:taskforge/features/imports/presentation/import_screen.dart';
 import 'package:taskforge/features/account/home_screen.dart';
+import 'package:taskforge/features/account/appearance_screen.dart';
 import 'package:taskforge/features/account/language_screen.dart';
 import 'package:taskforge/features/account/sessions_screen.dart';
 import 'package:taskforge/features/auth/change_password_screen.dart';
@@ -23,6 +24,7 @@ import 'package:taskforge/features/auth/forgot_password_screen.dart';
 import 'package:taskforge/features/auth/reset_password_screen.dart';
 import 'package:taskforge/features/auth/sign_in_screen.dart';
 import 'package:taskforge/features/auth/sign_up_screen.dart';
+import 'package:taskforge/core/ui/gallery/component_gallery.dart';
 import 'package:taskforge/features/debug/debug_screen.dart';
 import 'package:taskforge/features/calendar/presentation/workspace_calendar_screen.dart';
 import 'package:taskforge/features/chat/presentation/chat_screen.dart';
@@ -53,6 +55,8 @@ import 'package:taskforge/features/security/presentation/sso_callback_screen.dar
 import 'package:taskforge/features/security/presentation/sso_setup_screen.dart';
 import 'package:taskforge/features/security/presentation/two_factor_screen.dart';
 import 'package:taskforge/core/auth/auth_api.dart' show SecondFactorRequired;
+import 'package:taskforge/features/shell/app_frame.dart';
+import 'package:taskforge/features/shell/nav_items.dart';
 import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/system/presentation/system_screen.dart';
 import 'package:taskforge/features/system/presentation/version_screens.dart';
@@ -117,9 +121,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   // A project belongs to one workspace: leave its pages when the workspace changes.
   ref.listen(workspaceScopeProvider, (previous, next) {
     final path = router.routeInformationProvider.value.uri.path;
-    if (previous != null && next != previous && path.startsWith('/projects/')) {
-      router.go('/');
-    }
+    if (previous == null || next == previous) return;
+    // Same kind of page in the new workspace; its old items do not exist there.
+    final target = pageTypeRoot(path);
+    if (target != path) router.go(target);
   });
   router = GoRouter(
     refreshListenable: Listenable.merge([session, workspacesChanged]),
@@ -167,9 +172,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: '/', builder: (_, _) => const HomeScreen()),
-      GoRoute(path: '/about', builder: (_, _) => const AboutScreen()),
-      GoRoute(path: '/system', builder: (_, _) => const SystemScreen()),
       GoRoute(
         path: '/update-required',
         builder: (_, _) => const UpdateRequiredScreen(),
@@ -180,150 +182,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const OnboardingScreen(firstWorkspace: false),
       ),
       GoRoute(
-        path: '/workspaces/settings',
-        builder: (_, _) => const WorkspaceSettingsScreen(),
-      ),
-      GoRoute(
-        path: '/workspaces/roles',
-        builder: (_, _) => const RolesScreen(),
-      ),
-      // Fixed paths first: `:id` would otherwise swallow them.
-      GoRoute(
-        path: '/projects/archived',
-        builder: (_, _) => const ArchivedProjectsScreen(),
-      ),
-      GoRoute(
-        path: '/projects/private',
-        builder: (_, _) => const PrivateProjectsScreen(),
-      ),
-      GoRoute(
-        path: '/projects/:id',
-        builder: (_, state) => ProjectScreen(
-          projectId: state.pathParameters['id']!,
-          taskId: state.uri.queryParameters['task'],
-          view: state.uri.queryParameters['view'],
-        ),
-      ),
-      GoRoute(
-        path: '/projects/:id/settings',
-        builder: (_, state) =>
-            ProjectSettingsScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/projects/:id/sprints',
-        builder: (_, state) =>
-            SprintsScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/projects/:id/automations',
-        builder: (_, state) =>
-            AutomationsScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/projects/:id/workflow',
-        builder: (_, state) =>
-            WorkflowScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/projects/:id/fields',
-        builder: (_, state) =>
-            FieldsScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/docs',
-        builder: (_, state) =>
-            DocsScreen(project: state.uri.queryParameters['project'] ?? ''),
-      ),
-      GoRoute(
-        path: '/docs/:id',
-        builder: (_, state) => DocsScreen(
-          docId: state.pathParameters['id'],
-          project: state.uri.queryParameters['project'] ?? '',
-        ),
-      ),
-      GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
-      GoRoute(path: '/chat', builder: (_, _) => const ChatScreen()),
-      GoRoute(
-        path: '/chat/:spaceId',
-        builder: (_, state) =>
-            ChatScreen(spaceId: state.pathParameters['spaceId']),
-      ),
-      GoRoute(path: '/timesheet', builder: (_, _) => const TimesheetScreen()),
-      GoRoute(
-        path: '/inbox/preferences',
-        builder: (_, _) => const NotificationPrefsScreen(),
-      ),
-      GoRoute(path: '/members', builder: (_, _) => const MembersScreen()),
-      GoRoute(path: '/audit', builder: (_, _) => const AuditScreen()),
-      GoRoute(path: '/import', builder: (_, _) => const ImportScreen()),
-      GoRoute(path: '/developer', builder: (_, _) => const DeveloperScreen()),
-      GoRoute(
         path: '/f/:token',
         builder: (_, state) =>
             PublicFormPage(token: state.pathParameters['token']!),
-      ),
-      GoRoute(path: '/forms', builder: (_, _) => const FormsScreen()),
-      // Fixed paths before `:id`.
-      GoRoute(
-        path: '/forms/new',
-        builder: (_, state) =>
-            FormBuilderScreen(projectId: state.uri.queryParameters['project']),
-      ),
-      GoRoute(
-        path: '/forms/:id',
-        builder: (_, state) =>
-            FormBuilderScreen(formId: state.pathParameters['id']),
-      ),
-      GoRoute(
-        path: '/forms/:id/submissions',
-        builder: (_, state) =>
-            SubmissionsScreen(formId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/developer/webhooks/:id',
-        builder: (_, state) =>
-            DeliveriesScreen(webhookId: state.pathParameters['id']!),
-      ),
-      GoRoute(path: '/dashboards', builder: (_, _) => const DashboardsScreen()),
-      GoRoute(path: '/goals', builder: (_, _) => const GoalsScreen()),
-      GoRoute(path: '/workload', builder: (_, _) => const WorkloadScreen()),
-      GoRoute(
-        path: '/workload/settings',
-        builder: (_, _) => const WorkloadSettingsScreen(),
-      ),
-      GoRoute(
-        path: '/templates',
-        builder: (_, state) => TemplatesScreen(
-          kind: state.uri.queryParameters['kind'] == 'project'
-              ? TemplateKind.project
-              : null,
-        ),
-      ),
-      GoRoute(
-        path: '/goals/:id',
-        builder: (_, state) =>
-            GoalDetailScreen(goalId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/projects/:id/dashboards',
-        builder: (_, state) =>
-            DashboardsScreen(projectId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: '/calendar',
-        builder: (_, _) => const WorkspaceCalendarScreen(),
       ),
       GoRoute(
         path: '/invite/:token',
         builder: (_, state) =>
             InviteScreen(token: state.pathParameters['token']!),
       ),
-      GoRoute(path: '/sessions', builder: (_, _) => const SessionsScreen()),
-      GoRoute(
-        path: '/settings/security',
-        builder: (_, _) => const SecurityScreen(),
-      ),
-      GoRoute(path: '/settings/sso', builder: (_, _) => const SsoSetupScreen()),
       GoRoute(
         path: '/two-factor',
         // The challenge is passed as navigation state; without it, start over.
@@ -342,14 +209,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        path: '/settings/language',
-        builder: (_, _) => const LanguageScreen(),
-      ),
-      GoRoute(
-        path: '/change-password',
-        builder: (_, _) => const ChangePasswordScreen(),
-      ),
-      GoRoute(
         path: '/forgot-password',
         builder: (_, _) => const ForgotPasswordScreen(),
       ),
@@ -361,8 +220,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             ResetPasswordScreen(ticket: state.extra as String),
       ),
-      GoRoute(path: '/offline', builder: (_, _) => const OfflineScreen()),
-      GoRoute(path: '/debug', builder: (_, _) => const DebugScreen()),
       GoRoute(
         path: '/sign-in',
         builder: (_, state) =>
@@ -373,6 +230,260 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             SignUpScreen(from: state.uri.queryParameters['from']),
       ),
+      GoRoute(
+        path: '/',
+        pageBuilder: (_, state) => framedPage(state, const HomeScreen()),
+      ),
+      GoRoute(
+        path: '/about',
+        pageBuilder: (_, state) => framedPage(state, const AboutScreen()),
+      ),
+      GoRoute(
+        path: '/system',
+        pageBuilder: (_, state) => framedPage(state, const SystemScreen()),
+      ),
+      GoRoute(
+        path: '/workspaces/settings',
+        pageBuilder: (_, state) =>
+            framedPage(state, const WorkspaceSettingsScreen()),
+      ),
+      GoRoute(
+        path: '/workspaces/roles',
+        pageBuilder: (_, state) => framedPage(state, const RolesScreen()),
+      ),
+      // Fixed paths first: `:id` would otherwise swallow them.
+      GoRoute(
+        path: '/projects/archived',
+        pageBuilder: (_, state) =>
+            framedPage(state, const ArchivedProjectsScreen()),
+      ),
+      GoRoute(
+        path: '/projects/private',
+        pageBuilder: (_, state) =>
+            framedPage(state, const PrivateProjectsScreen()),
+      ),
+      GoRoute(
+        path: '/projects/:id',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          ProjectScreen(
+            projectId: state.pathParameters['id']!,
+            taskId: state.uri.queryParameters['task'],
+            view: state.uri.queryParameters['view'],
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/settings',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          ProjectSettingsScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/sprints',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          SprintsScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/automations',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          AutomationsScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/workflow',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          WorkflowScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/fields',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          FieldsScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/docs',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          DocsScreen(project: state.uri.queryParameters['project'] ?? ''),
+        ),
+      ),
+      GoRoute(
+        path: '/docs/:id',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          DocsScreen(
+            docId: state.pathParameters['id'],
+            project: state.uri.queryParameters['project'] ?? '',
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/inbox',
+        pageBuilder: (_, state) => framedPage(state, const InboxScreen()),
+      ),
+      GoRoute(
+        path: '/chat',
+        pageBuilder: (_, state) => framedPage(state, const ChatScreen()),
+      ),
+      GoRoute(
+        path: '/chat/:spaceId',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          ChatScreen(spaceId: state.pathParameters['spaceId']),
+        ),
+      ),
+      GoRoute(
+        path: '/timesheet',
+        pageBuilder: (_, state) => framedPage(state, const TimesheetScreen()),
+      ),
+      GoRoute(
+        path: '/inbox/preferences',
+        pageBuilder: (_, state) =>
+            framedPage(state, const NotificationPrefsScreen()),
+      ),
+      GoRoute(
+        path: '/members',
+        pageBuilder: (_, state) => framedPage(state, const MembersScreen()),
+      ),
+      GoRoute(
+        path: '/audit',
+        pageBuilder: (_, state) => framedPage(state, const AuditScreen()),
+      ),
+      GoRoute(
+        path: '/import',
+        pageBuilder: (_, state) => framedPage(state, const ImportScreen()),
+      ),
+      GoRoute(
+        path: '/developer',
+        pageBuilder: (_, state) => framedPage(state, const DeveloperScreen()),
+      ),
+      GoRoute(
+        path: '/forms',
+        pageBuilder: (_, state) => framedPage(state, const FormsScreen()),
+      ),
+      // Fixed paths before `:id`.
+      GoRoute(
+        path: '/forms/new',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          FormBuilderScreen(projectId: state.uri.queryParameters['project']),
+        ),
+      ),
+      GoRoute(
+        path: '/forms/:id',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          FormBuilderScreen(formId: state.pathParameters['id']),
+        ),
+      ),
+      GoRoute(
+        path: '/forms/:id/submissions',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          SubmissionsScreen(formId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/developer/webhooks/:id',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          DeliveriesScreen(webhookId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/dashboards',
+        pageBuilder: (_, state) => framedPage(state, const DashboardsScreen()),
+      ),
+      GoRoute(
+        path: '/goals',
+        pageBuilder: (_, state) => framedPage(state, const GoalsScreen()),
+      ),
+      GoRoute(
+        path: '/workload',
+        pageBuilder: (_, state) => framedPage(state, const WorkloadScreen()),
+      ),
+      GoRoute(
+        path: '/workload/settings',
+        pageBuilder: (_, state) =>
+            framedPage(state, const WorkloadSettingsScreen()),
+      ),
+      GoRoute(
+        path: '/templates',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          TemplatesScreen(
+            kind: state.uri.queryParameters['kind'] == 'project'
+                ? TemplateKind.project
+                : null,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/goals/:id',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          GoalDetailScreen(goalId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/projects/:id/dashboards',
+        pageBuilder: (_, state) => framedPage(
+          state,
+          DashboardsScreen(projectId: state.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/calendar',
+        pageBuilder: (_, state) =>
+            framedPage(state, const WorkspaceCalendarScreen()),
+      ),
+      GoRoute(
+        path: '/sessions',
+        pageBuilder: (_, state) => framedPage(state, const SessionsScreen()),
+      ),
+      GoRoute(
+        path: '/settings/security',
+        pageBuilder: (_, state) => framedPage(state, const SecurityScreen()),
+      ),
+      GoRoute(
+        path: '/settings/sso',
+        pageBuilder: (_, state) => framedPage(state, const SsoSetupScreen()),
+      ),
+      GoRoute(
+        path: '/settings/appearance',
+        pageBuilder: (_, state) => framedPage(state, const AppearanceScreen()),
+      ),
+      GoRoute(
+        path: '/settings/language',
+        pageBuilder: (_, state) => framedPage(state, const LanguageScreen()),
+      ),
+      GoRoute(
+        path: '/change-password',
+        pageBuilder: (_, state) =>
+            framedPage(state, const ChangePasswordScreen()),
+      ),
+      GoRoute(
+        path: '/offline',
+        pageBuilder: (_, state) => framedPage(state, const OfflineScreen()),
+      ),
+      GoRoute(
+        path: '/debug',
+        pageBuilder: (_, state) => framedPage(state, const DebugScreen()),
+      ),
+      if (kDebugMode)
+        GoRoute(
+          path: '/debug/gallery',
+          pageBuilder: (_, state) =>
+              framedPage(state, const ComponentGallery()),
+        ),
     ],
   );
   return router;

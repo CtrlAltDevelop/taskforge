@@ -24,7 +24,6 @@ void main() {
     expect(top(tester, 'project-p2'), lessThan(top(tester, 'project-p1')));
     expect(byKey('private-p4'), findsOneWidget);
     expect(byKey('private-p1'), findsNothing);
-    expect(find.text('ZUL'), findsOneWidget);
   });
 
   testWidgets('tapping a project opens its page', (tester) async {
@@ -85,7 +84,7 @@ void main() {
     expect(app.projects.workspaces.last, 'w2');
   });
 
-  testWidgets('on a narrow screen the sidebar lives in a drawer', (
+  testWidgets('on a tablet the sidebar is a strip and opens as an overlay', (
     tester,
   ) async {
     await pumpProjects(
@@ -93,13 +92,14 @@ void main() {
       projects: [project('p1', 'Website')],
       size: const Size(800, 900),
     );
-    expect(byKey('project-p1'), findsNothing);
+    // A tablet shows the icon strip: no names until the menu opens.
+    expect(find.text('Website'), findsNothing);
 
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle();
-    expect(byKey('project-p1'), findsOneWidget);
+    expect(byKey('project-p1'), findsNWidgets(2)); // the strip and the overlay
 
-    await tester.tap(byKey('project-p1'));
+    await tester.tap(byKey('project-p1').last);
     await tester.pumpAndSettle();
 
     expect(byKey('project-title'), findsOneWidget);

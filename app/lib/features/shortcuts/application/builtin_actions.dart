@@ -1,4 +1,5 @@
 import 'package:taskforge/core/actions/app_action.dart';
+import 'package:taskforge/core/ui/frame_scope.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/search/presentation/search_overlay.dart';
@@ -16,6 +17,7 @@ AppAction _go(
   String path, {
   String Function(AppLocalizations) group = groupGoTo,
   String keys = '',
+  String? goKey,
   List<String> keywords = const [],
 }) => AppAction(
   id: id,
@@ -24,6 +26,7 @@ AppAction _go(
   semanticOf: (l) => l.grpKGoTo(title(l)),
   keywords: keywords,
   defaultKeys: keys,
+  goKey: goKey,
   available: (c) => c.location != path,
   run: (c) => c.router.go(path),
 );
@@ -83,6 +86,7 @@ final List<AppAction> builtInActions = [
     '/',
     keys: 'alt+h',
     keywords: const ['projects'],
+    goKey: 'h',
   ),
   _go(
     'nav.inbox',
@@ -90,6 +94,7 @@ final List<AppAction> builtInActions = [
     '/inbox',
     keys: 'alt+i',
     keywords: const ['notifications'],
+    goKey: 'i',
   ),
   _go(
     'nav.calendar',
@@ -97,6 +102,7 @@ final List<AppAction> builtInActions = [
     '/calendar',
     keys: 'alt+c',
     keywords: const ['dates', 'schedule'],
+    goKey: 'k',
   ),
   _go(
     'nav.docs',
@@ -104,6 +110,7 @@ final List<AppAction> builtInActions = [
     '/docs',
     keys: 'alt+d',
     keywords: const ['wiki', 'pages'],
+    goKey: 'd',
   ),
   _go(
     'nav.dashboards',
@@ -111,6 +118,7 @@ final List<AppAction> builtInActions = [
     '/dashboards',
     keys: 'alt+b',
     keywords: const ['reports', 'charts', 'metrics', 'widgets'],
+    goKey: 'b',
   ),
   _go(
     'nav.timesheet',
@@ -118,6 +126,7 @@ final List<AppAction> builtInActions = [
     '/timesheet',
     keys: 'alt+t',
     keywords: const ['time', 'hours'],
+    goKey: 't',
   ),
   _go(
     'nav.members',
@@ -125,6 +134,54 @@ final List<AppAction> builtInActions = [
     '/members',
     keys: 'alt+m',
     keywords: const ['people', 'invite', 'team'],
+    goKey: 'm',
+  ),
+  _go(
+    'nav.chat',
+    (l) => l.chatTitle,
+    '/chat',
+    goKey: 'c',
+    keywords: const ['messages', 'channels', 'dm'],
+  ),
+  _go(
+    'nav.forms',
+    (l) => l.formsTitle,
+    '/forms',
+    goKey: 'f',
+    keywords: const ['intake', 'submissions'],
+  ),
+  _go(
+    'nav.developer',
+    (l) => l.devTitle,
+    '/developer',
+    group: groupAccount,
+    goKey: 'v',
+    keywords: const ['api', 'tokens', 'webhooks'],
+  ),
+  _go(
+    'nav.goals',
+    (l) => l.goalsTitle,
+    '/goals',
+    goKey: 'g',
+    keywords: const ['okr', 'objectives', 'key results'],
+  ),
+  _go(
+    'nav.workload',
+    (l) => l.wlTitle,
+    '/workload',
+    goKey: 'w',
+    keywords: const ['capacity', 'time off'],
+  ),
+  AppAction(
+    id: 'nav.sidebar',
+    titleOf: (l) => l.shellToggleSidebar,
+    groupOf: groupGeneral,
+    semanticOf: (l) => l.shellToggleSidebar,
+    keywords: const ['menu', 'panel', 'collapse'],
+    defaultKeys: 'bracketleft',
+    sharesKeyWith: const {'task.prev'},
+    available: (c) => c.taskId == null,
+    run: (c) => AppFrameScope.maybeOf(c.context)?.toggleSidebar?.call(),
   ),
   _go(
     'nav.archived_projects',
@@ -144,6 +201,7 @@ final List<AppAction> builtInActions = [
     '/workspaces/settings',
     group: groupWorkspace,
     keywords: const ['preferences', 'logo'],
+    goKey: 's',
   ),
   AppAction(
     id: 'nav.audit',

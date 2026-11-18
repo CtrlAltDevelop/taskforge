@@ -57,8 +57,10 @@ class AppAction {
     required this.run,
     this.keywords = const [],
     this.defaultKeys = '',
+    this.goKey,
     this.views,
     this.available,
+    this.sharesKeyWith = const {},
   }) : _title = title,
        _group = group,
        _semanticLabel = semanticLabel;
@@ -95,6 +97,9 @@ class AppAction {
   /// The wire form of the default chord, or empty for none.
   final String defaultKeys;
 
+  /// A go-to letter: `g` then this key runs it (fixed, not rebindable).
+  final String? goKey;
+
   /// The views of a project page this action belongs to (`list`, `board`,
   /// `calendar`, `timeline`): it is offered, and its keys work, only there.
   /// Null: every page.
@@ -102,6 +107,11 @@ class AppAction {
 
   /// Null: always available.
   final bool Function(ActionContext)? available;
+
+  /// Ids of actions that may default to the same key as this one because
+  /// they are never available together (`[` toggles the sidebar, or is
+  /// "previous task" while a task is open). Both sides must name each other.
+  final Set<String> sharesKeyWith;
   final FutureOr<void> Function(ActionContext) run;
 
   bool isAvailable(ActionContext context) {

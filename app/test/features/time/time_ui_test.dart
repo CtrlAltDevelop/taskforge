@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../tasks/detail_tabs.dart';
+
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/core/sync/sync_client.dart';
 import 'package:taskforge/core/sync/sync_coordinator.dart';
@@ -49,6 +52,9 @@ Future<Opened> open(
     ],
   );
   await pumped.go(tester, location);
+  if (enabled && find.byKey(const Key('task-tabs')).evaluate().isNotEmpty) {
+    await openTab(tester, 'Time');
+  }
   return (pumped: pumped, time: fake, notes: notes);
 }
 

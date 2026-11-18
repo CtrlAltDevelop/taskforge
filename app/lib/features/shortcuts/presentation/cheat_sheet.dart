@@ -121,13 +121,25 @@ class _Row extends ConsumerWidget {
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (chord == null)
+        if (action.goKey case final letter?) ...[
+          Keycap('G', key: Key('go-${action.id}')),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              context.l10n.shellThen,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
+          Keycap(letter.toUpperCase()),
+          const SizedBox(width: 12),
+        ],
+        if (chord case final c?)
+          Keycap(c.label(isMac: isApplePlatform, l10n: context.l10n))
+        else if (action.goKey == null)
           Text(
             context.l10n.grpGNone,
             style: Theme.of(context).textTheme.labelSmall,
-          )
-        else
-          Keycap(chord!.label(isMac: isApplePlatform, l10n: context.l10n)),
+          ),
         IconButton(
           key: Key('rebind-${action.id}'),
           tooltip: context.l10n.grpGChangeKeysFor(action.titleIn(context.l10n)),

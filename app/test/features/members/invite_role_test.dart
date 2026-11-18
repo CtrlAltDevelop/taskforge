@@ -13,6 +13,8 @@ Future<void> _openInvite(WidgetTester tester, FakeMembersClient members) async {
   );
   await tester.tap(byKey('open-workspace-settings'));
   await tester.pumpAndSettle();
+  await tester.ensureVisible(byKey('open-members'));
+  await tester.pumpAndSettle();
   await tester.tap(byKey('open-members'));
   await tester.pumpAndSettle();
   await tester.tap(byKey('open-invite'));
@@ -127,6 +129,8 @@ void main() {
       overrides: [membersClientProvider.overrideWithValue(client)],
     );
     await t.tap(byKey('open-workspace-settings'));
+    await t.pumpAndSettle();
+    await t.ensureVisible(byKey('open-members'));
     await t.pumpAndSettle();
     await t.tap(byKey('open-members'));
     await t.pumpAndSettle();

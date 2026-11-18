@@ -24,7 +24,15 @@ class ActionRegistry {
       }
       final other = keys[chord.wire];
       if (other != null) {
-        throw ArgumentError('"$other" and "${a.id}" both default to $chord.');
+        final partner = actions.where((x) => x.id == other).firstOrNull;
+        final agreed =
+            partner != null &&
+            partner.sharesKeyWith.contains(a.id) &&
+            a.sharesKeyWith.contains(other);
+        if (!agreed) {
+          throw ArgumentError('"$other" and "${a.id}" both default to $chord.');
+        }
+        continue;
       }
       keys[chord.wire] = a.id;
     }
@@ -66,10 +74,13 @@ class Bindings {
     return Chord.parse(action.defaultKeys);
   }
 
-  /// The action a key press runs, if any.
-  AppAction? actionFor(Chord chord) {
+  /// The action a key press runs, if any. When [within] is given, an action
+  /// that is not available there is passed over (two actions may share a key
+  /// when they are never available together).
+  AppAction? actionFor(Chord chord, {ActionContext? within}) {
     for (final a in registry.actions) {
-      if (chordOf(a.id) == chord) return a;
+      if (chordOf(a.id) != chord) continue;
+      if (within == null || a.isAvailable(within)) return a;
     }
     return null;
   }

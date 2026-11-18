@@ -289,7 +289,9 @@ void main() {
       );
       expect(find.text('zoe@example.com'), findsOneWidget);
 
-      await tester.tap(find.byKey(const Key('sign-out')));
+      await tester.tap(find.byKey(const Key('profile-menu')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign out'));
       await tester.pumpAndSettle();
 
       expect(session.status, AuthStatus.signedOut);
@@ -308,6 +310,10 @@ void main() {
         sessionId: 's',
       ),
     );
+
+    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('open-sessions')));
     await tester.pumpAndSettle();
@@ -328,6 +334,8 @@ void main() {
           sessionId: 's',
         ),
       );
+      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('open-sessions')));
       await tester.pumpAndSettle();
 
@@ -349,6 +357,8 @@ void main() {
           sessionId: 's',
         ),
       );
+      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('open-sessions')));
       await tester.pumpAndSettle();
 
@@ -402,6 +412,8 @@ void main() {
         sessionId: 's',
       ),
     );
+    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-sessions')));
     await tester.pumpAndSettle();
     api.revokeFails = const NetworkUnavailable('offline');
@@ -426,7 +438,7 @@ void main() {
     await tester.scrollUntilVisible(
       find.byKey(const Key('open-change-password')),
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: find.byType(Scrollable).last,
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
@@ -463,7 +475,7 @@ void main() {
     await tester.scrollUntilVisible(
       find.byKey(const Key('open-change-password')),
       200,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: find.byType(Scrollable).last,
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-change-password')));
@@ -546,6 +558,8 @@ void main() {
           sessionId: 's',
         ),
       );
+      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('open-sessions')));
       await tester.pumpAndSettle();
       api.refreshFails = const AuthApiException(
@@ -573,6 +587,8 @@ void main() {
         sessionId: 's',
       ),
     );
+    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('open-sessions')));
     await tester.pumpAndSettle();
 

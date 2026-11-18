@@ -7,7 +7,6 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/presentation/doc_page.dart';
 import 'package:taskforge/features/docs/presentation/doc_panels.dart';
 import 'package:taskforge/features/docs/presentation/page_tree.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
@@ -45,7 +44,7 @@ class DocsScreen extends ConsumerWidget {
     final canEditPage = id == null
         ? false
         : ref.watch(docSessionProvider(id).select((s) => s.canEdit));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpJDocs)),
       body: LayoutBuilder(
         builder: (context, box) {

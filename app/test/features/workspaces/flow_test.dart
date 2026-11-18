@@ -60,13 +60,7 @@ void main() {
 
       expect(client.items.single.slug, 'acme-corp');
       expect(find.text('Create your workspace'), findsNothing);
-      expect(
-        find.descendant(
-          of: find.byType(AppBar),
-          matching: find.text('Acme Corp'),
-        ),
-        findsOneWidget,
-      );
+      expect(find.byTooltip('Acme Corp'), findsOneWidget);
       expect(byKey('open-workspace-settings'), findsOneWidget);
     });
 
@@ -168,10 +162,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(container.read(workspaceScopeProvider), 'b');
-      expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('Beta')),
-        findsOneWidget,
-      );
+      expect(find.byTooltip('Beta'), findsOneWidget);
     });
 
     testWidgets('desktop: a dropdown menu switches', (tester) async {
