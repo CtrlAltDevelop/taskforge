@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/features/tasks/presentation/detail/detail_cells.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 
@@ -135,12 +136,11 @@ void main() {
         findsOneWidget,
       );
       expect(
-        tester
-            .widget<DropdownButtonFormField<String>>(
-              find.byKey(const Key('detail-status')),
-            )
-            .initialValue,
-        'todo',
+        find.descendant(
+          of: find.byKey(const Key('detail-status')),
+          matching: find.text('To do'),
+        ),
+        findsOneWidget,
       );
     },
   );
@@ -175,11 +175,7 @@ void main() {
     await _open(tester, workflow: defaultWorkflow(), role: 'Viewer');
 
     expect(
-      tester
-          .widget<DropdownButtonFormField<String>>(
-            find.byKey(const Key('detail-status')),
-          )
-          .onChanged,
+      tester.widget<ValueButton>(find.byKey(const Key('detail-status'))).onTap,
       isNull,
     );
   });

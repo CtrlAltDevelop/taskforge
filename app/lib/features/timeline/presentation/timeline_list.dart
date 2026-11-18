@@ -1,6 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/timeline/domain/timeline_math.dart';
@@ -57,22 +60,25 @@ class TimelineList extends StatelessWidget {
         final row = rows[i];
         final task = row.task;
         if (task == null) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            clipBehavior: Clip.antiAlias,
-            child: ListTile(
-              dense: true,
-              title: Text(
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: TfSpace.md,
+              vertical: TfSpace.xs,
+            ),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
                 row.header!,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: context.tf.typography.label.copyWith(
+                  color: context.tf.colors.textMuted,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           );
         }
         final isCritical = critical.contains(task.id);
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          clipBehavior: Clip.antiAlias,
+        return WorkCard(
           child: ListTile(
             key: Key('timeline-row-${task.id}'),
             contentPadding: EdgeInsetsDirectional.only(

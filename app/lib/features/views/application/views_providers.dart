@@ -241,6 +241,51 @@ class ListLayoutNotifier extends Notifier<LayoutState> {
     await _reloadShared();
   }
 
+  /// Pins a shared layout as a tab of the project page (or removes the tab),
+  /// at the end of the tabs. Throws [ViewException].
+  Future<void> setTab(SavedView view, {required bool pinned}) async {
+    final last = state.shared
+        .where((v) => v.pinnedAsTab)
+        .fold(0, (m, v) => v.tabOrder > m ? v.tabOrder : m);
+    await _saveTab(view, pinned: pinned, order: pinned ? last + 1 : 0);
+  }
+
+  /// Moves a pinned tab one place earlier ([delta] -1) or later (+1). Throws
+  /// [ViewException].
+  Future<void> moveTab(SavedView view, int delta) async {
+    final tabs = pinnedTabs(state.shared);
+    final from = tabs.indexWhere((v) => v.id == view.id);
+    final to = from + delta;
+    if (from < 0 || to < 0 || to >= tabs.length) return;
+    final order = [...tabs];
+    order.insert(to, order.removeAt(from));
+    for (var i = 0; i < order.length; i++) {
+      final v = order[i];
+      if (v.tabOrder != i + 1) await _saveTab(v, pinned: true, order: i + 1);
+    }
+  }
+
+  Future<void> _saveTab(
+    SavedView view, {
+    required bool pinned,
+    required int order,
+  }) async {
+    final workspace = _workspace;
+    if (workspace == null) return;
+    await _client.save(
+      workspace,
+      projectId,
+      name: view.name,
+      layout: view.layout,
+      id: view.id,
+      expectedVersion: view.version,
+      shared: true,
+      pinnedAsTab: pinned,
+      tabOrder: order,
+    );
+    await _reloadShared();
+  }
+
   Future<void> deleteShared(SavedView view) async {
     final workspace = _workspace;
     if (workspace == null) return;

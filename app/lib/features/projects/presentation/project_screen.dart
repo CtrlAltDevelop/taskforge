@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,10 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
 import 'package:taskforge/features/projects/presentation/archived_banner.dart';
-import 'package:taskforge/features/projects/presentation/project_actions.dart';
-import 'package:taskforge/features/projects/presentation/project_avatar.dart';
+import 'package:taskforge/features/projects/presentation/project_header.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/presentation/task_trash_screen.dart';
@@ -37,32 +36,16 @@ class ProjectScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(projectCatalogProvider(true));
     final project = ref.watch(projectProvider(projectId));
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(
         title: Text(project?.name ?? context.l10n.grpHProject),
         actions: [
           if (project != null) ...[
-            IconButton(
-              key: const Key('favorite-toggle'),
-              tooltip: project.isFavorite
-                  ? context.l10n.grpHRemoveFavorite
-                  : context.l10n.grpHAddFavorite,
-              icon: Icon(project.isFavorite ? Icons.star : Icons.star_border),
-              // The server refuses starring an archived project.
-              onPressed: project.isArchived
-                  ? null
-                  : () => runProjectAction(
-                      context,
-                      () => ref
-                          .read(projectsControllerProvider)
-                          .favorite(project, !project.isFavorite),
-                    ),
-            ),
             if (ref.watch(permissionSetProvider).can(Perm.taskDelete))
               IconButton(
                 key: const Key('open-task-trash'),
                 tooltip: context.l10n.grpHTrash,
-                icon: const Icon(Icons.delete_outline),
+                icon: const TfIcon(TfIcons.trash, size: 24),
                 onPressed: () => Navigator.of(context).push<void>(
                   MaterialPageRoute(
                     builder: (_) => TaskTrashScreen(project: project),
@@ -73,7 +56,7 @@ class ProjectScreen extends ConsumerWidget {
               IconButton(
                 key: const Key('save-project-template'),
                 tooltip: context.l10n.tplSaveProject,
-                icon: const Icon(Icons.copy_all_outlined),
+                icon: const TfIcon(TfIcons.copy, size: 24),
                 onPressed: () async {
                   final saved = await showSaveTemplateSheet(
                     context,
@@ -88,7 +71,7 @@ class ProjectScreen extends ConsumerWidget {
             IconButton(
               key: const Key('open-project-settings'),
               tooltip: context.l10n.grpHProjectSettings,
-              icon: const Icon(Icons.settings),
+              icon: const TfIcon(TfIcons.settings, size: 24),
               onPressed: () => context.push('/projects/${project.id}/settings'),
             ),
           ],
@@ -125,35 +108,10 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       children: [
         if (project.isArchived) ArchivedBanner(project: project),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              ProjectAvatar(project: project, radius: 24),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      project.name,
-                      key: const Key('project-title'),
-                      style: theme.textTheme.headlineSmall,
-                    ),
-                    Text(project.key, key: const Key('project-key-label')),
-                    if (project.description.isNotEmpty)
-                      Text(project.description, key: const Key('project-desc')),
-                  ],
-                ),
-              ),
-              if (project.isPrivate) const Icon(Icons.lock),
-            ],
-          ),
-        ),
+        ProjectHeader(project: project),
         Expanded(
           child: TaskSection(
             project: project,

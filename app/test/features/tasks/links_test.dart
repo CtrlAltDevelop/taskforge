@@ -1,5 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'detail_tabs.dart';
+
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
@@ -40,6 +43,7 @@ Future<FakeTasksClient> _open(
   await pumped.go(tester, '/projects/p1');
   await tester.tap(find.byKey(Key('task-$open')));
   await tester.pumpAndSettle();
+  await openTab(tester, 'Links');
   return server;
 }
 

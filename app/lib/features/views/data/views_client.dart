@@ -29,6 +29,8 @@ abstract interface class ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   });
 
   Future<void> delete(String workspaceId, String projectId, String id);
@@ -228,6 +230,8 @@ SavedView _view(pb.SavedView v) => SavedView(
   layout: layoutFromPb(v.layout),
   isShared: v.isShared,
   version: v.version,
+  pinnedAsTab: v.pinnedAsTab,
+  tabOrder: v.tabOrder,
 );
 
 class GrpcViewsClient implements ViewsClient {
@@ -384,6 +388,8 @@ class GrpcViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) => _run(
     () async => _timeline(
       await _stub.save(
@@ -411,6 +417,8 @@ class GrpcViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) => _run(
     () async => _calendar(
       await _stub.save(
@@ -438,6 +446,8 @@ class GrpcViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) => _run(
     () async => _board(
       await _stub.save(
@@ -465,6 +475,8 @@ class GrpcViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) => _run(
     () async => _view(
       await _stub.save(
@@ -477,6 +489,8 @@ class GrpcViewsClient implements ViewsClient {
           kind: 'list',
           layout: layoutToPb(layout),
           shared: shared,
+          pinnedAsTab: pinnedAsTab,
+          tabOrder: tabOrder,
         ),
         options: _options,
       ),

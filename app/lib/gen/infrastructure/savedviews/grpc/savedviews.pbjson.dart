@@ -325,6 +325,8 @@ const SavedView$json = {
       '6': '.config.savedviews.TimelineLayoutResponse',
       '10': 'timeline'
     },
+    {'1': 'pinned_as_tab', '3': 14, '4': 1, '5': 8, '10': 'pinnedAsTab'},
+    {'1': 'tab_order', '3': 15, '4': 1, '5': 5, '10': 'tabOrder'},
   ],
 };
 
@@ -339,7 +341,9 @@ final $typed_data.Uint8List savedViewDescriptor = $convert.base64Decode(
     'RQoIY2FsZW5kYXIYCyABKAsyKS5jb25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFJlc3'
     'BvbnNlUghjYWxlbmRhchJMCg1hY3RpdmVfZmlsdGVyGAwgASgLMicuY29uZmlnLnNhdmVkdmll'
     'd3MuRmlsdGVyTGF5b3V0UmVzcG9uc2VSDGFjdGl2ZUZpbHRlchJFCgh0aW1lbGluZRgNIAEoCz'
-    'IpLmNvbmZpZy5zYXZlZHZpZXdzLlRpbWVsaW5lTGF5b3V0UmVzcG9uc2VSCHRpbWVsaW5l');
+    'IpLmNvbmZpZy5zYXZlZHZpZXdzLlRpbWVsaW5lTGF5b3V0UmVzcG9uc2VSCHRpbWVsaW5lEiIK'
+    'DXBpbm5lZF9hc190YWIYDiABKAhSC3Bpbm5lZEFzVGFiEhsKCXRhYl9vcmRlchgPIAEoBVIIdG'
+    'FiT3JkZXI=');
 
 @$core.Deprecated('Use timelineLayoutDescriptor instead')
 const TimelineLayout$json = {
@@ -476,6 +480,8 @@ const ViewSaveRequest$json = {
       '6': '.config.savedviews.TimelineLayout',
       '10': 'timeline'
     },
+    {'1': 'pinned_as_tab', '3': 13, '4': 1, '5': 8, '10': 'pinnedAsTab'},
+    {'1': 'tab_order', '3': 14, '4': 1, '5': 5, '10': 'tabOrder'},
   ],
 };
 
@@ -490,4 +496,5 @@ final $typed_data.Uint8List viewSaveRequestDescriptor = $convert.base64Decode(
     'b25maWcuc2F2ZWR2aWV3cy5DYWxlbmRhckxheW91dFIIY2FsZW5kYXISRAoNYWN0aXZlX2ZpbH'
     'RlchgLIAEoCzIfLmNvbmZpZy5zYXZlZHZpZXdzLkZpbHRlckxheW91dFIMYWN0aXZlRmlsdGVy'
     'Ej0KCHRpbWVsaW5lGAwgASgLMiEuY29uZmlnLnNhdmVkdmlld3MuVGltZWxpbmVMYXlvdXRSCH'
-    'RpbWVsaW5l');
+    'RpbWVsaW5lEiIKDXBpbm5lZF9hc190YWIYDSABKAhSC3Bpbm5lZEFzVGFiEhsKCXRhYl9vcmRl'
+    'chgOIAEoBVIIdGFiT3JkZXI=');

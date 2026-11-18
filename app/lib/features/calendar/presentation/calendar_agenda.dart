@@ -1,7 +1,12 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
@@ -45,12 +50,17 @@ class DayTasks extends StatelessWidget {
       key: const Key('day-tasks'),
       children: [
         for (final task in onDay)
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            clipBehavior: Clip.antiAlias,
+          WorkCard(
             child: ListTile(
               key: Key('agenda-${task.id}'),
-              leading: CircleAvatar(radius: 6, backgroundColor: colorOf(task)),
+              leading: Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: colorOf(task),
+                  shape: BoxShape.circle,
+                ),
+              ),
               title: Text(task.title),
               subtitle: Text(_span(context, task)),
               onTap: () => onOpen(task),
@@ -58,7 +68,7 @@ class DayTasks extends StatelessWidget {
                   ? IconButton(
                       key: Key('reschedule-${task.id}'),
                       tooltip: context.l10n.grpFReschedule,
-                      icon: const Icon(Icons.edit_calendar_outlined),
+                      icon: TfIcon(TfIcons.calendarEdit),
                       onPressed: () => onReschedule(task),
                     )
                   : null,
@@ -113,23 +123,21 @@ class MonthDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final c = context.tf.colors;
     return Column(
       children: [
         for (var w = 0; w < weeks; w++)
           Row(
             children: [
-              for (var c = 0; c < 7; c++)
-                Expanded(
-                  child: _cell(context, scheme, addDays(first, 7 * w + c)),
-                ),
+              for (var col = 0; col < 7; col++)
+                Expanded(child: _cell(context, c, addDays(first, 7 * w + col))),
             ],
           ),
       ],
     );
   }
 
-  Widget _cell(BuildContext context, ColorScheme scheme, Day d) {
+  Widget _cell(BuildContext context, TfColors c, Day d) {
     final isSelected = d == selected;
     final shown = jalali ? jalaliOf(d) : null;
     final has = tasksOn(tasks, d).isNotEmpty;
@@ -141,9 +149,9 @@ class MonthDots extends StatelessWidget {
         height: 44,
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: isSelected ? scheme.primaryContainer : null,
-          border: d == today ? Border.all(color: scheme.primary) : null,
-          borderRadius: BorderRadius.circular(8),
+          color: isSelected ? c.selected : null,
+          border: d == today ? Border.all(color: c.accent) : null,
+          borderRadius: TfRadius.panel,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -152,8 +160,8 @@ class MonthDots extends StatelessWidget {
               context.localDigits('${shown?.day ?? d.day}'),
               style: TextStyle(
                 color: (shown?.month ?? d.month) == month
-                    ? null
-                    : scheme.outline,
+                    ? c.text
+                    : c.textSubtle,
               ),
             ),
             if (has)
@@ -162,7 +170,7 @@ class MonthDots extends StatelessWidget {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                  color: scheme.primary,
+                  color: c.accent,
                   shape: BoxShape.circle,
                 ),
               )
@@ -172,7 +180,7 @@ class MonthDots extends StatelessWidget {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                  border: Border.all(color: scheme.outline),
+                  border: Border.all(color: c.textSubtle),
                   shape: BoxShape.circle,
                 ),
               )

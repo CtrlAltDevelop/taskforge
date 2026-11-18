@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../tasks/detail_tabs.dart';
+
 import 'package:taskforge/core/sync/sync_client.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/features/comments/domain/comment_text.dart';
@@ -398,6 +401,7 @@ void main() {
     final c = await _connect(tester, live);
     await tester.tap(find.text('Alpha'));
     await tester.pumpAndSettle();
+    await openTab(tester, 'Attachments');
     expect(find.byKey(const Key('attachment-f9')), findsNothing);
 
     live.attachments.files.add(attachment('f9', 'spec.pdf', uploader: 'u2'));
@@ -430,6 +434,7 @@ void main() {
     final first = await _connect(tester, live);
     await tester.tap(find.text('Alpha'));
     await tester.pumpAndSettle();
+    await openTab(tester, 'Attachments');
     expect(find.byKey(const Key('attachment-f8')), findsNothing);
 
     live.attachments.files.add(attachment('f8', 'while-away.pdf'));

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/frame_scope.dart' show KeyClaim;
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attach_buttons.dart';
 import 'package:taskforge/features/comments/application/comments_providers.dart';
@@ -30,6 +31,15 @@ typedef ComposerSend = Future<void> Function(
   List<UploadSource> files,
 );
 
+/// Lets code outside the composer send what is typed in it (the action
+/// registry's Cmd+Enter): the composer fills it in while it is on screen.
+class ComposerHandle {
+  Future<void> Function()? _send;
+
+  /// Sends the text now; does nothing when there is none or no composer.
+  Future<void> send() async => _send?.call();
+}
+
 /// Where comments are written: a box that grows, `@` opens a list of people
 /// who can see the task, Ctrl/Cmd + Enter sends, and (with [allowFiles])
 /// files can be attached and show as chips until they are sent. [onSend] may
@@ -48,6 +58,7 @@ class CommentComposer extends ConsumerStatefulWidget {
     this.onCancel,
     this.autofocus = false,
     this.allowFiles = false,
+    this.handle,
   });
 
   /// The task whose people can be mentioned (unless [mentionLookup] says).
@@ -75,6 +86,9 @@ class CommentComposer extends ConsumerStatefulWidget {
   /// Whether files can be attached (a new comment or reply; not an edit).
   final bool allowFiles;
 
+  /// Set to let the outside send the text (see [ComposerHandle]).
+  final ComposerHandle? handle;
+
   @override
   ConsumerState<CommentComposer> createState() => _CommentComposerState();
 }
@@ -91,10 +105,13 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
   void initState() {
     super.initState();
     _controller.addListener(_watchCaret);
+    widget.handle?._send = _send;
   }
 
   @override
   void dispose() {
+    final handle = widget.handle;
+    if (handle?._send == _send) handle?._send = null;
     _controller.dispose();
     _focus.dispose();
     super.dispose();
@@ -272,23 +289,28 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
               ),
             ),
           ),
-        CallbackShortcuts(
-          bindings: {
-            const SingleActivator(LogicalKeyboardKey.enter, control: true):
-                _send,
-            const SingleActivator(LogicalKeyboardKey.enter, meta: true): _send,
-          },
-          child: TextField(
-            key: const Key('comment-input'),
-            controller: _controller,
-            focusNode: _focus,
-            autofocus: widget.autofocus,
-            minLines: 2,
-            maxLines: 8,
-            textInputAction: TextInputAction.newline,
-            decoration: InputDecoration(
-              hintText: widget.hint ?? context.l10n.grpIWriteComment,
-              border: const OutlineInputBorder(),
+        // Cmd/Ctrl+Enter sends from here; the global shortcut host leaves it.
+        KeyClaim(
+          chords: const {'mod+enter'},
+          child: CallbackShortcuts(
+            bindings: {
+              const SingleActivator(LogicalKeyboardKey.enter, control: true):
+                  _send,
+              const SingleActivator(LogicalKeyboardKey.enter, meta: true):
+                  _send,
+            },
+            child: TextField(
+              key: const Key('comment-input'),
+              controller: _controller,
+              focusNode: _focus,
+              autofocus: widget.autofocus,
+              minLines: 2,
+              maxLines: 8,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(
+                hintText: widget.hint ?? context.l10n.grpIWriteComment,
+                border: const OutlineInputBorder(),
+              ),
             ),
           ),
         ),

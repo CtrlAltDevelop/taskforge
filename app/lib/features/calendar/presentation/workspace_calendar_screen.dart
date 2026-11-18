@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,28 +14,16 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
-import 'package:taskforge/features/projects/presentation/app_shell.dart';
-
-/// Colours for projects that chose none, in order.
-const _palette = [
-  Color(0xFF1E88E5),
-  Color(0xFF43A047),
-  Color(0xFFF4511E),
-  Color(0xFF8E24AA),
-  Color(0xFFFDD835),
-  Color(0xFF00ACC1),
-  Color(0xFFD81B60),
-  Color(0xFF6D4C41),
-];
 
 /// The colour each project is drawn in: the one it chose, else one of the
-/// [_palette] by its place in the list.
-Map<String, Color> projectColors(List<Project> projects) => {
-  for (var i = 0; i < projects.length; i++)
-    projects[i].id: projects[i].color.isEmpty
-        ? _palette[i % _palette.length]
-        : parseStatusColor(projects[i].color),
-};
+/// [palette] (the design system's categorical colours) by its place in the list.
+Map<String, Color> projectColors(List<Project> projects, List<Color> palette) =>
+    {
+      for (var i = 0; i < projects.length; i++)
+        projects[i].id: projects[i].color.isEmpty
+            ? palette[i % palette.length]
+            : parseStatusColor(projects[i].color),
+    };
 
 /// The calendar of every project the person can open, coloured by project,
 /// with chips to hide a project. Choices last for the session.
@@ -48,9 +37,9 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
       for (final p in catalog.value?.projects ?? const <Project>[])
         if (p.canOpen) p,
     ];
-    final colors = projectColors(projects);
+    final colors = projectColors(projects, context.tf.colors.categorical);
     final hidden = ref.watch(hiddenProjectsProvider);
-    return ShellScaffold(
+    return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.calendar)),
       body: CalendarView(
         scope: '',

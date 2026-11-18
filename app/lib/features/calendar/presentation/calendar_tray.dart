@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -80,7 +81,7 @@ class CalendarTray extends ConsumerWidget {
                 ? IconButton(
                     key: Key('schedule-${task.id}'),
                     tooltip: context.l10n.grpFSchedule,
-                    icon: const Icon(Icons.event_available_outlined),
+                    icon: TfIcon(TfIcons.calendarCheck),
                     onPressed: () => onSchedule(task),
                   )
                 : null,

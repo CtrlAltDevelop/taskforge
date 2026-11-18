@@ -224,6 +224,8 @@ class SavedView {
     required this.layout,
     required this.isShared,
     required this.version,
+    this.pinnedAsTab = false,
+    this.tabOrder = 0,
   });
 
   final String id;
@@ -231,7 +233,22 @@ class SavedView {
   final ListLayout layout;
   final bool isShared;
   final int version;
+
+  /// Shown as its own tab on the project page, at [tabOrder] among the tabs.
+  final bool pinnedAsTab;
+  final int tabOrder;
 }
+
+/// The layouts pinned as tabs, in tab order.
+List<SavedView> pinnedTabs(Iterable<SavedView> views) =>
+    [
+      for (final v in views)
+        if (v.pinnedAsTab) v,
+    ]..sort(
+      (a, b) => a.tabOrder != b.tabOrder
+          ? a.tabOrder.compareTo(b.tabOrder)
+          : a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+    );
 
 /// The name the person's own layout is saved under; they never see it.
 const personalLayoutName = 'My layout';

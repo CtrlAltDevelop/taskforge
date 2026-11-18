@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/timeline/data/timeline_client.dart';
@@ -87,7 +88,7 @@ Future<Opened> _open(
   await tester.tap(
     find.descendant(
       of: find.byKey(const Key('view-switch')),
-      matching: find.byIcon(Icons.stacked_bar_chart),
+      matching: find.byIcon(TfIcons.timeline.glyph),
     ),
   );
   await tester.pumpAndSettle();
@@ -349,6 +350,9 @@ void main() {
 
     await tester.tap(find.byKey(const Key('timeline-critical')));
     await tester.pumpAndSettle();
+    await tester.pump(
+      const Duration(seconds: 2),
+    ); // the layout save is debounced
 
     expect(o.timeline.criticalReads, greaterThan(0));
     expect(o.views.timelineSaves.last.layout.criticalPath, isTrue);

@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart'
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/i18n/jalali.dart';
 import 'package:taskforge/core/i18n/locale_prefs.dart';
 import 'package:taskforge/features/account/locale_providers.dart';
@@ -209,9 +210,8 @@ void main() {
             )
             .first,
       );
-      final scheme = Theme.of(tester.element(find.byType(CalendarGrid)))
-          .colorScheme;
-      expect(dim.style!.color, scheme.outline);
+      final colors = tester.element(find.byType(CalendarGrid)).tf.colors;
+      expect(dim.style!.color, colors.textSubtle);
       // 1 Farvardin is the 7th cell, not dimmed.
       expect(_cellText(tester, day(2025, 3, 21)), '1');
       final inside = tester.widget<Text>(
@@ -222,7 +222,7 @@ void main() {
             )
             .first,
       );
-      expect(inside.style!.color, isNull);
+      expect(inside.style!.color, colors.text);
     });
 
     testWidgets('native digits on day numbers', (tester) async {

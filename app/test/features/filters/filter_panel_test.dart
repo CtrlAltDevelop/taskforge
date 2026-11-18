@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/filters/domain/filter_query.dart';
@@ -235,7 +236,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byKey(const Key('view-switch')),
-          matching: find.byIcon(Icons.calendar_month_outlined),
+          matching: find.byIcon(TfIcons.calendar.glyph),
         ),
       );
       await tester.pumpAndSettle();
@@ -244,7 +245,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byKey(const Key('view-switch')),
-          matching: find.byIcon(Icons.table_rows_outlined),
+          matching: find.byIcon(TfIcons.list.glyph),
         ),
       );
       await tester.pumpAndSettle();
@@ -313,7 +314,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byKey(const Key('view-switch')),
-          matching: find.byIcon(Icons.calendar_month_outlined),
+          matching: find.byIcon(TfIcons.calendar.glyph),
         ),
       );
       await tester.pumpAndSettle();
@@ -398,7 +399,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byKey(const Key('view-switch')),
-          matching: find.byIcon(Icons.calendar_month_outlined),
+          matching: find.byIcon(TfIcons.calendar.glyph),
         ),
       );
       await tester.pumpAndSettle();
@@ -699,10 +700,10 @@ void main() {
         await _tap(tester, 'saved-filters-menu');
 
         expect(find.textContaining('a field is gone'), findsOneWidget);
-        final item = tester.widget<PopupMenuItem<Object>>(
+        final item = tester.widget<MenuItemButton>(
           find.byKey(const Key('saved-broken')),
         );
-        expect(item.enabled, isFalse);
+        expect(item.onPressed, isNull);
       },
     );
   });

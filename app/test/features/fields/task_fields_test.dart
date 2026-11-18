@@ -1,5 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../tasks/detail_tabs.dart';
+
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 
@@ -35,6 +38,7 @@ Finder _input(String id) => find.descendant(
 Future<void> _openTask(WidgetTester tester, String title) async {
   await tester.tap(find.text(title));
   await tester.pumpAndSettle();
+  await openTab(tester, 'Fields');
 }
 
 Map<String, String> _lastValues(FakeTasksClient tasks) =>
@@ -91,6 +95,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(_lastValues(tasks), {'m': 'o-bug'});
 
+    await tester.ensureVisible(find.byKey(const Key('field-c')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('field-c')));
     await tester.pumpAndSettle();
     expect(_lastValues(tasks), {'c': 'true'});
@@ -153,6 +159,10 @@ void main() {
     await _openTask(tester, 'No value');
     expect(find.text('Required'), findsOneWidget);
 
+    await tester.tap(
+      find.byKey(const Key('close-detail')),
+    ); // a window covers the list
+    await tester.pumpAndSettle();
     await _openTask(tester, 'Has value');
     expect(find.text('Required'), findsNothing);
     await tester.enterText(_input('t'), '');

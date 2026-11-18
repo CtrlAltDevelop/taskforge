@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/features/account/locale_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +20,9 @@ import 'package:taskforge/features/recurrence/application/recurrence_providers.d
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/tasks/presentation/work/add_task.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_search.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_toolbar.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 
 /// Below this width the calendar is an agenda: a month of dots and the tasks of
@@ -200,9 +204,11 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget build(BuildContext context) {
     final layout = ref.watch(calendarLayoutProvider(_id)).layout;
     final read = ref.watch(calendarProvider(_id));
-    final state = widget.visible == null
-        ? read
-        : read.copyWith(tasks: read.tasks.where(widget.visible!).toList());
+    final query = ref.watch(viewSearchProvider(_id));
+    final shown = widget.visible == null
+        ? read.tasks
+        : read.tasks.where(widget.visible!).toList();
+    final state = read.copyWith(tasks: searched(shown, query));
     // Status colours come from each task's own project's workflow: watch those
     // so the colours fill in as they load.
     for (final id in {for (final t in read.tasks) t.projectId}) {
@@ -308,28 +314,38 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CalendarToolbar(
+            ViewToolbar(
+              key: const Key('calendar-toolbar'),
               projectId: _id,
-              compact: phone,
-              workspaceWide: widget.workspaceWide,
-              onTray: sidebar || widget.workspaceWide
+              canShare: !widget.archived && permissions.can(Perm.projectUpdate),
+              specific: calendarSpecificControls(
+                context,
+                ref,
+                _id,
+                compact: phone,
+                workspaceWide: widget.workspaceWide,
+                onTray: sidebar || widget.workspaceWide
+                    ? null
+                    : () => _openTray(canMove),
+              ),
+              onAddTask:
+                  widget.workspaceWide ||
+                      widget.archived ||
+                      !permissions.can(Perm.taskCreate)
                   ? null
-                  : () => _openTray(canMove),
+                  : () => runNewTask(context, ref),
             ),
             if (widget.legend != null) widget.legend!,
             if (state.loading)
               const LinearProgressIndicator(key: Key('calendar-loading')),
             if (state.error != null)
-              MaterialBanner(
+              TfBanner(
                 key: const Key('calendar-error'),
-                content: Text(taskErrorMessage(state.error!, context.l10n)),
-                actions: [
-                  TextButton(
-                    key: const Key('retry-calendar'),
-                    onPressed: ref.read(calendarProvider(_id).notifier).refresh,
-                    child: Text(context.l10n.retry),
-                  ),
-                ],
+                kind: TfBannerKind.danger,
+                message: taskErrorMessage(state.error!, context.l10n),
+                actionLabel: context.l10n.retry,
+                actionKey: const Key('retry-calendar'),
+                onAction: ref.read(calendarProvider(_id).notifier).refresh,
               ),
             Expanded(
               child: Row(

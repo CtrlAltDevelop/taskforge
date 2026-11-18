@@ -33,6 +33,9 @@ class FakeBoardClient implements BoardClient {
   /// The next move is refused with this.
   TaskException? failMove;
 
+  /// Fails the next read of the board.
+  TaskException? failGet;
+
   /// When set, [move] waits for it (to overlap drops in tests).
   Completer<void>? moveGate;
 
@@ -79,6 +82,11 @@ class FakeBoardClient implements BoardClient {
     getCalls.add((groupBy: groupBy, swimlane: swimlane));
     filters.add(filterAst);
     await getGate?.future;
+    final failure = failGet;
+    if (failure != null) {
+      failGet = null;
+      throw failure;
+    }
     final lanes = swimlane.isEmpty
         ? ['']
         : [

@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+
+import '../tasks/detail_tabs.dart';
+
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_io.dart';
 
@@ -36,6 +39,7 @@ Future<void> open(
   await pumped.go(tester, '/projects/p1');
   await tester.tap(find.text('Fix login'));
   await tester.pumpAndSettle();
+  await openTab(tester, 'Attachments');
 }
 
 Future<void> tapKey(WidgetTester tester, String key) async {

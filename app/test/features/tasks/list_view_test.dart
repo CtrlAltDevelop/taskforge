@@ -575,6 +575,8 @@ void main() {
       // The focus is in the table once a row has been clicked.
       await tester.tap(find.byKey(const Key('task-a')));
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('close-detail'))); // window
+      await tester.pumpAndSettle();
 
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.sendKeyEvent(LogicalKeyboardKey.space);
@@ -588,6 +590,8 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
       expect(find.text('WEB-2'), findsWidgets);
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape); // closes the window
+      await tester.pumpAndSettle();
 
       await tester.sendKeyEvent(LogicalKeyboardKey.escape);
       await tester.pumpAndSettle();
@@ -599,6 +603,8 @@ void main() {
     ) async {
       final s = await _open(tester);
       await tester.tap(find.byKey(const Key('task-a')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('close-detail'))); // window
       await tester.pumpAndSettle();
 
       await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
@@ -654,6 +660,8 @@ void main() {
       await _tap(tester, 'group-menu');
       await _tap(tester, 'group-by-priority');
       await tester.tap(find.byKey(const Key('task-b')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('close-detail'))); // window
       await tester.pumpAndSettle();
 
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);

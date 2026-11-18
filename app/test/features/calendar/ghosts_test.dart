@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 
@@ -35,7 +36,7 @@ Future<FakeRecurrenceClient> _open(
   await tester.tap(
     find.descendant(
       of: find.byKey(const Key('view-switch')),
-      matching: find.byIcon(Icons.calendar_month_outlined),
+      matching: find.byIcon(TfIcons.calendar.glyph),
     ),
   );
   await tester.pumpAndSettle();

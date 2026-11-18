@@ -36,7 +36,9 @@ Map<String, int> _scan() {
       .whereType<File>()
       .where((f) => f.path.endsWith('.dart'))
       .where((f) => !f.path.replaceAll(r'\', '/').contains('lib/gen/'))
-      .where((f) => !f.path.replaceAll(r'\', '/').contains('lib/l10n/'));
+      .where((f) => !f.path.replaceAll(r'\', '/').contains('lib/l10n/'))
+      // The debug-only component gallery is English by design.
+      .where((f) => !f.path.replaceAll(r'\', '/').contains('core/ui/gallery/'));
   for (final file in files) {
     final source = file.readAsStringSync();
     final n =
@@ -172,7 +174,6 @@ void main() {
         'lib/features/tasks/presentation/task_trash_screen.dart',
         'lib/features/board/presentation/board_card.dart',
         'lib/features/board/presentation/board_column.dart',
-        'lib/features/board/presentation/board_toolbar.dart',
         'lib/features/calendar/presentation/calendar_agenda.dart',
         'lib/features/calendar/presentation/calendar_ghosts.dart',
         'lib/features/calendar/presentation/calendar_grid.dart',
@@ -228,7 +229,6 @@ void main() {
         'lib/features/dashboards/presentation/widget_card.dart',
         'lib/features/timeline/presentation/timeline_dialogs.dart',
         'lib/features/timeline/presentation/timeline_list.dart',
-        'lib/features/timeline/presentation/timeline_toolbar.dart',
         'lib/features/timeline/presentation/timeline_view.dart',
         'lib/features/fields/presentation/field_input.dart',
         'lib/features/fields/presentation/fields_screen.dart',
@@ -274,13 +274,10 @@ void main() {
         'lib/features/imports/presentation/import_wizard.dart',
         'lib/features/imports/presentation/mapping_step.dart',
         'lib/features/automations/presentation/automations_screen.dart',
-        'lib/features/tasks/presentation/list_toolbar.dart',
-        'lib/features/tasks/presentation/task_detail.dart',
         'lib/features/recurrence/presentation/repeat_editor.dart',
         'lib/features/workspaces/presentation/settings_screen.dart',
         'lib/features/inbox/presentation/prefs_screen.dart',
         'lib/features/fields/presentation/field_dialogs.dart',
-        'lib/features/projects/presentation/project_sidebar.dart',
         'lib/features/calendar/presentation/calendar_toolbar.dart',
         'lib/features/roles/presentation/role_dialogs.dart',
       ]) {

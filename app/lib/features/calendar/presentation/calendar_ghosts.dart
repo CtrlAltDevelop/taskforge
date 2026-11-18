@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -28,7 +29,7 @@ class GhostTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           children: [
-            Icon(Icons.repeat, size: 12, color: faded),
+            TfIcon(TfIcons.repeat, size: 12, color: faded),
             const SizedBox(width: 2),
             Expanded(
               child: Text(
@@ -48,7 +49,7 @@ class GhostTile extends StatelessWidget {
     }
     return ListTile(
       key: Key('ghost-${ghost.seriesId}-${ghost.dueDate}'),
-      leading: Icon(Icons.repeat, color: faded),
+      leading: TfIcon(TfIcons.repeat, color: faded),
       title: Text(
         ghost.title,
         style: TextStyle(color: faded, fontStyle: FontStyle.italic),

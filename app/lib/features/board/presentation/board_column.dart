@@ -1,6 +1,10 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/presentation/board_card.dart';
 import 'package:taskforge/features/board/presentation/edge_scroll.dart';
@@ -124,12 +128,10 @@ class _BoardColumnViewState extends State<BoardColumnView> {
   Widget build(BuildContext context) {
     final key = widget.column.key;
     if (widget.collapsed) return _folded(context);
-    final scheme = Theme.of(context).colorScheme;
+    final c = context.tf.colors;
     return SizedBox(
       width: columnWidth,
-      child: Card(
-        margin: const EdgeInsets.all(6),
-        color: scheme.surfaceContainerLow,
+      child: _ColumnShell(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -165,7 +167,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
                 builder: (context, hovering, _) => Container(
                   color: hovering.isEmpty
                       ? null
-                      : scheme.primary.withValues(alpha: 0.06),
+                      : c.accent.withValues(alpha: 0.06),
                   child: _cards(context),
                 ),
               ),
@@ -184,15 +186,14 @@ class _BoardColumnViewState extends State<BoardColumnView> {
 
   Widget _folded(BuildContext context) => SizedBox(
     width: 48,
-    child: Card(
-      margin: const EdgeInsets.all(6),
+    child: _ColumnShell(
       child: InkWell(
         key: Key('expand-${widget.column.key}'),
         onTap: widget.onToggleCollapse,
         child: Column(
           children: [
             const SizedBox(height: 8),
-            const Icon(Icons.unfold_more, size: 18),
+            TfIcon(TfIcons.expandAll, size: 18),
             const SizedBox(height: 8),
             Text('${widget.column.count}'),
             const SizedBox(height: 8),
@@ -210,11 +211,11 @@ class _BoardColumnViewState extends State<BoardColumnView> {
 
   Widget _header(BuildContext context) {
     final key = widget.column.key;
-    final scheme = Theme.of(context).colorScheme;
+    final tf = context.tf;
     final limit = widget.limit;
     return Container(
       key: _over ? Key('wip-over-$key') : null,
-      color: _over ? scheme.errorContainer : null,
+      color: _over ? tf.colors.danger.bg : null,
       padding: const EdgeInsetsDirectional.only(start: 4),
       child: Row(
         children: [
@@ -223,7 +224,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             tooltip: context.l10n.grpFFoldColumn,
             iconSize: 18,
             visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.unfold_less),
+            icon: TfIcon(TfIcons.collapseAll),
             onPressed: widget.onToggleCollapse,
           ),
           if (widget.color != null)
@@ -240,7 +241,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             child: Text(
               widget.title,
               key: Key('column-title-$key'),
-              style: Theme.of(context).textTheme.titleSmall,
+              style: tf.typography.bodyStrong.copyWith(color: tf.colors.text),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -249,9 +250,9 @@ class _BoardColumnViewState extends State<BoardColumnView> {
                 ? '${widget.column.count}'
                 : '${widget.column.count} / $limit',
             key: Key('count-$key'),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: _over ? scheme.error : null,
+            style: tf.typography.tabular.copyWith(
+              fontWeight: FontWeight.w600,
+              color: _over ? tf.colors.danger.fg : tf.colors.textMuted,
             ),
           ),
           PopupMenuButton<String>(
@@ -426,7 +427,7 @@ class _CardSlotState extends State<_CardSlot> {
     final line = Container(
       height: 3,
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      color: Theme.of(context).colorScheme.primary,
+      color: context.tf.colors.accent,
     );
     final drag = BoardDrag(widget.task, widget.laneKey);
     final feedback = Material(
@@ -522,7 +523,7 @@ class _AddFieldState extends State<_AddField> {
       decoration: InputDecoration(
         isDense: true,
         hintText: context.l10n.grpFAddTask,
-        prefixIcon: const Icon(Icons.add, size: 18),
+        prefixIcon: TfIcon(TfIcons.plus, size: 18),
       ),
       onSubmitted: _submit,
     ),
@@ -583,4 +584,27 @@ class _LimitDialogState extends State<_LimitDialog> {
       ),
     ],
   );
+}
+
+/// A column's frame: a sunken lane with a hairline, so cards stand out of it.
+class _ColumnShell extends StatelessWidget {
+  const _ColumnShell({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.tf.colors;
+    return Padding(
+      padding: const EdgeInsets.all(TfSpace.xs),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: c.sunken,
+          borderRadius: TfRadius.panel,
+          border: Border.all(color: c.border, width: tfHairline),
+        ),
+        child: child,
+      ),
+    );
+  }
 }

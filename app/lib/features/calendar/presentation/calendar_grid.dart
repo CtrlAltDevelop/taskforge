@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/i18n/weekday_names.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
@@ -77,7 +79,9 @@ class CalendarGrid extends StatelessWidget {
                 child: Center(
                   child: Text(
                     name,
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: context.tf.typography.label.copyWith(
+                      color: context.tf.colors.textMuted,
+                    ),
                   ),
                 ),
               ),
@@ -170,7 +174,8 @@ class _DayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final tf = context.tf;
+    final c = tf.colors;
     final isToday = day == grid.today;
     final shown = grid.jalali ? jalaliOf(day) : null;
     final number = shown?.day ?? day.day;
@@ -182,13 +187,13 @@ class _DayCell extends StatelessWidget {
       builder: (context, hovering, _) => Container(
         decoration: BoxDecoration(
           color: hovering.isNotEmpty
-              ? scheme.primary.withValues(alpha: 0.12)
+              ? c.accent.withValues(alpha: 0.12)
               : isToday
-              ? scheme.primaryContainer.withValues(alpha: 0.4)
+              ? c.selected
               : null,
           border: BorderDirectional(
-            start: BorderSide(color: scheme.outlineVariant, width: 0.5),
-            top: BorderSide(color: scheme.outlineVariant, width: 0.5),
+            start: BorderSide(color: c.border, width: tfHairline),
+            top: BorderSide(color: c.border, width: tfHairline),
           ),
         ),
         child: Column(
@@ -197,20 +202,26 @@ class _DayCell extends StatelessWidget {
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(6, 2, 0, 0),
               child: isToday
-                  ? CircleAvatar(
+                  ? Container(
                       key: const Key('today-marker'),
-                      radius: 9,
-                      backgroundColor: scheme.primary,
+                      width: 20,
+                      height: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: c.accent,
+                        shape: BoxShape.circle,
+                      ),
                       child: Text(
                         context.localDigits('$number'),
-                        style: TextStyle(fontSize: 11, color: scheme.onPrimary),
+                        style: tf.typography.caption.copyWith(
+                          color: c.onAccent,
+                        ),
                       ),
                     )
                   : Text(
                       context.localDigits('$number'),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: dim ? scheme.outline : null,
+                      style: tf.typography.caption.copyWith(
+                        color: dim ? c.textSubtle : c.text,
                       ),
                     ),
             ),
@@ -223,7 +234,7 @@ class _DayCell extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Text(
                     context.l10n.grpFPlusMore(hidden),
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: tf.typography.caption.copyWith(color: c.textMuted),
                   ),
                 ),
               )
@@ -265,8 +276,8 @@ class _Bar extends StatelessWidget {
     final color = grid.colorOf(task);
     final selected = task.id == grid.openTaskId;
     final shape = BorderRadiusDirectional.horizontal(
-      start: Radius.circular(segment.continuesBefore ? 0 : 6),
-      end: Radius.circular(segment.continuesAfter ? 0 : 6),
+      start: Radius.circular(segment.continuesBefore ? 0 : TfRadius.sm),
+      end: Radius.circular(segment.continuesAfter ? 0 : TfRadius.sm),
     ).resolve(Directionality.of(context));
     final body = Material(
       color: color,
@@ -277,7 +288,10 @@ class _Bar extends StatelessWidget {
         onTap: () => grid.onOpen(task),
         child: Container(
           decoration: selected
-              ? BoxDecoration(borderRadius: shape, border: Border.all(width: 2))
+              ? BoxDecoration(
+                  borderRadius: shape,
+                  border: Border.all(width: 2, color: context.tf.colors.text),
+                )
               : null,
           padding: const EdgeInsets.symmetric(horizontal: 6),
           alignment: AlignmentDirectional.centerStart,
@@ -285,8 +299,7 @@ class _Bar extends StatelessWidget {
             _label(task),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 12,
+            style: context.tf.typography.caption.copyWith(
               color:
                   ThemeData.estimateBrightnessForColor(color) == Brightness.dark
                   ? Colors.white
@@ -333,7 +346,7 @@ class _Bar extends StatelessWidget {
             data: drag,
             feedback: Material(
               color: color,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: TfRadius.control,
               child: Padding(
                 padding: const EdgeInsets.all(6),
                 child: Text(task.title),

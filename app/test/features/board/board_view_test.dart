@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
@@ -51,7 +52,7 @@ Future<Opened> _open(
   await tester.tap(
     find.descendant(
       of: find.byKey(const Key('view-switch')),
-      matching: find.byIcon(Icons.view_kanban_outlined),
+      matching: find.byIcon(TfIcons.board.glyph),
     ),
   );
   await tester.pumpAndSettle();
@@ -553,7 +554,7 @@ void main() {
     await tester.tap(
       find.descendant(
         of: find.byKey(const Key('view-switch')),
-        matching: find.byIcon(Icons.view_kanban_outlined),
+        matching: find.byIcon(TfIcons.board.glyph),
       ),
     );
     await tester.pump();
@@ -573,7 +574,7 @@ void main() {
     await tester.tap(
       find.descendant(
         of: find.byKey(const Key('view-switch')),
-        matching: find.byIcon(Icons.table_rows_outlined),
+        matching: find.byIcon(TfIcons.list.glyph),
       ),
     );
     await tester.pumpAndSettle();
@@ -583,7 +584,7 @@ void main() {
     await tester.tap(
       find.descendant(
         of: find.byKey(const Key('view-switch')),
-        matching: find.byIcon(Icons.view_kanban_outlined),
+        matching: find.byIcon(TfIcons.board.glyph),
       ),
     );
     await tester.pumpAndSettle();

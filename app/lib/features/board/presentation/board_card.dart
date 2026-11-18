@@ -1,4 +1,12 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tf/tf_avatar.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
+import 'package:taskforge/core/ui/tf/tf_status.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/presentation/live_flash.dart';
 
@@ -48,50 +56,80 @@ class BoardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final tf = context.tf;
+    final c = tf.colors;
     return LiveFlash(
       taskId: task.id,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        color: selected ? scheme.secondaryContainer : null,
-        child: InkWell(
-          key: Key('card-${task.id}'),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 4, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      task.displayId,
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    if (task.isBlocked) ...[
-                      const SizedBox(width: 4),
-                      BlockedBadge(blockedBy: task.blockedBy),
-                    ],
-                    const Spacer(),
-                    if (onMoveTo != null && moveChoices.isNotEmpty)
-                      _MoveMenu(
-                        taskId: task.id,
-                        choices: moveChoices,
-                        onSelected: onMoveTo!,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: TfSpace.sm,
+          vertical: TfSpace.xs,
+        ),
+        child: Material(
+          color: selected ? c.selected : c.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: TfRadius.panel,
+            side: BorderSide(
+              color: selected ? c.accent : c.border,
+              width: tfHairline,
+            ),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            key: Key('card-${task.id}'),
+            onTap: onTap,
+            hoverColor: c.hover,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                TfSpace.md,
+                TfSpace.sm,
+                TfSpace.xs,
+                TfSpace.sm,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        task.displayId,
+                        style: tf.typography.mono.copyWith(
+                          color: c.textMuted,
+                          fontSize: 11,
+                        ),
                       ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 6, bottom: 4),
-                  child: Text(
-                    task.title,
-                    key: Key('card-title-${task.id}'),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                      if (task.isBlocked) ...[
+                        const SizedBox(width: TfSpace.xs),
+                        BlockedBadge(blockedBy: task.blockedBy),
+                      ],
+                      const Spacer(),
+                      if (onMoveTo != null && moveChoices.isNotEmpty)
+                        _MoveMenu(
+                          taskId: task.id,
+                          choices: moveChoices,
+                          onSelected: onMoveTo!,
+                        ),
+                    ],
                   ),
-                ),
-                _details(context),
-              ],
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      end: TfSpace.sm,
+                      bottom: TfSpace.xs,
+                    ),
+                    child: Tooltip(
+                      message: task.title,
+                      child: Text(
+                        task.title,
+                        key: Key('card-title-${task.id}'),
+                        style: tf.typography.bodyStrong.copyWith(color: c.text),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  _details(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -100,15 +138,16 @@ class BoardCard extends StatelessWidget {
   }
 
   Widget _details(BuildContext context) {
+    final c = context.tf.colors;
     final chips = <Widget>[
       if (cardFields.contains('priority') && task.priority != TaskPriority.none)
-        _Chip(
-          icon: priorityIcon(task.priority),
-          color: priorityColor(task.priority),
+        TfPriorityIcon(
+          priority: tfPriorityOf(task.priority),
           label: task.priority.labelIn(context.l10n),
+          showLabel: true,
         ),
       if (cardFields.contains('due_date') && task.dueDate.isNotEmpty)
-        _Chip(icon: Icons.event_outlined, label: task.dueDate),
+        TfChip(icon: TfIcons.calendar, label: task.dueDate, tone: c.neutral),
       for (final column in cardFields)
         if (lookups.field(column) case final field?)
           if (fieldDisplay(
@@ -118,7 +157,7 @@ class BoardCard extends StatelessWidget {
                 l10n: context.l10n,
               )
               case final text when text.isNotEmpty)
-            _Chip(label: '${field.name}: $text'),
+            TfChip(label: '${field.name}: $text'),
     ];
     final assignees =
         cardFields.contains('assignee') && task.assigneeIds.isNotEmpty;
@@ -128,7 +167,17 @@ class BoardCard extends StatelessWidget {
     }
     return Row(
       children: [
-        Expanded(child: Wrap(spacing: 4, runSpacing: 4, children: chips)),
+        Expanded(
+          // Chips are not controls here: a tap on them opens the card.
+          child: IgnorePointer(
+            child: Wrap(
+              spacing: TfSpace.xs,
+              runSpacing: TfSpace.xs,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: chips,
+            ),
+          ),
+        ),
         if (progress)
           ProgressRing(
             key: Key('card-progress-${task.id}'),
@@ -136,10 +185,16 @@ class BoardCard extends StatelessWidget {
           ),
         if (assignees)
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 4, end: 4),
-            child: _Avatars(
-              key: Key('card-assignees-${task.id}'),
-              names: [for (final id in task.assigneeIds) lookups.person(id)],
+            padding: const EdgeInsetsDirectional.only(start: TfSpace.xs),
+            child: Tooltip(
+              message: [for (final id in task.assigneeIds) lookups.person(id)]
+                  .join(', '),
+              child: TfAvatarStack(
+                key: Key('card-assignees-${task.id}'),
+                names: [for (final id in task.assigneeIds) lookups.person(id)],
+                max: 3,
+                size: 20,
+              ),
             ),
           ),
       ],
@@ -167,7 +222,7 @@ class _MoveMenu extends StatelessWidget {
       tooltip: context.l10n.grpFMoveTo,
       padding: EdgeInsets.zero,
       iconSize: 18,
-      icon: const Icon(Icons.more_vert),
+      icon: TfIcon(TfIcons.moreVertical),
       onSelected: onSelected,
       itemBuilder: (_) => [
         for (final c in choices)
@@ -176,59 +231,6 @@ class _MoveMenu extends StatelessWidget {
             value: c.key,
             child: Text(context.l10n.grpFMoveToColumn(c.label)),
           ),
-      ],
-    ),
-  );
-}
-
-class _Chip extends StatelessWidget {
-  const _Chip({required this.label, this.icon, this.color});
-
-  final String label;
-  final IconData? icon;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      if (icon != null) Icon(icon, size: 14, color: color),
-      if (icon != null) const SizedBox(width: 2),
-      Flexible(
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-    ],
-  );
-}
-
-class _Avatars extends StatelessWidget {
-  const _Avatars({super.key, required this.names});
-
-  final List<String> names;
-
-  @override
-  Widget build(BuildContext context) => Tooltip(
-    message: names.join(', '),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final name in names.take(3))
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 2),
-            child: CircleAvatar(
-              radius: 11,
-              child: Text(
-                name.isEmpty ? '?' : name.characters.first.toUpperCase(),
-                style: const TextStyle(fontSize: 10),
-              ),
-            ),
-          ),
-        if (names.length > 3)
-          Text(context.l10n.grpFPlusCount(names.length - 3)),
       ],
     ),
   );

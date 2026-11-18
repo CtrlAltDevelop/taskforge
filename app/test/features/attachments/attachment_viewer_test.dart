@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../tasks/detail_tabs.dart';
+
 import 'package:taskforge/features/attachments/domain/attachments.dart';
 import 'package:taskforge/features/attachments/presentation/attachments_io.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
@@ -26,6 +29,7 @@ Future<void> open(WidgetTester tester, FakeAttachments files) async {
   await pumped.go(tester, '/projects/p1');
   await tester.tap(find.text('Fix login'));
   await tester.pumpAndSettle();
+  await openTab(tester, 'Attachments');
 }
 
 FakeAttachments withVideo() =>
@@ -232,6 +236,7 @@ void main() {
       await pumped.go(tester, '/projects/p1');
       await tester.tap(find.text('Fix login'));
       await tester.pumpAndSettle();
+      await openTab(tester, 'Attachments');
       await tapKey(tester, 'open-z1');
 
       await tapKey(tester, 'viewer-download');

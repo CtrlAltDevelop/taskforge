@@ -6,7 +6,7 @@ import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/presentation/board_card.dart';
 import 'package:taskforge/features/board/presentation/board_column.dart';
-import 'package:taskforge/features/board/presentation/board_toolbar.dart';
+import 'package:taskforge/features/board/presentation/board_controls.dart';
 import 'package:taskforge/features/board/presentation/edge_scroll.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
@@ -20,6 +20,11 @@ import 'package:taskforge/features/sprints/domain/sprints.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
+import 'package:taskforge/features/tasks/presentation/work/add_task.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_search.dart';
+import 'package:taskforge/features/filters/application/filters_providers.dart';
+import 'package:taskforge/features/tasks/presentation/work/work_states.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_toolbar.dart';
 import 'package:taskforge/features/views/domain/board_layout.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 
@@ -147,28 +152,29 @@ class _BoardViewState extends ConsumerState<BoardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        BoardToolbar(
+        ViewToolbar(
+          key: const Key('board-toolbar'),
           projectId: _id,
-          lookups: lookups,
-          sprintFilter: _sprintFilterOffered(),
+          canShare: editable && permissions.can(Perm.projectUpdate),
+          group: BoardColumnsMenu(projectId: _id, lookups: lookups),
+          fields: BoardFieldsMenu(projectId: _id, lookups: lookups),
+          specific: boardSpecificControls(
+            context,
+            ref,
+            _id,
+            sprintFilter: _sprintFilterOffered(),
+          ),
+          onAddTask: canCreate ? () => runNewTask(context, ref) : null,
         ),
         Expanded(
           child: state.error != null && state.lanes.isEmpty
-              ? Center(
-                  child: TextButton(
-                    key: const Key('retry-board'),
-                    onPressed: () =>
-                        ref.read(boardProvider(_id).notifier).load(),
-                    child: Text(
-                      '${taskErrorMessage(state.error!, context.l10n)} Retry',
-                    ),
-                  ),
+              ? WorkError(
+                  error: state.error!,
+                  retryKey: const Key('retry-board'),
+                  onRetry: () => ref.read(boardProvider(_id).notifier).load(),
                 )
               : state.loading && state.lanes.isEmpty
-              ? const Center(
-                  key: Key('board-loading'),
-                  child: CircularProgressIndicator(),
-                )
+              ? const BoardSkeleton()
               : _board(context, state, layout, lookups, canMove, canCreate),
         ),
       ],
@@ -185,7 +191,27 @@ class _BoardViewState extends ConsumerState<BoardView> {
   ) {
     final collapsed = ref.watch(collapsedColumnsProvider(_id));
     final touch = MediaQuery.sizeOf(context).width < touchBreakpoint;
-    final lanes = state.lanes;
+    final query = ref.watch(viewSearchProvider(_id));
+    final lanes = query.isEmpty
+        ? state.lanes
+        : [
+            for (final lane in state.lanes)
+              lane.mapColumns((c) {
+                final shown = searched(c.tasks, query);
+                return c.copyWith(tasks: shown, count: shown.length);
+              }),
+          ];
+    final cards = lanes.fold(
+      0,
+      (n, lane) => lane.columns.fold(n, (m, c) => m + c.count),
+    );
+    final narrowed =
+        query.isNotEmpty || !ref.watch(activeFilterProvider(_id)).query.isEmpty;
+    // Filters or search hide every card: say so (an empty project keeps its
+    // columns, which hold the "add" fields).
+    if (cards == 0 && narrowed && !state.loading) {
+      return WorkEmpty(projectId: _id);
+    }
     final choices = <MoveChoice>[
       for (final c in lanes.firstOrNull?.columns ?? const <BoardColumn>[])
         (

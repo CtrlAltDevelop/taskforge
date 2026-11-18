@@ -1,9 +1,11 @@
+import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart'
     show todayProvider, trayProvider;
@@ -23,7 +25,10 @@ import 'package:taskforge/features/timeline/presentation/timeline_dialogs.dart';
 import 'package:taskforge/features/timeline/presentation/timeline_export.dart';
 import 'package:taskforge/features/timeline/presentation/timeline_list.dart';
 import 'package:taskforge/features/timeline/presentation/timeline_painter.dart';
-import 'package:taskforge/features/timeline/presentation/timeline_toolbar.dart';
+import 'package:taskforge/features/tasks/presentation/work/add_task.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_search.dart';
+import 'package:taskforge/features/tasks/presentation/work/view_toolbar.dart';
+import 'package:taskforge/features/timeline/presentation/timeline_controls.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 /// Below this width the timeline opens as a list (the chart is still one tap
@@ -219,7 +224,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
     final range = readRange(zoom, anchor);
     final axis = TimeAxis(range.first, zoom.pxPerDay);
     final rows = buildRows(
-      state.tasks,
+      searched(state.tasks, ref.watch(viewSearchProvider(_id))),
       layout.groupBy,
       assigneeName: (id) =>
           members.where((m) => m.userId == id).firstOrNull?.displayName ?? id,
@@ -242,28 +247,35 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TimelineToolbar(
+              ViewToolbar(
+                key: const Key('timeline-toolbar'),
                 projectId: _id,
-                listMode: listMode,
-                onListMode: (v) => setState(() => _listChoice = v),
-                onExport: () => _export(scene, zoom),
-                onWorkingDays: permissions.can(Perm.workspaceUpdate)
-                    ? () => _editWorkingDays(days)
+                canShare: !archived && permissions.can(Perm.projectUpdate),
+                group: TimelineGroupMenu(projectId: _id),
+                specific: timelineSpecificControls(
+                  context,
+                  ref,
+                  _id,
+                  listMode: listMode,
+                  onListMode: (v) => setState(() => _listChoice = v),
+                  onExport: () => _export(scene, zoom),
+                  onWorkingDays: permissions.can(Perm.workspaceUpdate)
+                      ? () => _editWorkingDays(days)
+                      : null,
+                ),
+                onAddTask: !archived && permissions.can(Perm.taskCreate)
+                    ? () => runNewTask(context, ref)
                     : null,
               ),
               if (state.loading) const LinearProgressIndicator(minHeight: 2),
               if (state.error != null)
-                MaterialBanner(
-                  content: Text(taskErrorMessage(state.error!, context.l10n)),
-                  actions: [
-                    TextButton(
-                      key: const Key('timeline-retry'),
-                      onPressed: ref
-                          .read(timelineProvider(_id).notifier)
-                          .refresh,
-                      child: Text(context.l10n.grpIRetry),
-                    ),
-                  ],
+                TfBanner(
+                  key: const Key('timeline-error'),
+                  kind: TfBannerKind.danger,
+                  message: taskErrorMessage(state.error!, context.l10n),
+                  actionLabel: context.l10n.grpIRetry,
+                  actionKey: const Key('timeline-retry'),
+                  onAction: ref.read(timelineProvider(_id).notifier).refresh,
                 ),
               Expanded(
                 child: listMode
@@ -427,7 +439,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
         ),
         TextButton.icon(
           key: const Key('timeline-unscheduled'),
-          icon: const Icon(Icons.event_note_outlined),
+          icon: TfIcon(TfIcons.calendarRange),
           label: Text(context.l10n.grpIUnscheduled),
           onPressed: () => _openTray(canMove),
         ),

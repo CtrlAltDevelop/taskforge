@@ -38,6 +38,8 @@ class FakeViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) async {
     saves.add((
       name: name,
@@ -74,6 +76,8 @@ class FakeViewsClient implements ViewsClient {
       layout: layout,
       isShared: shared,
       version: i < 0 ? 1 : views[i].version + 1,
+      pinnedAsTab: pinnedAsTab,
+      tabOrder: tabOrder,
     );
     if (i < 0) {
       views.add(saved);
@@ -107,6 +111,8 @@ class FakeViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) async {
     boardSaves.add((name: name, layout: layout, id: id));
     if (id.isEmpty && boards.any((b) => b.name == name)) {
@@ -179,6 +185,8 @@ class FakeViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) async {
     calendarSaves.add((name: name, layout: layout, id: id));
     final i = calendars.indexWhere((c) => c.id == id);
@@ -216,6 +224,8 @@ class FakeViewsClient implements ViewsClient {
     String id = '',
     int expectedVersion = 0,
     bool shared = false,
+    bool pinnedAsTab = false,
+    int tabOrder = 0,
   }) async {
     timelineSaves.add((name: name, layout: layout, id: id));
     final i = timelines.indexWhere((c) => c.id == id);

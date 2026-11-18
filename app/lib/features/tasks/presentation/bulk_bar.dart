@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -156,10 +159,14 @@ class _BulkBarState extends ConsumerState<BulkBar> {
     final busy = _progress != null;
     final statuses = widget.lookups.flow?.statuses ?? const <WorkflowStatus>[];
     final progress = _progress;
+    final c = context.tf.colors;
     return Material(
       key: const Key('bulk-bar'),
       elevation: 3,
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: c.raised,
+      shape: Border(
+        top: BorderSide(color: c.border, width: tfHairline),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -199,10 +206,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                           child: Text(s.name),
                         ),
                     ],
-                    child: _BarLabel(
-                      Icons.flag_outlined,
-                      context.l10n.grpFStatus,
-                    ),
+                    child: _BarLabel(TfIcons.flag, context.l10n.grpFStatus),
                   ),
                 if (widget.canUpdate)
                   PopupMenuButton<TaskPriority>(
@@ -218,23 +222,20 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                           child: Text(p.labelIn(context.l10n)),
                         ),
                     ],
-                    child: _BarLabel(
-                      Icons.low_priority,
-                      context.l10n.grpFPriority,
-                    ),
+                    child: _BarLabel(TfIcons.sort, context.l10n.grpFPriority),
                   ),
                 if (widget.canUpdate)
                   TextButton.icon(
                     key: const Key('bulk-assign'),
                     onPressed: busy ? null : _assign,
-                    icon: const Icon(Icons.person_add_alt),
+                    icon: TfIcon(TfIcons.userPlus),
                     label: Text(context.l10n.grpFAssign),
                   ),
                 if (widget.canDelete)
                   TextButton.icon(
                     key: const Key('bulk-delete'),
                     onPressed: busy ? null : () => _delete(selection.length),
-                    icon: const Icon(Icons.delete_outline),
+                    icon: TfIcon(TfIcons.trash),
                     label: Text(context.l10n.grpFDelete),
                   ),
                 TextButton(
@@ -260,7 +261,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
 class _BarLabel extends StatelessWidget {
   const _BarLabel(this.icon, this.label);
 
-  final IconData icon;
+  final TfIconData icon;
   final String label;
 
   @override
@@ -268,7 +269,7 @@ class _BarLabel extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     child: Row(
       mainAxisSize: MainAxisSize.min,
-      children: [Icon(icon, size: 18), const SizedBox(width: 4), Text(label)],
+      children: [TfIcon(icon, size: 18), const SizedBox(width: 4), Text(label)],
     ),
   );
 }

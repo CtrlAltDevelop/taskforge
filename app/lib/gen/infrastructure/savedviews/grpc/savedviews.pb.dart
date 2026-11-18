@@ -1100,6 +1100,8 @@ class SavedView extends $pb.GeneratedMessage {
     CalendarLayoutResponse? calendar,
     FilterLayoutResponse? activeFilter,
     TimelineLayoutResponse? timeline,
+    $core.bool? pinnedAsTab,
+    $core.int? tabOrder,
   }) {
     final result = SavedView._();
     if (id != null) result.id = id;
@@ -1115,6 +1117,8 @@ class SavedView extends $pb.GeneratedMessage {
     if (calendar != null) result.calendar = calendar;
     if (activeFilter != null) result.activeFilter = activeFilter;
     if (timeline != null) result.timeline = timeline;
+    if (pinnedAsTab != null) result.pinnedAsTab = pinnedAsTab;
+    if (tabOrder != null) result.tabOrder = tabOrder;
     return result;
   }
 
@@ -1150,6 +1154,8 @@ class SavedView extends $pb.GeneratedMessage {
         subBuilder: FilterLayoutResponse.$_createMessage)
     ..aOM<TimelineLayoutResponse>(13, _omitFieldNames ? '' : 'timeline',
         subBuilder: TimelineLayoutResponse.$_createMessage)
+    ..aOB(14, _omitFieldNames ? '' : 'pinnedAsTab')
+    ..aI(15, _omitFieldNames ? '' : 'tabOrder')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1298,6 +1304,24 @@ class SavedView extends $pb.GeneratedMessage {
   void clearTimeline() => $_clearField(13);
   @$pb.TagNumber(13)
   TimelineLayoutResponse ensureTimeline() => $_ensure(12);
+
+  @$pb.TagNumber(14)
+  $core.bool get pinnedAsTab => $_getBF(13);
+  @$pb.TagNumber(14)
+  set pinnedAsTab($core.bool value) => $_setBool(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasPinnedAsTab() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearPinnedAsTab() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.int get tabOrder => $_getIZ(14);
+  @$pb.TagNumber(15)
+  set tabOrder($core.int value) => $_setSignedInt32(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasTabOrder() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearTabOrder() => $_clearField(15);
 }
 
 class TimelineLayout extends $pb.GeneratedMessage {
@@ -1719,6 +1743,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     CalendarLayout? calendar,
     FilterLayout? activeFilter,
     TimelineLayout? timeline,
+    $core.bool? pinnedAsTab,
+    $core.int? tabOrder,
   }) {
     final result = ViewSaveRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -1733,6 +1759,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
     if (calendar != null) result.calendar = calendar;
     if (activeFilter != null) result.activeFilter = activeFilter;
     if (timeline != null) result.timeline = timeline;
+    if (pinnedAsTab != null) result.pinnedAsTab = pinnedAsTab;
+    if (tabOrder != null) result.tabOrder = tabOrder;
     return result;
   }
 
@@ -1767,6 +1795,8 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
         subBuilder: FilterLayout.$_createMessage)
     ..aOM<TimelineLayout>(12, _omitFieldNames ? '' : 'timeline',
         subBuilder: TimelineLayout.$_createMessage)
+    ..aOB(13, _omitFieldNames ? '' : 'pinnedAsTab')
+    ..aI(14, _omitFieldNames ? '' : 'tabOrder')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1908,6 +1938,24 @@ class ViewSaveRequest extends $pb.GeneratedMessage {
   void clearTimeline() => $_clearField(12);
   @$pb.TagNumber(12)
   TimelineLayout ensureTimeline() => $_ensure(11);
+
+  @$pb.TagNumber(13)
+  $core.bool get pinnedAsTab => $_getBF(12);
+  @$pb.TagNumber(13)
+  set pinnedAsTab($core.bool value) => $_setBool(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasPinnedAsTab() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearPinnedAsTab() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.int get tabOrder => $_getIZ(13);
+  @$pb.TagNumber(14)
+  set tabOrder($core.int value) => $_setSignedInt32(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasTabOrder() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearTabOrder() => $_clearField(14);
 }
 
 const $core.bool _omitFieldNames =
