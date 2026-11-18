@@ -519,6 +519,7 @@ def _task_rows(
             workspace=workspace,
             project__in=projects,
             deleted_at__isnull=True,
+            is_sample=False,
             status__category__in=OPEN,
             assignees__isnull=False,
         )

@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package config.home;
+
+service HomeController {
+    rpc MyWork(HomeMyWorkRequest) returns (HomeMyWork) {}
+    rpc PinDashboard(HomePinDashboardRequest) returns (HomePinned) {}
+    rpc RecordRecent(HomeRecordRecentRequest) returns (HomeRecorded) {}
+    rpc Summary(HomeSummaryRequest) returns (HomeSummary) {}
+}
+
+service OnboardingController {
+    rpc ApplyStarter(OnboardingApplyStarterRequest) returns (OnboardingStarterApplied) {}
+    rpc CompleteStep(OnboardingCompleteStepRequest) returns (OnboardingState) {}
+    rpc DeleteSamples(OnboardingDeleteSamplesRequest) returns (OnboardingSamplesDeleted) {}
+    rpc Dismiss(OnboardingDismissRequest) returns (OnboardingState) {}
+    rpc Get(OnboardingGetRequest) returns (OnboardingState) {}
+}
+
+message HomeDay {
+    string date = 1;
+    int32 seconds = 2;
+}
+
+message HomeMention {
+    string id = 1;
+    string type = 2;
+    string task_id = 3;
+    string actor_id = 4;
+    string created_at = 5;
+    bool read = 6;
+    string payload_json = 7;
+}
+
+message HomeMyWork {
+    repeated MyWorkTask tasks = 1;
+    string next_cursor = 2;
+}
+
+message HomeMyWorkRequest {
+    string workspace_id = 1;
+    string relation = 2;
+    bool include_done = 3;
+    string filter_ast = 4;
+    string today = 5;
+    string cursor = 6;
+    int32 limit = 7;
+}
+
+message HomePin {
+    string dashboard_id = 1;
+    string name = 2;
+    string project_id = 3;
+}
+
+message HomePinDashboardRequest {
+    string workspace_id = 1;
+    string dashboard_id = 2;
+    bool pinned = 3;
+}
+
+message HomePinned {
+}
+
+message HomeRecordRecentRequest {
+    string workspace_id = 1;
+    string task_id = 2;
+}
+
+message HomeRecorded {
+}
+
+message HomeSummary {
+    int32 today_count = 1;
+    int32 overdue_count = 2;
+    int32 in_progress_count = 3;
+    repeated HomeTask due_items = 4;
+    repeated HomeTask in_progress_items = 5;
+    repeated HomeTask recent = 6;
+    repeated HomeMention mentions = 7;
+    int32 unread_notifications = 8;
+    int32 unread_chat = 9;
+    repeated HomeDay week = 10;
+    repeated HomePin pinned_dashboards = 11;
+    string computed_at = 12;
+}
+
+message HomeSummaryRequest {
+    string workspace_id = 1;
+    string today = 2;
+    int32 utc_offset_minutes = 3;
+}
+
+message HomeTask {
+    string task_id = 1;
+    string project_id = 2;
+    string project_key = 3;
+    int32 number = 4;
+    string title = 5;
+    string status_name = 6;
+    string status_category = 7;
+    string priority = 8;
+    string due_date = 9;
+}
+
+message MyWorkTask {
+    HomeTask task = 1;
+    bool assigned = 2;
+    bool watching = 3;
+}
+
+message OnboardingApplyStarterRequest {
+    string workspace_id = 1;
+    string starter = 2;
+    string name = 3;
+    string key = 4;
+}
+
+message OnboardingCompleteStepRequest {
+    string workspace_id = 1;
+    string step = 2;
+}
+
+message OnboardingDeleteSamplesRequest {
+    string workspace_id = 1;
+}
+
+message OnboardingDismissRequest {
+    string workspace_id = 1;
+}
+
+message OnboardingGetRequest {
+    string workspace_id = 1;
+}
+
+message OnboardingSamplesDeleted {
+    int32 deleted = 1;
+}
+
+message OnboardingStarter {
+    string key = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message OnboardingStarterApplied {
+    string project_id = 1;
+    int32 task_count = 2;
+}
+
+message OnboardingState {
+    repeated OnboardingStep steps = 1;
+    bool dismissed = 2;
+    bool complete = 3;
+    bool visible = 4;
+    string sample_project_id = 5;
+    int32 sample_count = 6;
+    repeated OnboardingStarter starters = 7;
+}
+
+message OnboardingStep {
+    string step = 1;
+    bool done = 2;
+}
+

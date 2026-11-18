@@ -64,6 +64,7 @@ class Task(serializers.Serializer[dict[str, object]]):
     group_key = serializers.CharField()
     blockers_due = serializers.CharField()  # calendar reads: latest due date of open blockers
     blocks_due = serializers.CharField()  # ... and earliest due date of what this blocks
+    is_sample = serializers.BooleanField()  # an onboarding starter's example task (phase 48)
 
 
 class Link(serializers.Serializer[dict[str, object]]):

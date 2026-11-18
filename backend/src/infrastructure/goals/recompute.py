@@ -51,7 +51,9 @@ def count_linked(kr: KeyResult) -> tuple[int, int]:
     goal = kr.goal
     actor = goal.owner or goal.created_by
     rows = (
-        Task.objects.filter(workspace_id=goal.workspace_id, deleted_at__isnull=True)
+        Task.objects.filter(
+            workspace_id=goal.workspace_id, deleted_at__isnull=True, is_sample=False
+        )
         .filter(task_condition(kr, actor))
         .exclude(status__category=Category.CANCELLED)
     )

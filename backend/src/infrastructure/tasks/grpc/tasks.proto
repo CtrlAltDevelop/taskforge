@@ -239,6 +239,7 @@ message Task {
     string due_time = 29;
     string blockers_due = 30;
     string blocks_due = 31;
+    bool is_sample = 32;
 }
 
 message TaskBulkUpdateRequest {
@@ -380,6 +381,7 @@ message TaskResponse {
     string due_time = 29;
     string blockers_due = 30;
     string blocks_due = 31;
+    bool is_sample = 32;
 }
 
 message TaskRestoreRequest {

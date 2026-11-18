@@ -96,7 +96,9 @@ def visible_projects(scope: Scope) -> Any:
 
 
 def visible_tasks(scope: Scope, where: Q, scope_name: str) -> Any:
-    rows = Task.objects.filter(project__in=visible_projects(scope), deleted_at__isnull=True)
+    rows = Task.objects.filter(
+        project__in=visible_projects(scope), deleted_at__isnull=True, is_sample=False
+    )
     if where:
         rows = rows.filter(where)
     if scope_name == "open":

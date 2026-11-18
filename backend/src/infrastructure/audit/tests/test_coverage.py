@@ -50,6 +50,16 @@ READS = frozenset(
         "WidgetController.Preview",
         "WidgetController.Data",
         "DashboardController.Get",
+        # Phase 48: one person's own Home. Reads, or personal state (recent, pins, checklist)
+        # that is not workspace data; ApplyStarter and a real DeleteSamples are audited.
+        "HomeController.Summary",
+        "HomeController.MyWork",
+        "HomeController.RecordRecent",
+        "HomeController.PinDashboard",
+        "OnboardingController.Get",
+        "OnboardingController.CompleteStep",
+        "OnboardingController.Dismiss",
+        "OnboardingController.DeleteSamples",
         "DashboardController.List",
         "AutomationRunController.List",
         "BacklogController.List",

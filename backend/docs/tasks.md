@@ -56,6 +56,7 @@ The record an override leaves: who completed a blocked task anyway, and the open
 | `created_at` | DateTime |  |
 | `updated_at` | DateTime |  |
 | `deleted_at` | DateTime | nullable |
+| `is_sample` | Boolean |  |
 
 #### `TaskAssignee`
 

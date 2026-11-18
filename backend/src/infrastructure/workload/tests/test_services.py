@@ -299,3 +299,21 @@ def test_a_capacity_change_drops_the_cached_grid(team: Any, grid: Any) -> None:
     assert cells(compute(team), team.member)[7] == (8 * H, 8 * H)
     services.set_capacity(team.owner, team.ws, str(team.member.pk), "6", [0, 1, 2, 3, 4])
     assert cells(compute(team), team.member)[7] == (8 * H, 6 * H)
+
+
+def test_sample_tasks_are_not_on_the_grid(team: Any, grid: Any) -> None:
+    sample = make_task(
+        team,
+        grid["a"].project,
+        "Sample",
+        10,
+        [team.member],
+        start_date="2030-01-07",
+        due_date="2030-01-07",
+    )
+    Task.objects.filter(pk=sample.pk).update(is_sample=True)
+
+    result = compute(team)
+
+    assert sample.display_id not in {t.display_id for t in result.tasks}
+    assert cells(result, team.member)[7] == (8 * H, 8 * H)

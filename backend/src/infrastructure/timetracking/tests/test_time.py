@@ -459,3 +459,21 @@ def test_a_lost_start_race_is_retried(
     with pytest.raises(ApiError) as gave_up:
         services.start(team.member, team.ws, str(web.pk), str(task.pk))
     assert gave_up.value.status == 409
+
+
+def test_sample_task_time_is_not_in_the_reports(team: Any, web: Any, task: Any) -> None:
+    from infrastructure.tasks.models import Task
+
+    sample = tasks.create(team.owner, team.ws, str(web.pk), "Sample")
+    Task.objects.filter(pk=sample.pk).update(is_sample=True)
+    started = datetime(2026, 11, 3, 9, tzinfo=UTC)
+    log(team, web, task, team.member, started, HOUR)
+    log(team, web, sample, team.member, started, 2 * HOUR)
+
+    sheet = reports.timesheet(team.member, team.ws, "2026-11-02", "UTC")
+    mine = reports.totals(
+        team.member, team.ws, str(web.pk), started - timedelta(days=1), started + timedelta(days=1)
+    )
+
+    assert [r.title for r in sheet.rows] == [task.title] and sheet.total == HOUR
+    assert [p.seconds for p in mine] == [HOUR]

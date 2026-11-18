@@ -55,6 +55,7 @@ PROJECT_LABELS = frozenset(
         "customfields",
         "savedviews",
         "shortcuts",
+        "home",
         "filters",
         "sync",
         "comments",

@@ -54,6 +54,8 @@ from infrastructure.filters.grpc import filters_pb2 as flpb
 from infrastructure.filters.grpc import filters_pb2_grpc as flstubs
 from infrastructure.goals.grpc import goals_pb2 as gopb
 from infrastructure.goals.grpc import goals_pb2_grpc as gostubs
+from infrastructure.home.grpc import home_pb2 as hmpb
+from infrastructure.home.grpc import home_pb2_grpc as hmstubs
 from infrastructure.imports import exports as export_services
 from infrastructure.imports import services as import_services
 from infrastructure.imports.grpc import imports_pb2 as impb
@@ -2082,6 +2084,83 @@ ENDPOINTS += (
     ),
 )
 
+HM = hmstubs.HomeControllerStub
+OB = hmstubs.OnboardingControllerStub
+
+
+# Phase 48: Home and onboarding. Everything is the caller's own view of a workspace they can open
+# (the data is scoped by what they may see, not refused), so ``workspace.view`` is the gate;
+# starting from a starter also needs ``project.create``.
+ENDPOINTS += (
+    Endpoint(
+        "HomeController.Summary",
+        "workspace.view",
+        _grpc(HM, "Summary", lambda w: hmpb.HomeSummaryRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "HomeController.MyWork",
+        "workspace.view",
+        _grpc(HM, "MyWork", lambda w: hmpb.HomeMyWorkRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "HomeController.RecordRecent",
+        "workspace.view",
+        _grpc(
+            HM,
+            "RecordRecent",
+            lambda w: hmpb.HomeRecordRecentRequest(workspace_id=w.ws, task_id=w.task_id),
+        ),
+        _make_task,
+    ),
+    Endpoint(
+        "HomeController.PinDashboard",
+        "workspace.view",
+        _grpc(
+            HM,
+            "PinDashboard",
+            lambda w: hmpb.HomePinDashboardRequest(
+                workspace_id=w.ws, dashboard_id=w.dashboard_id, pinned=True
+            ),
+        ),
+        _dashboard_on,
+    ),
+    Endpoint(
+        "OnboardingController.Get",
+        "workspace.view",
+        _grpc(OB, "Get", lambda w: hmpb.OnboardingGetRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "OnboardingController.CompleteStep",
+        "workspace.view",
+        _grpc(
+            OB,
+            "CompleteStep",
+            lambda w: hmpb.OnboardingCompleteStepRequest(workspace_id=w.ws, step="try_board"),
+        ),
+    ),
+    Endpoint(
+        "OnboardingController.Dismiss",
+        "workspace.view",
+        _grpc(OB, "Dismiss", lambda w: hmpb.OnboardingDismissRequest(workspace_id=w.ws)),
+    ),
+    Endpoint(
+        "OnboardingController.ApplyStarter",
+        "project.create",
+        _grpc(
+            OB,
+            "ApplyStarter",
+            lambda w: hmpb.OnboardingApplyStarterRequest(workspace_id=w.ws, starter="blank"),
+        ),
+    ),
+    Endpoint(
+        "OnboardingController.DeleteSamples",
+        "workspace.view",
+        _grpc(
+            OB, "DeleteSamples", lambda w: hmpb.OnboardingDeleteSamplesRequest(workspace_id=w.ws)
+        ),
+    ),
+)
+
 _LATER = "gated like its siblings; the phase's own tests cover it (not in the matrix yet)"
 _ACCOUNT = "account-level: the caller's own security or session, not workspace data"
 _PUBLIC = "public: the form's secret token (or the signed state) is the capability"
@@ -2141,9 +2220,7 @@ EXEMPT.update(
 # These two call api.clickup.com with the caller's own token, so the matrix cannot run them; the
 # permission check (data.manage) is tested in imports/tests/test_clickup_api.py.
 _CLICKUP = "calls the ClickUp API with a personal token (tested in imports)"
-EXEMPT.update(
-    {"POST /imports/clickup/lists": _CLICKUP, "POST /imports/clickup/fetch": _CLICKUP}
-)
+EXEMPT.update({"POST /imports/clickup/lists": _CLICKUP, "POST /imports/clickup/fetch": _CLICKUP})
 _PROJECTS = "/workspaces/{workspace_id}/projects"
 EXEMPT.update(
     {

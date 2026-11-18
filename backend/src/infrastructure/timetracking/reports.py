@@ -118,6 +118,7 @@ def timesheet(
             workspace=workspace,
             task__project_id__in=enabled,
             task__deleted_at__isnull=True,
+            task__is_sample=False,
             started_at__lt=bounds[-1],
         )
         .filter(Q(ended_at__isnull=True) | Q(ended_at__gt=bounds[0]))
@@ -172,6 +173,7 @@ def totals(
     rows = TimeEntry.objects.filter(
         task__project=project,
         task__deleted_at__isnull=True,
+        task__is_sample=False,
         started_at__gte=start,
         started_at__lt=end,
     ).select_related("user__profile")

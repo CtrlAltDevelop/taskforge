@@ -84,6 +84,11 @@ def _visible(actor: Any, workspace: Workspace) -> Any:
     )
 
 
+def visible_to(actor: Any, workspace: Workspace) -> Any:
+    """The dashboards this person may open (for Home's pins)."""
+    return _visible(actor, workspace)
+
+
 def _manages(actor: Any, workspace: Workspace) -> bool:
     return access.can(actor, MANAGE, workspace).allowed
 

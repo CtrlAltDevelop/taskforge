@@ -64,6 +64,9 @@ class Task(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    # Phase 48: a task the onboarding starter made as an example. Left out of dashboards and Home
+    # counts; ``Onboarding.DeleteSamples`` removes them all.
+    is_sample = models.BooleanField(default=False)
     # Not stored: the services set it on the tasks they return (see ``links.blocked_ids``).
     is_blocked = False
     blockers: tuple[str, ...] = ()  # "WEB-4 (In progress)" or "Restricted task", for the caller

@@ -138,3 +138,70 @@ def test_security_headers_do_not_override_a_view_that_set_its_own() -> None:
 
     assert response["Permissions-Policy"] == "camera=(self)"
     assert response["Cross-Origin-Opener-Policy"] == "same-origin"
+
+
+def test_maintenance_mode_answers_503_json_but_keeps_operations_up(
+    client: Client, settings: Any
+) -> None:
+    settings.MAINTENANCE_MODE = True
+
+    refused = client.get("/api/v1/workspaces")
+
+    assert refused.status_code == 503
+    assert refused.json()["maintenance"] is True and refused["Retry-After"] == "60"
+    assert client.get("/api/health/live").status_code == 200
+    assert client.get("/api/version").status_code == 200
+    assert client.get("/metrics").status_code != 503
+
+
+def test_maintenance_mode_is_off_by_default(client: Client) -> None:
+    assert client.get("/api/health/live").status_code == 200
+    assert client.get("/api/v1/workspaces").status_code != 503
+
+
+def _call_through_the_interceptor(stub_class: Any, method: str, request: Any) -> Any:
+    """One RPC on a server carrying the project's handlers *and* the maintenance interceptor
+    (the shared ``grpc_call`` fixture builds its server without the settings' interceptors)."""
+    import asyncio
+
+    import grpc
+
+    from config.grpc import grpc_handlers
+    from infrastructure.system.maintenance import maintenance_interceptor
+
+    async def run() -> Any:
+        server = grpc.aio.server(interceptors=[maintenance_interceptor])
+        port = server.add_insecure_port("127.0.0.1:0")
+        grpc_handlers(server)
+        await server.start()
+        try:
+            async with grpc.aio.insecure_channel(f"127.0.0.1:{port}") as channel:
+                return await getattr(stub_class(channel), method)(request)
+        finally:
+            await server.stop(None)
+
+    return asyncio.run(run())
+
+
+def test_maintenance_mode_makes_grpc_unavailable_except_system(settings: Any) -> None:
+    import grpc
+    from google.protobuf.empty_pb2 import Empty
+
+    from infrastructure.shortcuts.grpc import shortcuts_pb2, shortcuts_pb2_grpc
+    from infrastructure.system.grpc import system_pb2_grpc
+
+    stub = shortcuts_pb2_grpc.ShortcutControllerStub
+    asked = shortcuts_pb2.ShortcutGetRequest()
+    settings.MAINTENANCE_MODE = False
+    with pytest.raises(grpc.aio.AioRpcError) as normal:
+        _call_through_the_interceptor(stub, "Get", asked)
+    settings.MAINTENANCE_MODE = True
+    with pytest.raises(grpc.aio.AioRpcError) as down:
+        _call_through_the_interceptor(stub, "Get", asked)
+    with pytest.raises(grpc.aio.AioRpcError) as system:
+        _call_through_the_interceptor(system_pb2_grpc.SystemControllerStub, "Info", Empty())
+
+    assert normal.value.code() is not grpc.StatusCode.UNAVAILABLE  # off: reaches the handler
+    assert down.value.code() is grpc.StatusCode.UNAVAILABLE
+    assert "maintenance" in down.value.details()
+    assert system.value.code() is not grpc.StatusCode.UNAVAILABLE  # exempt

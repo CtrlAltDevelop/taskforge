@@ -270,3 +270,15 @@ def test_a_member_owner_edits_their_own_goal(team: Any) -> None:
     gid = str(_goal(team, "Mine", actor=team.member).goal.pk)
     view = services.update(team.member, team.ws, gid, 1, name="renamed")
     assert view.goal.name == "renamed" and view.can_edit is True
+
+
+def test_sample_tasks_do_not_count_toward_a_linked_key_result(team: Any, project: Any) -> None:
+    from infrastructure.tasks.models import Task
+
+    real, sample = _task(team, project, "real"), _task(team, project, "sample")
+    Task.objects.filter(pk=sample.pk).update(is_sample=True)
+    kr, _ = _kr(team, _goal(team), KrType.LINKED, task_ids=[str(real.pk), str(sample.pk)])
+    other, _ = _kr(team, _goal(team, "H"), KrType.LINKED, name="KR2", filter_text="priority = none")
+
+    assert recompute.count_linked(kr) == (0, 1)
+    assert recompute.count_linked(other) == (0, 1)

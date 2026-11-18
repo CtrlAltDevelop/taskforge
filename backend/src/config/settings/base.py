@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from infrastructure.auth.core.dpop_grpc import method_path_interceptor
 from infrastructure.common.registry import registered_app_configs
+from infrastructure.system.maintenance import maintenance_interceptor
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 # `DJANGO_ENV_FILE` names the file, so a deployment can keep several side by
@@ -1057,6 +1058,7 @@ INSTALLED_APPS = [
     "infrastructure.customfields.apps.CustomFieldsConfig",
     "infrastructure.savedviews.apps.SavedViewsConfig",
     "infrastructure.shortcuts.apps.ShortcutsConfig",
+    "infrastructure.home.apps.HomeConfig",
     "infrastructure.filters.apps.FiltersConfig",
     "infrastructure.sync.apps.SyncConfig",
     "infrastructure.comments.apps.CommentsConfig",
@@ -1101,7 +1103,7 @@ GRPC_FRAMEWORK = {
     # Phase 39: records the called method's path for the DPoP proof check.
     # An instance, not a dotted path: django-socio-grpc imports only some settings from strings,
     # and this one goes to grpc untouched (grpc refuses anything but ServerInterceptor objects).
-    "SERVER_INTERCEPTORS": [method_path_interceptor],
+    "SERVER_INTERCEPTORS": [maintenance_interceptor, method_path_interceptor],
 }
 
 # Whether the admin loads the live script at all. Both feeds are optional apps
@@ -1161,7 +1163,12 @@ UNFOLD = {
 
 from infrastructure.system.jsonlog import logging_config  # noqa: E402
 
+# Phase 48: while on, REST answers 503 {"maintenance": true} and gRPC UNAVAILABLE "maintenance: ..."
+# (health, version, metrics and the admin stay up). Read at start: restart to change it.
+MAINTENANCE_MODE = os.getenv("DJANGO_MAINTENANCE_MODE", "false").strip().lower() == "true"
+
 MIDDLEWARE = [
+    "infrastructure.system.maintenance.MaintenanceMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # before CommonMiddleware
     "infrastructure.auth.core.refresh_cookie.RefreshCookieMiddleware",

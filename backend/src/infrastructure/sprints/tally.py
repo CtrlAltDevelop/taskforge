@@ -41,7 +41,7 @@ def _sum(**filters: Any) -> Any:
 
 def tallies(sprint_ids: list[Any]) -> dict[Any, Tally]:
     rows = (
-        Task.objects.filter(sprint_id__in=sprint_ids, deleted_at__isnull=True)
+        Task.objects.filter(sprint_id__in=sprint_ids, deleted_at__isnull=True, is_sample=False)
         .values("sprint_id")
         .annotate(
             n=Count("pk"),

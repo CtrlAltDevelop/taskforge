@@ -290,3 +290,14 @@ def test_active_projects_list_before_archived_ones(team: Any) -> None:
     projects.archive(team.owner, team.ws, str(old.pk), old.version)
 
     assert [h.key for h in find(team, team.member, "alpha").hits["project"]] == ["NEW", "OLD"]
+
+
+def test_a_sample_task_is_found_so_first_run_search_works(team: Any, web: Any) -> None:
+    from infrastructure.tasks.models import Task
+
+    sample = make_task(team, web, "Quokka sample", "quokka")
+    Task.objects.filter(pk=sample.pk).update(is_sample=True)
+
+    assert titles(find(team, team.owner, "quokka", "task")) == [sample.title]
+    jumped = find(team, team.owner, f"WEB-{sample.number}", "task").jump
+    assert jumped is not None and jumped.id == str(sample.pk)

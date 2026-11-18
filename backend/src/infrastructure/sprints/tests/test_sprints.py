@@ -569,3 +569,18 @@ def test_capacity_is_validated(team: Any, web: Any) -> None:
             team.owner, team.ws, str(web.pk), "S", "", "2026-11-02", "2026-11-06", "", 10**9
         )
     assert refresh(sprint).capacity_sec is None
+
+
+def test_sample_tasks_are_left_out_of_the_sprint_numbers(team: Any, web: Any) -> None:
+    from infrastructure.sprints import tally
+
+    real, sample = make_task(team, web, "real", "3"), make_task(team, web, "sample", "5")
+    sprint = new_sprint(team, web)
+    add(team, web, sprint, real, sample)
+    Task.objects.filter(pk=sample.pk).update(is_sample=True)
+
+    counts = tally.tally(refresh(sprint))
+
+    assert (counts.tasks, counts.points, counts.open_tasks) == (1, Decimal("3"), 1)
+    started = start(team, web, sprint)
+    assert started.baseline_points == Decimal("3") and started.baseline_tasks == 1

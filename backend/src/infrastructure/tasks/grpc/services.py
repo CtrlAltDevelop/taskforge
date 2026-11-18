@@ -121,6 +121,7 @@ def _message(task: TaskRow, kind: str = "Task") -> Any:
         blocked_by=list(task.blockers),
         blockers_due=task.blockers_due,
         blocks_due=task.blocks_due,
+        is_sample=task.is_sample,
         group_key=task.group_key,
         fields=[
             _field_value(kind, field_id, value)
