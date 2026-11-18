@@ -4,6 +4,7 @@ import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
@@ -101,6 +102,7 @@ void showTfToast(
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
+      snackBarAnimationStyle: TfMotion.style(context, TfDuration.base),
       SnackBar(
         content: Row(
           children: [

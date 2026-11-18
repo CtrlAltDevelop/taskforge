@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_interactive.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
@@ -37,7 +38,9 @@ class TfTabs extends StatelessWidget {
                 onTap: () => onChanged(i),
                 selected: i == index,
                 semanticLabel: labels[i],
-                builder: (context, states) => Container(
+                builder: (context, states) => AnimatedContainer(
+                  duration: TfMotion.of(context, TfDuration.base),
+                  curve: tfCurve,
                   constraints: BoxConstraints(
                     minHeight: tfTarget(
                       context,

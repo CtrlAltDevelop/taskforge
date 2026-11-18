@@ -62,3 +62,28 @@ class ContrastNotifier extends Notifier<bool> {
     ref.read(localPrefsProvider).write(_key, high ? 'high' : 'normal');
   }
 }
+
+/// Reduce motion, chosen in Appearance. The system flag also counts; the app
+/// root folds both into the media query so every surface reads one value.
+final reduceMotionProvider = NotifierProvider<ReduceMotionNotifier, bool>(
+  ReduceMotionNotifier.new,
+);
+
+class ReduceMotionNotifier extends Notifier<bool> {
+  static const _key = 'theme.reduce_motion';
+  var _chose = false;
+
+  @override
+  bool build() {
+    ref.read(localPrefsProvider).read(_key).then((saved) {
+      if (ref.mounted && !_chose && saved == 'on') state = true;
+    });
+    return false;
+  }
+
+  void choose({required bool reduce}) {
+    _chose = true;
+    state = reduce;
+    ref.read(localPrefsProvider).write(_key, reduce ? 'on' : 'off');
+  }
+}

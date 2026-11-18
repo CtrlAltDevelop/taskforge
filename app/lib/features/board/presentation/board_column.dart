@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/board/domain/board.dart';
@@ -226,7 +227,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             tooltip: context.l10n.grpFFoldColumn,
             iconSize: 18,
             visualDensity: VisualDensity.compact,
-            icon: TfIcon(TfIcons.collapseAll),
+            icon: TfIcon(TfIcons.collapseAll, size: TfIconSize.control),
             onPressed: widget.onToggleCollapse,
           ),
           if (widget.color != null)
@@ -376,6 +377,18 @@ class _CardSlot extends StatefulWidget {
 }
 
 class _CardSlotState extends State<_CardSlot> {
+  /// The card just dropped: its new slot, built when the move lands, settles
+  /// into place once. Cards from cached data never do.
+  static String? _justDropped;
+
+  late final bool _settle = _justDropped == widget.task.id;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_settle) _justDropped = null;
+  }
+
   /// While something hovers: whether the pointer is in the lower half.
   bool? _below;
 
@@ -396,6 +409,7 @@ class _CardSlotState extends State<_CardSlot> {
   void _drop(DragTargetDetails<BoardDrag> d) {
     final below = _below ?? false;
     setState(() => _below = null);
+    _justDropped = d.data.task.id;
     if (d.data.task.id == widget.task.id) {
       widget.onPointerGone();
       return;
@@ -467,7 +481,7 @@ class _CardSlotState extends State<_CardSlot> {
               key: Key('drop-line-above-${widget.task.id}'),
               child: line,
             ),
-          draggable,
+          TfSettleIn(enabled: _settle, child: draggable),
           if (hovering.isNotEmpty && _below == true)
             KeyedSubtree(
               key: Key('drop-line-below-${widget.task.id}'),

@@ -61,7 +61,15 @@ class TaskForgeApp extends ConsumerWidget {
     final prefs = ref.watch(localePrefsProvider);
     final density = ref.watch(densityProvider);
     final highContrast = ref.watch(contrastProvider);
+    final reduceMotion = ref.watch(reduceMotionProvider);
     return MaterialApp.router(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          disableAnimations:
+              reduceMotion || MediaQuery.disableAnimationsOf(context),
+        ),
+        child: child ?? const SizedBox.shrink(),
+      ),
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       locale: _pseudoLocale ? const Locale('en', 'XA') : prefs.locale,
       supportedLocales: AppLocalizations.supportedLocales,

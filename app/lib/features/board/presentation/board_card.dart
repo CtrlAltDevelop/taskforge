@@ -227,7 +227,7 @@ class _MoveMenu extends StatelessWidget {
       tooltip: context.l10n.grpFMoveTo,
       padding: EdgeInsets.zero,
       iconSize: 18,
-      icon: TfIcon(TfIcons.moreVertical),
+      icon: TfIcon(TfIcons.moreVertical, size: TfIconSize.control),
       onSelected: onSelected,
       itemBuilder: (_) => [
         for (final c in choices)

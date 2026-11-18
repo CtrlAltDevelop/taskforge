@@ -6,6 +6,7 @@ import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
@@ -220,9 +221,9 @@ class _Centered extends StatelessWidget {
   }
 }
 
-/// A grey placeholder block shown while data loads. Static (no shimmer) so
-/// it respects reduced motion by default.
-class TfSkeleton extends StatelessWidget {
+/// A grey placeholder block shown while data loads. A soft highlight sweeps
+/// across it a few times, then it rests; static with reduced motion.
+class TfSkeleton extends StatefulWidget {
   const TfSkeleton({
     super.key,
     this.width,
@@ -235,15 +236,78 @@ class TfSkeleton extends StatelessWidget {
   final bool circle;
 
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-    child: Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: context.tf.colors.border,
-        shape: circle ? BoxShape.circle : BoxShape.rectangle,
-        borderRadius: circle ? null : TfRadius.chip,
-      ),
-    ),
+  State<TfSkeleton> createState() => _TfSkeletonState();
+}
+
+class _TfSkeletonState extends State<TfSkeleton>
+    with SingleTickerProviderStateMixin {
+  static const _sweeps = 3; // finite, so a loading screen can settle
+  late final _sweep = AnimationController(
+    vsync: this,
+    duration: TfDuration.slow * 5,
   );
+  var _started = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (TfMotion.reduced(context)) {
+      _sweep.stop();
+    } else if (!_started) {
+      _started = true;
+      _sweep.repeat(count: _sweeps);
+    }
+  }
+
+  @override
+  void dispose() {
+    _sweep.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.tf.colors;
+    final radius = widget.circle ? null : TfRadius.chip;
+    final shape = widget.circle ? BoxShape.circle : BoxShape.rectangle;
+    final reduced = TfMotion.reduced(context);
+    return ExcludeSemantics(
+      child: reduced
+          ? Container(
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: colors.border,
+                shape: shape,
+                borderRadius: radius,
+              ),
+            )
+          : AnimatedBuilder(
+              animation: _sweep,
+              builder: (context, _) => Container(
+                key: const Key('tf-skeleton-shimmer'),
+                width: widget.width,
+                height: widget.height,
+                decoration: BoxDecoration(
+                  shape: shape,
+                  borderRadius: radius,
+                  gradient: LinearGradient(
+                    colors: [colors.border, colors.hover, colors.border],
+                    transform: _Slide(_sweep.value),
+                  ),
+                ),
+              ),
+            ),
+    );
+  }
+}
+
+class _Slide extends GradientTransform {
+  const _Slide(this.t);
+
+  final double t;
+
+  @override
+  Matrix4 transform(Rect bounds, {TextDirection? textDirection}) =>
+      Matrix4.translationValues(bounds.width * (2 * t - 1), 0, 0);
 }

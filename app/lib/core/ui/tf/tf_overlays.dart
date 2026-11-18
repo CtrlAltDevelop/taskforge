@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
@@ -16,6 +17,7 @@ Future<T?> showTfDialog<T>(
 }) => showDialog<T>(
   context: context,
   barrierDismissible: dismissible,
+  animationStyle: TfMotion.style(context, TfDuration.base),
   builder: (context) {
     final tf = context.tf;
     return Dialog(
@@ -75,7 +77,7 @@ Future<T?> showTfSideSheet<T>(
   barrierDismissible: true,
   barrierLabel: title,
   barrierColor: const Color(0x66000000),
-  transitionDuration: const Duration(milliseconds: 180),
+  transitionDuration: TfMotion.of(context, TfDuration.slow),
   pageBuilder: (context, _, _) {
     final tf = context.tf;
     return Align(
@@ -137,7 +139,7 @@ Future<T?> showTfSideSheet<T>(
         0,
       ),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+    ).animate(CurvedAnimation(parent: animation, curve: tfCurve)),
     child: child,
   ),
 );
@@ -147,6 +149,7 @@ Future<T?> showTfBottomSheet<T>(BuildContext context, {required Widget body}) =>
     showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
+      sheetAnimationStyle: TfMotion.style(context, TfDuration.slow),
       builder: (context) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
