@@ -122,6 +122,7 @@ Quality:
 |---------|--------------|
 | `make check` | ruff, mypy, Django/migration/proto checks, `dart format`, `flutter analyze` |
 | `make test` | pytest with coverage, `flutter test --coverage` |
+| `make perf` | Performance smoke (cold start, scroll cost at 5,000 vs small workspaces) and the recipe for profile-mode numbers on a device |
 | `make integration` | `flutter test integration_test`: whole-app flows with fakes (offline flow); builds a desktop runner, so slow |
 | `make proto` | Regenerate Python `.proto` + stubs and Dart stubs. Add new protos to `DART_PROTOS` in the Makefile |
 | `make proto-lint` | `buf lint` |

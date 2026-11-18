@@ -1,6 +1,6 @@
 # Phase 49 — Motion, accessibility and visual release QA
 
-**Status:** TODO
+**Status:** implemented on `develop`. What is left is device and screen-reader work that needs a person: see **Owner must test** at the end of this file (Part F).
 
 ## Feature
 The final pass that makes the redesign release-quality: motion, accessibility, performance, remaining screens (settings and admin) and a visual-regression gate.
@@ -9,7 +9,7 @@ The final pass that makes the redesign release-quality: motion, accessibility, p
 A design system only feels professional when the last 20 % is done: nothing jumps, everything responds in 100 ms, keyboard and screen readers work, and no screen is left in the old style. Jira and ClickUp both ship visible inconsistencies between old and new areas; we remove the old style entirely before release (phase 38 ships it).
 
 ## How it works (plain words)
-A short **motion spec** (durations 100/160/240 ms, one ease-out curve, no bounce) is applied: sheet and peek slide, menu fade-scale, list insert/remove, board drop settle, toast, tab underline slide, skeleton shimmer. `reduce motion` turns all of it to instant fades. Remaining screens move to `Tf*`: Settings (profile, security, sessions, language, appearance, notifications), admin (members, roles, audit, import/export, developer, webhooks, forms builder, workflow and field editors, sprints, automations, goals, docs editor chrome, dashboards editor, workload, timesheet). Then the **gate**: lint allow-list is empty, golden suite covers every top-level screen on phone and desktop in light/dark and en/fa, and an accessibility audit passes.
+A short **motion spec** (durations 100/160/240 ms, one ease-out curve, no bounce) is applied: sheet and peek slide, menu fade-scale, list insert/remove, board drop settle, toast, tab underline slide, skeleton shimmer. `reduce motion` turns all of it to instant fades. Remaining screens move to `Tf*`: Settings (profile, security, sessions, language, appearance, notifications), admin (members, roles, audit, import/export, developer, webhooks, forms builder, workflow and field editors, sprints, automations, goals, docs editor chrome, dashboards editor, workload, timesheet). Then the **gate**: there is no lint allow-list, golden suite covers every top-level screen on phone and desktop in light/dark and en/fa, and an accessibility audit passes.
 
 ## Scope
 **In:** motion tokens and use, remaining-screen migration, accessibility (focus order, labels, roles, contrast, 200 % text, screen-reader pass on web with VoiceOver/NVDA notes, reduced motion), performance budget (cold start, first list paint, scroll), deleting dead pre-redesign widgets and aliases (`radiusSmall/Medium/Large`, old shell), updated screenshots in README and docs, release checklist entry in phase 38 docs.
@@ -29,21 +29,21 @@ A short **motion spec** (durations 100/160/240 ms, one ease-out curve, no bounce
 - No animation blocks input or delays data; nothing animates on first paint of cached data.
 - Focus is trapped in dialogs and sheets and returned on close; `Esc` always closes the top layer only.
 - Every icon-only button has a tooltip and semantic label; every image has alt text or is marked decorative.
-- Performance budget (measured on a mid Android phone, an M-series Mac and web): cold start to interactive list < 2 s on a 5,000-task workspace, scroll ≥ 55 fps; recorded in the phase notes and re-checked by a smoke script.
+- Performance budget (measured on a mid Android phone, an M-series Mac and web): cold start to interactive list < 2 s on a 5,000-task workspace, scroll ≥ 55 fps; recorded in the phase notes; `make perf` re-runs the smoke tests that keep cost from growing with task count, the device numbers are measured by hand with the recipe it prints.
 - Goldens use the tolerance already agreed in phase 31 so another OS does not fail them.
 
 ## Acceptance criteria
-- [ ] Lint allow-list empty: no hex colour, ad-hoc radius or raw `Icons.*` anywhere in `features/`
-- [ ] Old shell, old toolbars and deprecated token aliases deleted; `flutter analyze` clean
-- [ ] Golden suite: every top-level route on phone and desktop, light/dark, en/fa
-- [ ] Reduce-motion honoured; motion spec applied to the listed surfaces
-- [ ] Accessibility checklist signed off: keyboard-only walk of sign in → create task → comment → settings; screen-reader labels; 200 % text; contrast AA
-- [ ] Performance budget met and recorded
-- [ ] README and docs screenshots refreshed; brand assets in all six platform builds verified by running them
-- [ ] Release checklist (phase 38) references this gate
+- [x] Lint allow-list empty: no hex colour, ad-hoc radius, raw `Icons.*` or Material `Colors.*` anywhere in `features/` or `core/` outside the tokens (`test/core/ui/forbidden_literals_test.dart`, no allow-list)
+- [x] Old shell, old toolbars and deprecated token aliases deleted; `flutter analyze` clean
+- [x] Golden suite: every top-level route on phone and desktop, light/dark, en/fa (all eight combinations; routes that need a server challenge or a seeded record are listed with a reason in the test)
+- [x] Reduce-motion honoured; motion spec applied to the listed surfaces (menu, tabs, sheets, dialog, toast, list insert and remove, board settle, skeleton), each tested normal and reduced; the Appearance switch has a widget test
+- [ ] Accessibility checklist signed off. Automated parts are done and green (focus trap and Esc, labelled tap targets, 200 % text, contrast AA, a11y lint). **Owner:** the keyboard-only walk and the VoiceOver / NVDA pass in [docs/accessibility-checklist.md](../accessibility-checklist.md)
+- [ ] Performance budget met and recorded. `make perf` runs the smoke tests (cost does not grow with task count); **owner:** the profile-mode numbers on a mid Android phone, an M-series Mac and web (recipe printed by `make perf`)
+- [ ] README and docs screenshots refreshed (done, six web screenshots); **owner:** brand assets run on Android, iOS, Windows and Linux (Part F table)
+- [x] Release checklist (phase 38) references this gate
 
 ## Tests
-Golden gate in CI, keyboard-traversal widget tests for dialogs/sheets, semantics tests (`SemanticsHandle`) on key screens, a profile-mode timing script, a test that fails on forbidden literals.
+Golden gate in CI, keyboard-traversal widget tests for dialogs/sheets, semantics tests (`SemanticsHandle`) on key screens, a performance smoke (`make perf`; the profile-mode recipe it prints is run by a person on a device), a test that fails on forbidden literals.
 
 ## Depends on
 44–48.
@@ -51,7 +51,7 @@ Golden gate in CI, keyboard-traversal widget tests for dialogs/sheets, semantics
 ## Notes: motion, focus, semantics, performance (part C)
 
 **Motion.** `core/ui/tokens/motion.dart`: `TfDuration` fast 100 / base 160 / slow 240 ms, one curve `tfCurve` (ease-out cubic, no overshoot), `TfMotion.of(context, d)` (zero when reduced) and `TfMotion.style` for routes. Reduce motion is `MediaQuery.disableAnimations` (system flag) or the Appearance choice `reduceMotionProvider`; `app.dart` folds both into the media query. Applied to: side sheet and bottom sheet slide (slow), dialog fade, toast, task open fade, tab underline colour, checkbox, row actions, live flash, shell page fade, jump-to-latest scroll, skeleton shimmer (three sweeps, then still; static when reduced), board drop settle (`TfSettleIn`, only for the card just dropped, never for cached data). Tests: `test/core/ui/motion/motion_test.dart` (normal and reduced per surface).
-Part E closed three of these: the menu panel (`TfMenu`) is drawn by the menu's own child (`_MenuPanelMotion`) and fades and scales in from its top edge (MenuAnchor only positions it); the tab underline slides (`TfTabs` measures the chosen tab and moves one `AnimatedPositioned`); rows inserted into the task list (table and phone cards) and board columns ease in through `TfSettleIn`, driven by `TfFreshIds` (an id is fresh only if it was not in the list at the first settled paint, so cached or still-streaming rows never animate). Not done: removal animation (a removed row is gone at once; animating it needs the list to keep ghosts of deleted rows). Filtering a list shows the rows that come into the result as inserted. The Appearance screen has no reduce-motion switch yet: `reduceMotionProvider.choose(reduce: ...)` is ready for it.
+Part E closed three of these: the menu panel (`TfMenu`) is drawn by the menu's own child (`_MenuPanelMotion`) and fades and scales in from its top edge (MenuAnchor only positions it); the tab underline slides (`TfTabs` measures the chosen tab and moves one `AnimatedPositioned`); rows inserted into the task list (table and phone cards) and board columns ease in through `TfSettleIn`, driven by `TfFreshIds` (an id is fresh only if it was not in the list at the first settled paint, so cached or still-streaming rows never animate). Removal: a row removed after the first settled paint stays as a ghost for 160 ms and fades and collapses (`TfRemovals`, `TfRemoveOut` in `core/ui/tf/tf_list_motion.dart`; task table, phone list and board columns; instant under reduce-motion; `removal_test.dart`). The table's rows have a fixed height, so there the ghost fades inside its slot. Filtering a list shows the rows that come into the result as inserted. The Appearance screen has the reduce-motion switch (`reduce-motion`, tested in `appearance_screen_test.dart`).
 
 **Focus.** `test/core/ui/overlay_focus_test.dart` locks in what Flutter's routes give us: Esc closes only the top layer (dialog over sheet, dialog over task peek), focus returns to the opener, Tab and Shift+Tab stay inside a dialog or sheet.
 
@@ -59,15 +59,15 @@ Part E closed three of these: the menu panel (`TfMenu`) is drawn by the menu's o
 
 **Icons.** A bare `TfIcon` stays 16 (`TfIconSize.inline`). Inside Material controls with their own 40-48 px target (IconButton, PopupMenuButton, ListTile leading, input affixes) call sites use `TfIconSize.control` (20) in the work views, filters, task detail, calendar, inbox, chat, search and shortcuts. Settings and admin screens are left to the restyle.
 
-**Dead code.** The `radiusSmall/Medium/Large` aliases are deleted (no callers). No old shell or old toolbar files remain; a sweep of `core/ui`, `features/shell` and `work/` found no unreferenced file or symbol. `ChatSystemLine` (`features/comments`) is only used by its own test.
+**Dead code.** The `radiusSmall/Medium/Large` aliases are deleted (no callers). No old shell or old toolbar files remain; a sweep of `core/ui`, `features/shell` and `work/` found no unreferenced file or symbol. `ChatSystemLine` (no callers) is deleted with its test and goldens.
 
 **Performance.** `test/perf/cold_start_test.dart` (cold app to first list paint, 5,000 vs 200 tasks; ceiling 6 s and at most 3x the small workspace) and `test/features/tasks/work_perf_test.dart` (scroll frame cost 5,000 vs 200 rows, 1,000 vs 50 cards). Debug test VM on an M-series Mac, last runs: cold start to first list 200 tasks 1.7-2.6 s, 5,000 tasks 1.2-1.6 s; scrolled frame 92 ms (200 rows) vs 69 ms (5,000), board 45 vs 35 ms. These show cost does not grow with task count; they are not fps figures. Not measured: `flutter run --profile` on macOS, web, and a mid Android phone. **Owner to measure on a mid Android phone** (cold start to interactive list < 2 s on 5,000 tasks, scroll >= 55 fps, DevTools frame chart in profile mode) and record the numbers here.
 
 ## Notes: release gate (part E)
 
-**Goldens.** `test/i18n/release_goldens_test.dart` reads every `path:` of `lib/app_router.dart`, so a new route without a picture, or without an entry in `_notPictured` (with a reason), fails; a second test checks the parsed list against the real router. 252 PNGs in `test/i18n/goldens/release/` (4.5 MB). Twelve primary screens (home, my work, project, inbox, chat, docs, calendar, dashboards, goals, members, appearance, sign in) get all eight combinations of phone/desktop, light/dark, en/fa; every other route gets desktop light en, desktop dark en, phone light en, phone light fa (full 8 for ~50 routes would be 400 PNGs). Not pictured, each with its reason: two-factor, SSO callback, public form, form builder (3 routes), webhook detail, goal detail (they need a challenge, a ticket or a seeded record) and the debug gallery (own sweep).
+**Goldens.** `test/i18n/release_goldens_test.dart` reads every `path:` of `lib/app_router.dart`, so a new route without a picture, or without an entry in `_notPictured` (with a reason), fails; a second test checks the parsed list against the real router. Every route gets all eight combinations (phone and desktop, light and dark, en and fa): 408 PNGs in `test/i18n/goldens/release/` (about 7 MB), compared with the tolerant comparator of phase 31 (`useTolerantGoldens`). Not pictured, each with its reason: two-factor, SSO callback, public form, form builder (3 routes), webhook detail, goal detail (they need a challenge, a ticket or a seeded record) and the debug gallery (own sweep).
 
-**Lint.** `test/core/ui/forbidden_literals_test.dart` covers `lib/features` and `lib/core` (outside `core/ui/tokens`) with no allow-list; `ui_lint_test.dart` and `ui_lint_allowlist.txt` are deleted. The raw values moved into tokens: `tfBlack`, `tfWhite`, `tfClear`, `tfScrim`, `TfRadius.inset/pill`, `tokens/chart_palette.dart`; the last Material icons in `core/` (sync status, date picker, offline) now use `TfIcons`.
+**Lint.** `test/core/ui/forbidden_literals_test.dart` covers `lib/features` and `lib/core` (outside `core/ui/tokens`) with no allow-list, and catches hex colours, `BorderRadius.circular`, `Icons.*` and every `Colors.*` (even `Colors.transparent`); semantic colours come from the theme's tones (`context.tf.colors.success.fg`, ...); `ui_lint_test.dart` and `ui_lint_allowlist.txt` are deleted. The raw values moved into tokens: `tfBlack`, `tfWhite`, `tfClear`, `tfScrim`, `TfRadius.inset/pill`, `tokens/chart_palette.dart`; the last Material icons in `core/` (sync status, date picker, offline) now use `TfIcons`.
 
 ## Notes: release QA, brand assets, screenshots (Part F)
 
@@ -104,3 +104,7 @@ Run on an M-series Mac with Flutter 3.50, Xcode 27.2, 2026-11-18. The checklist 
 - PostgreSQL runs: the phase 48 Summary p95 and the full backend suite (both so far only on SQLite).
 - `make integration` on a desktop (needs a desktop runner; not run here).
 - Housekeeping: Docker Desktop was started for the Envoy container and left running; commit `1f9fc1b` (another agent's) swept in `app/android/.kotlin/sessions/*.salive` and a Gradle problems report under `app/android/build/reports/`; remove them from git and add them to `.gitignore`.
+
+## Notes: review fixes (part G)
+
+Lazy pages: `TfPage.builder` (itemBuilder rows plus a `pinned` header above the list) now backs members, audit and automations; the members search field and the audit filters sit above the list, so typed text survives scrolling (`tf_page_builder_test.dart`). The timesheet and import pages stay eager on purpose (a grid, and a wizard whose state must not be disposed). `TfStickySaveBar` is passed through `TfPage.bottom` from the workspace general section, so it stays visible while the page scrolls (`settings_sticky_bar_test.dart`). `TfRadioTile` is one tab stop and one announced radio (checked, in a group, enabled or not); `TfInteractive` now states tap and focus on labelled controls. `TfMenu` and `TfSelect` entries announce `selected`. The menu panel keeps a transparent margin so its shadow is not clipped (`tf_menu_panel_test.dart` golden, with shadows on). Tabs re-measure on size change and draw the chosen underline from the first frame; skeleton shimmer follows the reading direction and restarts when reduce-motion is switched off.

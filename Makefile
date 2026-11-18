@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate seed purge tick web proto gen proto-lint proto-breaking check test integration prod-config backup restore-smoke version
+.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate seed purge tick web proto gen proto-lint proto-breaking check test integration perf prod-config backup restore-smoke version
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -169,3 +169,17 @@ test:
 # End-to-end flows through the whole app with fakes (builds a desktop runner, so it is slow).
 integration:
 	cd app && flutter test integration_test
+
+# The performance smoke: cold start to first list and scroll cost on 5,000 vs
+# small workspaces, in the debug test VM (they prove cost does not grow with
+# task count; they are not fps figures). Then the recipe for the real numbers.
+perf:
+	cd app && flutter test test/perf test/features/tasks/work_perf_test.dart
+	@echo ""
+	@echo "Profile-mode numbers (a person with a device does this; record them in"
+	@echo "docs/phases/phase-49-polish-motion-release-qa.md, Part C Performance):"
+	@echo "  cd app && flutter run --profile -d <device>   # a mid Android phone; also -d macos, and -d chrome for web"
+	@echo "  Open a project with 5,000 tasks (`make seed` makes a small demo workspace only; create 5,000 tasks by import or script) and read, in DevTools:"
+	@echo "   - Performance > Frame chart: scroll the list and the board; frames stay under 18 ms (55 fps or better)."
+	@echo "   - Timeline / app start: time from launch to the first task row painted; target under 2 s."
+	@echo "  Debug and run-lite builds are not representative; always profile or release."
