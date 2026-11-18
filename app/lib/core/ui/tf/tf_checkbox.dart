@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_interactive.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -98,7 +99,7 @@ class TfToggle extends StatelessWidget {
       semanticLabel: label,
       builder: (context, states) {
         final track = AnimatedContainer(
-          duration: const Duration(milliseconds: 120),
+          duration: TfMotion.of(context, TfDuration.fast),
           width: 32,
           height: 18,
           padding: const EdgeInsets.all(2),

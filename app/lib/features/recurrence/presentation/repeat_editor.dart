@@ -505,7 +505,7 @@ class _Timing extends StatelessWidget {
         key: const Key('repeat-time'),
         dense: true,
         contentPadding: EdgeInsets.zero,
-        leading: const TfIcon(TfIcons.clock),
+        leading: const TfIcon(TfIcons.clock, size: TfIconSize.control),
         title: Text(
           context.l10n.grpDRepeatAt(context.localDigits(draft.atTime)),
         ),

@@ -113,7 +113,10 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     hintText: context.l10n.grpFSearchHint,
-                    prefixIcon: const TfIcon(TfIcons.search),
+                    prefixIcon: const TfIcon(
+                      TfIcons.search,
+                      size: TfIconSize.control,
+                    ),
                     suffixIcon: state.loading
                         ? const Padding(
                             padding: EdgeInsets.all(12),
@@ -336,7 +339,7 @@ class _Recent extends StatelessWidget {
           ListTile(
             key: Key('recent-$q'),
             dense: true,
-            leading: const TfIcon(TfIcons.history),
+            leading: const TfIcon(TfIcons.history, size: TfIconSize.control),
             title: Text(q),
             onTap: () => onPick(q),
           ),

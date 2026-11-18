@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,8 +111,8 @@ class _SsoSlugDialogState extends State<_SsoSlugDialog> {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    return AlertDialog(
-      title: Text(t.ssoContinue),
+    return TfDialogFrame(
+      title: t.ssoContinue,
       content: TextField(
         key: const Key('sso-slug'),
         controller: _slug,
@@ -123,15 +125,17 @@ class _SsoSlugDialogState extends State<_SsoSlugDialog> {
         onSubmitted: (v) => Navigator.pop(context, v.trim().toLowerCase()),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpBCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(t.grpBCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('sso-go'),
+          label: t.ssoContinueShort,
+          variant: TfButtonVariant.primary,
           onPressed: () =>
               Navigator.pop(context, _slug.text.trim().toLowerCase()),
-          child: Text(t.ssoContinueShort),
         ),
       ],
     );

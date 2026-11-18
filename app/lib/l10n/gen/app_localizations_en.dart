@@ -110,6 +110,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contrastLabel => 'High contrast';
 
   @override
+  String get reduceMotionLabel => 'Reduce motion';
+
+  @override
+  String get reduceMotionHelp => 'Animations become instant fades';
+
+  @override
   String get contrastHelp => 'Stronger text and borders for easier reading';
 
   @override
@@ -2950,6 +2956,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grpFColTitle => 'Title';
+
+  @override
+  String get tblSelectAll => 'Select all tasks';
 
   @override
   String grpFTrashTitle(String name) {
@@ -9378,6 +9387,12 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   String get contrastLabel => '[Ĥíĝĥ çöñţŕåšţ ~~~~]';
 
   @override
+  String get reduceMotionLabel => '[Ŕéðûçé möţíöñ ~~~]';
+
+  @override
+  String get reduceMotionHelp => '[Åñíméţíöñš ƀéçöé~ íñšţåñţ ~~~~~~]';
+
+  @override
   String get contrastHelp =>
       '[Šţŕöñĝéŕ ţéxţ åñð ƀöŕðéŕš ƒöŕ éåšíéŕ ŕéåðíñĝ ~~~~~~~~~~~~~~]';
 
@@ -12257,6 +12272,9 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get grpFColTitle => '[Ţíţłé ~]';
+
+  @override
+  String get tblSelectAll => '[Šéłéçţ áłł ţáşķş ~]';
 
   @override
   String grpFTrashTitle(String name) {

@@ -101,13 +101,19 @@ void main() {
     await _pump(tester, const LanguageScreen());
     await tester.tap(find.byKey(const Key('language-fa')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('جلالی (هجری شمسی)'));
     await tester.tap(find.text('جلالی (هجری شمسی)'));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('ارقام فارسی (۰۱۲۳)'));
     await tester.tap(find.text('ارقام فارسی (۰۱۲۳)'));
     await tester.pumpAndSettle();
 
     final previewFinder = find.byKey(const Key('date-preview'));
-    await tester.scrollUntilVisible(previewFinder, 200);
+    await tester.scrollUntilVisible(
+      previewFinder,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     final preview = tester.widget<Text>(previewFinder);
     expect(preview.data, matches(RegExp(r'^[۰-۹]+ \S+ ۱[۰-۹]{3}$')));
   });

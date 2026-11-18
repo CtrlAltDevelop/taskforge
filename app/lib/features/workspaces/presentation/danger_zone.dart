@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/page/tf_danger_zone.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
@@ -15,13 +16,19 @@ class DangerZone extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
     final notifier = ref.read(workspacesProvider.notifier);
-    final typed = await showDialog<String>(
-      context: context,
-      builder: (_) => _ConfirmDeleteDialog(name: workspace.name),
+    final confirmed = await showTfTypedConfirm(
+      context,
+      title: l10n.grpJDeleteWorkspaceQ,
+      phrase: workspace.name,
+      promptLabel: l10n.grpJTypeNameToConfirm(workspace.name),
+      confirmLabel: l10n.grpJDelete,
+      cancelLabel: l10n.cancel,
+      fieldKey: const Key('confirm-name'),
+      confirmKey: const Key('confirm-delete'),
     );
-    if (typed == null) return;
+    if (!confirmed) return;
     try {
-      await notifier.delete(workspace, typed);
+      await notifier.delete(workspace, workspace.name);
     } on WorkspaceException catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(workspaceErrorMessage(e, l10n))),
@@ -49,77 +56,15 @@ class DangerZone extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme.error;
-    return Padding(
-      padding: const EdgeInsets.only(top: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.grpJDangerZone,
-            style: Theme.of(context).textTheme.titleLarge
-                ?.copyWith(color: color),
-          ),
-          const SizedBox(height: 8),
-          Text(context.l10n.grpJDangerZoneBody),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            key: const Key('delete-workspace'),
-            style: OutlinedButton.styleFrom(foregroundColor: color),
-            onPressed: () => _delete(context, ref),
-            child: Text(context.l10n.grpJDeleteWorkspace),
-          ),
-        ],
+  Widget build(BuildContext context, WidgetRef ref) => TfDangerZone(
+    title: context.l10n.grpJDangerZone,
+    description: context.l10n.grpJDangerZoneBody,
+    actions: [
+      TfDangerAction(
+        label: context.l10n.grpJDeleteWorkspace,
+        buttonKey: const Key('delete-workspace'),
+        onPressed: () => _delete(context, ref),
       ),
-    );
-  }
-}
-
-class _ConfirmDeleteDialog extends StatefulWidget {
-  const _ConfirmDeleteDialog({required this.name});
-
-  final String name;
-
-  @override
-  State<_ConfirmDeleteDialog> createState() => _ConfirmDeleteDialogState();
-}
-
-class _ConfirmDeleteDialogState extends State<_ConfirmDeleteDialog> {
-  final _typed = TextEditingController();
-
-  @override
-  void dispose() {
-    _typed.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(context.l10n.grpJDeleteWorkspaceQ),
-      content: TextField(
-        key: const Key('confirm-name'),
-        controller: _typed,
-        autofocus: true,
-        onChanged: (_) => setState(() {}),
-        decoration: InputDecoration(
-          labelText: context.l10n.grpJTypeNameToConfirm(widget.name),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.cancel),
-        ),
-        FilledButton(
-          key: const Key('confirm-delete'),
-          onPressed: _typed.text == widget.name
-              ? () => Navigator.pop(context, _typed.text)
-              : null,
-          child: Text(context.l10n.grpJDelete),
-        ),
-      ],
-    );
-  }
+    ],
+  );
 }

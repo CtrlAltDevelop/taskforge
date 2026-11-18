@@ -1,3 +1,9 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -43,10 +49,10 @@ class MembersScreen extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: TfAppBar(
-          leading: IconButton(
+          leading: TfIconButton(
             key: const Key('back-home'),
+            icon: TfIcons.arrowStart,
             tooltip: context.l10n.grpJBack,
-            icon: const BackButtonIcon(),
             onPressed: () => context.go('/'),
           ),
           title: Text(context.l10n.grpJMembers),
@@ -54,10 +60,11 @@ class MembersScreen extends ConsumerWidget {
             PermissionGate(
               permission: Perm.memberInvite,
               disabledWhenDenied: true,
-              child: TextButton.icon(
+              child: TfButton(
                 key: const Key('open-invite'),
-                icon: const TfIcon(TfIcons.userPlus),
-                label: Text(context.l10n.grpJInvite),
+                label: context.l10n.grpJInvite,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.userPlus,
                 onPressed: () => showDialog<void>(
                   context: context,
                   builder: (_) => const InviteDialog(),
@@ -97,18 +104,20 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
   Future<bool> _confirm(String title, String body, String action) async =>
       await showDialog<bool>(
         context: context,
-        builder: (dialog) => AlertDialog(
-          title: Text(title),
+        builder: (dialog) => TfDialogFrame(
+          title: title,
           content: Text(body),
           actions: [
-            TextButton(
+            TfButton(
+              label: context.l10n.cancel,
+              variant: TfButtonVariant.ghost,
               onPressed: () => Navigator.of(dialog).pop(false),
-              child: Text(context.l10n.cancel),
             ),
-            FilledButton(
+            TfButton(
               key: const Key('confirm-action'),
+              label: action,
+              variant: TfButtonVariant.primary,
               onPressed: () => Navigator.of(dialog).pop(true),
-              child: Text(action),
             ),
           ],
         ),
@@ -158,10 +167,11 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
               if (!m.isOwner)
                 PermissionGate(
                   permission: Perm.memberRemove,
-                  child: TextButton.icon(
+                  child: TfButton(
                     key: const Key('profile-remove'),
-                    icon: const TfIcon(TfIcons.userMinus),
-                    label: Text(context.l10n.grpJRemoveFromWorkspace),
+                    label: context.l10n.grpJRemoveFromWorkspace,
+                    variant: TfButtonVariant.ghost,
+                    icon: TfIcons.userMinus,
                     onPressed: () {
                       Navigator.of(sheet).pop();
                       _remove(workspaceId, m);
@@ -214,8 +224,9 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                 m.email.toLowerCase().contains(q))
               m,
         ];
-        return ListView(
-          padding: const EdgeInsets.all(16),
+        return TfPage(
+          maxWidth: TfPageWidth.wide,
+          lazy: true,
           children: [
             TextField(
               key: const Key('member-search'),
@@ -227,52 +238,60 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
             ),
             const SizedBox(height: 8),
             for (final m in shown)
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                clipBehavior: Clip.antiAlias,
-                child: ListTile(
-                  key: Key('member-${m.userId}'),
-                  onTap: () => _showProfile(workspace.id, m),
-                  leading: CircleAvatar(child: Text(m.initials)),
-                  title: Text(m.label),
-                  subtitle: Text(
-                    '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
-                    '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RolePicker(key: Key('role-${m.userId}'), member: m),
-                      if (!m.isOwner)
-                        PermissionGate(
-                          permission: Perm.memberRemove,
-                          child: IconButton(
-                            key: Key('remove-${m.userId}'),
-                            tooltip: context.l10n.grpJRemoveMember(m.label),
-                            icon: const TfIcon(TfIcons.userMinus),
-                            onPressed: () => _remove(workspace.id, m),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                child: TfPanel(
+                  padding: EdgeInsets.zero,
+                  child: TfRow(
+                    key: Key('member-${m.userId}'),
+                    title: m.label,
+                    subtitle:
+                        '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
+                        '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
+                    leading: CircleAvatar(child: Text(m.initials)),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: RolePicker(
+                            key: Key('role-${m.userId}'),
+                            member: m,
                           ),
                         ),
-                    ],
+                        if (!m.isOwner)
+                          PermissionGate(
+                            permission: Perm.memberRemove,
+                            child: TfIconButton(
+                              key: Key('remove-${m.userId}'),
+                              icon: TfIcons.userMinus,
+                              tooltip: context.l10n.grpJRemoveMember(m.label),
+                              onPressed: () => _remove(workspace.id, m),
+                            ),
+                          ),
+                      ],
+                    ),
+                    onTap: () => _showProfile(workspace.id, m),
                   ),
                 ),
               ),
             const Divider(),
             if (workspace.isOwner)
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                clipBehavior: Clip.antiAlias,
-                child: ListTile(
-                  key: const Key('owner-cannot-leave'),
-                  leading: const TfIcon(TfIcons.info),
-                  title: Text(context.l10n.grpJOwnerCannotLeave),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                child: TfPanel(
+                  padding: EdgeInsets.zero,
+                  child: TfRow(
+                    key: const Key('owner-cannot-leave'),
+                    title: context.l10n.grpJOwnerCannotLeave,
+                    leading: const TfIcon(TfIcons.info),
+                  ),
                 ),
               )
             else
-              OutlinedButton(
+              TfButton(
                 key: const Key('leave-workspace'),
+                label: context.l10n.grpJLeaveWorkspace,
                 onPressed: () => _leave(workspace.id, workspace.name),
-                child: Text(context.l10n.grpJLeaveWorkspace),
               ),
           ],
         );

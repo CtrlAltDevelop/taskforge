@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -129,9 +134,9 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
     final project = _w.config.projectId.isNotEmpty
         ? _w.config.projectId
         : widget.projectId;
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('widget-editor'),
-      title: Text(context.l10n.grpIWidget),
+      title: context.l10n.grpIWidget,
       content: SizedBox(
         width: 640,
         child: SingleChildScrollView(
@@ -150,81 +155,60 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                 spacing: 12,
                 runSpacing: 8,
                 children: [
-                  DropdownButton<WidgetKind>(
+                  TfSelectField(
                     key: const Key('widget-kind'),
-                    value: _w.kind,
-                    items: [
+                    options: {
                       for (final k in WidgetKind.values)
-                        DropdownMenuItem(
-                          value: k,
-                          child: Text(k.labelIn(context.l10n)),
-                        ),
-                    ],
-                    onChanged: (k) => k == null ? null : _kind(k),
+                        k: k.labelIn(context.l10n),
+                    },
+                    value: _w.kind,
+                    onChanged: (k) => _kind(k),
                   ),
                   if (_w.kind != WidgetKind.burndown)
-                    DropdownButton<Measure>(
+                    TfSelectField(
                       key: const Key('widget-measure'),
-                      value: _w.config.measure,
-                      items: [
+                      options: {
                         for (final m in Measure.values)
-                          DropdownMenuItem(
-                            value: m,
-                            child: Text(m.labelIn(context.l10n)),
-                          ),
-                      ],
-                      onChanged: (m) => m == null
-                          ? null
-                          : _config(_w.config.copyWith(measure: m)),
+                          m: m.labelIn(context.l10n),
+                      },
+                      value: _w.config.measure,
+                      onChanged: (m) => _config(_w.config.copyWith(measure: m)),
                     ),
                   if (_w.kind.picksGrouping || _w.kind == WidgetKind.line)
-                    DropdownButton<String>(
+                    TfSelectField(
                       key: const Key('widget-group'),
+                      options: {
+                        for (final g in groups.entries)
+                          g.key:
+                              groupingLabelIn(context.l10n, g.key) ?? g.value,
+                      },
                       value: groups.containsKey(_w.config.groupBy)
                           ? _w.config.groupBy
                           : null,
-                      hint: Text(context.l10n.grpIGroupBy),
-                      items: [
-                        for (final g in groups.entries)
-                          DropdownMenuItem(
-                            value: g.key,
-                            child: Text(
-                              groupingLabelIn(context.l10n, g.key) ?? g.value,
-                            ),
-                          ),
-                      ],
-                      onChanged: (g) => g == null
-                          ? null
-                          : _config(_w.config.copyWith(groupBy: g)),
+                      onChanged: (g) => _config(_w.config.copyWith(groupBy: g)),
+                      hint: context.l10n.grpIGroupBy,
                     ),
                   if (_w.kind != WidgetKind.burndown &&
                       _w.kind != WidgetKind.workload)
-                    DropdownButton<Scope>(
+                    TfSelectField(
                       key: const Key('widget-scope'),
-                      value: _w.config.scope,
-                      items: [
+                      options: {
                         for (final s in Scope.values)
-                          DropdownMenuItem(
-                            value: s,
-                            child: Text(s.labelIn(context.l10n)),
-                          ),
-                      ],
-                      onChanged: (s) => s == null
-                          ? null
-                          : _config(_w.config.copyWith(scope: s)),
+                          s: s.labelIn(context.l10n),
+                      },
+                      value: _w.config.scope,
+                      onChanged: (s) => _config(_w.config.copyWith(scope: s)),
                     ),
                 ],
               ),
               if (_w.kind == WidgetKind.burndown) _sprintPicker(project),
               const SizedBox(height: 12),
               if (_w.kind != WidgetKind.burndown)
-                TextField(
+                TfTextField(
                   key: const Key('widget-tfql'),
                   controller: _tfql,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.grpIFilterTfqlOptional,
-                    hintText: 'priority = high AND assignee = me',
-                  ),
+                  label: context.l10n.grpIFilterTfqlOptional,
+                  hint: 'priority = high AND assignee = me',
                   onChanged: (v) =>
                       _config(_w.config.copyWith(tfql: v, filterId: '')),
                 ),
@@ -250,16 +234,18 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpICancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpICancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('widget-save'),
+          label: context.l10n.grpIDone,
+          variant: TfButtonVariant.primary,
           onPressed: _canSave
               ? () => Navigator.of(context).pop(_w.copyWith(title: _title.text))
               : null,
-          child: Text(context.l10n.grpIDone),
         ),
       ],
     );
@@ -278,28 +264,22 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
       spacing: 12,
       children: [
         if (widget.projectId.isEmpty)
-          DropdownButton<String>(
+          TfSelectField(
             key: const Key('widget-project'),
+            options: {for (final p in projects) p.id: p.name},
             value: projects.any((p) => p.id == chosen) ? chosen : null,
-            hint: Text(context.l10n.grpIProject),
-            items: [
-              for (final p in projects)
-                DropdownMenuItem(value: p.id, child: Text(p.name)),
-            ],
             onChanged: (p) =>
-                _config(_w.config.copyWith(projectId: p ?? '', sprintId: '')),
+                _config(_w.config.copyWith(projectId: p, sprintId: '')),
+            hint: context.l10n.grpIProject,
           ),
-        DropdownButton<String>(
+        TfSelectField(
           key: const Key('widget-sprint'),
+          options: {for (final s in sprints ?? const []) s.id: s.name},
           value: sprints?.any((s) => s.id == _w.config.sprintId) == true
               ? _w.config.sprintId
               : null,
-          hint: Text(context.l10n.grpISprint),
-          items: [
-            for (final s in sprints ?? const [])
-              DropdownMenuItem(value: s.id, child: Text(s.name)),
-          ],
           onChanged: (s) => _config(_w.config.copyWith(sprintId: s ?? '')),
+          hint: context.l10n.grpISprint,
         ),
       ],
     );

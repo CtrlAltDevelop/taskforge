@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
@@ -195,9 +196,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester
-          .widget<DropdownButtonFormField<FieldType>>(
-            find.byKey(const Key('field-type')),
-          )
+          .widget<TfSelectField<FieldType>>(find.byKey(const Key('field-type')))
           .onChanged,
       isNull,
     );

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -79,10 +80,10 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
     final first = ref.watch(deliveriesProvider(widget.webhookId));
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-developer'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpEBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/developer'),
         ),
         title: Text(context.l10n.devDeliveriesTitle),
@@ -108,10 +109,10 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: Center(
-                    child: OutlinedButton(
+                    child: TfButton(
                       key: const Key('load-more-deliveries'),
+                      label: context.l10n.devLoadMore,
                       onPressed: _loading ? null : () => _loadMore(cursor),
-                      child: Text(context.l10n.devLoadMore),
                     ),
                   ),
                 ),
@@ -174,11 +175,11 @@ class _DeliveryTile extends StatelessWidget {
         const SizedBox(height: 8),
         Align(
           alignment: AlignmentDirectional.centerStart,
-          child: OutlinedButton.icon(
+          child: TfButton(
             key: Key('resend-${d.id}'),
+            label: t.devResend,
+            icon: TfIcons.undo,
             onPressed: onResend,
-            icon: const TfIcon(TfIcons.undo),
-            label: Text(t.devResend),
           ),
         ),
       ],

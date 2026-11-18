@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -193,10 +195,10 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
           child: Row(
             children: [
               Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
-              IconButton(
+              TfIconButton(
                 key: const Key('rule-close'),
+                icon: TfIcons.close,
                 tooltip: context.l10n.grpGClose,
-                icon: const TfIcon(TfIcons.close),
                 onPressed: () => Navigator.of(context).pop(false),
               ),
             ],
@@ -273,14 +275,12 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                 if (!_ro)
                   Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: OutlinedButton.icon(
+                    child: TfButton(
                       key: const Key('add-action'),
-                      icon: const TfIcon(TfIcons.plus),
-                      label: Text(
-                        _actions.length >= maxActionsPerRule
-                            ? context.l10n.grpGActionLimit(maxActionsPerRule)
-                            : context.l10n.grpGAddAction,
-                      ),
+                      label: _actions.length >= maxActionsPerRule
+                          ? context.l10n.grpGActionLimit(maxActionsPerRule)
+                          : context.l10n.grpGAddAction,
+                      icon: TfIcons.plus,
                       onPressed: _actions.length >= maxActionsPerRule
                           ? null
                           : _addAction,
@@ -298,10 +298,11 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                 if (_conflict)
                   Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: TextButton(
+                    child: TfButton(
                       key: const Key('rule-reload'),
+                      label: context.l10n.grpGLoadLatest,
+                      variant: TfButtonVariant.ghost,
                       onPressed: _reload,
-                      child: Text(context.l10n.grpGLoadLatest),
                     ),
                   ),
               ],
@@ -314,21 +315,21 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
+                TfButton(
+                  label: context.l10n.grpGCancel,
+                  variant: TfButtonVariant.ghost,
                   onPressed: _busy
                       ? null
                       : () => Navigator.of(context).pop(false),
-                  child: Text(context.l10n.grpGCancel),
                 ),
                 const SizedBox(width: 8),
-                FilledButton(
+                TfButton(
                   key: const Key('rule-save'),
+                  label: _rule == null
+                      ? context.l10n.grpGCreate
+                      : context.l10n.grpGSave,
+                  variant: TfButtonVariant.primary,
                   onPressed: _busy ? null : _save,
-                  child: Text(
-                    _rule == null
-                        ? context.l10n.grpGCreate
-                        : context.l10n.grpGSave,
-                  ),
                 ),
               ],
             ),
@@ -355,30 +356,33 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      key: Key('card-$keyName'),
-      margin: const EdgeInsets.only(top: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    label.toUpperCase(),
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.primary,
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: TfPanel(
+        key: Key('card-$keyName'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      label.toUpperCase(),
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   ),
-                ),
-                ?trailing,
-              ],
-            ),
-            const SizedBox(height: 8),
-            child,
-          ],
+                  ?trailing,
+                ],
+              ),
+              const SizedBox(height: 8),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -402,22 +406,22 @@ class _CardTools extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      IconButton(
+      TfIconButton(
         key: Key('action-up-$index'),
+        icon: TfIcons.arrowUp,
         tooltip: context.l10n.grpGMoveUp,
-        icon: const TfIcon(TfIcons.arrowUp, size: 18),
         onPressed: index == 0 ? null : () => onMove(-1),
       ),
-      IconButton(
+      TfIconButton(
         key: Key('action-down-$index'),
+        icon: TfIcons.arrowDown,
         tooltip: context.l10n.grpGMoveDown,
-        icon: const TfIcon(TfIcons.arrowDown, size: 18),
         onPressed: index >= count - 1 ? null : () => onMove(1),
       ),
-      IconButton(
+      TfIconButton(
         key: Key('action-remove-$index'),
+        icon: TfIcons.trash,
         tooltip: context.l10n.grpGRemoveAction,
-        icon: const TfIcon(TfIcons.trash, size: 18),
         onPressed: onRemove,
       ),
     ],

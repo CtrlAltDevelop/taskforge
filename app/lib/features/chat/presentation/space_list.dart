@@ -52,7 +52,10 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
           child: TextField(
             key: const Key('chat-search'),
             decoration: InputDecoration(
-              prefixIcon: const TfIcon(TfIcons.search),
+              prefixIcon: const TfIcon(
+                TfIcons.search,
+                size: TfIconSize.control,
+              ),
               hintText: l10n.chatSearchHint,
               isDense: true,
               border: const OutlineInputBorder(),

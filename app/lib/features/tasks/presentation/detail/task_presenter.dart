@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/features/tasks/application/task_detail_state.dart';
 
 /// Builds what a route shows for the task in [current].
@@ -52,7 +53,7 @@ class TaskPresenter {
   void _push(TaskPresentationKind kind, {required bool animate}) {
     final nav = navigator();
     final duration = animate
-        ? const Duration(milliseconds: 160)
+        ? TfMotion.of(nav.context, TfDuration.base)
         : Duration.zero;
     Widget page(BuildContext context) => builder(context, current, kind);
     final Route<void> route = switch (kind) {

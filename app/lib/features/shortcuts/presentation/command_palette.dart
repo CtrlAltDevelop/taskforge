@@ -334,7 +334,10 @@ class _CommandPaletteState extends ConsumerState<CommandPalette> {
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: context.l10n.grpGPaletteHint,
-                    prefixIcon: const TfIcon(TfIcons.command),
+                    prefixIcon: const TfIcon(
+                      TfIcons.command,
+                      size: TfIconSize.control,
+                    ),
                     suffixIcon: _searching
                         ? const Padding(
                             padding: EdgeInsets.all(12),
@@ -417,7 +420,7 @@ class _ActionRow extends StatelessWidget {
       key: Key('palette-row-${action.id}'),
       dense: true,
       selected: selected,
-      leading: const TfIcon(TfIcons.bolt),
+      leading: const TfIcon(TfIcons.bolt, size: TfIconSize.control),
       title: Text(action.titleIn(context.l10n)),
       subtitle: Text(action.groupIn(context.l10n)),
       trailing: keys == null ? null : _Keycap(keys!),

@@ -98,20 +98,26 @@ class AttachmentViewer extends ConsumerWidget {
                     key: const Key('viewer-download'),
                     tooltip: context.l10n.grpHDownload,
                     onPressed: () => _open(context, ref),
-                    icon: const TfIcon(TfIcons.download),
+                    icon: const TfIcon(
+                      TfIcons.download,
+                      size: TfIconSize.control,
+                    ),
                   ),
                   if (onDelete != null)
                     IconButton(
                       key: const Key('viewer-delete'),
                       tooltip: context.l10n.grpHDelete,
                       onPressed: () => _delete(context),
-                      icon: const TfIcon(TfIcons.trash),
+                      icon: const TfIcon(
+                        TfIcons.trash,
+                        size: TfIconSize.control,
+                      ),
                     ),
                   IconButton(
                     key: const Key('viewer-close'),
                     tooltip: context.l10n.grpHClose,
                     onPressed: () => Navigator.pop(context),
-                    icon: const TfIcon(TfIcons.close),
+                    icon: const TfIcon(TfIcons.close, size: TfIconSize.control),
                   ),
                 ],
               ),
@@ -341,7 +347,10 @@ class _VideoPreviewState extends ConsumerState<_VideoPreview> {
           key: const Key('video-toggle'),
           tooltip: playing ? context.l10n.grpHPause : context.l10n.grpHPlay,
           onPressed: () => playing ? c.pause() : c.play(),
-          icon: TfIcon(playing ? TfIcons.pause : TfIcons.play),
+          icon: TfIcon(
+            playing ? TfIcons.pause : TfIcons.play,
+            size: TfIconSize.control,
+          ),
         ),
       ],
     );

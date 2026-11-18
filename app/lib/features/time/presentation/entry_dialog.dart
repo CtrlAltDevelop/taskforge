@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -123,35 +128,30 @@ class _EntryDialogState extends State<_EntryDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(
-      widget.existing == null
-          ? context.l10n.grpAAddTime
-          : context.l10n.grpAEditTime,
-    ),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: widget.existing == null
+        ? context.l10n.grpAAddTime
+        : context.l10n.grpAEditTime,
     content: SizedBox(
       width: 360,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.existing?.running != true)
-            TextField(
+            TfTextField(
               key: const Key('entry-duration'),
               controller: _duration,
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: context.l10n.grpATimeSpent,
-                hintText: '1h 30m',
-                errorText: _problem,
-              ),
+              label: context.l10n.grpATimeSpent,
+              hint: '1h 30m',
+              errorText: _problem,
               onSubmitted: (_) => _save(),
+              autofocus: true,
             ),
           const SizedBox(height: 12),
           if (widget.day == null && widget.existing?.running != true)
-            ListTile(
+            TfRow(
               key: const Key('entry-date'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(context.localIso(_date)),
+              title: context.localIso(_date),
               trailing: const TfIcon(TfIcons.calendar),
               onTap: _pickDate,
             ),
@@ -163,25 +163,26 @@ class _EntryDialogState extends State<_EntryDialog> {
             decoration: InputDecoration(labelText: context.l10n.grpANote),
           ),
           const SizedBox(height: 12),
-          SwitchListTile(
+          TfToggle(
             key: const Key('entry-billable'),
-            contentPadding: EdgeInsets.zero,
-            title: Text(context.l10n.grpABillable),
             value: _billable,
             onChanged: (v) => setState(() => _billable = v),
+            label: context.l10n.grpABillable,
           ),
         ],
       ),
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpACancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.l10n.grpACancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('entry-save'),
+        label: context.l10n.grpASave,
+        variant: TfButtonVariant.primary,
         onPressed: _save,
-        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -229,28 +230,28 @@ class _EstimateDialogState extends State<_EstimateDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.grpAEstimate),
-    content: TextField(
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: context.l10n.grpAEstimate,
+    content: TfTextField(
       key: const Key('estimate-field'),
       controller: _text,
-      autofocus: true,
-      decoration: InputDecoration(
-        labelText: context.l10n.grpAEstimatedTime,
-        hintText: context.l10n.grpAEmptyForNone,
-        errorText: _problem,
-      ),
+      label: context.l10n.grpAEstimatedTime,
+      hint: context.l10n.grpAEmptyForNone,
+      errorText: _problem,
       onSubmitted: (_) => _save(),
+      autofocus: true,
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpACancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.l10n.grpACancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('estimate-save'),
+        label: context.l10n.grpASave,
+        variant: TfButtonVariant.primary,
         onPressed: _save,
-        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -260,18 +261,20 @@ class _EstimateDialogState extends State<_EstimateDialog> {
 Future<bool> confirmDelete(BuildContext context) async =>
     await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.grpADeleteTimeTitle),
+      builder: (context) => TfDialogFrame(
+        title: context.l10n.grpADeleteTimeTitle,
         content: Text(context.l10n.grpADeleteTimeBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: context.l10n.grpAKeep,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text(context.l10n.grpAKeep),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete'),
+            label: context.l10n.grpADelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(context.l10n.grpADelete),
           ),
         ],
       ),

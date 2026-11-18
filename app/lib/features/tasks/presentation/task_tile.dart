@@ -233,7 +233,11 @@ class TaskTile extends StatelessWidget {
                 PopupMenuButton<TaskAction>(
                   key: Key('task-menu-${task.id}'),
                   tooltip: context.l10n.grpFMore,
-                  icon: TfIcon(TfIcons.moreVertical, color: c.textMuted),
+                  icon: TfIcon(
+                    TfIcons.moreVertical,
+                    size: TfIconSize.control,
+                    color: c.textMuted,
+                  ),
                   onSelected: onAction,
                   itemBuilder: (_) => [
                     for (final a in actions)

@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -73,12 +75,11 @@ class FieldInput extends StatelessWidget {
       label: _label,
       clearable: !field.required,
     ),
-    FieldType.checkbox => SwitchListTile(
+    FieldType.checkbox => TfToggle(
       key: _key,
-      contentPadding: EdgeInsets.zero,
-      title: Text(_label),
       value: value == 'true',
       onChanged: enabled ? (on) => onChanged(on ? 'true' : 'false') : null,
+      label: _label,
     ),
     FieldType.select => _Choice<String>(
       key: _key,
@@ -352,9 +353,9 @@ class _DateInput extends StatelessWidget {
         errorText: errorText,
         border: const OutlineInputBorder(),
         suffixIcon: clearable && value.isNotEmpty && enabled
-            ? IconButton(
+            ? TfIconButton(
+                icon: TfIcons.close,
                 tooltip: context.l10n.grpIClear,
-                icon: const TfIcon(TfIcons.close),
                 onPressed: () => onChanged(''),
               )
             : const TfIcon(TfIcons.calendar, size: 18),

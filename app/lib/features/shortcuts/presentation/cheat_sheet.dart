@@ -60,7 +60,7 @@ class CheatSheet extends ConsumerWidget {
                   IconButton(
                     key: const Key('cheat-close'),
                     tooltip: context.l10n.grpGClose,
-                    icon: const TfIcon(TfIcons.close),
+                    icon: const TfIcon(TfIcons.close, size: TfIconSize.control),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],

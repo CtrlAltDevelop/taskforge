@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -127,15 +128,17 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
           ),
         ],
         const SizedBox(height: 24),
-        FilledButton(
+        TfButton(
           key: const Key('join-workspace'),
+          label: context.l10n.grpJJoin,
+          variant: TfButtonVariant.primary,
           onPressed: _busy ? null : _accept,
-          child: Text(context.l10n.grpJJoin),
         ),
-        TextButton(
+        TfButton(
           key: const Key('decline-invite'),
+          label: context.l10n.grpJDecline,
+          variant: TfButtonVariant.ghost,
           onPressed: _busy ? null : _decline,
-          child: Text(context.l10n.grpJDecline),
         ),
       ],
     );
@@ -158,10 +161,11 @@ class _Message extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       Text(text, key: const Key('invite-message'), textAlign: TextAlign.center),
-      TextButton(
+      TfButton(
         key: const Key('invite-home'),
+        label: context.l10n.grpJGoToTaskForge,
+        variant: TfButtonVariant.ghost,
         onPressed: () => context.go('/'),
-        child: Text(context.l10n.grpJGoToTaskForge),
       ),
     ],
   );

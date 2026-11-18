@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -28,18 +32,18 @@ class SubmissionsScreen extends ConsumerWidget {
     final page = ref.watch(submissionsProvider(formId));
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-forms'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpEBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/forms'),
         ),
         title: Text(context.l10n.formsSubmissions),
         actions: [
-          IconButton(
+          TfIconButton(
             key: const Key('refresh-submissions'),
+            icon: TfIcons.refresh,
             tooltip: context.l10n.devRetry,
-            icon: const TfIcon(TfIcons.refresh),
             onPressed: () => ref.invalidate(submissionsProvider(formId)),
           ),
         ],
@@ -60,37 +64,32 @@ class SubmissionsScreen extends ConsumerWidget {
             : ListView(
                 children: [
                   for (final s in data.submissions)
-                    Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        key: Key('submission-${s.id}'),
-                        leading: const TfIcon(TfIcons.inbox),
-                        title: Text(
-                          s.taskTitle.isEmpty
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                      child: TfPanel(
+                        padding: EdgeInsets.zero,
+                        child: TfRow(
+                          key: Key('submission-${s.id}'),
+                          title: s.taskTitle.isEmpty
                               ? context.l10n.formsTaskGone
                               : '${s.taskKey} ${s.taskTitle}',
-                        ),
-                        subtitle: Text(
-                          [
+                          subtitle: [
                             s.reference,
                             if (s.statusName.isNotEmpty) s.statusName,
                             if (s.email.isNotEmpty) s.email,
                             _when(context, s.at),
                           ].join(' · '),
-                        ),
-                        onTap: s.taskTitle.isEmpty
-                            ? null
-                            : () => context.go('/projects/${s.projectId}'),
-                        trailing: IconButton(
-                          tooltip: context.l10n.formsCopyReference,
-                          icon: const TfIcon(TfIcons.copy),
-                          onPressed: () => Clipboard.setData(
-                            ClipboardData(text: s.reference),
+                          leading: const TfIcon(TfIcons.inbox),
+                          trailing: TfIconButton(
+                            icon: TfIcons.copy,
+                            tooltip: context.l10n.formsCopyReference,
+                            onPressed: () => Clipboard.setData(
+                              ClipboardData(text: s.reference),
+                            ),
                           ),
+                          onTap: s.taskTitle.isEmpty
+                              ? null
+                              : () => context.go('/projects/${s.projectId}'),
                         ),
                       ),
                     ),

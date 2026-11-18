@@ -1,5 +1,11 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
-import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,11 +34,12 @@ class ImportScreen extends ConsumerWidget {
         title: Text(context.l10n.grpCImpTitle),
         actions: [
           if (allowed)
-            TextButton.icon(
+            TfButton(
               key: const Key('open-export'),
+              label: context.l10n.grpCImpExport,
+              variant: TfButtonVariant.ghost,
+              icon: TfIcons.download,
               onPressed: () => showExportDialog(context),
-              icon: const TfIcon(TfIcons.download),
-              label: Text(context.l10n.grpCImpExport),
             ),
         ],
       ),
@@ -42,17 +49,14 @@ class ImportScreen extends ConsumerWidget {
               illustration: TfIllustrationKind.noAccess,
               title: context.l10n.grpCImpDenied,
             )
-          : ContentWidth(
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: const [
-                  ImportWizardCard(),
-                  SizedBox(height: 24),
-                  ImportHistory(),
-                  SizedBox(height: 24),
-                  PlaceholdersPanel(),
-                ],
-              ),
+          : TfPage(
+              children: const [
+                ImportWizardCard(),
+                SizedBox(height: 24),
+                ImportHistory(),
+                SizedBox(height: 24),
+                PlaceholdersPanel(),
+              ],
             ),
     );
   }
@@ -109,57 +113,60 @@ class ImportHistory extends ConsumerWidget {
               : Column(
                   children: [
                     for (final job in list)
-                      Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: TfSpace.xs,
                         ),
-                        clipBehavior: Clip.antiAlias,
-                        child: ListTile(
-                          key: Key('job-${job.id}'),
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(job.filename),
-                          subtitle: Text(
-                            '${job.kind?.labelIn(context.l10n) ?? job.source} · ${job.status}'
-                            '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
-                            '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
-                          ),
-                          trailing: Wrap(
-                            spacing: 4,
-                            children: [
-                              if (job.canResume || job.status == 'analyzed')
-                                TextButton(
-                                  key: Key('job-resume-${job.id}'),
-                                  onPressed: () => ref
-                                      .read(importWizardProvider.notifier)
-                                      .resume(job),
-                                  child: Text(
-                                    job.canResume
+                        child: TfPanel(
+                          padding: EdgeInsets.zero,
+                          child: TfRow(
+                            key: Key('job-${job.id}'),
+                            title: job.filename,
+                            subtitle:
+                                '${job.kind?.labelIn(context.l10n) ?? job.source} · ${job.status}'
+                                '${job.stat('tasks') > 0 ? ' · ${context.l10n.grpCImpTasksCount(job.stat('tasks'))}' : ''}'
+                                '${job.createdAt.length >= 10 ? ' · ${job.createdAt.substring(0, 10)}' : ''}',
+                            trailing: Wrap(
+                              spacing: 4,
+                              children: [
+                                if (job.canResume || job.status == 'analyzed')
+                                  TfButton(
+                                    key: Key('job-resume-${job.id}'),
+                                    label: job.canResume
                                         ? context.l10n.grpCImpResume
                                         : context.l10n.grpCImpContinue,
+                                    variant: TfButtonVariant.ghost,
+                                    onPressed: () => ref
+                                        .read(importWizardProvider.notifier)
+                                        .resume(job),
                                   ),
-                                ),
-                              if (job.canUndo)
-                                TextButton(
-                                  key: Key('job-undo-${job.id}'),
-                                  onPressed: () => _confirmUndo(
-                                    context,
-                                    () =>
-                                        _run(context, () => actions.undo(job)),
+                                if (job.canUndo)
+                                  TfButton(
+                                    key: Key('job-undo-${job.id}'),
+                                    label: context.l10n.grpCUndo,
+                                    variant: TfButtonVariant.ghost,
+                                    onPressed: () => _confirmUndo(
+                                      context,
+                                      () => _run(
+                                        context,
+                                        () => actions.undo(job),
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(context.l10n.grpCUndo),
-                                ),
-                              if (job.status == 'uploaded' ||
-                                  job.status == 'analyzed' ||
-                                  job.status == 'undone')
-                                IconButton(
-                                  key: Key('job-discard-${job.id}'),
-                                  tooltip: context.l10n.grpCImpForget,
-                                  onPressed: () =>
-                                      _run(context, () => actions.discard(job)),
-                                  icon: const TfIcon(TfIcons.trash),
-                                ),
-                            ],
+                                if (job.status == 'uploaded' ||
+                                    job.status == 'analyzed' ||
+                                    job.status == 'undone')
+                                  TfIconButton(
+                                    key: Key('job-discard-${job.id}'),
+                                    icon: TfIcons.trash,
+                                    tooltip: context.l10n.grpCImpForget,
+                                    onPressed: () => _run(
+                                      context,
+                                      () => actions.discard(job),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -176,19 +183,21 @@ class ImportHistory extends ConsumerWidget {
   ) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (dialog) => AlertDialog(
+      builder: (dialog) => TfDialogFrame(
         key: const Key('history-undo-dialog'),
-        title: Text(dialog.l10n.grpCImpUndoTitle),
+        title: dialog.l10n.grpCImpUndoTitle,
         content: Text(dialog.l10n.grpCImpUndoBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: dialog.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(dialog, false),
-            child: Text(dialog.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('history-undo-confirm'),
+            label: dialog.l10n.grpCImpUndoConfirm,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.pop(dialog, true),
-            child: Text(dialog.l10n.grpCImpUndoConfirm),
           ),
         ],
       ),
@@ -213,34 +222,33 @@ class PlaceholdersPanel extends ConsumerWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (dialog) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
+        builder: (context, setState) => TfDialogFrame(
           key: const Key('claim-dialog'),
-          title: Text(context.l10n.grpCImpClaimTitle(who.name)),
-          content: DropdownButton<String>(
+          title: context.l10n.grpCImpClaimTitle(who.name),
+          content: TfSelectField(
             key: const Key('claim-member'),
-            isExpanded: true,
-            value: chosen,
-            hint: Text(context.l10n.grpCImpChooseMember),
-            items: [
+            options: {
               for (final m in members)
-                DropdownMenuItem(
-                  value: m.userId,
-                  child: Text(m.displayName.isEmpty ? m.email : m.displayName),
-                ),
-            ],
+                m.userId: m.displayName.isEmpty ? m.email : m.displayName,
+            },
+            value: chosen,
             onChanged: (v) => setState(() => chosen = v),
+            hint: context.l10n.grpCImpChooseMember,
+            expand: true,
           ),
           actions: [
-            TextButton(
+            TfButton(
+              label: dialog.l10n.grpCCancel,
+              variant: TfButtonVariant.ghost,
               onPressed: () => Navigator.pop(dialog, false),
-              child: Text(dialog.l10n.grpCCancel),
             ),
-            FilledButton(
+            TfButton(
               key: const Key('claim-confirm'),
+              label: context.l10n.grpCImpAssign,
+              variant: TfButtonVariant.primary,
               onPressed: chosen == null
                   ? null
                   : () => Navigator.pop(dialog, true),
-              child: Text(context.l10n.grpCImpAssign),
             ),
           ],
         ),
@@ -277,23 +285,23 @@ class PlaceholdersPanel extends ConsumerWidget {
         ),
         Text(context.l10n.grpCImpWaitingBody),
         for (final who in people)
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            clipBehavior: Clip.antiAlias,
-            child: ListTile(
-              key: Key('placeholder-${who.id}'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(who.name),
-              subtitle: Text(
-                context.l10n.grpCImpPersonSub(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+            child: TfPanel(
+              padding: EdgeInsets.zero,
+              child: TfRow(
+                key: Key('placeholder-${who.id}'),
+                title: who.name,
+                subtitle: context.l10n.grpCImpPersonSub(
                   who.email.isEmpty ? context.l10n.grpCImpNoEmail : who.email,
                   who.tasks,
                 ),
-              ),
-              trailing: TextButton(
-                key: Key('claim-${who.id}'),
-                onPressed: () => _claim(context, ref, who),
-                child: Text(context.l10n.grpCImpAssignTo),
+                trailing: TfButton(
+                  key: Key('claim-${who.id}'),
+                  label: context.l10n.grpCImpAssignTo,
+                  variant: TfButtonVariant.ghost,
+                  onPressed: () => _claim(context, ref, who),
+                ),
               ),
             ),
           ),

@@ -259,7 +259,10 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         hintText: context.l10n.grpFAddSubtaskHint,
-        prefixIcon: const TfIcon(TfIcons.cornerDownRight),
+        prefixIcon: const TfIcon(
+          TfIcons.cornerDownRight,
+          size: TfIconSize.control,
+        ),
         counterText: '',
         isDense: true,
         border: const OutlineInputBorder(),

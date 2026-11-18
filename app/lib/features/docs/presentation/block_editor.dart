@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -312,10 +313,11 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
         if (!widget.readOnly && _blocks.isNotEmpty)
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: TextButton.icon(
+            child: TfButton(
               key: const Key('add-block'),
-              icon: const TfIcon(TfIcons.plus, size: 16),
-              label: Text(context.l10n.grpJAddBlock),
+              label: context.l10n.grpJAddBlock,
+              variant: TfButtonVariant.ghost,
+              icon: TfIcons.plus,
               onPressed: () {
                 final b = DocBlock.create(BlockType.paragraph);
                 _emit([..._blocks, b], focus: b.id);

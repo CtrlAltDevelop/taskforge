@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
@@ -176,10 +179,10 @@ class _PublicFormViewState extends State<PublicFormView> {
           const SizedBox(height: 8),
           SelectableText(t.formsThanksBody(_reference)),
           const SizedBox(height: 16),
-          OutlinedButton(
+          TfButton(
             key: const Key('form-another'),
+            label: t.formsAnother,
             onPressed: _again,
-            child: Text(t.formsAnother),
           ),
         ],
       );
@@ -219,10 +222,11 @@ class _PublicFormViewState extends State<PublicFormView> {
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
-        FilledButton(
+        TfButton(
           key: const Key('form-submit'),
+          label: _busy ? t.formsSending : t.formsSubmit,
+          variant: TfButtonVariant.primary,
           onPressed: _busy || widget.preview ? null : _send,
-          child: Text(_busy ? t.formsSending : t.formsSubmit),
         ),
       ],
     );
@@ -319,14 +323,13 @@ class _PublicFormViewState extends State<PublicFormView> {
       case 'date':
         return _date(q);
       case 'checkbox':
-        return CheckboxListTile(
+        return TfToggleTile(
           key: key,
-          contentPadding: EdgeInsets.zero,
-          controlAffinity: ListTileControlAffinity.leading,
-          title: Text(q.required ? '${q.label} *' : q.label),
-          subtitle: q.help.isEmpty ? null : Text(q.help),
           value: _values[q.id] == 'true',
-          onChanged: (v) => setState(() => _values[q.id] = '${v ?? false}'),
+          onChanged: (v) => setState(() => _values[q.id] = '$v'),
+          title: q.required ? '${q.label} *' : q.label,
+          subtitle: q.help.isEmpty ? null : q.help,
+          checkbox: true,
         );
       default:
         return TextField(
@@ -372,7 +375,9 @@ class _PublicFormViewState extends State<PublicFormView> {
       child: Row(
         children: [
           Expanded(child: Text(value.isEmpty ? t.formsNoDate : value)),
-          TextButton(
+          TfButton(
+            label: t.formsPickDate,
+            variant: TfButtonVariant.ghost,
             onPressed: () async {
               final now = DateTime.now();
               final picked = await showDatePicker(
@@ -385,12 +390,11 @@ class _PublicFormViewState extends State<PublicFormView> {
               final iso = picked.toIso8601String().substring(0, 10);
               setState(() => _values[q.id] = iso);
             },
-            child: Text(t.formsPickDate),
           ),
           if (value.isNotEmpty)
-            IconButton(
+            TfIconButton(
+              icon: TfIcons.close,
               tooltip: t.formsClearDate,
-              icon: const TfIcon(TfIcons.close),
               onPressed: () => setState(() => _values[q.id] = ''),
             ),
         ],
@@ -408,23 +412,21 @@ class _PublicFormViewState extends State<PublicFormView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (var i = 0; i < files.length; i++)
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
+            TfRow(
+              title: files[i].name,
               leading: const TfIcon(TfIcons.attachment),
-              title: Text(files[i].name),
-              trailing: IconButton(
+              trailing: TfIconButton(
+                icon: TfIcons.close,
                 tooltip: t.formsRemoveFile,
-                icon: const TfIcon(TfIcons.close),
                 onPressed: () => setState(() {
                   _files[q.id] = [...files]..removeAt(i);
                 }),
               ),
             ),
-          OutlinedButton.icon(
+          TfButton(
+            label: t.formsAddFile(q.maxFiles),
+            icon: TfIcons.upload,
             onPressed: files.length >= q.maxFiles ? null : () => _pickFiles(q),
-            icon: const TfIcon(TfIcons.upload),
-            label: Text(t.formsAddFile(q.maxFiles)),
           ),
         ],
       ),

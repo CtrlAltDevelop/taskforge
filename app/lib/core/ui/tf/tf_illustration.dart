@@ -74,6 +74,7 @@ class TfIllustration extends StatelessWidget {
           kind.asset,
           width: height * _w / _h,
           height: height,
+          excludeFromSemantics: true,
           colorMapper: _ThemeColors(context.tf.colors),
         ),
       ),

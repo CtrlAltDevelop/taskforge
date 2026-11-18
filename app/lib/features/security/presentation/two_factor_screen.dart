@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -119,15 +121,12 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
                 onSubmitted: (_) => _busy ? null : _submit(),
               ),
               const SizedBox(height: 12),
-              CheckboxListTile(
+              TfToggleTile(
                 key: const Key('two-factor-remember'),
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
                 value: _remember,
-                onChanged: _busy
-                    ? null
-                    : (v) => setState(() => _remember = v ?? false),
-                title: Text(t.secRememberDevice),
+                onChanged: _busy ? null : (v) => setState(() => _remember = v),
+                title: t.secRememberDevice,
+                checkbox: true,
               ),
               if (_error != null) ...[
                 Text(_error!, style: TextStyle(color: colors.error)),
@@ -144,8 +143,10 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
                       )
                     : Text(t.secVerify),
               ),
-              TextButton(
+              TfButton(
                 key: const Key('two-factor-toggle'),
+                label: _recovery ? t.secUseAppCode : t.secUseRecovery,
+                variant: TfButtonVariant.ghost,
                 onPressed: _busy
                     ? null
                     : () => setState(() {
@@ -153,12 +154,12 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
                         _code.clear();
                         _error = null;
                       }),
-                child: Text(_recovery ? t.secUseAppCode : t.secUseRecovery),
               ),
-              TextButton(
+              TfButton(
                 key: const Key('two-factor-back'),
+                label: t.secBackToSignIn,
+                variant: TfButtonVariant.ghost,
                 onPressed: () => context.go('/sign-in'),
-                child: Text(t.secBackToSignIn),
               ),
             ],
           ),

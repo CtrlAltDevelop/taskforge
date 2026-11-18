@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -193,9 +194,8 @@ class RoleList extends StatelessWidget {
                   ),
                 ),
                 for (final p in area.permissions)
-                  ListTile(
-                    dense: true,
-                    title: Text(p.label),
+                  TfRow(
+                    title: p.label,
                     trailing: _Cell(
                       role: role,
                       permission: p,

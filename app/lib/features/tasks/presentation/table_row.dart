@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/presentation/live_flash.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -104,6 +105,9 @@ class _TaskRowState extends State<TaskRow> {
         color: fill,
         child: InkWell(
           onTap: widget.onOpen,
+          // The title cell is the one named, announced target; this is the
+          // mouse's wider hit area.
+          excludeFromSemantics: true,
           // The title cell is the row's one tab stop.
           canRequestFocus: false,
           hoverColor: Colors.transparent,
@@ -122,11 +126,14 @@ class _TaskRowState extends State<TaskRow> {
               children: [
                 SizedBox(
                   width: tableCheckWidth,
-                  child: Checkbox(
-                    key: Key('check-${_task.id}'),
-                    visualDensity: VisualDensity.compact,
-                    value: widget.picked,
-                    onChanged: (_) => widget.onPick(),
+                  child: Semantics(
+                    label: _task.title,
+                    child: Checkbox(
+                      key: Key('check-${_task.id}'),
+                      visualDensity: VisualDensity.compact,
+                      value: widget.picked,
+                      onChanged: (_) => widget.onPick(),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -295,7 +302,7 @@ class _Reveal extends StatelessWidget {
       excluding: !reachable,
       child: AnimatedOpacity(
         opacity: visible ? 1 : 0,
-        duration: const Duration(milliseconds: 100),
+        duration: TfMotion.of(context, TfDuration.fast),
         child: child,
       ),
     ),

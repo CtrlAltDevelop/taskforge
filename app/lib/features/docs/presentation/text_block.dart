@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -319,16 +320,16 @@ class _TextBlockViewState extends State<TextBlockView> {
           ),
           ('code', TfIcons.code, context.l10n.grpJCode, codeMark),
         ])
-          IconButton(
+          TfIconButton(
             key: Key('tb-$id'),
+            icon: icon,
             tooltip: tip,
-            icon: TfIcon(icon, size: 18),
             onPressed: () => _toggle(mark),
           ),
-        IconButton(
+        TfIconButton(
           key: const Key('tb-link'),
+          icon: TfIcons.link,
           tooltip: context.l10n.grpJLink,
-          icon: const TfIcon(TfIcons.link, size: 18),
           onPressed: _link,
         ),
       ],

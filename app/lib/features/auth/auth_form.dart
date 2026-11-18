@@ -104,7 +104,10 @@ class _AuthFormState extends State<AuthForm> {
                 tooltip: _hidden[index]
                     ? context.l10n.showPassword
                     : context.l10n.hidePassword,
-                icon: TfIcon(_hidden[index] ? TfIcons.eye : TfIcons.eyeOff),
+                icon: TfIcon(
+                  _hidden[index] ? TfIcons.eye : TfIcons.eyeOff,
+                  size: TfIconSize.control,
+                ),
                 onPressed: () =>
                     setState(() => _hidden[index] = !_hidden[index]),
               )

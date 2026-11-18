@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -43,8 +48,8 @@ class _MigrationDialogState extends State<_MigrationDialog> {
   @override
   Widget build(BuildContext context) {
     final count = widget.status.taskCount;
-    return AlertDialog(
-      title: Text(context.l10n.grpIDeleteStatusTitle(widget.status.name)),
+    return TfDialogFrame(
+      title: context.l10n.grpIDeleteStatusTitle(widget.status.name),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,36 +59,31 @@ class _MigrationDialogState extends State<_MigrationDialog> {
             key: const Key('migration-explain'),
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<String>(
+          TfSelectField(
             key: const Key('migrate-target'),
-            initialValue: _target,
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: context.l10n.grpIMoveTasksTo,
-            ),
-            items: [
+            options: {
               for (final s in widget.others)
-                DropdownMenuItem(
-                  value: s.key,
-                  child: Text(
-                    s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
-                  ),
-                ),
-            ],
-            onChanged: (v) => setState(() => _target = v ?? _target),
+                s.key: s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
+            },
+            value: _target,
+            onChanged: (v) => setState(() => _target = v),
+            label: context.l10n.grpIMoveTasksTo,
+            expand: true,
           ),
         ],
       ),
       actions: [
-        TextButton(
+        TfButton(
           key: const Key('cancel-delete-status'),
+          label: context.l10n.grpICancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpICancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('confirm-delete-status'),
+          label: context.l10n.grpIMoveTasksAndDelete,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.pop(context, _target),
-          child: Text(context.l10n.grpIMoveTasksAndDelete),
         ),
       ],
     );
@@ -140,51 +140,49 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
   late bool _subtasks = widget.transition.requireSubtasksDone;
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.title),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: widget.title,
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        DropdownButtonFormField<String>(
+        TfSelectField(
           key: const Key('condition-role'),
-          initialValue: _role,
-          isExpanded: true,
-          decoration: InputDecoration(labelText: context.l10n.grpIWhoMayMove),
-          items: [
-            DropdownMenuItem(value: '', child: Text(context.l10n.grpIAnyRole)),
+          options: {
+            '': context.l10n.grpIAnyRole,
             for (final r in widget.roles)
-              DropdownMenuItem(
-                value: r.id,
-                child: Text(context.l10n.grpIOnlyRole(r.name)),
-              ),
-          ],
-          onChanged: (v) => setState(() => _role = v ?? ''),
+              r.id: context.l10n.grpIOnlyRole(r.name),
+          },
+          value: _role,
+          onChanged: (v) => setState(() => _role = v),
+          label: context.l10n.grpIWhoMayMove,
+          expand: true,
         ),
         const SizedBox(height: 12),
-        SwitchListTile(
+        TfToggle(
           key: const Key('condition-assignee'),
-          contentPadding: EdgeInsets.zero,
-          title: Text(context.l10n.grpITaskNeedsAssignee),
           value: _assignee,
           onChanged: (v) => setState(() => _assignee = v),
+          label: context.l10n.grpITaskNeedsAssignee,
         ),
-        SwitchListTile(
+        TfToggleTile(
           key: const Key('condition-subtasks'),
-          contentPadding: EdgeInsets.zero,
-          title: Text(context.l10n.grpIAllSubtasksDone),
-          subtitle: Text(context.l10n.grpIDoneOrCancelledDepth),
           value: _subtasks,
           onChanged: (v) => setState(() => _subtasks = v),
+          title: context.l10n.grpIAllSubtasksDone,
+          subtitle: context.l10n.grpIDoneOrCancelledDepth,
         ),
       ],
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpICancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpICancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('save-conditions'),
+        label: context.l10n.grpIDone,
+        variant: TfButtonVariant.primary,
         onPressed: () => Navigator.pop(
           context,
           TransitionConditions(
@@ -193,7 +191,6 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
             requireSubtasksDone: _subtasks,
           ),
         ),
-        child: Text(context.l10n.grpIDone),
       ),
     ],
   );

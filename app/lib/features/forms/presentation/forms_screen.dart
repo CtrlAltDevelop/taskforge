@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -75,18 +80,20 @@ class FormsScreen extends ConsumerWidget {
   ) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(c.l10n.formsDeleteTitle(form.name)),
+      builder: (c) => TfDialogFrame(
+        title: c.l10n.formsDeleteTitle(form.name),
         content: Text(c.l10n.formsDeleteBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: c.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(c).pop(false),
-            child: Text(c.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete-form'),
+            label: c.l10n.formsDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(c).pop(true),
-            child: Text(c.l10n.formsDelete),
           ),
         ],
       ),
@@ -135,10 +142,10 @@ class FormsScreen extends ConsumerWidget {
         projects.where((p) => p.id == id).firstOrNull?.name ?? '';
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-settings'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpEBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/workspaces/settings'),
         ),
         title: Text(context.l10n.formsTitle),
@@ -151,18 +158,18 @@ class FormsScreen extends ConsumerWidget {
           retryKey: const Key('retry-forms'),
           onRetry: () => ref.invalidate(formsProvider),
         ),
-        data: (rows) => ListView(
-          padding: const EdgeInsets.all(16),
+        data: (rows) => TfPage(
           children: [
             Text(context.l10n.formsHint),
             const SizedBox(height: 12),
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: FilledButton.icon(
+              child: TfButton(
                 key: const Key('new-form'),
+                label: context.l10n.formsNew,
+                variant: TfButtonVariant.primary,
+                icon: TfIcons.plus,
                 onPressed: projects.isEmpty ? null : () => _new(context, ref),
-                icon: const TfIcon(TfIcons.plus),
-                label: Text(context.l10n.formsNew),
               ),
             ),
             const SizedBox(height: 8),
@@ -172,61 +179,61 @@ class FormsScreen extends ConsumerWidget {
                 child: Text(context.l10n.formsEmpty),
               ),
             for (final f in rows)
-              Card(
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                clipBehavior: Clip.antiAlias,
-                child: ListTile(
-                  key: Key('form-${f.id}'),
-                  leading: const TfIcon(TfIcons.form),
-                  title: Text(f.name),
-                  subtitle: Text(
-                    [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TfPanel(
+                  padding: EdgeInsets.zero,
+                  child: TfRow(
+                    key: Key('form-${f.id}'),
+                    title: f.name,
+                    subtitle: [
                       projectName(f.projectId),
                       context.l10n.formsSubmissionCount(f.submissionCount),
                       if (f.problem.isNotEmpty) f.problem,
                     ].where((s) => s.isNotEmpty).join(' · '),
-                  ),
-                  onTap: () => _pick(context, ref, f, _Action.edit),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Switch(
-                        key: Key('enable-${f.id}'),
-                        value: f.enabled,
-                        onChanged: (on) => _run(context, ref, (ws) async {
-                          await ref
-                              .read(formsClientProvider)
-                              .setEnabled(ws, f, enabled: on);
-                          return null;
-                        }),
-                      ),
-                      PopupMenuButton<_Action>(
-                        key: Key('menu-${f.id}'),
-                        onSelected: (a) => _pick(context, ref, f, a),
-                        itemBuilder: (c) => [
-                          PopupMenuItem(
-                            value: _Action.copy,
-                            child: Text(c.l10n.formsCopyLink),
-                          ),
-                          PopupMenuItem(
-                            value: _Action.submissions,
-                            child: Text(c.l10n.formsSubmissions),
-                          ),
-                          PopupMenuItem(
-                            value: _Action.edit,
-                            child: Text(c.l10n.formsEdit),
-                          ),
-                          PopupMenuItem(
-                            value: _Action.rotate,
-                            child: Text(c.l10n.formsRotateLink),
-                          ),
-                          PopupMenuItem(
-                            value: _Action.delete,
-                            child: Text(c.l10n.formsDelete),
-                          ),
-                        ],
-                      ),
-                    ],
+                    leading: const TfIcon(TfIcons.form),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Switch(
+                          key: Key('enable-${f.id}'),
+                          value: f.enabled,
+                          onChanged: (on) => _run(context, ref, (ws) async {
+                            await ref
+                                .read(formsClientProvider)
+                                .setEnabled(ws, f, enabled: on);
+                            return null;
+                          }),
+                        ),
+                        PopupMenuButton<_Action>(
+                          key: Key('menu-${f.id}'),
+                          onSelected: (a) => _pick(context, ref, f, a),
+                          itemBuilder: (c) => [
+                            PopupMenuItem(
+                              value: _Action.copy,
+                              child: Text(c.l10n.formsCopyLink),
+                            ),
+                            PopupMenuItem(
+                              value: _Action.submissions,
+                              child: Text(c.l10n.formsSubmissions),
+                            ),
+                            PopupMenuItem(
+                              value: _Action.edit,
+                              child: Text(c.l10n.formsEdit),
+                            ),
+                            PopupMenuItem(
+                              value: _Action.rotate,
+                              child: Text(c.l10n.formsRotateLink),
+                            ),
+                            PopupMenuItem(
+                              value: _Action.delete,
+                              child: Text(c.l10n.formsDelete),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    onTap: () => _pick(context, ref, f, _Action.edit),
                   ),
                 ),
               ),

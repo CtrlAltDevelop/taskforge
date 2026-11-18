@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
@@ -338,7 +339,7 @@ void main() {
     final s = planning();
     await open(tester, s);
 
-    expect(tester.widget<FilledButton>(key('add-to-sprint')).onPressed, isNull);
+    expect(tester.widget<TfButton>(key('add-to-sprint')).onPressed, isNull);
     await tester.tap(key('select-a'));
     await tester.tap(key('select-b'));
     await tester.pump();

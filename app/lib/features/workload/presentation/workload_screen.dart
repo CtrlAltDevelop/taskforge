@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -70,10 +74,10 @@ class WorkloadScreen extends ConsumerWidget {
       appBar: TfAppBar(
         title: Text(t.wlTitle),
         actions: [
-          IconButton(
+          TfIconButton(
             key: const Key('workload-settings'),
+            icon: TfIcons.tune,
             tooltip: t.wlSettings,
-            icon: const TfIcon(TfIcons.tune),
             onPressed: () => context.push('/workload/settings'),
           ),
         ],
@@ -141,9 +145,10 @@ class _Body extends StatelessWidget {
             text: t.wlSetCapacityHint,
             icon: TfIcons.info.glyph,
             action: canManage
-                ? TextButton(
+                ? TfButton(
+                    label: t.wlSetCapacity,
+                    variant: TfButtonVariant.ghost,
                     onPressed: () => context.push('/workload/settings'),
-                    child: Text(t.wlSetCapacity),
                   )
                 : null,
           ),
@@ -413,22 +418,18 @@ class _Unplaced extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for (final task in data.unplaced)
-                Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: ListTile(
-                    dense: true,
-                    title: Text('${task.displayId}  ${task.title}'),
-                    subtitle: Text(
-                      task.reason == UnplacedReason.noDates
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                  child: TfPanel(
+                    padding: EdgeInsets.zero,
+                    child: TfRow(
+                      title: '${task.displayId}  ${task.title}',
+                      subtitle: task.reason == UnplacedReason.noDates
                           ? t.wlReasonNoDates
                           : t.wlReasonNoEstimate,
-                    ),
-                    onTap: () => context.push(
-                      '/projects/${task.projectId}?task=${task.id}',
+                      onTap: () => context.push(
+                        '/projects/${task.projectId}?task=${task.id}',
+                      ),
                     ),
                   ),
                 ),

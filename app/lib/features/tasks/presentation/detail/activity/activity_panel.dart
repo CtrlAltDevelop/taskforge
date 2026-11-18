@@ -10,6 +10,7 @@ import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart' show TfSkeleton;
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/audit/presentation/activity_section.dart';
@@ -286,8 +287,8 @@ class _ActivityPanelState extends ConsumerState<ActivityPanel> {
               size: TfButtonSize.small,
               onPressed: () => _scroll.animateTo(
                 _scroll.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 160),
-                curve: Curves.easeOut,
+                duration: TfMotion.of(context, TfDuration.base),
+                curve: tfCurve,
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -79,8 +81,8 @@ class _EnrollDialogState extends ConsumerState<_EnrollDialog> {
   Widget build(BuildContext context) {
     final t = context.l10n;
     final enrolment = _enrolment;
-    return AlertDialog(
-      title: Text(t.secEnrollTitle),
+    return TfDialogFrame(
+      title: t.secEnrollTitle,
       content: SizedBox(
         width: 360,
         child: SingleChildScrollView(
@@ -140,14 +142,16 @@ class _EnrollDialogState extends ConsumerState<_EnrollDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpBCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: _busy ? null : () => Navigator.pop(context, false),
-          child: Text(t.grpBCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('sec-enroll-go'),
+          label: t.secTurnOn,
+          variant: TfButtonVariant.primary,
           onPressed: enrolment == null || _busy ? null : _confirm,
-          child: Text(t.secTurnOn),
         ),
       ],
     );

@@ -1,3 +1,10 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -28,9 +35,9 @@ class SsoSetupScreen extends ConsumerWidget {
     return Scaffold(
       appBar: TfAppBar(
         title: Text(t.ssoTitle),
-        leading: IconButton(
+        leading: TfIconButton(
+          icon: TfIcons.arrowStart,
           tooltip: t.grpBClose,
-          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop()
               ? context.pop()
               : context.go('/settings/security'),
@@ -162,18 +169,20 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
     final t = context.l10n;
     final sure = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(t.ssoRemoveTitle),
+      builder: (_) => TfDialogFrame(
+        title: t.ssoRemoveTitle,
         content: Text(t.ssoRemoveBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: t.grpBCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: Text(t.grpBCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('sso-remove-confirm'),
+            label: t.grpBDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.pop(context, true),
-            child: Text(t.grpBDelete),
           ),
         ],
       ),
@@ -193,19 +202,15 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
 
   Widget _roleMenu(String value, ValueChanged<String> onChanged, {Key? key}) {
     final ids = {for (final r in widget.roles) r.id};
-    return DropdownButtonFormField<String>(
+    return TfSelectField<String>(
       key: key,
-      initialValue: ids.contains(value) ? value : '',
-      isExpanded: true,
-      items: [
-        DropdownMenuItem(
-          value: '',
-          child: Text(context.l10n.ssoDefaultRoleAuto),
-        ),
-        for (final r in widget.roles)
-          DropdownMenuItem(value: r.id, child: Text(r.name)),
-      ],
-      onChanged: _busy ? null : (v) => onChanged(v ?? ''),
+      options: {
+        '': context.l10n.ssoDefaultRoleAuto,
+        for (final r in widget.roles) r.id: r.name,
+      },
+      value: ids.contains(value) ? value : '',
+      onChanged: _busy ? null : (v) => onChanged(v),
+      expand: true,
     );
   }
 
@@ -224,17 +229,16 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               value: widget.provider.redirectUri,
               copyKey: const Key('sso-redirect-copy'),
             ),
-            SwitchListTile(
+            TfToggle(
               key: const Key('sso-enabled'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(t.ssoEnabled),
               value: _enabled,
               onChanged: _busy ? null : (v) => setState(() => _enabled = v),
+              label: t.ssoEnabled,
             ),
-            TextField(
+            TfTextField(
               key: const Key('sso-name'),
               controller: _name,
-              decoration: InputDecoration(labelText: t.ssoName),
+              label: t.ssoName,
             ),
             const SizedBox(height: 12),
             TextField(
@@ -247,10 +251,10 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               ),
             ),
             const SizedBox(height: 12),
-            TextField(
+            TfTextField(
               key: const Key('sso-client-id'),
               controller: _clientId,
-              decoration: InputDecoration(labelText: t.ssoClientId),
+              label: t.ssoClientId,
             ),
             const SizedBox(height: 12),
             TextField(
@@ -265,10 +269,10 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               ),
             ),
             const SizedBox(height: 12),
-            TextField(
+            TfTextField(
               key: const Key('sso-scopes'),
               controller: _scopes,
-              decoration: InputDecoration(labelText: t.ssoScopes),
+              label: t.ssoScopes,
             ),
             const SizedBox(height: 12),
             TextField(
@@ -280,20 +284,19 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               ),
             ),
             const SizedBox(height: 12),
-            SwitchListTile(
+            TfToggleTile(
               key: const Key('sso-auto-create'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(t.ssoAutoCreate),
-              subtitle: Text(t.ssoAutoCreateSub),
               value: _autoCreate,
               onChanged: _busy ? null : (v) => setState(() => _autoCreate = v),
+              title: t.ssoAutoCreate,
+              subtitle: t.ssoAutoCreateSub,
             ),
             const SizedBox(height: 8),
             Text(t.ssoRoles, style: Theme.of(context).textTheme.titleSmall),
-            TextField(
+            TfTextField(
               key: const Key('sso-group-claim'),
               controller: _groupClaim,
-              decoration: InputDecoration(labelText: t.ssoGroupClaim),
+              label: t.ssoGroupClaim,
             ),
             const SizedBox(height: 8),
             _roleMenu(
@@ -309,9 +312,9 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               Row(
                 children: [
                   Expanded(
-                    child: TextField(
+                    child: TfTextField(
                       controller: _rows[i].group,
-                      decoration: InputDecoration(labelText: t.ssoGroup),
+                      label: t.ssoGroup,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -321,9 +324,9 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                       (v) => setState(() => _rows[i].roleId = v),
                     ),
                   ),
-                  IconButton(
+                  TfIconButton(
+                    icon: TfIcons.close,
                     tooltip: t.grpBDelete,
-                    icon: const TfIcon(TfIcons.close),
                     onPressed: () =>
                         setState(() => _rows.removeAt(i).group.dispose()),
                   ),
@@ -331,22 +334,22 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               ),
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: TextButton.icon(
+              child: TfButton(
                 key: const Key('sso-add-mapping'),
+                label: t.ssoAddMapping,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: () => setState(
                   () => _rows.add(_Row(TextEditingController(), '')),
                 ),
-                icon: const TfIcon(TfIcons.plus),
-                label: Text(t.ssoAddMapping),
               ),
             ),
-            SwitchListTile(
+            TfToggleTile(
               key: const Key('sso-enforce'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(t.ssoEnforce),
-              subtitle: Text(t.ssoEnforceSub),
               value: _enforce,
               onChanged: _busy ? null : (v) => setState(() => _enforce = v),
+              title: t.ssoEnforce,
+              subtitle: t.ssoEnforceSub,
             ),
             if (_error != null)
               Padding(
@@ -354,39 +357,38 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 child: Text(_error!, style: TextStyle(color: colors.error)),
               ),
             if (_check case final check?)
-              ListTile(
+              TfRow(
                 key: const Key('sso-test-result'),
-                contentPadding: EdgeInsets.zero,
+                title: check.ok ? t.ssoTestOk(check.keys) : t.ssoTestFailed,
+                subtitle: check.message,
                 leading: Icon(
                   check.ok ? TfIcons.success.glyph : TfIcons.error.glyph,
                   color: check.ok ? Colors.green : colors.error,
                 ),
-                title: Text(
-                  check.ok ? t.ssoTestOk(check.keys) : t.ssoTestFailed,
-                ),
-                subtitle: Text(check.message),
               ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               children: [
-                FilledButton(
+                TfButton(
                   key: const Key('sso-save'),
+                  label: t.grpBSave,
+                  variant: TfButtonVariant.primary,
                   onPressed: _busy ? null : _save,
-                  child: Text(t.grpBSave),
                 ),
-                OutlinedButton(
+                TfButton(
                   key: const Key('sso-test'),
+                  label: t.ssoTest,
                   onPressed: _busy || !widget.provider.configured
                       ? null
                       : _test,
-                  child: Text(t.ssoTest),
                 ),
                 if (widget.provider.configured)
-                  TextButton(
+                  TfButton(
                     key: const Key('sso-remove'),
+                    label: t.ssoRemove,
+                    variant: TfButtonVariant.ghost,
                     onPressed: _busy ? null : _delete,
-                    child: Text(t.ssoRemove),
                   ),
               ],
             ),

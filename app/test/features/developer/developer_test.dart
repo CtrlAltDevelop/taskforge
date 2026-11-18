@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/developer/presentation/deliveries_screen.dart';
@@ -38,8 +39,8 @@ void main() {
 
       await tester.tap(find.byKey(const Key('new-token')));
       await tester.pumpAndSettle();
-      FilledButton create() =>
-          tester.widget<FilledButton>(find.byKey(const Key('create-token')));
+      TfButton create() =>
+          tester.widget<TfButton>(find.byKey(const Key('create-token')));
       expect(create().onPressed, isNull);
 
       await tester.enterText(find.byKey(const Key('token-name')), 'Deploy');
@@ -76,8 +77,8 @@ void main() {
 
       expect(find.byKey(const Key('event-task.created')), findsOneWidget);
       expect(find.byKey(const Key('event-task.deleted')), findsOneWidget);
-      FilledButton save() =>
-          tester.widget<FilledButton>(find.byKey(const Key('save-webhook')));
+      TfButton save() =>
+          tester.widget<TfButton>(find.byKey(const Key('save-webhook')));
       await tester.enterText(
         find.byKey(const Key('webhook-url')),
         'https://example.com/x',

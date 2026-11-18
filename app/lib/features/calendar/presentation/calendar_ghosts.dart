@@ -49,7 +49,7 @@ class GhostTile extends StatelessWidget {
     }
     return ListTile(
       key: Key('ghost-${ghost.seriesId}-${ghost.dueDate}'),
-      leading: TfIcon(TfIcons.repeat, color: faded),
+      leading: TfIcon(TfIcons.repeat, size: TfIconSize.control, color: faded),
       title: Text(
         ghost.title,
         style: TextStyle(color: faded, fontStyle: FontStyle.italic),

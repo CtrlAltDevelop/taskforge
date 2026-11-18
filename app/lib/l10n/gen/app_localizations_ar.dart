@@ -109,6 +109,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contrastLabel => 'تباين عالٍ';
 
   @override
+  String get reduceMotionLabel => 'تقليل الحركة';
+
+  @override
+  String get reduceMotionHelp => 'تتحول الرسوم المتحركة إلى انتقالات فورية';
+
+  @override
   String get contrastHelp => 'نص وحدود أوضح لقراءة أسهل';
 
   @override
@@ -2989,6 +2995,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get grpFColTitle => 'العنوان';
+
+  @override
+  String get tblSelectAll => 'تحديد كل المهام';
 
   @override
   String grpFTrashTitle(String name) {

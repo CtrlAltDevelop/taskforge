@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
@@ -265,13 +268,10 @@ class _SprintsState extends ConsumerState<_Sprints> {
                   onSelectionChanged: (s) => setState(() => _reports = s.first),
                 ),
                 if (all.length > 1)
-                  DropdownButton<String>(
+                  TfSelectField(
                     key: const Key('sprint-picker'),
+                    options: {for (final s in all) s.id: s.name},
                     value: current?.id,
-                    items: [
-                      for (final s in all)
-                        DropdownMenuItem(value: s.id, child: Text(s.name)),
-                    ],
                     onChanged: (v) => setState(() {
                       _picked = v;
                       _selected.clear();
@@ -339,12 +339,13 @@ class _SprintsState extends ConsumerState<_Sprints> {
         rowBuilder: (t) => row(t, backlogSide: true),
         actions: [
           if (canPlan)
-            FilledButton(
+            TfButton(
               key: const Key('add-to-sprint'),
+              label: context.l10n.grpAAddToSprint,
+              variant: TfButtonVariant.primary,
               onPressed: _selected.any((id) => !sprintIds.contains(id))
                   ? () => _addSelected(sprint)
                   : null,
-              child: Text(context.l10n.grpAAddToSprint),
             ),
         ],
       ),
@@ -368,12 +369,13 @@ class _SprintsState extends ConsumerState<_Sprints> {
               rowBuilder: (t) => row(t, backlogSide: false),
               actions: [
                 if (canPlan)
-                  TextButton(
+                  TfButton(
                     key: const Key('remove-from-sprint'),
+                    label: context.l10n.grpARemove,
+                    variant: TfButtonVariant.ghost,
                     onPressed: _selected.any(sprintIds.contains)
                         ? () => _removeSelected(sprint, sprintIds)
                         : null,
-                    child: Text(context.l10n.grpARemove),
                   ),
               ],
             ),
@@ -492,10 +494,11 @@ class _Header extends ConsumerWidget {
             ),
           ),
           if (sprint.isActive)
-            TextButton.icon(
+            TfButton(
               key: const Key('sprint-on-board'),
-              icon: const TfIcon(TfIcons.board, size: 24),
-              label: Text(context.l10n.grpAShowOnBoard),
+              label: context.l10n.grpAShowOnBoard,
+              variant: TfButtonVariant.ghost,
+              icon: TfIcons.board,
               onPressed: () {
                 ref
                     .read(boardCurrentSprintProvider(sprint.projectId).notifier)
@@ -504,23 +507,25 @@ class _Header extends ConsumerWidget {
               },
             ),
           if (canManage) ...[
-            IconButton(
+            TfIconButton(
               key: const Key('edit-sprint'),
+              icon: TfIcons.edit,
               tooltip: context.l10n.grpAEditSprint,
-              icon: const TfIcon(TfIcons.edit, size: 24),
               onPressed: onEdit,
             ),
             if (sprint.isPlanned)
-              FilledButton(
+              TfButton(
                 key: const Key('start-sprint'),
+                label: context.l10n.grpAStartSprint,
+                variant: TfButtonVariant.primary,
                 onPressed: onStart,
-                child: Text(context.l10n.grpAStartSprint),
               ),
             if (sprint.isActive)
-              FilledButton(
+              TfButton(
                 key: const Key('complete-sprint'),
+                label: context.l10n.grpACompleteSprint,
+                variant: TfButtonVariant.primary,
                 onPressed: onComplete,
-                child: Text(context.l10n.grpACompleteSprint),
               ),
           ],
         ],
@@ -545,8 +550,9 @@ class _Reports extends StatelessWidget {
         title: context.l10n.grpANoSprintsYet,
       );
     }
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return TfPage(
+      maxWidth: TfPageWidth.wide,
+      lazy: true,
       children: [
         BurndownPanel(projectId: projectId, sprint: s),
         const SizedBox(height: 24),

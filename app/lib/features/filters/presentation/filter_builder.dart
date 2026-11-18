@@ -156,7 +156,7 @@ class _GroupView extends StatelessWidget {
                 IconButton(
                   key: Key('remove-group-$_id'),
                   tooltip: context.l10n.grpDRemoveGroup,
-                  icon: const TfIcon(TfIcons.close),
+                  icon: const TfIcon(TfIcons.close, size: TfIconSize.control),
                   onPressed: () => edit(path, (_) => null),
                 ),
             ],
@@ -308,7 +308,7 @@ class _ConditionRow extends StatelessWidget {
         IconButton(
           key: Key('remove-row-$id'),
           tooltip: context.l10n.grpDRemoveCondition,
-          icon: const TfIcon(TfIcons.trash),
+          icon: const TfIcon(TfIcons.trash, size: TfIconSize.control),
           onPressed: onRemove,
         ),
       ],
@@ -631,7 +631,7 @@ class _OrderView extends StatelessWidget {
             IconButton(
               key: Key('remove-order-$i'),
               tooltip: context.l10n.grpDRemoveOrdering,
-              icon: const TfIcon(TfIcons.close),
+              icon: const TfIcon(TfIcons.close, size: TfIconSize.control),
               onPressed: () => onChanged([
                 for (var k = 0; k < order.length; k++)
                   if (k != i) order[k],

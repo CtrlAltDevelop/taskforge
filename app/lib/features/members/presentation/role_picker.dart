@@ -1,8 +1,8 @@
-import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/members/presentation/members_screen.dart';
@@ -42,31 +42,16 @@ class RolePicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chip = Chip(label: Text(member.roleName));
+    final chip = TfChip(label: member.roleName);
     final canSet = ref.watch(permissionSetProvider).can(Perm.memberSetRole);
     final roles = ref.watch(rolesProvider).value?.roles;
     if (!canSet || roles == null) return chip;
-    return PopupMenuButton<Role>(
-      tooltip: context.l10n.grpJChangeRole,
-      onSelected: (role) => _assign(context, ref, role),
-      itemBuilder: (_) => [
-        for (final role in roles)
-          CheckedPopupMenuItem<Role>(
-            key: Key('role-option-${role.id}'),
-            value: role,
-            checked: role.id == member.roleId,
-            child: Text(role.name),
-          ),
-      ],
-      child: Chip(
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(member.roleName),
-            const TfIcon(TfIcons.chevronDown, size: 18),
-          ],
-        ),
-      ),
+    return TfSelectField<Role>(
+      options: {for (final role in roles) role: role.name},
+      value: roles.where((r) => r.id == member.roleId).firstOrNull,
+      hint: member.roleName,
+      itemKey: (role) => Key('role-option-${role.id}'),
+      onChanged: (role) => _assign(context, ref, role),
     );
   }
 }

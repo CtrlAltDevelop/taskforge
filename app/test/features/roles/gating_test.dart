@@ -67,6 +67,8 @@ void main() {
       await _openSettings(tester, 'Admin');
 
       expect(_fieldEnabled(tester, 'settings-name'), isTrue);
+      await tester.enterText(byKey('settings-name'), 'Renamed');
+      await tester.pump();
       expect(byKey('save-workspace'), findsOneWidget);
       expect(find.text('Danger zone'), findsNothing);
     });

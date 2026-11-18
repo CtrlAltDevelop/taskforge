@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -184,10 +189,10 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
         : const <CustomField>[];
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-to-settings'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpIBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/projects/${widget.projectId}/settings'),
         ),
         title: Text(context.l10n.grpIFields),
@@ -210,8 +215,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
         ),
         data: (loaded) {
           final shown = _reordered ?? loaded;
-          return ListView(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 96),
+          return TfPage(
             children: [
               if (shown.isEmpty)
                 Padding(
@@ -244,20 +248,20 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 for (final f in archived)
-                  Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: ListTile(
-                      key: Key('archived-${f.id}'),
-                      leading: TfIcon(fieldTypeIcon(f.type)),
-                      title: Text(f.name),
-                      trailing: TextButton(
-                        key: Key('restore-${f.id}'),
-                        onPressed: () => _restore(f),
-                        child: Text(context.l10n.grpIRestore),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                    child: TfPanel(
+                      padding: EdgeInsets.zero,
+                      child: TfRow(
+                        key: Key('archived-${f.id}'),
+                        title: f.name,
+                        leading: TfIcon(fieldTypeIcon(f.type)),
+                        trailing: TfButton(
+                          key: Key('restore-${f.id}'),
+                          label: context.l10n.grpIRestore,
+                          variant: TfButtonVariant.ghost,
+                          onPressed: () => _restore(f),
+                        ),
                       ),
                     ),
                   ),
@@ -288,40 +292,42 @@ class _FieldTile extends StatelessWidget {
   final VoidCallback onArchive;
 
   @override
-  Widget build(BuildContext context) => Card(
-    child: ListTile(
-      key: Key('field-tile-${field.id}'),
-      leading: TfIcon(fieldTypeIcon(field.type)),
-      title: Text(field.name),
-      subtitle: Text(
-        [
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+    child: TfPanel(
+      padding: EdgeInsets.zero,
+      child: TfRow(
+        key: Key('field-tile-${field.id}'),
+        title: field.name,
+        subtitle: [
           field.type.labelIn(context.l10n),
           if (field.required) context.l10n.grpIRequired,
           if (field.type.hasOptions)
             context.l10n.grpIOptionsCount(field.options.length),
         ].join(' · '),
+        leading: TfIcon(fieldTypeIcon(field.type)),
+        trailing: canEdit
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TfIconButton(
+                    key: Key('edit-${field.id}'),
+                    icon: TfIcons.edit,
+                    tooltip: context.l10n.grpIEdit,
+                    onPressed: onEdit,
+                  ),
+                  TfIconButton(
+                    key: Key('archive-${field.id}'),
+                    icon: TfIcons.archive,
+                    tooltip: context.l10n.grpIArchive,
+                    onPressed: onArchive,
+                  ),
+                  const SizedBox(width: 24),
+                ],
+              )
+            : null,
+        onTap: canEdit ? onEdit : null,
       ),
-      onTap: canEdit ? onEdit : null,
-      trailing: canEdit
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  key: Key('edit-${field.id}'),
-                  tooltip: context.l10n.grpIEdit,
-                  icon: const TfIcon(TfIcons.edit),
-                  onPressed: onEdit,
-                ),
-                IconButton(
-                  key: Key('archive-${field.id}'),
-                  tooltip: context.l10n.grpIArchive,
-                  icon: const TfIcon(TfIcons.archive),
-                  onPressed: onArchive,
-                ),
-                const SizedBox(width: 24),
-              ],
-            )
-          : null,
     ),
   );
 }

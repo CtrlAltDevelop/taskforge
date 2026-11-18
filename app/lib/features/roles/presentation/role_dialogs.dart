@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -43,8 +46,8 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(context.l10n.grpENewRole),
+    return TfDialogFrame(
+      title: context.l10n.grpENewRole,
       content: SizedBox(
         width: 400,
         child: Form(
@@ -71,13 +74,11 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
                     ),
                   ),
                   for (final p in area.permissions)
-                    CheckboxListTile(
+                    TfCheckbox(
                       key: Key('new-perm-${p.key}'),
-                      dense: true,
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(p.label),
                       value: _granted.contains(p.key),
-                      onChanged: (v) => _toggle(p.key, v ?? false),
+                      onChanged: (v) => _toggle(p.key, v),
+                      label: p.label,
                     ),
                 ],
               ],
@@ -86,18 +87,20 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpECancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpECancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('create-role-submit'),
+          label: context.l10n.grpECreate,
+          variant: TfButtonVariant.primary,
           onPressed: () {
             if (!_form.currentState!.validate()) return;
             Navigator.of(context)
                 .pop((name: _name.text.trim(), permissions: _granted));
           },
-          child: Text(context.l10n.grpECreate),
         ),
       ],
     );
@@ -131,8 +134,8 @@ class _RenameRoleDialogState extends State<_RenameRoleDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(context.l10n.grpERenameRole),
+    return TfDialogFrame(
+      title: context.l10n.grpERenameRole,
       content: Form(
         key: _form,
         child: TextFormField(
@@ -144,18 +147,20 @@ class _RenameRoleDialogState extends State<_RenameRoleDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpECancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpECancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('rename-role-submit'),
+          label: context.l10n.grpERename,
+          variant: TfButtonVariant.primary,
           onPressed: () {
             if (_form.currentState!.validate()) {
               Navigator.of(context).pop(_name.text.trim());
             }
           },
-          child: Text(context.l10n.grpERename),
         ),
       ],
     );
@@ -190,8 +195,8 @@ class _DeleteRoleDialogState extends State<_DeleteRoleDialog> {
   Widget build(BuildContext context) {
     final role = widget.role;
     final needsTarget = role.memberCount > 0;
-    return AlertDialog(
-      title: Text(context.l10n.grpEDeleteRoleTitle(role.name)),
+    return TfDialogFrame(
+      title: context.l10n.grpEDeleteRoleTitle(role.name),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,16 +224,18 @@ class _DeleteRoleDialogState extends State<_DeleteRoleDialog> {
         ],
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpECancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpECancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('delete-role-submit'),
+          label: context.l10n.grpEDelete,
+          variant: TfButtonVariant.primary,
           onPressed: needsTarget && _target == null
               ? null
               : () => Navigator.of(context).pop(_target ?? ''),
-          child: Text(context.l10n.grpEDelete),
         ),
       ],
     );

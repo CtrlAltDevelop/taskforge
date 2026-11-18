@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -130,18 +133,20 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
   Future<void> _delete(d.Dashboard dash) => _try(() async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.grpCDashDeleteTitle(dash.name)),
+      builder: (context) => TfDialogFrame(
+        title: context.l10n.grpCDashDeleteTitle(dash.name),
         content: Text(context.l10n.grpCDashDeleteBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: context.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: Text(context.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete-dashboard'),
+            label: context.l10n.grpCDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.pop(context, true),
-            child: Text(context.l10n.grpCDelete),
           ),
         ],
       ),
@@ -303,21 +308,21 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
   );
 
   List<Widget> _newButtons() => [
-    OutlinedButton(
+    TfButton(
       key: const Key('new-blank'),
+      label: context.l10n.grpCDashBlankDashboard,
       onPressed: _busy ? null : _newBlank,
-      child: Text(context.l10n.grpCDashBlankDashboard),
     ),
     if (widget.projectId.isNotEmpty)
-      OutlinedButton(
+      TfButton(
         key: const Key('template-project_overview'),
+        label: context.l10n.grpCDashProjectOverview,
         onPressed: _busy ? null : () => _fromTemplate('project_overview'),
-        child: Text(context.l10n.grpCDashProjectOverview),
       ),
-    OutlinedButton(
+    TfButton(
       key: const Key('template-my_work'),
+      label: context.l10n.grpCDashMyWork,
       onPressed: _busy ? null : () => _fromTemplate('my_work'),
-      child: Text(context.l10n.grpCDashMyWork),
     ),
   ];
 
@@ -326,11 +331,11 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
   Widget _pinButton(BuildContext context, d.Dashboard current) {
     final l = context.l10n;
     final pinned = ref.watch(pinnedDashboardIdsProvider).contains(current.id);
-    return IconButton(
+    return TfIconButton(
       key: const Key('pin-dashboard'),
       tooltip: pinned ? l.dashUnpinFromHome : l.dashPinToHome,
-      isSelected: pinned,
-      icon: TfIcon(pinned ? TfIcons.pinOff : TfIcons.pin, size: 24),
+      selected: pinned,
+      icon: pinned ? TfIcons.pinOff : TfIcons.pin,
       onPressed: () async {
         final messenger = ScaffoldMessenger.of(context);
         try {
@@ -357,13 +362,10 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (!_editing && all.isNotEmpty)
-          DropdownButton<String>(
+          TfSelectField(
             key: const Key('dashboard-picker'),
+            options: {for (final x in all) x.id: x.name},
             value: current?.id,
-            items: [
-              for (final x in all)
-                DropdownMenuItem(value: x.id, child: Text(x.name)),
-            ],
             onChanged: (v) => setState(() => _selected = v),
           ),
         if (_editing)
@@ -395,17 +397,17 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
             ],
           ),
         if (!_editing && current != null && current.canEdit)
-          OutlinedButton.icon(
+          TfButton(
             key: const Key('edit-dashboard'),
-            icon: const TfIcon(TfIcons.edit, size: 24),
-            label: Text(context.l10n.grpCDashEdit),
+            label: context.l10n.grpCDashEdit,
+            icon: TfIcons.edit,
             onPressed: () => _startEditing(current),
           ),
         if (!_editing && current != null)
-          IconButton(
+          TfIconButton(
             key: const Key('refresh-all'),
+            icon: TfIcons.refresh,
             tooltip: context.l10n.grpCDashRefresh,
-            icon: const TfIcon(TfIcons.refresh, size: 24),
             onPressed: () => ref.read(dashboardActionsProvider).refreshWidgets([
               for (final w in current.widgets)
                 if (!_unsaved.contains(w.id)) (id: w.id, version: w.version),
@@ -413,36 +415,38 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           ),
         if (!_editing && current != null) _pinButton(context, current),
         if (!_editing && current != null && current.canEdit)
-          IconButton(
+          TfIconButton(
             key: const Key('delete-dashboard'),
+            icon: TfIcons.trash,
             tooltip: context.l10n.grpCDelete,
-            icon: const TfIcon(TfIcons.trash, size: 24),
             onPressed: _busy ? null : () => _delete(current),
           ),
         if (_editing) ...[
-          OutlinedButton.icon(
+          TfButton(
             key: const Key('add-widget'),
-            icon: const TfIcon(TfIcons.chart, size: 24),
-            label: Text(context.l10n.grpCDashAddWidget),
+            label: context.l10n.grpCDashAddWidget,
+            icon: TfIcons.chart,
             onPressed: _draft!.widgets.length >= d.maxWidgets
                 ? null
                 : _addWidget,
           ),
-          OutlinedButton.icon(
+          TfButton(
             key: const Key('share-dashboard'),
-            icon: const TfIcon(TfIcons.users, size: 24),
-            label: Text(_draft!.visibility.labelIn(context.l10n)),
+            label: _draft!.visibility.labelIn(context.l10n),
+            icon: TfIcons.users,
             onPressed: _share,
           ),
-          FilledButton(
+          TfButton(
             key: const Key('save-dashboard'),
+            label: context.l10n.grpCDashSave,
+            variant: TfButtonVariant.primary,
             onPressed: _busy ? null : _save,
-            child: Text(context.l10n.grpCDashSave),
           ),
-          TextButton(
+          TfButton(
             key: const Key('cancel-edit'),
+            label: context.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: _busy ? null : _cancel,
-            child: Text(context.l10n.grpCCancel),
           ),
         ],
       ],
@@ -480,9 +484,9 @@ class _ShareDialogState extends State<_ShareDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
+  Widget build(BuildContext context) => TfDialogFrame(
     key: const Key('share-dialog'),
-    title: Text(context.l10n.grpCDashDialogTitle),
+    title: context.l10n.grpCDashDialogTitle,
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -518,17 +522,19 @@ class _ShareDialogState extends State<_ShareDialog> {
       ],
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpCCancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpCCancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('share-ok'),
+        label: context.l10n.grpCDashOk,
+        variant: TfButtonVariant.primary,
         onPressed: () => Navigator.pop(context, (
           name: _name.text.trim(),
           visibility: _visibility,
         )),
-        child: Text(context.l10n.grpCDashOk),
       ),
     ],
   );

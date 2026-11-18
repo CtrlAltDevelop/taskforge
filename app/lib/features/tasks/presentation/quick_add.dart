@@ -108,7 +108,7 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
           'task.new',
           l10n: context.l10n,
         ),
-        prefixIcon: const TfIcon(TfIcons.plus),
+        prefixIcon: const TfIcon(TfIcons.plus, size: TfIconSize.control),
         counterText: '',
         border: const OutlineInputBorder(),
       ),

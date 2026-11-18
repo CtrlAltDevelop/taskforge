@@ -65,10 +65,13 @@ class TableHeader extends StatelessWidget {
         children: [
           SizedBox(
             width: tableCheckWidth,
-            child: Checkbox(
-              key: const Key('select-all'),
-              value: allPicked,
-              onChanged: canPick ? (on) => onPickAll(on == true) : null,
+            child: Semantics(
+              label: context.l10n.tblSelectAll,
+              child: Checkbox(
+                key: const Key('select-all'),
+                value: allPicked,
+                onChanged: canPick ? (on) => onPickAll(on == true) : null,
+              ),
             ),
           ),
           cell('title', context.l10n.grpFColTitle, sortable: true),

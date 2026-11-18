@@ -1,3 +1,10 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -274,19 +281,20 @@ class _BuilderState extends ConsumerState<_Builder> {
       length: 2,
       child: Scaffold(
         appBar: TfAppBar(
-          leading: IconButton(
+          leading: TfIconButton(
             key: const Key('back-forms'),
+            icon: TfIcons.arrowStart,
             tooltip: t.grpEBack,
-            icon: const BackButtonIcon(),
             onPressed: () =>
                 context.canPop() ? context.pop() : context.go('/forms'),
           ),
           title: Text(widget.existing == null ? t.formsNew : t.formsEdit),
           actions: [
-            TextButton(
+            TfButton(
               key: const Key('save-form'),
+              label: t.save,
+              variant: TfButtonVariant.ghost,
               onPressed: _saving ? null : _save,
-              child: Text(t.save),
             ),
           ],
           bottom: TabBar(
@@ -319,17 +327,17 @@ class _BuilderState extends ConsumerState<_Builder> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        TextField(
+        TfTextField(
           key: const Key('form-name-field'),
           controller: _name,
-          decoration: InputDecoration(labelText: t.formsNameLabel),
+          label: t.formsNameLabel,
         ),
         const SizedBox(height: 12),
-        TextField(
+        TfTextField(
           key: const Key('form-description-field'),
           controller: _description,
+          label: t.formsDescriptionLabel,
           maxLines: 3,
-          decoration: InputDecoration(labelText: t.formsDescriptionLabel),
         ),
         const SizedBox(height: 20),
         Text(t.formsQuestions, style: Theme.of(context).textTheme.titleMedium),
@@ -339,25 +347,25 @@ class _BuilderState extends ConsumerState<_Builder> {
           onReorderItem: _move,
           children: [
             for (var i = 0; i < _questions.length; i++)
-              ListTile(
+              TfRow(
                 key: ValueKey(_questions[i].id),
+                title: _questions[i].label,
+                subtitle: _kindLabel(_questions[i], fields),
                 leading: ReorderableDragStartListener(
                   index: i,
                   child: const TfIcon(TfIcons.grip),
                 ),
-                title: Text(_questions[i].label),
-                subtitle: Text(_kindLabel(_questions[i], fields)),
-                onTap: () => _edit(i),
                 trailing: _questions[i].kind == QuestionKind.title
                     ? null
-                    : IconButton(
+                    : TfIconButton(
                         key: Key('remove-q-${_questions[i].id}'),
+                        icon: TfIcons.trash,
                         tooltip: t.formsRemoveQuestion,
-                        icon: const TfIcon(TfIcons.trash),
                         onPressed: () => setState(
                           () => _questions = [..._questions]..removeAt(i),
                         ),
                       ),
+                onTap: () => _edit(i),
               ),
           ],
         ),
@@ -365,8 +373,9 @@ class _BuilderState extends ConsumerState<_Builder> {
           spacing: 8,
           children: [
             if (!_questions.any((q) => q.kind == QuestionKind.description))
-              OutlinedButton(
+              TfButton(
                 key: const Key('add-description'),
+                label: t.formsAddDescription,
                 onPressed: () => _add(
                   Question(
                     id: _newId(),
@@ -374,10 +383,10 @@ class _BuilderState extends ConsumerState<_Builder> {
                     label: t.formsDefaultDescription,
                   ),
                 ),
-                child: Text(t.formsAddDescription),
               ),
-            OutlinedButton(
+            TfButton(
               key: const Key('add-file'),
+              label: t.formsAddFileQuestion,
               onPressed: () => _add(
                 Question(
                   id: _newId(),
@@ -386,41 +395,38 @@ class _BuilderState extends ConsumerState<_Builder> {
                   maxFiles: 1,
                 ),
               ),
-              child: Text(t.formsAddFileQuestion),
             ),
-            OutlinedButton(
+            TfButton(
               key: const Key('add-custom'),
+              label: t.formsAddField,
               onPressed: () => _addCustom(available),
-              child: Text(t.formsAddField),
             ),
           ],
         ),
         const Divider(height: 40),
         Text(t.formsTarget, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
+        TfSelectField(
           key: const Key('form-status'),
-          initialValue: workflow?.statuses.any((s) => s.id == _statusId) == true
+          options: {
+            '': t.formsStatusDefault,
+            for (final s in workflow?.statuses ?? const []) s.id: s.name,
+          },
+          value: workflow?.statuses.any((s) => s.id == _statusId) == true
               ? _statusId
               : '',
-          decoration: InputDecoration(labelText: t.formsStatusLabel),
-          items: [
-            DropdownMenuItem(value: '', child: Text(t.formsStatusDefault)),
-            for (final s in workflow?.statuses ?? const [])
-              DropdownMenuItem(value: s.id, child: Text(s.name)),
-          ],
           onChanged: (v) => setState(() => _statusId = v ?? ''),
+          label: t.formsStatusLabel,
+          expand: true,
         ),
         const SizedBox(height: 12),
-        DropdownButtonFormField<String>(
+        TfSelectField(
           key: const Key('form-priority'),
-          initialValue: _priority,
-          decoration: InputDecoration(labelText: t.formsPriorityLabel),
-          items: [
-            for (final p in priorities)
-              DropdownMenuItem(value: p, child: Text(_priorityLabel(p))),
-          ],
-          onChanged: (v) => setState(() => _priority = v ?? 'none'),
+          options: {for (final p in priorities) p: _priorityLabel(p)},
+          value: _priority,
+          onChanged: (v) => setState(() => _priority = v),
+          label: t.formsPriorityLabel,
+          expand: true,
         ),
         const SizedBox(height: 12),
         Text(t.formsAssigneesLabel),
@@ -439,41 +445,39 @@ class _BuilderState extends ConsumerState<_Builder> {
           ],
         ),
         const Divider(height: 40),
-        SwitchListTile(
+        TfToggle(
           key: const Key('form-enabled'),
-          title: Text(t.formsEnabled),
           value: _enabled,
           onChanged: (v) => setState(() => _enabled = v),
+          label: t.formsEnabled,
         ),
-        SwitchListTile(
+        TfToggle(
           key: const Key('form-require-email'),
-          title: Text(t.formsRequireEmail),
           value: _requireEmail,
           onChanged: (v) => setState(() => _requireEmail = v),
+          label: t.formsRequireEmail,
         ),
-        SwitchListTile(
+        TfToggle(
           key: const Key('form-confirmation'),
-          title: Text(t.formsSendConfirmation),
           value: _sendConfirmation,
           onChanged: (v) => setState(() => _sendConfirmation = v),
+          label: t.formsSendConfirmation,
         ),
-        SwitchListTile(
+        TfToggleTile(
           key: const Key('form-notify'),
-          title: Text(t.formsNotifyStatus),
-          subtitle: Text(t.formsNotifyStatusHint),
           value: _notifyStatus,
           onChanged: (v) => setState(() => _notifyStatus = v),
+          title: t.formsNotifyStatus,
+          subtitle: t.formsNotifyStatusHint,
         ),
         const Divider(height: 40),
         Text(t.formsBranding, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        TextField(
+        TfTextField(
           key: const Key('form-color'),
           controller: _color,
-          decoration: InputDecoration(
-            labelText: t.formsColorLabel,
-            hintText: '#1a73e8',
-          ),
+          label: t.formsColorLabel,
+          hint: '#1a73e8',
         ),
         const SizedBox(height: 12),
         TextField(
@@ -535,54 +539,54 @@ class _QuestionDialogState extends State<_QuestionDialog> {
   Widget build(BuildContext context) {
     final t = context.l10n;
     final isTitle = widget.question.kind == QuestionKind.title;
-    return AlertDialog(
-      title: Text(t.formsEditQuestion),
+    return TfDialogFrame(
+      title: t.formsEditQuestion,
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
+            TfTextField(
               key: const Key('question-label'),
               controller: _label,
+              label: t.formsQuestionLabel,
               onChanged: (_) => setState(() {}),
-              decoration: InputDecoration(labelText: t.formsQuestionLabel),
             ),
             const SizedBox(height: 12),
-            TextField(
+            TfTextField(
               key: const Key('question-help'),
               controller: _help,
-              decoration: InputDecoration(labelText: t.formsQuestionHelp),
+              label: t.formsQuestionHelp,
             ),
             const SizedBox(height: 12),
-            SwitchListTile(
+            TfToggle(
               key: const Key('question-required'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(t.formsQuestionRequired),
               value: _required || isTitle,
               onChanged: isTitle ? null : (v) => setState(() => _required = v),
+              label: t.formsQuestionRequired,
             ),
             const SizedBox(height: 12),
             if (widget.question.kind == QuestionKind.file)
-              DropdownButtonFormField<int>(
+              TfSelectField(
                 key: const Key('question-max-files'),
-                initialValue: _maxFiles < 1 ? 1 : _maxFiles,
-                decoration: InputDecoration(labelText: t.formsMaxFiles),
-                items: [
-                  for (var n = 1; n <= 5; n++)
-                    DropdownMenuItem(value: n, child: Text('$n')),
-                ],
-                onChanged: (v) => setState(() => _maxFiles = v ?? 1),
+                options: {for (var n = 1; n <= 5; n++) n: '$n'},
+                value: _maxFiles < 1 ? 1 : _maxFiles,
+                onChanged: (v) => setState(() => _maxFiles = v),
+                label: t.formsMaxFiles,
+                expand: true,
               ),
           ],
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(t.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('question-ok'),
+          label: t.save,
+          variant: TfButtonVariant.primary,
           onPressed: _label.text.trim().isEmpty
               ? null
               : () => Navigator.of(context).pop(
@@ -593,7 +597,6 @@ class _QuestionDialogState extends State<_QuestionDialog> {
                     maxFiles: _maxFiles,
                   ),
                 ),
-          child: Text(t.save),
         ),
       ],
     );

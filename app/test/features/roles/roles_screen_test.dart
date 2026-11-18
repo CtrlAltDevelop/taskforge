@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
@@ -336,9 +338,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();
-      FilledButton submit() => tester.widget<FilledButton>(
-        find.byKey(const Key('delete-role-submit')),
-      );
+      TfButton submit() =>
+          tester.widget<TfButton>(find.byKey(const Key('delete-role-submit')));
       expect(submit().onPressed, isNull);
 
       await tester.tap(find.byKey(const Key('reassign-to')));

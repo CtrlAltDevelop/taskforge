@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
@@ -244,7 +245,7 @@ void main() {
     expect(key('share-save'), findsNothing);
     expect(find.textContaining('doc.manage'), findsOneWidget);
     expect(
-      tester.widget<SwitchListTile>(key('share-restricted')).onChanged,
+      tester.widget<TfToggleTile>(key('share-restricted')).onChanged,
       isNull,
     );
   });

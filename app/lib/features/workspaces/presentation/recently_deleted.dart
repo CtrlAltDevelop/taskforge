@@ -2,6 +2,10 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 
@@ -26,26 +30,24 @@ class RecentlyDeleted extends ConsumerWidget {
     final deleted = ref.watch(deletedWorkspacesProvider).value ?? const [];
     if (deleted.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(top: 32),
+      padding: const EdgeInsets.only(top: TfSpace.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            context.l10n.grpJRecentlyDeleted,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          TfSectionHeader(title: context.l10n.grpJRecentlyDeleted),
           for (final w in deleted)
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                key: Key('deleted-${w.id}'),
-                contentPadding: EdgeInsets.zero,
-                title: Text(w.name),
-                trailing: OutlinedButton(
-                  key: Key('restore-${w.id}'),
-                  onPressed: () => _restore(context, ref, w.id),
-                  child: Text(context.l10n.grpJRestore),
+            Padding(
+              padding: const EdgeInsets.only(bottom: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  key: Key('deleted-${w.id}'),
+                  title: w.name,
+                  trailing: TfButton(
+                    key: Key('restore-${w.id}'),
+                    label: context.l10n.grpJRestore,
+                    onPressed: () => _restore(context, ref, w.id),
+                  ),
                 ),
               ),
             ),

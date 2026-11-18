@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:material_ui/material_ui.dart';
@@ -32,72 +36,71 @@ class PlanningTaskRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final points = task.points;
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        dense: true,
-        contentPadding: const EdgeInsetsDirectional.only(start: 4, end: 8),
-        leading: canDrag
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Checkbox(
-                    key: Key('select-${task.id}'),
-                    value: selected,
-                    onChanged: (v) => onToggle(v ?? false),
-                  ),
-                  Draggable<SprintTask>(
-                    key: Key('drag-${task.id}'),
-                    data: task,
-                    feedback: Material(
-                      elevation: 4,
-                      child: SizedBox(
-                        width: 260,
-                        child: ListTile(
-                          dense: true,
-                          title: Text(task.title, maxLines: 1),
-                          subtitle: Text(task.key),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfTile(
+          title: Text(
+            task.title,
+            overflow: TextOverflow.ellipsis,
+            style: task.isDone
+                ? const TextStyle(decoration: TextDecoration.lineThrough)
+                : null,
+          ),
+          subtitle: Text(
+            [
+              task.key,
+              if (task.statusName.isNotEmpty) task.statusName,
+              if (task.late) context.l10n.grpGAddedAfterStart,
+            ].join(' · '),
+            key: task.late ? Key('late-${task.id}') : null,
+            style: task.late
+                ? TextStyle(color: theme.colorScheme.error)
+                : theme.textTheme.bodySmall,
+          ),
+          leading: canDrag
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      key: Key('select-${task.id}'),
+                      value: selected,
+                      onChanged: (v) => onToggle(v ?? false),
+                    ),
+                    Draggable<SprintTask>(
+                      key: Key('drag-${task.id}'),
+                      data: task,
+                      feedback: Material(
+                        elevation: 4,
+                        child: SizedBox(
+                          width: 260,
+                          child: TfTile(
+                            title: Text(task.title, maxLines: 1),
+                            subtitle: Text(task.key),
+                          ),
                         ),
                       ),
+                      childWhenDragging: const Opacity(
+                        opacity: 0.3,
+                        child: TfIcon(TfIcons.grip),
+                      ),
+                      child: Tooltip(
+                        message: context.l10n.grpGDragToOtherList,
+                        child: const TfIcon(TfIcons.grip),
+                      ),
                     ),
-                    childWhenDragging: const Opacity(
-                      opacity: 0.3,
-                      child: TfIcon(TfIcons.grip),
-                    ),
-                    child: Tooltip(
-                      message: context.l10n.grpGDragToOtherList,
-                      child: const TfIcon(TfIcons.grip),
-                    ),
-                  ),
-                ],
-              )
-            : null,
-        title: Text(
-          task.title,
-          overflow: TextOverflow.ellipsis,
-          style: task.isDone
-              ? const TextStyle(decoration: TextDecoration.lineThrough)
+                  ],
+                )
               : null,
-        ),
-        subtitle: Text(
-          [
-            task.key,
-            if (task.statusName.isNotEmpty) task.statusName,
-            if (task.late) context.l10n.grpGAddedAfterStart,
-          ].join(' · '),
-          key: task.late ? Key('late-${task.id}') : null,
-          style: task.late
-              ? TextStyle(color: theme.colorScheme.error)
-              : theme.textTheme.bodySmall,
-        ),
-        trailing: ActionChip(
-          key: Key('points-${task.id}'),
-          label: Text(
-            points == null ? '—' : context.localDigits(pointsText(points)),
+          trailing: ActionChip(
+            key: Key('points-${task.id}'),
+            label: Text(
+              points == null ? '—' : context.localDigits(pointsText(points)),
+            ),
+            tooltip: context.l10n.grpGStoryPoints,
+            onPressed: onPoints,
           ),
-          tooltip: context.l10n.grpGStoryPoints,
-          onPressed: onPoints,
         ),
       ),
     );
@@ -185,10 +188,10 @@ class CapacityBar extends StatelessWidget {
                 ),
               ),
               if (onEdit != null)
-                IconButton(
+                TfIconButton(
                   key: const Key('capacity-edit'),
+                  icon: TfIcons.tune,
                   tooltip: context.l10n.grpGSetCapacity,
-                  icon: const TfIcon(TfIcons.tune, size: 18),
                   onPressed: onEdit,
                 ),
               SegmentedButton<bool>(

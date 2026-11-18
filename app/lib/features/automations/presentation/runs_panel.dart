@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -180,10 +181,11 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
               child: Center(
                 child: _loading
                     ? const CircularProgressIndicator()
-                    : TextButton(
+                    : TfButton(
                         key: const Key('runs-load-more'),
+                        label: context.l10n.grpGLoadMore,
+                        variant: TfButtonVariant.ghost,
                         onPressed: () => _loadMore(value),
-                        child: Text(context.l10n.grpGLoadMore),
                       ),
               ),
             ),

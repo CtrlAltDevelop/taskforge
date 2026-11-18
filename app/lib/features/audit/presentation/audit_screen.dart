@@ -1,3 +1,10 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
@@ -109,19 +116,19 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
     final allowed = ref.watch(permissionSetProvider).can(Perm.auditView);
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-home'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpBBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.l10n.grpBAuditTitle),
         actions: [
           if (allowed)
-            IconButton(
+            TfIconButton(
               key: const Key('audit-export'),
+              icon: TfIcons.download,
               tooltip: context.l10n.grpBExportCsv,
-              icon: const TfIcon(TfIcons.download),
               onPressed: _exporting ? null : _export,
             ),
         ],
@@ -153,9 +160,10 @@ class _Body extends ConsumerWidget {
     final state = ref.watch(auditListProvider(filters));
     final notifier = ref.read(auditListProvider(filters).notifier);
     final now = ref.watch(auditNowProvider)();
-    return ListView(
+    return TfPage(
       key: const Key('audit-list'),
-      padding: const EdgeInsets.all(16),
+      maxWidth: TfPageWidth.wide,
+      lazy: true,
       children: [
         _Filters(
           filters: filters,
@@ -190,14 +198,13 @@ class _Body extends ConsumerWidget {
               key: const Key('audit-error'),
             ),
           if (state.hasMore)
-            TextButton(
+            TfButton(
               key: const Key('audit-more'),
+              label: state.loadingMore
+                  ? context.l10n.grpBLoading
+                  : context.l10n.grpBShowOlder,
+              variant: TfButtonVariant.ghost,
               onPressed: state.loadingMore ? null : notifier.more,
-              child: Text(
-                state.loadingMore
-                    ? context.l10n.grpBLoading
-                    : context.l10n.grpBShowOlder,
-              ),
             ),
         ],
       ],
@@ -233,49 +240,43 @@ class _Filters extends ConsumerWidget {
             selected: filters.action == prefix,
             onSelected: (_) => onFilters(filters.copyWith(action: prefix)),
           ),
-        DropdownButton<String>(
+        TfSelectField(
           key: const Key('filter-person'),
+          options: {
+            '': context.l10n.grpBAnyone,
+            for (final m in members) m.userId: m.displayName,
+          },
           value: members.any((m) => m.userId == filters.actor)
               ? filters.actor
               : '',
-          hint: Text(context.l10n.grpBAnyone),
-          items: [
-            DropdownMenuItem(value: '', child: Text(context.l10n.grpBAnyone)),
-            for (final m in members)
-              DropdownMenuItem(value: m.userId, child: Text(m.displayName)),
-          ],
-          onChanged: (v) => onFilters(filters.copyWith(actor: v ?? '')),
+          onChanged: (v) => onFilters(filters.copyWith(actor: v)),
+          hint: context.l10n.grpBAnyone,
         ),
-        DropdownButton<String>(
+        TfSelectField(
           key: const Key('filter-project'),
+          options: {
+            '': context.l10n.grpBAnyProject,
+            for (final p in projects) p.id: p.name,
+          },
           value: projects.any((p) => p.id == filters.projectId)
               ? filters.projectId
               : '',
-          items: [
-            DropdownMenuItem(
-              value: '',
-              child: Text(context.l10n.grpBAnyProject),
-            ),
-            for (final p in projects)
-              DropdownMenuItem(value: p.id, child: Text(p.name)),
-          ],
-          onChanged: (v) => onFilters(filters.copyWith(projectId: v ?? '')),
+          onChanged: (v) => onFilters(filters.copyWith(projectId: v)),
         ),
-        OutlinedButton.icon(
+        TfButton(
           key: const Key('filter-dates'),
-          icon: const TfIcon(TfIcons.calendarRange),
-          label: Text(
-            filters.since == null
-                ? context.l10n.grpBAnyTime
-                : _range(context, filters),
-          ),
+          label: filters.since == null
+              ? context.l10n.grpBAnyTime
+              : _range(context, filters),
+          icon: TfIcons.calendarRange,
           onPressed: onPickDates,
         ),
         if (!filters.isEmpty)
-          TextButton(
+          TfButton(
             key: const Key('filters-clear'),
+            label: context.l10n.grpBClearFilters,
+            variant: TfButtonVariant.ghost,
             onPressed: () => onFilters(const AuditFilters()),
-            child: Text(context.l10n.grpBClearFilters),
           ),
       ],
     );
@@ -295,28 +296,26 @@ class _Row extends StatelessWidget {
   final DateTime now;
 
   @override
-  Widget build(BuildContext context) => Card(
-    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-    clipBehavior: Clip.antiAlias,
-    child: ListTile(
-      key: Key('audit-row-${entry.id}'),
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels, context.l10n)}',
-      ),
-      subtitle: Text(
-        '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
-      ),
-      trailing: entry.batchId.isEmpty
-          ? null
-          : Tooltip(
-              message: context.l10n.grpBBulkChange,
-              child: const TfIcon(TfIcons.layers, size: 16),
-            ),
-      onTap: () => showDialog<void>(
-        context: context,
-        builder: (_) => DiffDialog(entry: entry, labels: labels),
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+    child: TfPanel(
+      padding: EdgeInsets.zero,
+      child: TfRow(
+        key: Key('audit-row-${entry.id}'),
+        title:
+            '${entry.whoIn(context.l10n)} · ${describeEntry(entry, labels, context.l10n)}',
+        subtitle:
+            '${entry.targetType} · ${entry.action} · ${relativeTime(now, entry.at, context.l10n, context.localePrefs)}',
+        trailing: entry.batchId.isEmpty
+            ? null
+            : Tooltip(
+                message: context.l10n.grpBBulkChange,
+                child: const TfIcon(TfIcons.layers, size: 16),
+              ),
+        onTap: () => showDialog<void>(
+          context: context,
+          builder: (_) => DiffDialog(entry: entry, labels: labels),
+        ),
       ),
     ),
   );
@@ -344,9 +343,9 @@ class DiffDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final changes = fieldChanges(entry);
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('diff-dialog'),
-      title: Text(entry.action),
+      title: entry.action,
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
@@ -393,9 +392,10 @@ class DiffDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpBClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpBClose),
         ),
       ],
     );
@@ -419,56 +419,60 @@ class _ExportDialog extends StatelessWidget {
     return _dialog(context, shown, lines.length);
   }
 
-  Widget _dialog(BuildContext context, String shown, int total) => AlertDialog(
-    key: const Key('audit-export-dialog'),
-    title: Text(context.l10n.grpBAuditExportTitle),
-    content: SizedBox(
-      width: 520,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (total > previewLines)
-              Text(
-                context.l10n.grpBAuditExportNote(previewLines, total),
-                key: const Key('audit-export-note'),
-              ),
-            SelectableText(
-              shown,
-              key: const Key('audit-export-text'),
-              style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+  Widget _dialog(BuildContext context, String shown, int total) =>
+      TfDialogFrame(
+        key: const Key('audit-export-dialog'),
+        title: context.l10n.grpBAuditExportTitle,
+        content: SizedBox(
+          width: 520,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (total > previewLines)
+                  Text(
+                    context.l10n.grpBAuditExportNote(previewLines, total),
+                    key: const Key('audit-export-note'),
+                  ),
+                SelectableText(
+                  shown,
+                  key: const Key('audit-export-text'),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-    actions: [
-      TextButton(
-        key: const Key('audit-export-copy'),
-        onPressed: () async {
-          final copied = context.l10n.grpBCsvCopied;
-          await Clipboard.setData(ClipboardData(text: csv));
-          messenger.showSnackBar(SnackBar(content: Text(copied)));
-          if (context.mounted) Navigator.pop(context);
-        },
-        child: Text(context.l10n.grpBCopy),
-      ),
-      TextButton(
-        key: const Key('audit-export-save'),
-        onPressed: () async {
-          await FilePicker.saveFile(
-            fileName: 'audit-log.csv',
-            bytes: Uint8List.fromList(utf8.encode(csv)),
-            mimeType: 'text/csv',
-          );
-          if (context.mounted) Navigator.pop(context);
-        },
-        child: Text(context.l10n.grpBSaveAsFile),
-      ),
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpBClose),
-      ),
-    ],
-  );
+        actions: [
+          TfButton(
+            key: const Key('audit-export-copy'),
+            label: context.l10n.grpBCopy,
+            variant: TfButtonVariant.ghost,
+            onPressed: () async {
+              final copied = context.l10n.grpBCsvCopied;
+              await Clipboard.setData(ClipboardData(text: csv));
+              messenger.showSnackBar(SnackBar(content: Text(copied)));
+              if (context.mounted) Navigator.pop(context);
+            },
+          ),
+          TfButton(
+            key: const Key('audit-export-save'),
+            label: context.l10n.grpBSaveAsFile,
+            variant: TfButtonVariant.ghost,
+            onPressed: () async {
+              await FilePicker.saveFile(
+                fileName: 'audit-log.csv',
+                bytes: Uint8List.fromList(utf8.encode(csv)),
+                mimeType: 'text/csv',
+              );
+              if (context.mounted) Navigator.pop(context);
+            },
+          ),
+          TfButton(
+            label: context.l10n.grpBClose,
+            variant: TfButtonVariant.ghost,
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      );
 }

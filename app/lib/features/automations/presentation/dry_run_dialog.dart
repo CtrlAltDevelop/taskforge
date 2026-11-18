@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,8 +58,8 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
     final tasks = ref.watch(dryRunTasksProvider(widget.rule.projectId));
     final scheme = Theme.of(context).colorScheme;
     final result = _result;
-    return AlertDialog(
-      title: Text(context.l10n.grpGDryRunTitle(widget.rule.name)),
+    return TfDialogFrame(
+      title: context.l10n.grpGDryRunTitle(widget.rule.name),
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
@@ -143,14 +145,16 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpGClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpGClose),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('dry-run'),
+          label: context.l10n.grpGRun,
+          variant: TfButtonVariant.primary,
           onPressed: _task == null || _busy ? null : _run,
-          child: Text(context.l10n.grpGRun),
         ),
       ],
     );

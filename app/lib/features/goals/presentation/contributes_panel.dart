@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,25 +92,26 @@ class ContributesPanel extends ConsumerWidget {
               ),
             ),
             if (canAdd)
-              TextButton.icon(
+              TfButton(
                 key: const Key('contribute-add'),
+                label: t.goalsAddToKr,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: () => _add(context, ref),
-                icon: const TfIcon(TfIcons.plus, size: 18),
-                label: Text(t.goalsAddToKr),
               ),
           ],
         ),
         for (final c in rows ?? const <Contribution>[])
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            clipBehavior: Clip.antiAlias,
-            child: ListTile(
-              key: Key('contribution-${c.krId}'),
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: const TfIcon(TfIcons.flag, size: 18),
-              title: Text('${c.goalName} › ${c.krName}'),
-              onTap: () => context.push('/goals/${c.goalId}'),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+            child: TfPanel(
+              padding: EdgeInsets.zero,
+              child: TfRow(
+                key: Key('contribution-${c.krId}'),
+                title: '${c.goalName} › ${c.krName}',
+                leading: const TfIcon(TfIcons.flag, size: 18),
+                onTap: () => context.push('/goals/${c.goalId}'),
+              ),
             ),
           ),
       ],

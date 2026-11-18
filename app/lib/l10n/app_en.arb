@@ -32,6 +32,8 @@
   "densityComfortable": "Comfortable",
   "densityCompact": "Compact",
   "contrastLabel": "High contrast",
+  "reduceMotionLabel": "Reduce motion",
+  "reduceMotionHelp": "Animations become instant fades",
   "contrastHelp": "Stronger text and borders for easier reading",
   "appearancePreview": "Preview",
   "appearancePreviewTask": "Write the release notes",
@@ -1746,6 +1748,7 @@
     }
   },
   "grpFColTitle": "Title",
+  "tblSelectAll": "Select all tasks",
   "grpFTrashTitle": "{name} · Trash",
   "@grpFTrashTitle": {
     "placeholders": {

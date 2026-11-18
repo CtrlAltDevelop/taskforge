@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -139,10 +144,8 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
       (_type != FieldType.select || _preview.option(_default) != null);
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(
-      _editing ? context.l10n.grpEEditField : context.l10n.grpENewField,
-    ),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: _editing ? context.l10n.grpEEditField : context.l10n.grpENewField,
     content: SizedBox(
       width: 460,
       child: SingleChildScrollView(
@@ -160,20 +163,13 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
               ),
             ),
             const SizedBox(height: 12),
-            DropdownButtonFormField<FieldType>(
+            TfSelectField<FieldType>(
               key: const Key('field-type'),
-              initialValue: _type,
-              decoration: InputDecoration(labelText: context.l10n.grpEType),
-              items: [
-                for (final t in _types)
-                  DropdownMenuItem(
-                    value: t,
-                    child: Text(t.labelIn(context.l10n)),
-                  ),
-              ],
-              onChanged: _types.length == 1
-                  ? null
-                  : (t) => t == null ? null : _setType(t),
+              options: {for (final t in _types) t: t.labelIn(context.l10n)},
+              value: _type,
+              onChanged: _types.length == 1 ? null : (t) => _setType(t),
+              label: context.l10n.grpEType,
+              expand: true,
             ),
             const SizedBox(height: 12),
             if (_type.hasOptions) ...[
@@ -210,18 +206,16 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                       ],
                     ),
                     Expanded(
-                      child: TextField(
+                      child: TfTextField(
                         key: Key('option-label-$i'),
                         controller: o.controller,
-                        decoration: InputDecoration(
-                          hintText: context.l10n.grpELabel,
-                        ),
+                        hint: context.l10n.grpELabel,
                       ),
                     ),
-                    IconButton(
+                    TfIconButton(
                       key: Key('option-remove-$i'),
+                      icon: TfIcons.close,
                       tooltip: context.l10n.grpERemoveOption,
-                      icon: const TfIcon(TfIcons.close),
                       onPressed: () => setState(() {
                         _options.removeAt(i).controller.dispose();
                         if (_default == o.id) _default = '';
@@ -229,10 +223,11 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                     ),
                   ],
                 ),
-              TextButton.icon(
+              TfButton(
                 key: const Key('option-add'),
-                icon: const TfIcon(TfIcons.plus),
-                label: Text(context.l10n.grpEAddOption),
+                label: context.l10n.grpEAddOption,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: () => setState(
                   () => _options.add(
                     _EditableOption(
@@ -244,13 +239,12 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 ),
               ),
             ],
-            SwitchListTile(
+            TfToggleTile(
               key: const Key('field-required'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(context.l10n.grpERequired),
-              subtitle: Text(context.l10n.grpERequiredSub),
               value: _required,
               onChanged: (v) => setState(() => _required = v),
+              title: context.l10n.grpERequired,
+              subtitle: context.l10n.grpERequiredSub,
             ),
             if (!_type.hasOptions || _options.every((o) => o.id.isNotEmpty))
               FieldInput(
@@ -301,17 +295,17 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
       ),
     ),
     actions: [
-      TextButton(
+      TfButton(
         key: const Key('field-cancel'),
+        label: context.l10n.grpECancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpECancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('field-save'),
+        label: _editing ? context.l10n.grpESave : context.l10n.grpEAddField,
+        variant: TfButtonVariant.primary,
         onPressed: _save,
-        child: Text(
-          _editing ? context.l10n.grpESave : context.l10n.grpEAddField,
-        ),
       ),
     ],
   );
@@ -341,49 +335,46 @@ class _RemapDialogState extends State<RemapDialog> {
   late final _choice = {for (final id in widget.usage.keys) id: ''};
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.grpEOptionsInUse),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: context.l10n.grpEOptionsInUse,
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (final e in widget.usage.entries)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: DropdownButtonFormField<String>(
+            child: TfSelectField(
               key: Key('remap-${e.key}'),
-              initialValue: _choice[e.key],
-              decoration: InputDecoration(
-                labelText: context.l10n.grpERemapLabel(
-                  widget.field.option(e.key)?.label ??
-                      context.l10n.grpERemovedOption,
-                  e.value,
-                ),
-              ),
-              items: [
-                DropdownMenuItem(
-                  value: '',
-                  child: Text(context.l10n.grpENothingClear),
-                ),
+              options: {
+                '': context.l10n.grpENothingClear,
                 for (final o in widget.kept)
-                  if (o.id.isNotEmpty)
-                    DropdownMenuItem(value: o.id, child: Text(o.label)),
-              ],
-              onChanged: (v) => setState(() => _choice[e.key] = v ?? ''),
+                  if (o.id.isNotEmpty) o.id: o.label,
+              },
+              value: _choice[e.key],
+              onChanged: (v) => setState(() => _choice[e.key] = v),
+              label: context.l10n.grpERemapLabel(
+                widget.field.option(e.key)?.label ??
+                    context.l10n.grpERemovedOption,
+                e.value,
+              ),
+              expand: true,
             ),
           ),
       ],
     ),
     actions: [
-      TextButton(
+      TfButton(
         key: const Key('remap-cancel'),
+        label: context.l10n.grpECancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpECancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('remap-apply'),
+        label: context.l10n.grpEApply,
+        variant: TfButtonVariant.primary,
         onPressed: () =>
             Navigator.pop(context, Map<String, String>.of(_choice)),
-        child: Text(context.l10n.grpEApply),
       ),
     ],
   );

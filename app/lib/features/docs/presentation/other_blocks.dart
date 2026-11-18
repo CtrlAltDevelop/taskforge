@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -162,10 +167,11 @@ class TableBlockView extends StatelessWidget {
         if (!readOnly)
           Wrap(
             children: [
-              TextButton.icon(
+              TfButton(
                 key: Key('table-add-row-${block.id}'),
-                icon: const TfIcon(TfIcons.plus, size: 16),
-                label: Text(context.l10n.grpJTableRow),
+                label: context.l10n.grpJTableRow,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: () => onChanged(
                   block.withRows([
                     ...padded(),
@@ -173,10 +179,11 @@ class TableBlockView extends StatelessWidget {
                   ]),
                 ),
               ),
-              TextButton.icon(
+              TfButton(
                 key: Key('table-add-column-${block.id}'),
-                icon: const TfIcon(TfIcons.plus, size: 16),
-                label: Text(context.l10n.grpJTableColumn),
+                label: context.l10n.grpJTableColumn,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: columns >= 20
                     ? null
                     : () => onChanged(
@@ -185,20 +192,22 @@ class TableBlockView extends StatelessWidget {
                         ]),
                       ),
               ),
-              TextButton.icon(
+              TfButton(
                 key: Key('table-remove-row-${block.id}'),
-                icon: const TfIcon(TfIcons.minus, size: 16),
-                label: Text(context.l10n.grpJTableRow),
+                label: context.l10n.grpJTableRow,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.minus,
                 onPressed: rows.length <= 1
                     ? null
                     : () => onChanged(
                         block.withRows(padded().sublist(0, rows.length - 1)),
                       ),
               ),
-              TextButton.icon(
+              TfButton(
                 key: Key('table-remove-column-${block.id}'),
-                icon: const TfIcon(TfIcons.minus, size: 16),
-                label: Text(context.l10n.grpJTableColumn),
+                label: context.l10n.grpJTableColumn,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.minus,
                 onPressed: columns <= 1
                     ? null
                     : () => onChanged(
@@ -318,10 +327,10 @@ class ImageBlockView extends StatelessWidget {
                 ),
         ),
         if (!readOnly)
-          IconButton(
+          TfIconButton(
             key: Key('edit-image-${block.id}'),
+            icon: TfIcons.edit,
             tooltip: context.l10n.grpJEditImage,
-            icon: const TfIcon(TfIcons.edit, size: 18),
             onPressed: onEdit,
           ),
       ],
@@ -349,36 +358,42 @@ class TaskCardView extends StatelessWidget {
     final theme = Theme.of(context);
     final c = card;
     if (c == null) {
-      return Card(
-        key: const Key('task-card-loading'),
-        child: ListTile(dense: true, title: Text(context.l10n.grpJLoadingTask)),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+        child: TfPanel(
+          key: const Key('task-card-loading'),
+          padding: EdgeInsets.zero,
+          child: TfRow(title: context.l10n.grpJLoadingTask),
+        ),
       );
     }
     if (c.hidden) {
       return Card(
         key: Key('task-card-hidden-${c.taskId}'),
         color: theme.colorScheme.surfaceContainerHighest,
-        child: ListTile(
-          dense: true,
+        child: TfRow(
+          title: context.l10n.grpJNoAccessTask,
           leading: const TfIcon(TfIcons.lock),
-          title: Text(context.l10n.grpJNoAccessTask),
         ),
       );
     }
-    return Card(
-      key: Key('task-card-${c.taskId}'),
-      child: ListTile(
-        dense: true,
-        leading: TfIcon(
-          c.statusCategory == 'done' ? TfIcons.success : TfIcons.circle,
-          color: c.statusCategory == 'done' ? Colors.green : null,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        key: Key('task-card-${c.taskId}'),
+        padding: EdgeInsets.zero,
+        child: TfTile(
+          title: Text('${c.key}  ${c.title}', overflow: TextOverflow.ellipsis),
+          subtitle: Text(
+            [c.statusName, if (c.priority.isNotEmpty) c.priority].join(' · '),
+            key: Key('task-card-status-${c.taskId}'),
+          ),
+          leading: TfIcon(
+            c.statusCategory == 'done' ? TfIcons.success : TfIcons.circle,
+            color: c.statusCategory == 'done' ? Colors.green : null,
+          ),
+          onTap: () => onOpen(c),
         ),
-        title: Text('${c.key}  ${c.title}', overflow: TextOverflow.ellipsis),
-        subtitle: Text(
-          [c.statusName, if (c.priority.isNotEmpty) c.priority].join(' · '),
-          key: Key('task-card-status-${c.taskId}'),
-        ),
-        onTap: () => onOpen(c),
       ),
     );
   }

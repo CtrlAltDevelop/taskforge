@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -96,10 +97,11 @@ class _SsoCallbackScreenState extends ConsumerState<SsoCallbackScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    FilledButton(
+                    TfButton(
                       key: const Key('sso-back'),
+                      label: t.secBackToSignIn,
+                      variant: TfButtonVariant.primary,
                       onPressed: () => context.go('/sign-in'),
-                      child: Text(t.secBackToSignIn),
                     ),
                   ],
                 ),

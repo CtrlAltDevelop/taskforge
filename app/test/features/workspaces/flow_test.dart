@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -221,6 +222,7 @@ void main() {
       final client = await openSettings(tester);
 
       await tester.enterText(byKey('settings-name'), 'Alpha Two');
+      await tester.pump();
       await tester.tap(byKey('save-workspace'));
       await tester.pumpAndSettle();
 
@@ -234,6 +236,7 @@ void main() {
       client.takenSlugs.add('taken');
 
       await tester.enterText(byKey('settings-slug'), 'taken');
+      await tester.pump();
       await tester.tap(byKey('save-workspace'));
       await tester.pumpAndSettle();
 
@@ -247,6 +250,7 @@ void main() {
       client.failNext = const WorkspaceException(WorkspaceFailure.stale);
 
       await tester.enterText(byKey('settings-name'), 'Alpha Two');
+      await tester.pump();
       await tester.tap(byKey('save-workspace'));
       await tester.pumpAndSettle();
       expect(find.textContaining('Refresh to see'), findsOneWidget);
@@ -262,10 +266,12 @@ void main() {
       client.failNext = const WorkspaceException(WorkspaceFailure.forbidden);
 
       await tester.enterText(byKey('settings-name'), 'Alpha Two');
+      await tester.pump();
       await tester.tap(byKey('save-workspace'));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('permission'), findsOneWidget);
+      expect(byKey('settings-error'), findsOneWidget);
+      expect(find.textContaining('permission'), findsWidgets);
     });
 
     testWidgets('a non-owner cannot edit or delete', (tester) async {
@@ -283,14 +289,14 @@ void main() {
       await tester.tap(byKey('delete-workspace'));
       await tester.pumpAndSettle();
       expect(
-        tester.widget<FilledButton>(byKey('confirm-delete')).onPressed,
+        tester.widget<TfButton>(byKey("confirm-delete")).onPressed,
         isNull,
       );
 
       await tester.enterText(byKey('confirm-name'), 'alpha');
       await tester.pump();
       expect(
-        tester.widget<FilledButton>(byKey('confirm-delete')).onPressed,
+        tester.widget<TfButton>(byKey("confirm-delete")).onPressed,
         isNull,
       );
 

@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
@@ -109,17 +113,17 @@ class GoalsScreen extends ConsumerWidget {
         title: Text(t.goalsTitle),
         actions: [
           if (perms.can(Perm.goalManage))
-            IconButton(
+            TfIconButton(
               key: const Key('new-folder'),
+              icon: TfIcons.folderPlus,
               tooltip: t.goalsNewFolder,
-              icon: const TfIcon(TfIcons.folderPlus),
               onPressed: () => _newFolder(context, ref),
             ),
           if (perms.can(Perm.goalCreate))
-            IconButton(
+            TfIconButton(
               key: const Key('new-goal'),
+              icon: TfIcons.plus,
               tooltip: t.goalsNew,
-              icon: const TfIcon(TfIcons.plus),
               onPressed: goals.hasValue
                   ? () => _newGoal(context, ref, catalog)
                   : null,
@@ -147,8 +151,9 @@ class GoalsScreen extends ConsumerWidget {
             for (final g in roots)
               if (!folderIds.contains(g.folderId)) g,
           ];
-          return ListView(
-            padding: const EdgeInsets.all(16),
+          return TfPage(
+            maxWidth: TfPageWidth.wide,
+            lazy: true,
             children: [
               for (final f in cat.folders) ...[
                 _FolderHeader(
@@ -241,46 +246,50 @@ class GoalTile extends StatelessWidget {
     final end = goal.end;
     return Padding(
       padding: EdgeInsetsDirectional.only(start: 16.0 * depth),
-      child: Card(
-        child: InkWell(
-          key: Key('goal-${goal.id}'),
-          borderRadius: TfRadius.dialog,
-          onTap: () => context.push('/goals/${goal.id}'),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    if (goal.private)
-                      const Padding(
-                        padding: EdgeInsetsDirectional.only(end: 6),
-                        child: TfIcon(TfIcons.lock, size: 16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+        child: TfPanel(
+          padding: EdgeInsets.zero,
+          child: InkWell(
+            key: Key('goal-${goal.id}'),
+            borderRadius: TfRadius.dialog,
+            onTap: () => context.push('/goals/${goal.id}'),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (goal.private)
+                        const Padding(
+                          padding: EdgeInsetsDirectional.only(end: 6),
+                          child: TfIcon(TfIcons.lock, size: 16),
+                        ),
+                      Expanded(
+                        child: Text(
+                          goal.name,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                       ),
-                    Expanded(
-                      child: Text(
-                        goal.name,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    GoalStatusChip(status: goal.status),
-                  ],
-                ),
-                if (start != null && end != null)
-                  Text(
-                    t.goalsPeriod(
-                      context.localDate(start),
-                      context.localDate(end),
-                    ),
-                    style: Theme.of(context).textTheme.bodySmall,
+                      GoalStatusChip(status: goal.status),
+                    ],
                   ),
-                const SizedBox(height: 8),
-                GoalProgressBar(
-                  progress: goal.progress,
-                  color: goalStatusColor(goal.status),
-                ),
-              ],
+                  if (start != null && end != null)
+                    Text(
+                      t.goalsPeriod(
+                        context.localDate(start),
+                        context.localDate(end),
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  const SizedBox(height: 8),
+                  GoalProgressBar(
+                    progress: goal.progress,
+                    color: goalStatusColor(goal.status),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -108,6 +108,12 @@ class AppLocalizationsPs extends AppLocalizations {
   String get contrastLabel => 'لوړ توپیر';
 
   @override
+  String get reduceMotionLabel => 'حرکت کمول';
+
+  @override
+  String get reduceMotionHelp => 'انیمیشنونه سمدستي محو کیږي';
+
+  @override
   String get contrastHelp => 'د اسانه لوستلو لپاره پیاوړی متن او کرښې';
 
   @override
@@ -2944,6 +2950,9 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get grpFColTitle => 'سرلیک';
+
+  @override
+  String get tblSelectAll => 'ټول کارونه وټاکئ';
 
   @override
   String grpFTrashTitle(String name) {

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -63,15 +64,16 @@ class MergeBanner extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                FilledButton(
+                TfButton(
                   key: const Key('merge-acknowledge'),
+                  label: context.l10n.grpIMergeKeep,
+                  variant: TfButtonVariant.primary,
                   onPressed: onKeep,
-                  child: Text(context.l10n.grpIMergeKeep),
                 ),
-                OutlinedButton(
+                TfButton(
                   key: const Key('merge-reload'),
+                  label: context.l10n.grpIMergeReload,
                   onPressed: onReload,
-                  child: Text(context.l10n.grpIMergeReload),
                 ),
               ],
             ),

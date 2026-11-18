@@ -6,12 +6,6 @@ import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tokens/typography.dart';
 
-/// Old radius names; screens move to [TfRadius] one phase at a time and
-/// phase 49 deletes these.
-const radiusSmall = TfRadius.md;
-const radiusMedium = TfRadius.lg;
-const radiusLarge = 16.0;
-
 /// Builds the light, dark or high-contrast theme from the design tokens.
 /// [fontFallback] is kept for callers that pass their own; the tokens already
 /// carry the Arabic-script faces.

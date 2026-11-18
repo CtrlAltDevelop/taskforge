@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
@@ -501,7 +503,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(key('share-restricted'));
     await tester.pumpAndSettle();
-    final box = find.byType(CheckboxListTile);
+    final box = find.byType(TfCheckbox);
     expect(box, findsWidgets);
     await tester.tap(box.first);
     await tester.pump();

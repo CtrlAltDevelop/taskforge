@@ -1,4 +1,12 @@
-import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,27 +69,24 @@ class OfflineScreen extends ConsumerWidget {
     final workspace = ref.watch(workspaceScopeProvider);
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-home'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpAOfflineBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.l10n.grpAOfflineTitle),
       ),
       body: workspace == null
           ? Center(child: Text(context.l10n.grpAOfflineChooseWorkspace))
-          : ContentWidth(
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _Changes(workspace: workspace),
-                  const SizedBox(height: 24),
-                  const _Storage(),
-                  const SizedBox(height: 24),
-                  const _KeptProjects(),
-                ],
-              ),
+          : TfPage(
+              children: [
+                _Changes(workspace: workspace),
+                const SizedBox(height: 24),
+                const _Storage(),
+                const SizedBox(height: 24),
+                const _KeptProjects(),
+              ],
             ),
     );
   }
@@ -138,11 +143,10 @@ class _Changes extends ConsumerWidget {
         ),
         if (waiting.isEmpty) Text(context.l10n.grpAOfflineNothingWaiting),
         for (final e in waiting)
-          ListTile(
+          TfTile(
             key: Key('waiting-${e.id}'),
-            dense: true,
-            leading: const Icon(Icons.schedule),
             title: _Summary(entry: e),
+            leading: const Icon(Icons.schedule),
           ),
       ],
     );
@@ -215,71 +219,77 @@ class _AttentionCard extends ConsumerWidget {
     final sync = ref.read(offlineSyncProvider.notifier);
     final conflict = entry.state == OutboxState.conflict;
     final info = ConflictInfo.parse(entry.theirs);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DefaultTextStyle.merge(
-              style: const TextStyle(fontWeight: FontWeight.bold),
-              child: _Summary(entry: entry),
-            ),
-            const SizedBox(height: 4),
-            Text(reasonText(entry.error, context.l10n)),
-            if (conflict && info.field.isNotEmpty) ...[
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DefaultTextStyle.merge(
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                child: _Summary(entry: entry),
+              ),
               const SizedBox(height: 4),
-              Text(
-                context.l10n.grpAOfflineClash(
-                  info.field,
-                  info.current,
-                  '${entry.payload[info.field] ?? ''}',
+              Text(reasonText(entry.error, context.l10n)),
+              if (conflict && info.field.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  context.l10n.grpAOfflineClash(
+                    info.field,
+                    info.current,
+                    '${entry.payload[info.field] ?? ''}',
+                  ),
+                  key: Key('clash-${entry.id}'),
                 ),
-                key: Key('clash-${entry.id}'),
+              ],
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: [
+                  if (conflict) ...[
+                    TfButton(
+                      key: Key('keep-mine-${entry.id}'),
+                      label: context.l10n.grpAKeepMine,
+                      variant: TfButtonVariant.primary,
+                      onPressed: () async {
+                        await worker.keepMine(entry);
+                        await sync.syncNow();
+                      },
+                    ),
+                    TfButton(
+                      key: Key('take-theirs-${entry.id}'),
+                      label: context.l10n.grpATakeTheirs,
+                      onPressed: () => worker.takeTheirs(entry),
+                    ),
+                    if (entry.payload.length > 1)
+                      TfButton(
+                        key: Key('merge-${entry.id}'),
+                        label: context.l10n.grpAMerge,
+                        onPressed: () => _merge(context, worker, sync),
+                      ),
+                  ] else ...[
+                    TfButton(
+                      key: Key('retry-${entry.id}'),
+                      label: context.l10n.grpATryAgain,
+                      variant: TfButtonVariant.primary,
+                      onPressed: () async {
+                        await worker.retry(entry);
+                        await sync.syncNow();
+                      },
+                    ),
+                    TfButton(
+                      key: Key('discard-${entry.id}'),
+                      label: context.l10n.grpADiscard,
+                      onPressed: () => worker.discard(entry),
+                    ),
+                  ],
+                ],
               ),
             ],
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: [
-                if (conflict) ...[
-                  FilledButton(
-                    key: Key('keep-mine-${entry.id}'),
-                    onPressed: () async {
-                      await worker.keepMine(entry);
-                      await sync.syncNow();
-                    },
-                    child: Text(context.l10n.grpAKeepMine),
-                  ),
-                  OutlinedButton(
-                    key: Key('take-theirs-${entry.id}'),
-                    onPressed: () => worker.takeTheirs(entry),
-                    child: Text(context.l10n.grpATakeTheirs),
-                  ),
-                  if (entry.payload.length > 1)
-                    OutlinedButton(
-                      key: Key('merge-${entry.id}'),
-                      onPressed: () => _merge(context, worker, sync),
-                      child: Text(context.l10n.grpAMerge),
-                    ),
-                ] else ...[
-                  FilledButton(
-                    key: Key('retry-${entry.id}'),
-                    onPressed: () async {
-                      await worker.retry(entry);
-                      await sync.syncNow();
-                    },
-                    child: Text(context.l10n.grpATryAgain),
-                  ),
-                  OutlinedButton(
-                    key: Key('discard-${entry.id}'),
-                    onPressed: () => worker.discard(entry),
-                    child: Text(context.l10n.grpADiscard),
-                  ),
-                ],
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -313,32 +323,34 @@ class _MergeDialogState extends State<_MergeDialog> {
   late var _mine = {...widget.fields};
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.grpAMergeTitle),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: context.l10n.grpAMergeTitle,
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (final f in widget.fields)
-          CheckboxListTile(
+          TfCheckbox(
             key: Key('merge-field-$f'),
             value: _mine.contains(f),
-            title: Text(f),
             onChanged: (on) => setState(
               () =>
                   _mine = on == true ? {..._mine, f} : ({..._mine}..remove(f)),
             ),
+            label: f,
           ),
       ],
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpACancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpACancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('merge-confirm'),
+        label: context.l10n.grpAMerge,
+        variant: TfButtonVariant.primary,
         onPressed: () => Navigator.pop(context, _mine),
-        child: Text(context.l10n.grpAMerge),
       ),
     ],
   );
@@ -373,19 +385,16 @@ class _Storage extends ConsumerWidget {
           children: [
             Expanded(child: Text(context.l10n.grpAMostItMayHold)),
             const SizedBox(width: 12),
-            DropdownButton<int>(
+            TfSelectField(
               key: const Key('cache-cap'),
-              value: cacheCapChoicesMb.contains(capMb) ? capMb : null,
-              items: [
+              options: {
                 for (final mb in cacheCapChoicesMb)
-                  DropdownMenuItem(
-                    value: mb,
-                    child: Text(context.l10n.grpAMegabytes(mb)),
-                  ),
-              ],
+                  mb: context.l10n.grpAMegabytes(mb),
+              },
+              value: cacheCapChoicesMb.contains(capMb) ? capMb : null,
               onChanged: (mb) async {
                 final store = await ref.read(offlineStoreFutureProvider);
-                if (mb == null || store == null) return;
+                if (store == null) return;
                 await store.setCacheCap(mb * _mb);
                 await store.trimToCap();
                 ref.invalidate(cacheUsageProvider);
@@ -395,12 +404,12 @@ class _Storage extends ConsumerWidget {
         ),
         Align(
           alignment: AlignmentDirectional.centerStart,
-          child: OutlinedButton(
+          child: TfButton(
             key: const Key('clear-cache'),
+            label: context.l10n.grpAClearCopy,
             onPressed: workspace == null
                 ? null
                 : () => _clear(context, ref, workspace),
-            child: Text(context.l10n.grpAClearCopy),
           ),
         ),
         const SizedBox(height: 4),
@@ -419,18 +428,20 @@ class _Storage extends ConsumerWidget {
   ) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(ctx.l10n.grpAClearTitle),
+      builder: (ctx) => TfDialogFrame(
+        title: ctx.l10n.grpAClearTitle,
         content: Text(ctx.l10n.grpAClearBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: ctx.l10n.grpACancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(ctx.l10n.grpACancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('clear-cache-confirm'),
+            label: ctx.l10n.grpAClear,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(ctx.l10n.grpAClear),
           ),
         ],
       ),
@@ -467,17 +478,17 @@ class _KeptProjects extends ConsumerWidget {
           Builder(
             builder: (context) {
               final working = progress[p.id];
-              return SwitchListTile(
+              return TfToggleTile(
                 key: Key('keep-${p.id}'),
                 value:
                     kept.contains(p.id) ||
                     (working?.error == null && working != null),
-                title: Text(p.name),
+                title: p.name,
                 subtitle: working == null
                     ? null
                     : working.error != null
-                    ? Text(reasonText(working.error!, context.l10n))
-                    : Text(context.l10n.grpACopying(working.fetched)),
+                    ? reasonText(working.error!, context.l10n)
+                    : context.l10n.grpACopying(working.fetched),
                 onChanged: working != null && working.error == null
                     ? null
                     : (on) => on ? keeper.keep(p.id) : keeper.forget(p.id),

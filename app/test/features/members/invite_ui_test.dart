@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -44,10 +45,7 @@ void main() {
       await _addEmail(tester, 'nope');
 
       expect(find.textContaining('not a valid email'), findsOneWidget);
-      expect(
-        tester.widget<FilledButton>(byKey('send-invites')).onPressed,
-        isNull,
-      );
+      expect(tester.widget<TfButton>(byKey('send-invites')).onPressed, isNull);
     });
 
     testWidgets('caps the list at 20 addresses', (tester) async {

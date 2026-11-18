@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -168,11 +170,10 @@ class SlashMenu extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   for (final i in items)
-                    ListTile(
+                    TfRow(
                       key: Key('slash-${i.id}'),
-                      dense: true,
+                      title: i.labelIn(context.l10n),
                       leading: TfIcon(i.icon, size: 20),
-                      title: Text(i.labelIn(context.l10n)),
                       onTap: () => onPick(i),
                     ),
                 ],
@@ -218,14 +219,13 @@ class PagePicker extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   for (final p in items)
-                    ListTile(
+                    TfTile(
                       key: Key('pick-page-${p.id}'),
-                      dense: true,
-                      leading: Text(p.icon.isEmpty ? '📄' : p.icon),
                       title: Text(
                         p.labelIn(context.l10n),
                         overflow: TextOverflow.ellipsis,
                       ),
+                      leading: Text(p.icon.isEmpty ? '📄' : p.icon),
                       onTap: () => onPick(p),
                     ),
                 ],

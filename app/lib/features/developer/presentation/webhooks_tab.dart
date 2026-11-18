@@ -1,3 +1,10 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -55,18 +62,20 @@ class WebhooksTab extends ConsumerWidget {
   Future<void> _delete(BuildContext context, WidgetRef ref, Webhook h) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(c.l10n.devWebhookDeleteTitle(h.title)),
+      builder: (c) => TfDialogFrame(
+        title: c.l10n.devWebhookDeleteTitle(h.title),
         content: Text(c.l10n.devWebhookDeleteBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: c.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(c).pop(false),
-            child: Text(c.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete-webhook'),
+            label: c.l10n.devWebhookDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(c).pop(true),
-            child: Text(c.l10n.devWebhookDelete),
           ),
         ],
       ),
@@ -110,11 +119,12 @@ class WebhooksTab extends ConsumerWidget {
           const SizedBox(height: 12),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: FilledButton.icon(
+            child: TfButton(
               key: const Key('new-webhook'),
+              label: context.l10n.devWebhookNew,
+              variant: TfButtonVariant.primary,
+              icon: TfIcons.plus,
               onPressed: () => _edit(context, ref, null),
-              icon: const TfIcon(TfIcons.plus),
-              label: Text(context.l10n.devWebhookNew),
             ),
           ),
           if (rows.isEmpty)
@@ -123,81 +133,84 @@ class WebhooksTab extends ConsumerWidget {
               child: Text(context.l10n.devWebhooksEmpty),
             ),
           for (final h in rows)
-            Card(
-              key: Key('webhook-${h.id}'),
-              child: ListTile(
-                leading: TfIcon(
-                  h.active ? TfIcons.webhook : TfIcons.unlink,
-                  color: h.active ? null : Theme.of(context).disabledColor,
-                ),
-                title: Text(h.title),
-                subtitle: Text(
-                  [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                key: Key('webhook-${h.id}'),
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  title: h.title,
+                  subtitle: [
                     isolateLtr(h.url),
                     if (h.disabledReason.isNotEmpty)
                       context.l10n.devWebhookOff(h.disabledReason),
                   ].join('\n'),
-                ),
-                isThreeLine: h.disabledReason.isNotEmpty,
-                onTap: () => context.push('/developer/webhooks/${h.id}'),
-                trailing: PopupMenuButton<String>(
-                  key: Key('webhook-menu-${h.id}'),
-                  onSelected: (v) => switch (v) {
-                    'edit' => _edit(context, ref, h),
-                    'test' => _test(context, ref, h),
-                    'secret' =>
-                      Clipboard.setData(ClipboardData(text: h.secret)).then(
-                        (_) => context.mounted
-                            ? sayDeveloper(context, context.l10n.devCopied)
-                            : null,
+                  leading: TfIcon(
+                    h.active ? TfIcons.webhook : TfIcons.unlink,
+                    color: h.active ? null : Theme.of(context).disabledColor,
+                  ),
+                  trailing: PopupMenuButton<String>(
+                    key: Key('webhook-menu-${h.id}'),
+                    onSelected: (v) => switch (v) {
+                      'edit' => _edit(context, ref, h),
+                      'test' => _test(context, ref, h),
+                      'secret' =>
+                        Clipboard.setData(ClipboardData(text: h.secret)).then(
+                          (_) => context.mounted
+                              ? sayDeveloper(context, context.l10n.devCopied)
+                              : null,
+                        ),
+                      'toggle' => _run(context, ref, (ws) async {
+                        await ref
+                            .read(developerClientProvider)
+                            .updateWebhook(
+                              ws,
+                              h,
+                              WebhookDraft(
+                                name: h.name,
+                                url: h.url,
+                                events: h.events,
+                                projectId: h.projectId,
+                              ),
+                              active: !h.active,
+                            );
+                        return null;
+                      }),
+                      'deliveries' => context.push(
+                        '/developer/webhooks/${h.id}',
                       ),
-                    'toggle' => _run(context, ref, (ws) async {
-                      await ref
-                          .read(developerClientProvider)
-                          .updateWebhook(
-                            ws,
-                            h,
-                            WebhookDraft(
-                              name: h.name,
-                              url: h.url,
-                              events: h.events,
-                              projectId: h.projectId,
-                            ),
-                            active: !h.active,
-                          );
-                      return null;
-                    }),
-                    'deliveries' => context.push('/developer/webhooks/${h.id}'),
-                    _ => _delete(context, ref, h),
-                  },
-                  itemBuilder: (c) => [
-                    PopupMenuItem(
-                      value: 'edit',
-                      child: Text(c.l10n.devWebhookEdit),
-                    ),
-                    PopupMenuItem(
-                      value: 'test',
-                      child: Text(c.l10n.devWebhookTest),
-                    ),
-                    PopupMenuItem(
-                      value: 'deliveries',
-                      child: Text(c.l10n.devWebhookDeliveries),
-                    ),
-                    PopupMenuItem(
-                      value: 'secret',
-                      child: Text(
-                        '${c.l10n.devWebhookSecret} · ${c.l10n.devCopy}',
+                      _ => _delete(context, ref, h),
+                    },
+                    itemBuilder: (c) => [
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(c.l10n.devWebhookEdit),
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 'toggle',
-                      child: Text(c.l10n.devWebhookActive),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text(c.l10n.devWebhookDelete),
-                    ),
-                  ],
+                      PopupMenuItem(
+                        value: 'test',
+                        child: Text(c.l10n.devWebhookTest),
+                      ),
+                      PopupMenuItem(
+                        value: 'deliveries',
+                        child: Text(c.l10n.devWebhookDeliveries),
+                      ),
+                      PopupMenuItem(
+                        value: 'secret',
+                        child: Text(
+                          '${c.l10n.devWebhookSecret} · ${c.l10n.devCopy}',
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'toggle',
+                        child: Text(c.l10n.devWebhookActive),
+                      ),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Text(c.l10n.devWebhookDelete),
+                      ),
+                    ],
+                  ),
+                  onTap: () => context.push('/developer/webhooks/${h.id}'),
                 ),
               ),
             ),
@@ -238,12 +251,10 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
         const <Project>[];
     final projectIds = {'', ...projects.map((p) => p.id)};
     final ready = _url.text.trim().isNotEmpty && _events.isNotEmpty;
-    return AlertDialog(
-      title: Text(
-        widget.hook == null
-            ? context.l10n.devWebhookNew
-            : context.l10n.devWebhookEdit,
-      ),
+    return TfDialogFrame(
+      title: widget.hook == null
+          ? context.l10n.devWebhookNew
+          : context.l10n.devWebhookEdit,
       content: SizedBox(
         width: 440,
         child: SingleChildScrollView(
@@ -271,21 +282,16 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                 ),
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('webhook-project'),
-                initialValue: projectIds.contains(_projectId) ? _projectId : '',
-                decoration: InputDecoration(
-                  labelText: context.l10n.devWebhookProject,
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value: '',
-                    child: Text(context.l10n.devWebhookWholeWorkspace),
-                  ),
-                  for (final p in projects)
-                    DropdownMenuItem(value: p.id, child: Text(p.name)),
-                ],
-                onChanged: (v) => setState(() => _projectId = v ?? ''),
+                options: {
+                  '': context.l10n.devWebhookWholeWorkspace,
+                  for (final p in projects) p.id: p.name,
+                },
+                value: projectIds.contains(_projectId) ? _projectId : '',
+                onChanged: (v) => setState(() => _projectId = v),
+                label: context.l10n.devWebhookProject,
+                expand: true,
               ),
               const SizedBox(height: 12),
               Text(
@@ -295,18 +301,17 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
               ...catalog.maybeWhen(
                 data: (c) => [
                   for (final e in c.events)
-                    CheckboxListTile(
+                    TfToggleTile(
                       key: Key('event-${e.key}'),
-                      dense: true,
-                      contentPadding: EdgeInsets.zero,
                       value: _events.contains(e.key),
-                      title: Text(eventLabel(context.l10n, e.key, e.label)),
-                      subtitle: Text(isolateLtr(e.key)),
                       onChanged: (on) => setState(
                         () => on == true
                             ? _events.add(e.key)
                             : _events.remove(e.key),
                       ),
+                      title: eventLabel(context.l10n, e.key, e.label),
+                      subtitle: isolateLtr(e.key),
+                      checkbox: true,
                     ),
                 ],
                 orElse: () => const [LinearProgressIndicator()],
@@ -316,12 +321,15 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('save-webhook'),
+          label: context.l10n.devWebhookSave,
+          variant: TfButtonVariant.primary,
           onPressed: ready
               ? () => Navigator.of(context).pop(
                   WebhookDraft(
@@ -332,7 +340,6 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                   ),
                 )
               : null,
-          child: Text(context.l10n.devWebhookSave),
         ),
       ],
     );

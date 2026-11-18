@@ -26,7 +26,7 @@ class WatchButton extends ConsumerWidget {
       key: const Key('watch-toggle'),
       tooltip: tip,
       isSelected: watching,
-      icon: const TfIcon(TfIcons.eye),
+      icon: const TfIcon(TfIcons.eye, size: TfIconSize.control),
       selectedIcon: const TfIcon(TfIcons.eye),
       onPressed: state.value == null
           ? null

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -24,20 +25,21 @@ class RolesScreen extends ConsumerWidget {
     final canManage = ref.watch(permissionSetProvider).can(Perm.roleManage);
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-settings'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpJBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/workspaces/settings'),
         ),
         title: Text(context.l10n.grpJRolesAndPermissions),
         actions: [
           PermissionGate(
             permission: Perm.roleManage,
-            child: TextButton.icon(
+            child: TfButton(
               key: const Key('new-role'),
-              icon: const TfIcon(TfIcons.plus),
-              label: Text(context.l10n.grpJNewRole),
+              label: context.l10n.grpJNewRole,
+              variant: TfButtonVariant.ghost,
+              icon: TfIcons.plus,
               onPressed: roles.hasValue
                   ? () => createRoleFlow(context, ref, roles.requireValue)
                   : null,

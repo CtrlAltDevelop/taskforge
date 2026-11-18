@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -83,18 +87,20 @@ class GoalDetailScreen extends ConsumerWidget {
   Future<void> _delete(BuildContext context, WidgetRef ref, Goal goal) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(c.l10n.goalsDeleteTitle(goal.name)),
+      builder: (c) => TfDialogFrame(
+        title: c.l10n.goalsDeleteTitle(goal.name),
         content: Text(c.l10n.goalsDeleteBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: c.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(c).pop(false),
-            child: Text(c.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete-goal'),
+            label: c.l10n.goalsDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(c).pop(true),
-            child: Text(c.l10n.goalsDelete),
           ),
         ],
       ),
@@ -166,26 +172,26 @@ class GoalDetailScreen extends ConsumerWidget {
     final goal = cat.byId(goalId);
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-goals'),
+          icon: TfIcons.arrowStart,
           tooltip: t.grpEBack,
-          icon: const BackButtonIcon(),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go('/goals'),
         ),
         title: Text(goal?.name ?? t.goalsTitle),
         actions: [
           if (goal != null && goal.canEdit) ...[
-            IconButton(
+            TfIconButton(
               key: const Key('edit-goal'),
+              icon: TfIcons.edit,
               tooltip: t.goalsEdit,
-              icon: const TfIcon(TfIcons.edit),
               onPressed: () => _edit(context, ref, goal, cat, members),
             ),
-            IconButton(
+            TfIconButton(
               key: const Key('delete-goal'),
+              icon: TfIcons.trash,
               tooltip: t.goalsDelete,
-              icon: const TfIcon(TfIcons.trash),
               onPressed: () => _delete(context, ref, goal),
             ),
           ],
@@ -304,11 +310,12 @@ class _Body extends StatelessWidget {
               ),
             ),
             if (goal.canEdit)
-              TextButton.icon(
+              TfButton(
                 key: const Key('add-kr'),
+                label: t.goalsAddKr,
+                variant: TfButtonVariant.ghost,
+                icon: TfIcons.plus,
                 onPressed: onAddKr,
-                icon: const TfIcon(TfIcons.plus),
-                label: Text(t.goalsAddKr),
               ),
           ],
         ),
@@ -371,51 +378,56 @@ class KeyResultRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    return Card(
-      key: Key('kr-${kr.id}'),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    kr.name,
-                    style: Theme.of(context).textTheme.titleSmall,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        key: Key('kr-${kr.id}'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      kr.name,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
-                ),
-                if (canCheckIn)
-                  TextButton(
-                    key: Key('checkin-${kr.id}'),
-                    onPressed: onCheckIn,
-                    child: Text(t.goalsCheckIn),
-                  ),
-                if (canEdit)
-                  PopupMenuButton<bool>(
-                    key: Key('kr-menu-${kr.id}'),
-                    onSelected: (edit) => edit ? onEdit() : onDelete(),
-                    itemBuilder: (c) => [
-                      PopupMenuItem(
-                        value: true,
-                        child: Text(c.l10n.goalsEditKr),
-                      ),
-                      PopupMenuItem(
-                        value: false,
-                        child: Text(c.l10n.goalsDeleteKr),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            Text(
-              krSummary(context, kr),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 6),
-            GoalProgressBar(progress: kr.progress),
-          ],
+                  if (canCheckIn)
+                    TfButton(
+                      key: Key('checkin-${kr.id}'),
+                      label: t.goalsCheckIn,
+                      variant: TfButtonVariant.ghost,
+                      onPressed: onCheckIn,
+                    ),
+                  if (canEdit)
+                    PopupMenuButton<bool>(
+                      key: Key('kr-menu-${kr.id}'),
+                      onSelected: (edit) => edit ? onEdit() : onDelete(),
+                      itemBuilder: (c) => [
+                        PopupMenuItem(
+                          value: true,
+                          child: Text(c.l10n.goalsEditKr),
+                        ),
+                        PopupMenuItem(
+                          value: false,
+                          child: Text(c.l10n.goalsDeleteKr),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+              Text(
+                krSummary(context, kr),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 6),
+              GoalProgressBar(progress: kr.progress),
+            ],
+          ),
         ),
       ),
     );

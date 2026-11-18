@@ -3,7 +3,8 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/appearance.dart';
-import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
 import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_panel.dart';
@@ -26,6 +27,7 @@ class AppearanceScreen extends ConsumerWidget {
     final mode = ref.watch(themeModeProvider);
     final density = ref.watch(densityProvider);
     final high = ref.watch(contrastProvider);
+    final reduce = ref.watch(reduceMotionProvider);
     Widget label(String text) => Padding(
       padding: const EdgeInsets.only(top: TfSpace.lg, bottom: TfSpace.sm),
       child: Text(
@@ -35,76 +37,78 @@ class AppearanceScreen extends ConsumerWidget {
     );
     return Scaffold(
       appBar: TfAppBar(title: Text(l10n.appearance)),
-      body: ContentWidth(
-        child: ListView(
-          padding: const EdgeInsets.all(TfSpace.lg),
-          children: [
-            label(l10n.themeLabel),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TfSegmented<ThemeMode>(
-                options: {
-                  ThemeMode.system: l10n.themeSystem,
-                  ThemeMode.light: l10n.themeLight,
-                  ThemeMode.dark: l10n.themeDark,
-                },
-                value: mode,
-                onChanged: (m) =>
-                    ref.read(themeModeProvider.notifier).choose(m),
-              ),
+      body: TfPage(
+        children: [
+          label(l10n.themeLabel),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TfSegmented<ThemeMode>(
+              options: {
+                ThemeMode.system: l10n.themeSystem,
+                ThemeMode.light: l10n.themeLight,
+                ThemeMode.dark: l10n.themeDark,
+              },
+              value: mode,
+              onChanged: (m) => ref.read(themeModeProvider.notifier).choose(m),
             ),
-            label(l10n.densityLabel),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TfSegmented<TfDensity>(
-                options: {
-                  TfDensity.comfortable: l10n.densityComfortable,
-                  TfDensity.compact: l10n.densityCompact,
-                },
-                value: density,
-                onChanged: ref.read(densityProvider.notifier).choose,
-              ),
+          ),
+          label(l10n.densityLabel),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TfSegmented<TfDensity>(
+              options: {
+                TfDensity.comfortable: l10n.densityComfortable,
+                TfDensity.compact: l10n.densityCompact,
+              },
+              value: density,
+              onChanged: ref.read(densityProvider.notifier).choose,
             ),
-            const SizedBox(height: TfSpace.lg),
-            TfCheckbox(
-              value: high,
-              label: l10n.contrastLabel,
-              onChanged: (v) =>
-                  ref.read(contrastProvider.notifier).choose(high: v),
+          ),
+          const SizedBox(height: TfSpace.lg),
+          TfCheckbox(
+            value: high,
+            label: l10n.contrastLabel,
+            onChanged: (v) =>
+                ref.read(contrastProvider.notifier).choose(high: v),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: TfSpace.xl,
+              top: TfSpace.xs,
             ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                start: TfSpace.xl,
-                top: TfSpace.xs,
-              ),
-              child: Text(
-                l10n.contrastHelp,
-                style: tf.typography.small.copyWith(color: tf.colors.textMuted),
-              ),
+            child: Text(
+              l10n.contrastHelp,
+              style: tf.typography.small.copyWith(color: tf.colors.textMuted),
             ),
-            label(l10n.appearancePreview),
-            TfPanel(
-              padding: const EdgeInsets.all(TfSpace.sm),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.appearancePreviewTask,
-                      style: tf.typography.body.copyWith(color: tf.colors.text),
-                    ),
+          ),
+          const SizedBox(height: TfSpace.lg),
+          TfToggleTile(
+            key: const Key('reduce-motion'),
+            value: reduce,
+            title: l10n.reduceMotionLabel,
+            subtitle: l10n.reduceMotionHelp,
+            onChanged: (v) =>
+                ref.read(reduceMotionProvider.notifier).choose(reduce: v),
+          ),
+          label(l10n.appearancePreview),
+          TfPanel(
+            padding: const EdgeInsets.all(TfSpace.sm),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.appearancePreviewTask,
+                    style: tf.typography.body.copyWith(color: tf.colors.text),
                   ),
-                  const SizedBox(width: TfSpace.sm),
-                  TfStatusPill(
-                    label: l10n.themeLabel,
-                    kind: TfStatusKind.active,
-                  ),
-                  const SizedBox(width: TfSpace.sm),
-                  const TfBadge(count: 3),
-                ],
-              ),
+                ),
+                const SizedBox(width: TfSpace.sm),
+                TfStatusPill(label: l10n.themeLabel, kind: TfStatusKind.active),
+                const SizedBox(width: TfSpace.sm),
+                const TfBadge(count: 3),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

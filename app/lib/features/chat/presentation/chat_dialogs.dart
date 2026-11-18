@@ -214,6 +214,7 @@ class _NewChatDialogState extends ConsumerState<_NewChatDialog> {
                       dense: true,
                       selected: _picked.contains(p.userId),
                       leading: TfIcon(
+                        size: TfIconSize.control,
                         _picked.contains(p.userId)
                             ? TfIcons.active
                             : TfIcons.circle,

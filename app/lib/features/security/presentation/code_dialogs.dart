@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:convert';
@@ -39,24 +42,26 @@ class _CodeDialogState extends State<_CodeDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.title),
-    content: TextField(
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: widget.title,
+    content: TfTextField(
       key: const Key('sec-code'),
       controller: _code,
-      autofocus: true,
-      decoration: InputDecoration(labelText: context.l10n.secCodeOrRecovery),
+      label: context.l10n.secCodeOrRecovery,
       onSubmitted: (v) => Navigator.pop(context, v.trim()),
+      autofocus: true,
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpBCancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpBCancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('sec-code-go'),
+        label: widget.actionLabel,
+        variant: TfButtonVariant.primary,
         onPressed: () => Navigator.pop(context, _code.text.trim()),
-        child: Text(widget.actionLabel),
       ),
     ],
   );
@@ -81,8 +86,8 @@ class _RecoveryCodesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    return AlertDialog(
-      title: Text(t.secRecoveryTitle),
+    return TfDialogFrame(
+      title: t.secRecoveryTitle,
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -101,29 +106,32 @@ class _RecoveryCodesDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
           key: const Key('sec-recovery-copy'),
+          label: t.grpBCopy,
+          variant: TfButtonVariant.ghost,
           onPressed: () async {
             final messenger = ScaffoldMessenger.of(context);
             final copied = t.secCodesCopied;
             await Clipboard.setData(ClipboardData(text: _text));
             messenger.showSnackBar(SnackBar(content: Text(copied)));
           },
-          child: Text(t.grpBCopy),
         ),
-        TextButton(
+        TfButton(
           key: const Key('sec-recovery-save'),
+          label: t.grpBSaveAsFile,
+          variant: TfButtonVariant.ghost,
           onPressed: () => FilePicker.saveFile(
             fileName: 'taskforge-recovery-codes.txt',
             bytes: Uint8List.fromList(utf8.encode('$_text\n')),
             mimeType: 'text/plain',
           ),
-          child: Text(t.grpBSaveAsFile),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('sec-recovery-done'),
+          label: t.secSavedThem,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.pop(context),
-          child: Text(t.secSavedThem),
         ),
       ],
     );
@@ -147,10 +155,10 @@ class CopyableValue extends StatelessWidget {
           style: const TextStyle(fontFamily: 'monospace'),
         ),
       ),
-      IconButton(
+      TfIconButton(
         key: copyKey,
+        icon: TfIcons.copy,
         tooltip: context.l10n.grpBCopy,
-        icon: const TfIcon(TfIcons.copy),
         onPressed: () async {
           final messenger = ScaffoldMessenger.of(context);
           final copied = context.l10n.secCopied;

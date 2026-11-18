@@ -1,3 +1,9 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -37,10 +43,10 @@ class DeveloperScreen extends ConsumerWidget {
       length: canHooks ? 2 : 1,
       child: Scaffold(
         appBar: TfAppBar(
-          leading: IconButton(
+          leading: TfIconButton(
             key: const Key('back-settings'),
+            icon: TfIcons.arrowStart,
             tooltip: context.l10n.grpEBack,
-            icon: const BackButtonIcon(),
             onPressed: () => context.go('/workspaces/settings'),
           ),
           title: Text(context.l10n.devTitle),
@@ -80,18 +86,20 @@ class _TokensTab extends ConsumerWidget {
     if (ws == null) return;
     final ok = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(c.l10n.devTokenRevokeTitle(token.name)),
+      builder: (c) => TfDialogFrame(
+        title: c.l10n.devTokenRevokeTitle(token.name),
         content: Text(c.l10n.devTokenRevokeBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: c.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(c).pop(false),
-            child: Text(c.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-revoke'),
+            label: c.l10n.devTokenRevoke,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(c).pop(true),
-            child: Text(c.l10n.devTokenRevoke),
           ),
         ],
       ),
@@ -123,18 +131,18 @@ class _TokensTab extends ConsumerWidget {
         retryKey: const Key('retry-tokens'),
         onRetry: () => ref.invalidate(apiTokensProvider),
       ),
-      data: (rows) => ListView(
-        padding: const EdgeInsets.all(16),
+      data: (rows) => TfPage(
         children: [
           Text(context.l10n.devTokensHint),
           const SizedBox(height: 12),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: FilledButton.icon(
+            child: TfButton(
               key: const Key('new-token'),
+              label: context.l10n.devTokenNew,
+              variant: TfButtonVariant.primary,
+              icon: TfIcons.plus,
               onPressed: () => _create(context, ref),
-              icon: const TfIcon(TfIcons.plus),
-              label: Text(context.l10n.devTokenNew),
             ),
           ),
           const SizedBox(height: 8),
@@ -144,15 +152,14 @@ class _TokensTab extends ConsumerWidget {
               child: Text(context.l10n.devTokensEmpty),
             ),
           for (final t in rows)
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                key: Key('token-${t.id}'),
-                leading: const TfIcon(TfIcons.key),
-                title: Text(t.name),
-                subtitle: Text(
-                  [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  key: Key('token-${t.id}'),
+                  title: t.name,
+                  subtitle: [
                     context.l10n.devTokenPrefix(t.prefix),
                     _status(context, t),
                     t.lastUsedAt.isEmpty
@@ -161,14 +168,16 @@ class _TokensTab extends ConsumerWidget {
                             whenText(context, t.lastUsedAt),
                           ),
                   ].join(' · '),
+                  leading: const TfIcon(TfIcons.key),
+                  trailing: t.isActive
+                      ? TfButton(
+                          key: Key('revoke-${t.id}'),
+                          label: context.l10n.devTokenRevoke,
+                          variant: TfButtonVariant.ghost,
+                          onPressed: () => _revoke(context, ref, t),
+                        )
+                      : null,
                 ),
-                trailing: t.isActive
-                    ? TextButton(
-                        key: Key('revoke-${t.id}'),
-                        onPressed: () => _revoke(context, ref, t),
-                        child: Text(context.l10n.devTokenRevoke),
-                      )
-                    : null,
               ),
             ),
         ],

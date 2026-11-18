@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
@@ -247,7 +248,7 @@ void main() {
     );
     await tester.tap(key('dry-a1'));
     await tester.pumpAndSettle();
-    expect(tester.widget<FilledButton>(key('dry-run')).onPressed, isNull);
+    expect(tester.widget<TfButton>(key('dry-run')).onPressed, isNull);
     await choose(tester, 'dry-task', 'WEB-1 Fix it');
     await tester.tap(key('dry-run'));
     await tester.pumpAndSettle();
@@ -379,7 +380,7 @@ void main() {
     );
     await open(tester, fake);
     expect(key('rule-limit'), findsOneWidget);
-    expect(tester.widget<ButtonStyleButton>(key('new-rule')).onPressed, isNull);
+    expect(tester.widget<TfButton>(key("new-rule")).onPressed, isNull);
   });
 
   testWidgets('the builder fits a phone', (tester) async {

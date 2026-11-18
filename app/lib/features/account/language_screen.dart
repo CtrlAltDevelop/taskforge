@@ -1,4 +1,9 @@
-import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/page/tf_form.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_tabs.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,96 +39,94 @@ class LanguageScreen extends ConsumerWidget {
       }
     }
 
+    final tf = context.tf;
     return Scaffold(
       appBar: TfAppBar(title: Text(l10n.languageAndRegion)),
-      body: ContentWidth(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _Heading(l10n.languageLabel),
-            RadioGroup<String>(
-              groupValue: prefs.effectiveLanguage,
-              onChanged: (v) => change((p) => p.copyWith(language: v)),
-              child: Column(
-                children: [
-                  for (final code in supportedLanguages)
-                    RadioListTile<String>(
-                      key: Key('language-$code'),
-                      value: code,
-                      title: Text(languageNames[code]!),
-                    ),
-                ],
+      body: TfPage(
+        children: [
+          TfFormSection(
+            title: l10n.languageLabel,
+            children: [
+              RadioGroup<String>(
+                groupValue: prefs.effectiveLanguage,
+                onChanged: (v) => change((p) => p.copyWith(language: v)),
+                child: Column(
+                  children: [
+                    for (final code in supportedLanguages)
+                      TfRow(
+                        key: Key('language-$code'),
+                        leading: Semantics(
+                          label: languageNames[code],
+                          child: Radio<String>(value: code),
+                        ),
+                        title: languageNames[code]!,
+                        selected: code == prefs.effectiveLanguage,
+                        onTap: () => change((p) => p.copyWith(language: code)),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            const Divider(),
-            _Heading(l10n.calendarSystemLabel),
-            SegmentedButton<String>(
-              key: const Key('calendar-system'),
-              segments: [
-                ButtonSegment(
-                  value: 'gregorian',
-                  label: Text(l10n.calendarGregorian),
+            ],
+          ),
+          TfFormSection(
+            title: l10n.calendarSystemLabel,
+            children: [
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TfSegmented<String>(
+                  key: const Key('calendar-system'),
+                  options: {
+                    'gregorian': l10n.calendarGregorian,
+                    'jalali': l10n.calendarJalali,
+                  },
+                  value: prefs.calendar,
+                  onChanged: (v) => change((p) => p.copyWith(calendar: v)),
                 ),
-                ButtonSegment(
-                  value: 'jalali',
-                  label: Text(l10n.calendarJalali),
+              ),
+              TfFormField(
+                label: l10n.weekStartLabel,
+                child: TfSelectField<String>(
+                  key: const Key('week-start'),
+                  expand: true,
+                  options: {
+                    '': l10n.weekStartDefault,
+                    'sat': l10n.weekSaturday,
+                    'sun': l10n.weekSunday,
+                    'mon': l10n.weekMonday,
+                  },
+                  value: prefs.weekStart,
+                  onChanged: (v) => change((p) => p.copyWith(weekStart: v)),
                 ),
-              ],
-              selected: {prefs.calendar},
-              onSelectionChanged: (s) =>
-                  change((p) => p.copyWith(calendar: s.first)),
-            ),
-            const SizedBox(height: 16),
-            _Heading(l10n.weekStartLabel),
-            DropdownButton<String>(
-              key: const Key('week-start'),
-              value: prefs.weekStart,
-              isExpanded: true,
-              items: [
-                DropdownMenuItem(value: '', child: Text(l10n.weekStartDefault)),
-                DropdownMenuItem(value: 'sat', child: Text(l10n.weekSaturday)),
-                DropdownMenuItem(value: 'sun', child: Text(l10n.weekSunday)),
-                DropdownMenuItem(value: 'mon', child: Text(l10n.weekMonday)),
-              ],
-              onChanged: (v) => change((p) => p.copyWith(weekStart: v ?? '')),
-            ),
-            const SizedBox(height: 16),
-            _Heading(l10n.numeralsLabel),
-            SegmentedButton<String>(
-              key: const Key('numerals'),
-              segments: [
-                ButtonSegment(value: '', label: Text(l10n.numeralsLatin)),
-                ButtonSegment(
-                  value: 'native',
-                  label: Text(l10n.numeralsNative),
+              ),
+              TfFormField(
+                label: l10n.numeralsLabel,
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TfSegmented<String>(
+                    key: const Key('numerals'),
+                    options: {
+                      '': l10n.numeralsLatin,
+                      'native': l10n.numeralsNative,
+                    },
+                    value: prefs.numerals,
+                    onChanged: (v) => change((p) => p.copyWith(numerals: v)),
+                  ),
                 ),
-              ],
-              selected: {prefs.numerals},
-              onSelectionChanged: (s) =>
-                  change((p) => p.copyWith(numerals: s.first)),
-            ),
-            const Divider(height: 32),
-            _Heading(l10n.previewLabel),
-            Text(
-              formatDate(DateTime.now(), prefs, l10n, long: true),
-              key: const Key('date-preview'),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          TfFormSection(
+            title: l10n.previewLabel,
+            children: [
+              Text(
+                formatDate(DateTime.now(), prefs, l10n, long: true),
+                key: const Key('date-preview'),
+                style: tf.typography.lead.copyWith(color: tf.colors.text),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
-}
-
-class _Heading extends StatelessWidget {
-  const _Heading(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Text(text, style: Theme.of(context).textTheme.titleSmall),
-  );
 }

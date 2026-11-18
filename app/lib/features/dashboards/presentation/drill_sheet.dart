@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,17 +38,15 @@ class DrillDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final key = (widgetId: widgetId, bucket: bucket);
     final tasks = ref.watch(drilldownProvider(key));
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('drill-dialog'),
-      title: Text(
-        tasks.hasValue
-            ? context.l10n.grpIDrillTitle(
-                title,
-                tasks.requireValue.tasks.length,
-                tasks.requireValue.truncated ? '+' : '',
-              )
-            : title,
-      ),
+      title: tasks.hasValue
+          ? context.l10n.grpIDrillTitle(
+              title,
+              tasks.requireValue.tasks.length,
+              tasks.requireValue.truncated ? '+' : '',
+            )
+          : title,
       content: SizedBox(
         width: 480,
         height: 360,
@@ -67,19 +68,15 @@ class DrillDialog extends ConsumerWidget {
                   ),
                 ),
               for (final t in value.tasks)
-                ListTile(
+                TfRow(
                   key: Key('drill-${t.id}'),
-                  dense: true,
-                  title: Text('${t.displayId}  ${t.title}'),
-                  subtitle: Text(
-                    [
-                      t.statusName,
-                      if (t.priority.isNotEmpty && t.priority != 'none')
-                        t.priority,
-                      if (t.dueDate.isNotEmpty)
-                        context.l10n.grpIDueOn(t.dueDate),
-                    ].join(' · '),
-                  ),
+                  title: '${t.displayId}  ${t.title}',
+                  subtitle: [
+                    t.statusName,
+                    if (t.priority.isNotEmpty && t.priority != 'none')
+                      t.priority,
+                    if (t.dueDate.isNotEmpty) context.l10n.grpIDueOn(t.dueDate),
+                  ].join(' · '),
                   onTap: () {
                     Navigator.of(context).pop();
                     context.go('/projects/${t.projectId}?task=${t.id}');
@@ -98,9 +95,10 @@ class DrillDialog extends ConsumerWidget {
         },
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpIClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpIClose),
         ),
       ],
     );

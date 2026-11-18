@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,7 +90,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
             shrinkWrap: true,
             children: [
               for (final w in all)
-                ListTile(
+                TfTile(
                   key: Key('switch-${w.id}'),
                   title: Text(w.name),
                   trailing: w.id == current.id
@@ -100,10 +101,10 @@ class WorkspaceSwitcher extends ConsumerWidget {
                     Navigator.of(sheet).pop();
                   },
                 ),
-              ListTile(
+              TfTile(
                 key: const Key('new-workspace'),
-                leading: const TfIcon(TfIcons.plus),
                 title: Text(context.l10n.grpJCreateWorkspace),
+                leading: const TfIcon(TfIcons.plus),
                 onTap: () {
                   Navigator.of(sheet).pop();
                   context.push('/workspaces/new');

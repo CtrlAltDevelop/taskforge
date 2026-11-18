@@ -1,3 +1,9 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +23,8 @@ Future<String?> showFolderDialog(BuildContext context, {String initial = ''}) {
   final controller = TextEditingController(text: initial);
   return showDialog<String>(
     context: context,
-    builder: (c) => AlertDialog(
-      title: Text(c.l10n.goalsFolderName),
+    builder: (c) => TfDialogFrame(
+      title: c.l10n.goalsFolderName,
       content: TextField(
         key: const Key('folder-name'),
         controller: controller,
@@ -27,14 +33,16 @@ Future<String?> showFolderDialog(BuildContext context, {String initial = ''}) {
         decoration: InputDecoration(labelText: c.l10n.goalsFolderName),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: c.l10n.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(c).pop(),
-          child: Text(c.l10n.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('save-folder'),
+          label: c.l10n.goalsSave,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.of(c).pop(controller.text.trim()),
-          child: Text(c.l10n.goalsSave),
         ),
       ],
     ),
@@ -160,8 +168,8 @@ class _GoalDialogState extends State<_GoalDialog> {
       for (final g in widget.catalog.goals)
         if (g.id != widget.goal?.id) g,
     ];
-    return AlertDialog(
-      title: Text(editing ? t.goalsEdit : t.goalsNew),
+    return TfDialogFrame(
+      title: editing ? t.goalsEdit : t.goalsNew,
       content: SizedBox(
         width: 460,
         child: SingleChildScrollView(
@@ -185,93 +193,82 @@ class _GoalDialogState extends State<_GoalDialog> {
                 decoration: InputDecoration(labelText: t.goalsDescription),
               ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
+              TfButton(
                 key: const Key('goal-period'),
-                onPressed: _pickPeriod,
-                icon: const TfIcon(TfIcons.calendarRange),
-                label: Text(
-                  t.goalsPeriod(
-                    context.localDate(_start),
-                    context.localDate(_end),
-                  ),
+                label: t.goalsPeriod(
+                  context.localDate(_start),
+                  context.localDate(_end),
                 ),
+                icon: TfIcons.calendarRange,
+                onPressed: _pickPeriod,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('goal-owner'),
-                initialValue: widget.members.any((m) => m.userId == _owner)
+                options: {for (final m in widget.members) m.userId: m.label},
+                value: widget.members.any((m) => m.userId == _owner)
                     ? _owner
                     : null,
-                decoration: InputDecoration(labelText: t.goalsOwner),
-                items: [
-                  for (final m in widget.members)
-                    DropdownMenuItem(value: m.userId, child: Text(m.label)),
-                ],
-                onChanged: (v) => setState(() => _owner = v ?? _owner),
+                onChanged: (v) => setState(() => _owner = v),
+                label: t.goalsOwner,
+                expand: true,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('goal-parent'),
-                initialValue: parents.any((g) => g.id == _parent)
-                    ? _parent
-                    : '',
-                decoration: InputDecoration(labelText: t.goalsParent),
-                items: [
-                  DropdownMenuItem(value: '', child: Text(t.goalsNone)),
-                  for (final g in parents)
-                    DropdownMenuItem(value: g.id, child: Text(g.name)),
-                ],
-                onChanged: (v) => setState(() => _parent = v ?? ''),
+                options: {
+                  '': t.goalsNone,
+                  for (final g in parents) g.id: g.name,
+                },
+                value: parents.any((g) => g.id == _parent) ? _parent : '',
+                onChanged: (v) => setState(() => _parent = v),
+                label: t.goalsParent,
+                expand: true,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('goal-folder'),
-                initialValue: widget.catalog.folders.any((f) => f.id == _folder)
+                options: {
+                  '': t.goalsNoFolder,
+                  for (final f in widget.catalog.folders) f.id: f.name,
+                },
+                value: widget.catalog.folders.any((f) => f.id == _folder)
                     ? _folder
                     : '',
-                decoration: InputDecoration(labelText: t.goalsFolder),
-                items: [
-                  DropdownMenuItem(value: '', child: Text(t.goalsNoFolder)),
-                  for (final f in widget.catalog.folders)
-                    DropdownMenuItem(value: f.id, child: Text(f.name)),
-                ],
-                onChanged: (v) => setState(() => _folder = v ?? ''),
+                onChanged: (v) => setState(() => _folder = v),
+                label: t.goalsFolder,
+                expand: true,
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('goal-weight'),
-                initialValue: goalWeights.contains(_weight) ? _weight : '1',
-                decoration: InputDecoration(labelText: t.goalsWeight),
-                items: [
-                  for (final w in goalWeights)
-                    DropdownMenuItem(value: w, child: Text(w)),
-                ],
-                onChanged: (v) => setState(() => _weight = v ?? '1'),
+                options: {for (final w in goalWeights) w: w},
+                value: goalWeights.contains(_weight) ? _weight : '1',
+                onChanged: (v) => setState(() => _weight = v),
+                label: t.goalsWeight,
+                expand: true,
               ),
               const SizedBox(height: 12),
               if (editing)
-                DropdownButtonFormField<String>(
+                TfSelectField(
                   key: const Key('goal-status'),
-                  initialValue: _override,
-                  decoration: InputDecoration(labelText: t.goalsStatusLabel),
-                  items: [
-                    DropdownMenuItem(value: '', child: Text(t.goalsStatusAuto)),
+                  options: {
+                    '': t.goalsStatusAuto,
                     for (final s in GoalStatus.values)
-                      DropdownMenuItem(
-                        value: s.wire,
-                        child: Text(goalStatusLabel(t, s)),
-                      ),
-                  ],
-                  onChanged: (v) => setState(() => _override = v ?? ''),
+                      s.wire: goalStatusLabel(t, s),
+                  },
+                  value: _override,
+                  onChanged: (v) => setState(() => _override = v),
+                  label: t.goalsStatusLabel,
+                  expand: true,
                 ),
               const SizedBox(height: 12),
-              SwitchListTile(
+              TfToggleTile(
                 key: const Key('goal-private'),
-                contentPadding: EdgeInsets.zero,
-                title: Text(t.goalsPrivate),
-                subtitle: Text(t.goalsPrivateHint),
                 value: _private,
                 onChanged: (v) => setState(() => _private = v),
+                title: t.goalsPrivate,
+                subtitle: t.goalsPrivateHint,
               ),
               Text(
                 t.goalsContributors,
@@ -299,14 +296,16 @@ class _GoalDialogState extends State<_GoalDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(t.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('save-goal'),
+          label: t.goalsSave,
+          variant: TfButtonVariant.primary,
           onPressed: _save,
-          child: Text(t.goalsSave),
         ),
       ],
     );
@@ -396,8 +395,8 @@ class _KrDialogState extends State<_KrDialog> {
   Widget build(BuildContext context) {
     final t = context.l10n;
     final editing = widget.kr != null;
-    return AlertDialog(
-      title: Text(editing ? t.goalsEditKr : t.goalsAddKr),
+    return TfDialogFrame(
+      title: editing ? t.goalsEditKr : t.goalsAddKr,
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(
@@ -412,17 +411,13 @@ class _KrDialogState extends State<_KrDialog> {
                 decoration: InputDecoration(labelText: t.goalsKrName),
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<KrType>(
+              TfSelectField<KrType>(
                 key: const Key('kr-type'),
-                initialValue: _type,
-                decoration: InputDecoration(labelText: t.goalsKrType),
-                items: [
-                  for (final k in KrType.values)
-                    DropdownMenuItem(value: k, child: Text(_typeLabel(k))),
-                ],
-                onChanged: editing
-                    ? null
-                    : (v) => setState(() => _type = v ?? _type),
+                options: {for (final k in KrType.values) k: _typeLabel(k)},
+                value: _type,
+                onChanged: editing ? null : (v) => setState(() => _type = v),
+                label: t.goalsKrType,
+                expand: true,
               ),
               const SizedBox(height: 12),
               if (_type == KrType.number) ...[
@@ -454,29 +449,29 @@ class _KrDialogState extends State<_KrDialog> {
                   ),
               ],
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
+              TfSelectField(
                 key: const Key('kr-weight'),
-                initialValue: goalWeights.contains(_weight) ? _weight : '1',
-                decoration: InputDecoration(labelText: t.goalsWeight),
-                items: [
-                  for (final w in goalWeights)
-                    DropdownMenuItem(value: w, child: Text(w)),
-                ],
-                onChanged: (v) => setState(() => _weight = v ?? '1'),
+                options: {for (final w in goalWeights) w: w},
+                value: goalWeights.contains(_weight) ? _weight : '1',
+                onChanged: (v) => setState(() => _weight = v),
+                label: t.goalsWeight,
+                expand: true,
               ),
             ],
           ),
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(t.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('save-kr'),
+          label: t.goalsSave,
+          variant: TfButtonVariant.primary,
           onPressed: _save,
-          child: Text(t.goalsSave),
         ),
       ],
     );
@@ -553,8 +548,8 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
     final t = context.l10n;
     final history = ref.watch(checkInsProvider(widget.kr.id));
     final kr = widget.kr;
-    return AlertDialog(
-      title: Text(t.goalsCheckInTitle(kr.name)),
+    return TfDialogFrame(
+      title: t.goalsCheckInTitle(kr.name),
       content: SizedBox(
         width: 440,
         child: SingleChildScrollView(
@@ -563,12 +558,11 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (kr.type == KrType.boolean)
-                SwitchListTile(
+                TfToggle(
                   key: const Key('checkin-done'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(t.goalsCheckInDone),
                   value: _done,
                   onChanged: (v) => setState(() => _done = v),
+                  label: t.goalsCheckInDone,
                 )
               else if (kr.type == KrType.linked)
                 Text(t.goalsCheckInLinkedHint)
@@ -619,14 +613,16 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(t.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('save-checkin'),
+          label: t.goalsCheckIn,
+          variant: TfButtonVariant.primary,
           onPressed: _busy ? null : _save,
-          child: Text(t.goalsCheckIn),
         ),
       ],
     );
@@ -654,25 +650,17 @@ class _History extends StatelessWidget {
         Sparkline(points: [for (final r in rows.reversed) r.progress]),
         const SizedBox(height: 8),
         for (final r in rows.take(12))
-          ListTile(
+          TfRow(
             key: Key('checkin-${r.id}'),
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            title: Text(
-              t.goalsCheckInChange(
-                trimNumber(r.previousValue),
-                trimNumber(r.value),
-              ),
+            title: t.goalsCheckInChange(
+              trimNumber(r.previousValue),
+              trimNumber(r.value),
             ),
-            subtitle: Text(
-              [
-                r.userId.isEmpty
-                    ? t.goalsCheckInSystem
-                    : (names[r.userId] ?? ''),
-                if (r.at != null) context.localDate(r.at!),
-                if (r.note.isNotEmpty) r.note,
-              ].where((s) => s.isNotEmpty).join(' · '),
-            ),
+            subtitle: [
+              r.userId.isEmpty ? t.goalsCheckInSystem : (names[r.userId] ?? ''),
+              if (r.at != null) context.localDate(r.at!),
+              if (r.note.isNotEmpty) r.note,
+            ].where((s) => s.isNotEmpty).join(' · '),
           ),
       ],
     );

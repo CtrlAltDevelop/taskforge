@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -84,8 +88,8 @@ class _CapacityDialogState extends State<_CapacityDialog> {
   Widget build(BuildContext context) {
     final t = context.l10n;
     final names = t.weekdayShortNames;
-    return AlertDialog(
-      title: Text(t.wlCapacityOf(widget.name)),
+    return TfDialogFrame(
+      title: t.wlCapacityOf(widget.name),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -121,14 +125,16 @@ class _CapacityDialogState extends State<_CapacityDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.cancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(t.cancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('capacity-save'),
+          label: t.save,
+          variant: TfButtonVariant.primary,
           onPressed: _save,
-          child: Text(t.save),
         ),
       ],
     );
@@ -182,24 +188,24 @@ class _CapacityTab extends ConsumerWidget {
       data: (list) => ListView(
         children: [
           for (final c in list)
-            ListTile(
+            TfRow(
               key: Key('capacity-${c.userId}'),
-              title: Text(
-                members.where((m) => m.userId == c.userId).firstOrNull?.label ??
-                    c.userId,
-              ),
-              subtitle: Text(
-                c.isSet
-                    ? t.wlCapacitySummary(
-                        context.localDigits(hoursText(c.secondsPerDay)),
-                        context.localDigits('${c.workingDays.length}'),
-                      )
-                    : t.wlNoCapacity,
-              ),
+              title:
+                  members
+                      .where((m) => m.userId == c.userId)
+                      .firstOrNull
+                      ?.label ??
+                  c.userId,
+              subtitle: c.isSet
+                  ? t.wlCapacitySummary(
+                      context.localDigits(hoursText(c.secondsPerDay)),
+                      context.localDigits('${c.workingDays.length}'),
+                    )
+                  : t.wlNoCapacity,
               trailing: manage
-                  ? IconButton(
+                  ? TfIconButton(
+                      icon: TfIcons.edit,
                       tooltip: t.wlSetCapacity,
-                      icon: const TfIcon(TfIcons.edit),
                       onPressed: () => editCapacity(
                         context,
                         ref,
@@ -301,24 +307,22 @@ class _TimeOffTab extends ConsumerWidget {
             : ListView(
                 children: [
                   for (final r in list)
-                    ListTile(
-                      title: Text(
-                        '${members.where((m) => m.userId == r.userId).firstOrNull?.label ?? r.userId}'
-                        ' · ${_kindLabel(t, r.kind)}',
-                      ),
-                      subtitle: Text(
-                        '${context.localDate(r.start)} – ${context.localDate(r.end)}'
-                        '${r.note.isEmpty ? '' : '\n${r.note}'}',
-                      ),
-                      onTap: manage || r.userId == me
-                          ? () => _add(context, ref, r)
-                          : null,
+                    TfRow(
+                      title:
+                          '${members.where((m) => m.userId == r.userId).firstOrNull?.label ?? r.userId}'
+                          ' · ${_kindLabel(t, r.kind)}',
+                      subtitle:
+                          '${context.localDate(r.start)} – ${context.localDate(r.end)}'
+                          '${r.note.isEmpty ? '' : '\n${r.note}'}',
                       trailing: manage || r.userId == me
-                          ? IconButton(
+                          ? TfIconButton(
+                              icon: TfIcons.trash,
                               tooltip: t.wlDelete,
-                              icon: const TfIcon(TfIcons.trash),
                               onPressed: () => _delete(context, ref, r),
                             )
+                          : null,
+                      onTap: manage || r.userId == me
+                          ? () => _add(context, ref, r)
                           : null,
                     ),
                 ],
@@ -393,41 +397,38 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    return AlertDialog(
-      title: Text(t.wlAddTimeOff),
+    return TfDialogFrame(
+      title: t.wlAddTimeOff,
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.members.isNotEmpty && widget.existing == null)
-              DropdownButtonFormField<String>(
-                initialValue: _user,
-                decoration: InputDecoration(labelText: t.wlPerson),
-                items: [
-                  for (final m in widget.members)
-                    DropdownMenuItem(value: m.userId, child: Text(m.label)),
-                ],
-                onChanged: (v) => setState(() => _user = v ?? _user),
+              TfSelectField(
+                options: {for (final m in widget.members) m.userId: m.label},
+                value: _user,
+                onChanged: (v) => setState(() => _user = v),
+                label: t.wlPerson,
+                expand: true,
               ),
             const SizedBox(height: 8),
-            OutlinedButton.icon(
+            TfButton(
               key: const Key('time-off-dates'),
-              icon: const TfIcon(TfIcons.calendarRange),
-              label: Text(
-                '${context.localDate(_start)} – ${context.localDate(_end)}',
-              ),
+              label:
+                  '${context.localDate(_start)} – ${context.localDate(_end)}',
+              icon: TfIcons.calendarRange,
               onPressed: _pick,
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<TimeOffKind>(
-              initialValue: _kind,
-              decoration: InputDecoration(labelText: t.wlKind),
-              items: [
-                for (final k in TimeOffKind.values)
-                  DropdownMenuItem(value: k, child: Text(_kindLabel(t, k))),
-              ],
-              onChanged: (v) => setState(() => _kind = v ?? _kind),
+            TfSelectField(
+              options: {
+                for (final k in TimeOffKind.values) k: _kindLabel(t, k),
+              },
+              value: _kind,
+              onChanged: (v) => setState(() => _kind = v),
+              label: t.wlKind,
+              expand: true,
             ),
             const SizedBox(height: 12),
             TextField(
@@ -439,17 +440,19 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.cancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(t.cancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('time-off-save'),
+          label: t.save,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.pop(
             context,
             _TimeOffDraft(_user, _start, _end, _kind, _note.text),
           ),
-          child: Text(t.save),
         ),
       ],
     );
@@ -527,17 +530,17 @@ class _HolidaysTab extends ConsumerWidget {
             : ListView(
                 children: [
                   for (final h in list)
-                    ListTile(
-                      title: Text(h.name),
-                      subtitle: Text(context.localDate(h.date, long: true)),
-                      onTap: manage ? () => _edit(context, ref, h) : null,
+                    TfRow(
+                      title: h.name,
+                      subtitle: context.localDate(h.date, long: true),
                       trailing: manage
-                          ? IconButton(
+                          ? TfIconButton(
+                              icon: TfIcons.trash,
                               tooltip: t.wlDelete,
-                              icon: const TfIcon(TfIcons.trash),
                               onPressed: () => _delete(context, ref, h),
                             )
                           : null,
+                      onTap: manage ? () => _edit(context, ref, h) : null,
                     ),
                 ],
               ),
@@ -578,8 +581,8 @@ class _HolidayDialogState extends State<_HolidayDialog> {
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
-    return AlertDialog(
-      title: Text(t.wlAddHoliday),
+    return TfDialogFrame(
+      title: t.wlAddHoliday,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -590,25 +593,27 @@ class _HolidayDialogState extends State<_HolidayDialog> {
             decoration: InputDecoration(labelText: t.wlHolidayName),
           ),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            icon: const TfIcon(TfIcons.calendar),
-            label: Text(context.localDate(_date)),
+          TfButton(
+            label: context.localDate(_date),
+            icon: TfIcons.calendar,
             onPressed: _pick,
           ),
         ],
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: t.cancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(t.cancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('holiday-save'),
+          label: t.save,
+          variant: TfButtonVariant.primary,
           onPressed: () {
             if (_name.text.trim().isEmpty) return;
             Navigator.pop(context, (_date, _name.text));
           },
-          child: Text(t.save),
         ),
       ],
     );

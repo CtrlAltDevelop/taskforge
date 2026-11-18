@@ -108,6 +108,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get contrastLabel => 'کنتراست بالا';
 
   @override
+  String get reduceMotionLabel => 'کاهش حرکت';
+
+  @override
+  String get reduceMotionHelp => 'انیمیشن‌ها به محو شدن آنی تبدیل می‌شوند';
+
+  @override
   String get contrastHelp => 'متن و کادرهای پررنگ‌تر برای خواندن آسان‌تر';
 
   @override
@@ -2956,6 +2962,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get grpFColTitle => 'عنوان';
+
+  @override
+  String get tblSelectAll => 'انتخاب همه وظایف';
 
   @override
   String grpFTrashTitle(String name) {

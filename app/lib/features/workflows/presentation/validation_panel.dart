@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -15,12 +18,16 @@ class ValidationPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (problems.isEmpty) {
-      return Card(
-        key: const Key('validation-ok'),
-        child: ListTile(
-          leading: const TfIcon(TfIcons.success, color: Colors.green),
-          title: Text(context.l10n.grpINoProblems),
-          subtitle: Text(context.l10n.grpIEveryTaskValid),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+        child: TfPanel(
+          key: const Key('validation-ok'),
+          padding: EdgeInsets.zero,
+          child: TfRow(
+            title: context.l10n.grpINoProblems,
+            subtitle: context.l10n.grpIEveryTaskValid,
+            leading: const TfIcon(TfIcons.success, color: Colors.green),
+          ),
         ),
       );
     }

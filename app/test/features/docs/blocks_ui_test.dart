@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,11 +87,11 @@ void main() {
     await open(tester, docs);
 
     expect(
-      tester.widget<TextButton>(key('table-remove-row-t1')).onPressed,
+      tester.widget<TfButton>(key('table-remove-row-t1')).onPressed,
       isNull,
     );
     expect(
-      tester.widget<TextButton>(key('table-remove-column-t1')).onPressed,
+      tester.widget<TfButton>(key('table-remove-column-t1')).onPressed,
       isNull,
     );
     expect(find.text('only'), findsOneWidget);

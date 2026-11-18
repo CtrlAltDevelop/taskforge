@@ -21,14 +21,17 @@ Future<DateTime?> pickSnooze(BuildContext context, DateTime now) async {
           for (final (i, p) in snoozePresets(now, l10n: sheet.l10n).indexed)
             ListTile(
               key: Key('snooze-preset-$i'),
-              leading: const TfIcon(TfIcons.snooze),
+              leading: const TfIcon(TfIcons.snooze, size: TfIconSize.control),
               title: Text(p.label),
               subtitle: Text(sheet.localDigits(_describe(p.at, sheet.l10n))),
               onTap: () => Navigator.of(sheet).pop(p.at),
             ),
           ListTile(
             key: const Key('snooze-custom'),
-            leading: const TfIcon(TfIcons.calendarEdit),
+            leading: const TfIcon(
+              TfIcons.calendarEdit,
+              size: TfIconSize.control,
+            ),
             title: Text(sheet.l10n.grpHPickDateTime),
             onTap: () async {
               final custom = await _pickDateTime(sheet, now);

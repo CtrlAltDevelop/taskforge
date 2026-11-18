@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
@@ -53,15 +55,13 @@ void main() {
     expect(find.byKey(const Key('validation-ok')), findsOneWidget);
     expect(
       tester
-          .widget<IconButton>(find.byKey(const Key('status-default-todo')))
+          .widget<TfIconButton>(find.byKey(const Key('status-default-todo')))
           .onPressed,
       isNull,
       reason: 'it already is the default',
     );
     expect(
-      tester
-          .widget<FilledButton>(find.byKey(const Key('workflow-save')))
-          .onPressed,
+      tester.widget<TfButton>(find.byKey(const Key('workflow-save'))).onPressed,
       isNull,
       reason: 'nothing to save yet',
     );
@@ -125,9 +125,7 @@ void main() {
     );
     expect(find.byKey(const Key('validation-panel')), findsOneWidget);
     expect(
-      tester
-          .widget<FilledButton>(find.byKey(const Key('workflow-save')))
-          .onPressed,
+      tester.widget<TfButton>(find.byKey(const Key('workflow-save'))).onPressed,
       isNull,
     );
   });
@@ -362,7 +360,7 @@ void main() {
     (tester) async {
       await _open(tester, role: 'Viewer');
 
-      final tile = tester.widget<SwitchListTile>(
+      final tile = tester.widget<TfToggleTile>(
         find.byKey(const Key('restrict-creation-switch')),
       );
       expect(tile.value, isFalse);
@@ -393,7 +391,7 @@ void main() {
         expect(find.byKey(const Key('save-error')), findsOneWidget);
         expect(
           tester
-              .widget<FilledButton>(find.byKey(const Key('workflow-save')))
+              .widget<TfButton>(find.byKey(const Key('workflow-save')))
               .onPressed,
           isNull,
         );
@@ -517,9 +515,7 @@ void main() {
 
     expect(find.text('In progress'), findsOneWidget);
     expect(
-      tester
-          .widget<FilledButton>(find.byKey(const Key('workflow-save')))
-          .onPressed,
+      tester.widget<TfButton>(find.byKey(const Key('workflow-save'))).onPressed,
       isNull,
     );
   });
@@ -544,7 +540,7 @@ void main() {
     );
     expect(
       tester
-          .widget<IconButton>(find.byKey(const Key('status-delete-doing')))
+          .widget<TfIconButton>(find.byKey(const Key('status-delete-doing')))
           .onPressed,
       isNull,
     );

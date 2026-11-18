@@ -1,3 +1,11 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -55,20 +63,20 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                IconButton(
+                TfIconButton(
                   key: const Key('week-previous'),
+                  icon: TfIcons.chevronStart,
                   tooltip: context.l10n.grpAPreviousWeek,
-                  icon: const TfIcon(TfIcons.chevronStart, size: 24),
                   onPressed: () => _move(-1),
                 ),
                 Text(
                   '${context.localIso(_week)} – ${context.localIso(last)}',
                   key: const Key('week-label'),
                 ),
-                IconButton(
+                TfIconButton(
                   key: const Key('week-next'),
+                  icon: TfIcons.chevronEnd,
                   tooltip: context.l10n.grpANextWeek,
-                  icon: const TfIcon(TfIcons.chevronEnd, size: 24),
                   onPressed: () => _move(1),
                 ),
                 if (permissions.can(Perm.timeEditOthers))
@@ -77,18 +85,21 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                     onChanged: (id) =>
                         setState(() => _user = id == me ? '' : id),
                   ),
-                TextButton(
+                TfButton(
                   key: const Key('week-this'),
+                  label: context.l10n.grpAThisWeek,
+                  variant: TfButtonVariant.ghost,
                   onPressed: () =>
                       setState(() => _week = weekStartOf(_today())),
-                  child: Text(context.l10n.grpAThisWeek),
                 ),
               ],
             ),
           ),
           Expanded(
             child: switch (sheet) {
-              AsyncData(:final value) => ListView(
+              AsyncData(:final value) => TfPage(
+                maxWidth: TfPageWidth.wide,
+                lazy: true,
                 children: [
                   _Grid(sheet: value, week: _week, mine: _user.isEmpty),
                   _Totals(week: _week),
@@ -232,72 +243,77 @@ class _CellDialog extends ConsumerWidget {
             .where((e) => e.userId == me && _onDay(e))
             .toList();
     final actions = ref.read(timeActionsProvider);
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('cell-dialog'),
-      title: Text('${row.key} · ${context.localIso(day)}'),
+      title: '${row.key} · ${context.localIso(day)}',
       content: SizedBox(
         width: 360,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final e in entries)
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                clipBehavior: Clip.antiAlias,
-                child: ListTile(
-                  key: Key('cell-entry-${e.id}'),
-                  dense: true,
-                  title: Text(
-                    e.running
-                        ? context.l10n.grpARunning
-                        : durationText(e.durationSec),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                child: TfPanel(
+                  padding: EdgeInsets.zero,
+                  child: TfTile(
+                    key: Key('cell-entry-${e.id}'),
+                    title: Text(
+                      e.running
+                          ? context.l10n.grpARunning
+                          : durationText(e.durationSec),
+                    ),
+                    subtitle: e.note.isEmpty ? null : Text(e.note),
+                    trailing: e.running
+                        ? null
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TfIconButton(
+                                key: Key('cell-edit-${e.id}'),
+                                icon: TfIcons.edit,
+                                tooltip: context.l10n.grpAEdit,
+                                onPressed: () async {
+                                  final input = await askEntry(
+                                    context,
+                                    existing: e,
+                                  );
+                                  if (input == null || !context.mounted) return;
+                                  await _run(
+                                    context,
+                                    () => actions.edit(
+                                      e.id,
+                                      startedAt: input.startedAt,
+                                      durationSec: input.durationSec,
+                                      note: input.note,
+                                      billable: input.billable,
+                                    ),
+                                  );
+                                },
+                              ),
+                              TfIconButton(
+                                key: Key('cell-delete-${e.id}'),
+                                icon: TfIcons.trash,
+                                tooltip: context.l10n.grpADelete,
+                                onPressed: () async {
+                                  if (!await confirmDelete(context)) return;
+                                  if (!context.mounted) return;
+                                  await _run(
+                                    context,
+                                    () => actions.remove(e.id),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                   ),
-                  subtitle: e.note.isEmpty ? null : Text(e.note),
-                  trailing: e.running
-                      ? null
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              key: Key('cell-edit-${e.id}'),
-                              icon: const TfIcon(TfIcons.edit, size: 24),
-                              tooltip: context.l10n.grpAEdit,
-                              onPressed: () async {
-                                final input = await askEntry(
-                                  context,
-                                  existing: e,
-                                );
-                                if (input == null || !context.mounted) return;
-                                await _run(
-                                  context,
-                                  () => actions.edit(
-                                    e.id,
-                                    startedAt: input.startedAt,
-                                    durationSec: input.durationSec,
-                                    note: input.note,
-                                    billable: input.billable,
-                                  ),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              key: Key('cell-delete-${e.id}'),
-                              icon: const TfIcon(TfIcons.trash, size: 24),
-                              tooltip: context.l10n.grpADelete,
-                              onPressed: () async {
-                                if (!await confirmDelete(context)) return;
-                                if (!context.mounted) return;
-                                await _run(context, () => actions.remove(e.id));
-                              },
-                            ),
-                          ],
-                        ),
                 ),
               ),
-            TextButton.icon(
+            TfButton(
               key: const Key('cell-add'),
-              icon: const TfIcon(TfIcons.plus, size: 24),
-              label: Text(context.l10n.grpAAddTime),
+              label: context.l10n.grpAAddTime,
+              variant: TfButtonVariant.ghost,
+              icon: TfIcons.plus,
               onPressed: () async {
                 final input = await askEntry(context, day: day);
                 if (input == null) return;
@@ -319,9 +335,10 @@ class _CellDialog extends ConsumerWidget {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpAClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpAClose),
         ),
       ],
     );
@@ -344,24 +361,19 @@ class _PersonPicker extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 220),
-        child: DropdownButton<String>(
+        child: TfSelectField(
           key: const Key('sheet-person'),
-          isExpanded: true,
-          value: members.any((m) => m.userId == value) ? value : me,
-          items: [
+          options: {
             for (final m in members)
-              DropdownMenuItem(
-                value: m.userId,
-                child: Text(
-                  m.userId == me
-                      ? context.l10n.grpAYou
-                      : (m.displayName.isEmpty ? m.email : m.displayName),
-                ),
-              ),
-          ],
-          onChanged: (id) {
-            if (id != null) onChanged(id);
+              m.userId: m.userId == me
+                  ? context.l10n.grpAYou
+                  : (m.displayName.isEmpty ? m.email : m.displayName),
           },
+          value: members.any((m) => m.userId == value) ? value : me,
+          onChanged: (id) {
+            onChanged(id);
+          },
+          expand: true,
         ),
       ),
     );
@@ -434,23 +446,21 @@ class _TotalsState extends ConsumerState<_Totals> {
               AsyncData(:final value) => Column(
                 children: [
                   for (final t in value)
-                    Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        key: Key('total-${t.userId}'),
-                        dense: true,
-                        title: Text(t.name),
-                        trailing: Text(
-                          durationText(t.seconds) +
-                              (t.billable > 0
-                                  ? context.l10n.grpABillableAmount(
-                                      durationText(t.billable),
-                                    )
-                                  : ''),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+                      child: TfPanel(
+                        padding: EdgeInsets.zero,
+                        child: TfRow(
+                          key: Key('total-${t.userId}'),
+                          title: t.name,
+                          trailing: Text(
+                            durationText(t.seconds) +
+                                (t.billable > 0
+                                    ? context.l10n.grpABillableAmount(
+                                        durationText(t.billable),
+                                      )
+                                    : ''),
+                          ),
                         ),
                       ),
                     ),

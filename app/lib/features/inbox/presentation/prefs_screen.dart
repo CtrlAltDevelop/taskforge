@@ -1,5 +1,12 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
-import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,18 +172,19 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final settings = widget.prefs.settings;
     final theme = Theme.of(context);
-    return ContentWidth(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Text(
-            context.l10n.grpEWhatReachesYou,
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          for (final row in widget.prefs.rows)
-            Card(
+    return TfPage(
+      children: [
+        Text(
+          context.l10n.grpEWhatReachesYou,
+          style: theme.textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        for (final row in widget.prefs.rows)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+            child: TfPanel(
               key: Key('pref-${row.eventType}'),
+              padding: EdgeInsets.zero,
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
@@ -186,17 +194,17 @@ class _BodyState extends ConsumerState<_Body> {
                       padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
                       child: Text(row.label, style: theme.textTheme.titleSmall),
                     ),
-                    SwitchListTile(
+                    TfToggle(
                       key: Key('pref-inbox-${row.eventType}'),
-                      title: Text(context.l10n.grpEInbox),
                       value: row.inbox,
                       onChanged: (v) => _setRow(row.copyWith(inbox: v)),
+                      label: context.l10n.grpEInbox,
                     ),
-                    SwitchListTile(
+                    TfToggle(
                       key: Key('pref-push-${row.eventType}'),
-                      title: Text(context.l10n.grpEPush),
                       value: row.push,
                       onChanged: (v) => _setPush(row, v),
+                      label: context.l10n.grpEPush,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -227,105 +235,103 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               ),
             ),
-          const SizedBox(height: 16),
-          Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
-          SwitchListTile(
-            key: const Key('quiet-switch'),
-            title: Text(context.l10n.grpEQuietHold),
-            subtitle: Text(context.l10n.grpEQuietHoldSub),
-            value: settings.quietOn,
-            onChanged: _toggleQuiet,
           ),
-          if (settings.quietOn)
-            Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    key: const Key('quiet-start'),
-                    title: Text(context.l10n.grpEFrom),
-                    subtitle: Text(context.localDigits(settings.quietStart)),
-                    onTap: () => _pickQuiet(start: true),
-                  ),
+        const SizedBox(height: 16),
+        Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
+        TfToggleTile(
+          key: const Key('quiet-switch'),
+          value: settings.quietOn,
+          onChanged: _toggleQuiet,
+          title: context.l10n.grpEQuietHold,
+          subtitle: context.l10n.grpEQuietHoldSub,
+        ),
+        if (settings.quietOn)
+          Row(
+            children: [
+              Expanded(
+                child: TfRow(
+                  key: const Key('quiet-start'),
+                  title: context.l10n.grpEFrom,
+                  subtitle: context.localDigits(settings.quietStart),
+                  onTap: () => _pickQuiet(start: true),
                 ),
-                Expanded(
-                  child: ListTile(
-                    key: const Key('quiet-end'),
-                    title: Text(context.l10n.grpEUntil),
-                    subtitle: Text(context.localDigits(settings.quietEnd)),
-                    onTap: () => _pickQuiet(start: false),
-                  ),
-                ),
-              ],
-            ),
-          if (_quietError != null)
-            Semantics(
-              liveRegion: true,
-              child: Text(
-                _quietError!,
-                key: const Key('quiet-error'),
-                style: TextStyle(color: theme.colorScheme.error),
               ),
-            ),
-          const SizedBox(height: 16),
-          Text(
-            context.l10n.grpETimeZoneDigest,
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Autocomplete<String>(
-            initialValue: TextEditingValue(text: settings.timezone),
-            optionsBuilder: (value) {
-              final q = value.text.trim().toLowerCase();
-              return commonTimezones.keys.where(
-                (z) => z.toLowerCase().contains(q),
-              );
-            },
-            onSelected: _saveZone,
-            fieldViewBuilder: (context, controller, focus, onSubmit) =>
-                TextField(
-                  key: const Key('timezone-field'),
-                  controller: controller,
-                  focusNode: focus,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.grpETimeZone,
-                    helperText: context.l10n.grpETimeZoneHelper,
-                    errorText: _zoneError,
-                  ),
-                  onSubmitted: _saveZone,
-                  onEditingComplete: () => _saveZone(controller.text),
+              Expanded(
+                child: TfRow(
+                  key: const Key('quiet-end'),
+                  title: context.l10n.grpEUntil,
+                  subtitle: context.localDigits(settings.quietEnd),
+                  onTap: () => _pickQuiet(start: false),
                 ),
+              ),
+            ],
           ),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton.icon(
-              key: const Key('timezone-device'),
-              icon: const TfIcon(TfIcons.smartphone),
-              label: Text(context.l10n.grpEUseDeviceZone),
-              onPressed: () {
-                final zone = timezoneForOffset(DateTime.now().timeZoneOffset);
-                if (zone == null) {
-                  _say(context.l10n.grpETypeZone);
-                  return;
-                }
-                _saveZone(zone);
-              },
+        if (_quietError != null)
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              _quietError!,
+              key: const Key('quiet-error'),
+              style: TextStyle(color: theme.colorScheme.error),
             ),
           ),
-          const SizedBox(height: 8),
-          DropdownButtonFormField<int>(
-            key: const Key('digest-hour'),
-            initialValue: settings.digestHour,
-            decoration: InputDecoration(labelText: context.l10n.grpEDigestAt),
-            items: [
-              for (var h = 0; h < 24; h++)
-                DropdownMenuItem(value: h, child: Text(hhmm(h, 0))),
-            ],
-            onChanged: (h) {
-              if (h != null) _saveSettings(settings.copyWith(digestHour: h));
+        const SizedBox(height: 16),
+        Text(
+          context.l10n.grpETimeZoneDigest,
+          style: theme.textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        Autocomplete<String>(
+          initialValue: TextEditingValue(text: settings.timezone),
+          optionsBuilder: (value) {
+            final q = value.text.trim().toLowerCase();
+            return commonTimezones.keys.where(
+              (z) => z.toLowerCase().contains(q),
+            );
+          },
+          onSelected: _saveZone,
+          fieldViewBuilder: (context, controller, focus, onSubmit) => TextField(
+            key: const Key('timezone-field'),
+            controller: controller,
+            focusNode: focus,
+            decoration: InputDecoration(
+              labelText: context.l10n.grpETimeZone,
+              helperText: context.l10n.grpETimeZoneHelper,
+              errorText: _zoneError,
+            ),
+            onSubmitted: _saveZone,
+            onEditingComplete: () => _saveZone(controller.text),
+          ),
+        ),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: TfButton(
+            key: const Key('timezone-device'),
+            label: context.l10n.grpEUseDeviceZone,
+            variant: TfButtonVariant.ghost,
+            icon: TfIcons.smartphone,
+            onPressed: () {
+              final zone = timezoneForOffset(DateTime.now().timeZoneOffset);
+              if (zone == null) {
+                _say(context.l10n.grpETypeZone);
+                return;
+              }
+              _saveZone(zone);
             },
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        TfSelectField(
+          key: const Key('digest-hour'),
+          options: {for (var h = 0; h < 24; h++) h: hhmm(h, 0)},
+          value: settings.digestHour,
+          onChanged: (h) {
+            _saveSettings(settings.copyWith(digestHour: h));
+          },
+          label: context.l10n.grpEDigestAt,
+          expand: true,
+        ),
+      ],
     );
   }
 }

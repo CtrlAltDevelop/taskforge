@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,10 +47,11 @@ class InviteDialog extends StatelessWidget {
               ),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
-                child: TextButton(
+                child: TfButton(
                   key: const Key('close-invite'),
+                  label: context.l10n.close,
+                  variant: TfButtonVariant.ghost,
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.close),
                 ),
               ),
             ],
@@ -158,10 +162,10 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
             labelText: context.l10n.grpJInviteEmails,
             helperText: context.l10n.grpJInviteEmailsHelp(maxInviteEmails),
             errorText: _fieldError,
-            suffixIcon: IconButton(
+            suffixIcon: TfIconButton(
               key: const Key('add-email'),
+              icon: TfIcons.plus,
               tooltip: context.l10n.grpJAdd,
-              icon: const TfIcon(TfIcons.plus),
               onPressed: _add,
             ),
           ),
@@ -198,14 +202,13 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
             ),
           ),
         const SizedBox(height: 8),
-        FilledButton(
+        TfButton(
           key: const Key('send-invites'),
+          label: _emails.isEmpty
+              ? context.l10n.grpJInviteSendAll
+              : context.l10n.grpJInviteSendCount(_emails.length),
+          variant: TfButtonVariant.primary,
           onPressed: _busy || _emails.isEmpty ? null : _send,
-          child: Text(
-            _emails.isEmpty
-                ? context.l10n.grpJInviteSendAll
-                : context.l10n.grpJInviteSendCount(_emails.length),
-          ),
         ),
         if (result != null) ...[
           const SizedBox(height: 12),
@@ -297,15 +300,13 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
       padding: const EdgeInsets.all(16),
       shrinkWrap: true,
       children: [
-        DropdownButtonFormField<int>(
+        TfSelectField(
           key: const Key('link-expiry'),
-          initialValue: _days,
-          decoration: InputDecoration(labelText: context.l10n.grpJExpiresAfter),
-          items: [
-            for (final d in _expiryDays)
-              DropdownMenuItem(value: d, child: Text(context.l10n.grpJDays(d))),
-          ],
-          onChanged: (v) => setState(() => _days = v ?? _days),
+          options: {for (final d in _expiryDays) d: context.l10n.grpJDays(d)},
+          value: _days,
+          onChanged: (v) => setState(() => _days = v),
+          label: context.l10n.grpJExpiresAfter,
+          expand: true,
         ),
         const SizedBox(height: 12),
         TextField(
@@ -333,22 +334,22 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
             ),
           ),
         const SizedBox(height: 12),
-        FilledButton(
+        TfButton(
           key: const Key('create-link'),
+          label: context.l10n.grpJCreateLink,
+          variant: TfButtonVariant.primary,
           onPressed: _busy ? null : _create,
-          child: Text(context.l10n.grpJCreateLink),
         ),
         if (token != null && token.isNotEmpty)
-          ListTile(
-            contentPadding: EdgeInsets.zero,
+          TfTile(
             title: SelectableText(
               AppConfig.inviteUrl(token),
               key: const Key('invite-link'),
             ),
-            trailing: IconButton(
+            trailing: TfIconButton(
               key: const Key('copy-link'),
+              icon: TfIcons.copy,
               tooltip: context.l10n.grpJCopyLink,
-              icon: const TfIcon(TfIcons.copy),
               onPressed: () => copyInviteLink(context, token),
             ),
           ),

@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -24,11 +28,6 @@ const wideWorkflowBreakpoint = 900.0;
 
 /// Project settings → Workflow: the statuses of a project, which statuses may
 /// move to which, and what is wrong with the draft. Nothing is saved until Save.
-/// App bar buttons that still fit a 320dp wide phone in every language.
-final _tightButton = ButtonStyle(
-  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
-  minimumSize: WidgetStatePropertyAll(Size(48, 40)),
-);
 
 class WorkflowScreen extends ConsumerWidget {
   const WorkflowScreen({super.key, required this.projectId});
@@ -47,28 +46,33 @@ class WorkflowScreen extends ConsumerWidget {
     final notifier = ref.read(workflowEditorProvider(projectId).notifier);
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-to-settings'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpIBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/projects/$projectId/settings'),
         ),
         title: Text(context.l10n.grpIWorkflow),
         actions: [
           if (canEdit) ...[
-            TextButton(
-              style: _tightButton,
+            TfButton(
               key: const Key('workflow-discard'),
+              label: context.l10n.grpIDiscard,
+              variant: TfButtonVariant.ghost,
+              size: TfButtonSize.small,
               onPressed: editor.dirty && !editor.saving
                   ? notifier.discard
                   : null,
-              child: Text(context.l10n.grpIDiscard),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: FilledButton(
-                style: _tightButton,
+              child: TfButton(
                 key: const Key('workflow-save'),
+                label: editor.saving
+                    ? context.l10n.grpISaving
+                    : context.l10n.grpISave,
+                variant: TfButtonVariant.primary,
+                size: TfButtonSize.small,
                 onPressed: editor.canSave
                     ? () async {
                         final messenger = ScaffoldMessenger.of(context);
@@ -80,11 +84,6 @@ class WorkflowScreen extends ConsumerWidget {
                         }
                       }
                     : null,
-                child: Text(
-                  editor.saving
-                      ? context.l10n.grpISaving
-                      : context.l10n.grpISave,
-                ),
               ),
             ),
           ],
@@ -163,8 +162,7 @@ class WorkflowScreen extends ConsumerWidget {
             ],
           );
         }
-        return ListView(
-          padding: const EdgeInsets.all(16),
+        return TfPage(
           children: [
             side,
             const SizedBox(height: 12),
@@ -185,23 +183,21 @@ List<Widget> _listChildren(
   List<Role> roles,
   bool canEdit,
 ) => [
-  SwitchListTile(
+  TfToggleTile(
     key: const Key('restrict-switch'),
-    contentPadding: EdgeInsets.zero,
-    title: Text(context.l10n.grpIRestrictTransitions),
-    subtitle: Text(context.l10n.grpIRestrictTransitionsHint),
     value: editor.draft!.restrict,
     onChanged: canEdit ? (v) => notifier.edit((d) => d.setRestrict(v)) : null,
+    title: context.l10n.grpIRestrictTransitions,
+    subtitle: context.l10n.grpIRestrictTransitionsHint,
   ),
-  SwitchListTile(
+  TfToggleTile(
     key: const Key('restrict-creation-switch'),
-    contentPadding: EdgeInsets.zero,
-    title: Text(context.l10n.grpIRestrictCreation),
-    subtitle: Text(context.l10n.grpIRestrictCreationHint),
     value: editor.draft!.restrictCreation,
     onChanged: canEdit
         ? (v) => notifier.edit((d) => d.setRestrictCreation(v))
         : null,
+    title: context.l10n.grpIRestrictCreation,
+    subtitle: context.l10n.grpIRestrictCreationHint,
   ),
   ReorderableListView(
     shrinkWrap: true,
@@ -245,10 +241,10 @@ List<Widget> _listChildren(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Align(
         alignment: AlignmentDirectional.centerStart,
-        child: OutlinedButton.icon(
+        child: TfButton(
           key: const Key('add-status'),
-          icon: const TfIcon(TfIcons.plus),
-          label: Text(context.l10n.grpIAddStatus),
+          label: context.l10n.grpIAddStatus,
+          icon: TfIcons.plus,
           onPressed: () => notifier.edit(
             (d) => d.add(
               notifier.newKey(),
@@ -344,26 +340,20 @@ class _NeedsTarget extends StatelessWidget {
         children: [
           Text(context.l10n.grpIDeletedStillHasTasks(gone.name)),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
+          TfSelectField<String>(
             key: Key('migrate-${gone.key}'),
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: context.l10n.grpIMoveItsTasksTo,
-            ),
-            items: [
+            options: {
               for (final s in others)
-                DropdownMenuItem(
-                  value: s.key,
-                  child: Text(
-                    s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
-                  ),
-                ),
-            ],
+                s.key: s.name.isEmpty ? context.l10n.grpIUnnamed : s.name,
+            },
+            value: null,
             onChanged: canEdit
                 ? (v) {
-                    if (v != null) onPick(v);
+                    onPick(v);
                   }
                 : null,
+            label: context.l10n.grpIMoveItsTasksTo,
+            expand: true,
           ),
         ],
       ),

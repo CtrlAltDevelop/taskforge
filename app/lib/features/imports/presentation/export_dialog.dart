@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -58,9 +62,9 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
     if (!_everything && _projectId.isEmpty && projects.isNotEmpty) {
       _projectId = projects.first.id;
     }
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('export-dialog'),
-      title: Text(context.l10n.grpGExport),
+      title: context.l10n.grpGExport,
       content: SizedBox(
         width: 420,
         child: Column(
@@ -72,37 +76,31 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
               onChanged: (v) => setState(() => _everything = v ?? true),
               child: Column(
                 children: [
-                  RadioListTile<bool>(
+                  TfRadioTile<bool>(
                     key: const Key('export-scope-all'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.grpGEveryProject),
                     value: true,
+                    title: context.l10n.grpGEveryProject,
                   ),
-                  RadioListTile<bool>(
+                  TfRadioTile<bool>(
                     key: const Key('export-scope-project'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.grpGOneProject),
                     value: false,
+                    title: context.l10n.grpGOneProject,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 12),
             if (!_everything)
-              DropdownButton<String>(
+              TfSelectField(
                 key: const Key('export-project'),
-                isExpanded: true,
+                options: {
+                  for (final p in projects) p.id: '${p.name} (${p.key})',
+                },
                 value: projects.any((p) => p.id == _projectId)
                     ? _projectId
                     : null,
-                items: [
-                  for (final p in projects)
-                    DropdownMenuItem(
-                      value: p.id,
-                      child: Text('${p.name} (${p.key})'),
-                    ),
-                ],
-                onChanged: (id) => setState(() => _projectId = id ?? ''),
+                onChanged: (id) => setState(() => _projectId = id),
+                expand: true,
               ),
             const SizedBox(height: 8),
             Text(context.l10n.grpGExportInfo),
@@ -148,16 +146,18 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpGClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpGClose),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('export-go'),
+          label: context.l10n.grpGExport,
+          variant: TfButtonVariant.primary,
           onPressed: state.busy || (!_everything && _projectId.isEmpty)
               ? null
               : _go,
-          child: Text(context.l10n.grpGExport),
         ),
       ],
     );

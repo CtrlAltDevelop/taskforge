@@ -97,7 +97,10 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                 if (task.parentId.isNotEmpty)
                   ListTile(
                     key: const Key('pick-parent-top'),
-                    leading: const TfIcon(TfIcons.arrowUpToLine),
+                    leading: const TfIcon(
+                      TfIcons.arrowUpToLine,
+                      size: TfIconSize.control,
+                    ),
                     title: Text(context.l10n.grpFTopLevel),
                     onTap: () => Navigator.pop(context, ''),
                   ),

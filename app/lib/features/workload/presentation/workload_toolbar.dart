@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_tabs.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -36,31 +38,30 @@ class WorkloadToolbar extends ConsumerWidget {
         runSpacing: 8,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          SegmentedButton<WorkloadZoom>(
+          TfSegmented<WorkloadZoom>(
             key: const Key('workload-zoom'),
-            showSelectedIcon: false,
-            segments: [
-              for (final z in WorkloadZoom.values)
-                ButtonSegment(value: z, label: Text(zoomLabel(context, z))),
-            ],
-            selected: {query.zoom},
-            onSelectionChanged: (s) => notifier.setZoom(s.first),
+            options: {
+              for (final z in WorkloadZoom.values) z: zoomLabel(context, z),
+            },
+            value: query.zoom,
+            onChanged: notifier.setZoom,
           ),
-          IconButton(
+          TfIconButton(
             key: const Key('workload-prev'),
+            icon: TfIcons.chevronStart,
             tooltip: t.wlPrevious,
-            icon: const TfIcon(TfIcons.chevronStart),
             onPressed: () => notifier.page(-1),
           ),
-          TextButton(
+          TfButton(
             key: const Key('workload-today'),
+            label: t.wlToday,
+            variant: TfButtonVariant.ghost,
             onPressed: notifier.today,
-            child: Text(t.wlToday),
           ),
-          IconButton(
+          TfIconButton(
             key: const Key('workload-next'),
+            icon: TfIcons.chevronEnd,
             tooltip: t.wlNext,
-            icon: const TfIcon(TfIcons.chevronEnd),
             onPressed: () => notifier.page(1),
           ),
           Text(
@@ -69,7 +70,7 @@ class WorkloadToolbar extends ConsumerWidget {
           ),
           _FilterMenu(
             key: const Key('workload-projects'),
-            icon: TfIcons.folder.glyph,
+            icon: TfIcons.folder,
             label: t.wlProjects,
             options: {
               for (final p in projects?.projects ?? const []) p.id: p.name,
@@ -79,7 +80,7 @@ class WorkloadToolbar extends ConsumerWidget {
           ),
           _FilterMenu(
             key: const Key('workload-people'),
-            icon: TfIcons.users.glyph,
+            icon: TfIcons.users,
             label: t.wlPeople,
             options: {for (final m in members) m.userId: m.label},
             selected: query.userIds,
@@ -101,7 +102,7 @@ class _FilterMenu extends StatelessWidget {
     required this.onChanged,
   });
 
-  final IconData icon;
+  final TfIconData icon;
   final String label;
   final Map<String, String> options;
   final List<String> selected;
@@ -129,11 +130,9 @@ class _FilterMenu extends StatelessWidget {
             child: Text(context.l10n.wlClearFilter),
           ),
       ],
-      builder: (context, controller, _) => OutlinedButton.icon(
-        icon: Icon(icon, size: 18),
-        label: Text(
-          count == 0 ? label : '$label (${context.localDigits('$count')})',
-        ),
+      builder: (context, controller, _) => TfButton(
+        icon: icon,
+        label: count == 0 ? label : '$label (${context.localDigits('$count')})',
         onPressed: options.isEmpty
             ? null
             : () => controller.isOpen ? controller.close() : controller.open(),
@@ -162,7 +161,7 @@ class WorkloadLegend extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Text(text, style: theme.textTheme.bodySmall),
+        Flexible(child: Text(text, style: theme.textTheme.bodySmall)),
       ],
     );
     return Padding(

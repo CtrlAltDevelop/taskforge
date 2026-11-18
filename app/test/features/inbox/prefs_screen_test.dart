@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
@@ -42,11 +43,11 @@ void main() {
       expect(key('pref-${row.eventType}'), findsOneWidget);
     }
     expect(
-      tester.widget<SwitchListTile>(key('pref-push-task.assigned')).value,
+      tester.widget<TfToggle>(key('pref-push-task.assigned')).value,
       isTrue,
     );
     expect(
-      tester.widget<SwitchListTile>(key('pref-push-user.mentioned')).value,
+      tester.widget<TfToggle>(key('pref-push-user.mentioned')).value,
       isFalse,
     );
     expect(
@@ -65,7 +66,7 @@ void main() {
     expect(o.inbox.prefSets.single.eventType, 'task.assigned');
     expect(o.inbox.prefSets.single.inbox, isFalse);
     expect(
-      tester.widget<SwitchListTile>(key('pref-inbox-task.assigned')).value,
+      tester.widget<TfToggle>(key('pref-inbox-task.assigned')).value,
       isFalse,
     );
   });
@@ -92,7 +93,7 @@ void main() {
     await toggle(tester, 'pref-inbox-user.mentioned');
 
     expect(
-      tester.widget<SwitchListTile>(key('pref-inbox-user.mentioned')).value,
+      tester.widget<TfToggle>(key('pref-inbox-user.mentioned')).value,
       isTrue,
     );
     expect(find.textContaining('Could not reach the server'), findsOneWidget);
@@ -140,7 +141,7 @@ void main() {
     expect(o.local.permissionAsks, 0);
     expect(o.inbox.prefSets, isEmpty);
     expect(
-      tester.widget<SwitchListTile>(key('pref-push-user.mentioned')).value,
+      tester.widget<TfToggle>(key('pref-push-user.mentioned')).value,
       isFalse,
     );
   });

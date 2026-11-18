@@ -130,6 +130,7 @@ class _ManageDialog extends ConsumerWidget {
                     ListTile(
                       key: Key('manage-${f.id}'),
                       leading: TfIcon(
+                        size: TfIconSize.control,
                         f.isShared ? TfIcons.users : TfIcons.user,
                       ),
                       title: Text(f.name),
@@ -141,7 +142,10 @@ class _ManageDialog extends ConsumerWidget {
                       trailing: IconButton(
                         key: Key('delete-filter-${f.id}'),
                         tooltip: context.l10n.grpGDelete,
-                        icon: const TfIcon(TfIcons.trash),
+                        icon: const TfIcon(
+                          TfIcons.trash,
+                          size: TfIconSize.control,
+                        ),
                         onPressed: () async {
                           final workspace = ref.read(workspaceScopeProvider);
                           if (workspace == null) return;

@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_banner.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -28,8 +33,7 @@ String stateLabel(InviteState s, [AppLocalizations? l10n]) {
 Future<void> copyInviteLink(BuildContext context, String token) async {
   await Clipboard.setData(ClipboardData(text: AppConfig.inviteUrl(token)));
   if (context.mounted) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(context.l10n.grpJLinkCopied)));
+    showTfToast(context, context.l10n.grpJLinkCopied);
   }
 }
 
@@ -105,56 +109,57 @@ class _InvitationTile extends ConsumerWidget {
     final uses = i.maxUses == 0
         ? context.l10n.grpJUsesCount(i.uses)
         : context.l10n.grpJUsesOfMax(i.uses, i.maxUses);
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        key: Key('invite-${i.id}'),
-        leading: Icon(i.isLink ? TfIcons.link.glyph : TfIcons.mail.glyph),
-        title: Text(i.isLink ? context.l10n.grpJInviteLink : i.email),
-        subtitle: Text(
-          '${i.isLink ? '$uses · ' : ''}'
-          '${context.l10n.grpJInvitationMeta(i.createdByName, context.localDateOrEmpty(i.expiresAt))}',
-        ),
-        trailing: Wrap(
-          spacing: 4,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            if (i.roleName.isNotEmpty)
-              Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
-            Chip(
-              key: Key('state-${i.id}'),
-              label: Text(stateLabel(i.state, context.l10n)),
-            ),
-            PermissionGate(
-              permission: Perm.memberInvite,
-              child: Wrap(
-                children: [
-                  if (i.isLink && token.isNotEmpty && live)
-                    IconButton(
-                      key: Key('copy-${i.id}'),
-                      tooltip: context.l10n.grpJCopyLink,
-                      icon: const TfIcon(TfIcons.copy),
-                      onPressed: () => copyInviteLink(context, token),
-                    ),
-                  if (!i.isLink && i.state != InviteState.revoked)
-                    IconButton(
-                      key: Key('resend-${i.id}'),
-                      tooltip: context.l10n.grpJResend,
-                      icon: const TfIcon(TfIcons.send),
-                      onPressed: () => _resend(context, ref),
-                    ),
-                  if (live)
-                    IconButton(
-                      key: Key('revoke-${i.id}'),
-                      tooltip: context.l10n.grpJRevoke,
-                      icon: const TfIcon(TfIcons.blocked),
-                      onPressed: () => _revoke(context, ref),
-                    ),
-                ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfRow(
+          key: Key('invite-${i.id}'),
+          title: i.isLink ? context.l10n.grpJInviteLink : i.email,
+          subtitle:
+              '${i.isLink ? '$uses · ' : ''}'
+              '${context.l10n.grpJInvitationMeta(i.createdByName, context.localDateOrEmpty(i.expiresAt))}',
+          leading: Icon(i.isLink ? TfIcons.link.glyph : TfIcons.mail.glyph),
+          trailing: Wrap(
+            spacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              if (i.roleName.isNotEmpty)
+                Chip(key: Key('role-${i.id}'), label: Text(i.roleName)),
+              Chip(
+                key: Key('state-${i.id}'),
+                label: Text(stateLabel(i.state, context.l10n)),
               ),
-            ),
-          ],
+              PermissionGate(
+                permission: Perm.memberInvite,
+                child: Wrap(
+                  children: [
+                    if (i.isLink && token.isNotEmpty && live)
+                      TfIconButton(
+                        key: Key('copy-${i.id}'),
+                        icon: TfIcons.copy,
+                        tooltip: context.l10n.grpJCopyLink,
+                        onPressed: () => copyInviteLink(context, token),
+                      ),
+                    if (!i.isLink && i.state != InviteState.revoked)
+                      TfIconButton(
+                        key: Key('resend-${i.id}'),
+                        icon: TfIcons.send,
+                        tooltip: context.l10n.grpJResend,
+                        onPressed: () => _resend(context, ref),
+                      ),
+                    if (live)
+                      TfIconButton(
+                        key: Key('revoke-${i.id}'),
+                        icon: TfIcons.blocked,
+                        tooltip: context.l10n.grpJRevoke,
+                        onPressed: () => _revoke(context, ref),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

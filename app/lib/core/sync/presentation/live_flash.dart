@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 
 /// Tints its child for a moment when somebody else has just changed the task
@@ -18,7 +19,7 @@ class LiveFlash extends ConsumerWidget {
     );
     return AnimatedContainer(
       key: flashing ? const Key('live-flash') : null,
-      duration: const Duration(milliseconds: 300),
+      duration: TfMotion.of(context, TfDuration.slow),
       color: flashing
           ? Theme.of(context).colorScheme.tertiaryContainer
                 .withValues(alpha: 0.7)

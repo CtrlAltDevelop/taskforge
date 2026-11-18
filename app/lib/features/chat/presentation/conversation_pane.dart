@@ -325,7 +325,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
           IconButton(
             key: const Key('chat-settings'),
             tooltip: l10n.chatSettings,
-            icon: const TfIcon(TfIcons.tune),
+            icon: const TfIcon(TfIcons.tune, size: TfIconSize.control),
             onPressed: () => showSpaceSettings(context, _space.id),
           ),
         ],
@@ -423,7 +423,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
             IconButton(
               key: const Key('thread-back'),
               tooltip: l10n.chatBack,
-              icon: const TfIcon(TfIcons.arrowStart),
+              icon: const TfIcon(TfIcons.arrowStart, size: TfIconSize.control),
               onPressed: () => setState(() => _thread = null),
             ),
             Text(

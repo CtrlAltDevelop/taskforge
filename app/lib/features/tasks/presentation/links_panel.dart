@@ -50,7 +50,7 @@ class LinksPanel extends ConsumerWidget {
               IconButton(
                 key: const Key('add-link'),
                 tooltip: context.l10n.grpFAddLink,
-                icon: const TfIcon(TfIcons.link),
+                icon: const TfIcon(TfIcons.link, size: TfIconSize.control),
                 onPressed: () => showDialog<void>(
                   context: context,
                   builder: (_) => AddLinkDialog(project: project, task: task),
@@ -282,7 +282,10 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
             TextField(
               key: const Key('link-search'),
               decoration: InputDecoration(
-                prefixIcon: const TfIcon(TfIcons.search),
+                prefixIcon: const TfIcon(
+                  TfIcons.search,
+                  size: TfIconSize.control,
+                ),
                 hintText: context.l10n.grpFLinkSearchHint,
               ),
               onChanged: _search,

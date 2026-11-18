@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:async';
@@ -118,13 +119,13 @@ Future<void> _pump(WidgetTester tester, _FakeFormsClient client, String start) {
 }
 
 List<String> _labels(WidgetTester tester) => [
-  for (final tile in tester.widgetList<ListTile>(
+  for (final tile in tester.widgetList<TfRow>(
     find.descendant(
       of: find.byType(ReorderableListView),
-      matching: find.byType(ListTile),
+      matching: find.byType(TfRow),
     ),
   ))
-    (tile.title! as Text).data!,
+    tile.title,
 ];
 
 void main() {
@@ -187,7 +188,7 @@ void main() {
 
       await tester.drag(
         find.byIcon(TfIcons.grip.glyph).last,
-        const Offset(0, -60),
+        const Offset(0, -45),
       );
       await tester.pumpAndSettle();
       expect(_labels(tester), ['Summary', 'Attachment', 'Details']);
@@ -279,7 +280,7 @@ void main() {
       expect(find.textContaining('zoe@example.com'), findsOneWidget);
       expect(find.textContaining('FRM-8'), findsOneWidget);
       expect(
-        tester.widget<ListTile>(find.byKey(const Key('submission-s2'))).onTap,
+        tester.widget<TfRow>(find.byKey(const Key('submission-s2'))).onTap,
         isNull,
       );
     });

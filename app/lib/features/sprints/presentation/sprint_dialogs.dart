@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,8 +164,8 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
   Widget build(BuildContext context) {
     final saved = _saved;
     if (saved != null) {
-      return AlertDialog(
-        title: Text(context.l10n.grpASprintSaved),
+      return TfDialogFrame(
+        title: context.l10n.grpASprintSaved,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,10 +174,11 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
           ],
         ),
         actions: [
-          FilledButton(
+          TfButton(
             key: const Key('sprint-done'),
+            label: context.l10n.grpADone,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.grpADone),
           ),
         ],
       );
@@ -187,33 +193,27 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
             end,
             exceptId: widget.sprint?.id ?? '',
           );
-    return AlertDialog(
-      title: Text(
-        widget.sprint == null
-            ? context.l10n.grpANewSprint
-            : context.l10n.grpAEditSprint,
-      ),
+    return TfDialogFrame(
+      title: widget.sprint == null
+          ? context.l10n.grpANewSprint
+          : context.l10n.grpAEditSprint,
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              TfTextField(
                 key: const Key('sprint-name'),
                 controller: _name,
+                label: context.l10n.grpASprintName,
                 autofocus: true,
-                decoration: InputDecoration(
-                  labelText: context.l10n.grpASprintName,
-                ),
               ),
               const SizedBox(height: 12),
-              TextField(
+              TfTextField(
                 key: const Key('sprint-goal'),
                 controller: _goal,
-                decoration: InputDecoration(
-                  labelText: context.l10n.grpASprintGoal,
-                ),
+                label: context.l10n.grpASprintGoal,
               ),
               const SizedBox(height: 12),
               TextField(
@@ -222,9 +222,9 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   labelText: context.l10n.grpASprintStartLabel,
-                  suffixIcon: IconButton(
+                  suffixIcon: TfIconButton(
+                    icon: TfIcons.calendar,
                     tooltip: context.l10n.grpAPickStartDate,
-                    icon: const TfIcon(TfIcons.calendar),
                     onPressed: () => _pick(_start),
                   ),
                 ),
@@ -236,9 +236,9 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   labelText: context.l10n.grpASprintEndLabel,
-                  suffixIcon: IconButton(
+                  suffixIcon: TfIconButton(
+                    icon: TfIcons.calendar,
                     tooltip: context.l10n.grpAPickEndDate,
-                    icon: const TfIcon(TfIcons.calendar),
                     onPressed: () => _pick(_end),
                   ),
                 ),
@@ -295,14 +295,16 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpACancel,
+          variant: TfButtonVariant.ghost,
           onPressed: _busy ? null : () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpACancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('sprint-save'),
+          label: context.l10n.grpASave,
+          variant: TfButtonVariant.primary,
           onPressed: _busy ? null : _save,
-          child: Text(context.l10n.grpASave),
         ),
       ],
     );
@@ -336,8 +338,8 @@ class _CompleteState extends State<CompleteSprintDialog> {
   Widget build(BuildContext context) {
     final s = widget.sprint;
     final open = s.openTasks;
-    return AlertDialog(
-      title: Text(context.l10n.grpACompleteTitle(s.name)),
+    return TfDialogFrame(
+      title: context.l10n.grpACompleteTitle(s.name),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,49 +356,48 @@ class _CompleteState extends State<CompleteSprintDialog> {
               onChanged: (v) => setState(() => _carry = v ?? _carry),
               child: Column(
                 children: [
-                  RadioListTile<String>(
+                  TfRadioTile<String>(
                     key: const Key('carry-next'),
                     value: 'next',
-                    enabled: widget.planned.isNotEmpty,
-                    title: Text(context.l10n.grpACompleteMoveNext),
+                    title: context.l10n.grpACompleteMoveNext,
                     subtitle: widget.planned.isEmpty
-                        ? Text(context.l10n.grpACompleteNoPlanned)
+                        ? context.l10n.grpACompleteNoPlanned
                         : null,
+                    enabled: widget.planned.isNotEmpty,
                   ),
-                  RadioListTile<String>(
+                  TfRadioTile<String>(
                     key: const Key('carry-backlog'),
                     value: 'backlog',
-                    title: Text(context.l10n.grpACompleteBackToBacklog),
+                    title: context.l10n.grpACompleteBackToBacklog,
                   ),
                 ],
               ),
             ),
             if (_carry == 'next' && widget.planned.length > 1)
-              DropdownButton<String>(
+              TfSelectField(
                 key: const Key('carry-next-sprint'),
+                options: {for (final p in widget.planned) p.id: p.name},
                 value: _next,
-                isExpanded: true,
-                items: [
-                  for (final p in widget.planned)
-                    DropdownMenuItem(value: p.id, child: Text(p.name)),
-                ],
-                onChanged: (v) => setState(() => _next = v ?? _next),
+                onChanged: (v) => setState(() => _next = v),
+                expand: true,
               ),
           ],
         ],
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpACancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpACancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('complete-confirm'),
+          label: context.l10n.grpACompleteSprint,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.of(context).pop<CarryChoice>((
             carryOver: open == 0 ? 'backlog' : _carry,
             nextSprintId: open > 0 && _carry == 'next' ? _next : '',
           )),
-          child: Text(context.l10n.grpACompleteSprint),
         ),
       ],
     );
@@ -438,8 +439,8 @@ class _PointsState extends State<PointsDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.grpAPointsFor(widget.task.key)),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: context.l10n.grpAPointsFor(widget.task.key),
     content: TextField(
       key: const Key('points-field'),
       controller: _c,
@@ -452,14 +453,16 @@ class _PointsState extends State<PointsDialog> {
       onSubmitted: (_) => _ok(),
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpACancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.l10n.grpACancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('points-save'),
+        label: context.l10n.grpASave,
+        variant: TfButtonVariant.primary,
         onPressed: _ok,
-        child: Text(context.l10n.grpASave),
       ),
     ],
   );
@@ -488,12 +491,10 @@ class _CapacityState extends State<CapacityDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(
-      widget.hours
-          ? context.l10n.grpACapacityInHours
-          : context.l10n.grpACapacityInPoints,
-    ),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: widget.hours
+        ? context.l10n.grpACapacityInHours
+        : context.l10n.grpACapacityInPoints,
     content: TextField(
       key: const Key('capacity-field'),
       controller: _c,
@@ -501,14 +502,16 @@ class _CapacityState extends State<CapacityDialog> {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpACancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.l10n.grpACancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('capacity-save'),
+        label: context.l10n.grpASave,
+        variant: TfButtonVariant.primary,
         onPressed: () => Navigator.of(context).pop(_c.text.trim()),
-        child: Text(context.l10n.grpASave),
       ),
     ],
   );

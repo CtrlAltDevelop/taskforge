@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -60,148 +63,150 @@ class StatusCard extends StatelessWidget {
       for (final s in draft.statuses)
         if (s.key != key) s,
     ];
-    return Card(
-      key: Key('status-$key'),
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ReorderableDragStartListener(
-                  index: index,
-                  enabled: canEdit,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: TfIcon(
-                      TfIcons.grip,
-                      key: Key('status-handle-$key'),
-                      semanticLabel: context.l10n.grpIDragToReorder,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TfPanel(
+        key: Key('status-$key'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  ReorderableDragStartListener(
+                    index: index,
+                    enabled: canEdit,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: TfIcon(
+                        TfIcons.grip,
+                        key: Key('status-handle-$key'),
+                        semanticLabel: context.l10n.grpIDragToReorder,
+                      ),
                     ),
                   ),
-                ),
-                PopupMenuButton<String>(
-                  key: Key('status-color-$key'),
-                  enabled: canEdit,
-                  tooltip: context.l10n.grpIColour,
-                  onSelected: onRecolor,
-                  itemBuilder: (_) => [
-                    for (final c in statusColors)
-                      PopupMenuItem(
-                        value: c,
-                        child: Row(
-                          children: [
-                            TfIcon(TfIcons.circle, color: parseStatusColor(c)),
-                            const SizedBox(width: 12),
-                            Text(c),
-                          ],
+                  PopupMenuButton<String>(
+                    key: Key('status-color-$key'),
+                    enabled: canEdit,
+                    tooltip: context.l10n.grpIColour,
+                    onSelected: onRecolor,
+                    itemBuilder: (_) => [
+                      for (final c in statusColors)
+                        PopupMenuItem(
+                          value: c,
+                          child: Row(
+                            children: [
+                              TfIcon(
+                                TfIcons.circle,
+                                color: parseStatusColor(c),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(c),
+                            ],
+                          ),
                         ),
+                    ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: TfIcon(
+                        TfIcons.circle,
+                        color: parseStatusColor(status.color),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: _NameField(
+                      key: Key('status-name-$key'),
+                      value: status.name,
+                      enabled: canEdit,
+                      onChanged: onRename,
+                    ),
+                  ),
+                  TfIconButton(
+                    key: Key('status-default-$key'),
+                    icon: TfIcons.star,
+                    selected: status.isDefault,
+                    tooltip: status.isDefault
+                        ? context.l10n.grpINewTasksStartHere
+                        : context.l10n.grpIMakeDefaultStatus,
+                    onPressed: canEdit && !status.isDefault ? onDefault : null,
+                  ),
+                  TfIconButton(
+                    key: Key('status-delete-$key'),
+                    icon: TfIcons.trash,
+                    tooltip: context.l10n.grpIDeleteStatus,
+                    onPressed: canEdit ? onDelete : null,
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 8),
+                child: TfSelectField<StatusCategory>(
+                  key: Key('status-category-$key'),
+                  options: {
+                    for (final c in StatusCategory.values)
+                      c: c.labelIn(context.l10n),
+                  },
+                  value: status.category,
+                  onChanged: canEdit
+                      ? (c) {
+                          onCategory(c);
+                        }
+                      : null,
+                ),
+              ),
+              if (status.taskCount > 0 && !status.isNew)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
+                  child: Text(
+                    context.l10n.grpITaskCount(status.taskCount),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+              for (final p in problems)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
+                  child: Text(
+                    p.message,
+                    key: Key('problem-${p.code}-$key'),
+                    style: TextStyle(color: theme.colorScheme.error),
+                  ),
+                ),
+              if (draft.restrict) ...[
+                const Divider(),
+                Text(
+                  context.l10n.grpICanMoveTo,
+                  style: theme.textTheme.labelMedium,
+                ),
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
+                    for (final other in others)
+                      _MoveChip(
+                        from: status,
+                        to: other,
+                        draft: draft,
+                        canEdit: canEdit,
+                        summary: draft.allows(key, other.key)
+                            ? _summary(
+                                context,
+                                draft.transitions.firstWhere(
+                                  (t) => t.from == key && t.to == other.key,
+                                ),
+                              )
+                            : '',
+                        onToggle: () => onToggleMove(other),
+                        onConditions: () => onConditions(other),
                       ),
                   ],
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: TfIcon(
-                      TfIcons.circle,
-                      color: parseStatusColor(status.color),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: _NameField(
-                    key: Key('status-name-$key'),
-                    value: status.name,
-                    enabled: canEdit,
-                    onChanged: onRename,
-                  ),
-                ),
-                IconButton(
-                  key: Key('status-default-$key'),
-                  tooltip: status.isDefault
-                      ? context.l10n.grpINewTasksStartHere
-                      : context.l10n.grpIMakeDefaultStatus,
-                  icon: Icon(
-                    status.isDefault ? TfIcons.star.glyph : TfIcons.star.glyph,
-                  ),
-                  onPressed: canEdit && !status.isDefault ? onDefault : null,
-                ),
-                IconButton(
-                  key: Key('status-delete-$key'),
-                  tooltip: context.l10n.grpIDeleteStatus,
-                  icon: const TfIcon(TfIcons.trash),
-                  onPressed: canEdit ? onDelete : null,
                 ),
               ],
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 8),
-              child: DropdownButton<StatusCategory>(
-                key: Key('status-category-$key'),
-                value: status.category,
-                items: [
-                  for (final c in StatusCategory.values)
-                    DropdownMenuItem(
-                      value: c,
-                      child: Text(c.labelIn(context.l10n)),
-                    ),
-                ],
-                onChanged: canEdit
-                    ? (c) {
-                        if (c != null) onCategory(c);
-                      }
-                    : null,
-              ),
-            ),
-            if (status.taskCount > 0 && !status.isNew)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
-                child: Text(
-                  context.l10n.grpITaskCount(status.taskCount),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ),
-            for (final p in problems)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
-                child: Text(
-                  p.message,
-                  key: Key('problem-${p.code}-$key'),
-                  style: TextStyle(color: theme.colorScheme.error),
-                ),
-              ),
-            if (draft.restrict) ...[
-              const Divider(),
-              Text(
-                context.l10n.grpICanMoveTo,
-                style: theme.textTheme.labelMedium,
-              ),
-              const SizedBox(height: 4),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  for (final other in others)
-                    _MoveChip(
-                      from: status,
-                      to: other,
-                      draft: draft,
-                      canEdit: canEdit,
-                      summary: draft.allows(key, other.key)
-                          ? _summary(
-                              context,
-                              draft.transitions.firstWhere(
-                                (t) => t.from == key && t.to == other.key,
-                              ),
-                            )
-                          : '',
-                      onToggle: () => onToggleMove(other),
-                      onConditions: () => onConditions(other),
-                    ),
-                ],
-              ),
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -243,11 +248,10 @@ class _MoveChip extends StatelessWidget {
           onSelected: canEdit ? (_) => onToggle() : null,
         ),
         if (allowed && canEdit)
-          IconButton(
+          TfIconButton(
             key: Key('conditions-${from.key}-${to.key}'),
+            icon: TfIcons.tune,
             tooltip: context.l10n.grpIConditionsForMove,
-            visualDensity: VisualDensity.compact,
-            icon: const TfIcon(TfIcons.tune, size: 18),
             onPressed: onConditions,
           ),
       ],

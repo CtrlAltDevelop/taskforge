@@ -20,6 +20,7 @@ import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf/tf_status.dart';
 import 'package:taskforge/core/ui/tf/tf_tabs.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/gallery/gallery_page_section.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 Widget _section(BuildContext context, String title, Widget child) {
@@ -542,6 +543,14 @@ List<Widget> gallerySections(
           TfSkeleton(width: 240, height: 20),
         ]),
       ],
+    ),
+  ),
+  _section(
+    context,
+    'Page layout and forms',
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: pageGalleryBlocks(),
     ),
   ),
 ];

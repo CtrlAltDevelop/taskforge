@@ -343,11 +343,19 @@ abstract final class TfIcons {
 
 /// Draws a [TfIconData] in the text colour, mirrored in right-to-left when
 /// the icon says so. Decorative unless [semanticLabel] is given.
+/// Icon sizes. A bare [TfIcon] is [inline] (16): beside text, in Tf*
+/// components. Inside Material controls that bring their own 40-48 px target
+/// (IconButton, ListTile leading, input affixes) use [control].
+abstract final class TfIconSize {
+  static const double inline = 16;
+  static const double control = 20;
+}
+
 class TfIcon extends StatelessWidget {
   const TfIcon(
     this.icon, {
     super.key,
-    this.size = 16,
+    this.size = TfIconSize.inline,
     this.color,
     this.semanticLabel,
   });

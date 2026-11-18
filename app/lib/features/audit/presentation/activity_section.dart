@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -108,16 +112,15 @@ class ActivityList extends ConsumerWidget {
           ),
         ...children,
         if (state.hasMore)
-          TextButton(
+          TfButton(
             key: const Key('activity-more'),
+            label: state.loadingMore
+                ? context.l10n.grpBLoading
+                : context.l10n.grpBShowOlder,
+            variant: TfButtonVariant.ghost,
             onPressed: state.loadingMore
                 ? null
                 : ref.read(taskActivityProvider(task).notifier).more,
-            child: Text(
-              state.loadingMore
-                  ? context.l10n.grpBLoading
-                  : context.l10n.grpBShowOlder,
-            ),
           ),
       ],
     );
@@ -134,22 +137,19 @@ class _Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final e = line.entry;
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        key: Key('activity-${e.id}'),
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        leading: TfIcon(
-          e.actorType == 'user' ? TfIcons.user : TfIcons.bot,
-          size: 18,
-        ),
-        title: Text(
-          '${e.whoIn(context.l10n)} ${describeEntry(e, labels, context.l10n)}',
-        ),
-        subtitle: Text(
-          relativeTime(now, e.at, context.l10n, context.localePrefs),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfRow(
+          key: Key('activity-${e.id}'),
+          title:
+              '${e.whoIn(context.l10n)} ${describeEntry(e, labels, context.l10n)}',
+          subtitle: relativeTime(now, e.at, context.l10n, context.localePrefs),
+          leading: TfIcon(
+            e.actorType == 'user' ? TfIcons.user : TfIcons.bot,
+            size: 18,
+          ),
         ),
       ),
     );

@@ -1,3 +1,8 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:convert';
@@ -117,18 +122,21 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                title: Text(context.l10n.grpBHistory),
-                trailing: picked == null
-                    ? null
-                    : TextButton(
-                        key: const Key('revision-back'),
-                        onPressed: () => setState(() => _picked = null),
-                        child: Text(context.l10n.grpBAllRevisions),
-                      ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  title: context.l10n.grpBHistory,
+                  trailing: picked == null
+                      ? null
+                      : TfButton(
+                          key: const Key('revision-back'),
+                          label: context.l10n.grpBAllRevisions,
+                          variant: TfButtonVariant.ghost,
+                          onPressed: () => setState(() => _picked = null),
+                        ),
+                ),
               ),
             ),
             const Divider(height: 1),
@@ -151,22 +159,20 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
       AsyncData(:final value) => ListView(
         children: [
           for (final r in value)
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                key: Key('revision-${r.id}'),
-                dense: true,
-                title: Text(
-                  r.title.isEmpty
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  key: Key('revision-${r.id}'),
+                  title: r.title.isEmpty
                       ? context.l10n.grpBVersionN(r.version)
                       : r.title,
+                  subtitle:
+                      '${_memberName(ref, r.authorId, context.l10n.grpBSomeone)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
+                  trailing: Text(context.l10n.grpBVersionShort(r.version)),
+                  onTap: () => setState(() => _picked = r.id),
                 ),
-                subtitle: Text(
-                  '${_memberName(ref, r.authorId, context.l10n.grpBSomeone)} · ${r.savedAt.isEmpty ? r.at : r.savedAt}',
-                ),
-                trailing: Text(context.l10n.grpBVersionShort(r.version)),
-                onTap: () => setState(() => _picked = r.id),
               ),
             ),
         ],
@@ -211,10 +217,11 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
         if (widget.canEdit)
           Padding(
             padding: const EdgeInsets.all(12),
-            child: FilledButton.icon(
+            child: TfButton(
               key: const Key('revision-restore'),
-              icon: const TfIcon(TfIcons.undo),
-              label: Text(context.l10n.grpBRestoreVersion),
+              label: context.l10n.grpBRestoreVersion,
+              variant: TfButtonVariant.primary,
+              icon: TfIcons.undo,
               onPressed: _busy || !body.hasValue ? null : () => _restore(id),
             ),
           ),
@@ -237,14 +244,12 @@ class BacklinksPanel extends ConsumerWidget {
       key: const Key('backlinks-panel'),
       title: Text(context.l10n.grpBLinkedFrom(links.length)),
       children: [
-        if (links.isEmpty)
-          ListTile(dense: true, title: Text(context.l10n.grpBNoBacklinks)),
+        if (links.isEmpty) TfRow(title: context.l10n.grpBNoBacklinks),
         for (final d in links)
-          ListTile(
+          TfRow(
             key: Key('backlink-${d.id}'),
-            dense: true,
+            title: d.labelIn(context.l10n),
             leading: Text(d.icon.isEmpty ? '📄' : d.icon),
-            title: Text(d.labelIn(context.l10n)),
             onTap: () => onOpen(d.id),
           ),
       ],
@@ -264,9 +269,9 @@ Future<void> exportMarkdown(
     if (!context.mounted) return;
     await showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => TfDialogFrame(
         key: const Key('export-dialog'),
-        title: Text(context.l10n.grpBMarkdownTitle(out.title)),
+        title: context.l10n.grpBMarkdownTitle(out.title),
         content: SizedBox(
           width: 520,
           child: SingleChildScrollView(
@@ -278,18 +283,21 @@ Future<void> exportMarkdown(
           ),
         ),
         actions: [
-          TextButton(
+          TfButton(
             key: const Key('export-copy'),
+            label: context.l10n.grpBCopy,
+            variant: TfButtonVariant.ghost,
             onPressed: () async {
               final copied = context.l10n.grpBMarkdownCopied;
               await Clipboard.setData(ClipboardData(text: out.markdown));
               messenger.showSnackBar(SnackBar(content: Text(copied)));
               if (context.mounted) Navigator.pop(context);
             },
-            child: Text(context.l10n.grpBCopy),
           ),
-          TextButton(
+          TfButton(
             key: const Key('export-save'),
+            label: context.l10n.grpBSaveAsFile,
+            variant: TfButtonVariant.ghost,
             onPressed: () async {
               final name = out.title.trim().isEmpty ? 'page' : out.title.trim();
               await FilePicker.saveFile(
@@ -299,11 +307,11 @@ Future<void> exportMarkdown(
               );
               if (context.mounted) Navigator.pop(context);
             },
-            child: Text(context.l10n.grpBSaveAsFile),
           ),
-          TextButton(
+          TfButton(
+            label: context.l10n.grpBClose,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(context),
-            child: Text(context.l10n.grpBClose),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/core/ui/frame_scope.dart';
@@ -37,7 +38,7 @@ class _AppFrameState extends ConsumerState<AppFrame>
     with SingleTickerProviderStateMixin {
   late final _fade = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 140),
+    duration: TfDuration.base,
   );
   bool _started = false;
 

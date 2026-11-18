@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+
 import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
@@ -17,11 +20,15 @@ class WorkflowGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!draft.restrict) {
-      return Card(
-        key: const Key('graph-unrestricted'),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(context.l10n.grpIAnyStatusMoves),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+        child: TfPanel(
+          key: const Key('graph-unrestricted'),
+          padding: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(context.l10n.grpIAnyStatusMoves),
+          ),
         ),
       );
     }
@@ -31,15 +38,19 @@ class WorkflowGraph extends StatelessWidget {
         draft.statuses.length,
         draft.transitions.length,
       ),
-      child: Card(
-        child: AspectRatio(
-          aspectRatio: 1.1,
-          child: CustomPaint(
-            key: const Key('workflow-graph'),
-            painter: GraphPainter(
-              draft: draft,
-              edge: scheme.onSurfaceVariant,
-              text: scheme.onSurface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+        child: TfPanel(
+          padding: EdgeInsets.zero,
+          child: AspectRatio(
+            aspectRatio: 1.1,
+            child: CustomPaint(
+              key: const Key('workflow-graph'),
+              painter: GraphPainter(
+                draft: draft,
+                edge: scheme.onSurfaceVariant,
+                text: scheme.onSurface,
+              ),
             ),
           ),
         ),

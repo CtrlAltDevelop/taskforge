@@ -79,7 +79,10 @@ class CalendarTray extends ConsumerWidget {
                 ? IconButton(
                     key: Key('schedule-${task.id}'),
                     tooltip: context.l10n.grpFSchedule,
-                    icon: TfIcon(TfIcons.calendarCheck),
+                    icon: TfIcon(
+                      TfIcons.calendarCheck,
+                      size: TfIconSize.control,
+                    ),
                     onPressed: () => onSchedule(task),
                   )
                 : null,

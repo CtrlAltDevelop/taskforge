@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -88,8 +92,8 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
   @override
   Widget build(BuildContext context) {
     final catalog = ref.watch(developerCatalogProvider);
-    return AlertDialog(
-      title: Text(context.l10n.devTokenNew),
+    return TfDialogFrame(
+      title: context.l10n.devTokenNew,
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(
@@ -113,34 +117,29 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
               ...catalog.maybeWhen(
                 data: (c) => [
                   for (final s in c.scopes)
-                    CheckboxListTile(
+                    TfToggleTile(
                       key: Key('scope-${s.key}'),
-                      dense: true,
-                      contentPadding: EdgeInsets.zero,
                       value: _scopes.contains(s.key),
-                      title: Text(scopeLabel(context.l10n, s)),
-                      subtitle: Text(isolateLtr(s.key)),
                       onChanged: (on) => setState(
                         () => on == true
                             ? _scopes.add(s.key)
                             : _scopes.remove(s.key),
                       ),
+                      title: scopeLabel(context.l10n, s),
+                      subtitle: isolateLtr(s.key),
+                      checkbox: true,
                     ),
                 ],
                 orElse: () => const [LinearProgressIndicator()],
               ),
               const SizedBox(height: 8),
-              DropdownButtonFormField<int>(
+              TfSelectField(
                 key: const Key('token-expiry'),
-                initialValue: _days,
-                decoration: InputDecoration(
-                  labelText: context.l10n.devTokenExpiry,
-                ),
-                items: [
-                  for (final d in _expiryChoices)
-                    DropdownMenuItem(value: d, child: Text(_expiryText(d))),
-                ],
-                onChanged: (v) => setState(() => _days = v ?? 0),
+                options: {for (final d in _expiryChoices) d: _expiryText(d)},
+                value: _days,
+                onChanged: (v) => setState(() => _days = v),
+                label: context.l10n.devTokenExpiry,
+                expand: true,
               ),
               const SizedBox(height: 12),
               if (_error != null)
@@ -159,16 +158,18 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpCCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: _busy ? null : () => Navigator.of(context).pop(),
-          child: Text(context.l10n.grpCCancel),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('create-token'),
+          label: context.l10n.devTokenCreate,
+          variant: TfButtonVariant.primary,
           onPressed: _busy || _scopes.isEmpty || _name.text.trim().isEmpty
               ? null
               : _submit,
-          child: Text(context.l10n.devTokenCreate),
         ),
       ],
     );
@@ -194,8 +195,8 @@ class _SecretDialogState extends State<_SecretDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(context.l10n.devTokenCreatedTitle),
+    return TfDialogFrame(
+      title: context.l10n.devTokenCreatedTitle,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,16 +212,18 @@ class _SecretDialogState extends State<_SecretDialog> {
         ],
       ),
       actions: [
-        TextButton.icon(
+        TfButton(
           key: const Key('copy-secret'),
+          label: _copied ? context.l10n.devCopied : context.l10n.devCopy,
+          variant: TfButtonVariant.ghost,
+          icon: _copied ? TfIcons.check : TfIcons.copy,
           onPressed: _copy,
-          icon: TfIcon(_copied ? TfIcons.check : TfIcons.copy),
-          label: Text(_copied ? context.l10n.devCopied : context.l10n.devCopy),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('secret-done'),
+          label: context.l10n.devDone,
+          variant: TfButtonVariant.primary,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.devDone),
         ),
       ],
     );

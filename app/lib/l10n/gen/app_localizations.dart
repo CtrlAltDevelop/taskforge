@@ -295,6 +295,18 @@ abstract class AppLocalizations {
   /// **'High contrast'**
   String get contrastLabel;
 
+  /// No description provided for @reduceMotionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce motion'**
+  String get reduceMotionLabel;
+
+  /// No description provided for @reduceMotionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Animations become instant fades'**
+  String get reduceMotionHelp;
+
   /// No description provided for @contrastHelp.
   ///
   /// In en, this message translates to:
@@ -5292,6 +5304,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Title'**
   String get grpFColTitle;
+
+  /// No description provided for @tblSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all tasks'**
+  String get tblSelectAll;
 
   /// No description provided for @grpFTrashTitle.
   ///

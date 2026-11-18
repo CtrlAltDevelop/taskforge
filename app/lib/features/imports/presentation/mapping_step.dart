@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -128,13 +131,12 @@ class MappingStep extends ConsumerWidget {
         ],
         if (analysis.labels > 0) ...[
           const Divider(height: 32),
-          SwitchListTile(
+          TfToggleTile(
             key: const Key('map-labels'),
-            contentPadding: EdgeInsets.zero,
-            title: Text(context.l10n.grpCImpKeepLabels(analysis.labels)),
-            subtitle: Text(context.l10n.grpCImpKeepLabelsSub),
             value: mapping.labels,
             onChanged: (v) => notifier.edit(mapping.copyWith(labels: v)),
+            title: context.l10n.grpCImpKeepLabels(analysis.labels),
+            subtitle: context.l10n.grpCImpKeepLabelsSub,
           ),
         ],
         if (analysis.sprints.isNotEmpty)
@@ -148,16 +150,18 @@ class MappingStep extends ConsumerWidget {
         const SizedBox(height: 16),
         Row(
           children: [
-            TextButton(
+            TfButton(
               key: const Key('map-back'),
+              label: context.l10n.grpCBack,
+              variant: TfButtonVariant.ghost,
               onPressed: wizard.busy ? null : notifier.back,
-              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
-            FilledButton(
+            TfButton(
               key: const Key('map-next'),
+              label: context.l10n.grpCImpReview,
+              variant: TfButtonVariant.primary,
               onPressed: wizard.busy ? null : notifier.review,
-              child: Text(context.l10n.grpCImpReview),
             ),
           ],
         ),
@@ -179,17 +183,16 @@ class _Source extends StatelessWidget {
       children: [
         Text(context.l10n.grpCImpReadAs),
         const SizedBox(width: 12),
-        DropdownButton<ImportSource>(
+        TfSelectField<ImportSource>(
           key: const Key('import-source'),
+          options: {
+            for (final s in ImportSource.values) s: s.labelIn(context.l10n),
+          },
           value: current,
-          items: [
-            for (final s in ImportSource.values)
-              DropdownMenuItem(value: s, child: Text(s.labelIn(context.l10n))),
-          ],
           onChanged: wizard.busy
               ? null
               : (s) {
-                  if (s != null && s != current) notifier.changeSource(s);
+                  if (s != current) notifier.changeSource(s);
                 },
         ),
       ],
@@ -210,19 +213,17 @@ class _Members extends ConsumerWidget {
         Text(context.l10n.grpCImpZipFile),
         const SizedBox(width: 12),
         Flexible(
-          child: DropdownButton<String>(
+          child: TfSelectField(
             key: const Key('import-member'),
-            isExpanded: true,
-            hint: Text(context.l10n.grpCImpChooseOne),
-            items: [
-              for (final m in proposal.members)
-                DropdownMenuItem(value: m, child: Text(m)),
-            ],
+            options: {for (final m in proposal.members) m: m},
+            value: null,
             onChanged: (m) {
               if (m != null) {
                 ref.read(importWizardProvider.notifier).chooseMember(m);
               }
             },
+            hint: context.l10n.grpCImpChooseOne,
+            expand: true,
           ),
         ),
       ],
@@ -261,38 +262,30 @@ class _Target extends ConsumerWidget {
           },
           child: Column(
             children: [
-              RadioListTile<bool>(
+              TfRadioTile<bool>(
                 key: const Key('map-target-new'),
-                contentPadding: EdgeInsets.zero,
-                title: Text(context.l10n.grpCImpNewProject),
                 value: false,
+                title: context.l10n.grpCImpNewProject,
               ),
               if (projects.isNotEmpty)
-                RadioListTile<bool>(
+                TfRadioTile<bool>(
                   key: const Key('map-target-existing'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(context.l10n.grpCImpExistingProject),
                   value: true,
+                  title: context.l10n.grpCImpExistingProject,
                 ),
             ],
           ),
         ),
         const SizedBox(height: 12),
         if (existing)
-          DropdownButton<String>(
+          TfSelectField(
             key: const Key('map-project'),
+            options: {for (final p in projects) p.id: '${p.name} (${p.key})'},
             value: projects.any((p) => p.id == mapping.projectId)
                 ? mapping.projectId
                 : null,
-            items: [
-              for (final p in projects)
-                DropdownMenuItem(
-                  value: p.id,
-                  child: Text('${p.name} (${p.key})'),
-                ),
-            ],
             onChanged: (id) {
-              if (id != null) onChanged(mapping.copyWith(projectId: id));
+              onChanged(mapping.copyWith(projectId: id));
             },
           )
         else

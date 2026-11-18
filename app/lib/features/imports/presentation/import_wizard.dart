@@ -1,3 +1,10 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_select_field.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,50 +34,56 @@ class ImportWizardCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wizard = ref.watch(importWizardProvider);
-    return Card(
-      key: const Key('import-wizard'),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              spacing: 8,
-              children: [
-                for (final step in ImportStep.values)
-                  ChoiceChip(
-                    key: Key('step-${step.name}'),
-                    label: Text(
-                      '${step.index + 1}. ${_stepName(context.l10n, step)}',
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        key: const Key('import-wizard'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                children: [
+                  for (final step in ImportStep.values)
+                    ChoiceChip(
+                      key: Key('step-${step.name}'),
+                      label: Text(
+                        '${step.index + 1}. ${_stepName(context.l10n, step)}',
+                      ),
+                      selected: step == wizard.step,
+                      onSelected: null,
                     ),
-                    selected: step == wizard.step,
-                    onSelected: null,
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (wizard.busy)
-              const Padding(
-                padding: EdgeInsets.only(bottom: 12),
-                child: LinearProgressIndicator(key: Key('import-busy')),
+                ],
               ),
-            if (wizard.error != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(
-                  wizard.error!,
-                  key: const Key('import-error'),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+              const SizedBox(height: 16),
+              if (wizard.busy)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: LinearProgressIndicator(key: Key('import-busy')),
                 ),
-              ),
-            switch (wizard.step) {
-              ImportStep.source => const _SourceStep(),
-              ImportStep.upload => const _UploadStep(),
-              ImportStep.map => const MappingStep(),
-              ImportStep.review => const _ReviewStep(),
-              ImportStep.run => const _RunStep(),
-            },
-          ],
+              if (wizard.error != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    wizard.error!,
+                    key: const Key('import-error'),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ),
+              switch (wizard.step) {
+                ImportStep.source => const _SourceStep(),
+                ImportStep.upload => const _UploadStep(),
+                ImportStep.map => const MappingStep(),
+                ImportStep.review => const _ReviewStep(),
+                ImportStep.run => const _RunStep(),
+              },
+            ],
+          ),
         ),
       ),
     );
@@ -96,16 +109,16 @@ class _SourceStep extends ConsumerWidget {
           onChanged: (s) => ref.read(importWizardProvider.notifier).select(s),
           child: Column(
             children: [
-              RadioListTile<ImportSource?>(
+              TfRadioTile<ImportSource?>(
                 key: const Key('source-auto'),
-                title: Text(context.l10n.grpCImpAuto),
                 value: null,
+                title: context.l10n.grpCImpAuto,
               ),
               for (final s in ImportSource.values)
-                RadioListTile<ImportSource?>(
+                TfRadioTile<ImportSource?>(
                   key: Key('source-${s.wire}'),
-                  title: Text(s.labelIn(context.l10n)),
                   value: s,
+                  title: s.labelIn(context.l10n),
                 ),
             ],
           ),
@@ -113,10 +126,11 @@ class _SourceStep extends ConsumerWidget {
         const SizedBox(height: 8),
         Align(
           alignment: AlignmentDirectional.centerEnd,
-          child: FilledButton(
+          child: TfButton(
             key: const Key('source-next'),
+            label: context.l10n.grpCImpNext,
+            variant: TfButtonVariant.primary,
             onPressed: () => wizard.chooseSource(chosen),
-            child: Text(context.l10n.grpCImpNext),
           ),
         ),
       ],
@@ -151,21 +165,16 @@ class _UploadStep extends ConsumerWidget {
         children: [
           Text(context.l10n.grpCImpZipSeveral),
           const SizedBox(height: 12),
-          DropdownButton<String>(
+          TfSelectField<String>(
             key: const Key('upload-member'),
-            isExpanded: true,
-            hint: Text(context.l10n.grpCImpChooseAFile),
-            items: [
-              for (final m in choices)
-                DropdownMenuItem(value: m, child: Text(m)),
-            ],
+            options: {for (final m in choices) m: m},
+            value: null,
             onChanged: busy
                 ? null
-                : (m) {
-                    if (m != null) {
-                      ref.read(importWizardProvider.notifier).chooseMember(m);
-                    }
-                  },
+                : (m) =>
+                      ref.read(importWizardProvider.notifier).chooseMember(m),
+            hint: context.l10n.grpCImpChooseAFile,
+            expand: true,
           ),
         ],
       );
@@ -186,19 +195,21 @@ class _UploadStep extends ConsumerWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            TextButton(
+            TfButton(
               key: const Key('upload-back'),
+              label: context.l10n.grpCBack,
+              variant: TfButtonVariant.ghost,
               onPressed: busy
                   ? null
                   : ref.read(importWizardProvider.notifier).back,
-              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
-            FilledButton.icon(
+            TfButton(
               key: const Key('import-pick'),
+              label: context.l10n.grpCImpPickFile,
+              variant: TfButtonVariant.primary,
+              icon: TfIcons.upload,
               onPressed: busy ? null : () => _pick(ref),
-              icon: const TfIcon(TfIcons.upload),
-              label: Text(context.l10n.grpCImpPickFile),
             ),
           ],
         ),
@@ -262,20 +273,20 @@ class _ReviewStep extends ConsumerWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            TextButton(
+            TfButton(
               key: const Key('review-back'),
+              label: context.l10n.grpCBack,
+              variant: TfButtonVariant.ghost,
               onPressed: wizard.busy ? null : notifier.back,
-              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
-            FilledButton(
+            TfButton(
               key: const Key('import-start'),
+              label: resuming
+                  ? context.l10n.grpCImpResumeImport
+                  : context.l10n.grpCImpStart,
+              variant: TfButtonVariant.primary,
               onPressed: wizard.busy ? null : notifier.start,
-              child: Text(
-                resuming
-                    ? context.l10n.grpCImpResumeImport
-                    : context.l10n.grpCImpStart,
-              ),
             ),
           ],
         ),
@@ -321,19 +332,21 @@ class _Run extends ConsumerWidget {
   Future<void> _undo(BuildContext context, WidgetRef ref) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (dialog) => AlertDialog(
+      builder: (dialog) => TfDialogFrame(
         key: const Key('undo-dialog'),
-        title: Text(dialog.l10n.grpCImpUndoTitle),
+        title: dialog.l10n.grpCImpUndoTitle,
         content: Text(dialog.l10n.grpCImpUndoRunBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: dialog.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.pop(dialog, false),
-            child: Text(dialog.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('undo-confirm'),
+            label: dialog.l10n.grpCImpUndoConfirm,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.pop(dialog, true),
-            child: Text(dialog.l10n.grpCImpUndoConfirm),
           ),
         ],
       ),
@@ -369,10 +382,10 @@ class _Run extends ConsumerWidget {
           const SizedBox(height: 8),
           Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: OutlinedButton(
+            child: TfButton(
               key: const Key('import-cancel'),
+              label: context.l10n.grpCImpCancel,
               onPressed: notifier.cancel,
-              child: Text(context.l10n.grpCImpCancel),
             ),
           ),
         ] else ...[
@@ -402,27 +415,30 @@ class _Run extends ConsumerWidget {
             alignment: WrapAlignment.end,
             children: [
               if (job.status == 'done' && job.projectId.isNotEmpty)
-                FilledButton(
+                TfButton(
                   key: const Key('import-open-project'),
+                  label: context.l10n.grpCImpOpenProject,
+                  variant: TfButtonVariant.primary,
                   onPressed: () => context.go('/projects/${job.projectId}'),
-                  child: Text(context.l10n.grpCImpOpenProject),
                 ),
               if (job.canResume)
-                FilledButton(
+                TfButton(
                   key: const Key('import-resume'),
+                  label: context.l10n.grpCImpResume,
+                  variant: TfButtonVariant.primary,
                   onPressed: notifier.start,
-                  child: Text(context.l10n.grpCImpResume),
                 ),
               if (job.canUndo)
-                OutlinedButton(
+                TfButton(
                   key: const Key('import-undo'),
+                  label: context.l10n.grpCUndo,
                   onPressed: () => _undo(context, ref),
-                  child: Text(context.l10n.grpCUndo),
                 ),
-              TextButton(
+              TfButton(
                 key: const Key('import-another'),
+                label: context.l10n.grpCImpAnother,
+                variant: TfButtonVariant.ghost,
                 onPressed: notifier.restart,
-                child: Text(context.l10n.grpCImpAnother),
               ),
             ],
           ),
@@ -501,10 +517,8 @@ class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
           const SizedBox(height: 12),
           Text(context.l10n.grpCImpCuPick),
           for (final l in lists)
-            CheckboxListTile(
+            TfCheckbox(
               key: Key('clickup-list-${l.id}'),
-              dense: true,
-              title: Text(l.path),
               value: _picked.contains(l.id),
               onChanged: wizard.busy
                   ? null
@@ -512,6 +526,7 @@ class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
                       () =>
                           on == true ? _picked.add(l.id) : _picked.remove(l.id),
                     ),
+              label: l.path,
             ),
         ],
         if (fetching) ...[
@@ -524,30 +539,33 @@ class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
         const SizedBox(height: 12),
         Row(
           children: [
-            TextButton(
+            TfButton(
               key: const Key('clickup-back'),
+              label: context.l10n.grpCBack,
+              variant: TfButtonVariant.ghost,
               onPressed: wizard.busy ? null : notifier.back,
-              child: Text(context.l10n.grpCBack),
             ),
             const Spacer(),
             if (lists.isEmpty)
-              FilledButton(
+              TfButton(
                 key: const Key('clickup-load'),
+                label: context.l10n.grpCImpCuLoad,
+                variant: TfButtonVariant.primary,
                 onPressed: wizard.busy || _token.text.trim().isEmpty
                     ? null
                     : () => notifier.loadClickUp(_token.text.trim()),
-                child: Text(context.l10n.grpCImpCuLoad),
               )
             else
-              FilledButton(
+              TfButton(
                 key: const Key('clickup-fetch'),
+                label: context.l10n.grpCImpCuFetch,
+                variant: TfButtonVariant.primary,
                 onPressed: wizard.busy || _picked.isEmpty
                     ? null
                     : () => notifier.fetchClickUp(
                         _token.text.trim(),
                         _picked.toList(),
                       ),
-                child: Text(context.l10n.grpCImpCuFetch),
               ),
           ],
         ),

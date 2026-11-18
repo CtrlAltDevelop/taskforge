@@ -1,5 +1,10 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
-import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,33 +53,31 @@ class SessionsScreen extends ConsumerWidget {
         const <SessionInfo>[];
     return Scaffold(
       appBar: TfAppBar(
-        leading: IconButton(
+        leading: TfIconButton(
           key: const Key('back-home'),
+          icon: TfIcons.arrowStart,
           tooltip: context.l10n.grpIBack,
-          icon: const BackButtonIcon(),
           onPressed: () => context.go('/'),
         ),
         title: Text(context.l10n.grpISessions),
         actions: [
           if (others.isNotEmpty)
-            TextButton(
+            TfButton(
               key: const Key('revoke-others'),
+              label: context.l10n.grpISignOutOthers,
+              variant: TfButtonVariant.ghost,
               onPressed: () =>
                   _revoke(context, ref, [for (final s in others) s.id]),
-              child: Text(context.l10n.grpISignOutOthers),
             ),
         ],
       ),
       body: sessions.when(
-        data: (items) => ContentWidth(
-          child: ListView(
-            children: [
-              for (final s in items)
-                _SessionTile(session: s, onRevoke: _revoke),
-              const Divider(),
-              const DevicePrivacyNote(),
-            ],
-          ),
+        data: (items) => TfPage(
+          children: [
+            for (final s in items) _SessionTile(session: s, onRevoke: _revoke),
+            const Divider(),
+            const DevicePrivacyNote(),
+          ],
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => TfError(
@@ -148,58 +151,60 @@ class _SessionTile extends ConsumerWidget {
       if (session.ipAddress.isNotEmpty) session.ipAddress,
       if (session.fingerprintShort.isNotEmpty) '#${session.fingerprintShort}',
     ].join(' · ');
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        key: Key('session-${session.id}'),
-        leading: _device(context),
-        title: Row(
-          children: [
-            Flexible(
-              child: Text(_title(context), overflow: TextOverflow.ellipsis),
-            ),
-            IconButton(
-              key: Key('rename-${session.id}'),
-              tooltip: l10n.devSessionRename,
-              icon: const TfIcon(TfIcons.edit, size: 18),
-              onPressed: () => _rename(context, ref),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfTile(
+          key: Key('session-${session.id}'),
+          title: Row(
+            children: [
+              Flexible(
+                child: Text(_title(context), overflow: TextOverflow.ellipsis),
+              ),
+              TfIconButton(
+                key: Key('rename-${session.id}'),
+                icon: TfIcons.edit,
+                tooltip: l10n.devSessionRename,
+                onPressed: () => _rename(context, ref),
+              ),
+            ],
+          ),
+          subtitle: Wrap(
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              if (session.current)
+                Chip(
+                  key: const Key('chip-current'),
+                  label: Text(l10n.grpIThisDevice),
+                  visualDensity: VisualDensity.compact,
+                ),
+              if (session.newDevice)
+                Chip(
+                  key: const Key('chip-new'),
+                  label: Text(l10n.devSessionNew),
+                  visualDensity: VisualDensity.compact,
+                ),
+              if (session.keyChanged)
+                Chip(
+                  key: const Key('chip-key-changed'),
+                  label: Text(l10n.devSessionKeyChanged),
+                  visualDensity: VisualDensity.compact,
+                ),
+              if (details.isNotEmpty) Text(details),
+            ],
+          ),
+          leading: _device(context),
+          trailing: session.current
+              ? null
+              : TfIconButton(
+                  key: Key('revoke-${session.id}'),
+                  icon: TfIcons.close,
+                  tooltip: l10n.grpISignOutThis,
+                  onPressed: () => onRevoke(context, ref, [session.id]),
+                ),
         ),
-        subtitle: Wrap(
-          spacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            if (session.current)
-              Chip(
-                key: const Key('chip-current'),
-                label: Text(l10n.grpIThisDevice),
-                visualDensity: VisualDensity.compact,
-              ),
-            if (session.newDevice)
-              Chip(
-                key: const Key('chip-new'),
-                label: Text(l10n.devSessionNew),
-                visualDensity: VisualDensity.compact,
-              ),
-            if (session.keyChanged)
-              Chip(
-                key: const Key('chip-key-changed'),
-                label: Text(l10n.devSessionKeyChanged),
-                visualDensity: VisualDensity.compact,
-              ),
-            if (details.isNotEmpty) Text(details),
-          ],
-        ),
-        trailing: session.current
-            ? null
-            : IconButton(
-                key: Key('revoke-${session.id}'),
-                tooltip: l10n.grpISignOutThis,
-                icon: const TfIcon(TfIcons.close),
-                onPressed: () => onRevoke(context, ref, [session.id]),
-              ),
       ),
     );
   }
@@ -236,8 +241,8 @@ class _RenameDialogState extends State<_RenameDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return AlertDialog(
-      title: Text(l10n.devSessionRenameTitle),
+    return TfDialogFrame(
+      title: l10n.devSessionRenameTitle,
       content: TextField(
         key: const Key('rename-field'),
         controller: _controller,
@@ -250,14 +255,16 @@ class _RenameDialogState extends State<_RenameDialog> {
         onSubmitted: (_) => _save(),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: l10n.cancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
         ),
-        TextButton(
+        TfButton(
           key: const Key('rename-save'),
+          label: l10n.save,
+          variant: TfButtonVariant.ghost,
           onPressed: _save,
-          child: Text(l10n.save),
         ),
       ],
     );

@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:convert';
@@ -44,110 +47,113 @@ class WidgetCard extends ConsumerWidget {
         : widget.title;
     final key = (id: widget.id, version: widget.version);
     final data = saved ? ref.watch(widgetDataProvider(key)) : null;
-    return Card(
-      key: Key('widget-${widget.id}'),
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                if (editing) const TfIcon(TfIcons.grip, size: 18),
-                Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleSmall,
+    return Padding(
+      padding: EdgeInsets.zero,
+      child: TfPanel(
+        key: Key('widget-${widget.id}'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  if (editing) const TfIcon(TfIcons.grip, size: 18),
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
-                ),
-                if (saved)
-                  IconButton(
-                    key: Key('refresh-${widget.id}'),
-                    tooltip: context.l10n.grpIRefresh,
-                    visualDensity: VisualDensity.compact,
-                    icon: const TfIcon(TfIcons.refresh, size: 18),
-                    onPressed: () => ref
-                        .read(dashboardActionsProvider)
-                        .refreshWidgets([key]),
-                  ),
-                PopupMenuButton<String>(
-                  key: Key('menu-${widget.id}'),
-                  tooltip: context.l10n.grpIWidgetMenu,
-                  itemBuilder: (_) => [
-                    if (saved)
-                      PopupMenuItem(
-                        value: 'export',
-                        child: Text(context.l10n.grpIExportCsv),
-                      ),
-                    if (editing)
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Text(context.l10n.grpIEdit),
-                      ),
-                    if (editing)
-                      PopupMenuItem(
-                        value: 'remove',
-                        child: Text(context.l10n.grpIRemove),
-                      ),
-                  ],
-                  onSelected: (v) {
-                    switch (v) {
-                      case 'export':
-                        _export(context, ref, title);
-                      case 'edit':
-                        onEdit?.call();
-                      case 'remove':
-                        onRemove?.call();
-                    }
-                  },
-                ),
-              ],
-            ),
-            Expanded(
-              child: switch (data) {
-                null => TfEmpty(
-                  key: const Key('unsaved'),
-                  compact: true,
-                  illustration: TfIllustrationKind.goals,
-                  title: context.l10n.grpISaveToSeeNumbers,
-                ),
-                AsyncData(:final value) => _Loaded(
-                  widget: widget,
-                  data: value,
-                  onBucket: editing
-                      ? null
-                      : (bucket) => showDrillSheet(
-                          context,
-                          widgetId: widget.id,
-                          bucket: bucket,
-                          title: title,
+                  if (saved)
+                    TfIconButton(
+                      key: Key('refresh-${widget.id}'),
+                      icon: TfIcons.refresh,
+                      tooltip: context.l10n.grpIRefresh,
+                      onPressed: () => ref
+                          .read(dashboardActionsProvider)
+                          .refreshWidgets([key]),
+                    ),
+                  PopupMenuButton<String>(
+                    key: Key('menu-${widget.id}'),
+                    tooltip: context.l10n.grpIWidgetMenu,
+                    itemBuilder: (_) => [
+                      if (saved)
+                        PopupMenuItem(
+                          value: 'export',
+                          child: Text(context.l10n.grpIExportCsv),
                         ),
-                ),
-                AsyncError(:final error) when !data.hasValue => Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        dashboardErrorMessage(error, context.l10n),
-                        key: Key('error-${widget.id}'),
-                        textAlign: TextAlign.center,
-                      ),
-                      TextButton(
-                        key: Key('retry-${widget.id}'),
-                        onPressed: () =>
-                            ref.invalidate(widgetDataProvider(key)),
-                        child: Text(context.l10n.grpIRetry),
-                      ),
+                      if (editing)
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text(context.l10n.grpIEdit),
+                        ),
+                      if (editing)
+                        PopupMenuItem(
+                          value: 'remove',
+                          child: Text(context.l10n.grpIRemove),
+                        ),
                     ],
+                    onSelected: (v) {
+                      switch (v) {
+                        case 'export':
+                          _export(context, ref, title);
+                        case 'edit':
+                          onEdit?.call();
+                        case 'remove':
+                          onRemove?.call();
+                      }
+                    },
                   ),
-                ),
-                _ => const Center(child: CircularProgressIndicator()),
-              },
-            ),
-          ],
+                ],
+              ),
+              Expanded(
+                child: switch (data) {
+                  null => TfEmpty(
+                    key: const Key('unsaved'),
+                    compact: true,
+                    illustration: TfIllustrationKind.goals,
+                    title: context.l10n.grpISaveToSeeNumbers,
+                  ),
+                  AsyncData(:final value) => _Loaded(
+                    widget: widget,
+                    data: value,
+                    onBucket: editing
+                        ? null
+                        : (bucket) => showDrillSheet(
+                            context,
+                            widgetId: widget.id,
+                            bucket: bucket,
+                            title: title,
+                          ),
+                  ),
+                  AsyncError(:final error) when !data.hasValue => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          dashboardErrorMessage(error, context.l10n),
+                          key: Key('error-${widget.id}'),
+                          textAlign: TextAlign.center,
+                        ),
+                        TfButton(
+                          key: Key('retry-${widget.id}'),
+                          label: context.l10n.grpIRetry,
+                          variant: TfButtonVariant.ghost,
+                          onPressed: () =>
+                              ref.invalidate(widgetDataProvider(key)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _ => const Center(child: CircularProgressIndicator()),
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -165,9 +171,9 @@ class WidgetCard extends ConsumerWidget {
       if (!context.mounted) return;
       await showDialog<void>(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (_) => TfDialogFrame(
           key: const Key('widget-export-dialog'),
-          title: Text(context.l10n.grpICsvTitle(title)),
+          title: context.l10n.grpICsvTitle(title),
           content: SizedBox(
             width: 480,
             child: SingleChildScrollView(
@@ -179,18 +185,21 @@ class WidgetCard extends ConsumerWidget {
             ),
           ),
           actions: [
-            TextButton(
+            TfButton(
               key: const Key('widget-export-copy'),
+              label: context.l10n.grpICopy,
+              variant: TfButtonVariant.ghost,
               onPressed: () async {
                 final copied = context.l10n.grpICsvCopied;
                 await Clipboard.setData(ClipboardData(text: csv));
                 messenger.showSnackBar(SnackBar(content: Text(copied)));
                 if (context.mounted) Navigator.pop(context);
               },
-              child: Text(context.l10n.grpICopy),
             ),
-            TextButton(
+            TfButton(
               key: const Key('widget-export-save'),
+              label: context.l10n.grpISaveAsFile,
+              variant: TfButtonVariant.ghost,
               onPressed: () async {
                 await FilePicker.saveFile(
                   fileName: '${title.replaceAll(RegExp(r'[^\w-]+'), '-')}.csv',
@@ -199,11 +208,11 @@ class WidgetCard extends ConsumerWidget {
                 );
                 if (context.mounted) Navigator.pop(context);
               },
-              child: Text(context.l10n.grpISaveAsFile),
             ),
-            TextButton(
+            TfButton(
+              label: context.l10n.grpIClose,
+              variant: TfButtonVariant.ghost,
               onPressed: () => Navigator.pop(context),
-              child: Text(context.l10n.grpIClose),
             ),
           ],
         ),

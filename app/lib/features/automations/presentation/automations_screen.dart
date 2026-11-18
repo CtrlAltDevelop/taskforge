@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -46,18 +50,20 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
   Future<void> _delete(Automation rule) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(c.l10n.grpCAutoDeleteTitle(rule.name)),
+      builder: (c) => TfDialogFrame(
+        title: c.l10n.grpCAutoDeleteTitle(rule.name),
         content: Text(c.l10n.grpCAutoDeleteBody),
         actions: [
-          TextButton(
+          TfButton(
+            label: c.l10n.grpCCancel,
+            variant: TfButtonVariant.ghost,
             onPressed: () => Navigator.of(c).pop(false),
-            child: Text(c.l10n.grpCCancel),
           ),
-          FilledButton(
+          TfButton(
             key: const Key('confirm-delete'),
+            label: c.l10n.grpCDelete,
+            variant: TfButtonVariant.primary,
             onPressed: () => Navigator.of(c).pop(true),
-            child: Text(c.l10n.grpCDelete),
           ),
         ],
       ),
@@ -123,10 +129,11 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
                 onSelectionChanged: (s) => setState(() => _history = s.first),
               ),
               if (canManage && !_history)
-                FilledButton.icon(
+                TfButton(
                   key: const Key('new-rule'),
-                  icon: const TfIcon(TfIcons.plus, size: 24),
-                  label: Text(context.l10n.grpCAutoNew),
+                  label: context.l10n.grpCAutoNew,
+                  variant: TfButtonVariant.primary,
+                  icon: TfIcons.plus,
                   onPressed: full
                       ? null
                       : () => showRuleBuilder(
@@ -181,8 +188,10 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
       key: const Key('automations-empty'),
       title: context.l10n.grpCAutoEmpty,
     ),
-    AsyncData(:final value) => ListView(
+    AsyncData(:final value) => TfPage(
       key: const Key('automations-list'),
+      maxWidth: TfPageWidth.wide,
+      lazy: true,
       children: [
         for (final r in value)
           RuleTile(
@@ -240,86 +249,94 @@ class RuleTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final lookups = ref.watch(lookupsProvider(rule.projectId));
     final last = RunStatus.tryParse(rule.lastRunStatus);
-    return Card(
-      key: Key('rule-${rule.id}'),
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (rule.wasSwitchedOffByServer)
-              DisabledBanner(reason: rule.disabledReason),
-            InkWell(
-              key: Key('open-${rule.id}'),
-              onTap: onOpen,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          rule.name,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(
-                          context.l10n.grpCAutoWhen(
-                            describeTrigger(
-                              rule.trigger,
-                              lookups,
-                              context.l10n,
-                            ),
-                            rule.actions.length,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: TfPanel(
+        key: Key('rule-${rule.id}'),
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (rule.wasSwitchedOffByServer)
+                DisabledBanner(reason: rule.disabledReason),
+              InkWell(
+                key: Key('open-${rule.id}'),
+                onTap: onOpen,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            rule.name,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                        ),
-                      ],
+                          Text(
+                            context.l10n.grpCAutoWhen(
+                              describeTrigger(
+                                rule.trigger,
+                                lookups,
+                                context.l10n,
+                              ),
+                              rule.actions.length,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    Switch(
+                      key: Key('toggle-${rule.id}'),
+                      value: rule.enabled,
+                      onChanged: canManage ? onToggle : null,
+                    ),
+                  ],
+                ),
+              ),
+              Wrap(
+                spacing: 8,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  if (rule.lastRunStatus.isEmpty)
+                    Text(
+                      context.l10n.grpCAutoNeverRun,
+                      key: const Key('never-run'),
+                    )
+                  else
+                    KeyedSubtree(
+                      key: Key('last-${rule.id}'),
+                      child: RunStatusChip(
+                        status: last,
+                        raw: rule.lastRunStatus,
+                      ),
+                    ),
+                  if (rule.lastRunAt.isNotEmpty) Text(rule.lastRunAt),
+                  TfButton(
+                    key: Key('history-${rule.id}'),
+                    label: context.l10n.grpCAutoHistory,
+                    variant: TfButtonVariant.ghost,
+                    onPressed: onHistory,
                   ),
-                  Switch(
-                    key: Key('toggle-${rule.id}'),
-                    value: rule.enabled,
-                    onChanged: canManage ? onToggle : null,
-                  ),
+                  if (canManage) ...[
+                    TfButton(
+                      key: Key('dry-${rule.id}'),
+                      label: context.l10n.grpCAutoDryRun,
+                      variant: TfButtonVariant.ghost,
+                      onPressed: onDryRun,
+                    ),
+                    TfIconButton(
+                      key: Key('delete-${rule.id}'),
+                      icon: TfIcons.trash,
+                      tooltip: context.l10n.grpCDelete,
+                      onPressed: onDelete,
+                    ),
+                  ],
                 ],
               ),
-            ),
-            Wrap(
-              spacing: 8,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                if (rule.lastRunStatus.isEmpty)
-                  Text(
-                    context.l10n.grpCAutoNeverRun,
-                    key: const Key('never-run'),
-                  )
-                else
-                  KeyedSubtree(
-                    key: Key('last-${rule.id}'),
-                    child: RunStatusChip(status: last, raw: rule.lastRunStatus),
-                  ),
-                if (rule.lastRunAt.isNotEmpty) Text(rule.lastRunAt),
-                TextButton(
-                  key: Key('history-${rule.id}'),
-                  onPressed: onHistory,
-                  child: Text(context.l10n.grpCAutoHistory),
-                ),
-                if (canManage) ...[
-                  TextButton(
-                    key: Key('dry-${rule.id}'),
-                    onPressed: onDryRun,
-                    child: Text(context.l10n.grpCAutoDryRun),
-                  ),
-                  IconButton(
-                    key: Key('delete-${rule.id}'),
-                    tooltip: context.l10n.grpCDelete,
-                    icon: const TfIcon(TfIcons.trash, size: 24),
-                    onPressed: onDelete,
-                  ),
-                ],
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

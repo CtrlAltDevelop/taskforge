@@ -83,6 +83,7 @@ class FormSheet extends StatelessWidget {
                     child: Image.network(
                       form.logoUrl,
                       height: 56,
+                      excludeFromSemantics: true, // the name is right below
                       errorBuilder: (_, _, _) => const SizedBox.shrink(),
                     ),
                   ),

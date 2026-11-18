@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
@@ -322,23 +323,22 @@ class _PageTreeState extends ConsumerState<PageTree> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              IconButton(
+              TfIconButton(
                 key: const Key('show-archived'),
+                icon: TfIcons.archive,
                 tooltip: showArchived
                     ? context.l10n.grpBHideArchived
                     : context.l10n.grpBShowArchived,
-                isSelected: showArchived,
-                icon: const TfIcon(TfIcons.archive),
-                selectedIcon: const TfIcon(TfIcons.archive),
                 onPressed: () => ref
                     .read(docShowArchivedProvider.notifier)
                     .set(!showArchived),
+                selected: showArchived,
               ),
               if (widget.canEdit)
-                IconButton(
+                TfIconButton(
                   key: const Key('new-page'),
+                  icon: TfIcons.plus,
                   tooltip: context.l10n.grpBNewPage,
-                  icon: const TfIcon(TfIcons.plus),
                   onPressed: () => _create(''),
                 ),
             ],

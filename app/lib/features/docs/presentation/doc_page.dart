@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
@@ -152,23 +153,25 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
     key: const Key('breadcrumb'),
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
-      TextButton(
+      TfButton(
         key: const Key('crumb-root'),
+        label: context.l10n.grpBDocsCrumb,
+        variant: TfButtonVariant.ghost,
         onPressed: () => context.go(
           widget.project.isEmpty ? '/docs' : '/docs?project=${widget.project}',
         ),
-        child: Text(context.l10n.grpBDocsCrumb),
       ),
       for (final d in trail) ...[
         const TfIcon(TfIcons.chevronEnd, size: 16),
-        TextButton(
+        TfButton(
           key: Key('crumb-${d.id}'),
+          label: d.labelIn(context.l10n),
+          variant: TfButtonVariant.ghost,
           onPressed: d.id == widget.docId
               ? null
               : () => context.go(
                   '/docs/${d.id}${widget.project.isEmpty ? '' : '?project=${widget.project}'}',
                 ),
-          child: Text(d.labelIn(context.l10n)),
         ),
       ],
     ],
@@ -244,8 +247,10 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     'archived-banner',
                     context.l10n.grpBArchivedBanner,
                     action: page.canEdit
-                        ? TextButton(
+                        ? TfButton(
                             key: const Key('restore-page'),
+                            label: context.l10n.grpBRestore,
+                            variant: TfButtonVariant.ghost,
                             onPressed: () async {
                               try {
                                 await _actions.restore(id);
@@ -261,7 +266,6 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                                 }
                               }
                             },
-                            child: Text(context.l10n.grpBRestore),
                           )
                         : null,
                   ),
@@ -270,10 +274,11 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                     'conflict-banner',
                     context.l10n.grpBConflictBanner,
                     color: Theme.of(context).colorScheme.errorContainer,
-                    action: TextButton(
+                    action: TfButton(
                       key: const Key('open-conflict'),
+                      label: context.l10n.grpBResolve,
+                      variant: TfButtonVariant.ghost,
                       onPressed: _openConflict,
-                      child: Text(context.l10n.grpBResolve),
                     ),
                   ),
                 if (s.remoteChanged && s.conflict == null)
@@ -298,10 +303,10 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                 Row(
                   children: [
                     if (widget.onOpenTree != null)
-                      IconButton(
+                      TfIconButton(
                         key: const Key('open-page-tree'),
+                        icon: TfIcons.workflow,
                         tooltip: context.l10n.grpBPages,
-                        icon: const TfIcon(TfIcons.workflow),
                         onPressed: widget.onOpenTree,
                       ),
                     IconButton(
@@ -350,10 +355,11 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                       ),
                     ),
                     if (s.save == SaveState.error)
-                      TextButton(
+                      TfButton(
                         key: const Key('retry-save'),
+                        label: context.l10n.grpBRetry,
+                        variant: TfButtonVariant.ghost,
                         onPressed: notifier.saveNow,
-                        child: Text(context.l10n.grpBRetry),
                       ),
                     if (!page.canEdit && !s.archived)
                       Chip(
@@ -368,25 +374,25 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                         label: Text(context.l10n.grpBRestricted),
                         visualDensity: VisualDensity.compact,
                       ),
-                    IconButton(
+                    TfIconButton(
                       key: const Key('open-revisions'),
+                      icon: TfIcons.history,
                       tooltip: context.l10n.grpBHistory,
-                      icon: const TfIcon(TfIcons.history),
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                     ),
-                    IconButton(
+                    TfIconButton(
                       key: const Key('open-share'),
+                      icon: TfIcons.lock,
                       tooltip: context.l10n.grpBAccess,
-                      icon: const TfIcon(TfIcons.lock),
                       onPressed: () => showDialog<void>(
                         context: context,
                         builder: (_) => ShareDialog(docId: id),
                       ),
                     ),
-                    IconButton(
+                    TfIconButton(
                       key: const Key('export-md'),
+                      icon: TfIcons.share,
                       tooltip: context.l10n.grpBExportMarkdown,
-                      icon: const TfIcon(TfIcons.share),
                       onPressed: () => exportMarkdown(context, ref, id),
                     ),
                   ],

@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -22,45 +24,43 @@ class AboutScreen extends ConsumerWidget {
     return Scaffold(
       appBar: TfAppBar(
         title: Text(t.sysAboutTitle),
-        leading: IconButton(
+        leading: TfIconButton(
+          icon: TfIcons.arrowStart,
           tooltip: t.grpBClose,
-          icon: const TfIcon(TfIcons.arrowStart),
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
       body: ListView(
         children: [
-          ListTile(
+          TfRow(
             key: const Key('about-client-version'),
+            title: t.sysClientVersion,
+            subtitle: clientVersion,
             leading: const TfIcon(TfIcons.smartphone),
-            title: Text(t.sysClientVersion),
-            subtitle: Text(clientVersion),
           ),
-          ListTile(
+          TfRow(
             key: const Key('about-server-version'),
-            leading: const TfIcon(TfIcons.server),
-            title: Text(t.sysServerVersion),
-            subtitle: Text(
-              server.when(
-                data: (s) => s.version,
-                loading: () => '…',
-                error: (_, _) => t.sysUnknown,
-              ),
+            title: t.sysServerVersion,
+            subtitle: server.when(
+              data: (s) => s.version,
+              loading: () => '…',
+              error: (_, _) => t.sysUnknown,
             ),
+            leading: const TfIcon(TfIcons.server),
           ),
           if (server.value case final s? when s.isNewerThan(clientVersion))
-            ListTile(
+            TfRow(
+              title: t.sysUpdateAvailable(s.version),
               leading: const TfIcon(TfIcons.download),
-              title: Text(t.sysUpdateAvailable(s.version)),
             ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
-              child: OutlinedButton.icon(
+              child: TfButton(
                 key: const Key('about-check'),
-                icon: const TfIcon(TfIcons.refresh),
-                label: Text(t.sysCheckAgain),
+                label: t.sysCheckAgain,
+                icon: TfIcons.refresh,
                 onPressed: () => ref.invalidate(serverVersionProvider),
               ),
             ),
@@ -110,20 +110,22 @@ class DesktopUpdateNotice extends ConsumerWidget {
       content: Text(t.updNoticeText(notice.version)),
       actions: [
         if (notice.downloadUrl.isNotEmpty)
-          TextButton(
+          TfButton(
             key: const Key('update-notice-get'),
+            label: t.updNoticeGet,
+            variant: TfButtonVariant.ghost,
             onPressed: () => launchUrl(
               Uri.parse(notice.downloadUrl),
               mode: LaunchMode.externalApplication,
             ),
-            child: Text(t.updNoticeGet),
           ),
-        TextButton(
+        TfButton(
           key: const Key('update-notice-dismiss'),
+          label: t.updNoticeDismiss,
+          variant: TfButtonVariant.ghost,
           onPressed: () => ref
               .read(dismissedUpdateProvider.notifier)
               .dismiss(notice.version),
-          child: Text(t.updNoticeDismiss),
         ),
       ],
     );

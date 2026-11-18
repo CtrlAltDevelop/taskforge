@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,29 +31,33 @@ class ProblemsList extends StatelessWidget {
     final shown = sorted.take(maxProblemsShown).toList();
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: ExpansionTile(
-        key: const Key('problems-tile'),
-        tilePadding: EdgeInsets.zero,
-        title: Text(context.l10n.grpGNotesAboutFile(total)),
-        children: [
-          for (final p in shown)
-            ListTile(
-              dense: true,
-              leading: Icon(
-                p.isError ? TfIcons.error.glyph : TfIcons.warning.glyph,
-                color: p.isError ? scheme.error : scheme.tertiary,
+      // ExpansionTile paints its tile on the nearest Material; keep it clear of
+      // the panel behind it.
+      child: Material(
+        type: MaterialType.transparency,
+        child: ExpansionTile(
+          key: const Key('problems-tile'),
+          tilePadding: EdgeInsets.zero,
+          title: Text(context.l10n.grpGNotesAboutFile(total)),
+          children: [
+            for (final p in shown)
+              TfTile(
+                title: Text(p.message),
+                subtitle: p.line > 0
+                    ? Text(context.l10n.grpGRowNumber(p.line))
+                    : null,
+                leading: Icon(
+                  p.isError ? TfIcons.error.glyph : TfIcons.warning.glyph,
+                  color: p.isError ? scheme.error : scheme.tertiary,
+                ),
               ),
-              title: Text(p.message),
-              subtitle: p.line > 0
-                  ? Text(context.l10n.grpGRowNumber(p.line))
-                  : null,
-            ),
-          if (total > shown.length)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(context.l10n.grpGAndMore(total - shown.length)),
-            ),
-        ],
+            if (total > shown.length)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(context.l10n.grpGAndMore(total - shown.length)),
+              ),
+          ],
+        ),
       ),
     );
   }

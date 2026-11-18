@@ -1,3 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -151,10 +155,10 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
                       label: Text(context.l10n.grpJStartTimer),
                     ),
             if (canLog)
-              IconButton(
+              TfIconButton(
                 key: const Key('time-add'),
+                icon: TfIcons.plus,
                 tooltip: context.l10n.grpJAddTime,
-                icon: const TfIcon(TfIcons.plus),
                 onPressed: _add,
               ),
           ],
@@ -222,14 +226,13 @@ class _SummaryLine extends StatelessWidget {
                   '${context.l10n.grpJTimeBillable(durationText(summary.billableSec))}',
                 ),
               if (canEstimate)
-                TextButton(
+                TfButton(
                   key: const Key('time-estimate'),
+                  label: summary.hasEstimate
+                      ? context.l10n.grpJChangeEstimate
+                      : context.l10n.grpJSetEstimate,
+                  variant: TfButtonVariant.ghost,
                   onPressed: () => onEstimate(summary),
-                  child: Text(
-                    summary.hasEstimate
-                        ? context.l10n.grpJChangeEstimate
-                        : context.l10n.grpJSetEstimate,
-                  ),
                 ),
             ],
           ),
@@ -262,61 +265,61 @@ class _EntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final day = entry.startedAt.toLocal();
     final when = context.localIso(day);
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        key: Key('entry-${entry.id}'),
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        leading: Icon(
-          entry.running ? TfIcons.timer.glyph : TfIcons.clock.glyph,
-          semanticLabel: entry.running
-              ? context.l10n.grpJRunning
-              : context.l10n.grpJLoggedLabel,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfTile(
+          key: Key('entry-${entry.id}'),
+          title: Text(
+            '${entry.running ? context.l10n.grpJRunning : durationText(entry.durationSec)}'
+            ' · ${mine ? context.l10n.grpJYou : entry.userName} · $when'
+            '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
+          ),
+          subtitle: Wrap(
+            spacing: 8,
+            children: [
+              if (entry.note.isNotEmpty) Text(entry.note),
+              if (entry.overlaps)
+                Chip(
+                  key: Key('overlap-${entry.id}'),
+                  label: Text(context.l10n.grpJOverlapsEntry),
+                  visualDensity: VisualDensity.compact,
+                ),
+              if (entry.isLong)
+                Chip(
+                  key: Key('long-${entry.id}'),
+                  label: Text(context.l10n.grpJOver24h),
+                  visualDensity: VisualDensity.compact,
+                ),
+            ],
+          ),
+          leading: Icon(
+            entry.running ? TfIcons.timer.glyph : TfIcons.clock.glyph,
+            semanticLabel: entry.running
+                ? context.l10n.grpJRunning
+                : context.l10n.grpJLoggedLabel,
+          ),
+          trailing: canChange
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TfIconButton(
+                      key: Key('edit-${entry.id}'),
+                      icon: TfIcons.edit,
+                      tooltip: context.l10n.grpJEdit,
+                      onPressed: onEdit,
+                    ),
+                    TfIconButton(
+                      key: Key('delete-${entry.id}'),
+                      icon: TfIcons.trash,
+                      tooltip: context.l10n.grpJDelete,
+                      onPressed: onDelete,
+                    ),
+                  ],
+                )
+              : null,
         ),
-        title: Text(
-          '${entry.running ? context.l10n.grpJRunning : durationText(entry.durationSec)}'
-          ' · ${mine ? context.l10n.grpJYou : entry.userName} · $when'
-          '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
-        ),
-        subtitle: Wrap(
-          spacing: 8,
-          children: [
-            if (entry.note.isNotEmpty) Text(entry.note),
-            if (entry.overlaps)
-              Chip(
-                key: Key('overlap-${entry.id}'),
-                label: Text(context.l10n.grpJOverlapsEntry),
-                visualDensity: VisualDensity.compact,
-              ),
-            if (entry.isLong)
-              Chip(
-                key: Key('long-${entry.id}'),
-                label: Text(context.l10n.grpJOver24h),
-                visualDensity: VisualDensity.compact,
-              ),
-          ],
-        ),
-        trailing: canChange
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    key: Key('edit-${entry.id}'),
-                    tooltip: context.l10n.grpJEdit,
-                    icon: const TfIcon(TfIcons.edit),
-                    onPressed: onEdit,
-                  ),
-                  IconButton(
-                    key: Key('delete-${entry.id}'),
-                    tooltip: context.l10n.grpJDelete,
-                    icon: const TfIcon(TfIcons.trash),
-                    onPressed: onDelete,
-                  ),
-                ],
-              )
-            : null,
       ),
     );
   }

@@ -69,7 +69,10 @@ class DayTasks extends StatelessWidget {
                   ? IconButton(
                       key: Key('reschedule-${task.id}'),
                       tooltip: context.l10n.grpFReschedule,
-                      icon: TfIcon(TfIcons.calendarEdit),
+                      icon: TfIcon(
+                        TfIcons.calendarEdit,
+                        size: TfIconSize.control,
+                      ),
                       onPressed: () => onReschedule(task),
                     )
                   : null,

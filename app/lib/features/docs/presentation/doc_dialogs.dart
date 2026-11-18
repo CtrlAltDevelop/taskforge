@@ -1,3 +1,9 @@
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_field.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -106,24 +112,27 @@ class _TextDialogState extends State<_TextDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.title),
-    content: TextField(
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: widget.title,
+    content: TfTextField(
       key: Key(widget.fieldKey),
       controller: _c,
-      autofocus: true,
-      decoration: InputDecoration(labelText: widget.label, errorText: _error),
+      label: widget.label,
+      errorText: _error,
       onSubmitted: (_) => _ok(),
+      autofocus: true,
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpBCancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpBCancel),
       ),
-      FilledButton(
+      TfButton(
         key: Key(widget.okKey),
+        label: context.l10n.grpBOk,
+        variant: TfButtonVariant.primary,
         onPressed: _ok,
-        child: Text(context.l10n.grpBOk),
       ),
     ],
   );
@@ -151,35 +160,36 @@ class _ImageDialogState extends State<_ImageDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.grpBImageTitle),
+  Widget build(BuildContext context) => TfDialogFrame(
+    title: context.l10n.grpBImageTitle,
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextField(
+        TfTextField(
           key: const Key('image-src'),
           controller: _src,
+          label: context.l10n.grpBImageAddressLabel,
+          errorText: _error,
           autofocus: true,
-          decoration: InputDecoration(
-            labelText: context.l10n.grpBImageAddressLabel,
-            errorText: _error,
-          ),
         ),
         const SizedBox(height: 12),
-        TextField(
+        TfTextField(
           key: const Key('image-alt'),
           controller: _alt,
-          decoration: InputDecoration(labelText: context.l10n.grpBDescription),
+          label: context.l10n.grpBDescription,
         ),
       ],
     ),
     actions: [
-      TextButton(
+      TfButton(
+        label: context.l10n.grpBCancel,
+        variant: TfButtonVariant.ghost,
         onPressed: () => Navigator.pop(context),
-        child: Text(context.l10n.grpBCancel),
       ),
-      FilledButton(
+      TfButton(
         key: const Key('image-ok'),
+        label: context.l10n.grpBOk,
+        variant: TfButtonVariant.primary,
         onPressed: () {
           final src = _src.text.trim();
           if (!_okAddress(src, mail: false)) {
@@ -188,7 +198,6 @@ class _ImageDialogState extends State<_ImageDialog> {
           }
           Navigator.pop(context, {'src': src, 'alt': _alt.text.trim()});
         },
-        child: Text(context.l10n.grpBOk),
       ),
     ],
   );
@@ -237,32 +246,29 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
   @override
   Widget build(BuildContext context) {
     final pasted = taskIdFromText(_c.text);
-    return AlertDialog(
-      title: Text(context.l10n.grpBEmbedTaskTitle),
+    return TfDialogFrame(
+      title: context.l10n.grpBEmbedTaskTitle,
       content: SizedBox(
         width: 360,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
+            TfTextField(
               key: const Key('task-picker-field'),
               controller: _c,
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: context.l10n.grpBTaskSearchLabel,
-              ),
+              label: context.l10n.grpBTaskSearchLabel,
               onChanged: (v) {
                 setState(() {});
                 _search(v);
               },
+              autofocus: true,
             ),
             const SizedBox(height: 12),
             if (pasted != null)
-              ListTile(
+              TfRow(
                 key: const Key('task-use-pasted'),
-                dense: true,
+                title: context.l10n.grpBUsePastedTask,
                 leading: const TfIcon(TfIcons.link),
-                title: Text(context.l10n.grpBUsePastedTask),
                 onTap: () => Navigator.pop(context, pasted),
               ),
             Flexible(
@@ -270,9 +276,8 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
                 shrinkWrap: true,
                 children: [
                   for (final h in _hits)
-                    ListTile(
+                    TfTile(
                       key: Key('task-hit-${h.taskId}'),
-                      dense: true,
                       title: Text('${h.key}  ${h.title}'),
                       subtitle: h.status.isEmpty ? null : Text(h.status),
                       onTap: () => Navigator.pop(context, h.taskId),
@@ -284,9 +289,10 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpBCancel,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpBCancel),
         ),
       ],
     );
@@ -321,9 +327,9 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
     final notifier = ref.read(docSessionProvider(widget.docId).notifier);
     if (s.conflict == null) return const SizedBox.shrink();
     final merge = mergeFor(s, takeTheirs: _theirs);
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('conflict-dialog'),
-      title: Text(context.l10n.grpBConflictTitle),
+      title: context.l10n.grpBConflictTitle,
       content: SizedBox(
         width: 480,
         child: SingleChildScrollView(
@@ -393,26 +399,29 @@ class _ConflictDialogState extends ConsumerState<ConflictDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
           key: const Key('conflict-later'),
+          label: context.l10n.grpBDecideLater,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpBDecideLater),
         ),
-        TextButton(
+        TfButton(
           key: const Key('conflict-take-theirs'),
+          label: context.l10n.grpBDiscardMine,
+          variant: TfButtonVariant.ghost,
           onPressed: () {
             notifier.takeTheirs();
             Navigator.pop(context);
           },
-          child: Text(context.l10n.grpBDiscardMine),
         ),
-        FilledButton(
+        TfButton(
           key: const Key('conflict-apply'),
+          label: context.l10n.grpBApplyAndSave,
+          variant: TfButtonVariant.primary,
           onPressed: () {
             Navigator.pop(context);
             notifier.resolveConflict(merge.blocks);
           },
-          child: Text(context.l10n.grpBApplyAndSave),
         ),
       ],
     );
@@ -473,44 +482,41 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
     final s = ref.watch(docSessionProvider(widget.docId));
     final members = ref.watch(membersProvider).value ?? const [];
     final canManage = s.canManage;
-    return AlertDialog(
+    return TfDialogFrame(
       key: const Key('share-dialog'),
-      title: Text(context.l10n.grpBShareTitle),
+      title: context.l10n.grpBShareTitle,
       content: SizedBox(
         width: 400,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SwitchListTile(
+              TfToggleTile(
                 key: const Key('share-restricted'),
-                title: Text(context.l10n.grpBShareRestrict),
-                subtitle: Text(
-                  _restricted
-                      ? context.l10n.grpBShareRestrictedHint
-                      : context.l10n.grpBShareOpenHint,
-                ),
                 value: _restricted,
                 onChanged: canManage && !_busy
                     ? (v) => setState(() => _restricted = v)
                     : null,
+                title: context.l10n.grpBShareRestrict,
+                subtitle: _restricted
+                    ? context.l10n.grpBShareRestrictedHint
+                    : context.l10n.grpBShareOpenHint,
               ),
               if (_restricted)
                 for (final m in members)
-                  CheckboxListTile(
+                  TfCheckbox(
                     key: Key('share-member-${m.userId}'),
-                    dense: true,
-                    title: Text(m.label),
                     value: _people.contains(m.userId),
                     onChanged: canManage && !_busy
                         ? (v) => setState(() {
-                            if (v ?? false) {
+                            if (v) {
                               _people.add(m.userId);
                             } else {
                               _people.remove(m.userId);
                             }
                           })
                         : null,
+                    label: m.label,
                   ),
               if (!canManage)
                 Padding(
@@ -528,15 +534,17 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        TfButton(
+          label: context.l10n.grpBClose,
+          variant: TfButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.grpBClose),
         ),
         if (canManage)
-          FilledButton(
+          TfButton(
             key: const Key('share-save'),
+            label: context.l10n.grpBSave,
+            variant: TfButtonVariant.primary,
             onPressed: _busy ? null : _save,
-            child: Text(context.l10n.grpBSave),
           ),
       ],
     );

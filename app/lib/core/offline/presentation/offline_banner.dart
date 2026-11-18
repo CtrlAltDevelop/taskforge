@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,22 +46,22 @@ class OfflineBanner extends ConsumerWidget {
               child: Text(_message(context.l10n, online, waiting, attention)),
             ),
             if (attention > 0)
-              TextButton(
+              TfButton(
                 key: const Key('offline-review'),
+                label: context.l10n.grpHOfflineReview,
+                variant: TfButtonVariant.ghost,
                 onPressed: () => context.push('/offline'),
-                child: Text(context.l10n.grpHOfflineReview),
               ),
             if (waiting > 0 && online)
-              TextButton(
+              TfButton(
                 key: const Key('offline-sync-now'),
+                label: syncing
+                    ? context.l10n.grpHOfflineSyncing
+                    : context.l10n.grpHOfflineSyncNow,
+                variant: TfButtonVariant.ghost,
                 onPressed: syncing
                     ? null
                     : () => ref.read(offlineSyncProvider.notifier).syncNow(),
-                child: Text(
-                  syncing
-                      ? context.l10n.grpHOfflineSyncing
-                      : context.l10n.grpHOfflineSyncNow,
-                ),
               ),
           ],
         ),
