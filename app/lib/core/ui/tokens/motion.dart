@@ -111,4 +111,11 @@ class TfFreshIds {
   }
 
   bool isFresh(String id) => _fresh.contains(id);
+
+  /// Forget everything: the list went away (empty state) and comes back as
+  /// a first paint.
+  void reset() {
+    _seen = null;
+    _fresh = const {};
+  }
 }

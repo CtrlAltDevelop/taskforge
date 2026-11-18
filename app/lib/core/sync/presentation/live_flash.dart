@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Tints its child for a moment when somebody else has just changed the task
 /// [taskId], so a row or card that moved or changed on its own is noticed.
@@ -23,7 +24,7 @@ class LiveFlash extends ConsumerWidget {
       color: flashing
           ? Theme.of(context).colorScheme.tertiaryContainer
                 .withValues(alpha: 0.7)
-          : Colors.transparent,
+          : tfClear,
       child: child,
     );
   }

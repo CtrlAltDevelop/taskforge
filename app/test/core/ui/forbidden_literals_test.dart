@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// The design-system gate (phases 44 and 49): no hex colour, ad-hoc
 /// `BorderRadius.circular` or raw `Icons.*` anywhere in `lib/features` or
-/// `lib/core`. Colours, radii and icons come from the tokens, `TfRadius` and
-/// `TfIcons`; only `lib/core/ui/tokens` may define the raw values. There is no
+/// `lib/core`, nor a Material `Colors.*` name. Colours, radii and icons come
+/// from the tokens (`tfClear`, `tfWhite`, `tfBlack`, the theme's tones),
+/// `TfRadius` and `TfIcons`; only `lib/core/ui/tokens` may define the raw values. There is no
 /// allow-list: fix the file, do not exempt it.
 const _roots = ['lib/features', 'lib/core'];
 const _tokensDir = 'lib/core/ui/tokens/';
@@ -14,6 +15,9 @@ final _rules = {
   'hex colour': RegExp(r'Color\(\s*0x[0-9A-Fa-f]{6,8}\s*\)'),
   'BorderRadius.circular': RegExp(r'BorderRadius\.circular\('),
   'raw Icons.*': RegExp(r'\bIcons\.[a-z]'),
+  // Material's named colours (green, red, grey.shade500, even transparent):
+  // use the theme's tones and the tokens (tfClear, tfWhite, tfBlack).
+  'Colors.*': RegExp(r'\bColors\.[a-zA-Z]'),
 };
 
 /// `file: rule` for every breach.
@@ -48,5 +52,9 @@ void main() {
     );
     expect(_rules['raw Icons.*']!.hasMatch('Icon(Icons.add)'), isTrue);
     expect(_rules['raw Icons.*']!.hasMatch('TfIcons.add'), isFalse);
+    expect(_rules['Colors.*']!.hasMatch('Colors.green.shade700'), isTrue);
+    expect(_rules['Colors.*']!.hasMatch('Colors.transparent'), isTrue);
+    expect(_rules['Colors.*']!.hasMatch('TfColors.of(context)'), isFalse);
+    expect(_rules['Colors.*']!.hasMatch('c.colors.success'), isFalse);
   });
 }

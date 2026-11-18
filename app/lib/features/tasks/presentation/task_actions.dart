@@ -8,6 +8,8 @@ import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// What a row's menu can do.
 enum TaskAction {
@@ -37,12 +39,12 @@ IconData priorityIcon(TaskPriority priority) => switch (priority) {
   TaskPriority.none => TfIcons.minus.glyph,
 };
 
-Color priorityColor(TaskPriority priority) => switch (priority) {
-  TaskPriority.urgent => Colors.red,
-  TaskPriority.high => Colors.orange,
-  TaskPriority.normal => Colors.blue,
-  TaskPriority.low => Colors.blueGrey,
-  TaskPriority.none => Colors.grey,
+Color priorityColor(TfColors c, TaskPriority priority) => switch (priority) {
+  TaskPriority.urgent => c.danger.fg,
+  TaskPriority.high => c.warning.fg,
+  TaskPriority.normal => c.info.fg,
+  TaskPriority.low => c.textMuted,
+  TaskPriority.none => c.textSubtle,
 };
 
 /// The lock shown on a task that still has an open blocker; its tooltip names
@@ -65,7 +67,7 @@ class BlockedBadge extends StatelessWidget {
       TfIcons.lock,
       key: const Key('blocked-badge'),
       size: 18,
-      color: Colors.red,
+      color: context.tf.colors.danger.fg,
       semanticLabel: context.l10n.grpFBlocked,
     ),
   );

@@ -16,6 +16,8 @@ import '../views/fakes.dart';
 import '../workflows/fakes.dart';
 import 'fakes.dart';
 
+import 'package:taskforge/core/ui/tokens/colors.dart';
+
 const _wide = Size(1400, 1000);
 const _tablet = Size(800, 1000);
 const _phone = Size(420, 900);
@@ -570,7 +572,7 @@ void main() {
             )
             .first,
       );
-      expect(chip.color, Colors.red);
+      expect(chip.color, TfColors.light.danger.fg);
     });
   });
 

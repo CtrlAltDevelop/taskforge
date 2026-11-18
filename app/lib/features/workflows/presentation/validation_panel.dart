@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// What is wrong with the workflow being edited, in words, or that it is ready.
 class ValidationPanel extends StatelessWidget {
@@ -26,7 +27,10 @@ class ValidationPanel extends StatelessWidget {
           child: TfRow(
             title: context.l10n.grpINoProblems,
             subtitle: context.l10n.grpIEveryTaskValid,
-            leading: const TfIcon(TfIcons.success, color: Colors.green),
+            leading: TfIcon(
+              TfIcons.success,
+              color: context.tf.colors.success.fg,
+            ),
           ),
         ),
       );

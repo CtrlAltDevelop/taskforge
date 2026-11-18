@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:qr/qr.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Draws [data] as a QR code: dark modules on a white square with the quiet
 /// zone a scanner needs, whatever the theme.
@@ -32,10 +33,10 @@ class _QrPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(Offset.zero & size, Paint()..color = Colors.white);
+    canvas.drawRect(Offset.zero & size, Paint()..color = tfWhite);
     final modules = image.moduleCount + _quietModules * 2;
     final cell = size.shortestSide / modules;
-    final ink = Paint()..color = Colors.black;
+    final ink = Paint()..color = tfBlack;
     for (var row = 0; row < image.moduleCount; row++) {
       for (var col = 0; col < image.moduleCount; col++) {
         if (!image.isDark(row, col)) continue;

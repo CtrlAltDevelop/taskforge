@@ -11,6 +11,7 @@ import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// One task of the backlog or a sprint: a checkbox for multi-select, a handle
 /// to drag it to the other pane, and the points (tap to edit).
@@ -129,7 +130,7 @@ class DropPane extends StatelessWidget {
         border: Border.all(
           color: hovering.isNotEmpty
               ? Theme.of(context).colorScheme.primary
-              : Colors.transparent,
+              : tfClear,
           width: 2,
         ),
       ),

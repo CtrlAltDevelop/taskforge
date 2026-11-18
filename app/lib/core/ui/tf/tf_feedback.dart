@@ -253,6 +253,7 @@ class _TfSkeletonState extends State<TfSkeleton>
     super.didChangeDependencies();
     if (TfMotion.reduced(context)) {
       _sweep.stop();
+      _started = false; // sweeps again if motion is switched back on
     } else if (!_started) {
       _started = true;
       _sweep.repeat(count: _sweeps);
@@ -308,6 +309,9 @@ class _Slide extends GradientTransform {
   final double t;
 
   @override
-  Matrix4 transform(Rect bounds, {TextDirection? textDirection}) =>
-      Matrix4.translationValues(bounds.width * (2 * t - 1), 0, 0);
+  Matrix4 transform(Rect bounds, {TextDirection? textDirection}) {
+    // The highlight travels the way the text reads.
+    final way = textDirection == TextDirection.rtl ? -1 : 1;
+    return Matrix4.translationValues(way * bounds.width * (2 * t - 1), 0, 0);
+  }
 }

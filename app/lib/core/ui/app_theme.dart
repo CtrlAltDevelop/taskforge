@@ -44,7 +44,7 @@ ThemeData buildAppTheme({
       centerTitle: false,
       scrolledUnderElevation: 0,
       backgroundColor: c.surface,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: tfClear,
       shape: Border(bottom: line),
       titleTextStyle: type.lead.copyWith(color: c.text),
     ),
@@ -52,7 +52,7 @@ ThemeData buildAppTheme({
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: TfSpace.xs),
       color: c.surface,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: tfClear,
       shape: RoundedRectangleBorder(borderRadius: TfRadius.panel, side: line),
     ),
     dividerTheme: DividerThemeData(color: c.border, space: 1, thickness: 1),
@@ -91,12 +91,12 @@ ThemeData buildAppTheme({
     chipTheme: ChipThemeData(shape: shape, side: line, labelStyle: type.small),
     dialogTheme: DialogThemeData(
       backgroundColor: c.raised,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: tfClear,
       shape: RoundedRectangleBorder(borderRadius: TfRadius.dialog, side: line),
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: c.raised,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: tfClear,
       showDragHandle: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(TfRadius.lg)),
@@ -106,7 +106,7 @@ ThemeData buildAppTheme({
     popupMenuTheme: PopupMenuThemeData(
       shape: RoundedRectangleBorder(borderRadius: TfRadius.panel, side: line),
       color: c.raised,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: tfClear,
     ),
     snackBarTheme: SnackBarThemeData(
       behavior: SnackBarBehavior.floating,
@@ -181,7 +181,7 @@ ColorScheme _scheme(TfColors c) => ColorScheme(
   inverseSurface: c.text,
   onInverseSurface: c.surface,
   inversePrimary: c.accentTone.fg,
-  surfaceTint: Colors.transparent,
+  surfaceTint: tfClear,
   surfaceContainerLowest: c.surface,
   surfaceContainerLow: c.surface,
   surfaceContainer: c.sunken,

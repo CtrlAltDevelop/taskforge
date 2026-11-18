@@ -5,6 +5,8 @@ import 'package:ohlcv_chart/ohlcv_chart.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/goals/domain/goals.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 String goalStatusLabel(AppLocalizations t, GoalStatus status) =>
     switch (status) {
@@ -13,10 +15,10 @@ String goalStatusLabel(AppLocalizations t, GoalStatus status) =>
       GoalStatus.offTrack => t.goalsStatusOffTrack,
     };
 
-Color goalStatusColor(GoalStatus status) => switch (status) {
-  GoalStatus.onTrack => Colors.green.shade700,
-  GoalStatus.atRisk => Colors.orange.shade800,
-  GoalStatus.offTrack => Colors.red.shade700,
+Color goalStatusColor(TfColors c, GoalStatus status) => switch (status) {
+  GoalStatus.onTrack => c.success.fg,
+  GoalStatus.atRisk => c.warning.fg,
+  GoalStatus.offTrack => c.danger.fg,
 };
 
 /// A small pill with the goal's health.
@@ -27,7 +29,7 @@ class GoalStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = goalStatusColor(status);
+    final color = goalStatusColor(context.tf.colors, status);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(

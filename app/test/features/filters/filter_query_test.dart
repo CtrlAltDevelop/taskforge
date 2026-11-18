@@ -6,6 +6,7 @@ import 'package:taskforge/features/filters/domain/filter_fields.dart';
 import 'package:taskforge/features/filters/domain/filter_query.dart';
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
 import 'package:taskforge/features/filters/presentation/tfql_editor.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 FilterCondition _c(
   String field,
@@ -254,8 +255,8 @@ void main() {
       final rel = pieces.firstWhere((p) => p.text == '+7d');
 
       expect(and.style!.fontWeight, FontWeight.bold);
-      expect(string.style!.color, Colors.green.shade700);
-      expect(rel.style!.color, Colors.orange.shade800);
+      expect(string.style!.color, TfColors.light.success.fg);
+      expect(rel.style!.color, TfColors.light.warning.fg);
       expect(
         pieces.any((p) => p.style?.decoration == TextDecoration.underline),
         isTrue,

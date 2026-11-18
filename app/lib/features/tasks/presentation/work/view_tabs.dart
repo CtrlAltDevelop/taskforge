@@ -17,6 +17,7 @@ import 'package:taskforge/features/tasks/presentation/work/layouts_menu.dart';
 import 'package:taskforge/features/tasks/presentation/work/work_view.dart';
 import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 const _scrollDuration = Duration(milliseconds: 150);
 
@@ -230,10 +231,7 @@ class _Tab extends StatelessWidget {
         decoration: BoxDecoration(
           color: states.contains(WidgetState.hovered) ? c.hover : null,
           border: Border(
-            bottom: BorderSide(
-              color: selected ? c.accent : Colors.transparent,
-              width: 2,
-            ),
+            bottom: BorderSide(color: selected ? c.accent : tfClear, width: 2),
           ),
         ),
         foregroundDecoration: states.contains(WidgetState.focused)

@@ -8,14 +8,16 @@ import 'package:taskforge/features/automations/application/automations_providers
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 Color statusColor(BuildContext context, RunStatus? s) {
   final scheme = Theme.of(context).colorScheme;
+  final tone = context.tf.colors;
   return switch (s) {
-    RunStatus.succeeded => Colors.green.shade700,
+    RunStatus.succeeded => tone.success.fg,
     RunStatus.failed => scheme.error,
     RunStatus.skippedCondition => scheme.outline,
-    RunStatus.skippedLoop || RunStatus.skippedRate => Colors.orange.shade800,
+    RunStatus.skippedLoop || RunStatus.skippedRate => tone.warning.fg,
     null => scheme.outline,
   };
 }

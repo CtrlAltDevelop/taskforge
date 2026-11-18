@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tf/tf_list_motion.dart';
 import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
@@ -92,6 +93,14 @@ class _BoardColumnViewState extends State<BoardColumnView> {
   /// Cards that arrive after the first paint with cards ease in; cached ones
   /// (and a column still loading, so empty) do not.
   final _fresh = TfFreshIds();
+
+  /// Cards removed after the column was first shown play out as ghosts.
+  final _removals = TfRemovals<Task>((t) => t.id);
+
+  void _rebuildCards() {
+    if (mounted) setState(() {});
+  }
+
   late final _edge = EdgeScroller(
     controller: _scroll,
     axis: Axis.vertical,
@@ -286,7 +295,9 @@ class _BoardColumnViewState extends State<BoardColumnView> {
   Widget _cards(BuildContext context) {
     final column = widget.column;
     final tasks = column.tasks;
+    final items = _removals.update(tasks, reduced: TfMotion.reduced(context));
     if (tasks.isEmpty && !column.hasMore) {
+      _removals.reset();
       return TfEmpty(
         compact: true,
         illustration: TfIllustrationKind.board,
@@ -300,9 +311,9 @@ class _BoardColumnViewState extends State<BoardColumnView> {
     return ListView.builder(
       key: Key('cards-${column.key}'),
       controller: _scroll,
-      itemCount: tasks.length + (column.hasMore ? 1 : 0),
+      itemCount: items.length + (column.hasMore ? 1 : 0),
       itemBuilder: (context, i) {
-        if (i == tasks.length) {
+        if (i == items.length) {
           // Built only when scrolled to: that is the cue for the next page.
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) widget.onLoadMore();
@@ -312,13 +323,29 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             child: Center(child: LinearProgressIndicator()),
           );
         }
-        final task = tasks[i];
+        final item = items[i];
+        if (item is TfGhost) return _removals.ghostRow(item, _rebuildCards);
+        final task = item as Task;
+        _removals.remember(
+          task.id,
+          BoardCard(
+            task: task,
+            lookups: widget.lookups,
+            cardFields: widget.cardFields,
+            selected: false,
+            onTap: () {},
+            moveChoices: const [],
+            onMoveTo: null,
+          ),
+        );
         return _CardSlot(
           key: ValueKey(task.id),
           laneKey: widget.laneKey,
           task: task,
           fresh: _fresh.isFresh(task.id),
-          previousId: i > 0 ? tasks[i - 1].id : '',
+          previousId: i > 0 && items[i - 1] is Task
+              ? (items[i - 1] as Task).id
+              : '',
           canMove: widget.canMove,
           longPress: widget.longPressDrag,
           lookups: widget.lookups,

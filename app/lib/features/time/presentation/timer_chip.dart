@@ -10,6 +10,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 import 'package:taskforge/features/shortcuts/presentation/shortcut_hint.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// The running timer, on every screen with the sidebar: the task, the time so
 /// far (ticking), and a stop button. Nothing while no timer runs. Tapping the
@@ -80,7 +81,7 @@ class _TimerChipState extends ConsumerState<TimerChip> {
             TfIcon(
               TfIcons.circle,
               size: 12,
-              color: Colors.redAccent,
+              color: context.tf.colors.danger.fg,
               semanticLabel: context.l10n.grpJTimerRunning,
             ),
             const SizedBox(width: 8),

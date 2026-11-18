@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/sync/sync_models.dart';
 import 'package:taskforge/core/sync/sync_providers.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// A small dot: green while changes arrive live, amber while reconnecting.
 /// Shows nothing when there is no connection to speak of.
@@ -14,11 +15,15 @@ class LiveIndicator extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(syncStateProvider);
+    final tone = context.tf.colors;
     final (color, label) = switch (state) {
-      SyncState.live => (Colors.green, context.l10n.grp1SyncLive),
-      SyncState.connecting => (Colors.amber, context.l10n.grp1SyncConnecting),
+      SyncState.live => (tone.success.fg, context.l10n.grp1SyncLive),
+      SyncState.connecting => (
+        tone.warning.fg,
+        context.l10n.grp1SyncConnecting,
+      ),
       SyncState.reconnecting => (
-        Colors.amber,
+        tone.warning.fg,
         context.l10n.grp1SyncReconnecting,
       ),
       SyncState.offline => (null, ''),

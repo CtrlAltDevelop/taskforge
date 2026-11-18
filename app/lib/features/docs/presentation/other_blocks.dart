@@ -10,6 +10,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// A code block: plain monospace text and a language.
 class CodeBlockView extends StatefulWidget {
@@ -390,7 +391,9 @@ class TaskCardView extends StatelessWidget {
           ),
           leading: TfIcon(
             c.statusCategory == 'done' ? TfIcons.success : TfIcons.circle,
-            color: c.statusCategory == 'done' ? Colors.green : null,
+            color: c.statusCategory == 'done'
+                ? context.tf.colors.success.fg
+                : null,
           ),
           onTap: () => onOpen(c),
         ),

@@ -52,13 +52,12 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
                     onRetry: () => ref.invalidate(workspacesProvider),
                   )
                 : const Center(child: CircularProgressIndicator())
-          : TfPage(
-              children: [
-                // Keyed so a save, a refresh or a switch starts the form afresh.
-                GeneralSection(
-                  key: ValueKey('${workspace.id}/${workspace.version}'),
-                  workspace: workspace,
-                ),
+          // Keyed so a save, a refresh or a switch starts the form afresh. The
+          // section is the page: its save bar sits under the scrolling body.
+          : GeneralSection(
+              key: ValueKey('${workspace.id}/${workspace.version}'),
+              workspace: workspace,
+              after: [
                 PermissionGate(
                   permission: Perm.workspaceDelete,
                   child: DangerZone(workspace: workspace),
@@ -158,9 +157,16 @@ class _AdminLinks extends StatelessWidget {
 }
 
 class GeneralSection extends ConsumerStatefulWidget {
-  const GeneralSection({super.key, required this.workspace});
+  const GeneralSection({
+    super.key,
+    required this.workspace,
+    this.after = const [],
+  });
 
   final Workspace workspace;
+
+  /// The rest of the page, under the general form.
+  final List<Widget> after;
 
   @override
   ConsumerState<GeneralSection> createState() => _GeneralSectionState();
@@ -278,8 +284,18 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
     final l10n = context.l10n;
     final canEdit = ref.watch(permissionSetProvider).can(Perm.workspaceUpdate);
     final c = context.tf.colors;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return TfPage(
+      bottom: canEdit
+          ? TfStickySaveBar(
+              saveKey: const Key('save-workspace'),
+              dirty: _dirty,
+              saving: _busy,
+              onSave: _busy ? null : _save,
+              saveLabel: l10n.grpESaveChanges,
+              onDiscard: _discard,
+              discardLabel: l10n.cancel,
+            )
+          : null,
       children: [
         TfFormSection(
           title: l10n.grpEGeneral,
@@ -330,16 +346,7 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
               ),
           ],
         ),
-        if (canEdit)
-          TfStickySaveBar(
-            saveKey: const Key('save-workspace'),
-            dirty: _dirty,
-            saving: _busy,
-            onSave: _busy ? null : _save,
-            saveLabel: l10n.grpESaveChanges,
-            onDiscard: _discard,
-            discardLabel: l10n.cancel,
-          ),
+        ...widget.after,
       ],
     );
   }

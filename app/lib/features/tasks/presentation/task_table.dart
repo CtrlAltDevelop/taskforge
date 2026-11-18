@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/actions/chord.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tf/tf_list_motion.dart';
 import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/shortcuts/application/task_level_actions.dart';
@@ -81,6 +82,16 @@ class _TaskTableState extends ConsumerState<TaskTable> {
 
   /// Rows that arrive after the first settled paint ease in; cached ones do not.
   final _fresh = TfFreshIds();
+
+  /// Rows removed after the first settled paint play out as ghosts.
+  final _removals = TfRemovals<ListEntry>(
+    (e) => e is TaskEntry ? e.task.id : null,
+  );
+
+  void _rebuild() {
+    if (mounted) setState(() {});
+  }
+
   final _horizontal = ScrollController();
   final _focus = FocusNode(debugLabel: 'task-table');
 

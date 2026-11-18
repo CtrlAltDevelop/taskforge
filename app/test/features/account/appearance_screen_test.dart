@@ -38,6 +38,26 @@ void main() {
     expect(await prefs.read('theme.contrast'), 'high');
   });
 
+  testWidgets('the reduce-motion switch turns reduced motion on and off', (
+    t,
+  ) async {
+    final prefs = MemoryPrefs();
+    final container = ProviderContainer(
+      overrides: [localPrefsProvider.overrideWithValue(prefs)],
+    );
+    addTearDown(container.dispose);
+    await t.pumpWidget(_app(container));
+    expect(container.read(reduceMotionProvider), isFalse);
+
+    await t.tap(find.byKey(const Key('reduce-motion')));
+    await t.pump();
+    expect(container.read(reduceMotionProvider), isTrue);
+
+    await t.tap(find.byKey(const Key('reduce-motion')));
+    await t.pump();
+    expect(container.read(reduceMotionProvider), isFalse);
+  });
+
   test('saved choices come back on the next start', () async {
     final prefs = MemoryPrefs();
     await prefs.write('theme.density', 'compact');

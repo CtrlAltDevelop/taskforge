@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/templates/domain/templates.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// What a template creates: the task tree with relative dates, the statuses,
 /// the fields and the feature switches.
@@ -106,5 +107,5 @@ class _Heading extends StatelessWidget {
 
 Color _color(String hex) {
   final value = int.tryParse(hex.replaceFirst('#', ''), radix: 16);
-  return value == null ? Colors.grey : Color(0xFF000000 | value);
+  return value == null ? tfFallbackGrey : Color(0xFF000000 | value);
 }

@@ -5,6 +5,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workload/domain/workload.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// What a drag carries: a task, and the person and column it was taken from.
 @immutable
@@ -43,7 +45,7 @@ LoadLevel levelOf(int load, int capacity, {required bool capacitySet}) {
 
 Color levelColor(ThemeData theme, LoadLevel level) => switch (level) {
   LoadLevel.severe => theme.colorScheme.error,
-  LoadLevel.over => Colors.amber.shade700,
+  LoadLevel.over => theme.extension<TfTheme>()!.colors.warning.fg,
   LoadLevel.under => theme.colorScheme.primary.withValues(alpha: 0.45),
   LoadLevel.ok || LoadLevel.none => theme.colorScheme.primary,
 };
@@ -263,7 +265,7 @@ class _Segment extends StatelessWidget {
     final drag = dragged;
     if (drag == null) return bar;
     final feedback = Material(
-      color: Colors.transparent,
+      color: tfClear,
       child: Chip(label: Text(title)),
     );
     return _touch

@@ -160,54 +160,67 @@ class _Body extends ConsumerWidget {
     final state = ref.watch(auditListProvider(filters));
     final notifier = ref.read(auditListProvider(filters).notifier);
     final now = ref.watch(auditNowProvider)();
-    return TfPage(
+    final entries = state.entries;
+    final showRows =
+        !state.loading &&
+        !(state.error != null && entries.isEmpty) &&
+        entries.isNotEmpty;
+    // The rows, then what sits under them (an error, "show older"); or the one
+    // widget that stands in for them (spinner, error, empty).
+    final lead = <Widget>[
+      if (state.loading)
+        const Center(child: CircularProgressIndicator())
+      else if (state.error != null && entries.isEmpty)
+        TfError(
+          key: const Key('audit-error'),
+          compact: true,
+          message: auditErrorMessage(state.error!, context.l10n),
+          details: '${state.error}',
+          retryKey: const Key('audit-retry'),
+          onRetry: notifier.refresh,
+        )
+      else if (entries.isEmpty)
+        TfEmpty(
+          key: const Key('audit-empty'),
+          compact: true,
+          illustration: TfIllustrationKind.docs,
+          title: context.l10n.grpBAuditEmpty,
+        ),
+    ];
+    final foot = <Widget>[
+      if (showRows && state.error != null)
+        Text(
+          auditErrorMessage(state.error!, context.l10n),
+          key: const Key('audit-error'),
+        ),
+      if (showRows && state.hasMore)
+        TfButton(
+          key: const Key('audit-more'),
+          label: state.loadingMore
+              ? context.l10n.grpBLoading
+              : context.l10n.grpBShowOlder,
+          variant: TfButtonVariant.ghost,
+          onPressed: state.loadingMore ? null : notifier.more,
+        ),
+    ];
+    final rows = showRows ? entries.length : 0;
+    return TfPage.builder(
       key: const Key('audit-list'),
       maxWidth: TfPageWidth.wide,
-      lazy: true,
-      children: [
-        _Filters(
-          filters: filters,
-          onFilters: onFilters,
-          onPickDates: onPickDates,
-        ),
-        const SizedBox(height: 8),
-        if (state.loading)
-          const Center(child: CircularProgressIndicator())
-        else if (state.error != null && state.entries.isEmpty)
-          TfError(
-            key: const Key('audit-error'),
-            compact: true,
-            message: auditErrorMessage(state.error!, context.l10n),
-            details: '${state.error}',
-            retryKey: const Key('audit-retry'),
-            onRetry: notifier.refresh,
-          )
-        else if (state.entries.isEmpty)
-          TfEmpty(
-            key: const Key('audit-empty'),
-            compact: true,
-            illustration: TfIllustrationKind.docs,
-            title: context.l10n.grpBAuditEmpty,
-          )
-        else ...[
-          for (final e in state.entries)
-            _Row(entry: e, labels: state.labels, now: now),
-          if (state.error != null)
-            Text(
-              auditErrorMessage(state.error!, context.l10n),
-              key: const Key('audit-error'),
-            ),
-          if (state.hasMore)
-            TfButton(
-              key: const Key('audit-more'),
-              label: state.loadingMore
-                  ? context.l10n.grpBLoading
-                  : context.l10n.grpBShowOlder,
-              variant: TfButtonVariant.ghost,
-              onPressed: state.loadingMore ? null : notifier.more,
-            ),
-        ],
-      ],
+      pinned: _Filters(
+        filters: filters,
+        onFilters: onFilters,
+        onPickDates: onPickDates,
+      ),
+      itemCount: lead.length + rows + foot.length,
+      itemBuilder: (context, i) {
+        if (i < lead.length) return lead[i];
+        i -= lead.length;
+        if (i < rows) {
+          return _Row(entry: entries[i], labels: state.labels, now: now);
+        }
+        return foot[i - rows];
+      },
     );
   }
 }

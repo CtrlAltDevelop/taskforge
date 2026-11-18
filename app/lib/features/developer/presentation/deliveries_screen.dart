@@ -11,6 +11,7 @@ import 'package:taskforge/features/developer/domain/developer.dart';
 import 'package:taskforge/features/developer/presentation/developer_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// A webhook's delivery log: what was sent, what came back, and Resend.
 class DeliveriesScreen extends ConsumerStatefulWidget {
@@ -136,7 +137,7 @@ class _DeliveryTile extends StatelessWidget {
     final t = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final color = switch (d.status) {
-      DeliveryStatus.delivered => Colors.green,
+      DeliveryStatus.delivered => context.tf.colors.success.fg,
       DeliveryStatus.pending => scheme.outline,
       _ => scheme.error,
     };

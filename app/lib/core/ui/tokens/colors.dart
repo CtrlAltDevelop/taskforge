@@ -227,3 +227,6 @@ const Color tfClear = Color(0x00000000);
 
 /// The dim behind a modal layer.
 const Color tfScrim = Color(0x66000000);
+
+/// A neutral grey for a swatch whose colour is missing or unreadable.
+const Color tfFallbackGrey = Color(0xFF9E9E9E);

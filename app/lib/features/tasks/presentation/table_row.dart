@@ -23,6 +23,7 @@ import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/home/presentation/sample_badge.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// One task as a line of the table: check box, title with its fold arrow and
 /// subtask ring, one cell per column, and the row menu. Rename and the menu
@@ -97,7 +98,7 @@ class _TaskRowState extends State<TaskRow> {
     final shown = _hovered || widget.focused || tfIsTouch;
     final fill = widget.picked || widget.open
         ? c.selected
-        : (_hovered ? c.hover : Colors.transparent);
+        : (_hovered ? c.hover : tfClear);
     final row = MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
@@ -110,7 +111,7 @@ class _TaskRowState extends State<TaskRow> {
           excludeFromSemantics: true,
           // The title cell is the row's one tab stop.
           canRequestFocus: false,
-          hoverColor: Colors.transparent,
+          hoverColor: tfClear,
           splashFactory: NoSplash.splashFactory,
           child: Container(
             height: widget.height,
@@ -212,7 +213,7 @@ class _TaskRowState extends State<TaskRow> {
     return InkWell(
       key: Key('task-${_task.id}'),
       onTap: widget.onOpen,
-      hoverColor: Colors.transparent,
+      hoverColor: tfClear,
       splashFactory: NoSplash.splashFactory,
       child: Row(
         children: [

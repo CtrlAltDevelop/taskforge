@@ -30,7 +30,7 @@ Color tfOnColor(Color background) =>
 
 /// [base] pushed toward black (light) or white (dark) for hover / pressed.
 Color tfShade(TfColors c, Color base, double amount) => Color.alphaBlend(
-  (c.isDark ? Colors.white : Colors.black).withValues(alpha: amount),
+  (c.isDark ? tfWhite : tfBlack).withValues(alpha: amount),
   base,
 );
 
@@ -71,6 +71,7 @@ class TfInteractive extends StatefulWidget {
     this.checked,
     this.mixed,
     this.toggled,
+    this.inGroup = false,
     this.padTarget = false,
     this.semanticLabel,
     this.focusNode,
@@ -88,6 +89,9 @@ class TfInteractive extends StatefulWidget {
   final bool? checked;
   final bool? mixed;
   final bool? toggled;
+
+  /// One choice of a mutually exclusive group (a radio): [checked] says which.
+  final bool inGroup;
 
   /// Grow the hit area to the touch minimum (components with no painted box).
   final bool padTarget;
@@ -141,8 +145,13 @@ class _TfInteractiveState extends State<TfInteractive> {
       checked: widget.checked,
       mixed: widget.mixed,
       toggled: widget.toggled,
-      enabled: widget.button ? _enabled : null,
+      inMutuallyExclusiveGroup: widget.inGroup ? true : null,
+      enabled: widget.button || widget.inGroup ? _enabled : null,
       label: widget.semanticLabel,
+      // A labelled control hides its children, and with them the tap and the
+      // focus they would announce: say both here.
+      onTap: widget.semanticLabel != null ? widget.onTap : null,
+      focusable: widget.semanticLabel != null ? _enabled : null,
       excludeSemantics: widget.semanticLabel != null,
       child: FocusableActionDetector(
         enabled: _enabled,

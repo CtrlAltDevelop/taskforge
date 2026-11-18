@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 final _token = RegExp(
   r'''("(?:[^"\\]|\\.)*"?)|(\d{4}-\d{2}-\d{2}|[+-]\d+[dwmy]\b|-?\d+(?:\.\d+)?)|([A-Za-z_][A-Za-z0-9_]*)|(<=|>=|!=|!~|[=~<>(),])''',
@@ -51,9 +52,9 @@ class TfqlController extends TextEditingController {
       final piece = m[0]!;
       final TextStyle tone;
       if (m[1] != null) {
-        tone = colored(Colors.green.shade700);
+        tone = colored(context.tf.colors.success.fg);
       } else if (m[2] != null) {
-        tone = colored(Colors.orange.shade800);
+        tone = colored(context.tf.colors.warning.fg);
       } else if (m[3] != null) {
         tone = _keywords.contains(piece.toLowerCase())
             ? colored(scheme.primary, bold: true)

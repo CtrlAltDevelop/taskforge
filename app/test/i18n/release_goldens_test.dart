@@ -30,11 +30,10 @@ import 'tolerant_golden.dart';
 /// new route without a picture (or an entry in [_notPictured]) fails
 /// `every route has a picture or a reason`.
 ///
-/// Size of the suite: about 50 routes x 8 combinations (phone and desktop,
-/// light and dark, English and Persian) would be 400 PNGs of up to 1280x800,
-/// too heavy for the repository. So the 12 [_primary] screens get all eight
-/// combinations; every other route gets four that between them cover each axis:
-/// desktop light en, desktop dark en, phone light en, phone light fa.
+/// Every route gets all eight combinations: phone and desktop, light and
+/// dark, English and Persian (about 400 PNGs, a few MB). Pixels are compared
+/// with the tolerant comparator (`useTolerantGoldens`, phase 31), so another OS
+/// does not fail them.
 ///
 /// Regenerate with `flutter test --update-goldens
 /// test/i18n/release_goldens_test.dart` after a deliberate restyle.
@@ -66,22 +65,6 @@ const _signedOut = {
   '/sign-up',
   '/forgot-password',
   '/reset-password',
-};
-
-/// The screens people see most: all eight combinations.
-const _primary = {
-  '/',
-  '/my-work',
-  '/projects/:id',
-  '/inbox',
-  '/chat',
-  '/docs',
-  '/calendar',
-  '/dashboards',
-  '/goals',
-  '/members',
-  '/settings/appearance',
-  '/sign-in',
 };
 
 /// Where a route with parameters is opened.
@@ -116,23 +99,12 @@ String _slug(String path) {
 
 typedef _Combo = ({Size size, ThemeMode mode, String language});
 
-List<_Combo> _combos(String path) {
-  const modes = [ThemeMode.light, ThemeMode.dark];
-  if (_primary.contains(path)) {
-    return [
-      for (final size in [_phone, _desktop])
-        for (final mode in modes)
-          for (final language in ['en', 'fa'])
-            (size: size, mode: mode, language: language),
-    ];
-  }
-  return [
-    (size: _desktop, mode: ThemeMode.light, language: 'en'),
-    (size: _desktop, mode: ThemeMode.dark, language: 'en'),
-    (size: _phone, mode: ThemeMode.light, language: 'en'),
-    (size: _phone, mode: ThemeMode.light, language: 'fa'),
-  ];
-}
+List<_Combo> _combos() => [
+  for (final size in [_phone, _desktop])
+    for (final mode in [ThemeMode.light, ThemeMode.dark])
+      for (final language in ['en', 'fa'])
+        (size: size, mode: mode, language: language),
+];
 
 String _name(String path, _Combo c) =>
     'goldens/release/${_slug(path)}_${c.size == _phone ? 'phone' : 'desktop'}_'
@@ -206,7 +178,7 @@ void main() {
     for (final reason in _notPictured.entries) {
       expect(paths, contains(reason.key), reason: 'stale: ${reason.key}');
     }
-    for (final key in [..._primary, ..._sample.keys, ..._signedOut]) {
+    for (final key in [..._sample.keys, ..._signedOut]) {
       expect(paths, contains(key), reason: 'stale entry: $key');
     }
     final withParams = paths.where((p) => p.contains(':') || p.contains('?'));
@@ -237,7 +209,7 @@ void main() {
   });
 
   for (final path in paths.where((p) => !_notPictured.containsKey(p))) {
-    for (final combo in _combos(path)) {
+    for (final combo in _combos()) {
       final label =
           '$path ${combo.size == _phone ? 'phone' : 'desktop'} '
           '${combo.mode.name} ${combo.language}';

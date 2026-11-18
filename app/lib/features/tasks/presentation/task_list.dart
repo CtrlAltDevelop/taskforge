@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/bidi.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/tf/tf_list_motion.dart';
 import 'package:taskforge/core/ui/tokens/motion.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
@@ -143,6 +144,7 @@ class _TaskListState extends ConsumerState<TaskListView>
       );
     }
     if (state.loading && state.tasks.isEmpty) {
+      _resetMotion();
       return WorkSkeleton(cards: !widget.wide);
     }
     final canCreate = !project.isArchived && permissions.can(Perm.taskCreate);
@@ -150,7 +152,10 @@ class _TaskListState extends ConsumerState<TaskListView>
       projectId: project.id,
       onAddTask: canCreate ? () => runNewTask(context, ref) : null,
     );
-    if (state.tasks.isEmpty) return empty;
+    if (state.tasks.isEmpty) {
+      _resetMotion();
+      return empty;
+    }
     final layout = ref.watch(listLayoutProvider(project.id)).layout;
     final tree = ref.watch(taskTreeProvider(project.id));
     final entries = listEntries(
@@ -162,7 +167,10 @@ class _TaskListState extends ConsumerState<TaskListView>
       serverCounts:
           ref.watch(groupCountsProvider(project.id)).value ?? const {},
     );
-    if (entries.isEmpty && !state.loading) return empty;
+    if (entries.isEmpty && !state.loading) {
+      _resetMotion();
+      return empty;
+    }
     final editable = !project.isArchived;
     final canUpdate = editable && permissions.can(Perm.taskUpdate);
     final canDelete = editable && permissions.can(Perm.taskDelete);

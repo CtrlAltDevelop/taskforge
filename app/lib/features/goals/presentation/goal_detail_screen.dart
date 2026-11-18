@@ -21,6 +21,7 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 const _goalFields = [
   'name',
@@ -277,7 +278,7 @@ class _Body extends StatelessWidget {
         const SizedBox(height: 12),
         GoalProgressBar(
           progress: goal.progress,
-          color: goalStatusColor(goal.status),
+          color: goalStatusColor(context.tf.colors, goal.status),
           height: 12,
         ),
         if (start != null && end != null)

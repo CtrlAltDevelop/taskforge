@@ -18,7 +18,16 @@ class TfTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.selected = false,
+    this.checked,
+    this.inGroup = false,
+    this.semanticLabel,
   });
+
+  /// Radio rows: whether this choice is the chosen one, and that it belongs to
+  /// a group. [semanticLabel] then replaces the children's own text.
+  final bool? checked;
+  final bool inGroup;
+  final String? semanticLabel;
 
   final Widget title;
   final Widget? subtitle;
@@ -36,7 +45,10 @@ class TfTile extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       selected: selected ? true : null,
-      button: onTap != null,
+      checked: checked,
+      inGroup: inGroup,
+      semanticLabel: semanticLabel,
+      button: onTap != null && !inGroup,
       builder: (context, states) => Container(
         constraints: BoxConstraints(
           minHeight: tfTarget(context, tf.density.rowHeight),
@@ -191,13 +203,20 @@ class TfRadioTile<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final registry = RadioGroup.maybeOf<T>(context);
     final tf = context.tf;
+    final chosen = registry?.groupValue == value;
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: TfTile(
-        selected: registry?.groupValue == value,
-        leading: Semantics(
-          label: title,
-          child: IgnorePointer(child: Radio<T>(value: value)),
+        selected: chosen,
+        checked: chosen,
+        inGroup: true,
+        semanticLabel: subtitle == null ? title : '$title. $subtitle',
+        // The row is the one tab stop and the one thing announced; the radio
+        // inside only paints.
+        leading: ExcludeFocus(
+          child: ExcludeSemantics(
+            child: IgnorePointer(child: Radio<T>(value: value)),
+          ),
         ),
         title: Text(title, style: tf.typography.body),
         subtitle: subtitle == null ? null : Text(subtitle!),

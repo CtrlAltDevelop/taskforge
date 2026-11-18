@@ -33,7 +33,30 @@ class TfPage extends StatelessWidget {
   }) : assert(
          child == null || children.length == 0,
          'Give children or child, not both',
-       );
+       ),
+       itemCount = null,
+       itemBuilder = null,
+       pinned = null;
+
+  /// A long list: [itemBuilder] runs only for rows near the screen, and
+  /// [pinned] (a search field, filters) stays above the list, so what is
+  /// typed there survives scrolling.
+  const TfPage.builder({
+    super.key,
+    required int this.itemCount,
+    required IndexedWidgetBuilder this.itemBuilder,
+    this.pinned,
+    this.maxWidth = TfPageWidth.reading,
+    this.bottom,
+  }) : children = const [],
+       child = null,
+       lazy = true;
+
+  final int? itemCount;
+  final IndexedWidgetBuilder? itemBuilder;
+
+  /// Above the scrolling rows of [TfPage.builder]; never scrolls away.
+  final Widget? pinned;
 
   final List<Widget> children;
   final Widget? child;
@@ -55,7 +78,37 @@ class TfPage extends StatelessWidget {
       gutter,
       TfSpace.xl,
     );
-    final body = child != null
+    final builder = itemBuilder;
+    final body = builder != null
+        ? Column(
+            children: [
+              if (pinned != null)
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                    gutter,
+                    TfSpace.lg,
+                    gutter,
+                    TfSpace.sm,
+                  ),
+                  // Tall pinned content (wrapped filters on a small phone) scrolls
+                  // within a share of the window instead of overflowing it.
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.sizeOf(context).height * 0.4,
+                    ),
+                    child: SingleChildScrollView(child: pinned),
+                  ),
+                ),
+              Expanded(
+                child: ListView.builder(
+                  padding: padding.copyWith(top: TfSpace.sm),
+                  itemCount: itemCount,
+                  itemBuilder: builder,
+                ),
+              ),
+            ],
+          )
+        : child != null
         ? Padding(padding: padding, child: child)
         : lazy
         ? ListView(padding: padding, children: children)

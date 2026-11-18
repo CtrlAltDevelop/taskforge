@@ -2,9 +2,9 @@ import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' show Color;
-import 'package:material_ui/material_ui.dart' show Colors;
 
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 const maxStatusNameLength = 40;
 const maxStatuses = 30;
@@ -53,7 +53,7 @@ enum StatusCategory {
 /// `#RRGGBB` as a colour; grey when empty or not a colour.
 Color parseStatusColor(String hex) {
   final match = RegExp(r'^#([0-9A-Fa-f]{6})$').firstMatch(hex);
-  if (match == null) return Colors.grey.shade500;
+  if (match == null) return tfFallbackGrey;
   return Color(0xFF000000 | int.parse(match.group(1)!, radix: 16));
 }
 

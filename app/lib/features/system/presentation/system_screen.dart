@@ -15,6 +15,7 @@ import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/system/domain/system.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// Admin page: server version and the health of Redis, the Celery broker and workers, and the
 /// due work waiting to be handled.
@@ -189,7 +190,9 @@ class _StatusTile extends StatelessWidget {
         subtitle: text,
         leading: Icon(
           good ? TfIcons.success.glyph : TfIcons.error.glyph,
-          color: good ? Colors.green : Theme.of(context).colorScheme.error,
+          color: good
+              ? context.tf.colors.success.fg
+              : Theme.of(context).colorScheme.error,
         ),
       ),
     ),

@@ -10,6 +10,7 @@ import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 const _headerHeight = 24.0;
 const _laneHeight = 24.0;
@@ -302,8 +303,8 @@ class _Bar extends StatelessWidget {
             style: context.tf.typography.caption.copyWith(
               color:
                   ThemeData.estimateBrightnessForColor(color) == Brightness.dark
-                  ? Colors.white
-                  : Colors.black87,
+                  ? tfWhite
+                  : tfBlack,
             ),
           ),
         ),
@@ -322,7 +323,7 @@ class _Bar extends StatelessWidget {
         child: Container(
           key: Key('resize-${edge.name}-${task.id}-${formatDay(weekFirst)}'),
           width: 8,
-          color: Colors.black26,
+          color: tfBlack.withValues(alpha: 0.26),
         ),
       ),
     );

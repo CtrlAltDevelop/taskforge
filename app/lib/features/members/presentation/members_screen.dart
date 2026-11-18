@@ -100,6 +100,13 @@ class _MembersTab extends ConsumerStatefulWidget {
 
 class _MembersTabState extends ConsumerState<_MembersTab> {
   String _query = '';
+  final _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   Future<bool> _confirm(String title, String body, String action) async =>
       await showDialog<bool>(
@@ -224,76 +231,79 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
                 m.email.toLowerCase().contains(q))
               m,
         ];
-        return TfPage(
-          maxWidth: TfPageWidth.wide,
-          lazy: true,
-          children: [
-            TextField(
-              key: const Key('member-search'),
-              decoration: InputDecoration(
-                prefixIcon: const TfIcon(TfIcons.search),
-                labelText: context.l10n.grpJSearchMembers,
+        final tail = <Widget>[
+          const Divider(),
+          if (workspace.isOwner)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  key: const Key('owner-cannot-leave'),
+                  title: context.l10n.grpJOwnerCannotLeave,
+                  leading: const TfIcon(TfIcons.info),
+                ),
               ),
-              onChanged: (v) => setState(() => _query = v),
+            )
+          else
+            TfButton(
+              key: const Key('leave-workspace'),
+              label: context.l10n.grpJLeaveWorkspace,
+              onPressed: () => _leave(workspace.id, workspace.name),
             ),
-            const SizedBox(height: 8),
-            for (final m in shown)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
-                child: TfPanel(
-                  padding: EdgeInsets.zero,
-                  child: TfRow(
-                    key: Key('member-${m.userId}'),
-                    title: m.label,
-                    subtitle:
-                        '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
-                        '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
-                    leading: CircleAvatar(child: Text(m.initials)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: RolePicker(
-                            key: Key('role-${m.userId}'),
-                            member: m,
+        ];
+        return TfPage.builder(
+          maxWidth: TfPageWidth.wide,
+          pinned: TextField(
+            key: const Key('member-search'),
+            controller: _search,
+            decoration: InputDecoration(
+              prefixIcon: const TfIcon(TfIcons.search),
+              labelText: context.l10n.grpJSearchMembers,
+            ),
+            onChanged: (v) => setState(() => _query = v),
+          ),
+          itemCount: shown.length + tail.length,
+          itemBuilder: (context, i) {
+            if (i >= shown.length) return tail[i - shown.length];
+            final m = shown[i];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: TfRow(
+                  key: Key('member-${m.userId}'),
+                  title: m.label,
+                  subtitle:
+                      '${context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt))}'
+                      '${m.displayName.isEmpty ? '' : ' · ${m.email}'}',
+                  leading: CircleAvatar(child: Text(m.initials)),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: RolePicker(
+                          key: Key('role-${m.userId}'),
+                          member: m,
+                        ),
+                      ),
+                      if (!m.isOwner)
+                        PermissionGate(
+                          permission: Perm.memberRemove,
+                          child: TfIconButton(
+                            key: Key('remove-${m.userId}'),
+                            icon: TfIcons.userMinus,
+                            tooltip: context.l10n.grpJRemoveMember(m.label),
+                            onPressed: () => _remove(workspace.id, m),
                           ),
                         ),
-                        if (!m.isOwner)
-                          PermissionGate(
-                            permission: Perm.memberRemove,
-                            child: TfIconButton(
-                              key: Key('remove-${m.userId}'),
-                              icon: TfIcons.userMinus,
-                              tooltip: context.l10n.grpJRemoveMember(m.label),
-                              onPressed: () => _remove(workspace.id, m),
-                            ),
-                          ),
-                      ],
-                    ),
-                    onTap: () => _showProfile(workspace.id, m),
+                    ],
                   ),
+                  onTap: () => _showProfile(workspace.id, m),
                 ),
               ),
-            const Divider(),
-            if (workspace.isOwner)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
-                child: TfPanel(
-                  padding: EdgeInsets.zero,
-                  child: TfRow(
-                    key: const Key('owner-cannot-leave'),
-                    title: context.l10n.grpJOwnerCannotLeave,
-                    leading: const TfIcon(TfIcons.info),
-                  ),
-                ),
-              )
-            else
-              TfButton(
-                key: const Key('leave-workspace'),
-                label: context.l10n.grpJLeaveWorkspace,
-                onPressed: () => _leave(workspace.id, workspace.name),
-              ),
-          ],
+            );
+          },
         );
       },
     );

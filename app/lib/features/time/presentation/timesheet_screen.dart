@@ -99,7 +99,6 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
             child: switch (sheet) {
               AsyncData(:final value) => TfPage(
                 maxWidth: TfPageWidth.wide,
-                lazy: true,
                 children: [
                   _Grid(sheet: value, week: _week, mine: _user.isEmpty),
                   _Totals(week: _week),

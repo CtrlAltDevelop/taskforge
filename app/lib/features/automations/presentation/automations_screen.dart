@@ -188,31 +188,31 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
       key: const Key('automations-empty'),
       title: context.l10n.grpCAutoEmpty,
     ),
-    AsyncData(:final value) => TfPage(
+    AsyncData(:final value) => TfPage.builder(
       key: const Key('automations-list'),
       maxWidth: TfPageWidth.wide,
-      lazy: true,
-      children: [
-        for (final r in value)
-          RuleTile(
+      itemCount: value.length,
+      itemBuilder: (context, i) {
+        final r = value[i];
+        return RuleTile(
+          rule: r,
+          canManage: canManage,
+          onToggle: (on) =>
+              _try(() => ref.read(automationActionsProvider).toggle(r, on)),
+          onOpen: () => showRuleBuilder(
+            context,
+            projectId: widget.projectId,
             rule: r,
-            canManage: canManage,
-            onToggle: (on) =>
-                _try(() => ref.read(automationActionsProvider).toggle(r, on)),
-            onOpen: () => showRuleBuilder(
-              context,
-              projectId: widget.projectId,
-              rule: r,
-              readOnly: !canManage,
-            ),
-            onDryRun: () => showDryRun(context, r),
-            onHistory: () => setState(() {
-              _filter = r;
-              _history = true;
-            }),
-            onDelete: () => _delete(r),
+            readOnly: !canManage,
           ),
-      ],
+          onDryRun: () => showDryRun(context, r),
+          onHistory: () => setState(() {
+            _filter = r;
+            _history = true;
+          }),
+          onDelete: () => _delete(r),
+        );
+      },
     ),
     AsyncError(:final error) => TfError(
       key: const Key('automations-error'),

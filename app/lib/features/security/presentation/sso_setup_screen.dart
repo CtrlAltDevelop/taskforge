@@ -20,6 +20,7 @@ import 'package:taskforge/features/security/domain/security.dart';
 import 'package:taskforge/features/security/presentation/code_dialogs.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// Admin page: the workspace's OpenID Connect provider (issuer, client id and
 /// secret, allowed domains, group-to-role mapping, "SSO only") with a Test
@@ -363,7 +364,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                 subtitle: check.message,
                 leading: Icon(
                   check.ok ? TfIcons.success.glyph : TfIcons.error.glyph,
-                  color: check.ok ? Colors.green : colors.error,
+                  color: check.ok ? context.tf.colors.success.fg : colors.error,
                 ),
               ),
             const SizedBox(height: 8),

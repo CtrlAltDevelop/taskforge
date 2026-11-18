@@ -47,6 +47,9 @@ class TfMenu extends StatelessWidget {
       // A click outside only closes the menu; it does not also hit what is
       // under it (a window's backdrop, a row).
       consumeOutsideTap: true,
+      // The panel is inset by its shadow's room (see _MenuPanelMotion); pull
+      // it back so the visible edge sits where the menu would have.
+      alignmentOffset: const Offset(-_shadowRoom, -_shadowRoom),
       // The panel itself is drawn by _MenuPanelMotion (so it can fade and
       // scale in); MenuAnchor only positions it.
       style: MenuStyle(
@@ -63,34 +66,41 @@ class TfMenu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               for (final item in items)
-                MenuItemButton(
-                  key: item.key,
-                  onPressed: item.onSelected,
-                  leadingIcon: item.icon == null
-                      ? null
-                      : TfIcon(
-                          item.icon!,
-                          color: item.danger ? c.danger.fg : c.textMuted,
+                MergeSemantics(
+                  child: Semantics(
+                    selected: item.selected,
+                    child: MenuItemButton(
+                      key: item.key,
+                      onPressed: item.onSelected,
+                      leadingIcon: item.icon == null
+                          ? null
+                          : TfIcon(
+                              item.icon!,
+                              color: item.danger ? c.danger.fg : c.textMuted,
+                            ),
+                      trailingIcon: item.shortcut != null
+                          ? TfKeyHint(item.shortcut!)
+                          : (item.selected
+                                ? TfIcon(TfIcons.check, color: c.accent)
+                                : null),
+                      style: ButtonStyle(
+                        minimumSize: WidgetStatePropertyAll(
+                          Size(160, tf.density.rowHeight),
                         ),
-                  trailingIcon: item.shortcut != null
-                      ? TfKeyHint(item.shortcut!)
-                      : (item.selected
-                            ? TfIcon(TfIcons.check, color: c.accent)
-                            : null),
-                  style: ButtonStyle(
-                    minimumSize: WidgetStatePropertyAll(
-                      Size(160, tf.density.rowHeight),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: TfRadius.control,
+                          ),
+                        ),
+                        overlayColor: WidgetStatePropertyAll(c.hover),
+                        foregroundColor: WidgetStatePropertyAll(
+                          item.danger ? c.danger.fg : c.text,
+                        ),
+                        textStyle: WidgetStatePropertyAll(tf.typography.body),
+                      ),
+                      child: Text(item.label),
                     ),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(borderRadius: TfRadius.control),
-                    ),
-                    overlayColor: WidgetStatePropertyAll(c.hover),
-                    foregroundColor: WidgetStatePropertyAll(
-                      item.danger ? c.danger.fg : c.text,
-                    ),
-                    textStyle: WidgetStatePropertyAll(tf.typography.body),
                   ),
-                  child: Text(item.label),
                 ),
             ],
           ),
@@ -103,6 +113,10 @@ class TfMenu extends StatelessWidget {
     );
   }
 }
+
+/// Room around the panel for its shadow: MenuAnchor clips its content to its
+/// own bounds, so the shadow is painted inside a transparent margin.
+const double _shadowRoom = 16;
 
 /// The menu's panel: surface, border and shadow, fading and scaling in from
 /// its top edge (instant when motion is reduced).
@@ -123,8 +137,12 @@ class _MenuPanelMotion extends StatelessWidget {
       ),
       child: Padding(padding: const EdgeInsets.all(TfSpace.xs), child: child),
     );
+    final framed = Padding(
+      padding: const EdgeInsets.all(_shadowRoom),
+      child: panel,
+    );
     final duration = TfMotion.of(context, TfDuration.base);
-    if (duration == Duration.zero) return panel;
+    if (duration == Duration.zero) return framed;
     return TweenAnimationBuilder<double>(
       key: const Key('menu-motion'),
       tween: Tween(begin: 0, end: 1),
@@ -140,7 +158,7 @@ class _MenuPanelMotion extends StatelessWidget {
           child: child,
         ),
       ),
-      child: panel,
+      child: framed,
     );
   }
 }

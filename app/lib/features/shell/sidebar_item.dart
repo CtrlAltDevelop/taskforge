@@ -9,6 +9,7 @@ import 'package:taskforge/core/ui/tf/tf_menu.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Width of the open sidebar and of its icon strip.
 const sidebarWidth = 264.0;
@@ -102,7 +103,7 @@ class _SidebarItemState extends State<SidebarItem> {
             ? c.selected
             : states.contains(WidgetState.hovered)
             ? c.hover
-            : Colors.transparent;
+            : tfClear;
         return Container(
           constraints: BoxConstraints(
             minHeight: tfTarget(context, tf.density.rowHeight - TfSpace.xs),

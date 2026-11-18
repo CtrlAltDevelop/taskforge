@@ -5,6 +5,20 @@ mixin _TaskListPhone
   /// Cards that arrive after the first settled paint ease in; cached ones do not.
   final _fresh = TfFreshIds();
 
+  /// Cards removed after the first settled paint play out as ghosts.
+  final _removals = TfRemovals<ListEntry>(
+    (e) => e is TaskEntry ? e.task.id : null,
+  );
+
+  void _resetMotion() {
+    _fresh.reset();
+    _removals.reset();
+  }
+
+  void _rebuildList() {
+    if (mounted) setState(() {});
+  }
+
   /// The phone list: one card per task, long-press to start picking, swipe to
   /// complete or delete, pull to refresh.
   Widget _cards(
@@ -36,7 +50,11 @@ mixin _TaskListPhone
         if (e is TaskEntry) e.task.id,
     ], settled: !state.loading);
     final items = <Object>[
-      for (final entry in entries) ...[
+      for (final entry in _removals.update(
+        entries,
+        settled: !state.loading,
+        reduced: TfMotion.reduced(context),
+      )) ...[
         entry,
         if (entry is TaskEntry && _addingUnder == entry.task.id) entry.task.id,
       ],
@@ -54,6 +72,7 @@ mixin _TaskListPhone
             return const LinearProgressIndicator(key: Key('tasks-streaming'));
           }
           final item = items[i];
+          if (item is TfGhost) return _removals.ghostRow(item, _rebuildList);
           if (item is String) return _inlineAdd(tree, item);
           if (item is GroupEntry) {
             final header = _groupTile(lookups, layout, item);
@@ -92,7 +111,10 @@ mixin _TaskListPhone
           return TfSettleIn(
             key: ValueKey('settle-${task.id}'),
             enabled: _fresh.isFresh(task.id),
-            child: canDrag ? _dropTarget(tree, task, layout.query, row) : row,
+            child: _removals.remember(
+              task.id,
+              canDrag ? _dropTarget(tree, task, layout.query, row) : row,
+            ),
           );
         },
       ),

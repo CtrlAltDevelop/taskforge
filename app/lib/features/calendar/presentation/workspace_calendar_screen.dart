@@ -43,7 +43,8 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
       appBar: TfAppBar(title: Text(context.l10n.calendar)),
       body: CalendarView(
         scope: '',
-        projectColor: (t) => colors[t.projectId] ?? Colors.blueGrey,
+        projectColor: (t) =>
+            colors[t.projectId] ?? context.tf.colors.neutral.fg,
         visible: (t) => !hidden.contains(t.projectId),
         legend: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

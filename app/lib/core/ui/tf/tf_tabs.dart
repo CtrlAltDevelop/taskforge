@@ -38,7 +38,8 @@ class _TfTabsState extends State<TfTabs> {
     final row = _rowKey.currentContext?.findRenderObject() as RenderBox?;
     final tab =
         _tabKeys[widget.index].currentContext?.findRenderObject() as RenderBox?;
-    if (row == null || !row.attached || tab == null || !tab.attached) return;
+    if (row == null || !row.attached || !row.hasSize) return;
+    if (tab == null || !tab.attached || !tab.hasSize) return;
     final left = row.globalToLocal(tab.localToGlobal(Offset.zero)).dx;
     final next = (left: left, width: tab.size.width);
     if (next == _span) return;
@@ -65,63 +66,84 @@ class _TfTabsState extends State<TfTabs> {
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Stack(
-          children: [
-            Row(
-              key: _rowKey,
+        child: NotificationListener<SizeChangedLayoutNotification>(
+          // A resize, a font change or a label change moves the tabs without
+          // rebuilding this widget: measure again.
+          onNotification: (_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
+            return false;
+          },
+          child: SizeChangedLayoutNotifier(
+            child: Stack(
               children: [
-                for (var i = 0; i < widget.labels.length; i++)
-                  TfInteractive(
-                    key: _tabKeys[i],
-                    onTap: () => widget.onChanged(i),
-                    selected: i == widget.index,
-                    semanticLabel: widget.labels[i],
-                    builder: (context, states) => Container(
-                      constraints: BoxConstraints(
-                        minHeight: tfTarget(
-                          context,
-                          tf.density.controlHeight + TfSpace.xs,
+                Row(
+                  key: _rowKey,
+                  children: [
+                    for (var i = 0; i < widget.labels.length; i++)
+                      TfInteractive(
+                        key: _tabKeys[i],
+                        onTap: () => widget.onChanged(i),
+                        selected: i == widget.index,
+                        semanticLabel: widget.labels[i],
+                        builder: (context, states) => Container(
+                          constraints: BoxConstraints(
+                            minHeight: tfTarget(
+                              context,
+                              tf.density.controlHeight + TfSpace.xs,
+                            ),
+                          ),
+                          padding: EdgeInsetsDirectional.symmetric(
+                            horizontal: tf.density.padX + TfSpace.xs,
+                          ),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: states.contains(WidgetState.hovered)
+                                ? c.hover
+                                : null,
+                            // Until the sliding underline is measured (first
+                            // frame) the chosen tab carries its own.
+                            border: span == null && i == widget.index
+                                ? Border(
+                                    bottom: BorderSide(
+                                      color: c.accent,
+                                      width: 2,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          foregroundDecoration:
+                              states.contains(WidgetState.focused)
+                              ? BoxDecoration(border: tfFocusRing(c))
+                              : null,
+                          child: Text(
+                            widget.labels[i],
+                            style: tf.typography.label.copyWith(
+                              color: i == widget.index ? c.text : c.textMuted,
+                              fontWeight: i == widget.index
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
-                      padding: EdgeInsetsDirectional.symmetric(
-                        horizontal: tf.density.padX + TfSpace.xs,
-                      ),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: states.contains(WidgetState.hovered)
-                            ? c.hover
-                            : null,
-                      ),
-                      foregroundDecoration: states.contains(WidgetState.focused)
-                          ? BoxDecoration(border: tfFocusRing(c))
-                          : null,
-                      child: Text(
-                        widget.labels[i],
-                        style: tf.typography.label.copyWith(
-                          color: i == widget.index ? c.text : c.textMuted,
-                          fontWeight: i == widget.index
-                              ? FontWeight.w600
-                              : FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                  ],
+                ),
+                if (span != null)
+                  AnimatedPositioned(
+                    key: const Key('tab-underline'),
+                    duration: _animate
+                        ? TfMotion.of(context, TfDuration.base)
+                        : Duration.zero,
+                    curve: tfCurve,
+                    left: span.left,
+                    width: span.width,
+                    bottom: 0,
+                    height: 2,
+                    child: ColoredBox(color: c.accent),
                   ),
               ],
             ),
-            if (span != null)
-              AnimatedPositioned(
-                key: const Key('tab-underline'),
-                duration: _animate
-                    ? TfMotion.of(context, TfDuration.base)
-                    : Duration.zero,
-                curve: tfCurve,
-                left: span.left,
-                width: span.width,
-                bottom: 0,
-                height: 2,
-                child: ColoredBox(color: c.accent),
-              ),
-          ],
+          ),
         ),
       ),
     );

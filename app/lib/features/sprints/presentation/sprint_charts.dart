@@ -8,6 +8,7 @@ import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Burndown of one sprint: remaining work (solid), the ideal line (dashed
 /// look via lighter colour), steps where scope changed, and nothing for days
@@ -222,7 +223,7 @@ class _BurndownChart extends StatelessWidget {
               : points[i].backfilled
               ? SeriesDot(
                   radius: 4,
-                  color: Colors.transparent,
+                  color: tfClear,
                   strokeColor: actual,
                   strokeWidth: 1.5,
                 )

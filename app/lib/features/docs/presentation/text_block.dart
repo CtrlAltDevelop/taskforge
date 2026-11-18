@@ -10,6 +10,8 @@ import 'package:taskforge/features/docs/domain/doc_ops.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 import 'package:taskforge/features/docs/presentation/rich_controller.dart';
 import 'package:taskforge/features/docs/presentation/slash_menu.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Asks for a link address; null means leave it.
 typedef LinkAsker = Future<String?> Function(
@@ -409,7 +411,11 @@ class _TextBlockViewState extends State<TextBlockView> {
       ],
     );
     if (isCallout) {
-      final tone = _toneColor(theme.colorScheme, _block.tone);
+      final tone = _toneColor(
+        context.tf.colors,
+        theme.colorScheme,
+        _block.tone,
+      );
       row = Row(
         children: [
           IconButton(
@@ -518,9 +524,9 @@ class _TextBlockViewState extends State<TextBlockView> {
   }
 }
 
-Color _toneColor(ColorScheme s, String tone) => switch (tone) {
-  'warning' => Colors.orange,
-  'success' => Colors.green,
+Color _toneColor(TfColors c, ColorScheme s, String tone) => switch (tone) {
+  'warning' => c.warning.fg,
+  'success' => c.success.fg,
   'danger' => s.error,
   _ => s.primary,
 };

@@ -8,22 +8,24 @@ extension _TableRows on _TaskTableState {
       for (final e in entries)
         if (e is TaskEntry) e.task.id,
     ], settled: !widget.loading);
-    final count = entries.length + (widget.loading ? 1 : 0);
+    final items = _removals.update(
+      entries,
+      settled: !widget.loading,
+      reduced: TfMotion.reduced(context),
+    );
+    final count = items.length + (widget.loading ? 1 : 0);
     return ListView.builder(
       key: const Key('task-list'),
       controller: _vertical,
       itemCount: count,
-      itemExtentBuilder: (i, _) => i >= entries.length ? 4 : _rowHeight,
+      itemExtentBuilder: (i, _) => i >= items.length ? 4 : _rowHeight,
       itemBuilder: (context, i) {
-        if (i >= entries.length) {
+        if (i >= items.length) {
           return const LinearProgressIndicator(key: Key('tasks-streaming'));
         }
-        return switch (entries[i]) {
-          GroupEntry(:final key) when entries[i] is GroupEntry => _group(
-            context,
-            entries[i] as GroupEntry,
-            key,
-          ),
+        return switch (items[i]) {
+          final TfGhost ghost => _removals.ghostRow(ghost, _rebuild),
+          final GroupEntry group => _group(context, group, group.key),
           final TaskEntry entry => _taskRow(
             context,
             entry,
@@ -88,7 +90,7 @@ extension _TableRows on _TaskTableState {
     return TfSettleIn(
       key: ValueKey('settle-${task.id}'),
       enabled: _fresh.isFresh(task.id),
-      child: row,
+      child: _removals.remember(task.id, row),
     );
   }
 }

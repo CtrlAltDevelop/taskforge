@@ -24,6 +24,7 @@ import 'package:taskforge/features/tasks/presentation/work/add_task.dart';
 import 'package:taskforge/features/tasks/presentation/work/view_search.dart';
 import 'package:taskforge/features/tasks/presentation/work/view_toolbar.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 
 /// Below this width the calendar is an agenda: a month of dots and the tasks of
 /// the chosen day. From [trayBreakpoint] the unscheduled tasks sit beside it.
@@ -91,7 +92,9 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   }
 
   Color _colorOf(Task task, String colorBy) {
-    if (colorBy == 'priority') return priorityColor(task.priority);
+    if (colorBy == 'priority') {
+      return priorityColor(context.tf.colors, task.priority);
+    }
     if (colorBy == 'project' && widget.projectColor != null) {
       return widget.projectColor!(task);
     }
@@ -100,7 +103,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             .value
             ?.statusById(task.statusId)
             ?.swatch ??
-        Colors.blueGrey;
+        context.tf.colors.neutral.fg;
   }
 
   void _say(String text) => ScaffoldMessenger.of(context)

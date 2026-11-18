@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// Icon and color choice from the fixed sets; [enabled] false makes it inert.
 class ProjectLookPicker extends StatelessWidget {
@@ -55,11 +56,7 @@ class ProjectLookPicker extends StatelessWidget {
                   radius: 14,
                   backgroundColor: parseProjectColor(c),
                   child: c == color
-                      ? const TfIcon(
-                          TfIcons.check,
-                          size: 16,
-                          color: Colors.white,
-                        )
+                      ? const TfIcon(TfIcons.check, size: 16, color: tfWhite)
                       : null,
                 ),
               ),

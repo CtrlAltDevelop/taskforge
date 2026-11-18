@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/colors.dart';
 
 /// A text field that looks like plain text until pointed at, and saves when
 /// it loses focus (or on Enter for one line). Someone else's value (or a
@@ -137,15 +138,15 @@ class _CommitTextFieldState extends State<CommitTextField> {
           hintText: widget.hint,
           hintStyle: widget.style.copyWith(color: c.textSubtle),
           filled: true,
-          fillColor: Colors.transparent,
+          fillColor: tfClear,
           hoverColor: c.hover,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: TfSpace.sm,
             vertical: TfSpace.sm,
           ),
-          border: edge(Colors.transparent),
-          enabledBorder: edge(Colors.transparent),
-          disabledBorder: edge(Colors.transparent),
+          border: edge(tfClear),
+          enabledBorder: edge(tfClear),
+          disabledBorder: edge(tfClear),
           focusedBorder: edge(c.focus),
         ),
       ),
