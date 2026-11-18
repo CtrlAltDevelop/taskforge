@@ -104,7 +104,7 @@ _This app requires no settings of its own._
 
 ### Layout
 
-`infrastructure/tasks`: `models.py`, `fields.py` (validation), `rank.py` (fractional-index positions), `services.py` (every rule), `signals.py`, `grpc/` (adapter, serializers, `tasks.proto`). The `task.*` permission keys live in the single workspaces registry; their grants migration is `workspaces/migrations/0010_task_permissions.py`.
+`infrastructure/tasks`: `models.py`, `fields.py` (validation), `rank.py` (fractional-index positions), `services.py` (every rule), `signals.py`, `grpc/` (adapter, serializers, `tasks.proto`). The `task.*` permission keys live in the single workspaces registry; their grants are frozen in `workspaces/migrations/0001_initial.py`.
 
 ### Permissions
 

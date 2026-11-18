@@ -1,7 +1,7 @@
 """Create the built-in roles and their grants. Works on live models and on migration state.
 
 What the built-ins hold is defined by the *migrations*, never by the live registry:
-migration 0005 freezes the phase-04 grants (``INITIAL_GRANTS``) and every later
+migration 0001 freezes the grants (``INITIAL_GRANTS``) and every later
 migration that adds a permission key declares ``ADDED_GRANTS`` and calls
 ``grant_to_builtins``. ``migrated_grants()`` replays those declarations; a test
 compares the result with ``registry.BUILTIN_GRANTS`` so a key added without a
@@ -13,7 +13,7 @@ from collections.abc import Iterable, Mapping
 from importlib import import_module
 from typing import Any
 
-SEED_MIGRATION = "infrastructure.workspaces.migrations.0005_seed_roles"
+SEED_MIGRATION = "infrastructure.workspaces.migrations.0001_initial"
 MIGRATIONS_PACKAGE = "infrastructure.workspaces.migrations"
 
 

@@ -250,8 +250,7 @@ three pages.
 
 **There are no meta keywords.** Nothing has ranked on that tag for well over a
 decade, and a box editors dutifully fill in that nothing reads costs them time
-on every page they write. It was removed in
-[`0002`](../src/apps/cms/migrations/0002_open_graph_and_choice_options.py) rather
+on every page they write. It was removed rather
 than deprecated.
 
 ## The sitemap

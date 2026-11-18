@@ -127,8 +127,8 @@ translate. Registry of keys and built-in grants: `registry.py` (single source of
   the invitation's role, also for a returning, previously removed member (who never keeps an
   old role); if the role was deleted meanwhile it falls back to Member. Resend keeps the role.
   Existing invitations (no role) behave as before.
-- **Seeding**: migration 0005 creates the built-ins and backfills members (creator -> Owner,
-  everyone else -> Member). 0005 freezes the phase-04 grants (it never reads the live registry). A `post_migrate`
+- **Seeding**: `0001_initial` creates the built-ins with the grants frozen in it
+  (`INITIAL_GRANTS`; it never reads the live registry). A `post_migrate`
   hook recreates *missing* built-ins only (a flushed test database), from the migrations' grants
   (`seed.migrated_grants()`), and never edits existing ones. **Adding a key** = add it to
   `registry.py` and write a migration that calls `seed.grant_to_builtins(...)` and declares

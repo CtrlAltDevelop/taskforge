@@ -3,8 +3,6 @@
 from typing import Any
 
 import pytest
-from django.db import connection
-from django.db.migrations.executor import MigrationExecutor
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
@@ -85,28 +83,6 @@ def test_migration_helper_grants_a_new_key_to_named_builtins(db: None) -> None:
     assert "task.edit" in _granted(access.builtin_role("Admin"))
     assert "task.edit" in _granted(access.builtin_role("Member"))
     assert "task.edit" not in _granted(access.builtin_role("Viewer"))
-
-
-@pytest.mark.django_db(transaction=True)
-def test_backfill_makes_the_creator_owner_and_everyone_else_member(make_user: Any) -> None:
-    creator, joiner = make_user("zoe"), make_user("max")
-    executor = MigrationExecutor(connection)
-    executor.migrate([("workspaces", "0004_roles")])
-    old = executor.loader.project_state([("workspaces", "0004_roles")]).apps
-    workspace = old.get_model("workspaces", "Workspace").objects.create(
-        name="Old", slug="old", created_by_id=creator.pk
-    )
-    members = old.get_model("workspaces", "WorkspaceMember").objects
-    for user, status in ((creator, "active"), (joiner, "removed")):
-        members.create(workspace_id=workspace.pk, user_id=user.pk, status=status)
-
-    executor = MigrationExecutor(connection)
-    executor.migrate(executor.loader.graph.leaf_nodes())
-
-    roles = {
-        m.user_id: m.role.name for m in WorkspaceMember.objects.filter(workspace_id=workspace.pk)
-    }
-    assert roles == {creator.pk: "Owner", joiner.pk: "Member"}
 
 
 @pytest.mark.parametrize("role", BUILTIN_ROLES)

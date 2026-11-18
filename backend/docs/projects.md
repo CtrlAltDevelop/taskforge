@@ -67,7 +67,7 @@ _This app requires no settings of its own._
 
 ### Layout
 
-`infrastructure/projects`: `models.py` (+ `Project.objects.visible_to`), `fields.py` (validation), `services.py` (create/update/archive/restore/features/favorite/numbering), `members.py` (private-project members, admin list), `features.py` (feature registry), `signals.py`, `grpc/` (adapter, serializers, `projects.proto`). The permission keys live in the single workspaces registry (`workspaces/registry.py`); their grants migration is `workspaces/migrations/0009_project_permissions.py`.
+`infrastructure/projects`: `models.py` (+ `Project.objects.visible_to`), `fields.py` (validation), `services.py` (create/update/archive/restore/features/favorite/numbering), `members.py` (private-project members, admin list), `features.py` (feature registry), `signals.py`, `grpc/` (adapter, serializers, `projects.proto`). The permission keys live in the single workspaces registry (`workspaces/registry.py`); their grants are frozen in `workspaces/migrations/0001_initial.py`.
 
 ### Permissions
 
