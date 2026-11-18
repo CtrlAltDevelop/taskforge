@@ -34,4 +34,4 @@ a throwaway database and matches the migrations. Keep `DJANGO_FIELD_ENCRYPTION_K
 `GET /api/health/live`, `/api/health/ready` (also `/api/health`), `GET /api/version`;
 `GET /metrics` with `Authorization: Bearer $DJANGO_METRICS_TOKEN` (scrape `backend:8010` inside the
 network; Caddy never publishes it). Admins see the same under Admin, System in the app.
-Releases: `make version V=1.2.0`, commit, tag `v1.2.0`; the Release workflow does the rest.
+Releases: `make version V=1.2.0`, commit, tag `v1.2.0`; the Release workflow does the rest. Before tagging, tick the [release checklist](../docs/phases/phase-38-release-deploy.md#release-checklist) (it includes the phase 49 quality gate and the [accessibility sign-off](../docs/accessibility-checklist.md)).

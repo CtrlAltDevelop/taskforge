@@ -54,3 +54,22 @@ Running the real images (not just the tests) exposed these; all are fixed:
 - The gRPC server did not start (see phase 39), and `smoke-restore.sh` lacked the DPoP nonce secret.
 - The web image used a Flutter image older than the SDK range; it now clones Flutter at a pinned tag. The scripts were not executable in git. CI's compose check lacked `DJANGO_DPOP_NONCE_SECRET`.
 - The CI `upgrade` job ran against SQLite: the development settings ignore `DJANGO_DB_*` unless `DJANGO_DEV_EXTERNAL=true`. It now sets that (and the auth switches) and installs the previous release with its extras.
+
+## Release checklist
+
+Before pushing a `vX.Y.Z` tag (see [deploy/README.md](../../deploy/README.md)), tick every line and paste the result in the release PR. The first block is the **phase 49 gate** ([phase 49](phase-49-polish-motion-release-qa.md)); a release does not ship with any line open.
+
+**Phase 49 gate (client quality)**
+- [ ] **Lint, no allow-list:** there is no allow-list; no hex colour, ad-hoc `BorderRadius.circular` or raw `Icons.*` in `lib/features` or `lib/core` (`flutter test test/core/ui/forbidden_literals_test.dart`); `flutter analyze` clean.
+- [ ] **Golden gate:** `flutter test test/core/ui test/features` goldens green in CI (every top-level route, phone and desktop, light/dark, en/fa).
+- [ ] **Accessibility:** [docs/accessibility-checklist.md](../accessibility-checklist.md) signed off: keyboard-only walk (sign in, create task, comment, settings), VoiceOver and NVDA labels, 200 % text, contrast AA.
+- [ ] **Reduce motion:** system flag and Appearance choice both turn animation off (`test/core/ui/motion`) and a manual check on one platform.
+- [ ] **Performance budget** recorded in the phase 49 notes for this release: cold start to interactive list under 2 s on a 5,000-task workspace, scroll at 55 fps or better, on a mid Android phone, an M-series Mac and web (profile mode, DevTools frame chart); `test/perf/cold_start_test.dart` green.
+- [ ] **Brand assets per platform:** icon, launch/splash and app name (`TaskForge`) checked for Android (mipmaps and adaptive icon), iOS (AppIcon set and launch screen), macOS (AppIcon), Windows (`app_icon.ico` in the exe), Linux (`app_icon.png` loaded by the window), web (favicon, manifest, maskable icons, social card). Regenerate with `python3 tool/make_brand_icons.py` from `app/`; status per platform is in the phase 49 notes (Part F).
+
+**Release mechanics**
+- [ ] `make check` and `make test` green; `make integration` passed on a desktop.
+- [ ] `make version V=X.Y.Z` committed; changelog written; `buf breaking` clean.
+- [ ] Backend suite green on PostgreSQL, not only SQLite.
+- [ ] Upgrade from the previous tag and backup restore smoke test pass (CI `upgrade` and restore jobs).
+- [ ] README and docs screenshots still match the UI (`docs/screenshots/`).

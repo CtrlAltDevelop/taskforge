@@ -47,3 +47,60 @@ Golden gate in CI, keyboard-traversal widget tests for dialogs/sheets, semantics
 
 ## Depends on
 44–48.
+
+## Notes: motion, focus, semantics, performance (part C)
+
+**Motion.** `core/ui/tokens/motion.dart`: `TfDuration` fast 100 / base 160 / slow 240 ms, one curve `tfCurve` (ease-out cubic, no overshoot), `TfMotion.of(context, d)` (zero when reduced) and `TfMotion.style` for routes. Reduce motion is `MediaQuery.disableAnimations` (system flag) or the Appearance choice `reduceMotionProvider`; `app.dart` folds both into the media query. Applied to: side sheet and bottom sheet slide (slow), dialog fade, toast, task open fade, tab underline colour, checkbox, row actions, live flash, shell page fade, jump-to-latest scroll, skeleton shimmer (three sweeps, then still; static when reduced), board drop settle (`TfSettleIn`, only for the card just dropped, never for cached data). Tests: `test/core/ui/motion/motion_test.dart` (normal and reduced per surface).
+Part E closed three of these: the menu panel (`TfMenu`) is drawn by the menu's own child (`_MenuPanelMotion`) and fades and scales in from its top edge (MenuAnchor only positions it); the tab underline slides (`TfTabs` measures the chosen tab and moves one `AnimatedPositioned`); rows inserted into the task list (table and phone cards) and board columns ease in through `TfSettleIn`, driven by `TfFreshIds` (an id is fresh only if it was not in the list at the first settled paint, so cached or still-streaming rows never animate). Not done: removal animation (a removed row is gone at once; animating it needs the list to keep ghosts of deleted rows). Filtering a list shows the rows that come into the result as inserted. The Appearance screen has no reduce-motion switch yet: `reduceMotionProvider.choose(reduce: ...)` is ready for it.
+
+**Focus.** `test/core/ui/overlay_focus_test.dart` locks in what Flutter's routes give us: Esc closes only the top layer (dialog over sheet, dialog over task peek), focus returns to the opener, Tab and Shift+Tab stay inside a dialog or sheet.
+
+**Semantics.** `test/core/ui/a11y_lint_test.dart` scans `lib/` and fails on an `IconButton` without `tooltip:` and on `Image`/`SvgPicture` without a label or `excludeFromSemantics: true`. `test/a11y/screens_semantics_test.dart` runs Flutter's `labeledTapTargetGuideline` on sign in, Home, list, board, task modal and three settings pages, and the 200 % text sweep on Home, My work and the list at 360/768/1280. It found two real gaps, fixed: the list's row and select-all checkboxes had no name (new key `tblSelectAll`; rows use the task title), and the row's wide hit area announced as an unnamed button. The contrast test (`tokens/colors_test.dart`) already covers every colour token (text, accent, tones, borders, focus, categorical); motion adds none.
+
+**Icons.** A bare `TfIcon` stays 16 (`TfIconSize.inline`). Inside Material controls with their own 40-48 px target (IconButton, PopupMenuButton, ListTile leading, input affixes) call sites use `TfIconSize.control` (20) in the work views, filters, task detail, calendar, inbox, chat, search and shortcuts. Settings and admin screens are left to the restyle.
+
+**Dead code.** The `radiusSmall/Medium/Large` aliases are deleted (no callers). No old shell or old toolbar files remain; a sweep of `core/ui`, `features/shell` and `work/` found no unreferenced file or symbol. `ChatSystemLine` (`features/comments`) is only used by its own test.
+
+**Performance.** `test/perf/cold_start_test.dart` (cold app to first list paint, 5,000 vs 200 tasks; ceiling 6 s and at most 3x the small workspace) and `test/features/tasks/work_perf_test.dart` (scroll frame cost 5,000 vs 200 rows, 1,000 vs 50 cards). Debug test VM on an M-series Mac, last runs: cold start to first list 200 tasks 1.7-2.6 s, 5,000 tasks 1.2-1.6 s; scrolled frame 92 ms (200 rows) vs 69 ms (5,000), board 45 vs 35 ms. These show cost does not grow with task count; they are not fps figures. Not measured: `flutter run --profile` on macOS, web, and a mid Android phone. **Owner to measure on a mid Android phone** (cold start to interactive list < 2 s on 5,000 tasks, scroll >= 55 fps, DevTools frame chart in profile mode) and record the numbers here.
+
+## Notes: release gate (part E)
+
+**Goldens.** `test/i18n/release_goldens_test.dart` reads every `path:` of `lib/app_router.dart`, so a new route without a picture, or without an entry in `_notPictured` (with a reason), fails; a second test checks the parsed list against the real router. 252 PNGs in `test/i18n/goldens/release/` (4.5 MB). Twelve primary screens (home, my work, project, inbox, chat, docs, calendar, dashboards, goals, members, appearance, sign in) get all eight combinations of phone/desktop, light/dark, en/fa; every other route gets desktop light en, desktop dark en, phone light en, phone light fa (full 8 for ~50 routes would be 400 PNGs). Not pictured, each with its reason: two-factor, SSO callback, public form, form builder (3 routes), webhook detail, goal detail (they need a challenge, a ticket or a seeded record) and the debug gallery (own sweep).
+
+**Lint.** `test/core/ui/forbidden_literals_test.dart` covers `lib/features` and `lib/core` (outside `core/ui/tokens`) with no allow-list; `ui_lint_test.dart` and `ui_lint_allowlist.txt` are deleted. The raw values moved into tokens: `tfBlack`, `tfWhite`, `tfClear`, `tfScrim`, `TfRadius.inset/pill`, `tokens/chart_palette.dart`; the last Material icons in `core/` (sync status, date picker, offline) now use `TfIcons`.
+
+## Notes: release QA, brand assets, screenshots (Part F)
+
+Run on an M-series Mac with Flutter 3.50, Xcode 27.2, 2026-11-18. The checklist that references this gate is in [phase 38](phase-38-release-deploy.md#release-checklist); the screen-reader and keyboard sign-off sheet is [docs/accessibility-checklist.md](../accessibility-checklist.md).
+
+**Brand assets, per platform** (launch name is now `TaskForge` everywhere; the brand page says never "Taskforge"):
+
+| Platform | Icon | Launch / splash | Name shown | Status |
+|----------|------|-----------------|------------|--------|
+| Android | `mipmap-*/ic_launcher.png` (legacy) plus new adaptive icon (`mipmap-anydpi-v26/ic_launcher.xml`, ink background, foreground in `drawable-nodpi`, monochrome layer) | `launch_background.xml` ink plus `launch_mark.png` | `android:label="TaskForge"` (was `taskforge`) | `flutter build apk --debug` built; the APK contains the adaptive icon and launch resources. Not run on a device |
+| iOS | `AppIcon.appiconset` (full-bleed, no alpha) | `LaunchScreen.storyboard` plus `LaunchImage.imageset` | `CFBundleDisplayName` `TaskForge` (was `Taskforge`) | `flutter build ios --simulator --debug` built; launch on the simulator not done (simulator access was not granted to the agent) |
+| macOS | `AppIcon.appiconset` 16-1024 | none (window opens directly) | `CFBundleDisplayName` `TaskForge` added; bundle file stays `taskforge.app` (renaming it touches the Xcode project) | `flutter build macos --debug` built and the app launched against the backend (window "TaskForge" opened, process alive); screenshots of the native window were not possible (screen capture returns black for the agent) |
+| Windows | `windows/runner/resources/app_icon.ico` (16-256, wired in `Runner.rc`) | none | window title and `ProductName`/`FileDescription` now `TaskForge` | verified by files only |
+| Linux | `runner/app_icon.png` 512, installed beside the binary by `CMakeLists.txt` and loaded in `my_application.cc` from `<exe dir>/data/app_icon.png` | none | window and header-bar title now `TaskForge` | verified by files only. Phase 44 said the wiring was never compiled; it reads correctly (glib `g_file_read_link` plus `gtk_window_set_icon_from_file`, installed path matches), but only a Linux build proves it |
+| Web | `favicon.png` 32, `icons/Icon-192/512` plus maskable 192/512 in `manifest.json`, `apple-touch-icon`, `social-card.png` | none | `TaskForge` in title, manifest, og tags | `flutter build web` built; ran in the browser against the backend (see screenshots) |
+
+`python3 tool/make_brand_icons.py` now also writes the Android adaptive icon; rerunning it changes no other asset.
+
+**Build faults found and fixed while building (not in the plan):** `flutter build apk` failed on the current toolchain: Flutter 3.50 needs Android Gradle Plugin 9.1.1 (the project had 9.1.0; `android/settings.gradle.kts`) and plugins need `compileSdk` 37 (`android/app/build.gradle.kts` now sets 37 instead of `flutter.compileSdkVersion`). Flutter warns AGP 9.1.1 and Kotlin 2.4.10 will soon be dropped (wants 9.3.1 and 2.4.20); upgrade before it becomes an error.
+
+**What was run.** Backend on a throwaway SQLite database and ports 8011/50052 (another stack already held 8010/50051; its data was not touched), seeded with `seed_demo`, then two tasks given status and assignee so Home, list and board show real data. Web ran with `flutter run -d web-server --profile` and an Envoy container (`deploy/envoy.yaml` copy on 8082 pointing at 50052). Needed `--dart-define=DPOP_ORIGIN=http://localhost:8010` because the backend signs against `DJANGO_PUBLIC_ORIGIN`/8010 (running REST on 8011 otherwise fails sign-in with "The proof is for another URL"). Sign in, Home, list, board, task modal with a comment, Settings > Language and a switch to Persian all worked. Nothing else on the web path failed.
+
+**Screenshots added** (800x500 PNG, palette-optimised, 38-55 KB each) in `docs/screenshots/`, referenced from the README: `home-light.png`, `list-light.png`, `board-light.png`, `task-modal-light.png`, `board-dark.png`, `board-fa-rtl.png`. Taken in the web app in the in-app browser (debug ribbon absent: profile mode). The workflow status names (To do, In progress, Done) are data from the seed and stay English in Persian; the Persian sidebar's workspace name "Demo" renders pale in light mode on the first load (seen in one frame, not reproduced after navigation; check contrast during the RTL review).
+
+**Not verified here.** Screenshots at 1280x800 (the pane renders 800x500); mobile and native-window shots; the web build with the production `SAME_ORIGIN` setup; Android and iOS launch; Windows and Linux builds.
+
+**Owner must test**
+- Android phone: run a release or profile build; check the adaptive icon (round and squircle masks, themed icon), launch name and splash; performance numbers (cold start to interactive list under 2 s on 5,000 tasks, scroll at 55 fps or better, DevTools frame chart in profile mode) and the same on an M-series Mac (`flutter run --profile -d macos`) and web profile; record them in the Part C Performance note.
+- iOS simulator or device: launch screen and AppIcon, display name.
+- Windows run: exe icon in Explorer and taskbar, window title `TaskForge`.
+- Linux run: build, confirm the window icon loads (the first real compile of the icon wiring) and the title.
+- VoiceOver (macOS and iOS) and NVDA (Windows): follow [docs/accessibility-checklist.md](../accessibility-checklist.md) and sign it off.
+- Native review of the phase 48-49 strings in Persian, Arabic and Pashto (fa, ar, ps).
+- PostgreSQL runs: the phase 48 Summary p95 and the full backend suite (both so far only on SQLite).
+- `make integration` on a desktop (needs a desktop runner; not run here).
+- Housekeeping: Docker Desktop was started for the Envoy container and left running; commit `1f9fc1b` (another agent's) swept in `app/android/.kotlin/sessions/*.salive` and a Gradle problems report under `app/android/build/reports/`; remove them from git and add them to `.gitignore`.

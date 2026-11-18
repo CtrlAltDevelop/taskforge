@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "dev.taskforge.taskforge"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // plugins need >= 37; flutter.compileSdkVersion is lower
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
