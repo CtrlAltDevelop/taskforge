@@ -8,6 +8,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/system/domain/system.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Admin page: server version and the health of Redis, the Celery broker and workers, and the
 /// due work waiting to be handled.
@@ -37,12 +38,11 @@ class SystemScreen extends ConsumerWidget {
       ),
       body: info.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Text(
-            e is SystemException && e.failure == SystemFailure.denied
-                ? t.sysDenied
-                : t.sysLoadFailed,
-          ),
+        error: (e, _) => TfError(
+          message: e is SystemException && e.failure == SystemFailure.denied
+              ? t.sysDenied
+              : t.sysLoadFailed,
+          details: '$e',
         ),
         data: (s) => _Body(info: s, t: t),
       ),

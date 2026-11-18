@@ -80,6 +80,8 @@ class MoreSheet extends ConsumerWidget {
               showProjectSwitcher(context);
             },
           ),
+          // The phone's bar holds Home, Inbox and Chat; My work lives here.
+          row(navItems.firstWhere((i) => i.id == 'my-work')),
           ...section(NavSection.projects, null),
           ...section(NavSection.workspace, l.shellWorkspaceGroup),
           ...section(NavSection.admin, l.shellAdminGroup),

@@ -1,5 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taskforge/features/home/application/home_providers.dart';
+
+import '../home/fakes.dart';
+
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -82,6 +86,9 @@ class FakeWorkspaceClient implements WorkspaceClient {
   final takenSlugs = <String>{};
   WorkspaceException? failNext;
   bool failList = false;
+
+  /// Fails the list with this instead of a network error.
+  WorkspaceException? listFailure;
   int listCalls = 0;
   int _next = 100;
 
@@ -94,6 +101,7 @@ class FakeWorkspaceClient implements WorkspaceClient {
   @override
   Future<List<Workspace>> list() async {
     listCalls++;
+    if (listFailure != null) throw listFailure!;
     if (failList) throw const WorkspaceException(WorkspaceFailure.network);
     return [...items];
   }
@@ -180,6 +188,9 @@ Future<ProviderContainer> pumpSignedIn(
   FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
 
+  /// Home, My work and the checklist (empty by default).
+  FakeHomeClient? home,
+
   /// What the server says its version is (default: nothing to update).
   FakeSystemClient? system,
 
@@ -234,6 +245,8 @@ Future<ProviderContainer> pumpSignedIn(
       securityClientProvider.overrideWithValue(FakeSecurityClient()),
       systemClientProvider.overrideWithValue(system ?? FakeSystemClient()),
       goalsClientProvider.overrideWithValue(FakeGoalsClient()),
+      homeClientProvider.overrideWithValue(home ?? FakeHomeClient()),
+      onboardingClientProvider.overrideWithValue(home ?? FakeHomeClient()),
       ...overrides,
     ],
   );

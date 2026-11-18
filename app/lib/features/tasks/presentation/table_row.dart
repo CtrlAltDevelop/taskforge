@@ -21,6 +21,7 @@ import 'package:taskforge/features/tasks/domain/task_tree.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/views/domain/list_layout.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
+import 'package:taskforge/features/home/presentation/sample_badge.dart';
 
 /// One task as a line of the table: check box, title with its fold arrow and
 /// subtask ring, one cell per column, and the row menu. Rename and the menu
@@ -183,6 +184,10 @@ class _TaskRowState extends State<TaskRow> {
       ),
       if (_task.isBlocked) ...[
         BlockedBadge(blockedBy: _task.blockedBy),
+        const SizedBox(width: TfSpace.xs),
+      ],
+      if (_task.isSample) ...[
+        const SampleBadge(),
         const SizedBox(width: TfSpace.xs),
       ],
     ];

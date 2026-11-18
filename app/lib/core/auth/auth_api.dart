@@ -22,6 +22,7 @@ class AuthApiException implements Exception {
     required this.title,
     required this.message,
     this.code = '',
+    this.maintenance = false,
   });
 
   final int status;
@@ -31,6 +32,10 @@ class AuthApiException implements Exception {
   /// The RFC 9449 error the server named (`invalid_token`, `invalid_dpop_proof`,
   /// `use_dpop_nonce`) when a proof or key was the problem, otherwise empty.
   final String code;
+
+  /// The server answered 503 with `{"maintenance": true}`: it is down for
+  /// maintenance, not unreachable.
+  final bool maintenance;
 
   /// The session's key is gone or is not this device's: the user must sign in again here.
   bool get keyChanged => code == 'invalid_token';
@@ -276,6 +281,7 @@ class HttpAuthApi implements AuthApi {
     final data = body['data'];
     throw AuthApiException(
       status: response.statusCode,
+      maintenance: response.statusCode == 503 && body['maintenance'] == true,
       code: data is Map ? (data['error'] as String? ?? '') : '',
       title: (body['title'] as String?) ?? 'ERROR',
       message: errors.isNotEmpty

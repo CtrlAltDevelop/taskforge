@@ -144,7 +144,14 @@ void main() {
     test('screens already moved to l10n stay free of hardcoded strings', () {
       final now = _scan();
       for (final done in [
-        'lib/features/account/home_screen.dart',
+        'lib/features/home/presentation/home_screen.dart',
+        'lib/features/home/presentation/home_cards.dart',
+        'lib/features/home/presentation/checklist_card.dart',
+        'lib/features/home/presentation/my_work_screen.dart',
+        'lib/features/onboarding/presentation/starter_screen.dart',
+        'lib/features/onboarding/presentation/invite_step.dart',
+        'lib/features/system/presentation/status_screens.dart',
+        'lib/features/system/presentation/whats_new.dart',
         'lib/features/account/language_screen.dart',
         'lib/features/account/language_menu.dart',
         'lib/features/auth/sign_in_screen.dart',

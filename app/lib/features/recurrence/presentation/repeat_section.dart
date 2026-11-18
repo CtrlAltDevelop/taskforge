@@ -6,6 +6,7 @@ import 'package:taskforge/features/recurrence/application/recurrence_providers.d
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/recurrence/presentation/repeat_editor.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// The "Repeat" chip of a task, and what its series is doing: the rule in
 /// words, which instance this is, the next dates, and a paused notice.
@@ -24,16 +25,12 @@ class RepeatSection extends ConsumerWidget {
     if (series.hasError && found == null) {
       // Not "does not repeat": offering to start a repeat here could replace
       // the one that exists.
-      return Row(
+      return TfError(
         key: const Key('repeat-read-error'),
-        children: [
-          Flexible(child: Text(context.l10n.grpHRepeatReadError)),
-          TextButton(
-            key: const Key('repeat-retry'),
-            onPressed: () => ref.invalidate(repeatProvider(target)),
-            child: Text(context.l10n.grpHRetry),
-          ),
-        ],
+        compact: true,
+        message: context.l10n.grpHRepeatReadError,
+        retryKey: const Key('repeat-retry'),
+        onRetry: () => ref.invalidate(repeatProvider(target)),
       );
     }
     if (series.isLoading && found == null) return const SizedBox.shrink();

@@ -14,6 +14,10 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/presentation/task_trash_screen.dart';
 import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
 import 'package:taskforge/features/tasks/presentation/task_section.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/features/projects/domain/project_access.dart';
+import 'package:taskforge/features/system/presentation/status_screens.dart';
 
 /// A project's page: its header and its tasks.
 class ProjectScreen extends ConsumerWidget {
@@ -79,18 +83,17 @@ class ProjectScreen extends ConsumerWidget {
       ),
       body: switch (project) {
         final p? => _Body(project: p, taskId: taskId, view: view),
-        null when catalog.hasError => Center(
-          child: TextButton(
-            key: const Key('retry-projects'),
-            onPressed: () => ref.invalidate(projectsProvider),
-            child: Text(context.l10n.grpHLoadProjectRetry),
-          ),
+        null when isDenied(catalog.error) => const NoAccessScreen(),
+        null when catalog.hasError => TfError(
+          message: context.l10n.grpHLoadProjectRetry,
+          details: '${catalog.error}',
+          retryKey: const Key('retry-projects'),
+          onRetry: () => ref.invalidate(projectsProvider),
         ),
-        null when catalog.hasValue => Center(
-          child: Text(
-            context.l10n.grpHProjectNotFound,
-            key: const Key('project-missing'),
-          ),
+        null when catalog.hasValue => TfEmpty(
+          key: const Key('project-missing'),
+          illustration: TfIllustrationKind.notFound,
+          title: context.l10n.grpHProjectNotFound,
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

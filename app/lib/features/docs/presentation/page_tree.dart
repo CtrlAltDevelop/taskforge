@@ -6,6 +6,8 @@ import 'package:taskforge/core/i18n/directional_icon.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 const newPageTitle = 'Untitled';
 
@@ -344,24 +346,20 @@ class _PageTreeState extends ConsumerState<PageTree> {
         ),
         Expanded(
           child: switch (tree) {
-            AsyncData(:final value) when value.isEmpty => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  context.l10n.grpBNoPagesYet,
-                  key: const Key('tree-empty'),
-                ),
-              ),
+            AsyncData(:final value) when value.isEmpty => TfEmpty(
+              key: const Key('tree-empty'),
+              compact: true,
+              illustration: TfIllustrationKind.docs,
+              title: context.l10n.grpBNoPagesYet,
             ),
             AsyncData(:final value) => ListView(
               children: _rows(DocTreeView(value), '', 0),
             ),
-            AsyncError() => Center(
-              child: TextButton(
-                key: const Key('retry-tree'),
-                onPressed: () => ref.invalidate(docTreeProvider),
-                child: Text(context.l10n.grpBPagesLoadFailed),
-              ),
+            AsyncError() => TfError(
+              compact: true,
+              message: context.l10n.grpBPagesLoadFailed,
+              retryKey: const Key('retry-tree'),
+              onRetry: () => ref.invalidate(docTreeProvider),
             ),
             _ => const Center(child: CircularProgressIndicator()),
           },

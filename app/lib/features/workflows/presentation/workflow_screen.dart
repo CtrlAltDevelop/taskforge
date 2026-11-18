@@ -16,6 +16,7 @@ import 'package:taskforge/features/workflows/presentation/status_card.dart';
 import 'package:taskforge/features/workflows/presentation/status_dialogs.dart';
 import 'package:taskforge/features/workflows/presentation/validation_panel.dart';
 import 'package:taskforge/features/workflows/presentation/workflow_graph.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Width from which the problems and the graph sit beside the status list.
 const wideWorkflowBreakpoint = 900.0;
@@ -101,16 +102,11 @@ class WorkflowScreen extends ConsumerWidget {
   ) {
     final draft = editor.draft;
     if (editor.loadError != null) {
-      return Center(
-        child: TextButton(
-          key: const Key('retry-workflow'),
-          onPressed: notifier.load,
-          child: Text(
-            context.l10n.grpIErrorRetry(
-              workflowErrorMessage(editor.loadError!, context.l10n),
-            ),
-          ),
-        ),
+      return TfError(
+        message: workflowErrorMessage(editor.loadError!, context.l10n),
+        details: '${editor.loadError}',
+        retryKey: const Key('retry-workflow'),
+        onRetry: notifier.load,
       );
     }
     if (editor.loading || draft == null) {

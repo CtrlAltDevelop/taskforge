@@ -8,6 +8,8 @@ import 'package:taskforge/features/chat/presentation/chat_labels.dart';
 import 'package:taskforge/features/comments/application/chat_prefs.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The places to talk, grouped (Channels, Groups, Direct messages, Task
 /// chats), with a search box. Tapping one calls [onOpen]; a task chat calls
@@ -72,34 +74,23 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
       return const _ListSkeleton(key: Key('chat-list-loading'));
     }
     if (state.error != null && state.list.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              chatErrorMessage(state.error!, l10n),
-              key: const Key('chat-list-error'),
-              textAlign: TextAlign.center,
-            ),
-            TextButton(
-              key: const Key('chat-list-retry'),
-              onPressed: () => ref.read(spacesProvider.notifier).load(),
-              child: Text(l10n.retry),
-            ),
-          ],
-        ),
+      return TfError(
+        key: const Key('chat-list-error'),
+        compact: true,
+        message: chatErrorMessage(state.error!, l10n),
+        details: '${state.error}',
+        retryKey: const Key('chat-list-retry'),
+        onRetry: () => ref.read(spacesProvider.notifier).load(),
       );
     }
     if (list.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            _query.isEmpty ? l10n.chatNoSpaces : l10n.chatNoMatches,
-            key: const Key('chat-list-empty'),
-            textAlign: TextAlign.center,
-          ),
-        ),
+      return TfEmpty(
+        key: const Key('chat-list-empty'),
+        compact: true,
+        illustration: _query.isEmpty
+            ? TfIllustrationKind.chat
+            : TfIllustrationKind.search,
+        title: _query.isEmpty ? l10n.chatNoSpaces : l10n.chatNoMatches,
       );
     }
     final now = ref.watch(chatNowProvider)();

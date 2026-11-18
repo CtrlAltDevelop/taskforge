@@ -8844,4 +8844,441 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tdUnsavedDraft => 'پیش‌نویس ذخیره‌نشده';
+
+  @override
+  String get illusTasks => 'فهرست وظایف';
+
+  @override
+  String get illusBoard => 'تابلو با سه ستون کارت';
+
+  @override
+  String get illusCalendar => 'تقویم با یک روز نشان‌شده';
+
+  @override
+  String get illusTimeline => 'نوارها روی خط زمانی';
+
+  @override
+  String get illusDocs => 'یک صفحه نوشته‌شده';
+
+  @override
+  String get illusChat => 'دو حباب گفتگو';
+
+  @override
+  String get illusInbox => 'سینی صندوق ورودی با یک پیام';
+
+  @override
+  String get illusSearch => 'ذره‌بین';
+
+  @override
+  String get illusGoals => 'هدف با یک تیر';
+
+  @override
+  String get illusTime => 'یک ساعت';
+
+  @override
+  String get illusNoAccess => 'قفل بسته';
+
+  @override
+  String get illusOffline => 'ابر خط‌خورده';
+
+  @override
+  String get illusNotFound => 'صفحه‌ای با ذره‌بین';
+
+  @override
+  String get illusMaintenance => 'چرخ‌دنده روی سرور';
+
+  @override
+  String get illusGeneric => 'یک کارت و یادداشت';
+
+  @override
+  String get errTitle => 'مشکلی پیش آمد';
+
+  @override
+  String get errRetry => 'تلاش دوباره';
+
+  @override
+  String get errCopyDetails => 'کپی جزئیات';
+
+  @override
+  String get errCopied => 'جزئیات کپی شد';
+
+  @override
+  String get sysGoHome => 'رفتن به خانه';
+
+  @override
+  String get sysNotFoundTitle => 'این صفحه پیدا نشد';
+
+  @override
+  String get sysNotFoundBody =>
+      'شاید پیوند قدیمی باشد یا صفحه جابه‌جا یا حذف شده باشد.';
+
+  @override
+  String get sysNoAccessTitle => 'شما دسترسی ندارید';
+
+  @override
+  String get sysNoAccessBody =>
+      'از مدیر فضای کار بخواهید به شما دسترسی بدهد یا به فضای کار دیگری بروید.';
+
+  @override
+  String get sysOfflineTitle => 'شما آفلاین هستید';
+
+  @override
+  String get sysOfflineBody =>
+      'اتصال خود را بررسی کنید. تغییرات شما اینجا ذخیره می‌شود و پس از اتصال ارسال می‌گردد.';
+
+  @override
+  String get sysMaintenanceTitle => 'به‌زودی برمی‌گردیم';
+
+  @override
+  String get sysMaintenanceBody =>
+      'TaskForge در حال به‌روزرسانی است. کار شما در امان است. چند دقیقه دیگر دوباره تلاش کنید.';
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'صبح بخیر، $name';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'ظهر بخیر، $name';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'عصر بخیر، $name';
+  }
+
+  @override
+  String get homeGreetMorningAnon => 'صبح بخیر';
+
+  @override
+  String get homeGreetAfternoonAnon => 'ظهر بخیر';
+
+  @override
+  String get homeGreetEveningAnon => 'عصر بخیر';
+
+  @override
+  String get homeCustomize => 'شخصی‌سازی';
+
+  @override
+  String get homeCustomizeTitle => 'شخصی‌سازی صفحه اصلی';
+
+  @override
+  String get homeCustomizeHint =>
+      'کارت‌ها را نمایش دهید، پنهان کنید یا جابه‌جا کنید. این تنظیم روی همین دستگاه ذخیره می‌شود.';
+
+  @override
+  String get homeReset => 'بازنشانی';
+
+  @override
+  String get homeAllHidden => 'همه کارت‌ها پنهان هستند';
+
+  @override
+  String get homeCardHide => 'پنهان کردن کارت';
+
+  @override
+  String get homeCardMenu => 'گزینه‌های کارت';
+
+  @override
+  String get homeCardMoveUp => 'انتقال به بالا';
+
+  @override
+  String get homeCardMoveDown => 'انتقال به پایین';
+
+  @override
+  String get homeCardChecklist => 'شروع کار';
+
+  @override
+  String get homeCardToday => 'امروز';
+
+  @override
+  String get homeCardAssigned => 'واگذار شده به من';
+
+  @override
+  String get homeCardMentions => 'اشاره‌ها و گفتگوی خوانده‌نشده';
+
+  @override
+  String get homeCardRecent => 'اخیر';
+
+  @override
+  String get homeCardTime => 'زمان این هفته';
+
+  @override
+  String get homeCardPinned => 'داشبوردهای سنجاق‌شده';
+
+  @override
+  String get homeCardFailed => 'بارگیری این کارت ممکن نشد.';
+
+  @override
+  String homeStale(String time) {
+    return 'آفلاین: نسخه ذخیره‌شده از $time نمایش داده می‌شود';
+  }
+
+  @override
+  String get homeStaleNoTime => 'آفلاین: نسخه ذخیره‌شده نمایش داده می‌شود';
+
+  @override
+  String get homeTodayEmpty => 'امروز موعدی ندارید';
+
+  @override
+  String get homeTodayEmptyHint =>
+      'وظایف امروز یا عقب‌افتاده اینجا نمایش داده می‌شوند.';
+
+  @override
+  String get homeStatToday => 'موعد امروز';
+
+  @override
+  String get homeStatOverdue => 'عقب‌افتاده';
+
+  @override
+  String get homeStatInProgress => 'در حال انجام';
+
+  @override
+  String homeOverdueOn(String date) {
+    return 'عقب‌افتاده · $date';
+  }
+
+  @override
+  String get homeAssignedEmpty => 'چیزی به شما واگذار نشده';
+
+  @override
+  String get homeAssignedEmptyHint =>
+      'وظایف واگذارشده به شما اینجا به تفکیک پروژه نمایش داده می‌شوند.';
+
+  @override
+  String get homeSeeAll => 'دیدن همه';
+
+  @override
+  String get homeStatusFailed => 'تغییر وضعیت ممکن نشد.';
+
+  @override
+  String get homeRecentEmpty => 'هنوز چیزی باز نشده';
+
+  @override
+  String get homeRecentEmptyHint =>
+      'وظایفی که باز می‌کنید اینجا نمایش داده می‌شوند.';
+
+  @override
+  String get homeMentionsEmpty => 'اشاره یا گفتگوی خوانده‌نشده‌ای نیست';
+
+  @override
+  String get homeMentionsEmptyHint => 'همه چیز را دیده‌اید.';
+
+  @override
+  String get homeUnreadNotifications => 'اعلان‌های خوانده‌نشده';
+
+  @override
+  String get homeUnreadChat => 'گفتگوی خوانده‌نشده';
+
+  @override
+  String get homeOpenInbox => 'باز کردن صندوق ورودی';
+
+  @override
+  String get homeMentionRow => 'شما را نام برد';
+
+  @override
+  String get homeTimeEmpty => 'این هفته زمانی ثبت نشده';
+
+  @override
+  String get homeTimeEmptyHint =>
+      'روی یک وظیفه زمان‌سنج را شروع کنید تا هفته‌تان اینجا نمایش داده شود.';
+
+  @override
+  String get homeTimeOpen => 'باز کردن جدول زمانی';
+
+  @override
+  String homeTimeTotal(String total) {
+    return '$total در ۷ روز گذشته ثبت شده';
+  }
+
+  @override
+  String homeTimeBar(String day, String time) {
+    return '$day: $time';
+  }
+
+  @override
+  String get homePinnedEmpty => 'داشبورد سنجاق‌شده‌ای نیست';
+
+  @override
+  String get homePinnedEmptyHint =>
+      'یک داشبورد را سنجاق کنید تا همیشه در دسترس باشد.';
+
+  @override
+  String get homePinnedOpen => 'باز کردن داشبوردها';
+
+  @override
+  String get homeCheckDismiss => 'رد کردن';
+
+  @override
+  String homeCheckProgress(String done, String total) {
+    return '$done از $total انجام شد';
+  }
+
+  @override
+  String get homeStepCreateTask => 'ساخت یک وظیفه';
+
+  @override
+  String get homeStepInvite => 'دعوت از یک نفر';
+
+  @override
+  String get homeStepBoard => 'امتحان تخته';
+
+  @override
+  String get homeStepPalette => 'باز کردن پالت فرمان (Cmd یا Ctrl + K)';
+
+  @override
+  String get mwTitle => 'کار من';
+
+  @override
+  String get mwRelationBoth => 'واگذارشده و در حال پیگیری';
+
+  @override
+  String get mwRelationAssigned => 'واگذار شده به من';
+
+  @override
+  String get mwRelationWatching => 'در حال پیگیری';
+
+  @override
+  String get mwIncludeDone => 'شامل انجام‌شده‌ها';
+
+  @override
+  String get mwEmpty => 'چیزی واگذار یا دنبال نشده';
+
+  @override
+  String get mwEmptyHint =>
+      'وظایفی که به شما واگذار شده یا دنبال می‌کنید اینجا نمایش داده می‌شوند.';
+
+  @override
+  String get mwNoMatch => 'هیچ وظیفه‌ای با فیلتر شما مطابقت ندارد';
+
+  @override
+  String get mwClearFilter => 'پاک کردن فیلتر';
+
+  @override
+  String get mwLoadMore => 'بارگیری بیشتر';
+
+  @override
+  String get mwAssigned => 'واگذارشده';
+
+  @override
+  String get mwWatching => 'پیگیری';
+
+  @override
+  String get mwFailed => 'بارگیری کار من ممکن نشد.';
+
+  @override
+  String obStepOf(String n, String total) {
+    return 'مرحله $n از $total';
+  }
+
+  @override
+  String get obStarterTitle => 'یک الگوی شروع انتخاب کنید';
+
+  @override
+  String get obStarterHint =>
+      'با یک پروژه آماده شروع کنید. همه چیز را بعدا می‌توانید تغییر دهید.';
+
+  @override
+  String get obStarterContinue => 'ساخت پروژه';
+
+  @override
+  String get obStarterCreating => 'در حال ساخت پروژه شما…';
+
+  @override
+  String get obStarterBlank => 'پروژه خالی';
+
+  @override
+  String get obStarterBlankDesc => 'یک پروژه خالی با گردش کار پیش‌فرض.';
+
+  @override
+  String get obStarterSoftware => 'تیم نرم‌افزار';
+
+  @override
+  String get obStarterSoftwareDesc =>
+      'بک‌لاگ، تخته و جریان انتشار، همراه با وظایف نمونه.';
+
+  @override
+  String get obStarterMarketing => 'بازاریابی';
+
+  @override
+  String get obStarterMarketingDesc =>
+      'کمپین‌ها، تقویم محتوا و مراحل بازبینی، همراه با وظایف نمونه.';
+
+  @override
+  String get obStarterBugs => 'ردیاب باگ';
+
+  @override
+  String get obStarterBugsDesc =>
+      'جریان گزارش، اولویت‌بندی و رفع، همراه با وظایف نمونه.';
+
+  @override
+  String get obInviteTitle => 'تیم خود را دعوت کنید';
+
+  @override
+  String get obInviteHint =>
+      'همین حالا هم‌تیمی‌ها را اضافه کنید، یا رد شوید و هر زمان از بخش اعضا انجام دهید.';
+
+  @override
+  String get obInviteButton => 'دعوت هم‌تیمی‌ها';
+
+  @override
+  String get obInviteSkip => 'فعلا رد شو';
+
+  @override
+  String get obInviteDone => 'رفتن به پروژه شما';
+
+  @override
+  String get sampleBadge => 'نمونه';
+
+  @override
+  String get sampleBanner =>
+      'این فضای کاری وظایف نمونه دارد. این وظایف با برچسب «نمونه» مشخص شده‌اند و در گزارش‌ها نمی‌آیند.';
+
+  @override
+  String get sampleDelete => 'حذف وظایف نمونه';
+
+  @override
+  String get sampleDeleted => 'وظایف نمونه حذف شدند';
+
+  @override
+  String get sampleDeleteFailed => 'حذف وظایف نمونه ممکن نشد.';
+
+  @override
+  String wnTitle(String version) {
+    return 'تازه‌های نسخه $version';
+  }
+
+  @override
+  String get wnClose => 'متوجه شدم';
+
+  @override
+  String get wnHome =>
+      'صفحه اصلی جدید: روز، وظایف و آنچه به شما نیاز دارد، یک‌جا.';
+
+  @override
+  String get wnMyWork =>
+      '«کار من» هر آنچه به شما واگذار شده یا دنبال می‌کنید را فهرست می‌کند.';
+
+  @override
+  String get wnStarters =>
+      'یک فضای کاری را با پروژه آماده و وظایف نمونه شروع کنید.';
+
+  @override
+  String get wnStates =>
+      'صفحه‌های خالی، خطا، آفلاین و پیدا‌نشد واضح‌تر در همه‌جا.';
+
+  @override
+  String get dashPinToHome => 'سنجاق به صفحه اصلی';
+
+  @override
+  String get dashUnpinFromHome => 'برداشتن سنجاق از صفحه اصلی';
+
+  @override
+  String get dashPinned => 'به صفحه اصلی سنجاق شد';
+
+  @override
+  String get dashUnpinned => 'از صفحه اصلی برداشته شد';
+
+  @override
+  String get dashPinFailed => 'تغییر سنجاق ممکن نشد.';
 }

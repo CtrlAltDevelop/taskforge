@@ -7,6 +7,8 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/calendar/application/calendar_providers.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_drag.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Open tasks with no dates. On a wide screen each drags onto a day; every
 /// one also has a "Schedule…" button that asks for a date (the way without a
@@ -32,25 +34,21 @@ class CalendarTray extends ConsumerWidget {
     final tray = ref.watch(trayProvider(projectId));
     final Widget body;
     if (tray.error != null && tray.tasks.isEmpty) {
-      body = Center(
-        child: TextButton(
-          key: const Key('retry-tray'),
-          onPressed: () => ref.read(trayProvider(projectId).notifier).load(),
-          child: Text(
-            context.l10n.grpFErrorRetry(
-              taskErrorMessage(tray.error!, context.l10n),
-            ),
-          ),
-        ),
+      body = TfError(
+        compact: true,
+        message: taskErrorMessage(tray.error!, context.l10n),
+        details: '${tray.error}',
+        retryKey: const Key('retry-tray'),
+        onRetry: () => ref.read(trayProvider(projectId).notifier).load(),
       );
     } else if (tray.loading) {
       body = const Center(child: CircularProgressIndicator());
     } else if (tray.tasks.isEmpty) {
-      body = Center(
-        child: Text(
-          context.l10n.grpFEverythingDated,
-          key: const Key('tray-empty'),
-        ),
+      body = TfEmpty(
+        key: const Key('tray-empty'),
+        compact: true,
+        illustration: TfIllustrationKind.calendar,
+        title: context.l10n.grpFEverythingDated,
       );
     } else {
       body = ListView.builder(

@@ -5214,5 +5214,592 @@
   },
   "tdTrashedBanner": "This task is in the trash.",
   "tdUnassigned": "Unassigned",
-  "tdUnsavedDraft": "Unsaved draft"
+  "tdUnsavedDraft": "Unsaved draft",
+  "illusTasks": "A checklist of tasks",
+  "@illusTasks": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusBoard": "A board with three columns of cards",
+  "@illusBoard": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusCalendar": "A calendar with one day marked",
+  "@illusCalendar": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusTimeline": "Bars on a timeline",
+  "@illusTimeline": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusDocs": "A written page",
+  "@illusDocs": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusChat": "Two chat bubbles",
+  "@illusChat": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusInbox": "An inbox tray with a message",
+  "@illusInbox": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusSearch": "A magnifying glass",
+  "@illusSearch": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusGoals": "A target with an arrow",
+  "@illusGoals": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusTime": "A clock",
+  "@illusTime": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusNoAccess": "A closed padlock",
+  "@illusNoAccess": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusOffline": "A cloud crossed out",
+  "@illusOffline": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusNotFound": "A page with a magnifying glass",
+  "@illusNotFound": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusMaintenance": "A gear on a server",
+  "@illusMaintenance": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "illusGeneric": "A card and a sticky note",
+  "@illusGeneric": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "errTitle": "Something went wrong",
+  "@errTitle": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "errRetry": "Try again",
+  "@errRetry": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "errCopyDetails": "Copy details",
+  "@errCopyDetails": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "errCopied": "Details copied",
+  "@errCopied": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysGoHome": "Go to Home",
+  "@sysGoHome": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysNotFoundTitle": "We can't find that page",
+  "@sysNotFoundTitle": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysNotFoundBody": "The link may be old, or the page was moved or deleted.",
+  "@sysNotFoundBody": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysNoAccessTitle": "You don't have access",
+  "@sysNoAccessTitle": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysNoAccessBody": "Ask a workspace admin to give you access, or switch to another workspace.",
+  "@sysNoAccessBody": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysOfflineTitle": "You're offline",
+  "@sysOfflineTitle": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysOfflineBody": "Check your connection. Changes you make are saved here and sent when you're back.",
+  "@sysOfflineBody": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysMaintenanceTitle": "Back in a moment",
+  "@sysMaintenanceTitle": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "sysMaintenanceBody": "TaskForge is being updated. Your work is safe. Try again in a few minutes.",
+  "@sysMaintenanceBody": {
+    "description": "Phase 48 empty/error/system state text."
+  },
+  "homeGreetMorning": "Good morning, {name}",
+  "@homeGreetMorning": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetAfternoon": "Good afternoon, {name}",
+  "@homeGreetAfternoon": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetEvening": "Good evening, {name}",
+  "@homeGreetEvening": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetMorningAnon": "Good morning",
+  "@homeGreetMorningAnon": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeGreetAfternoonAnon": "Good afternoon",
+  "@homeGreetAfternoonAnon": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeGreetEveningAnon": "Good evening",
+  "@homeGreetEveningAnon": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCustomize": "Customize",
+  "@homeCustomize": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCustomizeTitle": "Customize Home",
+  "@homeCustomizeTitle": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCustomizeHint": "Show, hide and reorder the cards. This is saved on this device.",
+  "@homeCustomizeHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeReset": "Reset",
+  "@homeReset": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeAllHidden": "All cards are hidden",
+  "@homeAllHidden": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardHide": "Hide card",
+  "@homeCardHide": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardMenu": "Card options",
+  "@homeCardMenu": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardMoveUp": "Move up",
+  "@homeCardMoveUp": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardMoveDown": "Move down",
+  "@homeCardMoveDown": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardChecklist": "Getting started",
+  "@homeCardChecklist": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardToday": "Today",
+  "@homeCardToday": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardAssigned": "Assigned to me",
+  "@homeCardAssigned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardMentions": "Mentions and unread chat",
+  "@homeCardMentions": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardRecent": "Recent",
+  "@homeCardRecent": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardTime": "Time this week",
+  "@homeCardTime": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardPinned": "Pinned dashboards",
+  "@homeCardPinned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCardFailed": "This card could not load.",
+  "@homeCardFailed": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStale": "Offline: showing the saved copy from {time}",
+  "@homeStale": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStaleNoTime": "Offline: showing the saved copy",
+  "@homeStaleNoTime": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTodayEmpty": "Nothing due today",
+  "@homeTodayEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTodayEmptyHint": "Tasks due today or overdue show up here.",
+  "@homeTodayEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStatToday": "Due today",
+  "@homeStatToday": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStatOverdue": "Overdue",
+  "@homeStatOverdue": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStatInProgress": "In progress",
+  "@homeStatInProgress": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeOverdueOn": "Overdue · {date}",
+  "@homeOverdueOn": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAssignedEmpty": "Nothing assigned to you",
+  "@homeAssignedEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeAssignedEmptyHint": "Tasks assigned to you appear here, grouped by project.",
+  "@homeAssignedEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeSeeAll": "See all",
+  "@homeSeeAll": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStatusFailed": "Could not change the status.",
+  "@homeStatusFailed": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeRecentEmpty": "Nothing opened yet",
+  "@homeRecentEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeRecentEmptyHint": "Tasks you open show up here.",
+  "@homeRecentEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeMentionsEmpty": "No mentions or unread chat",
+  "@homeMentionsEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeMentionsEmptyHint": "You are all caught up.",
+  "@homeMentionsEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeUnreadNotifications": "Unread notifications",
+  "@homeUnreadNotifications": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeUnreadChat": "Unread chat",
+  "@homeUnreadChat": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeOpenInbox": "Open inbox",
+  "@homeOpenInbox": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeMentionRow": "Mentioned you",
+  "@homeMentionRow": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTimeEmpty": "No time logged this week",
+  "@homeTimeEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTimeEmptyHint": "Start a timer on a task to see your week here.",
+  "@homeTimeEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTimeOpen": "Open timesheet",
+  "@homeTimeOpen": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeTimeTotal": "{total} logged in the last 7 days",
+  "@homeTimeTotal": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTimeBar": "{day}: {time}",
+  "@homeTimeBar": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homePinnedEmpty": "No pinned dashboards",
+  "@homePinnedEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homePinnedEmptyHint": "Pin a dashboard to keep it one tap away.",
+  "@homePinnedEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homePinnedOpen": "Open dashboards",
+  "@homePinnedOpen": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCheckDismiss": "Dismiss",
+  "@homeCheckDismiss": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeCheckProgress": "{done} of {total} done",
+  "@homeCheckProgress": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStepCreateTask": "Create a task",
+  "@homeStepCreateTask": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStepInvite": "Invite someone",
+  "@homeStepInvite": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStepBoard": "Try the board",
+  "@homeStepBoard": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "homeStepPalette": "Open the command palette (Cmd or Ctrl + K)",
+  "@homeStepPalette": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwTitle": "My work",
+  "@mwTitle": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwRelationBoth": "Assigned and watching",
+  "@mwRelationBoth": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwRelationAssigned": "Assigned to me",
+  "@mwRelationAssigned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwRelationWatching": "Watching",
+  "@mwRelationWatching": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwIncludeDone": "Include done",
+  "@mwIncludeDone": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwEmpty": "Nothing assigned or watched",
+  "@mwEmpty": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwEmptyHint": "Tasks assigned to you or that you watch show up here.",
+  "@mwEmptyHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwNoMatch": "No tasks match your filter",
+  "@mwNoMatch": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwClearFilter": "Clear filter",
+  "@mwClearFilter": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwLoadMore": "Load more",
+  "@mwLoadMore": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwAssigned": "Assigned",
+  "@mwAssigned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwWatching": "Watching",
+  "@mwWatching": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "mwFailed": "My work could not load.",
+  "@mwFailed": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStepOf": "Step {n} of {total}",
+  "@obStepOf": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "obStarterTitle": "Pick a starter",
+  "@obStarterTitle": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterHint": "Begin with a ready-made project. You can change everything later.",
+  "@obStarterHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterContinue": "Create project",
+  "@obStarterContinue": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterCreating": "Creating your project…",
+  "@obStarterCreating": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterBlank": "Blank project",
+  "@obStarterBlank": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterBlankDesc": "An empty project with the default workflow.",
+  "@obStarterBlankDesc": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterSoftware": "Software team",
+  "@obStarterSoftware": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterSoftwareDesc": "Backlog, board and a release flow, with sample tasks.",
+  "@obStarterSoftwareDesc": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterMarketing": "Marketing",
+  "@obStarterMarketing": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterMarketingDesc": "Campaigns, a content calendar and review stages, with sample tasks.",
+  "@obStarterMarketingDesc": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterBugs": "Bug tracker",
+  "@obStarterBugs": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obStarterBugsDesc": "Report, triage and fix flow, with sample tasks.",
+  "@obStarterBugsDesc": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obInviteTitle": "Invite your team",
+  "@obInviteTitle": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obInviteHint": "Add teammates now, or skip and do it any time from Members.",
+  "@obInviteHint": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obInviteButton": "Invite teammates",
+  "@obInviteButton": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obInviteSkip": "Skip for now",
+  "@obInviteSkip": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "obInviteDone": "Go to your project",
+  "@obInviteDone": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "sampleBadge": "Sample",
+  "@sampleBadge": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "sampleBanner": "This workspace has sample tasks. They are marked Sample and left out of reports.",
+  "@sampleBanner": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "sampleDelete": "Delete sample tasks",
+  "@sampleDelete": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "sampleDeleted": "Sample tasks deleted",
+  "@sampleDeleted": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "sampleDeleteFailed": "Could not delete the sample tasks.",
+  "@sampleDeleteFailed": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "wnTitle": "What's new in {version}",
+  "@wnTitle": {
+    "description": "Phase 48 Home, My work, onboarding.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "wnClose": "Got it",
+  "@wnClose": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "wnHome": "A new Home: your day, your tasks and what needs you, at a glance.",
+  "@wnHome": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "wnMyWork": "My work lists everything assigned to you or that you watch.",
+  "@wnMyWork": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "wnStarters": "Start a workspace from a ready-made project with sample tasks.",
+  "@wnStarters": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "wnStates": "Clearer empty, error, offline and not-found pages everywhere.",
+  "@wnStates": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "dashPinToHome": "Pin to Home",
+  "@dashPinToHome": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "dashUnpinFromHome": "Unpin from Home",
+  "@dashUnpinFromHome": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "dashPinned": "Pinned to Home",
+  "@dashPinned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "dashUnpinned": "Removed from Home",
+  "@dashUnpinned": {
+    "description": "Phase 48 Home, My work, onboarding."
+  },
+  "dashPinFailed": "Could not change the pin.",
+  "@dashPinFailed": {
+    "description": "Phase 48 Home, My work, onboarding."
+  }
 }

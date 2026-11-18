@@ -20,6 +20,8 @@ import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The areas a person can narrow the log to (an action prefix each).
 const auditAreas = <(String, String)>[
@@ -125,11 +127,10 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
       ),
       body: allowed
           ? _Body(filters: _filters, onFilters: _set, onPickDates: _pickDates)
-          : Center(
-              child: Text(
-                context.l10n.grpBAuditDenied,
-                key: const Key('audit-denied'),
-              ),
+          : TfEmpty(
+              key: const Key('audit-denied'),
+              illustration: TfIllustrationKind.noAccess,
+              title: context.l10n.grpBAuditDenied,
             ),
     );
   }
@@ -164,28 +165,20 @@ class _Body extends ConsumerWidget {
         if (state.loading)
           const Center(child: CircularProgressIndicator())
         else if (state.error != null && state.entries.isEmpty)
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  auditErrorMessage(state.error!, context.l10n),
-                  key: const Key('audit-error'),
-                ),
-              ),
-              TextButton(
-                key: const Key('audit-retry'),
-                onPressed: notifier.refresh,
-                child: Text(context.l10n.grpBRetry),
-              ),
-            ],
+          TfError(
+            key: const Key('audit-error'),
+            compact: true,
+            message: auditErrorMessage(state.error!, context.l10n),
+            details: '${state.error}',
+            retryKey: const Key('audit-retry'),
+            onRetry: notifier.refresh,
           )
         else if (state.entries.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              context.l10n.grpBAuditEmpty,
-              key: const Key('audit-empty'),
-            ),
+          TfEmpty(
+            key: const Key('audit-empty'),
+            compact: true,
+            illustration: TfIllustrationKind.docs,
+            title: context.l10n.grpBAuditEmpty,
           )
         else ...[
           for (final e in state.entries)

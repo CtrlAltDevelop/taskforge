@@ -8,6 +8,7 @@ import 'package:taskforge/features/developer/application/developer_providers.dar
 import 'package:taskforge/features/developer/domain/developer.dart';
 import 'package:taskforge/features/developer/presentation/developer_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// A webhook's delivery log: what was sent, what came back, and Resend.
 class DeliveriesScreen extends ConsumerStatefulWidget {
@@ -87,19 +88,16 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
       ),
       body: first.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: TextButton(
-            key: const Key('retry-deliveries'),
-            onPressed: () =>
-                ref.invalidate(deliveriesProvider(widget.webhookId)),
-            child: Text(context.l10n.devRetry),
-          ),
+        error: (e, _) => TfError(
+          details: '$e',
+          retryKey: const Key('retry-deliveries'),
+          onRetry: () => ref.invalidate(deliveriesProvider(widget.webhookId)),
         ),
         data: (page) {
           final rows = [...page.deliveries, ..._more];
           final cursor = _cursor ?? page.cursor;
           if (rows.isEmpty) {
-            return Center(child: Text(context.l10n.devDeliveriesEmpty));
+            return TfEmpty(title: context.l10n.devDeliveriesEmpty);
           }
           return ListView(
             children: [

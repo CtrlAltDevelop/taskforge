@@ -6,7 +6,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/version.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 import 'package:taskforge/features/system/application/system_providers.dart';
+import 'package:taskforge/features/system/presentation/status_screens.dart';
 
 /// Server and client version, and a way to re-check against the server.
 class AboutScreen extends ConsumerWidget {
@@ -78,41 +80,15 @@ class UpdateRequiredScreen extends ConsumerWidget {
     final server = ref.watch(serverVersionProvider).value;
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        body: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 440),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.system_update_alt, size: 56),
-                  const SizedBox(height: 16),
-                  Text(
-                    t.sysUpdateRequiredTitle,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    t.sysUpdateRequiredBody(
-                      clientVersion,
-                      server?.minClientVersion ?? '',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  FilledButton(
-                    key: const Key('update-required-retry'),
-                    onPressed: () => ref.invalidate(serverVersionProvider),
-                    child: Text(t.sysCheckAgain),
-                  ),
-                ],
-              ),
-            ),
-          ),
+      child: StatusPage(
+        kind: TfIllustrationKind.maintenance,
+        title: t.sysUpdateRequiredTitle,
+        body: t.sysUpdateRequiredBody(
+          clientVersion,
+          server?.minClientVersion ?? '',
         ),
+        actionLabel: t.sysCheckAgain,
+        onAction: () => ref.invalidate(serverVersionProvider),
       ),
     );
   }

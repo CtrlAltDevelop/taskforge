@@ -40,6 +40,7 @@ String? validateSignInPassword(String? value, [AppLocalizations? l10n]) =>
 String authErrorMessage(Object error, [AppLocalizations? l10n]) {
   final t = l10n ?? _english();
   return switch (error) {
+    AuthApiException(maintenance: true) => t.sysMaintenanceBody,
     AuthApiException(keyChanged: true) => t.dpopKeyChanged,
     AuthApiException(title: 'INVALID_CREDENTIALS') => t.errWrongCredentials,
     AuthApiException(title: 'RATE_LIMITED' || 'TOO_MANY_ATTEMPTS') =>

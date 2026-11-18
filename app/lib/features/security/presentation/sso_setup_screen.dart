@@ -11,6 +11,7 @@ import 'package:taskforge/features/security/data/security_client.dart';
 import 'package:taskforge/features/security/domain/security.dart';
 import 'package:taskforge/features/security/presentation/code_dialogs.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Admin page: the workspace's OpenID Connect provider (issuer, client id and
 /// secret, allowed domains, group-to-role mapping, "SSO only") with a Test
@@ -36,7 +37,8 @@ class SsoSetupScreen extends ConsumerWidget {
       ),
       body: provider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text(securityErrorMessage(e, t))),
+        error: (e, _) =>
+            TfError(message: securityErrorMessage(e, t), details: '$e'),
         data: (p) => _SsoForm(
           key: ValueKey('${p.version}-${p.configured}'),
           provider: p,

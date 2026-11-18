@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" width="120" height="96">
+<circle cx="60" cy="46" r="42" fill="#ff0003"/>
+<ellipse cx="60" cy="88" rx="34" ry="4" fill="#ff0007"/>
+<rect x="34" y="56" width="52" height="18" rx="5" fill="#ff0005"/>
+<rect x="34" y="56" width="52" height="18" rx="5" fill="none" stroke="#ff0008" stroke-width="1.2"/>
+<circle cx="44" cy="65" r="2.5" fill="#ff000e"/>
+<circle cx="52" cy="65" r="2.5" fill="#ff000d"/>
+<circle cx="66" cy="36" r="13" fill="none" stroke="#ff0001" stroke-width="6"/>
+<circle cx="66" cy="36" r="5" fill="none" stroke="#ff0001" stroke-width="3"/>
+<line x1="80.0" y1="36.0" x2="85.0" y2="36.0" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+<line x1="73.0" y1="48.1" x2="75.5" y2="52.5" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+<line x1="59.0" y1="48.1" x2="56.5" y2="52.5" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+<line x1="52.0" y1="36.0" x2="47.0" y2="36.0" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+<line x1="59.0" y1="23.9" x2="56.5" y2="19.5" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+<line x1="73.0" y1="23.9" x2="75.5" y2="19.5" stroke="#ff0001" stroke-width="5" stroke-linecap="round"/>
+</svg>

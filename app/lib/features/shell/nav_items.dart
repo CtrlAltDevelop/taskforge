@@ -67,6 +67,13 @@ final List<NavItem> navItems = [
     section: NavSection.main,
   ),
   NavItem(
+    id: 'my-work',
+    path: '/my-work',
+    icon: TfIcons.checkAll,
+    labelOf: (l) => l.mwTitle,
+    section: NavSection.main,
+  ),
+  NavItem(
     id: 'inbox',
     path: '/inbox',
     icon: TfIcons.inbox,
@@ -331,6 +338,8 @@ const outsideFrameRoutes = {
   '/f/:token',
   '/invite/:token',
   '/onboarding',
+  '/welcome/starter',
+  '/welcome/invite',
   '/update-required',
 };
 

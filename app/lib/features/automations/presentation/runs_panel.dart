@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 Color statusColor(BuildContext context, RunStatus? s) {
   final scheme = Theme.of(context).colorScheme;
@@ -154,11 +155,10 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
     });
     final runs = ref.watch(automationRunsProvider(_key));
     return switch (runs) {
-      AsyncData(:final value) when value.isEmpty => Center(
-        child: Text(
-          context.l10n.grpGNothingRunYet,
-          key: const Key('runs-empty'),
-        ),
+      AsyncData(:final value) when value.isEmpty => TfEmpty(
+        key: const Key('runs-empty'),
+        compact: true,
+        title: context.l10n.grpGNothingRunYet,
       ),
       AsyncData(:final value) => ListView(
         key: const Key('runs-list'),
@@ -188,20 +188,11 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
             ),
         ],
       ),
-      AsyncError(:final error) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              automationErrorMessage(error, context.l10n),
-              key: const Key('runs-error'),
-            ),
-            TextButton(
-              onPressed: () => ref.invalidate(automationRunsProvider),
-              child: Text(context.l10n.grpGRetry),
-            ),
-          ],
-        ),
+      AsyncError(:final error) => TfError(
+        key: const Key('runs-error'),
+        message: automationErrorMessage(error, context.l10n),
+        details: '$error',
+        onRetry: () => ref.invalidate(automationRunsProvider),
       ),
       _ => const Center(child: CircularProgressIndicator()),
     };

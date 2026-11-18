@@ -8920,4 +8920,433 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tdUnsavedDraft => 'مسودة غير محفوظة';
+
+  @override
+  String get illusTasks => 'قائمة مهام';
+
+  @override
+  String get illusBoard => 'لوحة بثلاثة أعمدة من البطاقات';
+
+  @override
+  String get illusCalendar => 'تقويم مع يوم محدد';
+
+  @override
+  String get illusTimeline => 'أشرطة على جدول زمني';
+
+  @override
+  String get illusDocs => 'صفحة مكتوبة';
+
+  @override
+  String get illusChat => 'فقاعتا محادثة';
+
+  @override
+  String get illusInbox => 'صندوق وارد مع رسالة';
+
+  @override
+  String get illusSearch => 'عدسة مكبرة';
+
+  @override
+  String get illusGoals => 'هدف مع سهم';
+
+  @override
+  String get illusTime => 'ساعة';
+
+  @override
+  String get illusNoAccess => 'قفل مغلق';
+
+  @override
+  String get illusOffline => 'سحابة مشطوبة';
+
+  @override
+  String get illusNotFound => 'صفحة مع عدسة مكبرة';
+
+  @override
+  String get illusMaintenance => 'ترس على خادم';
+
+  @override
+  String get illusGeneric => 'بطاقة وملاحظة';
+
+  @override
+  String get errTitle => 'حدث خطأ ما';
+
+  @override
+  String get errRetry => 'أعد المحاولة';
+
+  @override
+  String get errCopyDetails => 'نسخ التفاصيل';
+
+  @override
+  String get errCopied => 'تم نسخ التفاصيل';
+
+  @override
+  String get sysGoHome => 'الانتقال إلى الرئيسية';
+
+  @override
+  String get sysNotFoundTitle => 'لا يمكننا العثور على هذه الصفحة';
+
+  @override
+  String get sysNotFoundBody =>
+      'قد يكون الرابط قديمًا، أو نُقلت الصفحة أو حُذفت.';
+
+  @override
+  String get sysNoAccessTitle => 'ليس لديك صلاحية الوصول';
+
+  @override
+  String get sysNoAccessBody =>
+      'اطلب من مسؤول مساحة العمل منحك الصلاحية، أو انتقل إلى مساحة عمل أخرى.';
+
+  @override
+  String get sysOfflineTitle => 'أنت غير متصل';
+
+  @override
+  String get sysOfflineBody =>
+      'تحقق من اتصالك. تُحفظ تغييراتك هنا وتُرسل عند عودة الاتصال.';
+
+  @override
+  String get sysMaintenanceTitle => 'سنعود بعد قليل';
+
+  @override
+  String get sysMaintenanceBody =>
+      'يجري تحديث TaskForge. عملك آمن. حاول مرة أخرى بعد بضع دقائق.';
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'صباح الخير، $name';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'طاب يومك، $name';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'مساء الخير، $name';
+  }
+
+  @override
+  String get homeGreetMorningAnon => 'صباح الخير';
+
+  @override
+  String get homeGreetAfternoonAnon => 'طاب يومك';
+
+  @override
+  String get homeGreetEveningAnon => 'مساء الخير';
+
+  @override
+  String get homeCustomize => 'تخصيص';
+
+  @override
+  String get homeCustomizeTitle => 'تخصيص الصفحة الرئيسية';
+
+  @override
+  String get homeCustomizeHint =>
+      'أظهر البطاقات أو أخفِها أو أعد ترتيبها. يُحفظ هذا على هذا الجهاز.';
+
+  @override
+  String get homeReset => 'إعادة ضبط';
+
+  @override
+  String get homeAllHidden => 'جميع البطاقات مخفية';
+
+  @override
+  String get homeCardHide => 'إخفاء البطاقة';
+
+  @override
+  String get homeCardMenu => 'خيارات البطاقة';
+
+  @override
+  String get homeCardMoveUp => 'نقل لأعلى';
+
+  @override
+  String get homeCardMoveDown => 'نقل لأسفل';
+
+  @override
+  String get homeCardChecklist => 'البدء';
+
+  @override
+  String get homeCardToday => 'اليوم';
+
+  @override
+  String get homeCardAssigned => 'المسندة إليّ';
+
+  @override
+  String get homeCardMentions => 'الإشارات والدردشة غير المقروءة';
+
+  @override
+  String get homeCardRecent => 'الأخيرة';
+
+  @override
+  String get homeCardTime => 'وقت هذا الأسبوع';
+
+  @override
+  String get homeCardPinned => 'لوحات المعلومات المثبتة';
+
+  @override
+  String get homeCardFailed => 'تعذر تحميل هذه البطاقة.';
+
+  @override
+  String homeStale(String time) {
+    return 'غير متصل: تُعرض النسخة المحفوظة من $time';
+  }
+
+  @override
+  String get homeStaleNoTime => 'غير متصل: تُعرض النسخة المحفوظة';
+
+  @override
+  String get homeTodayEmpty => 'لا شيء مستحق اليوم';
+
+  @override
+  String get homeTodayEmptyHint =>
+      'تظهر هنا المهام المستحقة اليوم أو المتأخرة.';
+
+  @override
+  String get homeStatToday => 'مستحق اليوم';
+
+  @override
+  String get homeStatOverdue => 'متأخرة';
+
+  @override
+  String get homeStatInProgress => 'قيد التنفيذ';
+
+  @override
+  String homeOverdueOn(String date) {
+    return 'متأخرة · $date';
+  }
+
+  @override
+  String get homeAssignedEmpty => 'لا شيء مسند إليك';
+
+  @override
+  String get homeAssignedEmptyHint =>
+      'تظهر هنا المهام المسندة إليك، مجمّعة حسب المشروع.';
+
+  @override
+  String get homeSeeAll => 'عرض الكل';
+
+  @override
+  String get homeStatusFailed => 'تعذر تغيير الحالة.';
+
+  @override
+  String get homeRecentEmpty => 'لم يُفتح شيء بعد';
+
+  @override
+  String get homeRecentEmptyHint => 'تظهر هنا المهام التي تفتحها.';
+
+  @override
+  String get homeMentionsEmpty => 'لا إشارات ولا دردشة غير مقروءة';
+
+  @override
+  String get homeMentionsEmptyHint => 'لقد اطلعت على كل شيء.';
+
+  @override
+  String get homeUnreadNotifications => 'إشعارات غير مقروءة';
+
+  @override
+  String get homeUnreadChat => 'دردشة غير مقروءة';
+
+  @override
+  String get homeOpenInbox => 'فتح البريد الوارد';
+
+  @override
+  String get homeMentionRow => 'أشار إليك';
+
+  @override
+  String get homeTimeEmpty => 'لم يُسجَّل وقت هذا الأسبوع';
+
+  @override
+  String get homeTimeEmptyHint => 'ابدأ مؤقتًا على مهمة لترى أسبوعك هنا.';
+
+  @override
+  String get homeTimeOpen => 'فتح سجل الوقت';
+
+  @override
+  String homeTimeTotal(String total) {
+    return 'تم تسجيل $total في آخر 7 أيام';
+  }
+
+  @override
+  String homeTimeBar(String day, String time) {
+    return '$day: $time';
+  }
+
+  @override
+  String get homePinnedEmpty => 'لا توجد لوحات معلومات مثبتة';
+
+  @override
+  String get homePinnedEmptyHint => 'ثبّت لوحة معلومات لتبقى في متناول يدك.';
+
+  @override
+  String get homePinnedOpen => 'فتح لوحات المعلومات';
+
+  @override
+  String get homeCheckDismiss => 'تجاهل';
+
+  @override
+  String homeCheckProgress(String done, String total) {
+    return 'تم إنجاز $done من $total';
+  }
+
+  @override
+  String get homeStepCreateTask => 'أنشئ مهمة';
+
+  @override
+  String get homeStepInvite => 'ادعُ شخصًا';
+
+  @override
+  String get homeStepBoard => 'جرّب اللوحة';
+
+  @override
+  String get homeStepPalette => 'افتح لوحة الأوامر (Cmd أو Ctrl + K)';
+
+  @override
+  String get mwTitle => 'عملي';
+
+  @override
+  String get mwRelationBoth => 'المسندة والمتابَعة';
+
+  @override
+  String get mwRelationAssigned => 'المسندة إليّ';
+
+  @override
+  String get mwRelationWatching => 'أتابعها';
+
+  @override
+  String get mwIncludeDone => 'تضمين المنجزة';
+
+  @override
+  String get mwEmpty => 'لا شيء مسند أو متابَع';
+
+  @override
+  String get mwEmptyHint => 'تظهر هنا المهام المسندة إليك أو التي تتابعها.';
+
+  @override
+  String get mwNoMatch => 'لا مهام تطابق عامل التصفية';
+
+  @override
+  String get mwClearFilter => 'مسح عامل التصفية';
+
+  @override
+  String get mwLoadMore => 'تحميل المزيد';
+
+  @override
+  String get mwAssigned => 'مسندة';
+
+  @override
+  String get mwWatching => 'متابَعة';
+
+  @override
+  String get mwFailed => 'تعذر تحميل عملي.';
+
+  @override
+  String obStepOf(String n, String total) {
+    return 'الخطوة $n من $total';
+  }
+
+  @override
+  String get obStarterTitle => 'اختر نقطة بداية';
+
+  @override
+  String get obStarterHint => 'ابدأ بمشروع جاهز. يمكنك تغيير كل شيء لاحقًا.';
+
+  @override
+  String get obStarterContinue => 'إنشاء المشروع';
+
+  @override
+  String get obStarterCreating => 'جارٍ إنشاء مشروعك…';
+
+  @override
+  String get obStarterBlank => 'مشروع فارغ';
+
+  @override
+  String get obStarterBlankDesc => 'مشروع فارغ بسير العمل الافتراضي.';
+
+  @override
+  String get obStarterSoftware => 'فريق البرمجيات';
+
+  @override
+  String get obStarterSoftwareDesc =>
+      'قائمة مهام متراكمة ولوحة ومسار إصدار، مع مهام نموذجية.';
+
+  @override
+  String get obStarterMarketing => 'التسويق';
+
+  @override
+  String get obStarterMarketingDesc =>
+      'حملات وتقويم محتوى ومراحل مراجعة، مع مهام نموذجية.';
+
+  @override
+  String get obStarterBugs => 'متتبع الأخطاء';
+
+  @override
+  String get obStarterBugsDesc =>
+      'مسار الإبلاغ والفرز والإصلاح، مع مهام نموذجية.';
+
+  @override
+  String get obInviteTitle => 'ادعُ فريقك';
+
+  @override
+  String get obInviteHint =>
+      'أضف زملاءك الآن، أو تخطَّ ذلك وافعله في أي وقت من الأعضاء.';
+
+  @override
+  String get obInviteButton => 'دعوة الزملاء';
+
+  @override
+  String get obInviteSkip => 'تخطَّ الآن';
+
+  @override
+  String get obInviteDone => 'انتقل إلى مشروعك';
+
+  @override
+  String get sampleBadge => 'نموذج';
+
+  @override
+  String get sampleBanner =>
+      'تحتوي مساحة العمل هذه على مهام نموذجية. هي موسومة «نموذج» ولا تدخل في التقارير.';
+
+  @override
+  String get sampleDelete => 'حذف المهام النموذجية';
+
+  @override
+  String get sampleDeleted => 'حُذفت المهام النموذجية';
+
+  @override
+  String get sampleDeleteFailed => 'تعذر حذف المهام النموذجية.';
+
+  @override
+  String wnTitle(String version) {
+    return 'الجديد في $version';
+  }
+
+  @override
+  String get wnClose => 'حسنًا';
+
+  @override
+  String get wnHome => 'صفحة رئيسية جديدة: يومك ومهامك وما يحتاج إليك في لمحة.';
+
+  @override
+  String get wnMyWork => 'يعرض «عملي» كل ما أُسند إليك أو تتابعه.';
+
+  @override
+  String get wnStarters => 'ابدأ مساحة عمل من مشروع جاهز مع مهام نموذجية.';
+
+  @override
+  String get wnStates =>
+      'صفحات أوضح للحالات الفارغة والأخطاء وعدم الاتصال وعدم العثور في كل مكان.';
+
+  @override
+  String get dashPinToHome => 'تثبيت في الصفحة الرئيسية';
+
+  @override
+  String get dashUnpinFromHome => 'إلغاء التثبيت من الصفحة الرئيسية';
+
+  @override
+  String get dashPinned => 'تم التثبيت في الصفحة الرئيسية';
+
+  @override
+  String get dashUnpinned => 'أُزيل من الصفحة الرئيسية';
+
+  @override
+  String get dashPinFailed => 'تعذر تغيير التثبيت.';
 }

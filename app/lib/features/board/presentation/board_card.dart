@@ -17,6 +17,7 @@ import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart'
     show ProgressRing;
+import 'package:taskforge/features/home/presentation/sample_badge.dart';
 
 /// What is being dragged: a card and the lane it came from (a card only
 /// drops inside its own lane).
@@ -101,6 +102,10 @@ class BoardCard extends StatelessWidget {
                       if (task.isBlocked) ...[
                         const SizedBox(width: TfSpace.xs),
                         BlockedBadge(blockedBy: task.blockedBy),
+                      ],
+                      if (task.isSample) ...[
+                        const SizedBox(width: TfSpace.xs),
+                        const SampleBadge(),
                       ],
                       const Spacer(),
                       if (onMoveTo != null && moveChoices.isNotEmpty)

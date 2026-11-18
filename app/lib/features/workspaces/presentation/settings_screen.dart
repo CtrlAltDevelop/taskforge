@@ -14,6 +14,7 @@ import 'package:taskforge/features/workspaces/presentation/danger_zone.dart';
 import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
 import 'package:taskforge/features/workspaces/presentation/recently_deleted.dart';
 import 'package:taskforge/features/workspaces/presentation/workspace_logo.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 class WorkspaceSettingsScreen extends ConsumerWidget {
   const WorkspaceSettingsScreen({super.key});
@@ -33,15 +34,13 @@ class WorkspaceSettingsScreen extends ConsumerWidget {
         title: Text(context.l10n.grpEWorkspaceSettingsTitle),
       ),
       body: workspace == null
-          ? Center(
-              child: failed
-                  ? TextButton(
-                      key: const Key('retry-workspaces'),
-                      onPressed: () => ref.invalidate(workspacesProvider),
-                      child: Text(context.l10n.grpEWorkspacesLoadRetry),
-                    )
-                  : const CircularProgressIndicator(),
-            )
+          ? failed
+                ? TfError(
+                    message: context.l10n.grpEWorkspacesLoadRetry,
+                    retryKey: const Key('retry-workspaces'),
+                    onRetry: () => ref.invalidate(workspacesProvider),
+                  )
+                : const Center(child: CircularProgressIndicator())
           : ContentWidth(
               child: ListView(
                 padding: const EdgeInsets.all(16),

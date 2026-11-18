@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/imports/application/imports_providers.dart';
 import 'package:taskforge/features/imports/domain/imports.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Rows that could not be read, and warnings, most useful first (errors
 /// before warnings), capped; [total] is how many there are in all.
@@ -69,7 +70,12 @@ class ImportProblems extends ConsumerWidget {
     final detail = ref.watch(importDetailProvider(jobId));
     return detail.when(
       loading: () => const LinearProgressIndicator(),
-      error: (_, _) => Text(context.l10n.grpGNotesReadFailed),
+      error: (e, _) => TfError(
+        compact: true,
+        message: context.l10n.grpGNotesReadFailed,
+        details: '$e',
+        onRetry: () => ref.invalidate(importDetailProvider(jobId)),
+      ),
       data: (d) => ProblemsList(problems: d.problems, total: count),
     );
   }

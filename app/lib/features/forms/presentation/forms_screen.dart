@@ -11,6 +11,7 @@ import 'package:taskforge/features/forms/domain/forms.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 void sayForms(BuildContext context, String text) =>
     ScaffoldMessenger.of(context)
@@ -143,18 +144,11 @@ class FormsScreen extends ConsumerWidget {
       ),
       body: forms.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(formsErrorMessage(e, context.l10n)),
-              TextButton(
-                key: const Key('retry-forms'),
-                onPressed: () => ref.invalidate(formsProvider),
-                child: Text(context.l10n.devRetry),
-              ),
-            ],
-          ),
+        error: (e, _) => TfError(
+          message: formsErrorMessage(e, context.l10n),
+          details: '$e',
+          retryKey: const Key('retry-forms'),
+          onRetry: () => ref.invalidate(formsProvider),
         ),
         data: (rows) => ListView(
           padding: const EdgeInsets.all(16),

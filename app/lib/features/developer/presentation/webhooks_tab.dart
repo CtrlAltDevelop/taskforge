@@ -11,6 +11,7 @@ import 'package:taskforge/features/developer/presentation/developer_screen.dart'
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 class WebhooksTab extends ConsumerWidget {
   const WebhooksTab({super.key});
@@ -93,22 +94,13 @@ class WebhooksTab extends ConsumerWidget {
     final hooks = ref.watch(webhooksProvider);
     return hooks.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              e is DeveloperException && e.failure == DeveloperFailure.denied
-                  ? context.l10n.devWebhooksDenied
-                  : developerErrorMessage(e, context.l10n),
-            ),
-            TextButton(
-              key: const Key('retry-webhooks'),
-              onPressed: () => ref.invalidate(webhooksProvider),
-              child: Text(context.l10n.devRetry),
-            ),
-          ],
-        ),
+      error: (e, _) => TfError(
+        message: e is DeveloperException && e.failure == DeveloperFailure.denied
+            ? context.l10n.devWebhooksDenied
+            : developerErrorMessage(e, context.l10n),
+        details: '$e',
+        retryKey: const Key('retry-webhooks'),
+        onRetry: () => ref.invalidate(webhooksProvider),
       ),
       data: (rows) => ListView(
         padding: const EdgeInsets.all(16),

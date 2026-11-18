@@ -14,6 +14,8 @@ import 'package:taskforge/features/projects/application/projects_providers.dart'
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// A project's rules and their run history.
 class AutomationsScreen extends ConsumerStatefulWidget {
@@ -77,11 +79,10 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
         ),
       ),
       body: switch (project) {
-        null when catalog.hasValue => Center(
-          child: Text(
-            context.l10n.grpCAutoMissing,
-            key: const Key('automations-missing'),
-          ),
+        null when catalog.hasValue => TfEmpty(
+          key: const Key('automations-missing'),
+          illustration: TfIllustrationKind.notFound,
+          title: context.l10n.grpCAutoMissing,
         ),
         null => const Center(child: CircularProgressIndicator()),
         _ => _body(context),
@@ -176,15 +177,9 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     AsyncValue<List<Automation>> rules,
     bool canManage,
   ) => switch (rules) {
-    AsyncData(:final value) when value.isEmpty => Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Text(
-          context.l10n.grpCAutoEmpty,
-          key: const Key('automations-empty'),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    AsyncData(:final value) when value.isEmpty => TfEmpty(
+      key: const Key('automations-empty'),
+      title: context.l10n.grpCAutoEmpty,
     ),
     AsyncData(:final value) => ListView(
       key: const Key('automations-list'),
@@ -210,20 +205,11 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
           ),
       ],
     ),
-    AsyncError(:final error) => Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            automationErrorMessage(error, context.l10n),
-            key: const Key('automations-error'),
-          ),
-          TextButton(
-            onPressed: () => ref.invalidate(automationsProvider),
-            child: Text(context.l10n.grpCRetry),
-          ),
-        ],
-      ),
+    AsyncError(:final error) => TfError(
+      key: const Key('automations-error'),
+      message: automationErrorMessage(error, context.l10n),
+      details: '$error',
+      onRetry: () => ref.invalidate(automationsProvider),
     ),
     _ => const Center(child: CircularProgressIndicator()),
   };

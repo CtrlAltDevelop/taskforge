@@ -10,6 +10,7 @@ import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
 import 'package:taskforge/features/account/device_privacy_note.dart';
 import 'package:taskforge/features/auth/validators.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 class SessionsScreen extends ConsumerWidget {
   const SessionsScreen({super.key});
@@ -75,11 +76,9 @@ class SessionsScreen extends ConsumerWidget {
           ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(sessionsProvider),
-            child: Text(context.l10n.grpIRetry),
-          ),
+        error: (e, _) => TfError(
+          details: '$e',
+          onRetry: () => ref.invalidate(sessionsProvider),
         ),
       ),
     );

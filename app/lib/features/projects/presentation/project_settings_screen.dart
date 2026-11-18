@@ -13,6 +13,10 @@ import 'package:taskforge/features/projects/presentation/archived_banner.dart';
 import 'package:taskforge/features/projects/presentation/features_section.dart';
 import 'package:taskforge/features/projects/presentation/general_section.dart';
 import 'package:taskforge/features/projects/presentation/members_section.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/features/projects/domain/project_access.dart';
+import 'package:taskforge/features/system/presentation/status_screens.dart';
 
 class ProjectSettingsScreen extends ConsumerWidget {
   const ProjectSettingsScreen({super.key, required this.projectId});
@@ -38,17 +42,16 @@ class ProjectSettingsScreen extends ConsumerWidget {
           project: p,
           featureInfo: catalog.value?.featureInfo ?? const [],
         ),
-        null when catalog.hasError => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(projectsProvider),
-            child: Text(context.l10n.grpHLoadProjectRetry),
-          ),
+        null when isDenied(catalog.error) => const NoAccessScreen(),
+        null when catalog.hasError => TfError(
+          message: context.l10n.grpHLoadProjectRetry,
+          details: '${catalog.error}',
+          onRetry: () => ref.invalidate(projectsProvider),
         ),
-        null when catalog.hasValue => Center(
-          child: Text(
-            context.l10n.grpHProjectNotFound,
-            key: const Key('project-missing'),
-          ),
+        null when catalog.hasValue => TfEmpty(
+          key: const Key('project-missing'),
+          illustration: TfIllustrationKind.notFound,
+          title: context.l10n.grpHProjectNotFound,
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

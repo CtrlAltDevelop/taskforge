@@ -8805,4 +8805,439 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get tdUnsavedDraft => 'نه خوندي شوی مسوده';
+
+  @override
+  String get illusTasks => 'د دندو لیست';
+
+  @override
+  String get illusBoard => 'درې ستونونو سره د کارتونو تخته';
+
+  @override
+  String get illusCalendar => 'یوه ورځ نخښه شوې تقویم';
+
+  @override
+  String get illusTimeline => 'د مهالویش پر کرښه پټۍ';
+
+  @override
+  String get illusDocs => 'یوه لیکل شوې پاڼه';
+
+  @override
+  String get illusChat => 'دوه د خبرو بلبلې';
+
+  @override
+  String get illusInbox => 'د ان‌باکس پیالې سره یو پیغام';
+
+  @override
+  String get illusSearch => 'لوپه';
+
+  @override
+  String get illusGoals => 'نښه د غشي سره';
+
+  @override
+  String get illusTime => 'یوه ساعت';
+
+  @override
+  String get illusNoAccess => 'تړل شوی قفل';
+
+  @override
+  String get illusOffline => 'یوه ورېځ چې کرښه پرې ایستل شوې';
+
+  @override
+  String get illusNotFound => 'یوه پاڼه د لوپې سره';
+
+  @override
+  String get illusMaintenance => 'پر سرور یو غاښ‌چرخ';
+
+  @override
+  String get illusGeneric => 'یو کارت او یادښت';
+
+  @override
+  String get errTitle => 'یوه ستونزه رامنځته شوه';
+
+  @override
+  String get errRetry => 'بیا هڅه وکړئ';
+
+  @override
+  String get errCopyDetails => 'توضیحات کاپي کړئ';
+
+  @override
+  String get errCopied => 'توضیحات کاپي شول';
+
+  @override
+  String get sysGoHome => 'کور ته لاړ شئ';
+
+  @override
+  String get sysNotFoundTitle => 'دا پاڼه ونه موندل شوه';
+
+  @override
+  String get sysNotFoundBody =>
+      'ښایي لینک زوړ وي، یا پاڼه ځای پر ځای شوې یا ړنګه شوې وي.';
+
+  @override
+  String get sysNoAccessTitle => 'تاسو لاسرسی نه لرئ';
+
+  @override
+  String get sysNoAccessBody =>
+      'د کاري ځای له مدیر وغواړئ چې لاسرسی درکړي، یا بل کاري ځای ته لاړ شئ.';
+
+  @override
+  String get sysOfflineTitle => 'تاسو آفلاین یاست';
+
+  @override
+  String get sysOfflineBody =>
+      'خپل اړیکه وګورئ. ستاسو بدلونونه دلته ساتل کیږي او کله چې بیرته وصل شئ لیږل کیږي.';
+
+  @override
+  String get sysMaintenanceTitle => 'ژر بیرته راځو';
+
+  @override
+  String get sysMaintenanceBody =>
+      'TaskForge تازه کیږي. ستاسو کار خوندي دی. څو دقیقې وروسته بیا هڅه وکړئ.';
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'سهار مو پخیر، $name';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'ماسپښین مو پخیر، $name';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'ماښام مو پخیر، $name';
+  }
+
+  @override
+  String get homeGreetMorningAnon => 'سهار مو پخیر';
+
+  @override
+  String get homeGreetAfternoonAnon => 'ماسپښین مو پخیر';
+
+  @override
+  String get homeGreetEveningAnon => 'ماښام مو پخیر';
+
+  @override
+  String get homeCustomize => 'دودیز کړئ';
+
+  @override
+  String get homeCustomizeTitle => 'کورپاڼه دودیز کړئ';
+
+  @override
+  String get homeCustomizeHint =>
+      'کارتونه ښکاره کړئ، پټ کړئ یا یې ترتیب بدل کړئ. دا په همدې وسیله کې خوندي کیږي.';
+
+  @override
+  String get homeReset => 'بیا تنظیم';
+
+  @override
+  String get homeAllHidden => 'ټول کارتونه پټ دي';
+
+  @override
+  String get homeCardHide => 'کارت پټ کړئ';
+
+  @override
+  String get homeCardMenu => 'د کارت اختیارونه';
+
+  @override
+  String get homeCardMoveUp => 'پورته یې کړئ';
+
+  @override
+  String get homeCardMoveDown => 'ښکته یې کړئ';
+
+  @override
+  String get homeCardChecklist => 'پیل';
+
+  @override
+  String get homeCardToday => 'نن';
+
+  @override
+  String get homeCardAssigned => 'ماته سپارل شوي';
+
+  @override
+  String get homeCardMentions => 'یادونې او نالوستل شوې خبرې';
+
+  @override
+  String get homeCardRecent => 'وروستي';
+
+  @override
+  String get homeCardTime => 'د دې اونۍ وخت';
+
+  @override
+  String get homeCardPinned => 'ځوړند شوي ډشبوردونه';
+
+  @override
+  String get homeCardFailed => 'دا کارت پورته نه شو.';
+
+  @override
+  String homeStale(String time) {
+    return 'آفلاین: له $time خوندي شوې کاپي ښودل کیږي';
+  }
+
+  @override
+  String get homeStaleNoTime => 'آفلاین: خوندي شوې کاپي ښودل کیږي';
+
+  @override
+  String get homeTodayEmpty => 'نن هیڅ ټاکلی وخت نشته';
+
+  @override
+  String get homeTodayEmptyHint => 'نن یا ځنډیدلې دندې دلته ښکاري.';
+
+  @override
+  String get homeStatToday => 'نن ټاکلی';
+
+  @override
+  String get homeStatOverdue => 'ځنډیدلې';
+
+  @override
+  String get homeStatInProgress => 'روانې';
+
+  @override
+  String homeOverdueOn(String date) {
+    return 'ځنډیدلې · $date';
+  }
+
+  @override
+  String get homeAssignedEmpty => 'تاسو ته هیڅ نه دي سپارل شوي';
+
+  @override
+  String get homeAssignedEmptyHint =>
+      'تاسو ته سپارل شوې دندې دلته د پروژې له مخې ښکاري.';
+
+  @override
+  String get homeSeeAll => 'ټول وګورئ';
+
+  @override
+  String get homeStatusFailed => 'حالت بدل نه شو.';
+
+  @override
+  String get homeRecentEmpty => 'تر اوسه څه نه دي پرانیستل شوي';
+
+  @override
+  String get homeRecentEmptyHint => 'هغه دندې چې پرانیزئ دلته ښکاري.';
+
+  @override
+  String get homeMentionsEmpty => 'هېڅ یادونه یا نالوستل شوې خبرې نشته';
+
+  @override
+  String get homeMentionsEmptyHint => 'تاسو ټول وګورل.';
+
+  @override
+  String get homeUnreadNotifications => 'نالوستل شوې خبرتیاوې';
+
+  @override
+  String get homeUnreadChat => 'نالوستل شوې خبرې';
+
+  @override
+  String get homeOpenInbox => 'ان‌باکس پرانیزئ';
+
+  @override
+  String get homeMentionRow => 'ستاسو یادونه وکړه';
+
+  @override
+  String get homeTimeEmpty => 'پدې اونۍ کې هېڅ وخت نه دی ثبت شوی';
+
+  @override
+  String get homeTimeEmptyHint =>
+      'په یوه دنده وخت‌شمیر پیل کړئ ترڅو خپله اونۍ دلته وګورئ.';
+
+  @override
+  String get homeTimeOpen => 'د وخت جدول پرانیزئ';
+
+  @override
+  String homeTimeTotal(String total) {
+    return 'په تېرو ۷ ورځو کې $total ثبت شوی';
+  }
+
+  @override
+  String homeTimeBar(String day, String time) {
+    return '$day: $time';
+  }
+
+  @override
+  String get homePinnedEmpty => 'هېڅ ځوړند شوي ډشبورډ نشته';
+
+  @override
+  String get homePinnedEmptyHint =>
+      'یو ډشبورډ ځوړند کړئ ترڅو تل ستاسو په لاس کې وي.';
+
+  @override
+  String get homePinnedOpen => 'ډشبوردونه پرانیزئ';
+
+  @override
+  String get homeCheckDismiss => 'لرې کول';
+
+  @override
+  String homeCheckProgress(String done, String total) {
+    return '$done له $total څخه بشپړ شوي';
+  }
+
+  @override
+  String get homeStepCreateTask => 'یوه دنده جوړه کړئ';
+
+  @override
+  String get homeStepInvite => 'یو څوک ور وغواړئ';
+
+  @override
+  String get homeStepBoard => 'تخته ازمایئ';
+
+  @override
+  String get homeStepPalette => 'د قوماندو پالټ پرانیزئ (Cmd یا Ctrl + K)';
+
+  @override
+  String get mwTitle => 'زما کار';
+
+  @override
+  String get mwRelationBoth => 'سپارل شوي او تعقیب شوي';
+
+  @override
+  String get mwRelationAssigned => 'ماته سپارل شوي';
+
+  @override
+  String get mwRelationWatching => 'تعقیب شوي';
+
+  @override
+  String get mwIncludeDone => 'بشپړ شوي هم ولري';
+
+  @override
+  String get mwEmpty => 'هېڅ نه دي سپارل شوي یا تعقیب شوي';
+
+  @override
+  String get mwEmptyHint =>
+      'هغه دندې چې تاسو ته سپارل شوې یا تعقیبوئ یې دلته ښکاري.';
+
+  @override
+  String get mwNoMatch => 'ستاسو فلټر سره هېڅ دنده نه جوړیږي';
+
+  @override
+  String get mwClearFilter => 'فلټر پاک کړئ';
+
+  @override
+  String get mwLoadMore => 'نور پورته کړئ';
+
+  @override
+  String get mwAssigned => 'سپارل شوې';
+
+  @override
+  String get mwWatching => 'تعقیب';
+
+  @override
+  String get mwFailed => 'زما کار پورته نه شو.';
+
+  @override
+  String obStepOf(String n, String total) {
+    return '$n ګام له $total څخه';
+  }
+
+  @override
+  String get obStarterTitle => 'یو پیل انتخاب کړئ';
+
+  @override
+  String get obStarterHint =>
+      'د یو چمتو پروژې سره پیل وکړئ. تاسو کولی شئ ټول څه وروسته بدل کړئ.';
+
+  @override
+  String get obStarterContinue => 'پروژه جوړه کړئ';
+
+  @override
+  String get obStarterCreating => 'ستاسو پروژه جوړیږي…';
+
+  @override
+  String get obStarterBlank => 'تش پروژه';
+
+  @override
+  String get obStarterBlankDesc => 'د ډیفالټ کاري بهیر سره یوه تشه پروژه.';
+
+  @override
+  String get obStarterSoftware => 'د سافټویر ټیم';
+
+  @override
+  String get obStarterSoftwareDesc =>
+      'بیکلاګ، تخته او د خپرولو بهیر، د نمونې دندو سره.';
+
+  @override
+  String get obStarterMarketing => 'بازارموندنه';
+
+  @override
+  String get obStarterMarketingDesc =>
+      'کمپاینونه، د منځپانګې کلیز او د بیاکتنې پړاوونه، د نمونې دندو سره.';
+
+  @override
+  String get obStarterBugs => 'د بګ تعقیبوونکی';
+
+  @override
+  String get obStarterBugsDesc =>
+      'د راپور، ترتیبولو او سمولو بهیر، د نمونې دندو سره.';
+
+  @override
+  String get obInviteTitle => 'خپل ټیم وغواړئ';
+
+  @override
+  String get obInviteHint =>
+      'اوس ډله‌ییز غړي اضافه کړئ، یا یې پریږدئ او هر وخت له غړو څخه یې وکړئ.';
+
+  @override
+  String get obInviteButton => 'ډله‌ییز غړي وغواړئ';
+
+  @override
+  String get obInviteSkip => 'همدا اوس پریږدئ';
+
+  @override
+  String get obInviteDone => 'خپلې پروژې ته لاړ شئ';
+
+  @override
+  String get sampleBadge => 'نمونه';
+
+  @override
+  String get sampleBanner =>
+      'دا کاري ځای د نمونې دندې لري. دا د «نمونه» په نښه شوې او په راپورونو کې نه شاملیږي.';
+
+  @override
+  String get sampleDelete => 'د نمونې دندې ړنګې کړئ';
+
+  @override
+  String get sampleDeleted => 'د نمونې دندې ړنګې شوې';
+
+  @override
+  String get sampleDeleteFailed => 'د نمونې دندې ړنګې نه شوې.';
+
+  @override
+  String wnTitle(String version) {
+    return 'په $version کې نوي څه شته';
+  }
+
+  @override
+  String get wnClose => 'پوه شوم';
+
+  @override
+  String get wnHome =>
+      'نوې کورپاڼه: ستاسو ورځ، دندې او هغه څه چې ستاسو اړتیا لري، په یو نظر.';
+
+  @override
+  String get wnMyWork =>
+      '«زما کار» هر هغه څه لیست کوي چې تاسو ته سپارل شوي یا تعقیبوئ یې.';
+
+  @override
+  String get wnStarters =>
+      'یو کاري ځای د چمتو پروژې او نمونې دندو سره پیل کړئ.';
+
+  @override
+  String get wnStates =>
+      'په هر ځای کې د تشو، خطا، آفلاین او نه موندل شویو پاڼو روښانه کول.';
+
+  @override
+  String get dashPinToHome => 'کورپاڼې ته ځوړند کړئ';
+
+  @override
+  String get dashUnpinFromHome => 'له کورپاڼې څخه یې لرې کړئ';
+
+  @override
+  String get dashPinned => 'کورپاڼې ته ځوړند شو';
+
+  @override
+  String get dashUnpinned => 'له کورپاڼې لرې شو';
+
+  @override
+  String get dashPinFailed => 'ځوړندول بدل نه شو.';
 }

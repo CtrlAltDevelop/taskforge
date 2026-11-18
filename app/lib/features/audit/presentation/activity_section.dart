@@ -7,6 +7,7 @@ import 'package:taskforge/features/audit/application/audit_providers.dart';
 import 'package:taskforge/features/audit/domain/activity_lines.dart';
 import 'package:taskforge/features/audit/domain/audit.dart';
 import 'package:taskforge/features/audit/domain/describe.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// "Activity" in a task's detail: who changed what, newest first, grouped by
 /// day. Collapsed until opened, so closed tasks cost nothing to read.
@@ -63,9 +64,10 @@ class ActivityList extends ConsumerWidget {
       return Padding(
         padding: const EdgeInsets.all(8),
         child: state.error == null
-            ? Text(
-                context.l10n.grpJNoActivity,
+            ? TfEmpty(
                 key: const Key('activity-empty'),
+                compact: true,
+                title: context.l10n.grpJNoActivity,
               )
             : _Failed(
                 error: state.error!,
@@ -162,19 +164,12 @@ class _Failed extends StatelessWidget {
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      Expanded(
-        child: Text(
-          auditErrorMessage(error, context.l10n),
-          key: const Key('activity-error'),
-        ),
-      ),
-      TextButton(
-        key: const Key('activity-retry'),
-        onPressed: onRetry,
-        child: Text(context.l10n.retry),
-      ),
-    ],
+  Widget build(BuildContext context) => TfError(
+    key: const Key('activity-error'),
+    compact: true,
+    message: auditErrorMessage(error, context.l10n),
+    details: '$error',
+    retryKey: const Key('activity-retry'),
+    onRetry: onRetry,
   );
 }

@@ -10,6 +10,8 @@ import 'package:taskforge/features/docs/application/docs_providers.dart';
 import 'package:taskforge/features/docs/domain/doc_blocks.dart';
 import 'package:taskforge/features/docs/domain/docs.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 String _memberName(WidgetRef ref, String userId, String someone) {
   for (final m in ref.watch(membersProvider).value ?? const []) {
@@ -138,11 +140,11 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
   Widget _list() {
     final revisions = ref.watch(docRevisionsProvider(widget.docId));
     return switch (revisions) {
-      AsyncData(:final value) when value.isEmpty => Center(
-        child: Text(
-          context.l10n.grpBNoRevisions,
-          key: const Key('no-revisions'),
-        ),
+      AsyncData(:final value) when value.isEmpty => TfEmpty(
+        key: const Key('no-revisions'),
+        compact: true,
+        illustration: TfIllustrationKind.docs,
+        title: context.l10n.grpBNoRevisions,
       ),
       AsyncData(:final value) => ListView(
         children: [
@@ -167,11 +169,9 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             ),
         ],
       ),
-      AsyncError() => Center(
-        child: TextButton(
-          onPressed: () => ref.invalidate(docRevisionsProvider(widget.docId)),
-          child: Text(context.l10n.grpBRevisionsLoadFailed),
-        ),
+      AsyncError() => TfError(
+        message: context.l10n.grpBRevisionsLoadFailed,
+        onRetry: () => ref.invalidate(docRevisionsProvider(widget.docId)),
       ),
       _ => const Center(child: CircularProgressIndicator()),
     };
@@ -189,7 +189,10 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
             key: const Key('revision-preview'),
             child: switch (body) {
               AsyncData(:final value) => BlockPreview(blocks: value),
-              AsyncError() => Text(context.l10n.grpBRevisionLoadFailed),
+              AsyncError() => TfError(
+                compact: true,
+                message: context.l10n.grpBRevisionLoadFailed,
+              ),
               _ => const Center(child: CircularProgressIndicator()),
             },
           ),

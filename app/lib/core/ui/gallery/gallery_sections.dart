@@ -2,11 +2,13 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_avatar.dart';
+import 'package:taskforge/features/home/presentation/sample_badge.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
 import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 import 'package:taskforge/core/ui/tf/tf_interactive.dart';
 import 'package:taskforge/core/ui/tf/tf_field.dart';
 import 'package:taskforge/core/ui/tf/tf_key_hint.dart';
@@ -312,6 +314,7 @@ List<Widget> gallerySections(
       const TfBadge(count: 4),
       const TfBadge(count: 120),
       const TfBadge(),
+      const SampleBadge(),
     ]),
   ),
   _section(
@@ -494,14 +497,45 @@ List<Widget> gallerySections(
     Column(
       children: [
         const SizedBox(
-          height: 200,
+          height: 320,
           child: TfEmpty(
+            illustration: TfIllustrationKind.tasks,
             title: 'No tasks yet',
             message: 'Create the first one to get going.',
-            icon: TfIcons.list,
             actionLabel: 'New task',
+            docsLabel: 'Learn about tasks',
+            onDocs: _noop,
           ),
         ),
+        const TfEmpty(
+          compact: true,
+          title: 'Nothing here',
+          message: 'Compact, for lists and cards.',
+        ),
+        const SizedBox(
+          height: 120,
+          child: TfEmpty(
+            icon: TfIcons.list,
+            title: 'Icon only (older call sites)',
+          ),
+        ),
+        const SizedBox(
+          height: 320,
+          child: TfError(
+            message: 'We could not load the tasks.',
+            details: 'GrpError(unavailable)',
+            onRetry: _noop,
+          ),
+        ),
+        const TfError(
+          compact: true,
+          message: 'We could not load the tasks.',
+          onRetry: _noop,
+        ),
+        _wrap([
+          for (final kind in TfIllustrationKind.values)
+            TfIllustration(kind, height: 72),
+        ]),
         _wrap(const [
           TfSkeleton(width: 160),
           TfSkeleton(width: 40, height: 40, circle: true),
@@ -511,3 +545,5 @@ List<Widget> gallerySections(
     ),
   ),
 ];
+
+void _noop() {}

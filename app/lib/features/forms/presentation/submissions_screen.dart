@@ -8,6 +8,8 @@ import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/forms/application/forms_providers.dart';
 import 'package:taskforge/features/forms/domain/forms.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// What came in through one form: reference, the task it made, who sent it.
 class SubmissionsScreen extends ConsumerWidget {
@@ -43,21 +45,17 @@ class SubmissionsScreen extends ConsumerWidget {
       ),
       body: page.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(formsErrorMessage(e, context.l10n)),
-              TextButton(
-                key: const Key('retry-submissions'),
-                onPressed: () => ref.invalidate(submissionsProvider(formId)),
-                child: Text(context.l10n.devRetry),
-              ),
-            ],
-          ),
+        error: (e, _) => TfError(
+          message: formsErrorMessage(e, context.l10n),
+          details: '$e',
+          retryKey: const Key('retry-submissions'),
+          onRetry: () => ref.invalidate(submissionsProvider(formId)),
         ),
         data: (data) => data.submissions.isEmpty
-            ? Center(child: Text(context.l10n.formsNoSubmissions))
+            ? TfEmpty(
+                illustration: TfIllustrationKind.docs,
+                title: context.l10n.formsNoSubmissions,
+              )
             : ListView(
                 children: [
                   for (final s in data.submissions)

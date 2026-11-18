@@ -13,6 +13,8 @@ import 'package:taskforge/features/forms/presentation/public_form_page.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 String _newId() =>
     'q${DateTime.now().microsecondsSinceEpoch.toRadixString(36)}';
@@ -37,14 +39,17 @@ class FormBuilderScreen extends ConsumerWidget {
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(
         appBar: TfAppBar(),
-        body: Center(child: Text(formsErrorMessage(e, context.l10n))),
+        body: TfError(message: formsErrorMessage(e, context.l10n)),
       ),
       data: (rows) {
         final found = rows.where((f) => f.id == id).firstOrNull;
         if (found == null) {
           return Scaffold(
             appBar: TfAppBar(),
-            body: Center(child: Text(context.l10n.formsGone)),
+            body: TfEmpty(
+              illustration: TfIllustrationKind.notFound,
+              title: context.l10n.formsGone,
+            ),
           );
         }
         return _Builder(projectId: found.projectId, existing: found);

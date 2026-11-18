@@ -16,6 +16,7 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/time/application/time_providers.dart';
 import 'package:taskforge/features/time/domain/time.dart';
 import 'package:taskforge/features/time/presentation/entry_dialog.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// A week of the caller's time: a row per task, a column per day, totals on
 /// both edges. Tapping a cell opens that task's entries for the day.
@@ -93,19 +94,12 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
                   _Totals(week: _week),
                 ],
               ),
-              AsyncError(:final error) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(timeErrorMessage(error, context.l10n)),
-                    TextButton(
-                      key: const Key('timesheet-retry'),
-                      onPressed: () => ref.invalidate(
-                        timesheetProvider((week: _week, user: _user)),
-                      ),
-                      child: Text(context.l10n.grpARetry),
-                    ),
-                  ],
+              AsyncError(:final error) => TfError(
+                message: timeErrorMessage(error, context.l10n),
+                details: '$error',
+                retryKey: const Key('timesheet-retry'),
+                onRetry: () => ref.invalidate(
+                  timesheetProvider((week: _week, user: _user)),
                 ),
               ),
               _ => const Center(child: CircularProgressIndicator()),
@@ -462,8 +456,10 @@ class _TotalsState extends ConsumerState<_Totals> {
                     ),
                 ],
               ),
-              AsyncError(:final error) => Text(
-                timeErrorMessage(error, context.l10n),
+              AsyncError(:final error) => TfError(
+                compact: true,
+                message: timeErrorMessage(error, context.l10n),
+                details: '$error',
               ),
               _ => const LinearProgressIndicator(),
             },

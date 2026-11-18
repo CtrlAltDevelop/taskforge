@@ -7,6 +7,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// `/invite/:token`. Signed-out visitors never get here: the router sends them
 /// to sign-in with this page as the return path.
@@ -74,14 +75,13 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
             padding: const EdgeInsets.all(24),
             child: preview.when(
               loading: () => const CircularProgressIndicator(),
-              error: (e, _) => _Message(
-                text: inviteErrorMessage(e, context.l10n),
-                action: TextButton(
-                  key: const Key('retry-invite'),
-                  onPressed: () =>
-                      ref.invalidate(invitePreviewProvider(widget.token)),
-                  child: Text(context.l10n.retry),
-                ),
+              error: (e, _) => TfError(
+                compact: true,
+                message: inviteErrorMessage(e, context.l10n),
+                details: '$e',
+                retryKey: const Key('retry-invite'),
+                onRetry: () =>
+                    ref.invalidate(invitePreviewProvider(widget.token)),
               ),
               data: (p) {
                 if (p.state != InviteState.valid) {
@@ -149,22 +149,20 @@ bool _isTerminal(InviteFailure f) =>
     f == InviteFailure.notFound;
 
 class _Message extends StatelessWidget {
-  const _Message({required this.text, this.action});
+  const _Message({required this.text});
 
   final String text;
-  final Widget? action;
 
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
       Text(text, key: const Key('invite-message'), textAlign: TextAlign.center),
-      action ??
-          TextButton(
-            key: const Key('invite-home'),
-            onPressed: () => context.go('/'),
-            child: Text(context.l10n.grpJGoToTaskForge),
-          ),
+      TextButton(
+        key: const Key('invite-home'),
+        onPressed: () => context.go('/'),
+        child: Text(context.l10n.grpJGoToTaskForge),
+      ),
     ],
   );
 }

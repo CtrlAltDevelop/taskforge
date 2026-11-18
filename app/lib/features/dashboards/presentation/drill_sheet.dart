@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The tasks behind a number or one bar of a chart: as many as it counted.
 Future<void> showDrillSheet(
@@ -48,11 +50,11 @@ class DrillDialog extends ConsumerWidget {
         width: 480,
         height: 360,
         child: switch (tasks) {
-          AsyncData(:final value) when value.tasks.isEmpty => Center(
-            child: Text(
-              context.l10n.grpINoTasks,
-              key: const Key('drill-empty'),
-            ),
+          AsyncData(:final value) when value.tasks.isEmpty => TfEmpty(
+            key: const Key('drill-empty'),
+            compact: true,
+            illustration: TfIllustrationKind.goals,
+            title: context.l10n.grpINoTasks,
           ),
           AsyncData(:final value) => ListView(
             children: [
@@ -85,21 +87,12 @@ class DrillDialog extends ConsumerWidget {
                 ),
             ],
           ),
-          AsyncError(:final error) => Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  dashboardErrorMessage(error, context.l10n),
-                  key: const Key('drill-error'),
-                ),
-                TextButton(
-                  key: const Key('drill-retry'),
-                  onPressed: () => ref.invalidate(drilldownProvider(key)),
-                  child: Text(context.l10n.grpIRetry),
-                ),
-              ],
-            ),
+          AsyncError(:final error) => TfError(
+            key: const Key('drill-error'),
+            message: dashboardErrorMessage(error, context.l10n),
+            details: '$error',
+            retryKey: const Key('drill-retry'),
+            onRetry: () => ref.invalidate(drilldownProvider(key)),
           ),
           _ => const Center(child: CircularProgressIndicator()),
         },

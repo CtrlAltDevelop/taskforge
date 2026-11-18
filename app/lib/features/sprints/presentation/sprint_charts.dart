@@ -5,6 +5,8 @@ import 'package:ohlcv_chart/ohlcv_chart.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Burndown of one sprint: remaining work (solid), the ideal line (dashed
 /// look via lighter colour), steps where scope changed, and nothing for days
@@ -32,23 +34,13 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
     final data = ref.watch(burndownProvider(key));
     return switch (data) {
       AsyncData(:final value) => _body(context, value),
-      AsyncError(:final error) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                sprintErrorMessage(error, context.l10n),
-                key: const Key('burndown-error'),
-              ),
-            ),
-            TextButton(
-              key: const Key('burndown-retry'),
-              onPressed: () => ref.invalidate(burndownProvider(key)),
-              child: Text(context.l10n.grpARetry),
-            ),
-          ],
-        ),
+      AsyncError(:final error) => TfError(
+        key: const Key('burndown-error'),
+        compact: true,
+        message: sprintErrorMessage(error, context.l10n),
+        details: '$error',
+        retryKey: const Key('burndown-retry'),
+        onRetry: () => ref.invalidate(burndownProvider(key)),
       ),
       _ => const Padding(
         padding: EdgeInsets.all(24),
@@ -295,12 +287,11 @@ class VelocityPanel extends ConsumerWidget {
     Burndown b,
   ) {
     if (items.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          context.l10n.grpAVelocityEmpty,
-          key: const Key('velocity-empty'),
-        ),
+      return TfEmpty(
+        key: const Key('velocity-empty'),
+        compact: true,
+        illustration: TfIllustrationKind.goals,
+        title: context.l10n.grpAVelocityEmpty,
       );
     }
     return Column(

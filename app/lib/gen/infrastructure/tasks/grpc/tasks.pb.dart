@@ -2152,6 +2152,7 @@ class Task extends $pb.GeneratedMessage {
     $core.String? dueTime,
     $core.String? blockersDue,
     $core.String? blocksDue,
+    $core.bool? isSample,
   }) {
     final result = Task._();
     if (id != null) result.id = id;
@@ -2185,6 +2186,7 @@ class Task extends $pb.GeneratedMessage {
     if (dueTime != null) result.dueTime = dueTime;
     if (blockersDue != null) result.blockersDue = blockersDue;
     if (blocksDue != null) result.blocksDue = blocksDue;
+    if (isSample != null) result.isSample = isSample;
     return result;
   }
 
@@ -2233,6 +2235,7 @@ class Task extends $pb.GeneratedMessage {
     ..aOS(29, _omitFieldNames ? '' : 'dueTime')
     ..aOS(30, _omitFieldNames ? '' : 'blockersDue')
     ..aOS(31, _omitFieldNames ? '' : 'blocksDue')
+    ..aOB(32, _omitFieldNames ? '' : 'isSample')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2515,6 +2518,15 @@ class Task extends $pb.GeneratedMessage {
   $core.bool hasBlocksDue() => $_has(30);
   @$pb.TagNumber(31)
   void clearBlocksDue() => $_clearField(31);
+
+  @$pb.TagNumber(32)
+  $core.bool get isSample => $_getBF(31);
+  @$pb.TagNumber(32)
+  set isSample($core.bool value) => $_setBool(31, value);
+  @$pb.TagNumber(32)
+  $core.bool hasIsSample() => $_has(31);
+  @$pb.TagNumber(32)
+  void clearIsSample() => $_clearField(32);
 }
 
 class TaskBulkUpdateRequest extends $pb.GeneratedMessage {
@@ -3922,6 +3934,7 @@ class TaskResponse extends $pb.GeneratedMessage {
     $core.String? dueTime,
     $core.String? blockersDue,
     $core.String? blocksDue,
+    $core.bool? isSample,
   }) {
     final result = TaskResponse._();
     if (id != null) result.id = id;
@@ -3955,6 +3968,7 @@ class TaskResponse extends $pb.GeneratedMessage {
     if (dueTime != null) result.dueTime = dueTime;
     if (blockersDue != null) result.blockersDue = blockersDue;
     if (blocksDue != null) result.blocksDue = blocksDue;
+    if (isSample != null) result.isSample = isSample;
     return result;
   }
 
@@ -4003,6 +4017,7 @@ class TaskResponse extends $pb.GeneratedMessage {
     ..aOS(29, _omitFieldNames ? '' : 'dueTime')
     ..aOS(30, _omitFieldNames ? '' : 'blockersDue')
     ..aOS(31, _omitFieldNames ? '' : 'blocksDue')
+    ..aOB(32, _omitFieldNames ? '' : 'isSample')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4287,6 +4302,15 @@ class TaskResponse extends $pb.GeneratedMessage {
   $core.bool hasBlocksDue() => $_has(30);
   @$pb.TagNumber(31)
   void clearBlocksDue() => $_clearField(31);
+
+  @$pb.TagNumber(32)
+  $core.bool get isSample => $_getBF(31);
+  @$pb.TagNumber(32)
+  set isSample($core.bool value) => $_setBool(31, value);
+  @$pb.TagNumber(32)
+  $core.bool hasIsSample() => $_has(31);
+  @$pb.TagNumber(32)
+  void clearIsSample() => $_clearField(32);
 }
 
 class TaskRestoreRequest extends $pb.GeneratedMessage {

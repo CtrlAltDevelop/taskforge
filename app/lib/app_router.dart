@@ -15,7 +15,10 @@ import 'package:taskforge/features/templates/domain/templates.dart';
 import 'package:taskforge/features/templates/presentation/templates_screen.dart';
 import 'package:taskforge/features/audit/presentation/audit_screen.dart';
 import 'package:taskforge/features/imports/presentation/import_screen.dart';
-import 'package:taskforge/features/account/home_screen.dart';
+import 'package:taskforge/features/home/presentation/home_screen.dart';
+import 'package:taskforge/features/onboarding/presentation/invite_step.dart';
+import 'package:taskforge/features/onboarding/presentation/starter_screen.dart';
+import 'package:taskforge/features/home/presentation/my_work_screen.dart';
 import 'package:taskforge/features/account/appearance_screen.dart';
 import 'package:taskforge/features/account/language_screen.dart';
 import 'package:taskforge/features/account/sessions_screen.dart';
@@ -59,6 +62,7 @@ import 'package:taskforge/features/shell/app_frame.dart';
 import 'package:taskforge/features/shell/nav_items.dart';
 import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/system/presentation/system_screen.dart';
+import 'package:taskforge/features/system/presentation/status_screens.dart';
 import 'package:taskforge/features/system/presentation/version_screens.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/presentation/onboarding_screen.dart';
@@ -127,6 +131,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     if (target != path) router.go(target);
   });
   router = GoRouter(
+    errorBuilder: (_, _) => const NotFoundScreen(),
     refreshListenable: Listenable.merge([session, workspacesChanged]),
     redirect: (context, state) {
       final native = customSchemeRoute(state.uri);
@@ -177,6 +182,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const UpdateRequiredScreen(),
       ),
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
+      GoRoute(
+        path: '/welcome/starter',
+        builder: (_, _) => const StarterScreen(),
+      ),
+      GoRoute(
+        path: '/welcome/invite',
+        builder: (_, state) => InviteStepScreen(
+          projectId: state.uri.queryParameters['project'] ?? '',
+        ),
+      ),
       GoRoute(
         path: '/workspaces/new',
         builder: (_, _) => const OnboardingScreen(firstWorkspace: false),
@@ -324,6 +339,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             project: state.uri.queryParameters['project'] ?? '',
           ),
         ),
+      ),
+      GoRoute(
+        path: '/my-work',
+        pageBuilder: (_, state) => framedPage(state, const MyWorkScreen()),
       ),
       GoRoute(
         path: '/inbox',

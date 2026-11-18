@@ -4,6 +4,7 @@ import '../chat/fakes.dart' show FakeChatClient;
 
 import 'package:flutter_riverpod/misc.dart' show Override;
 
+import '../home/fakes.dart';
 import '../shortcuts/fakes.dart';
 
 import 'package:taskforge/features/board/application/board_providers.dart';
@@ -88,6 +89,7 @@ Future<Pumped> pumpProjects(
   FakeAutomationsClient? automations,
   FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
+  FakeHomeClient? home,
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
@@ -118,6 +120,7 @@ Future<Pumped> pumpProjects(
     automations: automations,
     recurrence: recurrence,
     localNotifier: localNotifier,
+    home: home,
     shortcuts: shortcuts,
     sync: sync,
     overrides: [

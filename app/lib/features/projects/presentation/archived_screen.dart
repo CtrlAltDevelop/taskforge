@@ -10,6 +10,8 @@ import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 class ArchivedProjectsScreen extends ConsumerWidget {
   const ArchivedProjectsScreen({super.key});
@@ -24,11 +26,10 @@ class ArchivedProjectsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpHArchivedProjects)),
       body: switch (catalog) {
-        AsyncData() when archived.isEmpty => Center(
-          child: Text(
-            context.l10n.grpHNoArchived,
-            key: const Key('archived-empty'),
-          ),
+        AsyncData() when archived.isEmpty => TfEmpty(
+          key: const Key('archived-empty'),
+          illustration: TfIllustrationKind.tasks,
+          title: context.l10n.grpHNoArchived,
         ),
         AsyncData() => ListView(
           children: [
@@ -57,11 +58,9 @@ class ArchivedProjectsScreen extends ConsumerWidget {
               ),
           ],
         ),
-        AsyncError() => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(projectsProvider),
-            child: Text(context.l10n.grpHLoadProjectsRetry),
-          ),
+        AsyncError() => TfError(
+          message: context.l10n.grpHLoadProjectsRetry,
+          onRetry: () => ref.invalidate(projectsProvider),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

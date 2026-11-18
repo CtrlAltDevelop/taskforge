@@ -14,6 +14,8 @@ import 'package:taskforge/features/goals/presentation/goals_screen.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 const _goalFields = [
   'name',
@@ -191,8 +193,12 @@ class GoalDetailScreen extends ConsumerWidget {
       body: goal == null
           ? catalog.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text(goalsErrorMessage(e, t))),
-              data: (_) => Center(child: Text(t.goalsGone)),
+              error: (e, _) =>
+                  TfError(message: goalsErrorMessage(e, t), details: '$e'),
+              data: (_) => TfEmpty(
+                illustration: TfIllustrationKind.notFound,
+                title: t.goalsGone,
+              ),
             )
           : _Body(
               goal: goal,

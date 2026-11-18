@@ -46,7 +46,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await ref
           .read(workspacesProvider.notifier)
           .create(name: _name.text.trim(), slug: _slug.text);
-      if (mounted) context.go('/');
+      // First workspace: pick a starter next; adding another goes home.
+      if (mounted) {
+        context.go(widget.firstWorkspace ? '/welcome/starter' : '/');
+      }
     } on WorkspaceException catch (e) {
       if (!mounted) return;
       setState(() {

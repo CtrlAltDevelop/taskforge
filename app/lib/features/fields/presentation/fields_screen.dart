@@ -15,6 +15,7 @@ import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 IconData fieldTypeIcon(FieldType type) => switch (type) {
   FieldType.text => Icons.text_fields,
@@ -200,14 +201,11 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
           : null,
       body: fields.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: TextButton(
-            key: const Key('fields-retry'),
-            onPressed: () => ref.invalidate(fieldsProvider(widget.projectId)),
-            child: Text(
-              context.l10n.grpIErrorRetry(fieldErrorMessage(e, context.l10n)),
-            ),
-          ),
+        error: (e, _) => TfError(
+          message: fieldErrorMessage(e, context.l10n),
+          details: '$e',
+          retryKey: const Key('fields-retry'),
+          onRetry: () => ref.invalidate(fieldsProvider(widget.projectId)),
         ),
         data: (loaded) {
           final shown = _reordered ?? loaded;

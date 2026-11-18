@@ -11,6 +11,7 @@ import 'package:taskforge/core/actions/fuzzy.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
+import 'package:taskforge/features/home/application/home_providers.dart';
 import 'package:taskforge/features/shortcuts/application/local_prefs.dart';
 import 'package:taskforge/features/shortcuts/application/shortcuts_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
@@ -35,6 +36,16 @@ ActionContext actionContextOf(BuildContext context) {
 /// Opens the palette over the current screen and runs what is chosen (after
 /// it closes, so an action may open another dialog).
 Future<void> openCommandPalette(BuildContext context) async {
+  // The checklist's "open the palette" step. Not worth an error if there is
+  // no provider scope (a bare widget test).
+  try {
+    ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(onboardingStepsProvider.notifier).note('open_palette');
+  } on Object {
+    // No scope: nothing to tell.
+  }
   // Taken here, where the palette was asked for, not inside the dialog that
   // is gone by the time the chosen action runs.
   final from = actionContextOf(context);

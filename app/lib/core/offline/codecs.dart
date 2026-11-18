@@ -27,6 +27,7 @@ Map<String, dynamic> taskToMap(Task t) => {
   'parentId': t.parentId,
   'depth': t.depth,
   'isBlocked': t.isBlocked,
+  'isSample': t.isSample,
   'blockedBy': t.blockedBy,
   'fieldValues': t.fieldValues,
   'blockersDue': t.blockersDue,
@@ -64,6 +65,7 @@ Task taskFromMap(Map<String, dynamic> m) => Task(
   parentId: '${m['parentId'] ?? ''}',
   depth: (m['depth'] as num?)?.toInt() ?? 0,
   isBlocked: m['isBlocked'] == true,
+  isSample: m['isSample'] == true,
   blockedBy: List.unmodifiable(_strings(m['blockedBy'])),
   fieldValues: Map.unmodifiable({
     for (final e

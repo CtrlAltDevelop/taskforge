@@ -16,6 +16,8 @@ import 'package:taskforge/features/dashboards/presentation/widget_editor.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/features/home/application/home_providers.dart';
 
 /// Dashboards of the workspace, or of one project: pick one, look at it, and
 /// (for those who may) edit it, share it or start a new one from a template.
@@ -251,22 +253,12 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
       ),
       body: switch (list) {
         AsyncData(:final value) => _body(context, value),
-        AsyncError(:final error) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                d.dashboardErrorMessage(error, context.l10n),
-                key: const Key('dashboards-error'),
-              ),
-              TextButton(
-                key: const Key('dashboards-retry'),
-                onPressed: () =>
-                    ref.invalidate(dashboardsProvider(widget.projectId)),
-                child: Text(context.l10n.grpCRetry),
-              ),
-            ],
-          ),
+        AsyncError(:final error) => TfError(
+          key: const Key('dashboards-error'),
+          message: d.dashboardErrorMessage(error, context.l10n),
+          details: '$error',
+          retryKey: const Key('dashboards-retry'),
+          onRetry: () => ref.invalidate(dashboardsProvider(widget.projectId)),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },
@@ -328,6 +320,30 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
       child: Text(context.l10n.grpCDashMyWork),
     ),
   ];
+
+  /// "Pin to Home" / "Unpin from Home": the dashboard shows on Home's Pinned
+  /// card while pinned.
+  Widget _pinButton(BuildContext context, d.Dashboard current) {
+    final l = context.l10n;
+    final pinned = ref.watch(pinnedDashboardIdsProvider).contains(current.id);
+    return IconButton(
+      key: const Key('pin-dashboard'),
+      tooltip: pinned ? l.dashUnpinFromHome : l.dashPinToHome,
+      isSelected: pinned,
+      icon: TfIcon(pinned ? TfIcons.pinOff : TfIcons.pin, size: 24),
+      onPressed: () async {
+        final messenger = ScaffoldMessenger.of(context);
+        try {
+          await ref.read(pinDashboardProvider)(current.id, pinned: !pinned);
+          messenger.showSnackBar(
+            SnackBar(content: Text(pinned ? l.dashUnpinned : l.dashPinned)),
+          );
+        } on Object {
+          messenger.showSnackBar(SnackBar(content: Text(l.dashPinFailed)));
+        }
+      },
+    );
+  }
 
   Widget _toolbar(
     BuildContext context,
@@ -395,6 +411,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
                 if (!_unsaved.contains(w.id)) (id: w.id, version: w.version),
             ]),
           ),
+        if (!_editing && current != null) _pinButton(context, current),
         if (!_editing && current != null && current.canEdit)
           IconButton(
             key: const Key('delete-dashboard'),

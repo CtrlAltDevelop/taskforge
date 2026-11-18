@@ -13,6 +13,7 @@ import 'package:taskforge/features/members/presentation/role_picker.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Runs [action]; shows the failure as a snackbar. True when it succeeded.
 Future<bool> runWithFeedback(
@@ -197,14 +198,11 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
     if (workspace == null) return const SizedBox.shrink();
     return members.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
-        child: TextButton(
-          key: const Key('retry-members'),
-          onPressed: () => ref.invalidate(membersProvider),
-          child: Text(
-            context.l10n.grpJErrorRetry(inviteErrorMessage(e, context.l10n)),
-          ),
-        ),
+      error: (e, _) => TfError(
+        message: inviteErrorMessage(e, context.l10n),
+        details: '$e',
+        retryKey: const Key('retry-members'),
+        onRetry: () => ref.invalidate(membersProvider),
       ),
       data: (all) {
         final q = _query.trim().toLowerCase();

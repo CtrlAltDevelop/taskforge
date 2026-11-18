@@ -5,7 +5,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/core/offline/offline_providers.dart';
 import 'package:taskforge/core/ui/appearance.dart';
-import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
@@ -206,15 +205,13 @@ void main() {
   });
 
   group('error', () {
-    testWidgets('the list: a banner with the reason and a retry', (
-      tester,
-    ) async {
+    testWidgets('the list: the reason and a retry', (tester) async {
       final server = FakeTasksClient([task('a', 'Back again')])
         ..failList = const TaskException(TaskFailure.network);
       await _open(tester, server: server);
 
       expect(find.byKey(const Key('work-error')), findsOneWidget);
-      expect(find.byType(TfBanner), findsOneWidget);
+      expect(find.byType(TfError), findsOneWidget);
       server.failList = null;
       await tester.tap(find.byKey(const Key('retry-tasks')));
       await tester.pumpAndSettle();

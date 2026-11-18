@@ -8833,6 +8833,441 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tdUnsavedDraft => 'Unsaved draft';
+
+  @override
+  String get illusTasks => 'A checklist of tasks';
+
+  @override
+  String get illusBoard => 'A board with three columns of cards';
+
+  @override
+  String get illusCalendar => 'A calendar with one day marked';
+
+  @override
+  String get illusTimeline => 'Bars on a timeline';
+
+  @override
+  String get illusDocs => 'A written page';
+
+  @override
+  String get illusChat => 'Two chat bubbles';
+
+  @override
+  String get illusInbox => 'An inbox tray with a message';
+
+  @override
+  String get illusSearch => 'A magnifying glass';
+
+  @override
+  String get illusGoals => 'A target with an arrow';
+
+  @override
+  String get illusTime => 'A clock';
+
+  @override
+  String get illusNoAccess => 'A closed padlock';
+
+  @override
+  String get illusOffline => 'A cloud crossed out';
+
+  @override
+  String get illusNotFound => 'A page with a magnifying glass';
+
+  @override
+  String get illusMaintenance => 'A gear on a server';
+
+  @override
+  String get illusGeneric => 'A card and a sticky note';
+
+  @override
+  String get errTitle => 'Something went wrong';
+
+  @override
+  String get errRetry => 'Try again';
+
+  @override
+  String get errCopyDetails => 'Copy details';
+
+  @override
+  String get errCopied => 'Details copied';
+
+  @override
+  String get sysGoHome => 'Go to Home';
+
+  @override
+  String get sysNotFoundTitle => 'We can\'t find that page';
+
+  @override
+  String get sysNotFoundBody =>
+      'The link may be old, or the page was moved or deleted.';
+
+  @override
+  String get sysNoAccessTitle => 'You don\'t have access';
+
+  @override
+  String get sysNoAccessBody =>
+      'Ask a workspace admin to give you access, or switch to another workspace.';
+
+  @override
+  String get sysOfflineTitle => 'You\'re offline';
+
+  @override
+  String get sysOfflineBody =>
+      'Check your connection. Changes you make are saved here and sent when you\'re back.';
+
+  @override
+  String get sysMaintenanceTitle => 'Back in a moment';
+
+  @override
+  String get sysMaintenanceBody =>
+      'TaskForge is being updated. Your work is safe. Try again in a few minutes.';
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'Good morning, $name';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'Good afternoon, $name';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'Good evening, $name';
+  }
+
+  @override
+  String get homeGreetMorningAnon => 'Good morning';
+
+  @override
+  String get homeGreetAfternoonAnon => 'Good afternoon';
+
+  @override
+  String get homeGreetEveningAnon => 'Good evening';
+
+  @override
+  String get homeCustomize => 'Customize';
+
+  @override
+  String get homeCustomizeTitle => 'Customize Home';
+
+  @override
+  String get homeCustomizeHint =>
+      'Show, hide and reorder the cards. This is saved on this device.';
+
+  @override
+  String get homeReset => 'Reset';
+
+  @override
+  String get homeAllHidden => 'All cards are hidden';
+
+  @override
+  String get homeCardHide => 'Hide card';
+
+  @override
+  String get homeCardMenu => 'Card options';
+
+  @override
+  String get homeCardMoveUp => 'Move up';
+
+  @override
+  String get homeCardMoveDown => 'Move down';
+
+  @override
+  String get homeCardChecklist => 'Getting started';
+
+  @override
+  String get homeCardToday => 'Today';
+
+  @override
+  String get homeCardAssigned => 'Assigned to me';
+
+  @override
+  String get homeCardMentions => 'Mentions and unread chat';
+
+  @override
+  String get homeCardRecent => 'Recent';
+
+  @override
+  String get homeCardTime => 'Time this week';
+
+  @override
+  String get homeCardPinned => 'Pinned dashboards';
+
+  @override
+  String get homeCardFailed => 'This card could not load.';
+
+  @override
+  String homeStale(String time) {
+    return 'Offline: showing the saved copy from $time';
+  }
+
+  @override
+  String get homeStaleNoTime => 'Offline: showing the saved copy';
+
+  @override
+  String get homeTodayEmpty => 'Nothing due today';
+
+  @override
+  String get homeTodayEmptyHint => 'Tasks due today or overdue show up here.';
+
+  @override
+  String get homeStatToday => 'Due today';
+
+  @override
+  String get homeStatOverdue => 'Overdue';
+
+  @override
+  String get homeStatInProgress => 'In progress';
+
+  @override
+  String homeOverdueOn(String date) {
+    return 'Overdue · $date';
+  }
+
+  @override
+  String get homeAssignedEmpty => 'Nothing assigned to you';
+
+  @override
+  String get homeAssignedEmptyHint =>
+      'Tasks assigned to you appear here, grouped by project.';
+
+  @override
+  String get homeSeeAll => 'See all';
+
+  @override
+  String get homeStatusFailed => 'Could not change the status.';
+
+  @override
+  String get homeRecentEmpty => 'Nothing opened yet';
+
+  @override
+  String get homeRecentEmptyHint => 'Tasks you open show up here.';
+
+  @override
+  String get homeMentionsEmpty => 'No mentions or unread chat';
+
+  @override
+  String get homeMentionsEmptyHint => 'You are all caught up.';
+
+  @override
+  String get homeUnreadNotifications => 'Unread notifications';
+
+  @override
+  String get homeUnreadChat => 'Unread chat';
+
+  @override
+  String get homeOpenInbox => 'Open inbox';
+
+  @override
+  String get homeMentionRow => 'Mentioned you';
+
+  @override
+  String get homeTimeEmpty => 'No time logged this week';
+
+  @override
+  String get homeTimeEmptyHint =>
+      'Start a timer on a task to see your week here.';
+
+  @override
+  String get homeTimeOpen => 'Open timesheet';
+
+  @override
+  String homeTimeTotal(String total) {
+    return '$total logged in the last 7 days';
+  }
+
+  @override
+  String homeTimeBar(String day, String time) {
+    return '$day: $time';
+  }
+
+  @override
+  String get homePinnedEmpty => 'No pinned dashboards';
+
+  @override
+  String get homePinnedEmptyHint => 'Pin a dashboard to keep it one tap away.';
+
+  @override
+  String get homePinnedOpen => 'Open dashboards';
+
+  @override
+  String get homeCheckDismiss => 'Dismiss';
+
+  @override
+  String homeCheckProgress(String done, String total) {
+    return '$done of $total done';
+  }
+
+  @override
+  String get homeStepCreateTask => 'Create a task';
+
+  @override
+  String get homeStepInvite => 'Invite someone';
+
+  @override
+  String get homeStepBoard => 'Try the board';
+
+  @override
+  String get homeStepPalette => 'Open the command palette (Cmd or Ctrl + K)';
+
+  @override
+  String get mwTitle => 'My work';
+
+  @override
+  String get mwRelationBoth => 'Assigned and watching';
+
+  @override
+  String get mwRelationAssigned => 'Assigned to me';
+
+  @override
+  String get mwRelationWatching => 'Watching';
+
+  @override
+  String get mwIncludeDone => 'Include done';
+
+  @override
+  String get mwEmpty => 'Nothing assigned or watched';
+
+  @override
+  String get mwEmptyHint =>
+      'Tasks assigned to you or that you watch show up here.';
+
+  @override
+  String get mwNoMatch => 'No tasks match your filter';
+
+  @override
+  String get mwClearFilter => 'Clear filter';
+
+  @override
+  String get mwLoadMore => 'Load more';
+
+  @override
+  String get mwAssigned => 'Assigned';
+
+  @override
+  String get mwWatching => 'Watching';
+
+  @override
+  String get mwFailed => 'My work could not load.';
+
+  @override
+  String obStepOf(String n, String total) {
+    return 'Step $n of $total';
+  }
+
+  @override
+  String get obStarterTitle => 'Pick a starter';
+
+  @override
+  String get obStarterHint =>
+      'Begin with a ready-made project. You can change everything later.';
+
+  @override
+  String get obStarterContinue => 'Create project';
+
+  @override
+  String get obStarterCreating => 'Creating your project…';
+
+  @override
+  String get obStarterBlank => 'Blank project';
+
+  @override
+  String get obStarterBlankDesc =>
+      'An empty project with the default workflow.';
+
+  @override
+  String get obStarterSoftware => 'Software team';
+
+  @override
+  String get obStarterSoftwareDesc =>
+      'Backlog, board and a release flow, with sample tasks.';
+
+  @override
+  String get obStarterMarketing => 'Marketing';
+
+  @override
+  String get obStarterMarketingDesc =>
+      'Campaigns, a content calendar and review stages, with sample tasks.';
+
+  @override
+  String get obStarterBugs => 'Bug tracker';
+
+  @override
+  String get obStarterBugsDesc =>
+      'Report, triage and fix flow, with sample tasks.';
+
+  @override
+  String get obInviteTitle => 'Invite your team';
+
+  @override
+  String get obInviteHint =>
+      'Add teammates now, or skip and do it any time from Members.';
+
+  @override
+  String get obInviteButton => 'Invite teammates';
+
+  @override
+  String get obInviteSkip => 'Skip for now';
+
+  @override
+  String get obInviteDone => 'Go to your project';
+
+  @override
+  String get sampleBadge => 'Sample';
+
+  @override
+  String get sampleBanner =>
+      'This workspace has sample tasks. They are marked Sample and left out of reports.';
+
+  @override
+  String get sampleDelete => 'Delete sample tasks';
+
+  @override
+  String get sampleDeleted => 'Sample tasks deleted';
+
+  @override
+  String get sampleDeleteFailed => 'Could not delete the sample tasks.';
+
+  @override
+  String wnTitle(String version) {
+    return 'What\'s new in $version';
+  }
+
+  @override
+  String get wnClose => 'Got it';
+
+  @override
+  String get wnHome =>
+      'A new Home: your day, your tasks and what needs you, at a glance.';
+
+  @override
+  String get wnMyWork =>
+      'My work lists everything assigned to you or that you watch.';
+
+  @override
+  String get wnStarters =>
+      'Start a workspace from a ready-made project with sample tasks.';
+
+  @override
+  String get wnStates =>
+      'Clearer empty, error, offline and not-found pages everywhere.';
+
+  @override
+  String get dashPinToHome => 'Pin to Home';
+
+  @override
+  String get dashUnpinFromHome => 'Unpin from Home';
+
+  @override
+  String get dashPinned => 'Pinned to Home';
+
+  @override
+  String get dashUnpinned => 'Removed from Home';
+
+  @override
+  String get dashPinFailed => 'Could not change the pin.';
 }
 
 /// The translations for English (`en_XA`).
@@ -17818,4 +18253,443 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get tdUnsavedDraft => '[Ûñšåṽéð ðŕåƒţ ~~~~]';
+
+  @override
+  String get illusTasks => '[Å çĥéçķłíšţ öƒ ţåšķš ~~~~~~]';
+
+  @override
+  String get illusBoard => '[Å ƀöåŕð ŵíţĥ ţĥŕéé çöłûɱñš öƒ çåŕðš ~~~~~~~~~~~]';
+
+  @override
+  String get illusCalendar => '[Å çåłéñðåŕ ŵíţĥ öñé ðåý ɱåŕķéð ~~~~~~~~~~]';
+
+  @override
+  String get illusTimeline => '[ßåŕš öñ å ţíɱéłíñé ~~~~~~]';
+
+  @override
+  String get illusDocs => '[Å ŵŕíţţéñ þåĝé ~~~~]';
+
+  @override
+  String get illusChat => '[Ţŵö çĥåţ ƀûƀƀłéš ~~~~~]';
+
+  @override
+  String get illusInbox => '[Åñ íñƀöx ţŕåý ŵíţĥ å ɱéššåĝé ~~~~~~~~~]';
+
+  @override
+  String get illusSearch => '[Å ɱåĝñíƒýíñĝ ĝłåšš ~~~~~~]';
+
+  @override
+  String get illusGoals => '[Å ţåŕĝéţ ŵíţĥ åñ åŕŕöŵ ~~~~~~~]';
+
+  @override
+  String get illusTime => '[Å çłöçķ ~~]';
+
+  @override
+  String get illusNoAccess => '[Å çłöšéð þåðłöçķ ~~~~~]';
+
+  @override
+  String get illusOffline => '[Å çłöûð çŕöššéð öûţ ~~~~~~]';
+
+  @override
+  String get illusNotFound => '[Å þåĝé ŵíţĥ å ɱåĝñíƒýíñĝ ĝłåšš ~~~~~~~~~~]';
+
+  @override
+  String get illusMaintenance => '[Å ĝéåŕ öñ å šéŕṽéŕ ~~~~~~]';
+
+  @override
+  String get illusGeneric => '[Å çåŕð åñð å šţíçķý ñöţé ~~~~~~~~]';
+
+  @override
+  String get errTitle => '[Šöɱéţĥíñĝ ŵéñţ ŵŕöñĝ ~~~~~~]';
+
+  @override
+  String get errRetry => '[Ţŕý åĝåíñ ~~~]';
+
+  @override
+  String get errCopyDetails => '[Çöþý ðéţåíłš ~~~~]';
+
+  @override
+  String get errCopied => '[Ðéţåíłš çöþíéð ~~~~]';
+
+  @override
+  String get sysGoHome => '[Ĝö ţö Ĥöɱé ~~~]';
+
+  @override
+  String get sysNotFoundTitle => '[Ŵé çåñ\'ţ ƒíñð ţĥåţ þåĝé ~~~~~~~]';
+
+  @override
+  String get sysNotFoundBody =>
+      '[Ţĥé łíñķ ɱåý ƀé öłð, öŕ ţĥé þåĝé ŵåš ɱöṽéð öŕ ðéłéţéð. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sysNoAccessTitle => '[Ýöû ðöñ\'ţ ĥåṽé åççéšš ~~~~~~~]';
+
+  @override
+  String get sysNoAccessBody =>
+      '[Åšķ å ŵöŕķšþåçé åðɱíñ ţö ĝíṽé ýöû åççéšš, öŕ šŵíţçĥ ţö åñöţĥéŕ ŵöŕķšþåçé. ~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sysOfflineTitle => '[Ýöû\'ŕé öƒƒłíñé ~~~~]';
+
+  @override
+  String get sysOfflineBody =>
+      '[Çĥéçķ ýöûŕ çöññéçţíöñ. Çĥåñĝéš ýöû ɱåķé åŕé šåṽéð ĥéŕé åñð šéñţ ŵĥéñ ýöû\'ŕé ƀåçķ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sysMaintenanceTitle => '[ßåçķ íñ å ɱöɱéñţ ~~~~~]';
+
+  @override
+  String get sysMaintenanceBody =>
+      '[ŢåšķFöŕĝé íš ƀéíñĝ ûþðåţéð. Ýöûŕ ŵöŕķ íš šåƒé. Ţŕý åĝåíñ íñ å ƒéŵ ɱíñûţéš. ~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String homeGreetMorning(String name) {
+    return '[Ĝööð ɱöŕñíñĝ, $name ~~~~~~]';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return '[Ĝööð åƒţéŕñööñ, $name ~~~~~~~]';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return '[Ĝööð éṽéñíñĝ, $name ~~~~~~]';
+  }
+
+  @override
+  String get homeGreetMorningAnon => '[Ĝööð ɱöŕñíñĝ ~~~~]';
+
+  @override
+  String get homeGreetAfternoonAnon => '[Ĝööð åƒţéŕñööñ ~~~~]';
+
+  @override
+  String get homeGreetEveningAnon => '[Ĝööð éṽéñíñĝ ~~~~]';
+
+  @override
+  String get homeCustomize => '[Çûšţöɱížé ~~~]';
+
+  @override
+  String get homeCustomizeTitle => '[Çûšţöɱížé Ĥöɱé ~~~~]';
+
+  @override
+  String get homeCustomizeHint =>
+      '[Šĥöŵ, ĥíðé åñð ŕéöŕðéŕ ţĥé çåŕðš. Ţĥíš íš šåṽéð öñ ţĥíš ðéṽíçé. ~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get homeReset => '[Ŕéšéţ ~]';
+
+  @override
+  String get homeAllHidden => '[Åłł çåŕðš åŕé ĥíððéñ ~~~~~~]';
+
+  @override
+  String get homeCardHide => '[Ĥíðé çåŕð ~~~]';
+
+  @override
+  String get homeCardMenu => '[Çåŕð öþţíöñš ~~~~]';
+
+  @override
+  String get homeCardMoveUp => '[Möṽé ûþ ~~]';
+
+  @override
+  String get homeCardMoveDown => '[Möṽé ðöŵñ ~~~]';
+
+  @override
+  String get homeCardChecklist => '[Ĝéţţíñĝ šţåŕţéð ~~~~~]';
+
+  @override
+  String get homeCardToday => '[Ţöðåý ~]';
+
+  @override
+  String get homeCardAssigned => '[Åššíĝñéð ţö ɱé ~~~~]';
+
+  @override
+  String get homeCardMentions => '[Méñţíöñš åñð ûñŕéåð çĥåţ ~~~~~~~~]';
+
+  @override
+  String get homeCardRecent => '[Ŕéçéñţ ~~]';
+
+  @override
+  String get homeCardTime => '[Ţíɱé ţĥíš ŵééķ ~~~~]';
+
+  @override
+  String get homeCardPinned => '[Þíññéð ðåšĥƀöåŕðš ~~~~~]';
+
+  @override
+  String get homeCardFailed => '[Ţĥíš çåŕð çöûłð ñöţ łöåð. ~~~~~~~~]';
+
+  @override
+  String homeStale(String time) {
+    return '[Öƒƒłíñé: šĥöŵíñĝ ţĥé šåṽéð çöþý ƒŕöɱ $time ~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get homeStaleNoTime => '[Öƒƒłíñé: šĥöŵíñĝ ţĥé šåṽéð çöþý ~~~~~~~~~~]';
+
+  @override
+  String get homeTodayEmpty => '[Ñöţĥíñĝ ðûé ţöðåý ~~~~~]';
+
+  @override
+  String get homeTodayEmptyHint =>
+      '[Ţåšķš ðûé ţöðåý öŕ öṽéŕðûé šĥöŵ ûþ ĥéŕé. ~~~~~~~~~~~~~]';
+
+  @override
+  String get homeStatToday => '[Ðûé ţöðåý ~~~]';
+
+  @override
+  String get homeStatOverdue => '[Öṽéŕðûé ~~]';
+
+  @override
+  String get homeStatInProgress => '[Íñ þŕöĝŕéšš ~~~]';
+
+  @override
+  String homeOverdueOn(String date) {
+    return '[Öṽéŕðûé · $date ~~~~~]';
+  }
+
+  @override
+  String get homeAssignedEmpty => '[Ñöţĥíñĝ åššíĝñéð ţö ýöû ~~~~~~~]';
+
+  @override
+  String get homeAssignedEmptyHint =>
+      '[Ţåšķš åššíĝñéð ţö ýöû åþþéåŕ ĥéŕé, ĝŕöûþéð ƀý þŕöĵéçţ. ~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get homeSeeAll => '[Šéé åłł ~~]';
+
+  @override
+  String get homeStatusFailed => '[Çöûłð ñöţ çĥåñĝé ţĥé šţåţûš. ~~~~~~~~~]';
+
+  @override
+  String get homeRecentEmpty => '[Ñöţĥíñĝ öþéñéð ýéţ ~~~~~~]';
+
+  @override
+  String get homeRecentEmptyHint => '[Ţåšķš ýöû öþéñ šĥöŵ ûþ ĥéŕé. ~~~~~~~~~]';
+
+  @override
+  String get homeMentionsEmpty => '[Ñö ɱéñţíöñš öŕ ûñŕéåð çĥåţ ~~~~~~~~]';
+
+  @override
+  String get homeMentionsEmptyHint => '[Ýöû åŕé åłł çåûĝĥţ ûþ. ~~~~~~~]';
+
+  @override
+  String get homeUnreadNotifications => '[Ûñŕéåð ñöţíƒíçåţíöñš ~~~~~~]';
+
+  @override
+  String get homeUnreadChat => '[Ûñŕéåð çĥåţ ~~~]';
+
+  @override
+  String get homeOpenInbox => '[Öþéñ íñƀöx ~~~]';
+
+  @override
+  String get homeMentionRow => '[Méñţíöñéð ýöû ~~~~]';
+
+  @override
+  String get homeTimeEmpty => '[Ñö ţíɱé łöĝĝéð ţĥíš ŵééķ ~~~~~~~~]';
+
+  @override
+  String get homeTimeEmptyHint =>
+      '[Šţåŕţ å ţíɱéŕ öñ å ţåšķ ţö šéé ýöûŕ ŵééķ ĥéŕé. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get homeTimeOpen => '[Öþéñ ţíɱéšĥééţ ~~~~]';
+
+  @override
+  String homeTimeTotal(String total) {
+    return '[$total łöĝĝéð íñ ţĥé łåšţ 7 ðåýš ~~~~~~~~~~~]';
+  }
+
+  @override
+  String homeTimeBar(String day, String time) {
+    return '[$day: $time ~~~~]';
+  }
+
+  @override
+  String get homePinnedEmpty => '[Ñö þíññéð ðåšĥƀöåŕðš ~~~~~~]';
+
+  @override
+  String get homePinnedEmptyHint =>
+      '[Þíñ å ðåšĥƀöåŕð ţö ķééþ íţ öñé ţåþ åŵåý. ~~~~~~~~~~~~~]';
+
+  @override
+  String get homePinnedOpen => '[Öþéñ ðåšĥƀöåŕðš ~~~~~]';
+
+  @override
+  String get homeCheckDismiss => '[Ðíšɱíšš ~~]';
+
+  @override
+  String homeCheckProgress(String done, String total) {
+    return '[$done öƒ $total ðöñé ~~~~~~~]';
+  }
+
+  @override
+  String get homeStepCreateTask => '[Çŕéåţé å ţåšķ ~~~~]';
+
+  @override
+  String get homeStepInvite => '[Íñṽíţé šöɱéöñé ~~~~]';
+
+  @override
+  String get homeStepBoard => '[Ţŕý ţĥé ƀöåŕð ~~~~]';
+
+  @override
+  String get homeStepPalette =>
+      '[Öþéñ ţĥé çöɱɱåñð þåłéţţé (Çɱð öŕ Çţŕł + Ķ) ~~~~~~~~~~~~~~]';
+
+  @override
+  String get mwTitle => '[Mý ŵöŕķ ~~]';
+
+  @override
+  String get mwRelationBoth => '[Åššíĝñéð åñð ŵåţçĥíñĝ ~~~~~~~]';
+
+  @override
+  String get mwRelationAssigned => '[Åššíĝñéð ţö ɱé ~~~~]';
+
+  @override
+  String get mwRelationWatching => '[Ŵåţçĥíñĝ ~~]';
+
+  @override
+  String get mwIncludeDone => '[Íñçłûðé ðöñé ~~~~]';
+
+  @override
+  String get mwEmpty => '[Ñöţĥíñĝ åššíĝñéð öŕ ŵåţçĥéð ~~~~~~~~~]';
+
+  @override
+  String get mwEmptyHint =>
+      '[Ţåšķš åššíĝñéð ţö ýöû öŕ ţĥåţ ýöû ŵåţçĥ šĥöŵ ûþ ĥéŕé. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get mwNoMatch => '[Ñö ţåšķš ɱåţçĥ ýöûŕ ƒíłţéŕ ~~~~~~~~]';
+
+  @override
+  String get mwClearFilter => '[Çłéåŕ ƒíłţéŕ ~~~~]';
+
+  @override
+  String get mwLoadMore => '[Łöåð ɱöŕé ~~~]';
+
+  @override
+  String get mwAssigned => '[Åššíĝñéð ~~]';
+
+  @override
+  String get mwWatching => '[Ŵåţçĥíñĝ ~~]';
+
+  @override
+  String get mwFailed => '[Mý ŵöŕķ çöûłð ñöţ łöåð. ~~~~~~~]';
+
+  @override
+  String obStepOf(String n, String total) {
+    return '[Šţéþ $n öƒ $total ~~~~~~]';
+  }
+
+  @override
+  String get obStarterTitle => '[Þíçķ å šţåŕţéŕ ~~~~]';
+
+  @override
+  String get obStarterHint =>
+      '[ßéĝíñ ŵíţĥ å ŕéåðý-ɱåðé þŕöĵéçţ. Ýöû çåñ çĥåñĝé éṽéŕýţĥíñĝ łåţéŕ. ~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get obStarterContinue => '[Çŕéåţé þŕöĵéçţ ~~~~]';
+
+  @override
+  String get obStarterCreating => '[Çŕéåţíñĝ ýöûŕ þŕöĵéçţ… ~~~~~~~]';
+
+  @override
+  String get obStarterBlank => '[ßłåñķ þŕöĵéçţ ~~~~]';
+
+  @override
+  String get obStarterBlankDesc =>
+      '[Åñ éɱþţý þŕöĵéçţ ŵíţĥ ţĥé ðéƒåûłţ ŵöŕķƒłöŵ. ~~~~~~~~~~~~~~]';
+
+  @override
+  String get obStarterSoftware => '[Šöƒţŵåŕé ţéåɱ ~~~~]';
+
+  @override
+  String get obStarterSoftwareDesc =>
+      '[ßåçķłöĝ, ƀöåŕð åñð å ŕéłéåšé ƒłöŵ, ŵíţĥ šåɱþłé ţåšķš. ~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get obStarterMarketing => '[Måŕķéţíñĝ ~~~]';
+
+  @override
+  String get obStarterMarketingDesc =>
+      '[Çåɱþåíĝñš, å çöñţéñţ çåłéñðåŕ åñð ŕéṽíéŵ šţåĝéš, ŵíţĥ šåɱþłé ţåšķš. ~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get obStarterBugs => '[ßûĝ ţŕåçķéŕ ~~~]';
+
+  @override
+  String get obStarterBugsDesc =>
+      '[Ŕéþöŕţ, ţŕíåĝé åñð ƒíx ƒłöŵ, ŵíţĥ šåɱþłé ţåšķš. ~~~~~~~~~~~~~~~]';
+
+  @override
+  String get obInviteTitle => '[Íñṽíţé ýöûŕ ţéåɱ ~~~~~]';
+
+  @override
+  String get obInviteHint =>
+      '[Åðð ţéåɱɱåţéš ñöŵ, öŕ šķíþ åñð ðö íţ åñý ţíɱé ƒŕöɱ Méɱƀéŕš. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get obInviteButton => '[Íñṽíţé ţéåɱɱåţéš ~~~~~]';
+
+  @override
+  String get obInviteSkip => '[Šķíþ ƒöŕ ñöŵ ~~~~]';
+
+  @override
+  String get obInviteDone => '[Ĝö ţö ýöûŕ þŕöĵéçţ ~~~~~~]';
+
+  @override
+  String get sampleBadge => '[Šåɱþłé ~~]';
+
+  @override
+  String get sampleBanner =>
+      '[Ţĥíš ŵöŕķšþåçé ĥåš šåɱþłé ţåšķš. Ţĥéý åŕé ɱåŕķéð Šåɱþłé åñð łéƒţ öûţ öƒ ŕéþöŕţš. ~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get sampleDelete => '[Ðéłéţé šåɱþłé ţåšķš ~~~~~~]';
+
+  @override
+  String get sampleDeleted => '[Šåɱþłé ţåšķš ðéłéţéð ~~~~~~]';
+
+  @override
+  String get sampleDeleteFailed =>
+      '[Çöûłð ñöţ ðéłéţé ţĥé šåɱþłé ţåšķš. ~~~~~~~~~~~]';
+
+  @override
+  String wnTitle(String version) {
+    return '[Ŵĥåţ\'š ñéŵ íñ $version ~~~~~~~]';
+  }
+
+  @override
+  String get wnClose => '[Ĝöţ íţ ~~]';
+
+  @override
+  String get wnHome =>
+      '[Å ñéŵ Ĥöɱé: ýöûŕ ðåý, ýöûŕ ţåšķš åñð ŵĥåţ ñééðš ýöû, åţ å ĝłåñçé. ~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wnMyWork =>
+      '[Mý ŵöŕķ łíšţš éṽéŕýţĥíñĝ åššíĝñéð ţö ýöû öŕ ţĥåţ ýöû ŵåţçĥ. ~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wnStarters =>
+      '[Šţåŕţ å ŵöŕķšþåçé ƒŕöɱ å ŕéåðý-ɱåðé þŕöĵéçţ ŵíţĥ šåɱþłé ţåšķš. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get wnStates =>
+      '[Çłéåŕéŕ éɱþţý, éŕŕöŕ, öƒƒłíñé åñð ñöţ-ƒöûñð þåĝéš éṽéŕýŵĥéŕé. ~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get dashPinToHome => '[Þíñ ţö Ĥöɱé ~~~]';
+
+  @override
+  String get dashUnpinFromHome => '[Ûñþíñ ƒŕöɱ Ĥöɱé ~~~~~]';
+
+  @override
+  String get dashPinned => '[Þíññéð ţö Ĥöɱé ~~~~]';
+
+  @override
+  String get dashUnpinned => '[Ŕéɱöṽéð ƒŕöɱ Ĥöɱé ~~~~~]';
+
+  @override
+  String get dashPinFailed => '[Çöûłð ñöţ çĥåñĝé ţĥé þíñ. ~~~~~~~~]';
 }

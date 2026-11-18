@@ -9,6 +9,7 @@ import 'package:taskforge/features/goals/domain/goals.dart';
 import 'package:taskforge/features/goals/presentation/goal_widgets.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Asks for a folder name; null when cancelled.
 Future<String?> showFolderDialog(BuildContext context, {String initial = ''}) {
@@ -605,7 +606,11 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
                   padding: EdgeInsets.all(12),
                   child: LinearProgressIndicator(),
                 ),
-                error: (e, _) => Text(goalsErrorMessage(e, t)),
+                error: (e, _) => TfError(
+                  compact: true,
+                  message: goalsErrorMessage(e, t),
+                  details: '$e',
+                ),
                 data: (rows) => _History(rows: rows, names: widget.names),
               ),
             ],

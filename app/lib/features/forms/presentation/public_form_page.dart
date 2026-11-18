@@ -5,6 +5,8 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/forms/application/forms_providers.dart';
 import 'package:taskforge/features/forms/domain/forms.dart';
 import 'package:taskforge/features/forms/presentation/public_form_view.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The page at `/f/<token>`: a form for anyone, with no app bar, no menu and
 /// no sign-in. It knows only what the server tells a visitor about the form.
@@ -122,28 +124,19 @@ class _Problem extends StatelessWidget {
     final gone =
         error is FormsException &&
         (error as FormsException).failure == FormsFailure.notFound;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              gone
-                  ? context.l10n.formsGonePage
-                  : formsErrorMessage(error, context.l10n),
-              key: const Key('form-problem'),
-              textAlign: TextAlign.center,
-            ),
-            if (!gone)
-              TextButton(
-                key: const Key('retry-public-form'),
-                onPressed: onRetry,
-                child: Text(context.l10n.devRetry),
-              ),
-          ],
-        ),
-      ),
+    if (gone) {
+      return TfEmpty(
+        key: const Key('form-problem'),
+        illustration: TfIllustrationKind.notFound,
+        title: context.l10n.formsGonePage,
+      );
+    }
+    return TfError(
+      key: const Key('form-problem'),
+      message: formsErrorMessage(error, context.l10n),
+      details: '$error',
+      retryKey: const Key('retry-public-form'),
+      onRetry: onRetry,
     );
   }
 }

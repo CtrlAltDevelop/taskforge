@@ -11,6 +11,18 @@ import 'package:taskforge/features/views/data/views_client.dart';
 import 'package:taskforge/features/views/domain/filter_layout.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
+/// The filter scope of My work: workspace-wide like the all-projects
+/// calendar, but kept apart from it (its own state, session only).
+const myWorkFilterScope = '~my-work';
+
+/// Whether [projectId] names a filter that spans every project.
+bool isWorkspaceWideFilter(String projectId) =>
+    projectId.isEmpty || projectId == myWorkFilterScope;
+
+/// The project id the server is told for [projectId] ('' for every project).
+String filterServerProject(String projectId) =>
+    projectId == myWorkFilterScope ? '' : projectId;
+
 final filtersClientProvider = Provider<FiltersClient>(
   (ref) => GrpcFiltersClient(
     ref.watch(grpcChannelProvider),
@@ -57,7 +69,7 @@ class FilterLayoutNotifier extends PersonalLayoutNotifier<FilterLayout> {
   FilterLayoutNotifier(String projectId)
     : super(projectId, const FilterLayout());
 
-  bool get _sessionOnly => projectId.isEmpty;
+  bool get _sessionOnly => isWorkspaceWideFilter(projectId);
 
   @override
   bool get keepAlive => _sessionOnly;
@@ -180,5 +192,7 @@ final savedFiltersProvider = FutureProvider.autoDispose
     .family<List<SavedFilter>, String>((ref, projectId) async {
       final workspace = ref.watch(workspaceScopeProvider);
       if (workspace == null) return const [];
-      return ref.watch(filtersClientProvider).list(workspace, projectId);
+      return ref
+          .watch(filtersClientProvider)
+          .list(workspace, filterServerProject(projectId));
     }, retry: (_, _) => null);

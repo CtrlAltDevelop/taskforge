@@ -16,6 +16,7 @@ import 'package:taskforge/features/tasks/presentation/presence_strip.dart';
 import 'package:taskforge/features/tasks/presentation/subtasks_panel.dart';
 import 'package:taskforge/features/tasks/presentation/task_actions.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/features/home/presentation/sample_badge.dart';
 
 /// Below this width the header keeps only the essentials in the row.
 const _headerCompactBelow = 520.0;
@@ -148,6 +149,10 @@ class TaskHeader extends ConsumerWidget {
                   if (task.isBlocked) ...[
                     const SizedBox(width: TfSpace.sm),
                     BlockedBadge(blockedBy: task.blockedBy),
+                  ],
+                  if (task.isSample) ...[
+                    const SizedBox(width: TfSpace.sm),
+                    const SampleBadge(),
                   ],
                   const Spacer(),
                   if (!compact) ...[

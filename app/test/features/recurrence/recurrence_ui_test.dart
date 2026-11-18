@@ -110,9 +110,12 @@ void main() {
     expect(key('repeat-summary'), findsOneWidget);
     expect(find.textContaining('Next: 2026-11-09'), findsOneWidget);
 
-    await tester.tap(key('repeat-day-2'));
+    // The editor starts on the weekday of today (the task has no due date):
+    // tap the day after it, so the test is the same on every day of the week.
+    final other = (DateTime.now().weekday - 1 + 1) % 7;
+    await tester.tap(key('repeat-day-$other'));
     await tester.pumpAndSettle();
-    expect(server.previews.last.weekdays.contains(2), isTrue);
+    expect(server.previews.last.weekdays.contains(other), isTrue);
 
     await tester.tap(key('repeat-save'));
     await tester.pumpAndSettle();

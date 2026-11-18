@@ -15593,6 +15593,798 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unsaved draft'**
   String get tdUnsavedDraft;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A checklist of tasks'**
+  String get illusTasks;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A board with three columns of cards'**
+  String get illusBoard;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A calendar with one day marked'**
+  String get illusCalendar;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Bars on a timeline'**
+  String get illusTimeline;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A written page'**
+  String get illusDocs;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Two chat bubbles'**
+  String get illusChat;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'An inbox tray with a message'**
+  String get illusInbox;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A magnifying glass'**
+  String get illusSearch;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A target with an arrow'**
+  String get illusGoals;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A clock'**
+  String get illusTime;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A closed padlock'**
+  String get illusNoAccess;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A cloud crossed out'**
+  String get illusOffline;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A page with a magnifying glass'**
+  String get illusNotFound;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A gear on a server'**
+  String get illusMaintenance;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'A card and a sticky note'**
+  String get illusGeneric;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get errTitle;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get errRetry;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy details'**
+  String get errCopyDetails;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Details copied'**
+  String get errCopied;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Home'**
+  String get sysGoHome;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'We can\'t find that page'**
+  String get sysNotFoundTitle;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'The link may be old, or the page was moved or deleted.'**
+  String get sysNotFoundBody;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have access'**
+  String get sysNoAccessTitle;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a workspace admin to give you access, or switch to another workspace.'**
+  String get sysNoAccessBody;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline'**
+  String get sysOfflineTitle;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection. Changes you make are saved here and sent when you\'re back.'**
+  String get sysOfflineBody;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'Back in a moment'**
+  String get sysMaintenanceTitle;
+
+  /// Phase 48 empty/error/system state text.
+  ///
+  /// In en, this message translates to:
+  /// **'TaskForge is being updated. Your work is safe. Try again in a few minutes.'**
+  String get sysMaintenanceBody;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning, {name}'**
+  String homeGreetMorning(String name);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon, {name}'**
+  String homeGreetAfternoon(String name);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening, {name}'**
+  String homeGreetEvening(String name);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetMorningAnon;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get homeGreetAfternoonAnon;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetEveningAnon;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize'**
+  String get homeCustomize;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize Home'**
+  String get homeCustomizeTitle;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Show, hide and reorder the cards. This is saved on this device.'**
+  String get homeCustomizeHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get homeReset;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'All cards are hidden'**
+  String get homeAllHidden;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide card'**
+  String get homeCardHide;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Card options'**
+  String get homeCardMenu;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Move up'**
+  String get homeCardMoveUp;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Move down'**
+  String get homeCardMoveDown;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting started'**
+  String get homeCardChecklist;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get homeCardToday;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to me'**
+  String get homeCardAssigned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentions and unread chat'**
+  String get homeCardMentions;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get homeCardRecent;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Time this week'**
+  String get homeCardTime;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned dashboards'**
+  String get homeCardPinned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'This card could not load.'**
+  String get homeCardFailed;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline: showing the saved copy from {time}'**
+  String homeStale(String time);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline: showing the saved copy'**
+  String get homeStaleNoTime;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing due today'**
+  String get homeTodayEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks due today or overdue show up here.'**
+  String get homeTodayEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Due today'**
+  String get homeStatToday;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get homeStatOverdue;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get homeStatInProgress;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue · {date}'**
+  String homeOverdueOn(String date);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing assigned to you'**
+  String get homeAssignedEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks assigned to you appear here, grouped by project.'**
+  String get homeAssignedEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get homeSeeAll;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not change the status.'**
+  String get homeStatusFailed;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing opened yet'**
+  String get homeRecentEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks you open show up here.'**
+  String get homeRecentEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'No mentions or unread chat'**
+  String get homeMentionsEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'You are all caught up.'**
+  String get homeMentionsEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread notifications'**
+  String get homeUnreadNotifications;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread chat'**
+  String get homeUnreadChat;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Open inbox'**
+  String get homeOpenInbox;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentioned you'**
+  String get homeMentionRow;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'No time logged this week'**
+  String get homeTimeEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a timer on a task to see your week here.'**
+  String get homeTimeEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Open timesheet'**
+  String get homeTimeOpen;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} logged in the last 7 days'**
+  String homeTimeTotal(String total);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}: {time}'**
+  String homeTimeBar(String day, String time);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'No pinned dashboards'**
+  String get homePinnedEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin a dashboard to keep it one tap away.'**
+  String get homePinnedEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Open dashboards'**
+  String get homePinnedOpen;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get homeCheckDismiss;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String homeCheckProgress(String done, String total);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a task'**
+  String get homeStepCreateTask;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite someone'**
+  String get homeStepInvite;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Try the board'**
+  String get homeStepBoard;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the command palette (Cmd or Ctrl + K)'**
+  String get homeStepPalette;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'My work'**
+  String get mwTitle;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned and watching'**
+  String get mwRelationBoth;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to me'**
+  String get mwRelationAssigned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Watching'**
+  String get mwRelationWatching;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Include done'**
+  String get mwIncludeDone;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing assigned or watched'**
+  String get mwEmpty;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks assigned to you or that you watch show up here.'**
+  String get mwEmptyHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks match your filter'**
+  String get mwNoMatch;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get mwClearFilter;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get mwLoadMore;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get mwAssigned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Watching'**
+  String get mwWatching;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'My work could not load.'**
+  String get mwFailed;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {n} of {total}'**
+  String obStepOf(String n, String total);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a starter'**
+  String get obStarterTitle;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin with a ready-made project. You can change everything later.'**
+  String get obStarterHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Create project'**
+  String get obStarterContinue;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating your project…'**
+  String get obStarterCreating;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank project'**
+  String get obStarterBlank;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'An empty project with the default workflow.'**
+  String get obStarterBlankDesc;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Software team'**
+  String get obStarterSoftware;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Backlog, board and a release flow, with sample tasks.'**
+  String get obStarterSoftwareDesc;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing'**
+  String get obStarterMarketing;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaigns, a content calendar and review stages, with sample tasks.'**
+  String get obStarterMarketingDesc;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Bug tracker'**
+  String get obStarterBugs;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Report, triage and fix flow, with sample tasks.'**
+  String get obStarterBugsDesc;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite your team'**
+  String get obInviteTitle;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Add teammates now, or skip and do it any time from Members.'**
+  String get obInviteHint;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite teammates'**
+  String get obInviteButton;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get obInviteSkip;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to your project'**
+  String get obInviteDone;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample'**
+  String get sampleBadge;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'This workspace has sample tasks. They are marked Sample and left out of reports.'**
+  String get sampleBanner;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete sample tasks'**
+  String get sampleDelete;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample tasks deleted'**
+  String get sampleDeleted;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete the sample tasks.'**
+  String get sampleDeleteFailed;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new in {version}'**
+  String wnTitle(String version);
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get wnClose;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'A new Home: your day, your tasks and what needs you, at a glance.'**
+  String get wnHome;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'My work lists everything assigned to you or that you watch.'**
+  String get wnMyWork;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a workspace from a ready-made project with sample tasks.'**
+  String get wnStarters;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearer empty, error, offline and not-found pages everywhere.'**
+  String get wnStates;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin to Home'**
+  String get dashPinToHome;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin from Home'**
+  String get dashUnpinFromHome;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned to Home'**
+  String get dashPinned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from Home'**
+  String get dashUnpinned;
+
+  /// Phase 48 Home, My work, onboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not change the pin.'**
+  String get dashPinFailed;
 }
 
 class _AppLocalizationsDelegate

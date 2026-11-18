@@ -11,6 +11,8 @@ import 'package:taskforge/features/dashboards/application/dashboards_providers.d
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 import 'package:taskforge/features/dashboards/presentation/drill_sheet.dart';
 import 'package:taskforge/features/dashboards/presentation/widget_body.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// One widget on a dashboard: title, menu, and its numbers (kept on screen
 /// while they are read again; a failure says so and offers Retry).
@@ -104,11 +106,11 @@ class WidgetCard extends ConsumerWidget {
             ),
             Expanded(
               child: switch (data) {
-                null => Center(
-                  child: Text(
-                    context.l10n.grpISaveToSeeNumbers,
-                    key: const Key('unsaved'),
-                  ),
+                null => TfEmpty(
+                  key: const Key('unsaved'),
+                  compact: true,
+                  illustration: TfIllustrationKind.goals,
+                  title: context.l10n.grpISaveToSeeNumbers,
                 ),
                 AsyncData(:final value) => _Loaded(
                   widget: widget,

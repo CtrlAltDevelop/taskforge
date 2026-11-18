@@ -15,6 +15,8 @@ import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 enum _FolderAction { rename, delete }
 
@@ -124,26 +126,17 @@ class GoalsScreen extends ConsumerWidget {
       ),
       body: goals.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(goalsErrorMessage(e, t)),
-              TextButton(
-                key: const Key('retry-goals'),
-                onPressed: () => ref.invalidate(goalsProvider),
-                child: Text(t.devRetry),
-              ),
-            ],
-          ),
+        error: (e, _) => TfError(
+          message: goalsErrorMessage(e, t),
+          details: '$e',
+          retryKey: const Key('retry-goals'),
+          onRetry: () => ref.invalidate(goalsProvider),
         ),
         data: (cat) {
           if (cat.goals.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(t.goalsEmpty, textAlign: TextAlign.center),
-              ),
+            return TfEmpty(
+              illustration: TfIllustrationKind.goals,
+              title: t.goalsEmpty,
             );
           }
           final roots = cat.roots;

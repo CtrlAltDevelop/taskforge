@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/automations/application/automations_providers.dart';
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/runs_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Tries [rule] on a chosen task without changing anything.
 Future<void> showDryRun(BuildContext context, Automation rule) =>
@@ -90,7 +91,13 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
                     _result = null;
                   }),
                 ),
-                AsyncError() => Text(context.l10n.grpGTasksLoadFailed),
+                AsyncError() => TfError(
+                  compact: true,
+                  message: context.l10n.grpGTasksLoadFailed,
+                  onRetry: () => ref.invalidate(
+                    dryRunTasksProvider(widget.rule.projectId),
+                  ),
+                ),
                 _ => const LinearProgressIndicator(),
               },
               if (_error != null)

@@ -12,6 +12,7 @@ import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/core/offline/read_cache.dart';
 import 'package:taskforge/gen/infrastructure/workspaces/grpc/workspaces.pbgrpc.dart'
     as pb;
+import 'package:taskforge/core/maintenance.dart';
 
 abstract interface class WorkspaceClient {
   Future<List<Workspace>> list();
@@ -37,6 +38,9 @@ abstract interface class WorkspaceClient {
 /// Maps a transport failure to a [WorkspaceException] the UI can explain.
 WorkspaceException mapWorkspaceError(Object error) {
   if (error is WorkspaceException) return error;
+  if (isMaintenance(error)) {
+    return const WorkspaceException(WorkspaceFailure.maintenance);
+  }
   if (error is GrpcError) {
     final denied = parsePermissionDenied(error);
     return switch (error.code) {

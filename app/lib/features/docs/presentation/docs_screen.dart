@@ -10,6 +10,8 @@ import 'package:taskforge/features/docs/presentation/page_tree.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/docs/application/docs_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Width from which the tree sits beside the page; below it the tree is a
 /// drawer (and the whole screen when no page is open).
@@ -50,11 +52,10 @@ class DocsScreen extends ConsumerWidget {
         builder: (context, box) {
           final wide = box.maxWidth >= docsTreeBreakpoint;
           Widget page(BuildContext inner) => id == null
-              ? Center(
-                  child: Text(
-                    context.l10n.grpJPickPage,
-                    key: const Key('no-page-open'),
-                  ),
+              ? TfEmpty(
+                  key: const Key('no-page-open'),
+                  illustration: TfIllustrationKind.docs,
+                  title: context.l10n.grpJPickPage,
                 )
               : DocPageView(
                   key: ValueKey('page-$id'),

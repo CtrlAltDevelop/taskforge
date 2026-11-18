@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/search/application/search_providers.dart';
 import 'package:taskforge/features/search/domain/search.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Opens the search box over the current screen; following a result goes to
 /// it. Does nothing while it is already open.
@@ -152,22 +154,23 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
 
   Widget _body(SearchState state, SearchResults? results) {
     if (state.error != null && results == null) {
-      return _Message(
+      return TfError(
         key: const Key('search-error'),
-        text: searchErrorMessage(state.error!, context.l10n),
-        action: TextButton(
-          key: const Key('search-retry'),
-          onPressed: ref.read(searchBoxProvider.notifier).retry,
-          child: Text(context.l10n.retry),
-        ),
+        compact: true,
+        message: searchErrorMessage(state.error!, context.l10n),
+        details: '${state.error}',
+        retryKey: const Key('search-retry'),
+        onRetry: ref.read(searchBoxProvider.notifier).retry,
       );
     }
     if (state.text.trim().isEmpty) return _Recent(state.recent, _setText);
     if (results == null) return const SizedBox(height: 72);
     if (results.isEmpty) {
-      return _Message(
+      return TfEmpty(
         key: const Key('search-empty'),
-        text: context.l10n.grpFSearchNothing,
+        compact: true,
+        illustration: TfIllustrationKind.search,
+        title: context.l10n.grpFSearchNothing,
       );
     }
     final rows = results.ordered;
@@ -342,20 +345,16 @@ class _Recent extends StatelessWidget {
 }
 
 class _Message extends StatelessWidget {
-  const _Message({super.key, required this.text, this.action});
+  const _Message({super.key, required this.text});
 
   final String text;
-  final Widget? action;
 
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.all(24),
     child: Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(text, textAlign: TextAlign.center),
-        ?action,
-      ],
+      children: [Text(text, textAlign: TextAlign.center)],
     ),
   );
 }

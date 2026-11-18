@@ -4,6 +4,8 @@ import 'package:taskforge/core/charts/dashboard_charts.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// A widget's numbers drawn the way its kind asks. [onBucket] gets the bucket
 /// a click landed on ('' for the whole number): the caller lists its tasks.
@@ -104,7 +106,10 @@ class _Empty extends StatelessWidget {
   const _Empty();
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: Text(context.l10n.grpINothingToShow, key: const Key('widget-empty')),
+  Widget build(BuildContext context) => TfEmpty(
+    key: const Key('widget-empty'),
+    compact: true,
+    illustration: TfIllustrationKind.goals,
+    title: context.l10n.grpINothingToShow,
   );
 }

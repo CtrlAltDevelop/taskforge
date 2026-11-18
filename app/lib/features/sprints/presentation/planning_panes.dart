@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/sprints/domain/sprints.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// One task of the backlog or a sprint: a checkbox for multi-select, a handle
 /// to drag it to the other pane, and the points (tap to edit).
@@ -239,7 +240,7 @@ class TaskListPane extends ConsumerWidget {
     super.key,
     required this.title,
     required this.tasks,
-    required this.emptyText,
+    required this.emptyTitle,
     required this.rowBuilder,
     this.actions = const [],
     this.header,
@@ -247,7 +248,7 @@ class TaskListPane extends ConsumerWidget {
 
   final String title;
   final AsyncValue<List<SprintTask>> tasks;
-  final String emptyText;
+  final String emptyTitle;
   final Widget Function(SprintTask task) rowBuilder;
   final List<Widget> actions;
   final Widget? header;
@@ -280,17 +281,16 @@ class TaskListPane extends ConsumerWidget {
           ?header,
           Expanded(
             child: switch (tasks) {
-              AsyncData(:final value) when value.isEmpty => Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(emptyText, textAlign: TextAlign.center),
-                ),
+              AsyncData(:final value) when value.isEmpty => TfEmpty(
+                compact: true,
+                title: emptyTitle,
               ),
               AsyncData(:final value) => ListView(
                 children: [for (final t in value) rowBuilder(t)],
               ),
-              AsyncError(:final error) => Center(
-                child: Text(sprintErrorMessage(error, context.l10n)),
+              AsyncError(:final error) => TfError(
+                compact: true,
+                message: sprintErrorMessage(error, context.l10n),
               ),
               _ => const Center(child: CircularProgressIndicator()),
             },

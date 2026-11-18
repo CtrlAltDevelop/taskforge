@@ -18,6 +18,7 @@ import 'package:taskforge/core/ui/tf/tf_status.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
+import 'package:taskforge/features/home/presentation/sample_badge.dart';
 
 /// One task on the phone: a card with a status stripe, the title, its id,
 /// status, due date and people, and a menu. Long press starts picking.
@@ -156,6 +157,7 @@ class TaskTile extends StatelessWidget {
                         PendingMark(id: task.id),
                         if (task.isBlocked)
                           BlockedBadge(blockedBy: task.blockedBy),
+                        if (task.isSample) const SampleBadge(),
                         if (task.priority != TaskPriority.none)
                           TfPriorityIcon(
                             priority: tfPriorityOf(task.priority),

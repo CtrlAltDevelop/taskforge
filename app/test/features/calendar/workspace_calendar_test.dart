@@ -354,7 +354,7 @@ void main() {
     });
   });
 
-  testWidgets('the home screen opens it', (tester) async {
+  testWidgets('the sidebar opens it', (tester) async {
     final server = FakeTasksClient();
     final pumped = await pumpProjects(
       tester,
@@ -365,7 +365,9 @@ void main() {
     );
     await pumped.go(tester, '/');
 
-    await tester.tap(find.byKey(const Key('open-calendar')));
+    await tester.tap(find.byKey(const Key('section-workspace')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('nav-calendar')));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('cal-title')), findsOneWidget);

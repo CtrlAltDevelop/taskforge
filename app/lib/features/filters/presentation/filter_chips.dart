@@ -28,7 +28,9 @@ class FilterChips extends ConsumerWidget {
     final notifier = ref.read(activeFilterProvider(projectId).notifier);
     final query = state.query;
     final l10n = context.l10n;
-    final wide = projectId.isEmpty; // the calendar of every project
+    final wide = isWorkspaceWideFilter(
+      projectId,
+    ); // the calendar of every project
     final fields = filterFields(
       flow: wide ? null : ref.watch(workflowProvider(projectId)).value,
       members: ref.watch(membersProvider).value ?? const [],

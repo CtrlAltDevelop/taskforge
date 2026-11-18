@@ -93,6 +93,9 @@ enum WorkspaceFailure {
   invalid,
   notFound,
   network,
+
+  /// The server answered "unavailable" and said it is down for maintenance.
+  maintenance,
   other,
 }
 
@@ -119,6 +122,7 @@ String workspaceErrorMessage(Object error, [AppLocalizations? l10n]) {
     WorkspaceFailure.invalid => error.detail ?? t.grpLCheckValues,
     WorkspaceFailure.notFound => t.grpLWsNotRestorable,
     WorkspaceFailure.network => t.grpLNetCheck,
+    WorkspaceFailure.maintenance => t.sysMaintenanceBody,
     WorkspaceFailure.other => t.grpLGeneric,
   };
 }

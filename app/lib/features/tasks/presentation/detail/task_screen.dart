@@ -28,6 +28,7 @@ import 'package:taskforge/features/tasks/presentation/detail/task_skeleton.dart'
 import 'package:taskforge/features/tasks/presentation/detail/task_tabs.dart';
 import 'package:taskforge/features/tasks/presentation/detail/task_title.dart';
 import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
+import 'package:taskforge/features/home/presentation/record_recent.dart';
 
 /// One task: fields and content on the left, the whole conversation on the
 /// right (see [TaskFrame]). The same screen sits in a window, a side panel or
@@ -73,61 +74,66 @@ class TaskScreen extends ConsumerWidget {
         : l10n.tdNoPermission;
     final members = _candidates(ref);
     final tree = ref.watch(taskTreeProvider(project.id));
-    return KeyedSubtree(
-      key: const Key('task-detail'),
-      child: LayoutBuilder(
-        builder: (context, box) => TaskFrame(
-          header: TaskHeader(
-            task: task,
-            breadcrumb: tree.breadcrumb(task.id),
-            kind: kind,
-            canDelete: !project.isArchived && permissions.can(Perm.taskDelete),
-            canTemplate: permissions.can(Perm.templateCreate),
-            onClose: onClose,
-            onOpen: onOpen,
-            onPrevious: onPrevious,
-            onNext: onNext,
-            onKind: onKind,
-            onDelete: () => deleteTaskFlow(context, ref, task, close: onClose),
-            onTemplate: () => _saveTemplate(context, task),
-          ),
-          body: [
-            if (task.deletedAt.isNotEmpty)
-              TfBanner(
-                key: const Key('trashed-banner'),
-                message: l10n.tdTrashedBanner,
-                kind: TfBannerKind.warning,
-              ),
-            TaskTitle(
+    return RecordRecentOnOpen(
+      taskId: task.id,
+      child: KeyedSubtree(
+        key: const Key('task-detail'),
+        child: LayoutBuilder(
+          builder: (context, box) => TaskFrame(
+            header: TaskHeader(
               task: task,
-              readOnlyReason: readOnlyReason,
-              compact: box.maxWidth < phoneBelow,
-            ),
-            TaskDescription(task: task, readOnlyReason: readOnlyReason),
-            DetailsPanel(
-              project: project,
-              task: task,
-              members: members,
-              readOnlyReason: readOnlyReason,
-              collapsible: box.maxWidth < phoneBelow,
-            ),
-            TaskTabs(
-              project: project,
-              task: task,
-              canEdit: canEdit,
-              members: members,
+              breadcrumb: tree.breadcrumb(task.id),
+              kind: kind,
+              canDelete:
+                  !project.isArchived && permissions.can(Perm.taskDelete),
+              canTemplate: permissions.can(Perm.templateCreate),
+              onClose: onClose,
               onOpen: onOpen,
-              onOpenLink: (link) => _openLink(context, ref, link),
+              onPrevious: onPrevious,
+              onNext: onNext,
+              onKind: onKind,
+              onDelete: () =>
+                  deleteTaskFlow(context, ref, task, close: onClose),
+              onTemplate: () => _saveTemplate(context, task),
             ),
-          ],
-          activity: ({leading = const [], topBar}) => ActivityPanel(
-            key: ValueKey('activity-panel-${task.id}'),
-            projectId: project.id,
-            taskId: task.id,
-            archived: project.isArchived,
-            isPrivate: project.isPrivate,
-            leading: leading,
-            topBar: topBar,
+            body: [
+              if (task.deletedAt.isNotEmpty)
+                TfBanner(
+                  key: const Key('trashed-banner'),
+                  message: l10n.tdTrashedBanner,
+                  kind: TfBannerKind.warning,
+                ),
+              TaskTitle(
+                task: task,
+                readOnlyReason: readOnlyReason,
+                compact: box.maxWidth < phoneBelow,
+              ),
+              TaskDescription(task: task, readOnlyReason: readOnlyReason),
+              DetailsPanel(
+                project: project,
+                task: task,
+                members: members,
+                readOnlyReason: readOnlyReason,
+                collapsible: box.maxWidth < phoneBelow,
+              ),
+              TaskTabs(
+                project: project,
+                task: task,
+                canEdit: canEdit,
+                members: members,
+                onOpen: onOpen,
+                onOpenLink: (link) => _openLink(context, ref, link),
+              ),
+            ],
+            activity: ({leading = const [], topBar}) => ActivityPanel(
+              key: ValueKey('activity-panel-${task.id}'),
+              projectId: project.id,
+              taskId: task.id,
+              archived: project.isArchived,
+              isPrivate: project.isPrivate,
+              leading: leading,
+              topBar: topBar,
+            ),
           ),
         ),
       ),

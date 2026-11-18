@@ -19,6 +19,8 @@ import 'package:taskforge/features/sprints/domain/sprints.dart';
 import 'package:taskforge/features/sprints/presentation/planning_panes.dart';
 import 'package:taskforge/features/sprints/presentation/sprint_charts.dart';
 import 'package:taskforge/features/sprints/presentation/sprint_dialogs.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Width from which the backlog and the sprint sit side by side.
 const planningBreakpoint = 820.0;
@@ -45,22 +47,16 @@ class SprintsScreen extends ConsumerWidget {
         ),
       ),
       body: switch (project) {
-        final p? when !p.enabledFeatures.contains(sprintsFeature) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              context.l10n.grpASprintsDisabled,
-              key: const Key('sprints-disabled'),
-              textAlign: TextAlign.center,
-            ),
-          ),
+        final p? when !p.enabledFeatures.contains(sprintsFeature) => TfEmpty(
+          key: const Key('sprints-disabled'),
+          illustration: TfIllustrationKind.tasks,
+          title: context.l10n.grpASprintsDisabled,
         ),
         final p? => _Sprints(project: p),
-        null when catalog.hasValue => Center(
-          child: Text(
-            context.l10n.grpAProjectNotFound,
-            key: const Key('sprints-missing'),
-          ),
+        null when catalog.hasValue => TfEmpty(
+          key: const Key('sprints-missing'),
+          illustration: TfIllustrationKind.notFound,
+          title: context.l10n.grpAProjectNotFound,
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },
@@ -227,21 +223,12 @@ class _SprintsState extends ConsumerState<_Sprints> {
     final sprints = ref.watch(sprintsProvider(_pid));
     return switch (sprints) {
       AsyncData(:final value) => _loaded(context, value),
-      AsyncError(:final error) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              sprintErrorMessage(error, context.l10n),
-              key: const Key('sprints-error'),
-            ),
-            TextButton(
-              key: const Key('sprints-retry'),
-              onPressed: () => ref.invalidate(sprintsProvider(_pid)),
-              child: Text(context.l10n.grpARetry),
-            ),
-          ],
-        ),
+      AsyncError(:final error) => TfError(
+        key: const Key('sprints-error'),
+        message: sprintErrorMessage(error, context.l10n),
+        details: '$error',
+        retryKey: const Key('sprints-retry'),
+        onRetry: () => ref.invalidate(sprintsProvider(_pid)),
       ),
       _ => const Center(child: CircularProgressIndicator()),
     };
@@ -348,7 +335,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
       child: TaskListPane(
         title: context.l10n.grpABacklog,
         tasks: backlog,
-        emptyText: context.l10n.grpABacklogEmpty,
+        emptyTitle: context.l10n.grpABacklogEmpty,
         rowBuilder: (t) => row(t, backlogSide: true),
         actions: [
           if (canPlan)
@@ -364,14 +351,10 @@ class _SprintsState extends ConsumerState<_Sprints> {
     );
 
     final sprintPane = sprint == null
-        ? Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                context.l10n.grpANoOpenSprint,
-                key: const Key('no-sprint'),
-              ),
-            ),
+        ? TfEmpty(
+            key: const Key('no-sprint'),
+            illustration: TfIllustrationKind.tasks,
+            title: context.l10n.grpANoOpenSprint,
           )
         : DropPane(
             key: const Key('sprint-pane'),
@@ -380,7 +363,7 @@ class _SprintsState extends ConsumerState<_Sprints> {
             child: TaskListPane(
               title: sprint.name,
               tasks: inSprint,
-              emptyText: context.l10n.grpADragHere,
+              emptyTitle: context.l10n.grpADragHere,
               header: _capacityBar(sprint, canManage),
               rowBuilder: (t) => row(t, backlogSide: false),
               actions: [
@@ -556,11 +539,10 @@ class _Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = sprint;
     if (s == null) {
-      return Center(
-        child: Text(
-          context.l10n.grpANoSprintsYet,
-          key: const Key('reports-empty'),
-        ),
+      return TfEmpty(
+        key: const Key('reports-empty'),
+        illustration: TfIllustrationKind.tasks,
+        title: context.l10n.grpANoSprintsYet,
       );
     }
     return ListView(

@@ -17,6 +17,8 @@ import 'package:taskforge/features/docs/presentation/doc_dialogs.dart';
 import 'package:taskforge/features/docs/presentation/doc_panels.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// What the save indicator says.
 String saveLabel(SaveState s, {AppLocalizations? l10n}) {
@@ -192,31 +194,22 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
     final error = s.error;
     if (error != null) {
       final missing = error.failure == DocFailure.notFound;
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              missing
-                  ? context.l10n.grpBDocNotFound
-                  : docErrorMessage(error, context.l10n),
-              key: Key(missing ? 'doc-not-found' : 'doc-error'),
-            ),
-            const SizedBox(height: 8),
-            if (missing)
-              TextButton(
-                key: const Key('back-to-docs'),
-                onPressed: () => context.go('/docs'),
-                child: Text(context.l10n.grpBBackToAllPages),
-              )
-            else
-              TextButton(
-                key: const Key('retry-doc'),
-                onPressed: notifier.load,
-                child: Text(context.l10n.grpBRetry),
-              ),
-          ],
-        ),
+      if (missing) {
+        return TfEmpty(
+          key: const Key('doc-not-found'),
+          illustration: TfIllustrationKind.notFound,
+          title: context.l10n.grpBDocNotFound,
+          actionLabel: context.l10n.grpBBackToAllPages,
+          actionKey: const Key('back-to-docs'),
+          onAction: () => context.go('/docs'),
+        );
+      }
+      return TfError(
+        key: const Key('doc-error'),
+        message: docErrorMessage(error, context.l10n),
+        details: '$error',
+        retryKey: const Key('retry-doc'),
+        onRetry: notifier.load,
       );
     }
 

@@ -17,6 +17,8 @@ import 'package:taskforge/features/workload/domain/workload.dart';
 import 'package:taskforge/features/workload/presentation/workload_screen.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Asks for hours per day and working days, saves them, and says so on a
 /// refusal. Returns true when something was saved.
@@ -171,7 +173,11 @@ class _CapacityTab extends ConsumerWidget {
     final manage = ref.watch(permissionSetProvider).can(Perm.workloadManage);
     return caps.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text(workloadMessage(context, e))),
+      error: (e, _) => TfError(
+        message: workloadMessage(context, e),
+        details: '$e',
+        onRetry: () => ref.invalidate(capacitiesProvider),
+      ),
       data: (list) => ListView(
         children: [
           for (final c in list)
@@ -281,9 +287,16 @@ class _TimeOffTab extends ConsumerWidget {
       ),
       body: rows.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text(workloadMessage(context, e))),
+        error: (e, _) => TfError(
+          message: workloadMessage(context, e),
+          details: '$e',
+          onRetry: () => ref.invalidate(timeOffProvider),
+        ),
         data: (list) => list.isEmpty
-            ? Center(child: Text(t.wlNoTimeOff))
+            ? TfEmpty(
+                illustration: TfIllustrationKind.tasks,
+                title: t.wlNoTimeOff,
+              )
             : ListView(
                 children: [
                   for (final r in list)
@@ -500,9 +513,16 @@ class _HolidaysTab extends ConsumerWidget {
           : null,
       body: rows.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text(workloadMessage(context, e))),
+        error: (e, _) => TfError(
+          message: workloadMessage(context, e),
+          details: '$e',
+          onRetry: () => ref.invalidate(holidaysProvider),
+        ),
         data: (list) => list.isEmpty
-            ? Center(child: Text(t.wlNoHolidays))
+            ? TfEmpty(
+                illustration: TfIllustrationKind.tasks,
+                title: t.wlNoHolidays,
+              )
             : ListView(
                 children: [
                   for (final h in list)

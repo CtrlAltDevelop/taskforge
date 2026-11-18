@@ -10,6 +10,8 @@ import 'package:taskforge/features/board/presentation/board_card.dart';
 import 'package:taskforge/features/board/presentation/edge_scroll.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/list_lookups.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Width of one column.
 const columnWidth = 280.0;
@@ -280,16 +282,13 @@ class _BoardColumnViewState extends State<BoardColumnView> {
     final column = widget.column;
     final tasks = column.tasks;
     if (tasks.isEmpty && !column.hasMore) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            widget.canMove
-                ? context.l10n.grp1DropCardHere
-                : context.l10n.grp1NoCards,
-            key: Key('empty-${column.key}'),
-          ),
-        ),
+      return TfEmpty(
+        compact: true,
+        illustration: TfIllustrationKind.board,
+        title: widget.canMove
+            ? context.l10n.grp1DropCardHere
+            : context.l10n.grp1NoCards,
+        key: Key('empty-${column.key}'),
       );
     }
     return ListView.builder(

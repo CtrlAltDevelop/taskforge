@@ -12,6 +12,8 @@ import 'package:taskforge/features/chat/presentation/chat_labels.dart';
 import 'package:taskforge/features/chat/presentation/conversation_pane.dart';
 import 'package:taskforge/features/chat/presentation/space_list.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Where the list and the conversation sit side by side.
 const chatTwoPaneFrom = 720.0;
@@ -111,11 +113,10 @@ class _Placeholder extends StatelessWidget {
     if (waiting) {
       return const Center(child: CircularProgressIndicator());
     }
-    return Center(
-      child: Text(
-        lost ? l10n.grpLCommentGone : l10n.chatSelectSpace,
-        key: const Key('chat-placeholder'),
-      ),
+    return TfEmpty(
+      key: const Key('chat-placeholder'),
+      illustration: TfIllustrationKind.chat,
+      title: lost ? l10n.grpLCommentGone : l10n.chatSelectSpace,
     );
   }
 }

@@ -16,6 +16,8 @@ import 'package:taskforge/features/workload/domain/workload.dart';
 import 'package:taskforge/features/workload/presentation/workload_cell.dart';
 import 'package:taskforge/features/workload/presentation/workload_settings.dart';
 import 'package:taskforge/features/workload/presentation/workload_toolbar.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 const _nameWidth = 190.0;
 const _minCell = 72.0;
@@ -85,17 +87,10 @@ class WorkloadScreen extends ConsumerWidget {
               skipLoadingOnReload: true,
               skipLoadingOnRefresh: true,
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(workloadMessage(context, e)),
-                    TextButton(
-                      onPressed: () => ref.invalidate(workloadProvider),
-                      child: Text(t.retry),
-                    ),
-                  ],
-                ),
+              error: (e, _) => TfError(
+                message: workloadMessage(context, e),
+                details: '$e',
+                onRetry: () => ref.invalidate(workloadProvider),
               ),
               data: (data) => _Body(
                 data: data,
@@ -155,7 +150,10 @@ class _Body extends StatelessWidget {
           _Note(text: t.wlTruncated, icon: Icons.warning_amber),
         Expanded(
           child: data.people.isEmpty
-              ? Center(child: Text(t.wlNoPeople))
+              ? TfEmpty(
+                  illustration: TfIllustrationKind.tasks,
+                  title: t.wlNoPeople,
+                )
               : _Grid(
                   data: data,
                   members: members,

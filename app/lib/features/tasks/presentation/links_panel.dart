@@ -8,6 +8,7 @@ import 'package:taskforge/features/tasks/data/tasks_client.dart';
 import 'package:taskforge/features/tasks/domain/links.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 IconData linkIcon(LinkKind kind) => switch (kind) {
   LinkKind.blocks => Icons.block,
@@ -58,15 +59,12 @@ class LinksPanel extends ConsumerWidget {
         ),
         links.when(
           loading: () => const LinearProgressIndicator(),
-          error: (e, _) => Row(
-            children: [
-              Expanded(child: Text(taskErrorMessage(e, context.l10n))),
-              TextButton(
-                key: const Key('retry-links'),
-                onPressed: () => ref.invalidate(taskLinksProvider(task.id)),
-                child: Text(context.l10n.retry),
-              ),
-            ],
+          error: (e, _) => TfError(
+            compact: true,
+            message: taskErrorMessage(e, context.l10n),
+            details: '$e',
+            retryKey: const Key('retry-links'),
+            onRetry: () => ref.invalidate(taskLinksProvider(task.id)),
           ),
           data: (items) => items.isEmpty
               ? Text(context.l10n.grpFNoLinks, key: const Key('no-links'))

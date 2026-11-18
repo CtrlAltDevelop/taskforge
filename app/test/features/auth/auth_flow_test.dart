@@ -12,7 +12,7 @@ import 'package:taskforge/core/auth/auth_tokens.dart';
 import 'package:taskforge/core/auth/token_store.dart';
 import 'package:taskforge/features/account/account_client.dart';
 import 'package:taskforge/features/account/account_providers.dart';
-import 'package:taskforge/features/account/home_screen.dart';
+import 'package:taskforge/features/home/presentation/home_screen.dart';
 import 'package:taskforge/features/account/sessions_api.dart';
 import 'package:taskforge/features/security/application/security_providers.dart';
 import 'package:taskforge/features/system/application/system_providers.dart';
@@ -158,6 +158,14 @@ Future<(AuthSession, _FakeApi)> _pump(
   return (session, api);
 }
 
+/// Opens an account page from the avatar menu (Home no longer links to them).
+Future<void> _openAccountPage(WidgetTester tester, String label) async {
+  await tester.tap(find.byKey(const Key('profile-menu')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(label));
+  await tester.pumpAndSettle();
+}
+
 void main() {
   testWidgets('a signed-out user is sent to the sign-in screen', (
     tester,
@@ -178,7 +186,8 @@ void main() {
     await tester.tap(find.byKey(const Key('submit')));
     await tester.pumpAndSettle();
 
-    expect(find.text('zoe@example.com'), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byKey(const Key('home-greeting')), findsOneWidget);
   });
 
   testWidgets(
@@ -287,7 +296,7 @@ void main() {
           sessionId: 's',
         ),
       );
-      expect(find.text('zoe@example.com'), findsOneWidget);
+      expect(find.byType(HomeScreen), findsOneWidget);
 
       await tester.tap(find.byKey(const Key('profile-menu')));
       await tester.pumpAndSettle();
@@ -311,11 +320,7 @@ void main() {
       ),
     );
 
-    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byKey(const Key('open-sessions')));
+    await _openAccountPage(tester, 'Sessions');
     await tester.pumpAndSettle();
 
     expect(find.text('TaskForge macOS'), findsOneWidget);
@@ -334,9 +339,7 @@ void main() {
           sessionId: 's',
         ),
       );
-      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('open-sessions')));
+      await _openAccountPage(tester, 'Sessions');
       await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(const Key('revoke-other')));
@@ -357,9 +360,7 @@ void main() {
           sessionId: 's',
         ),
       );
-      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('open-sessions')));
+      await _openAccountPage(tester, 'Sessions');
       await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(const Key('revoke-others')));
@@ -412,9 +413,7 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('open-sessions')));
+    await _openAccountPage(tester, 'Sessions');
     await tester.pumpAndSettle();
     api.revokeFails = const NetworkUnavailable('offline');
 
@@ -435,13 +434,7 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.scrollUntilVisible(
-      find.byKey(const Key('open-change-password')),
-      200,
-      scrollable: find.byType(Scrollable).last,
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('open-change-password')));
+    await _openAccountPage(tester, 'Change password');
     await tester.pumpAndSettle();
 
     await tester.enterText(
@@ -472,13 +465,7 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.scrollUntilVisible(
-      find.byKey(const Key('open-change-password')),
-      200,
-      scrollable: find.byType(Scrollable).last,
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('open-change-password')));
+    await _openAccountPage(tester, 'Change password');
     await tester.pumpAndSettle();
 
     await tester.enterText(
@@ -558,9 +545,7 @@ void main() {
           sessionId: 's',
         ),
       );
-      await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('open-sessions')));
+      await _openAccountPage(tester, 'Sessions');
       await tester.pumpAndSettle();
       api.refreshFails = const AuthApiException(
         status: 401,
@@ -587,14 +572,12 @@ void main() {
         sessionId: 's',
       ),
     );
-    await tester.ensureVisible(find.byKey(const Key('open-sessions')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('open-sessions')));
+    await _openAccountPage(tester, 'Sessions');
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('back-home')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('open-sessions')), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 }

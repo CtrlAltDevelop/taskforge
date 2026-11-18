@@ -9,6 +9,7 @@ import 'package:taskforge/features/dashboards/domain/dashboards.dart';
 import 'package:taskforge/features/dashboards/presentation/widget_body.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/sprints/application/sprints_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Pick or change a widget: what it is, what it counts, and a live preview of
 /// the numbers it would show (read from the server without saving).
@@ -235,11 +236,10 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
               SizedBox(
                 height: 200,
                 child: _error != null
-                    ? Center(
-                        child: Text(
-                          dashboardErrorMessage(_error!, context.l10n),
-                          key: const Key('preview-error'),
-                        ),
+                    ? TfError(
+                        key: const Key('preview-error'),
+                        compact: true,
+                        message: dashboardErrorMessage(_error!, context.l10n),
                       )
                     : _preview == null
                     ? const Center(child: CircularProgressIndicator())

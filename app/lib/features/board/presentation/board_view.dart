@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/features/home/application/home_providers.dart';
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/board/domain/board.dart';
 import 'package:taskforge/features/board/presentation/board_card.dart';
@@ -64,6 +65,15 @@ class _BoardViewState extends ConsumerState<BoardView> {
   );
 
   String get _id => widget.project.id;
+
+  @override
+  void initState() {
+    super.initState();
+    // The checklist's "try the board" step: only the app sees a board open.
+    Future.microtask(() {
+      if (mounted) ref.read(onboardingStepsProvider.notifier).note('try_board');
+    });
+  }
 
   @override
   void dispose() {

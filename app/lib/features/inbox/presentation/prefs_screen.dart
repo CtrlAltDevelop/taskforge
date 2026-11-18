@@ -10,6 +10,7 @@ import 'package:taskforge/features/inbox/application/push.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/inbox/domain/timezones.dart';
 import 'package:taskforge/features/inbox/presentation/push_prompt.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// Which kinds of event reach this person by which channel, when they may be
 /// disturbed and what time zone that is in.
@@ -23,24 +24,12 @@ class NotificationPrefsScreen extends ConsumerWidget {
       appBar: TfAppBar(title: Text(context.l10n.grpENotifSettings)),
       body: switch (prefs) {
         AsyncData(:final value) => _Body(prefs: value),
-        AsyncError(:final error) => Center(
-          child: Semantics(
-            liveRegion: true,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  inboxErrorMessage(error, context.l10n),
-                  key: const Key('prefs-error'),
-                ),
-                TextButton(
-                  key: const Key('retry-prefs'),
-                  onPressed: () => ref.invalidate(prefsProvider),
-                  child: Text(context.l10n.grpERetry),
-                ),
-              ],
-            ),
-          ),
+        AsyncError(:final error) => TfError(
+          key: const Key('prefs-error'),
+          message: inboxErrorMessage(error, context.l10n),
+          details: '$error',
+          retryKey: const Key('retry-prefs'),
+          onRetry: () => ref.invalidate(prefsProvider),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

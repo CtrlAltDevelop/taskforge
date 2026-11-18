@@ -148,7 +148,11 @@ class _ManageDialog extends ConsumerWidget {
                           try {
                             await ref
                                 .read(filtersClientProvider)
-                                .delete(workspace, projectId, f.id);
+                                .delete(
+                                  workspace,
+                                  filterServerProject(projectId),
+                                  f.id,
+                                );
                             if (ref
                                     .read(activeFilterProvider(projectId))
                                     .savedId ==

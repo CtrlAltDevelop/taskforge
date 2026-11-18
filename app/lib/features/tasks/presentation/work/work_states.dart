@@ -3,15 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
-import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
-import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/tasks/presentation/work/view_search.dart';
 import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// How many placeholder rows a loading list shows.
 const skeletonRows = 8;
@@ -82,7 +81,7 @@ class WorkEmpty extends ConsumerWidget {
     if (!filters.query.isEmpty || search.isNotEmpty) {
       return TfEmpty(
         key: const Key('no-matches'),
-        icon: TfIcons.filter,
+        illustration: TfIllustrationKind.search,
         title: l10n.wvNoMatch,
         actionLabel: l10n.wvClearFilters,
         onAction: () {
@@ -93,7 +92,7 @@ class WorkEmpty extends ConsumerWidget {
     }
     return TfEmpty(
       key: const Key('no-tasks'),
-      icon: TfIcons.list,
+      illustration: TfIllustrationKind.tasks,
       title: l10n.wvNoTasks,
       message: l10n.wvNoTasksHint,
       actionLabel: onAddTask == null ? null : l10n.wvAddFirstTask,
@@ -116,23 +115,13 @@ class WorkError extends StatelessWidget {
   final Key retryKey;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(TfSpace.lg),
-    child: Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: TfBanner(
-          key: const Key('work-error'),
-          kind: TfBannerKind.danger,
-          message:
-              '${context.l10n.wvLoadFailed}. ${taskErrorMessage(error, context.l10n)}',
-          actionLabel: context.l10n.retry,
-          actionKey: retryKey,
-          onAction: onRetry,
-        ),
-      ),
-    ),
+  Widget build(BuildContext context) => TfError(
+    key: const Key('work-error'),
+    title: context.l10n.wvLoadFailed,
+    message: taskErrorMessage(error, context.l10n),
+    details: '$error',
+    retryKey: retryKey,
+    onRetry: onRetry,
   );
 }
 

@@ -506,6 +506,7 @@ const Task$json = {
     {'1': 'due_time', '3': 29, '4': 1, '5': 9, '10': 'dueTime'},
     {'1': 'blockers_due', '3': 30, '4': 1, '5': 9, '10': 'blockersDue'},
     {'1': 'blocks_due', '3': 31, '4': 1, '5': 9, '10': 'blocksDue'},
+    {'1': 'is_sample', '3': 32, '4': 1, '5': 8, '10': 'isSample'},
   ],
 };
 
@@ -528,7 +529,7 @@ final $typed_data.Uint8List taskDescriptor = $convert.base64Decode(
     'bG9ja2VkQnkSNAoGZmllbGRzGBsgAygLMhwuY29uZmlnLnRhc2tzLlRhc2tGaWVsZFZhbHVlUg'
     'ZmaWVsZHMSGwoJZ3JvdXBfa2V5GBwgASgJUghncm91cEtleRIZCghkdWVfdGltZRgdIAEoCVIH'
     'ZHVlVGltZRIhCgxibG9ja2Vyc19kdWUYHiABKAlSC2Jsb2NrZXJzRHVlEh0KCmJsb2Nrc19kdW'
-    'UYHyABKAlSCWJsb2Nrc0R1ZQ==');
+    'UYHyABKAlSCWJsb2Nrc0R1ZRIbCglpc19zYW1wbGUYICABKAhSCGlzU2FtcGxl');
 
 @$core.Deprecated('Use taskBulkUpdateRequestDescriptor instead')
 const TaskBulkUpdateRequest$json = {
@@ -873,6 +874,7 @@ const TaskResponse$json = {
     {'1': 'due_time', '3': 29, '4': 1, '5': 9, '10': 'dueTime'},
     {'1': 'blockers_due', '3': 30, '4': 1, '5': 9, '10': 'blockersDue'},
     {'1': 'blocks_due', '3': 31, '4': 1, '5': 9, '10': 'blocksDue'},
+    {'1': 'is_sample', '3': 32, '4': 1, '5': 8, '10': 'isSample'},
   ],
 };
 
@@ -895,7 +897,8 @@ final $typed_data.Uint8List taskResponseDescriptor = $convert.base64Decode(
     'GiADKAlSCWJsb2NrZWRCeRI8CgZmaWVsZHMYGyADKAsyJC5jb25maWcudGFza3MuVGFza0ZpZW'
     'xkVmFsdWVSZXNwb25zZVIGZmllbGRzEhsKCWdyb3VwX2tleRgcIAEoCVIIZ3JvdXBLZXkSGQoI'
     'ZHVlX3RpbWUYHSABKAlSB2R1ZVRpbWUSIQoMYmxvY2tlcnNfZHVlGB4gASgJUgtibG9ja2Vyc0'
-    'R1ZRIdCgpibG9ja3NfZHVlGB8gASgJUglibG9ja3NEdWU=');
+    'R1ZRIdCgpibG9ja3NfZHVlGB8gASgJUglibG9ja3NEdWUSGwoJaXNfc2FtcGxlGCAgASgIUghp'
+    'c1NhbXBsZQ==');
 
 @$core.Deprecated('Use taskRestoreRequestDescriptor instead')
 const TaskRestoreRequest$json = {

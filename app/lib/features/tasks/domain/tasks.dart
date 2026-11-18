@@ -67,6 +67,7 @@ class Task {
     this.parentId = '',
     this.depth = 0,
     this.isBlocked = false,
+    this.isSample = false,
     this.blockedBy = const [],
     this.fieldValues = const {},
     this.groupKey = '',
@@ -114,6 +115,9 @@ class Task {
 
   /// Has a blocker that is not done yet: it cannot be completed until it is.
   final bool isBlocked;
+
+  /// Made by the first-run starter; marked "Sample" and left out of reports.
+  final bool isSample;
 
   /// The open blockers as you may see them: `WEB-4 (In progress)`, or
   /// `Restricted task`.
@@ -163,6 +167,7 @@ class Task {
     parentId: parentId,
     depth: depth,
     isBlocked: isBlocked,
+    isSample: isSample,
     blockedBy: blockedBy,
     fieldValues: patch.fieldValues == null
         ? fieldValues
@@ -200,6 +205,7 @@ class Task {
           parentId: parentId,
           depth: depth,
           isBlocked: isBlocked,
+          isSample: isSample,
           blockedBy: blockedBy,
           fieldValues: fieldValues,
           groupKey: key,

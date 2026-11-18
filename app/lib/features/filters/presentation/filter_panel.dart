@@ -54,6 +54,8 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
   final _editor = GlobalKey<TfqlEditorState>();
 
   String get _project => widget.projectId;
+  String get _serverProject => filterServerProject(_project);
+  bool get _wide => isWorkspaceWideFilter(_project);
 
   @override
   void dispose() {
@@ -69,7 +71,7 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
     try {
       return await ref
           .read(filtersClientProvider)
-          .validate(workspace, _project, tfql: tfql, astJson: astJson);
+          .validate(workspace, _serverProject, tfql: tfql, astJson: astJson);
     } on FilterException catch (e) {
       if (mounted) {
         setState(() => _message = filterErrorMessage(e, context.l10n));
@@ -135,10 +137,14 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
     if (workspace == null) return;
     try {
       final client = ref.read(filtersClientProvider);
-      final checked = await client.validate(workspace, _project, tfql: text);
+      final checked = await client.validate(
+        workspace,
+        _serverProject,
+        tfql: text,
+      );
       final suggestions = await client.suggest(
         workspace,
-        _project,
+        _serverProject,
         text,
         cursor < 0 ? text.length : cursor,
       );
@@ -193,8 +199,8 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
       context: context,
       builder: (_) => _SaveDialog(
         canShare: widget.canShare,
-        sharedValue: _project.isEmpty ? 'workspace' : 'project',
-        sharedLabel: _project.isEmpty
+        sharedValue: _wide ? 'workspace' : 'project',
+        sharedLabel: _wide
             ? context.l10n.grpGEveryoneWorkspace
             : context.l10n.grpGEveryoneProject,
       ),
@@ -206,7 +212,7 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
           .read(filtersClientProvider)
           .save(
             workspace,
-            _project,
+            _serverProject,
             name: choice.name,
             query: checked.query!,
             visibility: choice.visibility,
@@ -225,7 +231,7 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final wide = _project.isEmpty; // the calendar of every project
+    final wide = _wide; // the calendar of every project, My work
     final fields = filterFields(
       flow: wide ? null : ref.watch(workflowProvider(_project)).value,
       members: ref.watch(membersProvider).value ?? const [],

@@ -18,6 +18,8 @@ import 'package:taskforge/features/comments/presentation/comments_section.dart'
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// How far from the newest message still counts as "at the bottom".
 const _bottomSlack = 48.0;
@@ -348,26 +350,21 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
       );
     }
     if (state.error != null && state.messages.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              chatErrorMessage(state.error!, l10n),
-              key: const Key('chat-error'),
-            ),
-            TextButton(
-              key: const Key('chat-retry'),
-              onPressed: () => _notifier.load(),
-              child: Text(l10n.retry),
-            ),
-          ],
-        ),
+      return TfError(
+        key: const Key('chat-error'),
+        message: chatErrorMessage(state.error!, l10n),
+        details: '${state.error}',
+        retryKey: const Key('chat-retry'),
+        onRetry: () => _notifier.load(),
       );
     }
     final timeline = topLevel(state.messages);
     if (timeline.isEmpty) {
-      return Center(child: Text(l10n.chatSayHi, key: const Key('chat-empty')));
+      return TfEmpty(
+        key: const Key('chat-empty'),
+        illustration: TfIllustrationKind.chat,
+        title: l10n.chatSayHi,
+      );
     }
     final unreadId = firstUnreadId(timeline, _readAtOpen, me);
     // Newest at the bottom: the list runs from the bottom up.

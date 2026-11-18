@@ -8,6 +8,8 @@ import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/timeline/domain/timeline_math.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// "5 Nov → 9 Nov", "due 5 Nov" or "from 5 Nov": what a bar says, in words.
 String datesText(Task t, [AppLocalizations? l10n]) {
@@ -45,11 +47,10 @@ class TimelineList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
-      return Center(
-        child: Text(
-          context.l10n.grpINothingScheduled,
-          key: const Key('timeline-empty'),
-        ),
+      return TfEmpty(
+        key: const Key('timeline-empty'),
+        illustration: TfIllustrationKind.timeline,
+        title: context.l10n.grpINothingScheduled,
       );
     }
     return ListView.builder(

@@ -10,6 +10,8 @@ import 'package:taskforge/features/templates/domain/templates.dart';
 import 'package:taskforge/features/templates/presentation/template_dialogs.dart';
 import 'package:taskforge/features/templates/presentation/template_preview.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The gallery: search, the structure of each template, use / edit / delete.
 class TemplatesScreen extends ConsumerStatefulWidget {
@@ -91,14 +93,17 @@ class _State extends ConsumerState<TemplatesScreen> {
           Expanded(
             child: gallery.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(
-                child: TextButton(
-                  onPressed: () => ref.invalidate(templatesProvider(query)),
-                  child: Text(templatesErrorMessage(e, t)),
-                ),
+              error: (e, _) => TfError(
+                message: templatesErrorMessage(e, t),
+                details: '$e',
+                onRetry: () => ref.invalidate(templatesProvider(query)),
               ),
               data: (items) => items.isEmpty
-                  ? Center(child: Text(t.tplEmpty, key: const Key('tpl-empty')))
+                  ? TfEmpty(
+                      key: const Key('tpl-empty'),
+                      illustration: TfIllustrationKind.docs,
+                      title: t.tplEmpty,
+                    )
                   : ListView.builder(
                       padding: const EdgeInsets.all(16),
                       itemCount: items.length,

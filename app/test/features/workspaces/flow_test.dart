@@ -48,7 +48,7 @@ void main() {
       expect(client.items, isEmpty);
     });
 
-    testWidgets('creating lands on home showing the workspace name', (
+    testWidgets('creating lands on the starter step, then home', (
       tester,
     ) async {
       final client = FakeWorkspaceClient();
@@ -60,6 +60,10 @@ void main() {
 
       expect(client.items.single.slug, 'acme-corp');
       expect(find.text('Create your workspace'), findsNothing);
+      // First run: the starter comes next; leaving it for Home keeps working.
+      expect(byKey('starter-create'), findsOneWidget);
+      GoRouter.of(tester.element(byKey('starter-create'))).go('/');
+      await tester.pumpAndSettle();
       expect(find.byTooltip('Acme Corp'), findsOneWidget);
       expect(byKey('open-workspace-settings'), findsOneWidget);
     });

@@ -273,10 +273,14 @@ void main() {
 
     testWidgets('a project that was opened shows under Recent', (tester) async {
       await pumpProjects(tester, projects: projects);
-      expect(find.text('Recent'), findsNothing);
+      final inSidebar = find.descendant(
+        of: byKey('sidebar'),
+        matching: find.text('Recent'),
+      );
+      expect(inSidebar, findsNothing);
       await tester.tap(byKey('project-p3'));
       await tester.pumpAndSettle();
-      expect(find.text('Recent'), findsOneWidget);
+      expect(inSidebar, findsOneWidget);
       expect(byKey('recent-p3'), findsOneWidget);
     });
 

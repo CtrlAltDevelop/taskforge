@@ -12,6 +12,7 @@ import 'package:taskforge/features/members/presentation/members_screen.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 String stateLabel(InviteState s, [AppLocalizations? l10n]) {
   final t = l10n ?? lookupAppLocalizations(const Locale('en'));
@@ -41,17 +42,14 @@ class PendingTab extends ConsumerWidget {
     final workspaceId = ref.watch(workspaceScopeProvider);
     return invitations.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
-        child: TextButton(
-          key: const Key('retry-invitations'),
-          onPressed: () => ref.invalidate(invitationsProvider),
-          child: Text(
-            context.l10n.grpJErrorRetry(inviteErrorMessage(e, context.l10n)),
-          ),
-        ),
+      error: (e, _) => TfError(
+        message: inviteErrorMessage(e, context.l10n),
+        details: '$e',
+        retryKey: const Key('retry-invitations'),
+        onRetry: () => ref.invalidate(invitationsProvider),
       ),
       data: (all) => all.isEmpty
-          ? Center(child: Text(context.l10n.grpJNoInvitations))
+          ? TfEmpty(title: context.l10n.grpJNoInvitations)
           : ListView(
               children: [
                 for (final i in all)

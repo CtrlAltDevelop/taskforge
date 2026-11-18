@@ -8,6 +8,7 @@ import 'package:taskforge/features/recurrence/application/recurrence_providers.d
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/core/i18n/weekday_names.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 Future<void> showRepeatEditor(
   BuildContext context, {
@@ -554,9 +555,11 @@ class _PreviewBox extends StatelessWidget {
     }
     return preview.when(
       loading: () => const LinearProgressIndicator(key: Key('repeat-loading')),
-      error: (e, _) => Text(
-        repeatErrorMessage(e, context.l10n),
+      error: (e, _) => TfError(
         key: const Key('repeat-preview-error'),
+        compact: true,
+        message: repeatErrorMessage(e, context.l10n),
+        details: '$e',
       ),
       data: (p) => p == null
           ? const SizedBox.shrink()

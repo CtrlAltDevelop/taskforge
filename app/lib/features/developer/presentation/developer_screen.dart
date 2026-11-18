@@ -12,6 +12,7 @@ import 'package:taskforge/features/developer/presentation/webhooks_tab.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 
 /// A readable date for an ISO instant, in the person's calendar and digits.
 String whenText(BuildContext context, String iso) {
@@ -116,12 +117,10 @@ class _TokensTab extends ConsumerWidget {
     final tokens = ref.watch(apiTokensProvider);
     return tokens.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
-        child: TextButton(
-          key: const Key('retry-tokens'),
-          onPressed: () => ref.invalidate(apiTokensProvider),
-          child: Text(context.l10n.devRetry),
-        ),
+      error: (e, _) => TfError(
+        details: '$e',
+        retryKey: const Key('retry-tokens'),
+        onRetry: () => ref.invalidate(apiTokensProvider),
       ),
       data: (rows) => ListView(
         padding: const EdgeInsets.all(16),

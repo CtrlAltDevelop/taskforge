@@ -11,6 +11,8 @@ import 'package:taskforge/features/imports/presentation/import_wizard.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Import from Jira, ClickUp or CSV; what was imported before (with undo);
 /// people waiting to be matched to members; and export.
@@ -34,11 +36,10 @@ class ImportScreen extends ConsumerWidget {
         ],
       ),
       body: !allowed
-          ? Center(
-              child: Text(
-                context.l10n.grpCImpDenied,
-                key: const Key('import-denied'),
-              ),
+          ? TfEmpty(
+              key: const Key('import-denied'),
+              illustration: TfIllustrationKind.noAccess,
+              title: context.l10n.grpCImpDenied,
             )
           : ContentWidth(
               child: ListView(
@@ -89,15 +90,12 @@ class ImportHistory extends ConsumerWidget {
         ),
         jobs.when(
           loading: () => const LinearProgressIndicator(),
-          error: (e, _) => Row(
-            children: [
-              Text(importErrorMessage(e, context.l10n)),
-              TextButton(
-                key: const Key('history-retry'),
-                onPressed: () => ref.invalidate(importJobsProvider),
-                child: Text(context.l10n.grpCRetry),
-              ),
-            ],
+          error: (e, _) => TfError(
+            compact: true,
+            message: importErrorMessage(e, context.l10n),
+            details: '$e',
+            retryKey: const Key('history-retry'),
+            onRetry: () => ref.invalidate(importJobsProvider),
           ),
           data: (list) => list.isEmpty
               ? Padding(

@@ -11,6 +11,8 @@ import 'package:taskforge/features/calendar/domain/calendar_math.dart';
 import 'package:taskforge/features/calendar/presentation/calendar_ghosts.dart';
 import 'package:taskforge/features/recurrence/domain/recurrence.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// The tasks of one day as a list, each with a button that asks for a new date
 /// (the phone's way to reschedule, and the keyboard's).
@@ -39,11 +41,10 @@ class DayTasks extends StatelessWidget {
     final onDay = tasksOn(tasks, day);
     final ghostsToday = ghostsOn(ghosts, day);
     if (onDay.isEmpty && ghostsToday.isEmpty) {
-      return Center(
-        child: Text(
-          context.l10n.grpFNothingOn(context.localIso(day)),
-          key: const Key('day-empty'),
-        ),
+      return TfEmpty(
+        key: const Key('day-empty'),
+        illustration: TfIllustrationKind.calendar,
+        title: context.l10n.grpFNothingOn(context.localIso(day)),
       );
     }
     return ListView(

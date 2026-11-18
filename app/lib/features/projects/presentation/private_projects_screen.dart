@@ -8,6 +8,8 @@ import 'package:taskforge/features/projects/application/projects_providers.dart'
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 /// Admin list of private projects. Those the admin is not in cannot be opened
 /// until they add themselves.
@@ -26,11 +28,10 @@ class PrivateProjectsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpHPrivateProjects)),
       body: switch (list) {
-        AsyncData(:final value) when value.isEmpty => Center(
-          child: Text(
-            context.l10n.grpHNoPrivate,
-            key: const Key('private-empty'),
-          ),
+        AsyncData(:final value) when value.isEmpty => TfEmpty(
+          key: const Key('private-empty'),
+          illustration: TfIllustrationKind.tasks,
+          title: context.l10n.grpHNoPrivate,
         ),
         AsyncData(:final value) => ListView(
           children: [
@@ -59,11 +60,9 @@ class PrivateProjectsScreen extends ConsumerWidget {
               ),
           ],
         ),
-        AsyncError() => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(privateProjectsProvider),
-            child: Text(context.l10n.grpHLoadProjectsRetry),
-          ),
+        AsyncError() => TfError(
+          message: context.l10n.grpHLoadProjectsRetry,
+          onRetry: () => ref.invalidate(privateProjectsProvider),
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },

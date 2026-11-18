@@ -14,6 +14,8 @@ import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/inbox/presentation/snooze_sheet.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 enum NotificationMenu { toggleRead, snooze, unsnooze, archive, unarchive }
 
@@ -158,32 +160,22 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (state.error != null && state.items.isEmpty) {
-      return Center(
-        child: Semantics(
-          liveRegion: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                inboxErrorMessage(state.error!, context.l10n),
-                key: const Key('inbox-error'),
-              ),
-              TextButton(
-                key: const Key('retry-inbox'),
-                onPressed: _notifier.load,
-                child: Text(context.l10n.grpHRetry),
-              ),
-            ],
-          ),
+      return Semantics(
+        liveRegion: true,
+        child: TfError(
+          key: const Key('inbox-error'),
+          message: inboxErrorMessage(state.error!, context.l10n),
+          details: '${state.error}',
+          retryKey: const Key('retry-inbox'),
+          onRetry: _notifier.load,
         ),
       );
     }
     if (state.items.isEmpty) {
-      return Center(
-        child: Text(
-          _empty(context.l10n, _filter),
-          key: const Key('inbox-empty'),
-        ),
+      return TfEmpty(
+        key: const Key('inbox-empty'),
+        illustration: TfIllustrationKind.inbox,
+        title: _empty(context.l10n, _filter),
       );
     }
     return RefreshIndicator(
