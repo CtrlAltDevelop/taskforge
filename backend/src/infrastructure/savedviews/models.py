@@ -32,6 +32,8 @@ class SavedView(models.Model):
     name = models.CharField(max_length=60)
     config = models.JSONField(default=dict)
     is_shared = models.BooleanField(default=False)
+    pinned_as_tab = models.BooleanField(default=False)
+    tab_order = models.PositiveIntegerField(default=0)
     version = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)

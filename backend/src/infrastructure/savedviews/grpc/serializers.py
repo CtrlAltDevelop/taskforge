@@ -91,6 +91,8 @@ class SavedView(serializers.Serializer[dict[str, object]]):
     name = serializers.CharField()
     kind = serializers.CharField()
     is_shared = serializers.BooleanField()
+    pinned_as_tab = serializers.BooleanField()
+    tab_order = serializers.IntegerField()
     layout = Layout()
     board = BoardLayout()  # set instead of ``layout`` for a ``board`` view
     calendar = CalendarLayout()  # set instead of ``layout`` for a ``calendar`` view

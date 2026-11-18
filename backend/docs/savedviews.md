@@ -25,6 +25,8 @@ _This app publishes no routes of its own._
 | `name` | Char |  |
 | `config` | JSON |  |
 | `is_shared` | Boolean |  |
+| `pinned_as_tab` | Boolean |  |
+| `tab_order` | PositiveInteger |  |
 | `version` | PositiveInteger |  |
 | `created_at` | DateTime |  |
 | `updated_at` | DateTime |  |
@@ -45,6 +47,7 @@ _This app requires no settings of its own._
 ## Usage
 
 - **Who**: anyone who can open the project keeps personal layouts there, read-only roles and archived projects included (a layout is a preference, not an edit). A **shared** layout has no owner and needs `project.update` and an active project, to save and to delete.
+- **Tabs** (phase 46): `pinned_as_tab` and `tab_order` (0 to 250) ride on `Save`; a pinned layout is a tab on the project page, in `tab_order`. Pinning a shared layout is a shared save (`project.update`); a personal one is private.
 - **Saving**: a new layout, or `view_id` plus `expected_version` (stale: `VERSION_CONFLICT` with the current `version`). A name is 1–60 characters and unique per owner and kind; a project keeps at most 50 layouts of one kind in one place (`VIEW_NAME_TAKEN`, `VIEW_LIMIT`). A personal layout becomes shared by saving it with `shared`; it cannot go back.
 - **Kinds**: `list` (columns, widths, sort, `group_by`) and `board` (`group_by`, `swimlane`, `card_fields`, `limits` — a work-in-progress limit per column key; `config.clean_board`). A board layout travels as `BoardLayout` in `ViewSaveRequest.board` / `SavedView.board`; the app saves the person's own under the same fixed name as its list layout (a name is unique per kind).
 - A `timeline` layout (`zoom` day/week/month/quarter, `group_by` empty/assignee/status, `hide_done`, `critical_path`; `config.clean_timeline`) travels as `TimelineLayout` in `ViewSaveRequest.timeline` / `SavedView.timeline`.

@@ -54,6 +54,12 @@ def _name(raw: str) -> str:
     return name
 
 
+def _tab_order(raw: int) -> int:
+    if not 0 <= raw <= MAX_PER_SCOPE * len(KINDS):
+        raise ApiError("A tab's position is out of range.")
+    return int(raw)
+
+
 def _kind(raw: str) -> str:
     if raw not in KINDS:
         raise ApiError(f"Unknown view kind {raw!r}.")
@@ -115,6 +121,8 @@ def save(
     view_id: str = "",
     shared: bool = False,
     expected_version: int = 0,
+    pinned_as_tab: bool = False,
+    tab_order: int = 0,
 ) -> SavedView:
     """Create a layout, or save ``view_id`` (``expected_version`` required then)."""
     cleaned_name, cleaned_kind = _name(name), _kind(kind)
@@ -131,6 +139,8 @@ def save(
                 name=cleaned_name,
                 kind=cleaned_kind,
                 config=cleaned,
+                pinned_as_tab=pinned_as_tab,
+                tab_order=_tab_order(tab_order),
             )
     except IntegrityError:  # two saves of one name raced past the check below
         raise _name_taken() from None
@@ -189,6 +199,7 @@ def _write(
     view.owner = owner
     view.is_shared = shared
     view.name, view.kind, view.config = values["name"], kind, values["config"]
+    view.pinned_as_tab, view.tab_order = values["pinned_as_tab"], values["tab_order"]
     view.updated_at = timezone.now()
     view.save()
     return view

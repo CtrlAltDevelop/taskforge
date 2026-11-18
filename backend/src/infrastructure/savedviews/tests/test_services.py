@@ -243,3 +243,45 @@ def test_the_unknown_view_id_is_not_found(team: Any, project: Any) -> None:
         with pytest.raises(ApiError) as missing:
             services.delete(team.member, team.ws, str(project.pk), bad)
         assert missing.value.status == 404
+
+
+def test_a_layout_is_pinned_as_a_tab_and_keeps_its_order(team: Any, project: Any) -> None:
+    first = _save(team, project, name="a", pinned_as_tab=True, tab_order=2)
+    second = _save(team, project, name="b", pinned_as_tab=True, tab_order=1)
+    plain = _save(team, project, name="c")
+
+    back = {v.pk: v for v in services.list_views(team.member, team.ws, str(project.pk))}
+
+    assert (back[first.pk].pinned_as_tab, back[first.pk].tab_order) == (True, 2)
+    assert (back[second.pk].pinned_as_tab, back[second.pk].tab_order) == (True, 1)
+    assert (back[plain.pk].pinned_as_tab, back[plain.pk].tab_order) == (False, 0)
+
+
+def test_unpinning_saves_with_the_current_version(team: Any, project: Any) -> None:
+    view = _save(team, project, pinned_as_tab=True, tab_order=1)
+
+    again = _save(team, project, view_id=str(view.pk), expected_version=1, pinned_as_tab=False)
+
+    assert (again.pinned_as_tab, again.tab_order, again.version) == (False, 0, 2)
+
+
+def test_pinning_a_shared_layout_takes_the_manage_permission(team: Any, project: Any) -> None:
+    with pytest.raises(ApiError):
+        _save(team, project, shared=True, pinned_as_tab=True)  # a member may not share
+    shared = _save(team, project, who=team.admin, shared=True, pinned_as_tab=True, tab_order=1)
+
+    assert [v.pk for v in services.list_views(team.viewer, team.ws, str(project.pk))] == [shared.pk]
+    assert shared.pinned_as_tab is True
+
+
+def test_a_pinned_personal_tab_is_private_to_its_owner(team: Any, project: Any) -> None:
+    _save(team, project, pinned_as_tab=True, tab_order=1)
+
+    assert _names(team, project, team.viewer) == []
+    with pytest.raises(ApiError):
+        services.list_views(team.outsider, team.ws, str(project.pk))
+
+
+def test_a_tab_position_is_bounded(team: Any, project: Any) -> None:
+    with pytest.raises(ApiError):
+        _save(team, project, pinned_as_tab=True, tab_order=100000)

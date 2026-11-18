@@ -104,6 +104,8 @@ message SavedView {
     CalendarLayoutResponse calendar = 11;
     FilterLayoutResponse active_filter = 12;
     TimelineLayoutResponse timeline = 13;
+    bool pinned_as_tab = 14;
+    int32 tab_order = 15;
 }
 
 message TimelineLayout {
@@ -149,5 +151,7 @@ message ViewSaveRequest {
     CalendarLayout calendar = 10;
     FilterLayout active_filter = 11;
     TimelineLayout timeline = 12;
+    bool pinned_as_tab = 13;
+    int32 tab_order = 14;
 }
 

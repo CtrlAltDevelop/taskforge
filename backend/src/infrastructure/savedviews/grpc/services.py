@@ -150,6 +150,8 @@ def _message(view: ViewRow) -> Any:
         name=view.name,
         kind=view.kind,
         is_shared=view.is_shared,
+        pinned_as_tab=view.pinned_as_tab,
+        tab_order=view.tab_order,
         version=view.version,
         updated_at=view.updated_at.isoformat(),
     )
@@ -204,6 +206,8 @@ class ViewService(generics.GenericService):
             {"name": "calendar", "type": CalendarLayout},
             {"name": "timeline", "type": TimelineLayout},
             {"name": "active_filter", "type": FilterLayout},
+            {"name": "pinned_as_tab", "type": "bool"},
+            {"name": "tab_order", "type": "int32"},
         ],
         request_name="ViewSaveRequest",
         response=SavedView,
@@ -224,6 +228,8 @@ class ViewService(generics.GenericService):
                     view_id=request.id,
                     shared=request.shared,
                     expected_version=request.expected_version,
+                    pinned_as_tab=request.pinned_as_tab,
+                    tab_order=request.tab_order,
                 )
             )
         )()

@@ -32,6 +32,8 @@ NAMED: Final = frozenset(
         "comma",
         "period",
         "question",
+        "bracketleft",
+        "bracketright",
     }  # fmt: skip
 )
 FUNCTION_KEY = re.compile(r"^f([1-9]|1[0-2])$")

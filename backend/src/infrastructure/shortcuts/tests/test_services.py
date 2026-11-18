@@ -23,6 +23,9 @@ def max_(db: None) -> object:
     [
         ("Shift+Mod+K", "mod+shift+k"),
         (" ctrl+alt+Enter ", "ctrl+alt+enter"),
+        ("bracketleft", "bracketleft"),
+        ("bracketright", "bracketright"),
+        ("Shift+BracketLeft", "shift+bracketleft"),
     ],
 )
 def test_normalise_orders_modifiers(raw: str, chord: str) -> None:

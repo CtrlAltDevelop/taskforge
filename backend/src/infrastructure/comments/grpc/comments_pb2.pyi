@@ -35,6 +35,8 @@ class Comment(_message.Message):
     MENTION_IDS_FIELD_NUMBER: _builtins.int
     REACTIONS_FIELD_NUMBER: _builtins.int
     EDIT_COUNT_FIELD_NUMBER: _builtins.int
+    KIND_FIELD_NUMBER: _builtins.int
+    EVENT_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     task_id: _builtins.str
     author_id: _builtins.str
@@ -46,6 +48,8 @@ class Comment(_message.Message):
     pinned: _builtins.bool
     version: _builtins.int
     edit_count: _builtins.int
+    kind: _builtins.str
+    event: _builtins.str
     @_builtins.property
     def mention_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     @_builtins.property
@@ -66,10 +70,12 @@ class Comment(_message.Message):
         mention_ids: _abc.Iterable[_builtins.str] | None = ...,
         reactions: _abc.Iterable[Global___ReactionResponse] | None = ...,
         edit_count: _builtins.int = ...,
+        kind: _builtins.str = ...,
+        event: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["author_id", b"author_id", "body", b"body", "created_at", b"created_at", "deleted", b"deleted", "edit_count", b"edit_count", "edited_at", b"edited_at", "id", b"id", "mention_ids", b"mention_ids", "parent_id", b"parent_id", "pinned", b"pinned", "reactions", b"reactions", "task_id", b"task_id", "version", b"version"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["author_id", b"author_id", "body", b"body", "created_at", b"created_at", "deleted", b"deleted", "edit_count", b"edit_count", "edited_at", b"edited_at", "event", b"event", "id", b"id", "kind", b"kind", "mention_ids", b"mention_ids", "parent_id", b"parent_id", "pinned", b"pinned", "reactions", b"reactions", "task_id", b"task_id", "version", b"version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

@@ -389,6 +389,8 @@ class SavedView(_message.Message):
     CALENDAR_FIELD_NUMBER: _builtins.int
     ACTIVE_FILTER_FIELD_NUMBER: _builtins.int
     TIMELINE_FIELD_NUMBER: _builtins.int
+    PINNED_AS_TAB_FIELD_NUMBER: _builtins.int
+    TAB_ORDER_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     project_id: _builtins.str
     owner_id: _builtins.str
@@ -397,6 +399,8 @@ class SavedView(_message.Message):
     is_shared: _builtins.bool
     version: _builtins.int
     updated_at: _builtins.str
+    pinned_as_tab: _builtins.bool
+    tab_order: _builtins.int
     @_builtins.property
     def layout(self) -> Global___LayoutResponse: ...
     @_builtins.property
@@ -423,10 +427,12 @@ class SavedView(_message.Message):
         calendar: Global___CalendarLayoutResponse | None = ...,
         active_filter: Global___FilterLayoutResponse | None = ...,
         timeline: Global___TimelineLayoutResponse | None = ...,
+        pinned_as_tab: _builtins.bool = ...,
+        tab_order: _builtins.int = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "layout", b"layout", "timeline", b"timeline"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "project_id", b"project_id", "timeline", b"timeline", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "id", b"id", "is_shared", b"is_shared", "kind", b"kind", "layout", b"layout", "name", b"name", "owner_id", b"owner_id", "pinned_as_tab", b"pinned_as_tab", "project_id", b"project_id", "tab_order", b"tab_order", "timeline", b"timeline", "updated_at", b"updated_at", "version", b"version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -574,6 +580,8 @@ class ViewSaveRequest(_message.Message):
     CALENDAR_FIELD_NUMBER: _builtins.int
     ACTIVE_FILTER_FIELD_NUMBER: _builtins.int
     TIMELINE_FIELD_NUMBER: _builtins.int
+    PINNED_AS_TAB_FIELD_NUMBER: _builtins.int
+    TAB_ORDER_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     id: _builtins.str
@@ -581,6 +589,8 @@ class ViewSaveRequest(_message.Message):
     name: _builtins.str
     kind: _builtins.str
     shared: _builtins.bool
+    pinned_as_tab: _builtins.bool
+    tab_order: _builtins.int
     @_builtins.property
     def layout(self) -> Global___Layout: ...
     @_builtins.property
@@ -606,10 +616,12 @@ class ViewSaveRequest(_message.Message):
         calendar: Global___CalendarLayout | None = ...,
         active_filter: Global___FilterLayout | None = ...,
         timeline: Global___TimelineLayout | None = ...,
+        pinned_as_tab: _builtins.bool = ...,
+        tab_order: _builtins.int = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "layout", b"layout", "timeline", b"timeline"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "project_id", b"project_id", "shared", b"shared", "timeline", b"timeline", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_filter", b"active_filter", "board", b"board", "calendar", b"calendar", "expected_version", b"expected_version", "id", b"id", "kind", b"kind", "layout", b"layout", "name", b"name", "pinned_as_tab", b"pinned_as_tab", "project_id", b"project_id", "shared", b"shared", "tab_order", b"tab_order", "timeline", b"timeline", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
