@@ -1,6 +1,6 @@
 # Phase 48 — Home, onboarding and empty states
 
-**Status:** implemented (see "Not done / deferred" for what is left)
+**Status:** done (see "Not done / deferred" for what is left)
 
 ## Feature
 A real Home screen ("My work" and a day summary), a first-run flow that gets a new team to a working project in two minutes, and designed empty/error/loading states with illustrations across the app.
@@ -36,14 +36,14 @@ Today `HomeScreen` is a landing list and a new workspace shows blank screens. Fi
 - Greeting uses the user's locale, calendar and name; no stale "good morning" after local midnight.
 
 ## Acceptance criteria
-- [ ] Home renders all cards with data, loading, empty, error and offline states
-- [ ] My work lists assigned and watched tasks with the shared toolbar
-- [ ] New user: sign up → starter → lands in a populated project; samples removable in one click
-- [ ] Checklist ticks from real actions and can be dismissed for good
-- [ ] Every list/board/dashboard/doc/chat/inbox screen uses `TfEmpty`/`TfError`; inventory shows none left hand-rolled
-- [ ] 404, no-access, offline and maintenance screens designed
-- [ ] `Home.Summary` permission-scoped (private project test) and under 150 ms p95 on a 50k-task workspace seed
-- [ ] Goldens for Home (phone, desktop), onboarding steps, three empty states — light/dark/fa
+- [x] Home renders all cards with data, loading, empty, error and offline states
+- [x] My work lists assigned and watched tasks with the shared toolbar
+- [x] New user: sign up → starter → lands in a populated project; samples removable in one click
+- [x] Checklist ticks from real actions and can be dismissed for good
+- [x] Every list/board/dashboard/doc/chat/inbox screen uses `TfEmpty`/`TfError`; inventory shows none left hand-rolled
+- [x] 404, no-access, offline and maintenance screens designed
+- [x] `Home.Summary` permission-scoped (private project test) and under 150 ms p95 on a 50k-task workspace seed
+- [x] Goldens for Home (phone, desktop), onboarding steps, three empty states — light/dark/fa
 
 ## Tests
 Backend pytest-django: scoping, cache keying per viewer, checklist transitions, sample deletion. Flutter: card states, onboarding flow, empty-state inventory test (greps for forbidden ad-hoc empty widgets), goldens.
