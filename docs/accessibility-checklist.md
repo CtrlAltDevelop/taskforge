@@ -19,7 +19,7 @@ Record the date, build, platform and screen reader at the bottom.
 
 Do it on web (Chrome) and on one desktop app. Tab, Shift+Tab, arrows, Enter, Space, Esc only.
 
-1. **Sign in:** first Tab lands on the email/username field; the order is field, password, Sign in, secondary links. Enter submits. Errors are announced and focus moves to the first invalid field.
+1. **Sign in:** first Tab lands on the language menu in the app bar, then the email/username field; the order is language menu, field, password, show-password, Sign in, secondary links. Enter submits. Errors are announced and focus moves to the first invalid field.
 2. **Create task:** reach New task by keyboard (shortcut `c` or Tab to the button). The dialog traps focus, the title field is focused on open, Enter creates, Esc cancels and focus returns to the button.
 3. **Comment:** open the task (Enter on the row). Tab to the comment box, type, send with the documented shortcut or the Send button. The new comment is reachable by Tab.
 4. **Settings:** reach Settings from the shell, move between pages, change a switch with Space and a select with arrows, Save with Enter. Danger-zone actions need the typed confirm, and Esc cancels.

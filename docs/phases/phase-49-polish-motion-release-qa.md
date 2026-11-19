@@ -78,7 +78,7 @@ Run on an M-series Mac with Flutter 3.50, Xcode 27.2, 2026-11-18. The checklist 
 | Platform | Icon | Launch / splash | Name shown | Status |
 |----------|------|-----------------|------------|--------|
 | Android | `mipmap-*/ic_launcher.png` (legacy) plus new adaptive icon (`mipmap-anydpi-v26/ic_launcher.xml`, ink background, foreground in `drawable-nodpi`, monochrome layer) | `launch_background.xml` ink plus `launch_mark.png` | `android:label="TaskForge"` (was `taskforge`) | `flutter build apk --debug` built; the APK contains the adaptive icon and launch resources. Not run on a device |
-| iOS | `AppIcon.appiconset` (full-bleed, no alpha) | `LaunchScreen.storyboard` plus `LaunchImage.imageset` | `CFBundleDisplayName` `TaskForge` (was `Taskforge`) | `flutter build ios --simulator --debug` built; launch on the simulator not done (simulator access was not granted to the agent) |
+| iOS | `AppIcon.appiconset` (full-bleed, no alpha) | `LaunchScreen.storyboard` plus `LaunchImage.imageset` | `CFBundleDisplayName` `TaskForge` (was `Taskforge`) | `flutter build ios --simulator --debug` built; launched on the iPhone 18 Pro Max simulator (iOS 27.2, debug) on 2026-11-19: the ink launch screen with the anvil mark showed, then the sign-in screen rendered; the built bundle's `CFBundleDisplayName` is `TaskForge`. The home-screen icon was not looked at and no backend was running, so nothing past sign-in was exercised |
 | macOS | `AppIcon.appiconset` 16-1024 | none (window opens directly) | `CFBundleDisplayName` `TaskForge` added; bundle file stays `taskforge.app` (renaming it touches the Xcode project) | `flutter build macos --debug` built and the app launched against the backend (window "TaskForge" opened, process alive); screenshots of the native window were not possible (screen capture returns black for the agent) |
 | Windows | `windows/runner/resources/app_icon.ico` (16-256, wired in `Runner.rc`) | none | window title and `ProductName`/`FileDescription` now `TaskForge` | verified by files only |
 | Linux | `runner/app_icon.png` 512, installed beside the binary by `CMakeLists.txt` and loaded in `my_application.cc` from `<exe dir>/data/app_icon.png` | none | window and header-bar title now `TaskForge` | verified by files only. Phase 44 said the wiring was never compiled; it reads correctly (glib `g_file_read_link` plus `gtk_window_set_icon_from_file`, installed path matches), but only a Linux build proves it |
@@ -92,18 +92,22 @@ Run on an M-series Mac with Flutter 3.50, Xcode 27.2, 2026-11-18. The checklist 
 
 **Screenshots added** (800x500 PNG, palette-optimised, 38-55 KB each) in `docs/screenshots/`, referenced from the README: `home-light.png`, `list-light.png`, `board-light.png`, `task-modal-light.png`, `board-dark.png`, `board-fa-rtl.png`. Taken in the web app in the in-app browser (debug ribbon absent: profile mode). The workflow status names (To do, In progress, Done) are data from the seed and stay English in Persian; the Persian sidebar's workspace name "Demo" renders pale in light mode on the first load (seen in one frame, not reproduced after navigation; check contrast during the RTL review).
 
-**Not verified here.** Screenshots at 1280x800 (the pane renders 800x500); mobile and native-window shots; the web build with the production `SAME_ORIGIN` setup; Android and iOS launch; Windows and Linux builds.
+**Keyboard walk, sign-in (automated part).** `test/a11y/keyboard_sign_in_test.dart` drives Tab, Shift+Tab and Enter on the sign-in screen. It found that the first Tab stop is the language menu in the app bar, then identity, password, show-password, Sign in; the checklist now says so. A person still has to do the full walk and the screen-reader pass.
+
+**Gates run on `develop`, 2026-11-19.** `make check` passes (it first failed on import order and formatting in backend migrations and two long test lines, all fixed, plus a mypy override for migrations). Flutter: `flutter test --coverage` passes (3,538 tests). Backend: 6,238 passed, 25 skipped, one failure: `tasks/tests/test_bulk.py::test_two_hundred_tasks_change_inside_the_budget` takes about 2.15 s against its 2.0 s wall-clock budget on this Mac with SQLite; it fails the same way without these changes, so it is not caused by them and is not fixed.
+
+**Not verified here.** Screenshots at 1280x800 (the pane renders 800x500); mobile and native-window shots; the web build with the production `SAME_ORIGIN` setup; Android launch; iOS beyond the sign-in screen; Windows and Linux builds.
 
 **Owner must test**
 - Android phone: run a release or profile build; check the adaptive icon (round and squircle masks, themed icon), launch name and splash; performance numbers (cold start to interactive list under 2 s on 5,000 tasks, scroll at 55 fps or better, DevTools frame chart in profile mode) and the same on an M-series Mac (`flutter run --profile -d macos`) and web profile; record them in the Part C Performance note.
-- iOS simulator or device: launch screen and AppIcon, display name.
+- iOS: AppIcon on the home screen, and a run on a real device (the simulator launch is recorded in the table above).
 - Windows run: exe icon in Explorer and taskbar, window title `TaskForge`.
 - Linux run: build, confirm the window icon loads (the first real compile of the icon wiring) and the title.
 - VoiceOver (macOS and iOS) and NVDA (Windows): follow [docs/accessibility-checklist.md](../accessibility-checklist.md) and sign it off.
 - Native review of the phase 48-49 strings in Persian, Arabic and Pashto (fa, ar, ps).
 - PostgreSQL runs: the phase 48 Summary p95 and the full backend suite (both so far only on SQLite).
 - `make integration` on a desktop (needs a desktop runner; not run here).
-- Housekeeping: Docker Desktop was started for the Envoy container and left running; commit `1f9fc1b` (another agent's) swept in `app/android/.kotlin/sessions/*.salive` and a Gradle problems report under `app/android/build/reports/`; remove them from git and add them to `.gitignore`.
+- Housekeeping: Docker Desktop was started for the Envoy container and left running. (The earlier note that `.salive` and Gradle report files were committed was wrong: `git ls-files` finds none.)
 
 ## Notes: review fixes (part G)
 
