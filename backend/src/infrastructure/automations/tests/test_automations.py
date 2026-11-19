@@ -481,7 +481,9 @@ def test_a_rule_never_touches_a_task_of_another_project(team: Any, web: Any, oth
         rule.pk, {"type": "task_created", "id": "x", "task_id": str(foreign.pk), "depth": 0}
     )
 
-    assert got is None and not AutomationRun.objects.exists() and not Comment.objects.filter(kind="user").exists()
+    assert got is None
+    assert not AutomationRun.objects.exists()
+    assert not Comment.objects.filter(kind="user").exists()
     assert not AutomationRun.objects.filter(automation=rule).exists()
 
 

@@ -235,9 +235,7 @@ def test_a_file_larger_than_the_server_accepts_is_refused_with_413(
     assert _upload(world, data=b"title\nabcdefghij\n").status_code == 413
 
 
-@pytest.mark.parametrize(
-    ("path", "extra"), [("lists", {}), ("fetch", {"list_ids": ["L1"]})]
-)
+@pytest.mark.parametrize(("path", "extra"), [("lists", {}), ("fetch", {"list_ids": ["L1"]})])
 def test_the_clickup_routes_need_data_manage(
     people: dict[str, Any],  # noqa: F811
     path: str,

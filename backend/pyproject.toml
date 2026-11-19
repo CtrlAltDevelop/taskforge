@@ -119,6 +119,12 @@ warn_unused_ignores = true
 # they are just not held to this project's own strictness settings.
 exclude = "_pb2(_grpc)?\\.pyi?$"
 
+# Written by `makemigrations`; regenerating them would drop any annotation added by hand.
+[[tool.mypy.overrides]]
+module = ["*.migrations.*"]
+disallow_untyped_defs = false
+disable_error_code = ["var-annotated"]
+
 [[tool.mypy.overrides]]
 module = ["django_socio_grpc.*", "grpc_tools.*"]
 ignore_missing_imports = true

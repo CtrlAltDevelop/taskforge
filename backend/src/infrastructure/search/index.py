@@ -86,9 +86,7 @@ def put_task(task_id: Any) -> None:
 
 
 def put_comment(comment_id: Any) -> None:
-    comment = Comment.objects.filter(
-        pk=comment_id, deleted_at__isnull=True, kind="user"
-    ).first()
+    comment = Comment.objects.filter(pk=comment_id, deleted_at__isnull=True, kind="user").first()
     if comment is None:
         drop(Kind.COMMENT, comment_id)
         return

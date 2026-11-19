@@ -7,7 +7,7 @@ from django.utils import timezone
 BATCH = 1000
 
 
-def dismiss_for_members(apps, schema_editor):  # type: ignore[no-untyped-def]
+def dismiss_for_members(apps, schema_editor):
     member = apps.get_model("workspaces", "WorkspaceMember")
     onboarding = apps.get_model("home", "UserOnboarding")
     now = timezone.now()
