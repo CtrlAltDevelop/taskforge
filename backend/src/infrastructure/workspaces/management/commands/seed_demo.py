@@ -1,47 +1,59 @@
-"""Create a demo user, workspace, project and a few tasks for local development."""
+"""Seed a complete demo dataset (every area of the app) for local development."""
 
-from datetime import date, timedelta
+from importlib import import_module
 from typing import Any
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
+from django.test.utils import override_settings
 
-DEMO_USER = "demo"
-DEMO_PASSWORD = "demo-password-123"  # dev only; refused unless DEBUG
-DEMO_TASKS = (
-    ("Write the launch announcement", "high", 3),
-    ("Fix the login redirect", "urgent", 1),
-    ("Review onboarding copy", "normal", 7),
-    ("Tidy the backlog", "low", 14),
-    ("Plan next sprint", "none", 0),
-)
+from infrastructure.common.demo.base import EMAIL_DOMAIN, PASSWORD, Ctx
+
+MODULES = ("core", "collab", "planning", "extras")  # run in this order; missing ones are skipped
+USERNAMES = ("owner", "admin", "member", "dev", "designer", "viewer", "guest", "demo")
 
 
 class Command(BaseCommand):
-    help = "Seed a demo user, workspace, project and tasks (development only; safe to re-run)."
+    help = "Seed the full demo dataset (development only). --reset wipes the demo users first."
+
+    def add_arguments(self, parser: Any) -> None:
+        parser.add_argument("--reset", action="store_true", help="delete the demo users and data")
 
     def handle(self, *args: Any, **options: Any) -> None:
         if not settings.DEBUG:
             raise CommandError("seed_demo only runs with DEBUG on (development settings).")
-        from infrastructure.projects import services as projects
-        from infrastructure.tasks import services as tasks
-        from infrastructure.workspaces import services as workspaces
-
         users = get_user_model().objects
-        if users.filter(username=DEMO_USER).exists():
-            self.stdout.write("Demo data already present; nothing to do.")
+        if options["reset"]:
+            from infrastructure.common.demo.reset import wipe
+
+            wipe()  # also clears the old one-user demo, which has no "owner"
+        elif users.filter(username="owner").exists():
+            self.stdout.write("Demo data already present; use --reset to rebuild it.")
             return
-        with transaction.atomic():
-            user = users.create_user(
-                username=DEMO_USER, email="demo@example.com", password=DEMO_PASSWORD
-            )
-            workspace = workspaces.create(user, "Demo", "demo")
-            project = projects.create(user, workspace, "Website", "WEB").project
-            for title, priority, days in DEMO_TASKS:
-                due = (date.today() + timedelta(days=days)).isoformat() if days else ""
-                tasks.create(
-                    user, workspace, str(project.pk), title, priority=priority, due_date=due
-                )
-        self.stdout.write(self.style.SUCCESS(f"Seeded: log in as {DEMO_USER} / {DEMO_PASSWORD}"))
+        ctx = Ctx()
+        # Deliver inbox mail inside this process: the background thread would fight the open
+        # transaction for SQLite's single write lock.
+        with (
+            override_settings(
+                INBOX_SYNC_DELIVERY=True,
+                AUTOMATIONS_SYNC_RUN=True,  # rules run in a thread otherwise, and lock SQLite
+                IMPORTS_SYNC_RUN=True,
+                WORKSPACE_EMAIL_ASYNC=False,
+                CELERY_TASK_ALWAYS_EAGER=True,  # no broker needed: goal recounts run inline
+                GOALS_RECOMPUTE_DEBOUNCE_SECONDS=0,
+            ),
+            transaction.atomic(),
+        ):
+            for name in MODULES:
+                try:
+                    module = import_module(f"infrastructure.common.demo.{name}")
+                except ModuleNotFoundError as error:
+                    if error.name != f"infrastructure.common.demo.{name}":
+                        raise
+                    self.stdout.write(f"  skip {name} (not written)")
+                    continue
+                module.seed(ctx)
+                self.stdout.write(f"  seeded {name}")
+        self.stdout.write(self.style.SUCCESS(f"Done. Log in as owner@{EMAIL_DOMAIN} / {PASSWORD}"))
