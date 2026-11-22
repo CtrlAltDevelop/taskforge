@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
@@ -161,7 +162,7 @@ class FormsScreen extends ConsumerWidget {
         data: (rows) => TfPage(
           children: [
             Text(context.l10n.formsHint),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: TfButton(
@@ -172,15 +173,15 @@ class FormsScreen extends ConsumerWidget {
                 onPressed: projects.isEmpty ? null : () => _new(context, ref),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             if (rows.isEmpty)
               Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(TfSpace.xl),
                 child: Text(context.l10n.formsEmpty),
               ),
             for (final f in rows)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
                 child: TfPanel(
                   padding: EdgeInsets.zero,
                   child: TfRow(

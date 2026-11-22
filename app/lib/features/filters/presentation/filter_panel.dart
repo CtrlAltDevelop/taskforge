@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -289,7 +290,7 @@ class _FilterPanelState extends ConsumerState<FilterPanel> {
                 ),
               if (_message != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: TfSpace.sm),
                   child: Text(
                     _message!,
                     key: const Key('filter-message'),
@@ -375,7 +376,7 @@ class _SaveDialogState extends State<_SaveDialog> {
           decoration: InputDecoration(labelText: context.l10n.grpGName),
           onSubmitted: (_) => _done(),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         if (widget.canShare)
           DropdownButton<String>(
             key: const Key('filter-visibility'),

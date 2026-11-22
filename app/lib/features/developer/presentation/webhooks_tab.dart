@@ -113,10 +113,10 @@ class WebhooksTab extends ConsumerWidget {
         onRetry: () => ref.invalidate(webhooksProvider),
       ),
       data: (rows) => ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TfSpace.lg),
         children: [
           Text(context.l10n.devWebhookHint),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TfButton(
@@ -129,7 +129,7 @@ class WebhooksTab extends ConsumerWidget {
           ),
           if (rows.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               child: Text(context.l10n.devWebhooksEmpty),
             ),
           for (final h in rows)
@@ -270,7 +270,7 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                   labelText: context.l10n.devWebhookName,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('webhook-url'),
                 controller: _url,
@@ -281,7 +281,7 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                   labelText: context.l10n.devWebhookUrl,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('webhook-project'),
                 options: {
@@ -293,7 +293,7 @@ class _WebhookEditorState extends ConsumerState<WebhookEditor> {
                 label: context.l10n.devWebhookProject,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               Text(
                 context.l10n.devWebhookEvents,
                 style: Theme.of(context).textTheme.titleSmall,

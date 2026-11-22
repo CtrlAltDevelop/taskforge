@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/dashboards/application/dashboards_providers.dart';
@@ -53,7 +55,7 @@ class WidgetCard extends ConsumerWidget {
         key: Key('widget-${widget.id}'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -123,12 +125,14 @@ class WidgetCard extends ConsumerWidget {
                     data: value,
                     onBucket: editing
                         ? null
-                        : (bucket) => showDrillSheet(
-                            context,
-                            widgetId: widget.id,
-                            bucket: bucket,
-                            title: title,
-                          ),
+                        : (bucket) => widget.kind.isGoals
+                              ? context.go('/goals/$bucket')
+                              : showDrillSheet(
+                                  context,
+                                  widgetId: widget.id,
+                                  bucket: bucket,
+                                  title: title,
+                                ),
                   ),
                   AsyncError(:final error) when !data.hasValue => Center(
                     child: Column(

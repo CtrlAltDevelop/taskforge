@@ -9,6 +9,7 @@ import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 Color statusColor(BuildContext context, RunStatus? s) {
   final scheme = Theme.of(context).colorScheme;
@@ -57,7 +58,7 @@ class StepsView extends StatelessWidget {
         for (final (i, s) in steps.indexed)
           Padding(
             key: Key('step-$i'),
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -170,7 +171,7 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
           for (final r in [...value, ..._older]) RunTile(run: r),
           if (_moreError != null)
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(TfSpace.sm),
               child: Text(
                 automationErrorMessage(_moreError!, context.l10n),
                 key: const Key('runs-more-error'),
@@ -179,7 +180,7 @@ class _RunsPanelState extends ConsumerState<RunsPanel> {
             ),
           if (value.length >= runPageSize && !_exhausted)
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(TfSpace.sm),
               child: Center(
                 child: _loading
                     ? const CircularProgressIndicator()
@@ -226,7 +227,12 @@ class RunTile extends StatelessWidget {
       ),
       trailing: RunStatusChip(status: status, raw: run.rawStatus),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      childrenPadding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+      childrenPadding: const EdgeInsetsDirectional.fromSTEB(
+        TfSpace.lg,
+        0,
+        TfSpace.lg,
+        TfSpace.md,
+      ),
       children: [
         if (status != null &&
             status != RunStatus.succeeded &&
@@ -235,7 +241,7 @@ class RunTile extends StatelessWidget {
         if (run.didNotRun || run.explanation.isNotEmpty)
           Container(
             key: Key('why-${run.id}'),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: const EdgeInsets.symmetric(vertical: TfSpace.sm),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: theme.colorScheme.secondaryContainer,
@@ -251,7 +257,7 @@ class RunTile extends StatelessWidget {
           ),
         if (run.error.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(bottom: 6),
+            padding: const EdgeInsets.only(bottom: TfSpace.xs),
             child: Text(
               run.error,
               key: Key('error-${run.id}'),

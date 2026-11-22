@@ -200,11 +200,11 @@ class _FolderHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = context.l10n;
     return Padding(
-      padding: const EdgeInsets.only(top: 12, bottom: 4),
+      padding: const EdgeInsets.only(top: TfSpace.md, bottom: TfSpace.xs),
       child: Row(
         children: [
           const TfIcon(TfIcons.folder, size: 18),
-          const SizedBox(width: 8),
+          const SizedBox(width: TfSpace.sm),
           Expanded(
             child: Text(
               folder?.name ?? name ?? '',
@@ -246,7 +246,7 @@ class GoalTile extends StatelessWidget {
     final start = goal.start;
     final end = goal.end;
     return Padding(
-      padding: EdgeInsetsDirectional.only(start: 16.0 * depth),
+      padding: EdgeInsetsDirectional.only(start: TfSpace.lg * depth),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
         child: TfPanel(
@@ -256,7 +256,7 @@ class GoalTile extends StatelessWidget {
             borderRadius: TfRadius.dialog,
             onTap: () => context.push('/goals/${goal.id}'),
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(TfSpace.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -264,7 +264,7 @@ class GoalTile extends StatelessWidget {
                     children: [
                       if (goal.private)
                         const Padding(
-                          padding: EdgeInsetsDirectional.only(end: 6),
+                          padding: EdgeInsetsDirectional.only(end: TfSpace.xs),
                           child: TfIcon(TfIcons.lock, size: 16),
                         ),
                       Expanded(
@@ -284,7 +284,7 @@ class GoalTile extends StatelessWidget {
                       ),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: TfSpace.sm),
                   GoalProgressBar(
                     progress: goal.progress,
                     color: goalStatusColor(context.tf.colors, goal.status),

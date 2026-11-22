@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -201,7 +202,12 @@ class _DayCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(6, 2, 0, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                TfSpace.sm,
+                TfSpace.xxs,
+                0,
+                0,
+              ),
               child: isToday
                   ? Container(
                       key: const Key('today-marker'),
@@ -232,7 +238,7 @@ class _DayCell extends StatelessWidget {
                 key: Key('more-${formatDay(day)}'),
                 onTap: () => grid.onMore(day),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
                   child: Text(
                     context.l10n.grpFPlusMore(hidden),
                     style: tf.typography.caption.copyWith(color: c.textMuted),
@@ -294,7 +300,7 @@ class _Bar extends StatelessWidget {
                   border: Border.all(width: 2, color: context.tf.colors.text),
                 )
               : null,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
           alignment: AlignmentDirectional.centerStart,
           child: Text(
             _label(task),
@@ -316,7 +322,7 @@ class _Bar extends StatelessWidget {
       data: CalDrag(task, edge: edge),
       dragAnchorStrategy: pointerDragAnchorStrategy,
       feedback: const Material(
-        child: Padding(padding: EdgeInsets.all(4), child: Text('↔')),
+        child: Padding(padding: EdgeInsets.all(TfSpace.xs), child: Text('↔')),
       ),
       child: MouseRegion(
         cursor: SystemMouseCursors.resizeLeftRight,
@@ -349,7 +355,7 @@ class _Bar extends StatelessWidget {
               color: color,
               borderRadius: TfRadius.control,
               child: Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(TfSpace.sm),
                 child: Text(task.title),
               ),
             ),

@@ -154,18 +154,23 @@ class _MembersTabState extends ConsumerState<_MembersTab> {
       builder: (sheet) => SafeArea(
         child: Padding(
           key: const Key('member-profile'),
-          padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 24),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            TfSpace.xl,
+            0,
+            TfSpace.xl,
+            TfSpace.xl,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircleAvatar(radius: 32, child: Text(m.initials)),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               Text(m.label, style: Theme.of(sheet).textTheme.titleLarge),
               Text(m.email),
               Text(
                 context.l10n.grpJJoined(context.localDateOrEmpty(m.joinedAt)),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               RolePicker(
                 key: const Key('profile-role'),
                 member: m,

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,7 +72,7 @@ class FormSheet extends StatelessWidget {
       data: themed,
       child: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(TfSpace.xl),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 640),
             child: Column(
@@ -87,7 +88,7 @@ class FormSheet extends StatelessWidget {
                       errorBuilder: (_, _, _) => const SizedBox.shrink(),
                     ),
                   ),
-                const SizedBox(height: 12),
+                const SizedBox(height: TfSpace.md),
                 Text(
                   form.name,
                   key: const Key('form-name'),
@@ -96,10 +97,10 @@ class FormSheet extends StatelessWidget {
                   ),
                 ),
                 if (form.description.isNotEmpty) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: TfSpace.sm),
                   Text(form.description),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 PublicFormView(
                   form: form,
                   onSubmit: onSubmit,

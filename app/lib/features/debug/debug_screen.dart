@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/content_width.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -26,7 +27,7 @@ class DebugScreen extends ConsumerWidget {
       ),
       body: ContentWidth(
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TfSpace.lg),
           children: [for (final client in clients) PingTile(client: client)],
         ),
       ),

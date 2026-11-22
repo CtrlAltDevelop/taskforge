@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -89,7 +90,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             if (!_everything)
               TfSelectField(
                 key: const Key('export-project'),
@@ -102,16 +103,16 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
                 onChanged: (id) => setState(() => _projectId = id),
                 expand: true,
               ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Text(context.l10n.grpGExportInfo),
             if (state.busy)
               const Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(top: TfSpace.md),
                 child: LinearProgressIndicator(key: Key('export-busy')),
               ),
             if (state.saved != null && _saveError == null)
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.only(top: TfSpace.md),
                 child: Text(
                   state.job != null
                       ? context.l10n.grpGExportSavedSized(
@@ -126,7 +127,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
               ),
             if (_saveError != null)
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.only(top: TfSpace.md),
                 child: Text(
                   _saveError!,
                   key: const Key('export-save-error'),
@@ -135,7 +136,7 @@ class _ExportDialogState extends ConsumerState<ExportDialog> {
               ),
             if (state.error != null)
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.only(top: TfSpace.md),
                 child: Text(
                   state.error!,
                   key: const Key('export-error'),

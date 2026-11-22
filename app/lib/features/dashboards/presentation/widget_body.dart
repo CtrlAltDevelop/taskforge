@@ -46,6 +46,26 @@ class WidgetBody extends StatelessWidget {
             caption: label,
           ),
         );
+      case WidgetKind.goals:
+        final bars = [
+          for (final b in data.buckets)
+            ChartDatum(
+              b.key,
+              b.label,
+              b.amount,
+              context.l10n.dashPercent(
+                context.localDigits(shortNumber(b.value)),
+              ),
+            ),
+        ];
+        if (bars.isEmpty) return const _Empty();
+        return SingleChildScrollView(
+          child: BarChartView(
+            data: bars,
+            semanticsLabel: label,
+            onTap: onBucket == null ? null : (d) => onBucket!(d.key),
+          ),
+        );
       case WidgetKind.bar:
       case WidgetKind.workload:
         if (_bars(context).isEmpty) return const _Empty();

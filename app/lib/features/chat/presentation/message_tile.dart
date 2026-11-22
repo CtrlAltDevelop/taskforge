@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -61,7 +62,7 @@ class MessageTile extends StatelessWidget {
     final l10n = context.l10n;
     if (m.deleted) {
       return Padding(
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 4),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: TfSpace.xs),
         child: Text(
           l10n.chatRemoved,
           key: Key('removed-${m.id}'),
@@ -85,7 +86,7 @@ class MessageTile extends StatelessWidget {
     return Opacity(
       opacity: m.sendState == SendState.sending ? 0.6 : 1,
       child: Padding(
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 6),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: TfSpace.sm),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,14 +99,16 @@ class MessageTile extends StatelessWidget {
                     style: theme.textTheme.labelLarge,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: TfSpace.sm),
                 Text(
                   clockOf(m.createdAt, context.localePrefs),
                   style: theme.textTheme.labelSmall,
                 ),
                 if (m.edited)
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 6),
+                    padding: const EdgeInsetsDirectional.only(
+                      start: TfSpace.sm,
+                    ),
                     child: Text(
                       l10n.chatEdited,
                       key: Key('edited-${m.id}'),
@@ -132,7 +135,7 @@ class MessageTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const TfIcon(TfIcons.clock, size: 12),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: TfSpace.xs),
                   Text(
                     l10n.chatSending,
                     key: Key('sending-${m.id}'),
@@ -150,7 +153,7 @@ class MessageTile extends StatelessWidget {
                     size: 16,
                     color: theme.colorScheme.error,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: TfSpace.xs),
                   Text(
                     l10n.chatNotSent,
                     style: TextStyle(color: theme.colorScheme.error),
@@ -198,12 +201,14 @@ class UnreadDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.error;
     return Padding(
-      padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
+      padding: const EdgeInsetsDirectional.symmetric(vertical: TfSpace.sm),
       child: Row(
         children: [
           Expanded(child: Divider(color: color)),
           Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: TfSpace.sm,
+            ),
             child: Text(
               context.l10n.chatUnreadDivider,
               style: TextStyle(color: color, fontSize: 12),

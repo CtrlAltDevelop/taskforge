@@ -64,7 +64,7 @@ mixin _TaskListPhone
           ref.read(taskListProvider(project.id).notifier).refresh(),
       child: ListView.builder(
         key: const Key('task-list'),
-        padding: const EdgeInsets.only(top: 4, bottom: 96),
+        padding: const EdgeInsets.only(top: TfSpace.xs, bottom: 96),
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: items.length + (state.loading ? 1 : 0),
         itemBuilder: (context, i) {

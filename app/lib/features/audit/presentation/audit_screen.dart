@@ -13,6 +13,7 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -241,57 +242,60 @@ class _Filters extends ConsumerWidget {
     final members = ref.watch(membersProvider).value ?? const [];
     final projects =
         ref.watch(projectCatalogProvider(true)).value?.projects ?? const [];
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        for (final (label, prefix) in auditAreas)
-          ChoiceChip(
-            key: Key('area-${prefix.isEmpty ? 'all' : prefix}'),
-            label: Text(_areaLabel(context, prefix, label)),
-            selected: filters.action == prefix,
-            onSelected: (_) => onFilters(filters.copyWith(action: prefix)),
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        spacing: TfSpace.sm,
+        runSpacing: TfSpace.sm,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          for (final (label, prefix) in auditAreas)
+            TfChip(
+              key: Key('area-${prefix.isEmpty ? 'all' : prefix}'),
+              label: _areaLabel(context, prefix, label),
+              selected: filters.action == prefix,
+              onTap: () => onFilters(filters.copyWith(action: prefix)),
+            ),
+          TfSelectField(
+            key: const Key('filter-person'),
+            options: {
+              '': context.l10n.grpBAnyone,
+              for (final m in members) m.userId: m.displayName,
+            },
+            value: members.any((m) => m.userId == filters.actor)
+                ? filters.actor
+                : '',
+            onChanged: (v) => onFilters(filters.copyWith(actor: v)),
+            hint: context.l10n.grpBAnyone,
           ),
-        TfSelectField(
-          key: const Key('filter-person'),
-          options: {
-            '': context.l10n.grpBAnyone,
-            for (final m in members) m.userId: m.displayName,
-          },
-          value: members.any((m) => m.userId == filters.actor)
-              ? filters.actor
-              : '',
-          onChanged: (v) => onFilters(filters.copyWith(actor: v)),
-          hint: context.l10n.grpBAnyone,
-        ),
-        TfSelectField(
-          key: const Key('filter-project'),
-          options: {
-            '': context.l10n.grpBAnyProject,
-            for (final p in projects) p.id: p.name,
-          },
-          value: projects.any((p) => p.id == filters.projectId)
-              ? filters.projectId
-              : '',
-          onChanged: (v) => onFilters(filters.copyWith(projectId: v)),
-        ),
-        TfButton(
-          key: const Key('filter-dates'),
-          label: filters.since == null
-              ? context.l10n.grpBAnyTime
-              : _range(context, filters),
-          icon: TfIcons.calendarRange,
-          onPressed: onPickDates,
-        ),
-        if (!filters.isEmpty)
+          TfSelectField(
+            key: const Key('filter-project'),
+            options: {
+              '': context.l10n.grpBAnyProject,
+              for (final p in projects) p.id: p.name,
+            },
+            value: projects.any((p) => p.id == filters.projectId)
+                ? filters.projectId
+                : '',
+            onChanged: (v) => onFilters(filters.copyWith(projectId: v)),
+          ),
           TfButton(
-            key: const Key('filters-clear'),
-            label: context.l10n.grpBClearFilters,
-            variant: TfButtonVariant.ghost,
-            onPressed: () => onFilters(const AuditFilters()),
+            key: const Key('filter-dates'),
+            label: filters.since == null
+                ? context.l10n.grpBAnyTime
+                : _range(context, filters),
+            icon: TfIcons.calendarRange,
+            onPressed: onPickDates,
           ),
-      ],
+          if (!filters.isEmpty)
+            TfButton(
+              key: const Key('filters-clear'),
+              label: context.l10n.grpBClearFilters,
+              variant: TfButtonVariant.ghost,
+              onPressed: () => onFilters(const AuditFilters()),
+            ),
+        ],
+      ),
     );
   }
 
@@ -372,7 +376,7 @@ class DiffDialog extends StatelessWidget {
               if (changes.isEmpty) Text(context.l10n.grpBNoFieldChanges),
               for (final c in changes)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
                   child: c.hasBefore
                       ? Text.rich(
                           TextSpan(

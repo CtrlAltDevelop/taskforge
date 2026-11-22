@@ -26,7 +26,7 @@ class WorkflowGraph extends StatelessWidget {
           key: const Key('graph-unrestricted'),
           padding: EdgeInsets.zero,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(TfSpace.lg),
             child: Text(context.l10n.grpIAnyStatusMoves),
           ),
         ),

@@ -132,7 +132,7 @@ class LiveAlerts {
             .show(
               id: n.id.hashCode & 0x7fffffff,
               title: n.kind.labelIn(l10n),
-              body: '${n.whatIn(l10n)} ${n.taskLabel}'.trim(),
+              body: '${n.whatIn(l10n)} ${n.subject}'.trim(),
               payload: '${n.projectId}|${n.taskId}',
             );
       }

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
@@ -163,7 +164,7 @@ class SlashMenu extends StatelessWidget {
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty
             ? Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(TfSpace.md),
                 child: Text(context.l10n.grpJNoMatchingBlocks),
               )
             : ListView(
@@ -212,7 +213,7 @@ class PagePicker extends StatelessWidget {
         constraints: const BoxConstraints(maxHeight: 260, maxWidth: 320),
         child: items.isEmpty
             ? Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(TfSpace.md),
                 child: Text(context.l10n.grpJNoMatchingPages),
               )
             : ListView(

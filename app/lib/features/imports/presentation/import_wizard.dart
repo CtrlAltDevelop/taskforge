@@ -40,7 +40,7 @@ class ImportWizardCard extends ConsumerWidget {
         key: const Key('import-wizard'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TfSpace.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -58,15 +58,15 @@ class ImportWizardCard extends ConsumerWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: TfSpace.lg),
               if (wizard.busy)
                 const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: TfSpace.md),
                   child: LinearProgressIndicator(key: Key('import-busy')),
                 ),
               if (wizard.error != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: TfSpace.md),
                   child: Text(
                     wizard.error!,
                     key: const Key('import-error'),
@@ -123,7 +123,7 @@ class _SourceStep extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Align(
           alignment: AlignmentDirectional.centerEnd,
           child: TfButton(
@@ -164,7 +164,7 @@ class _UploadStep extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.grpCImpZipSeveral),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           TfSelectField<String>(
             key: const Key('upload-member'),
             options: {for (final m in choices) m: m},
@@ -187,12 +187,12 @@ class _UploadStep extends ConsumerWidget {
               ? context.l10n.grpCImpChooseGeneric
               : context.l10n.grpCImpChooseSource(source.labelIn(context.l10n)),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: TfSpace.xs),
         Text(
           context.l10n.grpCImpSentNote,
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         Row(
           children: [
             TfButton(
@@ -237,7 +237,7 @@ class _ReviewStep extends ConsumerWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         if (report != null) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           Wrap(
             spacing: 24,
             runSpacing: 4,
@@ -250,7 +250,7 @@ class _ReviewStep extends ConsumerWidget {
           ),
           if (report.alreadyImported > 0)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: TfSpace.sm),
               child: Text(
                 context.l10n.grpCImpAlready(report.alreadyImported),
                 key: const Key('review-already'),
@@ -258,7 +258,7 @@ class _ReviewStep extends ConsumerWidget {
             ),
           if (report.errors > 0)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: TfSpace.sm),
               child: Text(
                 context.l10n.grpCImpRowErrors(report.errors),
                 key: const Key('review-errors'),
@@ -270,7 +270,7 @@ class _ReviewStep extends ConsumerWidget {
             total: report.errors + report.warningTotal,
           ),
         ],
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         Row(
           children: [
             TfButton(
@@ -370,7 +370,7 @@ class _Run extends ConsumerWidget {
             key: const Key('import-progress'),
             value: job.total == 0 ? null : job.progress,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           Text(
             job.status == 'queued'
                 ? context.l10n.grpCImpWaitingStart
@@ -379,7 +379,7 @@ class _Run extends ConsumerWidget {
                 : context.l10n.grpCImpProgress(job.done, job.total),
             key: const Key('import-progress-text'),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           Align(
             alignment: AlignmentDirectional.centerEnd,
             child: TfButton(
@@ -405,11 +405,11 @@ class _Run extends ConsumerWidget {
               key: const Key('import-failure'),
               style: TextStyle(color: scheme.error),
             ),
-          const SizedBox(height: 4),
+          const SizedBox(height: TfSpace.xs),
           _Stats(job: job),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           ImportProblems(jobId: job.id, count: job.problemCount),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           Wrap(
             spacing: 8,
             alignment: WrapAlignment.end,
@@ -514,7 +514,7 @@ class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
           ),
         ),
         if (lists.isNotEmpty) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Text(context.l10n.grpCImpCuPick),
           for (final l in lists)
             TfCheckbox(
@@ -530,13 +530,13 @@ class _ClickUpStepState extends ConsumerState<_ClickUpStep> {
             ),
         ],
         if (fetching) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Text(
             '${context.l10n.grpCImpCuFetching} ${wizard.job?.done ?? 0}',
             key: const Key('clickup-progress'),
           ),
         ],
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         Row(
           children: [
             TfButton(

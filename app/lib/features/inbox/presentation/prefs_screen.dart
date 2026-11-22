@@ -178,7 +178,7 @@ class _BodyState extends ConsumerState<_Body> {
           context.l10n.grpEWhatReachesYou,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         for (final row in widget.prefs.rows)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
@@ -186,12 +186,17 @@ class _BodyState extends ConsumerState<_Body> {
               key: Key('pref-${row.eventType}'),
               padding: EdgeInsets.zero,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(TfSpace.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        TfSpace.sm,
+                        TfSpace.xs,
+                        TfSpace.sm,
+                        0,
+                      ),
                       child: Text(row.label, style: theme.textTheme.titleSmall),
                     ),
                     TfToggle(
@@ -207,7 +212,9 @@ class _BodyState extends ConsumerState<_Body> {
                       label: context.l10n.grpEPush,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: TfSpace.lg,
+                      ),
                       child: Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         spacing: 12,
@@ -236,7 +243,7 @@ class _BodyState extends ConsumerState<_Body> {
               ),
             ),
           ),
-        const SizedBox(height: 16),
+        const SizedBox(height: TfSpace.lg),
         Text(context.l10n.grpEQuietHours, style: theme.textTheme.titleMedium),
         TfToggleTile(
           key: const Key('quiet-switch'),
@@ -275,12 +282,12 @@ class _BodyState extends ConsumerState<_Body> {
               style: TextStyle(color: theme.colorScheme.error),
             ),
           ),
-        const SizedBox(height: 16),
+        const SizedBox(height: TfSpace.lg),
         Text(
           context.l10n.grpETimeZoneDigest,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Autocomplete<String>(
           initialValue: TextEditingValue(text: settings.timezone),
           optionsBuilder: (value) {
@@ -320,7 +327,7 @@ class _BodyState extends ConsumerState<_Body> {
             },
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         TfSelectField(
           key: const Key('digest-hour'),
           options: {for (var h = 0; h < 24; h++) h: hhmm(h, 0)},

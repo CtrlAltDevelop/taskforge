@@ -2,7 +2,9 @@ import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_banner.dart';
 import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
@@ -62,37 +64,34 @@ class SecurityScreen extends ConsumerWidget {
           status.when(
             data: (s) => _TwoFactorSection(status: s),
             loading: () => const Padding(
-              padding: EdgeInsets.all(24),
+              padding: EdgeInsets.all(TfSpace.xl),
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (e, _) => TfRow(
-              title: securityErrorMessage(e, t),
-              leading: const TfIcon(TfIcons.error),
-              trailing: TfButton(
-                label: t.grpBRetry,
-                variant: TfButtonVariant.ghost,
-                onPressed: () => ref.invalidate(secondFactorStatusProvider),
-              ),
+            error: (e, _) => TfBanner(
+              message: securityErrorMessage(e, t),
+              kind: TfBannerKind.danger,
+              actionLabel: t.grpBRetry,
+              onAction: () => ref.invalidate(secondFactorStatusProvider),
             ),
           ),
           if (canManage) ...[
-            const Divider(),
+            const SizedBox(height: TfSpace.lg),
             if (policy != null) _PolicySection(policy: policy),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
               child: TfPanel(
                 padding: EdgeInsets.zero,
-                child: TfRow(
+                child: TfTile(
                   key: const Key('open-sso-setup'),
-                  title: t.ssoTitle,
-                  subtitle: t.ssoSub,
+                  title: Text(t.ssoTitle),
+                  subtitle: Text(t.ssoSub),
                   leading: const TfIcon(TfIcons.idCard),
                   onTap: () => context.push('/settings/sso'),
                 ),
               ),
             ),
           ],
-          const Divider(),
+          const SizedBox(height: TfSpace.lg),
           const DevicePrivacyNote(),
         ],
       ),
@@ -107,17 +106,13 @@ class _Banner extends StatelessWidget {
   final bool error;
 
   @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return MaterialBanner(
-      backgroundColor: error
-          ? colors.errorContainer
-          : colors.surfaceContainerHighest,
-      leading: Icon(error ? TfIcons.lock.glyph : TfIcons.info.glyph),
-      content: Text(text),
-      actions: const [SizedBox.shrink()],
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: TfSpace.lg),
+    child: TfBanner(
+      message: text,
+      kind: error ? TfBannerKind.danger : TfBannerKind.info,
+    ),
+  );
 }
 
 class _TwoFactorSection extends ConsumerWidget {
@@ -331,40 +326,46 @@ class _PolicySectionState extends ConsumerState<_PolicySection> {
   Widget build(BuildContext context) {
     final t = context.l10n;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            t.secPolicyTitle,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          TfToggleTile(
-            key: const Key('sec-require'),
-            value: _require,
-            onChanged: _busy ? null : (v) => setState(() => _require = v),
-            title: t.secRequire,
-            subtitle: t.secRequireSub,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            key: const Key('sec-grace'),
-            controller: _grace,
-            enabled: !_busy && _require,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: t.secGraceDays),
-          ),
-          const SizedBox(height: 12),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TfButton(
-              key: const Key('sec-policy-save'),
-              label: t.grpBSave,
-              variant: TfButtonVariant.primary,
-              onPressed: _busy ? null : _save,
+      padding: const EdgeInsets.only(bottom: TfSpace.sm),
+      child: TfPanel(
+        padding: const EdgeInsets.all(TfSpace.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              t.secPolicyTitle,
+              style: context.tf.typography.lead.copyWith(
+                color: context.tf.colors.text,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: TfSpace.xs),
+            TfToggleTile(
+              key: const Key('sec-require'),
+              value: _require,
+              onChanged: _busy ? null : (v) => setState(() => _require = v),
+              title: t.secRequire,
+              subtitle: t.secRequireSub,
+            ),
+            const SizedBox(height: TfSpace.md),
+            TextField(
+              key: const Key('sec-grace'),
+              controller: _grace,
+              enabled: !_busy && _require,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: t.secGraceDays),
+            ),
+            const SizedBox(height: TfSpace.md),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TfButton(
+                key: const Key('sec-policy-save'),
+                label: t.grpBSave,
+                variant: TfButtonVariant.primary,
+                onPressed: _busy ? null : _save,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

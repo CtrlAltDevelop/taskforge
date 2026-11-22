@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -276,6 +278,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
         all.where((x) => x.id == _selected).firstOrNull ??
         all.firstOrNull;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _toolbar(context, all, current),
         const Divider(height: 1),
@@ -301,8 +304,12 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(context.l10n.grpCDashEmpty, key: const Key('dashboards-empty')),
-        const SizedBox(height: 8),
-        Wrap(spacing: 8, children: _newButtons()),
+        const SizedBox(height: TfSpace.md),
+        Wrap(
+          spacing: TfSpace.sm,
+          runSpacing: TfSpace.sm,
+          children: _newButtons(),
+        ),
       ],
     ),
   );
@@ -355,10 +362,13 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
     List<d.Dashboard> all,
     d.Dashboard? current,
   ) => Padding(
-    padding: const EdgeInsets.all(8),
+    padding: EdgeInsets.symmetric(
+      horizontal: pageGutter(ScreenSize.of(context)),
+      vertical: TfSpace.sm,
+    ),
     child: Wrap(
-      spacing: 8,
-      runSpacing: 4,
+      spacing: TfSpace.sm,
+      runSpacing: TfSpace.sm,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (!_editing && all.isNotEmpty)
@@ -378,7 +388,7 @@ class _DashboardsScreenState extends ConsumerState<DashboardsScreen> {
           PopupMenuButton<String>(
             key: const Key('new-dashboard'),
             tooltip: context.l10n.grpCDashNew,
-            icon: const TfIcon(TfIcons.plus, size: 24),
+            icon: const TfIcon(TfIcons.plus),
             onSelected: (v) => v == 'blank' ? _newBlank() : _fromTemplate(v),
             itemBuilder: (_) => [
               PopupMenuItem(

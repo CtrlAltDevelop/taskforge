@@ -462,7 +462,9 @@ class _WeekBars extends StatelessWidget {
                       Container(
                         key: Key('home-time-bar-$i'),
                         height: 4 + _barHeight * days[i].seconds / most,
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: TfSpace.xs,
+                        ),
                         decoration: BoxDecoration(
                           color: days[i].seconds == 0 ? c.border : c.accent,
                           borderRadius: TfRadius.chip,

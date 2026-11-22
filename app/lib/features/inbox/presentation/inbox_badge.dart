@@ -17,6 +17,8 @@ class InboxBadge extends ConsumerWidget {
       label: count > 0 ? '$count unread' : null,
       child: Badge(
         key: const Key('inbox-badge'),
+        alignment: AlignmentDirectional.topEnd,
+        offset: const Offset(8, -6),
         isLabelVisible: count > 0,
         label: Text(count > 99 ? '99+' : '$count'),
         child: child,

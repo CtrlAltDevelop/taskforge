@@ -18,6 +18,9 @@ enum NotificationKind {
   statusChanged('status.changed', 'Status changes', TfIcons.arrowLeftRight),
   dueSoon('task.due_soon', 'Due soon', TfIcons.clock),
   timerLong('timer.long', 'Long timers', TfIcons.timer),
+  webhookDisabled('webhook.disabled', 'Webhook switched off', TfIcons.webhook),
+  goalReached('goal.reached', 'Goals reached', TfIcons.target),
+  goalAtRisk('goal.at_risk', 'Goals at risk', TfIcons.flag),
   unknown('', 'Notification', TfIcons.bell);
 
   const NotificationKind(this.wire, this.label, this.tfIcon);
@@ -33,6 +36,9 @@ enum NotificationKind {
     statusChanged => l.grpMNkStatusChanged,
     dueSoon => l.grpMNkDueSoon,
     timerLong => l.grpMNkTimerLong,
+    webhookDisabled => l.inboxNkWebhookDisabled,
+    goalReached => l.inboxNkGoalReached,
+    goalAtRisk => l.inboxNkGoalAtRisk,
     unknown => l.grpMNkUnknown,
   };
   final TfIconData tfIcon;
@@ -120,6 +126,38 @@ class InboxNotification {
   String get excerpt => _text('excerpt');
   String get dueDate => _text('due_date');
 
+  /// Why a webhook was switched off.
+  String get reason => _text('reason');
+
+  /// A goal's progress as a whole percent, from its 0..1 `progress`.
+  int get progressPercent {
+    final raw = payload['progress'];
+    return raw is num ? (raw * 100).round() : 0;
+  }
+
+  /// What the notification is about: the webhook's or goal's name, else the
+  /// task as the row names it.
+  String get subject => switch (kind) {
+    NotificationKind.webhookDisabled => _text('webhook'),
+    NotificationKind.goalReached ||
+    NotificationKind.goalAtRisk => _text('goal'),
+    _ => taskLabel,
+  };
+
+  /// Where tapping goes, or null when there is nowhere (or the ids are gone).
+  String? get route {
+    String? to(String prefix, String id) => id.isEmpty ? null : '$prefix$id';
+    return switch (kind) {
+      NotificationKind.webhookDisabled => to(
+        '/developer/webhooks/',
+        _text('webhook_id'),
+      ),
+      NotificationKind.goalReached ||
+      NotificationKind.goalAtRisk => to('/goals/', _text('goal_id')),
+      _ => canOpen ? '/projects/$projectId?task=$taskId' : null,
+    };
+  }
+
   String _text(String name) => payload[name]?.toString() ?? '';
 
   /// Who did it, in a sentence ("Hank assigned you ...").
@@ -136,6 +174,9 @@ class InboxNotification {
           : '$who moved from $from to $to',
     NotificationKind.dueSoon => 'Due soon:',
     NotificationKind.timerLong => 'Your timer is still running on',
+    NotificationKind.webhookDisabled => 'Webhook switched off:',
+    NotificationKind.goalReached => 'Goal reached:',
+    NotificationKind.goalAtRisk => 'Goal at risk:',
     NotificationKind.unknown => 'New activity on',
   };
 
@@ -156,6 +197,9 @@ class InboxNotification {
             : l.grpMNotifMoved(w, from, to),
       NotificationKind.dueSoon => l.grpMNotifDueSoon,
       NotificationKind.timerLong => l.grpMNotifTimer,
+      NotificationKind.webhookDisabled => l.inboxNotifWebhookDisabled,
+      NotificationKind.goalReached => l.inboxNotifGoalReached,
+      NotificationKind.goalAtRisk => l.inboxNotifGoalAtRisk,
       NotificationKind.unknown => l.grpMNotifNew,
     };
   }

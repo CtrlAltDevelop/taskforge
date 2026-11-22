@@ -131,19 +131,28 @@ class _StarterScreenState extends ConsumerState<StarterScreen> {
                         ),
                       ),
                       const SizedBox(height: TfSpace.lg),
-                      Wrap(
-                        spacing: TfSpace.md,
-                        runSpacing: TfSpace.md,
-                        children: [
-                          for (final key in keys)
-                            _StarterCard(
-                              starterKey: key,
-                              selected: key == chosen,
-                              onTap: _busy
-                                  ? null
-                                  : () => setState(() => _chosen = key),
-                            ),
-                        ],
+                      LayoutBuilder(
+                        builder: (context, box) {
+                          final columns = box.maxWidth >= 480 ? 2 : 1;
+                          final cardWidth =
+                              (box.maxWidth - TfSpace.md * (columns - 1)) /
+                              columns;
+                          return Wrap(
+                            spacing: TfSpace.md,
+                            runSpacing: TfSpace.md,
+                            children: [
+                              for (final key in keys)
+                                _StarterCard(
+                                  starterKey: key,
+                                  width: cardWidth,
+                                  selected: key == chosen,
+                                  onTap: _busy
+                                      ? null
+                                      : () => setState(() => _chosen = key),
+                                ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -189,8 +198,10 @@ class _StarterCard extends StatelessWidget {
     required this.starterKey,
     required this.selected,
     required this.onTap,
+    required this.width,
   });
 
+  final double width;
   final String starterKey;
   final bool selected;
   final VoidCallback? onTap;
@@ -201,7 +212,7 @@ class _StarterCard extends StatelessWidget {
     final tf = context.tf;
     final c = tf.colors;
     return SizedBox(
-      width: 220,
+      width: width,
       child: TfInteractive(
         key: Key('starter-$starterKey'),
         onTap: onTap,

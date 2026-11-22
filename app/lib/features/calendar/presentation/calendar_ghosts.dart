@@ -1,4 +1,6 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -26,11 +28,11 @@ class GhostTile extends StatelessWidget {
     final faded = Theme.of(context).colorScheme.outline;
     if (dense) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: TfSpace.xs),
         child: Row(
           children: [
             TfIcon(TfIcons.repeat, size: 12, color: faded),
-            const SizedBox(width: 2),
+            const SizedBox(width: TfSpace.xxs),
             Expanded(
               child: Text(
                 ghost.title,
@@ -38,7 +40,7 @@ class GhostTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: faded,
-                  fontSize: 11,
+                  fontSize: TfFontSize.caption,
                   fontStyle: FontStyle.italic,
                 ),
               ),

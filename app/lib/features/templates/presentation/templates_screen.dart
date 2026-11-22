@@ -1,3 +1,9 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_tabs.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -54,39 +60,41 @@ class _State extends ConsumerState<TemplatesScreen> {
     return Scaffold(
       appBar: TfAppBar(title: Text(t.tplTitle)),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            padding: EdgeInsets.fromLTRB(
+              pageGutter(ScreenSize.of(context)),
+              TfSpace.md,
+              pageGutter(ScreenSize.of(context)),
+              TfSpace.sm,
+            ),
             child: TextField(
               key: const Key('tpl-search'),
               controller: _search,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                prefixIcon: const TfIcon(TfIcons.search, size: 24),
+                prefixIcon: const TfIcon(TfIcons.search),
                 hintText: t.tplSearch,
               ),
               onChanged: (v) => setState(() => _text = v),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: EdgeInsets.symmetric(
+              horizontal: pageGutter(ScreenSize.of(context)),
+              vertical: TfSpace.sm,
+            ),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
-              child: SegmentedButton<TemplateKind?>(
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(value: null, label: Text(t.tplAll)),
-                  ButtonSegment(
-                    value: TemplateKind.project,
-                    label: Text(t.tplKindProject),
-                  ),
-                  ButtonSegment(
-                    value: TemplateKind.task,
-                    label: Text(t.tplKindTask),
-                  ),
-                ],
-                selected: {_kind},
-                onSelectionChanged: (s) => setState(() => _kind = s.first),
+              child: TfSegmented<TemplateKind?>(
+                options: {
+                  null: t.tplAll,
+                  TemplateKind.project: t.tplKindProject,
+                  TemplateKind.task: t.tplKindTask,
+                },
+                value: _kind,
+                onChanged: (v) => setState(() => _kind = v),
               ),
             ),
           ),
@@ -104,12 +112,23 @@ class _State extends ConsumerState<TemplatesScreen> {
                       illustration: TfIllustrationKind.docs,
                       title: t.tplEmpty,
                     )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: items.length,
-                      itemBuilder: (_, i) => _Card(
-                        template: items[i],
-                        onTap: () => _open(items[i]),
+                  : Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: TfPageWidth.wide,
+                        ),
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: pageGutter(ScreenSize.of(context)),
+                            vertical: TfSpace.sm,
+                          ),
+                          itemCount: items.length,
+                          itemBuilder: (_, i) => _Card(
+                            template: items[i],
+                            onTap: () => _open(items[i]),
+                          ),
+                        ),
                       ),
                     ),
             ),
@@ -135,24 +154,26 @@ class _Card extends StatelessWidget {
       template.kind == TemplateKind.project ? t.tplKindProject : t.tplKindTask,
       t.tplTasksN(template.taskCount),
     ];
-    return Card(
-      child: ListTile(
-        key: Key('tpl-${template.id}'),
-        leading: TfIcon(
-          size: 24,
-          template.kind == TemplateKind.project
-              ? TfIcons.folder
-              : TfIcons.workflow,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+      child: TfPanel(
+        padding: EdgeInsets.zero,
+        child: TfTile(
+          key: Key('tpl-${template.id}'),
+          leading: TfIcon(
+            template.kind == TemplateKind.project
+                ? TfIcons.folder
+                : TfIcons.workflow,
+          ),
+          title: Text(template.name),
+          subtitle: Text(
+            [
+              if (template.description.isNotEmpty) template.description,
+              badges.join(' · '),
+            ].join('\n'),
+          ),
+          onTap: onTap,
         ),
-        title: Text(template.name),
-        subtitle: Text(
-          [
-            if (template.description.isNotEmpty) template.description,
-            badges.join(' · '),
-          ].join('\n'),
-        ),
-        isThreeLine: template.description.isNotEmpty,
-        onTap: onTap,
       ),
     );
   }

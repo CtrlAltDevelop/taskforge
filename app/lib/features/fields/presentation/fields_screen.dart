@@ -22,6 +22,7 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/tasks/application/tasks_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
 TfIconData fieldTypeIcon(FieldType type) => switch (type) {
   FieldType.text => TfIcons.textType,
@@ -219,10 +220,12 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
             children: [
               if (shown.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    context.l10n.grpINoCustomFields,
+                  padding: const EdgeInsets.symmetric(vertical: TfSpace.xxl),
+                  child: TfEmpty(
                     key: const Key('fields-empty'),
+                    illustration: TfIllustrationKind.generic,
+                    title: context.l10n.grpINoCustomFields,
+                    compact: true,
                   ),
                 ),
               ReorderableListView(
@@ -242,7 +245,7 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                 ],
               ),
               if (archived.isNotEmpty) ...[
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 Text(
                   context.l10n.grpIArchivedRestorable,
                   style: Theme.of(context).textTheme.titleSmall,
@@ -266,6 +269,8 @@ class _FieldsScreenState extends ConsumerState<FieldsScreen> {
                     ),
                   ),
               ],
+              // Room for the floating Add field button over the last row.
+              if (canEdit) const SizedBox(height: TfSpace.huge + TfSpace.lg),
             ],
           );
         },
@@ -322,7 +327,7 @@ class _FieldTile extends StatelessWidget {
                     tooltip: context.l10n.grpIArchive,
                     onPressed: onArchive,
                   ),
-                  const SizedBox(width: 24),
+                  const SizedBox(width: TfSpace.xl),
                 ],
               )
             : null,

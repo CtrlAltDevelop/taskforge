@@ -9277,6 +9277,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashPinFailed => 'Could not change the pin.';
+
+  @override
+  String get devAccountsTab => 'Service accounts';
+
+  @override
+  String get devAccountsHint =>
+      'A service account is an identity for an integration, not a person. Its tokens work with the role you give it, narrowed to the scopes you pick.';
+
+  @override
+  String get devAccountNew => 'New service account';
+
+  @override
+  String get devAccountName => 'Name';
+
+  @override
+  String get devAccountRole => 'Role';
+
+  @override
+  String get devAccountCreate => 'Create';
+
+  @override
+  String get devAccountSave => 'Save';
+
+  @override
+  String get devAccountsEmpty => 'No service accounts yet.';
+
+  @override
+  String devAccountSubtitle(String role, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tokens',
+      one: '1 token',
+      zero: 'No tokens',
+    );
+    return '$role · $_temp0';
+  }
+
+  @override
+  String get devAccountTokens => 'Tokens';
+
+  @override
+  String get devAccountChangeRole => 'Change role';
+
+  @override
+  String get devAccountDelete => 'Delete';
+
+  @override
+  String devAccountDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get devAccountDeleteBody =>
+      'Its tokens stop working at once and it leaves the workspace. This cannot be undone.';
+
+  @override
+  String devAccountTokensTitle(String name) {
+    return 'Tokens of $name';
+  }
+
+  @override
+  String get devAccountTokensEmpty => 'No tokens for this account yet.';
+
+  @override
+  String get inboxNkWebhookDisabled => 'Webhook switched off';
+
+  @override
+  String get inboxNkGoalReached => 'Goals reached';
+
+  @override
+  String get inboxNkGoalAtRisk => 'Goals at risk';
+
+  @override
+  String get inboxNotifWebhookDisabled => 'Webhook switched off:';
+
+  @override
+  String get inboxNotifGoalReached => 'Goal reached:';
+
+  @override
+  String get inboxNotifGoalAtRisk => 'Goal at risk:';
+
+  @override
+  String inboxGoalProgress(int percent) {
+    return '$percent% of the target';
+  }
+
+  @override
+  String get dashWkGoals => 'Goals';
+
+  @override
+  String dashPercent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get dashGoalLimit => 'How many goals';
+
+  @override
+  String get formsDefaultValues => 'Default values';
+
+  @override
+  String get formsDefaultValuesHint =>
+      'Every task made by this form starts with these project field values. Use a multi-select field named Labels for labels.';
+
+  @override
+  String get formsLogoUpload => 'Upload image';
+
+  @override
+  String get formsLogoRemove => 'Remove logo';
+
+  @override
+  String get formsLogoUploaded => 'Uploaded image';
+
+  @override
+  String get formsLogoSaveFirst => 'Save the form first to upload a logo.';
 }
 
 /// The translations for English (`en_XA`).
@@ -9387,10 +9503,10 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   String get contrastLabel => '[Ĥíĝĥ çöñţŕåšţ ~~~~]';
 
   @override
-  String get reduceMotionLabel => '[Ŕéðûçé möţíöñ ~~~]';
+  String get reduceMotionLabel => '[Ŕéðûçé ɱöţíöñ ~~~~]';
 
   @override
-  String get reduceMotionHelp => '[Åñíméţíöñš ƀéçöé~ íñšţåñţ ~~~~~~]';
+  String get reduceMotionHelp => '[Åñíɱåţíöñš ƀéçöɱé íñšţåñţ ƒåðéš ~~~~~~~~~~]';
 
   @override
   String get contrastHelp =>
@@ -12274,7 +12390,7 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
   String get grpFColTitle => '[Ţíţłé ~]';
 
   @override
-  String get tblSelectAll => '[Šéłéçţ áłł ţáşķş ~]';
+  String get tblSelectAll => '[Šéłéçţ åłł ţåšķš ~~~~~]';
 
   @override
   String grpFTrashTitle(String name) {
@@ -18710,4 +18826,122 @@ class AppLocalizationsEnXa extends AppLocalizationsEn {
 
   @override
   String get dashPinFailed => '[Çöûłð ñöţ çĥåñĝé ţĥé þíñ. ~~~~~~~~]';
+
+  @override
+  String get devAccountsTab => '[Šéŕṽíçé åççöûñţš ~~~~~]';
+
+  @override
+  String get devAccountsHint =>
+      '[Å šéŕṽíçé åççöûñţ íš åñ íðéñţíţý ƒöŕ åñ íñţéĝŕåţíöñ, ñöţ å þéŕšöñ. Íţš ţöķéñš ŵöŕķ ŵíţĥ ţĥé ŕöłé ýöû ĝíṽé íţ, ñåŕŕöŵéð ţö ţĥé šçöþéš ýöû þíçķ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get devAccountNew => '[Ñéŵ šéŕṽíçé åççöûñţ ~~~~~~]';
+
+  @override
+  String get devAccountName => '[Ñåɱé ~]';
+
+  @override
+  String get devAccountRole => '[Ŕöłé ~]';
+
+  @override
+  String get devAccountCreate => '[Çŕéåţé ~~]';
+
+  @override
+  String get devAccountSave => '[Šåṽé ~]';
+
+  @override
+  String get devAccountsEmpty => '[Ñö šéŕṽíçé åççöûñţš ýéţ. ~~~~~~~~]';
+
+  @override
+  String devAccountSubtitle(String role, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ţöķéñš',
+      one: '1 ţöķéñ',
+      zero: 'Ñö ţöķéñš',
+    );
+    return '[$role · $_temp0 ~~~~~~~~~~~~~~~~~~~~~~~~]';
+  }
+
+  @override
+  String get devAccountTokens => '[Ţöķéñš ~~]';
+
+  @override
+  String get devAccountChangeRole => '[Çĥåñĝé ŕöłé ~~~]';
+
+  @override
+  String get devAccountDelete => '[Ðéłéţé ~~]';
+
+  @override
+  String devAccountDeleteTitle(String name) {
+    return '[Ðéłéţé \"$name\"? ~~~~~]';
+  }
+
+  @override
+  String get devAccountDeleteBody =>
+      '[Íţš ţöķéñš šţöþ ŵöŕķíñĝ åţ öñçé åñð íţ łéåṽéš ţĥé ŵöŕķšþåçé. Ţĥíš çåññöţ ƀé ûñðöñé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String devAccountTokensTitle(String name) {
+    return '[Ţöķéñš öƒ $name ~~~~~]';
+  }
+
+  @override
+  String get devAccountTokensEmpty =>
+      '[Ñö ţöķéñš ƒöŕ ţĥíš åççöûñţ ýéţ. ~~~~~~~~~~]';
+
+  @override
+  String get inboxNkWebhookDisabled => '[Ŵéƀĥööķ šŵíţçĥéð öƒƒ ~~~~~~]';
+
+  @override
+  String get inboxNkGoalReached => '[Ĝöåłš ŕéåçĥéð ~~~~]';
+
+  @override
+  String get inboxNkGoalAtRisk => '[Ĝöåłš åţ ŕíšķ ~~~~]';
+
+  @override
+  String get inboxNotifWebhookDisabled => '[Ŵéƀĥööķ šŵíţçĥéð öƒƒ: ~~~~~~~]';
+
+  @override
+  String get inboxNotifGoalReached => '[Ĝöåł ŕéåçĥéð: ~~~~]';
+
+  @override
+  String get inboxNotifGoalAtRisk => '[Ĝöåł åţ ŕíšķ: ~~~~]';
+
+  @override
+  String inboxGoalProgress(int percent) {
+    return '[$percent% öƒ ţĥé ţåŕĝéţ ~~~~~~~~]';
+  }
+
+  @override
+  String get dashWkGoals => '[Ĝöåłš ~]';
+
+  @override
+  String dashPercent(String value) {
+    return '[$value% ~~]';
+  }
+
+  @override
+  String get dashGoalLimit => '[Ĥöŵ ɱåñý ĝöåłš ~~~~]';
+
+  @override
+  String get formsDefaultValues => '[Ðéƒåûłţ ṽåłûéš ~~~~]';
+
+  @override
+  String get formsDefaultValuesHint =>
+      '[Éṽéŕý ţåšķ ɱåðé ƀý ţĥíš ƒöŕɱ šţåŕţš ŵíţĥ ţĥéšé þŕöĵéçţ ƒíéłð ṽåłûéš. Ûšé å ɱûłţí-šéłéçţ ƒíéłð ñåɱéð Łåƀéłš ƒöŕ łåƀéłš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]';
+
+  @override
+  String get formsLogoUpload => '[Ûþłöåð íɱåĝé ~~~~]';
+
+  @override
+  String get formsLogoRemove => '[Ŕéɱöṽé łöĝö ~~~]';
+
+  @override
+  String get formsLogoUploaded => '[Ûþłöåðéð íɱåĝé ~~~~]';
+
+  @override
+  String get formsLogoSaveFirst =>
+      '[Šåṽé ţĥé ƒöŕɱ ƒíŕšţ ţö ûþłöåð å łöĝö. ~~~~~~~~~~~~]';
 }

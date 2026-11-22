@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -126,7 +127,7 @@ class _Groups extends StatelessWidget {
         for (final kind in LinkKind.values)
           if (items.any((l) => l.kind == kind)) ...[
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: TfSpace.sm),
               child: Text(
                 kind.labelIn(context.l10n),
                 style: theme.textTheme.labelMedium,
@@ -278,7 +279,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
               ],
               onChanged: _busy ? null : (k) => setState(() => _kind = k!),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             TextField(
               key: const Key('link-search'),
               decoration: InputDecoration(
@@ -319,7 +320,7 @@ class _AddLinkDialogState extends ConsumerState<AddLinkDialog> {
               ),
             if (_error != null)
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: TfSpace.sm),
                 child: Text(
                   _error!,
                   key: const Key('link-error'),

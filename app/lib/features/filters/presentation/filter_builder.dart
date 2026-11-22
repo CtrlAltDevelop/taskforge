@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -53,7 +54,7 @@ class FilterBuilder extends StatelessWidget {
         edit: _edit,
         fieldOf: _field,
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: TfSpace.md),
       _OrderView(
         order: query.order,
         fields: [
@@ -116,7 +117,7 @@ class _GroupView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(TfSpace.sm),
       decoration: BoxDecoration(
         border: Border.all(color: scheme.outlineVariant),
         borderRadius: TfRadius.panel,
@@ -161,10 +162,10 @@ class _GroupView extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           for (var i = 0; i < group.children.length; i++)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: TfSpace.sm),
               child: switch (group.children[i]) {
                 final FilterGroup g => _GroupView(
                   key: Key('group-${[...path, i].join('-')}'),
@@ -606,7 +607,7 @@ class _OrderView extends StatelessWidget {
                         k == i ? FilterOrder(v, desc: order[k].desc) : order[k],
                     ]),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: TfSpace.sm),
             SegmentedButton<bool>(
               key: Key('order-dir-$i'),
               showSelectedIcon: false,

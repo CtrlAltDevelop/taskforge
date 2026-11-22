@@ -1,7 +1,9 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -102,13 +104,17 @@ class _DeliveriesScreenState extends ConsumerState<DeliveriesScreen> {
           if (rows.isEmpty) {
             return TfEmpty(title: context.l10n.devDeliveriesEmpty);
           }
-          return ListView(
+          return TfPage(
+            lazy: true,
             children: [
               for (final d in rows)
-                _DeliveryTile(delivery: d, onResend: () => _resend(d)),
+                Material(
+                  type: MaterialType.transparency,
+                  child: _DeliveryTile(delivery: d, onResend: () => _resend(d)),
+                ),
               if (cursor.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(TfSpace.md),
                   child: Center(
                     child: TfButton(
                       key: const Key('load-more-deliveries'),
@@ -156,7 +162,12 @@ class _DeliveryTile extends StatelessWidget {
           whenText(context, d.at.isEmpty ? d.createdAt : d.at),
         ].where((s) => s.isNotEmpty).join(' · '),
       ),
-      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      childrenPadding: const EdgeInsets.fromLTRB(
+        TfSpace.lg,
+        0,
+        TfSpace.lg,
+        TfSpace.lg,
+      ),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (d.error.isNotEmpty) Text(d.error),
@@ -173,7 +184,7 @@ class _DeliveryTile extends StatelessWidget {
           subtitle: d.statusCode == 0 ? '' : '${d.statusCode}',
           text: d.responseSnippet,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Align(
           alignment: AlignmentDirectional.centerStart,
           child: TfButton(
@@ -203,7 +214,7 @@ class _Block extends StatelessWidget {
   Widget build(BuildContext context) {
     if (text.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.only(top: TfSpace.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -211,10 +222,10 @@ class _Block extends StatelessWidget {
             [title, subtitle].where((s) => s.isNotEmpty).join(' · '),
             style: Theme.of(context).textTheme.labelMedium,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: TfSpace.xs),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(TfSpace.sm),
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: SelectableText(
               text,

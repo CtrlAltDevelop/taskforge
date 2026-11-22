@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_field.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -94,7 +95,7 @@ class _RecoveryCodesDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(t.secRecoveryBody),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             for (final code in codes)
               SelectableText(
                 code,

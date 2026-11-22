@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,12 +39,13 @@ class SignInScreen extends ConsumerWidget {
         }
       },
       footer: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ValueListenableBuilder<bool>(
             valueListenable: session.keyChanged,
             builder: (context, changed, _) => changed
                 ? Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.only(bottom: TfSpace.md),
                     child: Text(
                       key: const Key('key-changed'),
                       context.l10n.dpopKeyChanged,
@@ -54,6 +56,7 @@ class SignInScreen extends ConsumerWidget {
                   )
                 : const SizedBox.shrink(),
           ),
+          const SizedBox(height: TfSpace.sm),
           OutlinedButton.icon(
             key: const Key('go-sso'),
             onPressed: () => showSsoDialog(context, ref),

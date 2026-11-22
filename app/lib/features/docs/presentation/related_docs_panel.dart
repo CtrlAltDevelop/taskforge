@@ -39,7 +39,7 @@ class RelatedDocsPanel extends ConsumerWidget {
         children: [
           if (all.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(TfSpace.lg),
               child: Text(context.l10n.grpJNoPagesYetLong),
             ),
           for (final d in all)

@@ -86,6 +86,7 @@ class IntakeForm {
     required this.version,
     required this.submissionCount,
     required this.problem,
+    this.fieldDefaults = const {},
   });
 
   final String id;
@@ -110,6 +111,34 @@ class IntakeForm {
 
   /// Why submissions would fail now; empty when none.
   final String problem;
+
+  /// Project field id -> the value (wire form) every task of the form starts
+  /// with; a multi-select field named Labels covers labels.
+  final Map<String, String> fieldDefaults;
+
+  /// The same form after a logo upload bumped [version].
+  IntakeForm withLogo({required String logoUrl, required int version}) =>
+      IntakeForm(
+        id: id,
+        projectId: projectId,
+        name: name,
+        description: description,
+        token: token,
+        questions: questions,
+        statusId: statusId,
+        priority: priority,
+        assigneeIds: assigneeIds,
+        enabled: enabled,
+        requireEmail: requireEmail,
+        sendConfirmation: sendConfirmation,
+        notifyStatus: notifyStatus,
+        brandColor: brandColor,
+        logoUrl: logoUrl,
+        version: version,
+        submissionCount: submissionCount,
+        problem: problem,
+        fieldDefaults: fieldDefaults,
+      );
 }
 
 /// What the builder sends to create or save a form.
@@ -128,6 +157,8 @@ class FormDraft {
     required this.notifyStatus,
     required this.brandColor,
     required this.logoUrl,
+    this.fieldDefaults = const {},
+    this.keepLogo = false,
   });
 
   final String name;
@@ -142,6 +173,13 @@ class FormDraft {
   final bool notifyStatus;
   final String brandColor;
   final String logoUrl;
+
+  /// Project field id -> default value, in the wire form.
+  final Map<String, String> fieldDefaults;
+
+  /// Leave the logo as the server has it (it may be an upload): [logoUrl] is
+  /// then not sent, since sending it back would turn the logo into a link.
+  final bool keepLogo;
 }
 
 /// One send, as the submissions list shows it.

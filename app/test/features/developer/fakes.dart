@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'
     hide GlobalMaterialLocalizations, GlobalCupertinoLocalizations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskforge/features/developer/application/developer_providers.dart';
 import 'package:taskforge/features/developer/data/developer_client.dart';
@@ -24,17 +25,36 @@ const devCatalog = DeveloperCatalog(
   ],
 );
 
-ApiToken tokenRow(String id, {List<String> scopes = const ['tasks:read']}) =>
-    ApiToken(
-      id: id,
-      name: 'CI',
-      prefix: 'tf_ab12',
-      scopes: scopes,
-      status: 'active',
-      expiresAt: '',
-      lastUsedAt: '',
-      createdAt: '2026-11-01T00:00:00Z',
-    );
+ApiToken tokenRow(
+  String id, {
+  List<String> scopes = const ['tasks:read'],
+  String serviceAccountId = '',
+}) => ApiToken(
+  serviceAccountId: serviceAccountId,
+  id: id,
+  name: 'CI',
+  prefix: 'tf_ab12',
+  scopes: scopes,
+  status: 'active',
+  expiresAt: '',
+  lastUsedAt: '',
+  createdAt: '2026-11-01T00:00:00Z',
+);
+
+ServiceAccount accountRow(
+  String id, {
+  String name = 'CI bot',
+  String roleId = 'r-member',
+}) => ServiceAccount(
+  id: id,
+  name: name,
+  userId: 'u-$id',
+  roleId: roleId,
+  roleName: roleId == 'r-admin' ? 'Admin' : 'Member',
+  active: true,
+  tokenCount: 1,
+  createdAt: '2026-11-01T00:00:00Z',
+);
 
 Webhook hookRow({String projectId = ''}) => Webhook(
   id: 'h1',
@@ -74,7 +94,15 @@ class FakeDeveloperClient implements DeveloperClient {
     this.hooks = const [],
     this.deliveryRows = const [],
     this.tokenRows = const [],
+    this.accounts = const [],
   });
+
+  List<ServiceAccount> accounts;
+  final accountTokenCalls = <String>[];
+  final roleChanges = <(String, String)>[];
+  final deletedAccounts = <String>[];
+  final revoked = <String>[];
+  DeveloperException? failAccount;
 
   List<Webhook> hooks;
   List<Delivery> deliveryRows;
@@ -90,7 +118,12 @@ class FakeDeveloperClient implements DeveloperClient {
   Future<DeveloperCatalog> catalog(String workspaceId) async => devCatalog;
 
   @override
-  Future<List<ApiToken>> tokens(String workspaceId) async => tokenRows;
+  Future<List<ApiToken>> tokens(
+    String workspaceId, {
+    String serviceAccountId = '',
+  }) async => serviceAccountId.isEmpty
+      ? tokenRows.where((t) => t.serviceAccountId.isEmpty).toList()
+      : tokenRows.where((t) => t.serviceAccountId == serviceAccountId).toList();
 
   @override
   Future<IssuedToken> createToken(
@@ -98,11 +131,55 @@ class FakeDeveloperClient implements DeveloperClient {
     required String name,
     required List<String> scopes,
     required int expiresInDays,
+    String serviceAccountId = '',
   }) async {
     final fail = failToken;
     if (fail != null) throw fail;
     tokenCalls.add((name: name, scopes: scopes, expiresInDays: expiresInDays));
+    accountTokenCalls.add(serviceAccountId);
     return IssuedToken(tokenRow('t9', scopes: scopes), 'tf_secret_once');
+  }
+
+  @override
+  Future<List<ServiceAccount>> serviceAccounts(String workspaceId) async =>
+      accounts;
+
+  @override
+  Future<ServiceAccount> createServiceAccount(
+    String workspaceId, {
+    required String name,
+    required String roleId,
+  }) async {
+    final fail = failAccount;
+    if (fail != null) throw fail;
+    final made = accountRow('sa9', name: name, roleId: roleId);
+    accounts = [...accounts, made];
+    return made;
+  }
+
+  @override
+  Future<ServiceAccount> setServiceAccountRole(
+    String workspaceId,
+    String accountId,
+    String roleId,
+  ) async {
+    roleChanges.add((accountId, roleId));
+    return accountRow(accountId, roleId: roleId);
+  }
+
+  @override
+  Future<void> deleteServiceAccount(
+    String workspaceId,
+    String accountId,
+  ) async {
+    deletedAccounts.add(accountId);
+    accounts = accounts.where((a) => a.id != accountId).toList();
+  }
+
+  @override
+  Future<ApiToken> revokeToken(String workspaceId, String tokenId) async {
+    revoked.add(tokenId);
+    return tokenRow(tokenId);
   }
 
   @override
@@ -153,6 +230,7 @@ Future<void> pumpDeveloper(
   Widget home,
   FakeDeveloperClient client, {
   FakeProjectsClient? projects,
+  List<Override> overrides = const [],
 }) async {
   tester.view.physicalSize = const Size(1200, 1600);
   tester.view.devicePixelRatio = 1;
@@ -165,6 +243,7 @@ Future<void> pumpDeveloper(
         projectsClientProvider.overrideWithValue(
           projects ?? FakeProjectsClient(),
         ),
+        ...overrides,
       ],
       child: MaterialApp(
         localizationsDelegates: const [

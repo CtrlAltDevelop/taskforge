@@ -39,7 +39,7 @@ class ValidationPanel extends StatelessWidget {
       key: const Key('validation-panel'),
       color: theme.colorScheme.errorContainer,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(TfSpace.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,10 +47,10 @@ class ValidationPanel extends StatelessWidget {
               context.l10n.grpIProblemsToFix(problems.length),
               style: theme.textTheme.titleSmall,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             for (final p in problems)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xxs),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -59,7 +59,7 @@ class ValidationPanel extends StatelessWidget {
                       size: 18,
                       color: theme.colorScheme.error,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: TfSpace.sm),
                     Expanded(
                       child: Text(p.message, key: Key('listed-${p.code}')),
                     ),

@@ -61,8 +61,8 @@ class ViewToolbar extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-            horizontal: TfSpace.sm,
+          padding: EdgeInsetsDirectional.symmetric(
+            horizontal: pageGutter(ScreenSize.of(context)),
             vertical: TfSpace.xs,
           ),
           child: Row(

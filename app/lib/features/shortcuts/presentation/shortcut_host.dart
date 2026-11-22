@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -111,26 +112,24 @@ class _ShortcutHostState extends ConsumerState<ShortcutHost> {
   }
 }
 
-/// The phone's way in: keys are not there, so a button opens the available
-/// actions as a sheet.
+/// The phone's way in: keys are not there, so a top-bar button opens the
+/// available actions as a sheet.
 class QuickActionsButton extends ConsumerWidget {
   const QuickActionsButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-      FloatingActionButton.small(
-        key: const Key('quick-actions'),
-        tooltip: context.l10n.grpGQuickActions,
-        heroTag: 'quick-actions',
-        onPressed: () => showModalBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          showDragHandle: true,
-          // Judged and run from here, not from the sheet that closes first.
-          builder: (_) => QuickActionsSheet(from: actionContextOf(context)),
-        ),
-        child: const TfIcon(TfIcons.bolt),
-      );
+  Widget build(BuildContext context, WidgetRef ref) => TfIconButton(
+    key: const Key('quick-actions'),
+    icon: TfIcons.bolt,
+    tooltip: context.l10n.grpGQuickActions,
+    onPressed: () => showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      // Judged and run from here, not from the sheet that closes first.
+      builder: (_) => QuickActionsSheet(from: actionContextOf(context)),
+    ),
+  );
 }
 
 class QuickActionsSheet extends StatelessWidget {

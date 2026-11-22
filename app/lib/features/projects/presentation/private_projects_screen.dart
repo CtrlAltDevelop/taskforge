@@ -10,6 +10,7 @@ import 'package:taskforge/features/projects/presentation/project_actions.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Admin list of private projects. Those the admin is not in cannot be opened
 /// until they add themselves.
@@ -37,7 +38,10 @@ class PrivateProjectsScreen extends ConsumerWidget {
           children: [
             for (final p in value)
               Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: TfSpace.md,
+                  vertical: TfSpace.xs,
+                ),
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: Key('private-project-${p.id}'),

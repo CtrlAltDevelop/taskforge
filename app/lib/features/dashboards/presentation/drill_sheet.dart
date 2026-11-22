@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -61,7 +62,7 @@ class DrillDialog extends ConsumerWidget {
             children: [
               if (value.truncated)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: TfSpace.sm),
                   child: Text(
                     context.l10n.grpIDrillTruncated,
                     key: const Key('drill-truncated'),

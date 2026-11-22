@@ -9,6 +9,7 @@ import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/tasks/domain/tasks.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Names for the ids a rule holds: statuses, custom fields and people.
 class Lookups {
@@ -131,7 +132,7 @@ class TriggerEditor extends StatelessWidget {
         onChanged: (v) =>
             onChanged(Trigger(type: TriggerType.tryParse(v) ?? trigger.type)),
       ),
-      const SizedBox(height: 8),
+      const SizedBox(height: TfSpace.sm),
       ...switch (trigger.type) {
         TriggerType.statusChanged => [
           Choice(
@@ -228,7 +229,7 @@ class _ActionEditorState extends State<ActionEditor> {
   }
 
   Widget _hints(TextEditingController c, void Function() sync) => Padding(
-    padding: const EdgeInsets.only(top: 6),
+    padding: const EdgeInsets.only(top: TfSpace.xs),
     child: Wrap(
       spacing: 6,
       runSpacing: 4,
@@ -316,7 +317,7 @@ class _ActionEditorState extends State<ActionEditor> {
             _set(_a.copyWith(field: v, value: ''));
           },
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         if (_a.field == 'priority')
           Choice(
             key: const Key('action-priority'),
@@ -346,7 +347,7 @@ class _ActionEditorState extends State<ActionEditor> {
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: Padding(
-              padding: const EdgeInsets.only(top: 6),
+              padding: const EdgeInsets.only(top: TfSpace.xs),
               child: ActionChip(
                 key: const Key('use-today'),
                 label: Text(context.l10n.grpCAutoUseToken(todayToken)),
@@ -391,7 +392,7 @@ class _ActionEditorState extends State<ActionEditor> {
             onChanged: (v) => _set(_a.copyWith(mode: v)),
           ),
           if (_a.mode != 'clear') ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             _people(_a.userIds, recipients: false),
           ],
         ],
@@ -414,7 +415,7 @@ class _ActionEditorState extends State<ActionEditor> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _people(_a.to, recipients: true),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           _textBox(context.l10n.grpCAutoMessage, maxTitleText, lines: 2),
           _hints(_text, () => _set(_a.copyWith(text: _text.text))),
         ],
@@ -434,7 +435,7 @@ class _ActionEditorState extends State<ActionEditor> {
               border: const OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           Choice(
             key: const Key('action-method'),
             label: context.l10n.grpCAutoMethod,
@@ -471,11 +472,11 @@ class _ActionEditorState extends State<ActionEditor> {
             );
           },
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         body,
         if (problem != null && _touched)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: TfSpace.xs),
             child: Text(
               problem,
               style: TextStyle(color: Theme.of(context).colorScheme.error),

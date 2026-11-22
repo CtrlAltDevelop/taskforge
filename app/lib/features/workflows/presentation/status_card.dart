@@ -8,6 +8,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// One status in the editor: look, name, category, default, delete, and (when
 /// transitions are restricted) which statuses it may move to.
@@ -64,12 +65,12 @@ class StatusCard extends StatelessWidget {
         if (s.key != key) s,
     ];
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
       child: TfPanel(
         key: Key('status-$key'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,7 +80,7 @@ class StatusCard extends StatelessWidget {
                     index: index,
                     enabled: canEdit,
                     child: Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(TfSpace.sm),
                       child: TfIcon(
                         TfIcons.grip,
                         key: Key('status-handle-$key'),
@@ -102,14 +103,14 @@ class StatusCard extends StatelessWidget {
                                 TfIcons.circle,
                                 color: parseStatusColor(c),
                               ),
-                              const SizedBox(width: 12),
+                              const SizedBox(width: TfSpace.md),
                               Text(c),
                             ],
                           ),
                         ),
                     ],
                     child: Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(TfSpace.sm),
                       child: TfIcon(
                         TfIcons.circle,
                         color: parseStatusColor(status.color),
@@ -142,7 +143,7 @@ class StatusCard extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8),
+                padding: const EdgeInsetsDirectional.only(start: TfSpace.sm),
                 child: TfSelectField<StatusCategory>(
                   key: Key('status-category-$key'),
                   options: {
@@ -159,7 +160,10 @@ class StatusCard extends StatelessWidget {
               ),
               if (status.taskCount > 0 && !status.isNew)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
+                  padding: const EdgeInsetsDirectional.only(
+                    start: TfSpace.sm,
+                    top: TfSpace.xs,
+                  ),
                   child: Text(
                     context.l10n.grpITaskCount(status.taskCount),
                     style: theme.textTheme.bodySmall,
@@ -167,7 +171,10 @@ class StatusCard extends StatelessWidget {
                 ),
               for (final p in problems)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 8, top: 4),
+                  padding: const EdgeInsetsDirectional.only(
+                    start: TfSpace.sm,
+                    top: TfSpace.xs,
+                  ),
                   child: Text(
                     p.message,
                     key: Key('problem-${p.code}-$key'),
@@ -180,7 +187,7 @@ class StatusCard extends StatelessWidget {
                   context.l10n.grpICanMoveTo,
                   style: theme.textTheme.labelMedium,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: TfSpace.xs),
                 Wrap(
                   spacing: 8,
                   runSpacing: 4,

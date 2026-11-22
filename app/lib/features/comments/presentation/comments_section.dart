@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -145,15 +146,19 @@ class CommentsSkeleton extends StatelessWidget {
       children: [
         for (var i = 0; i < 3; i++)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
             child: Row(
               children: [
                 CircleAvatar(radius: 12, backgroundColor: grey),
-                const SizedBox(width: 8),
+                const SizedBox(width: TfSpace.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [bar(120), const SizedBox(height: 6), bar(220)],
+                    children: [
+                      bar(120),
+                      const SizedBox(height: TfSpace.sm),
+                      bar(220),
+                    ],
                   ),
                 ),
               ],

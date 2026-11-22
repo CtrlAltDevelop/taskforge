@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -83,7 +84,7 @@ Future<void> showWhatsNew(
       children: [
         for (final note in notes)
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: TfSpace.sm),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

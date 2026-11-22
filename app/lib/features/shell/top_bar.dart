@@ -13,6 +13,7 @@ import 'package:taskforge/features/search/presentation/search_overlay.dart';
 import 'package:taskforge/features/shell/breadcrumbs.dart';
 import 'package:taskforge/features/shell/create_menu.dart';
 import 'package:taskforge/features/shell/project_switcher.dart';
+import 'package:taskforge/features/shortcuts/presentation/shortcut_host.dart';
 
 /// Height of the top bar.
 const topBarHeight = 48.0;
@@ -96,6 +97,7 @@ class TopBar extends ConsumerWidget {
               size: TfButtonSize.small,
               onPressed: () => openSearch(context),
             ),
+          if (compact) const QuickActionsButton(),
           const SizedBox(width: TfSpace.sm),
           const LiveIndicator(),
           const SizedBox(width: TfSpace.sm),

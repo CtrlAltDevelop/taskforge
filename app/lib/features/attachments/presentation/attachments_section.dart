@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:async';
@@ -132,7 +133,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
         ),
         if (state.error != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: TfSpace.sm),
             child: Row(
               key: const Key('attachment-error'),
               children: [
@@ -167,7 +168,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           ),
         if (files.isEmpty && uploads.isEmpty && !state.loading && !canAdd)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
             child: Text(
               context.l10n.grpHNoAttachments,
               key: const Key('no-attachments'),
@@ -175,7 +176,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           ),
         if (files.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Wrap(
               key: const Key('attachment-grid'),
               spacing: 8,
@@ -208,7 +209,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
           ),
         if (usage != null)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               context.localDigits(usageLine(usage, context.l10n)),
               key: const Key('storage-usage'),
@@ -256,7 +257,7 @@ class _AttachmentsSectionState extends ConsumerState<AttachmentsSection> {
               borderRadius: TfRadius.panel,
               child: Container(
                 constraints: const BoxConstraints(minHeight: 48),
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.lg),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: TfRadius.panel,

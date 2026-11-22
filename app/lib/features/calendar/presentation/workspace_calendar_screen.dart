@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -50,7 +52,9 @@ class WorkspaceCalendarScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+              padding: EdgeInsetsDirectional.symmetric(
+                horizontal: pageGutter(ScreenSize.of(context)),
+              ),
               child: FilterBar(
                 projectId: '',
                 canShare: ref
@@ -83,12 +87,14 @@ class _Legend extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => SingleChildScrollView(
     key: const Key('project-legend'),
     scrollDirection: Axis.horizontal,
-    padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+    padding: EdgeInsetsDirectional.symmetric(
+      horizontal: pageGutter(ScreenSize.of(context)),
+    ),
     child: Row(
       children: [
         for (final p in projects)
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 6),
+            padding: const EdgeInsetsDirectional.only(end: TfSpace.xs),
             child: FilterChip(
               key: Key('legend-${p.id}'),
               avatar: CircleAvatar(backgroundColor: colors[p.id], radius: 6),

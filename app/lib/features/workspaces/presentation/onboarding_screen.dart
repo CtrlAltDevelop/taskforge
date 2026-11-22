@@ -8,6 +8,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/features/workspaces/domain/workspace.dart';
 import 'package:taskforge/features/workspaces/presentation/recently_deleted.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// "Create your workspace": also used (at /workspaces/new) to add another one.
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -76,15 +77,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             key: _form,
             child: ListView(
               shrinkWrap: true,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               children: [
                 Text(
                   context.l10n.grpJCreateYourWorkspace,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: TfSpace.sm),
                 Text(context.l10n.grpJWorkspaceHolds),
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 TextFormField(
                   key: const Key('workspace-name'),
                   controller: _name,
@@ -94,7 +95,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     if (!_slugEdited) _slug.text = slugify(v);
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: TfSpace.lg),
                 TextFormField(
                   key: const Key('workspace-slug'),
                   controller: _slug,
@@ -109,7 +110,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   },
                 ),
                 if (_error != null) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: TfSpace.lg),
                   Text(
                     _error!,
                     key: const Key('workspace-error'),
@@ -118,7 +119,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 FilledButton(
                   key: const Key('create-workspace'),
                   onPressed: _busy ? null : _submit,
@@ -126,7 +127,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 ),
                 if (widget.firstWorkspace) ...[
                   const RecentlyDeleted(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: TfSpace.lg),
                   TextButton(
                     key: const Key('onboarding-sign-out'),
                     onPressed: ref.read(authSessionProvider).signOut,

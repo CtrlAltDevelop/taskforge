@@ -193,7 +193,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(TfSpace.lg),
             key: const Key('revision-preview'),
             child: switch (body) {
               AsyncData(:final value) => BlockPreview(blocks: value),
@@ -207,7 +207,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
         ),
         if (_error != null)
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(TfSpace.sm),
             child: Text(
               _error!,
               key: const Key('revision-error'),
@@ -216,7 +216,7 @@ class _RevisionsPanelState extends ConsumerState<RevisionsPanel> {
           ),
         if (widget.canEdit)
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(TfSpace.md),
             child: TfButton(
               key: const Key('revision-restore'),
               label: context.l10n.grpBRestoreVersion,

@@ -16,6 +16,75 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class FieldDefault extends $pb.GeneratedMessage {
+  factory FieldDefault({
+    $core.String? fieldId,
+    $core.String? value,
+  }) {
+    final result = FieldDefault._();
+    if (fieldId != null) result.fieldId = fieldId;
+    if (value != null) result.value = value;
+    return result;
+  }
+
+  FieldDefault._();
+
+  factory FieldDefault.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FieldDefault()..mergeFromBuffer(data, registry);
+  factory FieldDefault.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      FieldDefault()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'FieldDefault',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'config.forms'),
+      createEmptyInstance: FieldDefault.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'fieldId')
+    ..aOS(2, _omitFieldNames ? '' : 'value')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FieldDefault clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  FieldDefault copyWith(void Function(FieldDefault) updates) =>
+      super.copyWith((message) => updates(message as FieldDefault))
+          as FieldDefault;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use FieldDefault() / FieldDefault.new instead')
+  static FieldDefault create() => FieldDefault._();
+  static $pb.GeneratedMessage $_createMessage() => FieldDefault._();
+  @$core.override
+  FieldDefault createEmptyInstance() => FieldDefault._();
+  @$core.pragma('dart2js:noInline')
+  static FieldDefault getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FieldDefault>(
+          FieldDefault.$_createMessage);
+  static FieldDefault? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fieldId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fieldId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFieldId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFieldId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get value => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set value($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearValue() => $_clearField(2);
+}
+
 class FormAnswer extends $pb.GeneratedMessage {
   factory FormAnswer({
     IntakeForm? form,
@@ -90,6 +159,7 @@ class FormCreateRequest extends $pb.GeneratedMessage {
     $core.bool? notifyStatus,
     $core.String? brandColor,
     $core.String? logoUrl,
+    $core.Iterable<FieldDefault>? fieldDefaults,
   }) {
     final result = FormCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -106,6 +176,7 @@ class FormCreateRequest extends $pb.GeneratedMessage {
     if (notifyStatus != null) result.notifyStatus = notifyStatus;
     if (brandColor != null) result.brandColor = brandColor;
     if (logoUrl != null) result.logoUrl = logoUrl;
+    if (fieldDefaults != null) result.fieldDefaults.addAll(fieldDefaults);
     return result;
   }
 
@@ -137,6 +208,8 @@ class FormCreateRequest extends $pb.GeneratedMessage {
     ..aOB(12, _omitFieldNames ? '' : 'notifyStatus')
     ..aOS(13, _omitFieldNames ? '' : 'brandColor')
     ..aOS(14, _omitFieldNames ? '' : 'logoUrl')
+    ..pPM<FieldDefault>(15, _omitFieldNames ? '' : 'fieldDefaults',
+        subBuilder: FieldDefault.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -274,6 +347,9 @@ class FormCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasLogoUrl() => $_has(13);
   @$pb.TagNumber(14)
   void clearLogoUrl() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $pb.PbList<FieldDefault> get fieldDefaults => $_getList(14);
 }
 
 class FormDeleteRequest extends $pb.GeneratedMessage {
@@ -540,6 +616,7 @@ class FormUpdateRequest extends $pb.GeneratedMessage {
     $core.bool? notifyStatus,
     $core.String? brandColor,
     $core.String? logoUrl,
+    $core.Iterable<FieldDefault>? fieldDefaults,
   }) {
     final result = FormUpdateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
@@ -559,6 +636,7 @@ class FormUpdateRequest extends $pb.GeneratedMessage {
     if (notifyStatus != null) result.notifyStatus = notifyStatus;
     if (brandColor != null) result.brandColor = brandColor;
     if (logoUrl != null) result.logoUrl = logoUrl;
+    if (fieldDefaults != null) result.fieldDefaults.addAll(fieldDefaults);
     return result;
   }
 
@@ -593,6 +671,8 @@ class FormUpdateRequest extends $pb.GeneratedMessage {
     ..aOB(15, _omitFieldNames ? '' : 'notifyStatus')
     ..aOS(16, _omitFieldNames ? '' : 'brandColor')
     ..aOS(17, _omitFieldNames ? '' : 'logoUrl')
+    ..pPM<FieldDefault>(18, _omitFieldNames ? '' : 'fieldDefaults',
+        subBuilder: FieldDefault.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -751,6 +831,9 @@ class FormUpdateRequest extends $pb.GeneratedMessage {
   $core.bool hasLogoUrl() => $_has(16);
   @$pb.TagNumber(17)
   void clearLogoUrl() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $pb.PbList<FieldDefault> get fieldDefaults => $_getList(17);
 }
 
 class IntakeField extends $pb.GeneratedMessage {
@@ -906,6 +989,7 @@ class IntakeForm extends $pb.GeneratedMessage {
     $core.String? ownerId,
     $core.String? createdAt,
     $core.String? updatedAt,
+    $core.Iterable<FieldDefault>? fieldDefaults,
   }) {
     final result = IntakeForm._();
     if (id != null) result.id = id;
@@ -930,6 +1014,7 @@ class IntakeForm extends $pb.GeneratedMessage {
     if (ownerId != null) result.ownerId = ownerId;
     if (createdAt != null) result.createdAt = createdAt;
     if (updatedAt != null) result.updatedAt = updatedAt;
+    if (fieldDefaults != null) result.fieldDefaults.addAll(fieldDefaults);
     return result;
   }
 
@@ -969,6 +1054,8 @@ class IntakeForm extends $pb.GeneratedMessage {
     ..aOS(20, _omitFieldNames ? '' : 'ownerId')
     ..aOS(21, _omitFieldNames ? '' : 'createdAt')
     ..aOS(22, _omitFieldNames ? '' : 'updatedAt')
+    ..pPM<FieldDefault>(23, _omitFieldNames ? '' : 'fieldDefaults',
+        subBuilder: FieldDefault.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1176,6 +1263,9 @@ class IntakeForm extends $pb.GeneratedMessage {
   $core.bool hasUpdatedAt() => $_has(21);
   @$pb.TagNumber(22)
   void clearUpdatedAt() => $_clearField(22);
+
+  @$pb.TagNumber(23)
+  $pb.PbList<FieldDefault> get fieldDefaults => $_getList(22);
 }
 
 class IntakeSubmission extends $pb.GeneratedMessage {

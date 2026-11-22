@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/role_actions.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 const _labelWidth = 220.0;
 const _roleWidth = 120.0;
@@ -78,13 +79,15 @@ class _RoleHeader extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      if (role.isBuiltin)
+      if (role.isBuiltin) ...[
         TfIcon(
           TfIcons.lock,
           key: Key('lock-${role.id}'),
           size: 14,
           semanticLabel: context.l10n.grpJBuiltInReadOnly,
         ),
+        const SizedBox(width: TfSpace.xs),
+      ],
       Flexible(
         child: Text(
           role.name,
@@ -107,55 +110,62 @@ class RoleMatrix extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final roles = catalog.roles;
+    final minWidth = _labelWidth + roles.length * _roleWidth;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Table(
-          key: const Key('role-matrix'),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: {
-            0: const FixedColumnWidth(_labelWidth),
-            for (var i = 0; i < roles.length; i++)
-              i + 1: const FixedColumnWidth(_roleWidth),
-          },
-          children: [
-            TableRow(
+      padding: const EdgeInsets.all(TfSpace.lg),
+      child: LayoutBuilder(
+        builder: (context, box) => SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          // Fills a wide window (columns share the room), scrolls a narrow one.
+          child: SizedBox(
+            width: box.maxWidth > minWidth ? box.maxWidth : minWidth,
+            child: Table(
+              key: const Key('role-matrix'),
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              columnWidths: {
+                0: const FlexColumnWidth(2),
+                for (var i = 0; i < roles.length; i++)
+                  i + 1: const FlexColumnWidth(1),
+              },
               children: [
-                const SizedBox.shrink(),
-                for (final role in roles)
-                  _RoleHeader(role: role, all: roles, canManage: canManage),
-              ],
-            ),
-            for (final area in catalog.registry) ...[
-              TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      area.area,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  for (final _ in roles) const SizedBox.shrink(),
-                ],
-              ),
-              for (final p in area.permissions)
                 TableRow(
                   children: [
-                    Text(p.label),
+                    const SizedBox.shrink(),
                     for (final role in roles)
-                      Center(
-                        child: _Cell(
-                          role: role,
-                          permission: p,
-                          canManage: canManage,
-                        ),
-                      ),
+                      _RoleHeader(role: role, all: roles, canManage: canManage),
                   ],
                 ),
-            ],
-          ],
+                for (final area in catalog.registry) ...[
+                  TableRow(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: TfSpace.lg),
+                        child: Text(
+                          area.area,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      for (final _ in roles) const SizedBox.shrink(),
+                    ],
+                  ),
+                  for (final p in area.permissions)
+                    TableRow(
+                      children: [
+                        Text(p.label),
+                        for (final role in roles)
+                          Center(
+                            child: _Cell(
+                              role: role,
+                              permission: p,
+                              canManage: canManage,
+                            ),
+                          ),
+                      ],
+                    ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -174,7 +184,7 @@ class RoleList extends StatelessWidget {
     final roles = catalog.roles;
     return ListView(
       key: const Key('role-list'),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(TfSpace.sm),
       children: [
         for (final role in roles)
           ExpansionTile(
@@ -186,7 +196,12 @@ class RoleList extends StatelessWidget {
                 Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      TfSpace.lg,
+                      TfSpace.sm,
+                      TfSpace.lg,
+                      0,
+                    ),
                     child: Text(
                       area.area,
                       style: Theme.of(context).textTheme.titleSmall,

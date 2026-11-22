@@ -16403,6 +16403,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not change the pin.'**
   String get dashPinFailed;
+
+  /// No description provided for @devAccountsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Service accounts'**
+  String get devAccountsTab;
+
+  /// No description provided for @devAccountsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A service account is an identity for an integration, not a person. Its tokens work with the role you give it, narrowed to the scopes you pick.'**
+  String get devAccountsHint;
+
+  /// No description provided for @devAccountNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New service account'**
+  String get devAccountNew;
+
+  /// No description provided for @devAccountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get devAccountName;
+
+  /// No description provided for @devAccountRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get devAccountRole;
+
+  /// No description provided for @devAccountCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get devAccountCreate;
+
+  /// No description provided for @devAccountSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get devAccountSave;
+
+  /// No description provided for @devAccountsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No service accounts yet.'**
+  String get devAccountsEmpty;
+
+  /// No description provided for @devAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{role} · {count, plural, =0{No tokens} =1{1 token} other{{count} tokens}}'**
+  String devAccountSubtitle(String role, int count);
+
+  /// No description provided for @devAccountTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens'**
+  String get devAccountTokens;
+
+  /// No description provided for @devAccountChangeRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Change role'**
+  String get devAccountChangeRole;
+
+  /// No description provided for @devAccountDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get devAccountDelete;
+
+  /// No description provided for @devAccountDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String devAccountDeleteTitle(String name);
+
+  /// No description provided for @devAccountDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its tokens stop working at once and it leaves the workspace. This cannot be undone.'**
+  String get devAccountDeleteBody;
+
+  /// No description provided for @devAccountTokensTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens of {name}'**
+  String devAccountTokensTitle(String name);
+
+  /// No description provided for @devAccountTokensEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tokens for this account yet.'**
+  String get devAccountTokensEmpty;
+
+  /// No description provided for @inboxNkWebhookDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Webhook switched off'**
+  String get inboxNkWebhookDisabled;
+
+  /// No description provided for @inboxNkGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals reached'**
+  String get inboxNkGoalReached;
+
+  /// No description provided for @inboxNkGoalAtRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals at risk'**
+  String get inboxNkGoalAtRisk;
+
+  /// No description provided for @inboxNotifWebhookDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Webhook switched off:'**
+  String get inboxNotifWebhookDisabled;
+
+  /// No description provided for @inboxNotifGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached:'**
+  String get inboxNotifGoalReached;
+
+  /// No description provided for @inboxNotifGoalAtRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal at risk:'**
+  String get inboxNotifGoalAtRisk;
+
+  /// No description provided for @inboxGoalProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of the target'**
+  String inboxGoalProgress(int percent);
+
+  /// No description provided for @dashWkGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get dashWkGoals;
+
+  /// No description provided for @dashPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String dashPercent(String value);
+
+  /// No description provided for @dashGoalLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'How many goals'**
+  String get dashGoalLimit;
+
+  /// No description provided for @formsDefaultValues.
+  ///
+  /// In en, this message translates to:
+  /// **'Default values'**
+  String get formsDefaultValues;
+
+  /// No description provided for @formsDefaultValuesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every task made by this form starts with these project field values. Use a multi-select field named Labels for labels.'**
+  String get formsDefaultValuesHint;
+
+  /// No description provided for @formsLogoUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload image'**
+  String get formsLogoUpload;
+
+  /// No description provided for @formsLogoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove logo'**
+  String get formsLogoRemove;
+
+  /// No description provided for @formsLogoUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded image'**
+  String get formsLogoUploaded;
+
+  /// No description provided for @formsLogoSaveFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Save the form first to upload a logo.'**
+  String get formsLogoSaveFirst;
 }
 
 class _AppLocalizationsDelegate

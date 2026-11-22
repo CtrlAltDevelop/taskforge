@@ -251,12 +251,12 @@ class _Body extends StatelessWidget {
       for (final id in goal.contributorIds) names[id] ?? '',
     ].where((s) => s.isNotEmpty);
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TfSpace.lg),
       children: [
         Row(
           children: [
             GoalStatusChip(status: goal.status),
-            const SizedBox(width: 8),
+            const SizedBox(width: TfSpace.sm),
             if (goal.statusOverride.isEmpty)
               Text(
                 t.goalsStatusAutoNote,
@@ -270,12 +270,12 @@ class _Body extends StatelessWidget {
             if (goal.private) ...[
               const Spacer(),
               const TfIcon(TfIcons.lock, size: 16),
-              const SizedBox(width: 4),
+              const SizedBox(width: TfSpace.xs),
               Text(t.goalsPrivate),
             ],
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         GoalProgressBar(
           progress: goal.progress,
           color: goalStatusColor(context.tf.colors, goal.status),
@@ -283,19 +283,19 @@ class _Body extends StatelessWidget {
         ),
         if (start != null && end != null)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               t.goalsPeriod(context.localDate(start), context.localDate(end)),
             ),
           ),
         if (goal.description.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(goal.description),
           ),
         if (people.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               '${t.goalsOwner} / ${t.goalsContributors}: ${people.join(', ')}',
               style: Theme.of(context).textTheme.bodySmall,
@@ -333,7 +333,7 @@ class _Body extends StatelessWidget {
         if (children.isNotEmpty) ...[
           const Divider(height: 32),
           Text(t.goalsSubgoals, style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           for (final c in children) GoalTile(goal: c),
         ],
       ],
@@ -385,7 +385,7 @@ class KeyResultRow extends StatelessWidget {
         key: Key('kr-${kr.id}'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -425,7 +425,7 @@ class KeyResultRow extends StatelessWidget {
                 krSummary(context, kr),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: TfSpace.xs),
               GoalProgressBar(progress: kr.progress),
             ],
           ),

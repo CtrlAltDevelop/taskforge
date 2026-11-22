@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/page/tf_form.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -46,22 +47,21 @@ class _FeaturesSectionState extends ConsumerState<FeaturesSection> {
         ) &&
         !p.isArchived;
     final enabled = p.enabledFeatures;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return TfFormSection(
+      title: context.l10n.grpHFeatures,
+      description: context.l10n.grpHFeaturesHint,
       children: [
-        Text(
-          context.l10n.grpHFeatures,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        Text(context.l10n.grpHFeaturesHint),
         for (final f in widget.info)
-          SwitchListTile(
-            key: Key('feature-${f.key}'),
-            contentPadding: EdgeInsets.zero,
-            title: Text(f.label),
-            subtitle: Text(f.description),
-            value: enabled.contains(f.key),
-            onChanged: canEdit && !_busy ? (v) => _toggle(f.key, v) : null,
+          Material(
+            type: MaterialType.transparency,
+            child: SwitchListTile(
+              key: Key('feature-${f.key}'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(f.label),
+              subtitle: Text(f.description),
+              value: enabled.contains(f.key),
+              onChanged: canEdit && !_busy ? (v) => _toggle(f.key, v) : null,
+            ),
           ),
       ],
     );

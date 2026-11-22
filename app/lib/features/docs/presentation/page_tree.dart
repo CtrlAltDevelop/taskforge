@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter/foundation.dart';
@@ -181,7 +182,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
                     : null,
               ),
               Text(doc.icon.isEmpty ? '📄' : doc.icon),
-              const SizedBox(width: 6),
+              const SizedBox(width: TfSpace.sm),
               Expanded(
                 child: Text(
                   doc.labelIn(context.l10n),
@@ -251,7 +252,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
       feedback: Material(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(TfSpace.sm),
           child: Text(doc.labelIn(context.l10n)),
         ),
       ),
@@ -266,7 +267,7 @@ class _PageTreeState extends ConsumerState<PageTree> {
             feedback: Material(
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(TfSpace.sm),
                 child: Text(doc.labelIn(context.l10n)),
               ),
             ),
@@ -314,7 +315,12 @@ class _PageTreeState extends ConsumerState<PageTree> {
       key: const Key('page-tree'),
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            TfSpace.lg,
+            TfSpace.sm,
+            TfSpace.sm,
+            0,
+          ),
           child: Row(
             children: [
               Expanded(

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -30,7 +31,7 @@ class ProblemsList extends StatelessWidget {
       );
     final shown = sorted.take(maxProblemsShown).toList();
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: TfSpace.sm),
       // ExpansionTile paints its tile on the nearest Material; keep it clear of
       // the panel behind it.
       child: Material(
@@ -53,7 +54,7 @@ class ProblemsList extends StatelessWidget {
               ),
             if (total > shown.length)
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(TfSpace.sm),
                 child: Text(context.l10n.grpGAndMore(total - shown.length)),
               ),
           ],

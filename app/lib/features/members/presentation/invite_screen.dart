@@ -9,6 +9,7 @@ import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/members/domain/members.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// `/invite/:token`. Signed-out visitors never get here: the router sends them
 /// to sign-in with this page as the return path.
@@ -73,7 +74,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(TfSpace.xl),
             child: preview.when(
               loading: () => const CircularProgressIndicator(),
               error: (e, _) => TfError(
@@ -111,7 +112,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(inviter, textAlign: TextAlign.center),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Text(
           p.workspaceName,
           key: const Key('invite-workspace'),
@@ -119,7 +120,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
           textAlign: TextAlign.center,
         ),
         if (failure != null) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: TfSpace.lg),
           Text(
             inviteErrorMessage(failure, context.l10n),
             key: const Key('invite-failure'),
@@ -127,7 +128,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
             textAlign: TextAlign.center,
           ),
         ],
-        const SizedBox(height: 24),
+        const SizedBox(height: TfSpace.xl),
         TfButton(
           key: const Key('join-workspace'),
           label: context.l10n.grpJJoin,

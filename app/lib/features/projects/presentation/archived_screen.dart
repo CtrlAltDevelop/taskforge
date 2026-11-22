@@ -12,6 +12,7 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/roles/presentation/permission_gate.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 class ArchivedProjectsScreen extends ConsumerWidget {
   const ArchivedProjectsScreen({super.key});
@@ -35,7 +36,10 @@ class ArchivedProjectsScreen extends ConsumerWidget {
           children: [
             for (final p in archived)
               Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: TfSpace.md,
+                  vertical: TfSpace.xs,
+                ),
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: Key('archived-${p.id}'),

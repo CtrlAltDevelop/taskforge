@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/frame_scope.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
@@ -85,7 +86,12 @@ class HomeScreen extends ConsumerWidget {
     final size = ScreenSize.of(context);
     final gutter = pageGutter(size);
     return Scaffold(
-      appBar: TfAppBar(title: Text(context.l10n.grpKTHome)),
+      // A framed phone's top bar already names the page: no empty bar under it.
+      appBar:
+          (AppFrameScope.maybeOf(context)?.hasAccountMenu ?? false) &&
+              size.isCompact
+          ? null
+          : TfAppBar(title: Text(context.l10n.grpKTHome)),
       body: WhatsNewHost(
         child: RefreshIndicator(
           onRefresh: () async {

@@ -14,6 +14,7 @@ import 'package:taskforge/core/i18n/context_dates.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/developer/application/developer_providers.dart';
 import 'package:taskforge/features/developer/domain/developer.dart';
+import 'package:taskforge/features/developer/presentation/service_accounts_tab.dart';
 import 'package:taskforge/features/developer/presentation/token_dialogs.dart';
 import 'package:taskforge/features/developer/presentation/webhooks_tab.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
@@ -40,7 +41,7 @@ class DeveloperScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final canHooks = ref.watch(permissionSetProvider).can(Perm.webhookManage);
     return DefaultTabController(
-      length: canHooks ? 2 : 1,
+      length: canHooks ? 3 : 1,
       child: Scaffold(
         appBar: TfAppBar(
           leading: TfIconButton(
@@ -51,14 +52,24 @@ class DeveloperScreen extends ConsumerWidget {
           ),
           title: Text(context.l10n.devTitle),
           bottom: TabBar(
+            // Three tabs do not fit a phone: scroll them instead of clipping.
+            isScrollable: MediaQuery.sizeOf(context).width < 600,
+            tabAlignment: MediaQuery.sizeOf(context).width < 600
+                ? TabAlignment.start
+                : null,
             tabs: [
               Tab(text: context.l10n.devTokensTab),
               if (canHooks) Tab(text: context.l10n.devWebhooksTab),
+              if (canHooks) Tab(text: context.l10n.devAccountsTab),
             ],
           ),
         ),
         body: TabBarView(
-          children: [const _TokensTab(), if (canHooks) const WebhooksTab()],
+          children: [
+            const _TokensTab(),
+            if (canHooks) const WebhooksTab(),
+            if (canHooks) const ServiceAccountsTab(),
+          ],
         ),
       ),
     );
@@ -134,7 +145,7 @@ class _TokensTab extends ConsumerWidget {
       data: (rows) => TfPage(
         children: [
           Text(context.l10n.devTokensHint),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TfButton(
@@ -145,10 +156,10 @@ class _TokensTab extends ConsumerWidget {
               onPressed: () => _create(context, ref),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           if (rows.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               child: Text(context.l10n.devTokensEmpty),
             ),
           for (final t in rows)

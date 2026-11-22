@@ -2,6 +2,9 @@ import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:math' as math;
 
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/features/dashboards/domain/dashboards.dart';
@@ -45,8 +48,17 @@ class DashboardGrid extends StatelessWidget {
       final cells = [
         ...dashboard.layout.where((l) => _widget(l.widgetId) != null),
       ]..sort((a, b) => a.y != b.y ? a.y.compareTo(b.y) : a.x.compareTo(b.x));
-      if (c.maxWidth < stackBelow) return _stacked(cells);
-      return _grid(cells, c.maxWidth);
+      if (c.maxWidth < stackBelow) return _stacked(context, cells);
+      // The cells carry their own inset, so the grid starts a gutter minus
+      // that inset from the edge and its cards line up with the toolbar.
+      final inset = math.max(
+        0.0,
+        pageGutter(ScreenSize.of(context)) - TfSpace.sm,
+      );
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: inset),
+        child: _grid(cells, c.maxWidth - 2 * inset),
+      );
     },
   );
 
@@ -61,13 +73,13 @@ class DashboardGrid extends StatelessWidget {
     );
   }
 
-  Widget _stacked(List<LayoutCell> cells) => ListView(
+  Widget _stacked(BuildContext context, List<LayoutCell> cells) => ListView(
     key: const Key('dashboard-stack'),
-    padding: const EdgeInsets.all(12),
+    padding: EdgeInsets.all(pageGutter(ScreenSize.of(context))),
     children: [
       for (final cell in cells)
         Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: TfSpace.md),
           child: SizedBox(
             height: (cell.h * rowHeight).clamp(180, 360).toDouble(),
             child: _card(cell),
@@ -150,7 +162,7 @@ class _CellState extends State<_Cell> {
       width: width,
       height: height,
       child: Padding(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.all(TfSpace.sm),
         child: Stack(
           children: [
             Positioned.fill(child: widget.child),

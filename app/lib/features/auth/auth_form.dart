@@ -1,5 +1,7 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -37,6 +39,7 @@ class AuthForm extends StatefulWidget {
     required this.fields,
     required this.onSubmit,
     this.footer,
+    this.showLogo = true,
   });
 
   final String title;
@@ -47,6 +50,9 @@ class AuthForm extends StatefulWidget {
   /// [NetworkUnavailable] to show a message and stay on the form.
   final Future<void> Function(List<String> values) onSubmit;
   final Widget? footer;
+
+  /// The brand mark above the fields: on the public sign-in pages only.
+  final bool showLogo;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -138,18 +144,27 @@ class _AuthFormState extends State<AuthForm> {
           child: Form(
             key: _formKey,
             child: ListView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               shrinkWrap: true,
               children: [
+                Center(
+                  child: SvgPicture.asset(
+                    'assets/brand/taskforge-mark.svg',
+                    width: 48,
+                    height: 48,
+                    excludeFromSemantics: true,
+                  ),
+                ),
+                const SizedBox(height: TfSpace.xl),
                 for (var i = 0; i < widget.fields.length; i++) ...[
-                  if (i > 0) const SizedBox(height: 16),
+                  if (i > 0) const SizedBox(height: TfSpace.lg),
                   _field(i),
                 ],
                 if (_error case final error?) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: TfSpace.lg),
                   Text(error, style: TextStyle(color: colors.error)),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 FilledButton(
                   key: const Key('submit'),
                   onPressed: _busy ? null : _submit,
@@ -162,7 +177,7 @@ class _AuthFormState extends State<AuthForm> {
                       : Text(widget.submitLabel),
                 ),
                 if (widget.footer case final footer?) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: TfSpace.sm),
                   footer,
                 ],
               ],

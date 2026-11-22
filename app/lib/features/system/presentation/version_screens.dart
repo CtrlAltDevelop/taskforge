@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -54,7 +55,7 @@ class AboutScreen extends ConsumerWidget {
               leading: const TfIcon(TfIcons.download),
             ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(TfSpace.lg),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: TfButton(

@@ -188,7 +188,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             if (widget.onAdd != null)
               _AddField(columnKey: key, onAdd: widget.onAdd!),
           ],
@@ -208,11 +208,11 @@ class _BoardColumnViewState extends State<BoardColumnView> {
         onTap: widget.onToggleCollapse,
         child: Column(
           children: [
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             TfIcon(TfIcons.expandAll, size: 18),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Text('${widget.column.count}'),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Expanded(
               child: RotatedBox(
                 quarterTurns: 1,
@@ -232,7 +232,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
     return Container(
       key: _over ? Key('wip-over-$key') : null,
       color: _over ? tf.colors.danger.bg : null,
-      padding: const EdgeInsetsDirectional.only(start: 4),
+      padding: const EdgeInsetsDirectional.only(start: TfSpace.xs),
       child: Row(
         children: [
           IconButton(
@@ -247,7 +247,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             Container(
               width: 10,
               height: 10,
-              margin: const EdgeInsetsDirectional.only(end: 6),
+              margin: const EdgeInsetsDirectional.only(end: TfSpace.sm),
               decoration: BoxDecoration(
                 color: widget.color,
                 shape: BoxShape.circle,
@@ -319,7 +319,7 @@ class _BoardColumnViewState extends State<BoardColumnView> {
             if (mounted) widget.onLoadMore();
           });
           return const Padding(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(TfSpace.md),
             child: Center(child: LinearProgressIndicator()),
           );
         }
@@ -476,7 +476,7 @@ class _CardSlotState extends State<_CardSlot> {
   Widget build(BuildContext context) {
     final line = Container(
       height: 3,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
       color: context.tf.colors.accent,
     );
     final drag = BoardDrag(widget.task, widget.laneKey);
@@ -564,7 +564,12 @@ class _AddFieldState extends State<_AddField> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 8),
+    padding: const EdgeInsetsDirectional.fromSTEB(
+      TfSpace.sm,
+      TfSpace.xs,
+      TfSpace.sm,
+      TfSpace.sm,
+    ),
     child: TextField(
       key: Key('add-${widget.columnKey}'),
       controller: _controller,

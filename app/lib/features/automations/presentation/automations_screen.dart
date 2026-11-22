@@ -20,6 +20,8 @@ import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// A project's rules and their run history.
 class AutomationsScreen extends ConsumerStatefulWidget {
@@ -105,59 +107,67 @@ class _AutomationsScreenState extends ConsumerState<AutomationsScreen> {
     final full = count >= maxRulesPerProject;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SegmentedButton<bool>(
-                key: const Key('automations-tabs'),
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(
-                    value: false,
-                    label: Text(context.l10n.grpCAutoRules),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: pageGutter(ScreenSize.of(context)),
+              vertical: TfSpace.sm,
+            ),
+            child: Wrap(
+              spacing: TfSpace.sm,
+              runSpacing: TfSpace.xs,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                SegmentedButton<bool>(
+                  key: const Key('automations-tabs'),
+                  showSelectedIcon: false,
+                  segments: [
+                    ButtonSegment(
+                      value: false,
+                      label: Text(context.l10n.grpCAutoRules),
+                    ),
+                    ButtonSegment(
+                      value: true,
+                      label: Text(context.l10n.grpCAutoRunHistory),
+                    ),
+                  ],
+                  selected: {_history},
+                  onSelectionChanged: (s) => setState(() => _history = s.first),
+                ),
+                if (canManage && !_history)
+                  TfButton(
+                    key: const Key('new-rule'),
+                    label: context.l10n.grpCAutoNew,
+                    variant: TfButtonVariant.primary,
+                    icon: TfIcons.plus,
+                    onPressed: full
+                        ? null
+                        : () => showRuleBuilder(
+                            context,
+                            projectId: widget.projectId,
+                          ),
                   ),
-                  ButtonSegment(
-                    value: true,
-                    label: Text(context.l10n.grpCAutoRunHistory),
+                if (!canManage)
+                  Chip(
+                    key: const Key('read-only'),
+                    avatar: const TfIcon(TfIcons.lock, size: 16),
+                    label: Text(context.l10n.grpCAutoReadOnly),
                   ),
-                ],
-                selected: {_history},
-                onSelectionChanged: (s) => setState(() => _history = s.first),
-              ),
-              if (canManage && !_history)
-                TfButton(
-                  key: const Key('new-rule'),
-                  label: context.l10n.grpCAutoNew,
-                  variant: TfButtonVariant.primary,
-                  icon: TfIcons.plus,
-                  onPressed: full
-                      ? null
-                      : () => showRuleBuilder(
-                          context,
-                          projectId: widget.projectId,
-                        ),
-                ),
-              if (!canManage)
-                Chip(
-                  key: const Key('read-only'),
-                  avatar: const TfIcon(TfIcons.lock, size: 16),
-                  label: Text(context.l10n.grpCAutoReadOnly),
-                ),
-              if (full && !_history)
-                Text(
-                  context.l10n.grpCAutoLimit(maxRulesPerProject),
-                  key: const Key('rule-limit'),
-                ),
-            ],
+                if (full && !_history)
+                  Text(
+                    context.l10n.grpCAutoLimit(maxRulesPerProject),
+                    key: const Key('rule-limit'),
+                  ),
+              ],
+            ),
           ),
         ),
         if (_history && _filter != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(
+              horizontal: pageGutter(ScreenSize.of(context)),
+            ),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: InputChip(
@@ -250,12 +260,15 @@ class RuleTile extends ConsumerWidget {
     final lookups = ref.watch(lookupsProvider(rule.projectId));
     final last = RunStatus.tryParse(rule.lastRunStatus);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: TfSpace.sm,
+        vertical: TfSpace.xs,
+      ),
       child: TfPanel(
         key: Key('rule-${rule.id}'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

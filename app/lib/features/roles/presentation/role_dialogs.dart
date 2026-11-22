@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 typedef RoleDraft = ({String name, Set<String> permissions});
 
@@ -64,10 +65,10 @@ class _CreateRoleDialogState extends State<_CreateRoleDialog> {
                   decoration: InputDecoration(labelText: context.l10n.grpEName),
                   validator: (v) => _validateName(context, v),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: TfSpace.md),
                 for (final area in widget.registry) ...[
                   Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(top: TfSpace.md),
                     child: Text(
                       area.area,
                       style: Theme.of(context).textTheme.titleSmall,
@@ -204,7 +205,7 @@ class _DeleteRoleDialogState extends State<_DeleteRoleDialog> {
           if (!needsTarget) Text(context.l10n.grpERoleNoOne),
           if (needsTarget) ...[
             Text(context.l10n.grpERoleMoveMembers(role.memberCount)),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             DropdownButton<String>(
               key: const Key('reassign-to'),
               isExpanded: true,

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
@@ -106,20 +107,20 @@ class _EnrollDialogState extends ConsumerState<_EnrollDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(t.secScanQr),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: TfSpace.md),
                     Center(
                       child: QrView(
                         key: const Key('sec-qr'),
                         data: enrolment.otpauthUri,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: TfSpace.md),
                     Text(t.secOrTypeKey),
                     CopyableValue(
                       value: enrolment.secret,
                       copyKey: const Key('sec-secret-copy'),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: TfSpace.sm),
                     TextField(
                       key: const Key('sec-enroll-code'),
                       controller: _code,
@@ -127,9 +128,9 @@ class _EnrollDialogState extends ConsumerState<_EnrollDialog> {
                       decoration: InputDecoration(labelText: t.secEnterCode),
                       onSubmitted: (_) => _busy ? null : _confirm(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: TfSpace.md),
                     if (_error != null) ...[
-                      const SizedBox(height: 8),
+                      const SizedBox(height: TfSpace.sm),
                       Text(
                         _error!,
                         style: TextStyle(

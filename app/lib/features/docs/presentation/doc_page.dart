@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -135,8 +136,8 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
       Container(
         key: Key(key),
         width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.only(bottom: TfSpace.sm),
+        padding: const EdgeInsets.all(TfSpace.sm),
         decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: TfRadius.control,
@@ -235,8 +236,9 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
             notifier.saveNow(),
       },
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
+        padding: const EdgeInsets.all(TfSpace.lg),
+        child: Align(
+          alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 820),
             child: Column(
@@ -286,11 +288,11 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                 if (others.isNotEmpty)
                   Padding(
                     key: const Key('editing-hint'),
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: TfSpace.sm),
                     child: Row(
                       children: [
                         const TfIcon(TfIcons.edit, size: 14),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: TfSpace.xs),
                         Text(
                           others.length == 1
                               ? context.l10n.grpBIsEditing(others.first)
@@ -414,7 +416,7 @@ class _DocPageViewState extends ConsumerState<DocPageView> {
                   seedCards: page.cards,
                   onChanged: (b) => notifier.edit(blocks: b),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 BacklinksPanel(
                   docId: id,
                   onOpen: (d) => context.go('/docs/$d'),

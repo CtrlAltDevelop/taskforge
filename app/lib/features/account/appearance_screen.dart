@@ -5,7 +5,6 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/appearance.dart';
 import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
-import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
 import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf/tf_status.dart';
@@ -29,70 +28,75 @@ class AppearanceScreen extends ConsumerWidget {
     final high = ref.watch(contrastProvider);
     final reduce = ref.watch(reduceMotionProvider);
     Widget label(String text) => Padding(
-      padding: const EdgeInsets.only(top: TfSpace.lg, bottom: TfSpace.sm),
+      padding: const EdgeInsets.only(bottom: TfSpace.sm),
       child: Text(
         text,
         style: tf.typography.label.copyWith(color: tf.colors.textMuted),
+      ),
+    );
+    Widget panel(List<Widget> children) => Padding(
+      padding: const EdgeInsets.only(bottom: TfSpace.lg),
+      child: TfPanel(
+        padding: const EdgeInsets.all(TfSpace.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children,
+        ),
       ),
     );
     return Scaffold(
       appBar: TfAppBar(title: Text(l10n.appearance)),
       body: TfPage(
         children: [
-          label(l10n.themeLabel),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TfSegmented<ThemeMode>(
-              options: {
-                ThemeMode.system: l10n.themeSystem,
-                ThemeMode.light: l10n.themeLight,
-                ThemeMode.dark: l10n.themeDark,
-              },
-              value: mode,
-              onChanged: (m) => ref.read(themeModeProvider.notifier).choose(m),
+          panel([
+            label(l10n.themeLabel),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TfSegmented<ThemeMode>(
+                options: {
+                  ThemeMode.system: l10n.themeSystem,
+                  ThemeMode.light: l10n.themeLight,
+                  ThemeMode.dark: l10n.themeDark,
+                },
+                value: mode,
+                onChanged: (m) =>
+                    ref.read(themeModeProvider.notifier).choose(m),
+              ),
             ),
-          ),
-          label(l10n.densityLabel),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TfSegmented<TfDensity>(
-              options: {
-                TfDensity.comfortable: l10n.densityComfortable,
-                TfDensity.compact: l10n.densityCompact,
-              },
-              value: density,
-              onChanged: ref.read(densityProvider.notifier).choose,
+            const SizedBox(height: TfSpace.lg),
+            label(l10n.densityLabel),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TfSegmented<TfDensity>(
+                options: {
+                  TfDensity.comfortable: l10n.densityComfortable,
+                  TfDensity.compact: l10n.densityCompact,
+                },
+                value: density,
+                onChanged: ref.read(densityProvider.notifier).choose,
+              ),
             ),
-          ),
-          const SizedBox(height: TfSpace.lg),
-          TfCheckbox(
-            value: high,
-            label: l10n.contrastLabel,
-            onChanged: (v) =>
-                ref.read(contrastProvider.notifier).choose(high: v),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              start: TfSpace.xl,
-              top: TfSpace.xs,
+          ]),
+          panel([
+            TfToggleTile(
+              value: high,
+              title: l10n.contrastLabel,
+              subtitle: l10n.contrastHelp,
+              onChanged: (v) =>
+                  ref.read(contrastProvider.notifier).choose(high: v),
             ),
-            child: Text(
-              l10n.contrastHelp,
-              style: tf.typography.small.copyWith(color: tf.colors.textMuted),
+            TfToggleTile(
+              key: const Key('reduce-motion'),
+              value: reduce,
+              title: l10n.reduceMotionLabel,
+              subtitle: l10n.reduceMotionHelp,
+              onChanged: (v) =>
+                  ref.read(reduceMotionProvider.notifier).choose(reduce: v),
             ),
-          ),
-          const SizedBox(height: TfSpace.lg),
-          TfToggleTile(
-            key: const Key('reduce-motion'),
-            value: reduce,
-            title: l10n.reduceMotionLabel,
-            subtitle: l10n.reduceMotionHelp,
-            onChanged: (v) =>
-                ref.read(reduceMotionProvider.notifier).choose(reduce: v),
-          ),
+          ]),
           label(l10n.appearancePreview),
           TfPanel(
-            padding: const EdgeInsets.all(TfSpace.sm),
+            padding: const EdgeInsets.all(TfSpace.md),
             child: Row(
               children: [
                 Expanded(

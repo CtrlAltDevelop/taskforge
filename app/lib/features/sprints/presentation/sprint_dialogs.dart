@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -209,13 +210,13 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 label: context.l10n.grpASprintName,
                 autofocus: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfTextField(
                 key: const Key('sprint-goal'),
                 controller: _goal,
                 label: context.l10n.grpASprintGoal,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('sprint-start'),
                 controller: _start,
@@ -229,7 +230,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('sprint-end'),
                 controller: _end,
@@ -243,7 +244,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('sprint-capacity-points'),
                 controller: _capacityPoints,
@@ -254,7 +255,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpACapacityPointsOptional,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('sprint-capacity-hours'),
                 controller: _capacityHours,
@@ -265,10 +266,10 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                   labelText: context.l10n.grpACapacityHoursOptional,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               if (clash.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: TfSpace.sm),
                   child: Text(
                     context.l10n.grpASprintOverlap(
                       clash.map((s) => s.name).join(', '),
@@ -281,7 +282,7 @@ class _SprintFormState extends ConsumerState<SprintFormDialog> {
                 ),
               if (_error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: TfSpace.sm),
                   child: Text(
                     _error!,
                     key: const Key('sprint-form-error'),
@@ -349,7 +350,7 @@ class _CompleteState extends State<CompleteSprintDialog> {
             key: const Key('complete-counts'),
           ),
           if (open > 0) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Text(context.l10n.grpACompleteWhatHappens),
             RadioGroup<String>(
               groupValue: _carry,

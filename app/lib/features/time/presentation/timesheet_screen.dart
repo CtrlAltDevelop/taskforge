@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
@@ -57,10 +58,16 @@ class _TimesheetScreenState extends ConsumerState<TimesheetScreen> {
     return Scaffold(
       appBar: TfAppBar(title: Text(context.l10n.grpATimesheetTitle)),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(
+              horizontal: pageGutter(ScreenSize.of(context)),
+              vertical: TfSpace.sm,
+            ),
             child: Wrap(
+              spacing: TfSpace.sm,
+              runSpacing: TfSpace.sm,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 TfIconButton(
@@ -134,7 +141,7 @@ class _Grid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (sheet.rows.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(TfSpace.xl),
         child: Center(
           key: const Key('timesheet-empty'),
           child: Text(context.l10n.grpATimesheetEmpty),
@@ -146,7 +153,8 @@ class _Grid extends ConsumerWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        columnSpacing: 20,
+        columnSpacing: TfSpace.xl,
+        horizontalMargin: 0,
         columns: [
           DataColumn(label: Text(context.l10n.grpATask)),
           for (var i = 0; i < 7; i++)
@@ -357,7 +365,7 @@ class _PersonPicker extends ConsumerWidget {
     final me = ref.watch(currentUserIdProvider);
     if (members.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.zero,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 220),
         child: TfSelectField(
@@ -409,7 +417,7 @@ class _TotalsState extends ConsumerState<_Totals> {
           );
     return Padding(
       key: const Key('project-totals'),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: TfSpace.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -417,7 +425,7 @@ class _TotalsState extends ConsumerState<_Totals> {
             context.l10n.grpAProjectTotals,
             style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           DropdownButton<String>(
             key: const Key('totals-project'),
             isExpanded: true,
@@ -435,7 +443,7 @@ class _TotalsState extends ConsumerState<_Totals> {
             ],
             onChanged: (id) => setState(() => _project = id),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           if (totals != null)
             switch (totals) {
               AsyncData(:final value) when value.isEmpty => Text(

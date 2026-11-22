@@ -1,4 +1,6 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/page/tf_danger_zone.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -50,8 +52,20 @@ class ArchiveZone extends ConsumerWidget {
     )) {
       return const SizedBox.shrink();
     }
+    if (!project.isArchived) {
+      return TfDangerZone(
+        title: context.l10n.grpHDangerZone,
+        actions: [
+          TfDangerAction(
+            label: context.l10n.grpHArchiveProject,
+            buttonKey: const Key('archive-project'),
+            onPressed: () => _archive(context, ref),
+          ),
+        ],
+      );
+    }
     return Padding(
-      padding: const EdgeInsets.only(top: 32),
+      padding: const EdgeInsets.only(top: TfSpace.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,23 +74,15 @@ class ArchiveZone extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleLarge
                 ?.copyWith(color: color),
           ),
-          const SizedBox(height: 8),
-          if (project.isArchived)
-            OutlinedButton(
-              key: const Key('restore-project'),
-              onPressed: () => runProjectAction(
-                context,
-                () => ref.read(projectsControllerProvider).restore(project),
-              ),
-              child: Text(context.l10n.grpHRestoreProject),
-            )
-          else
-            OutlinedButton(
-              key: const Key('archive-project'),
-              style: OutlinedButton.styleFrom(foregroundColor: color),
-              onPressed: () => _archive(context, ref),
-              child: Text(context.l10n.grpHArchiveProject),
+          const SizedBox(height: TfSpace.sm),
+          OutlinedButton(
+            key: const Key('restore-project'),
+            onPressed: () => runProjectAction(
+              context,
+              () => ref.read(projectsControllerProvider).restore(project),
             ),
+            child: Text(context.l10n.grpHRestoreProject),
+          ),
         ],
       ),
     );

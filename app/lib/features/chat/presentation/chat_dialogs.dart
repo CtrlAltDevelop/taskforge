@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
@@ -177,7 +178,7 @@ class _NewChatDialogState extends ConsumerState<_NewChatDialog> {
               ),
               if (_kind != NewKind.message)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 12),
+                  padding: const EdgeInsetsDirectional.only(top: TfSpace.md),
                   child: TextField(
                     key: const Key('new-chat-name'),
                     controller: _name,
@@ -187,7 +188,7 @@ class _NewChatDialogState extends ConsumerState<_NewChatDialog> {
                 ),
               if (needsPeople) ...[
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 12),
+                  padding: const EdgeInsetsDirectional.only(top: TfSpace.md),
                   child: Text(
                     _kind == NewKind.group
                         ? l10n.chatMembersLabel
@@ -229,7 +230,7 @@ class _NewChatDialogState extends ConsumerState<_NewChatDialog> {
               ],
               if (_problem != null)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 8),
+                  padding: const EdgeInsetsDirectional.only(top: TfSpace.sm),
                   child: Text(
                     _problem!,
                     key: const Key('new-chat-problem'),
@@ -306,7 +307,12 @@ class _SettingsSheet extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 4),
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                TfSpace.lg,
+                TfSpace.lg,
+                TfSpace.lg,
+                TfSpace.xs,
+              ),
               child: Text(
                 l10n.chatSettings,
                 style: Theme.of(context).textTheme.titleMedium,

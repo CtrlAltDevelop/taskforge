@@ -53,38 +53,45 @@ class TfRow extends StatelessWidget {
                 ? tfFocusRing(c)
                 : null,
           ),
-          child: Row(
-            children: [
-              if (leading != null) ...[
-                leading!,
-                const SizedBox(width: TfSpace.md),
-              ],
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: tf.typography.body.copyWith(color: c.text),
-                    ),
-                    if (subtitle != null)
+          child: LayoutBuilder(
+            builder: (context, box) => Row(
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  const SizedBox(width: TfSpace.md),
+                ],
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        subtitle!,
+                        title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: tf.typography.small.copyWith(color: c.textMuted),
+                        style: tf.typography.body.copyWith(color: c.text),
                       ),
-                  ],
+                      if (subtitle != null)
+                        Text(
+                          subtitle!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: tf.typography.small.copyWith(
+                            color: c.textMuted,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              if (trailing != null) ...[
-                const SizedBox(width: TfSpace.md),
-                Flexible(child: trailing!),
+                if (trailing != null) ...[
+                  const SizedBox(width: TfSpace.md),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: box.maxWidth * 0.6),
+                    child: trailing!,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         );
       },

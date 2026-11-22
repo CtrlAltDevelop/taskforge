@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 
 import '../home/fakes.dart';
 import '../shortcuts/fakes.dart';
+import '../security/fakes.dart' show FakeSecurityClient;
+import '../system/fakes.dart' show FakeSystemClient;
 
 import 'package:taskforge/features/board/application/board_providers.dart';
 import 'package:taskforge/features/filters/application/filters_providers.dart';
@@ -18,6 +20,7 @@ import 'package:taskforge/features/views/application/views_providers.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/core/auth/auth_api.dart';
 import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
@@ -90,11 +93,14 @@ Future<Pumped> pumpProjects(
   FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
   FakeHomeClient? home,
+  FakeSystemClient? system,
+  FakeSecurityClient? security,
   FakeFiltersClient? filters,
   Day? today,
   Override? sync,
   FakeShortcutsClient? shortcuts,
   List<Override> overrides = const [],
+  AuthApi? authApi,
 
   /// Replace the fake tasks / comments clients (e.g. with the offline ones
   /// over a fake server).
@@ -113,6 +119,7 @@ Future<Pumped> pumpProjects(
     FakeWorkspaceClient([for (final id in workspaces) ws(id, 'WS $id')]),
     roles: FakeRolesClient(callerRole: (_) => role),
     projects: fake,
+    authApi: authApi,
     inbox: inbox,
     time: time,
     sprints: sprints,
@@ -121,6 +128,8 @@ Future<Pumped> pumpProjects(
     recurrence: recurrence,
     localNotifier: localNotifier,
     home: home,
+    system: system,
+    security: security,
     shortcuts: shortcuts,
     sync: sync,
     overrides: [

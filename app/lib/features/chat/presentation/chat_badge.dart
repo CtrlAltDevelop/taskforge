@@ -17,6 +17,8 @@ class ChatBadge extends ConsumerWidget {
       label: count > 0 ? context.l10n.chatUnreadLabel(count) : null,
       child: Badge(
         key: const Key('chat-badge'),
+        alignment: AlignmentDirectional.topEnd,
+        offset: const Offset(8, -6),
         isLabelVisible: count > 0,
         label: Text(count > 99 ? '99+' : '$count'),
         child: child,

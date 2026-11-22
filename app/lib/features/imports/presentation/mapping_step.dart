@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -80,7 +81,7 @@ class MappingStep extends ConsumerWidget {
           key: const Key('import-summary'),
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         _Source(wizard: wizard, notifier: notifier),
         if (proposal.members.length > 1) _Members(proposal: proposal),
         const Divider(height: 32),
@@ -141,13 +142,13 @@ class MappingStep extends ConsumerWidget {
         ],
         if (analysis.sprints.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               context.l10n.grpCImpSprintsCreated(analysis.sprints.join(', ')),
               key: const Key('map-sprints'),
             ),
           ),
-        const SizedBox(height: 16),
+        const SizedBox(height: TfSpace.lg),
         Row(
           children: [
             TfButton(
@@ -182,7 +183,7 @@ class _Source extends StatelessWidget {
     return Row(
       children: [
         Text(context.l10n.grpCImpReadAs),
-        const SizedBox(width: 12),
+        const SizedBox(width: TfSpace.md),
         TfSelectField<ImportSource>(
           key: const Key('import-source'),
           options: {
@@ -207,11 +208,11 @@ class _Members extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Padding(
-    padding: const EdgeInsets.only(top: 8),
+    padding: const EdgeInsets.only(top: TfSpace.sm),
     child: Row(
       children: [
         Text(context.l10n.grpCImpZipFile),
-        const SizedBox(width: 12),
+        const SizedBox(width: TfSpace.md),
         Flexible(
           child: TfSelectField(
             key: const Key('import-member'),
@@ -276,7 +277,7 @@ class _Target extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         if (existing)
           TfSelectField(
             key: const Key('map-project'),
@@ -301,7 +302,7 @@ class _Target extends ConsumerWidget {
                   onChanged: (v) => onChanged(mapping.copyWith(newName: v)),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: TfSpace.md),
               SizedBox(
                 width: 120,
                 child: TextFormField(
@@ -479,20 +480,20 @@ class _Table extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(title, style: Theme.of(context).textTheme.titleSmall),
-      const SizedBox(height: 4),
+      const SizedBox(height: TfSpace.xs),
       for (final row in rows)
         if (row is _Note)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
             child: Text(row.label),
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xxs),
             child: Row(
               children: [
                 Expanded(flex: 2, child: Text(row.label)),
-                const SizedBox(width: 12),
+                const SizedBox(width: TfSpace.md),
                 Expanded(
                   flex: 3,
                   child: DropdownButton<String>(

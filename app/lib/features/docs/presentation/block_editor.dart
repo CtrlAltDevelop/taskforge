@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
@@ -291,14 +292,14 @@ class _BlockEditorState extends ConsumerState<BlockEditor> {
               _emit([b], focus: b.id);
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.md),
               child: Text(context.l10n.grpJClickToWrite),
             ),
           ),
         for (final b in _blocks)
           Padding(
             key: ValueKey('row-${b.id}'),
-            padding: const EdgeInsets.symmetric(vertical: 2),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.xxs),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

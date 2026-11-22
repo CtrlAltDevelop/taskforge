@@ -27,6 +27,7 @@ class ApiToken extends $pb.GeneratedMessage {
     $core.String? lastUsedAt,
     $core.String? revokedAt,
     $core.String? createdAt,
+    $core.String? serviceAccountId,
   }) {
     final result = ApiToken._();
     if (id != null) result.id = id;
@@ -38,6 +39,7 @@ class ApiToken extends $pb.GeneratedMessage {
     if (lastUsedAt != null) result.lastUsedAt = lastUsedAt;
     if (revokedAt != null) result.revokedAt = revokedAt;
     if (createdAt != null) result.createdAt = createdAt;
+    if (serviceAccountId != null) result.serviceAccountId = serviceAccountId;
     return result;
   }
 
@@ -64,6 +66,7 @@ class ApiToken extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'lastUsedAt')
     ..aOS(8, _omitFieldNames ? '' : 'revokedAt')
     ..aOS(9, _omitFieldNames ? '' : 'createdAt')
+    ..aOS(10, _omitFieldNames ? '' : 'serviceAccountId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -160,6 +163,15 @@ class ApiToken extends $pb.GeneratedMessage {
   $core.bool hasCreatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearCreatedAt() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get serviceAccountId => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set serviceAccountId($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasServiceAccountId() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearServiceAccountId() => $_clearField(10);
 }
 
 class ApiTokenAnswer extends $pb.GeneratedMessage {
@@ -229,12 +241,14 @@ class ApiTokenCreateRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.Iterable<$core.String>? scopes,
     $core.int? expiresInDays,
+    $core.String? serviceAccountId,
   }) {
     final result = ApiTokenCreateRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
     if (name != null) result.name = name;
     if (scopes != null) result.scopes.addAll(scopes);
     if (expiresInDays != null) result.expiresInDays = expiresInDays;
+    if (serviceAccountId != null) result.serviceAccountId = serviceAccountId;
     return result;
   }
 
@@ -256,6 +270,7 @@ class ApiTokenCreateRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..pPS(3, _omitFieldNames ? '' : 'scopes')
     ..aI(4, _omitFieldNames ? '' : 'expiresInDays')
+    ..aOS(5, _omitFieldNames ? '' : 'serviceAccountId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -311,6 +326,15 @@ class ApiTokenCreateRequest extends $pb.GeneratedMessage {
   $core.bool hasExpiresInDays() => $_has(3);
   @$pb.TagNumber(4)
   void clearExpiresInDays() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get serviceAccountId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set serviceAccountId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasServiceAccountId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearServiceAccountId() => $_clearField(5);
 }
 
 class ApiTokenCreated extends $pb.GeneratedMessage {
@@ -442,9 +466,11 @@ class ApiTokenList extends $pb.GeneratedMessage {
 class ApiTokenListRequest extends $pb.GeneratedMessage {
   factory ApiTokenListRequest({
     $core.String? workspaceId,
+    $core.String? serviceAccountId,
   }) {
     final result = ApiTokenListRequest._();
     if (workspaceId != null) result.workspaceId = workspaceId;
+    if (serviceAccountId != null) result.serviceAccountId = serviceAccountId;
     return result;
   }
 
@@ -463,6 +489,7 @@ class ApiTokenListRequest extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
       createEmptyInstance: ApiTokenListRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'serviceAccountId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -496,6 +523,15 @@ class ApiTokenListRequest extends $pb.GeneratedMessage {
   $core.bool hasWorkspaceId() => $_has(0);
   @$pb.TagNumber(1)
   void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get serviceAccountId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set serviceAccountId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasServiceAccountId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearServiceAccountId() => $_clearField(2);
 }
 
 class ApiTokenRevokeRequest extends $pb.GeneratedMessage {
@@ -1295,6 +1331,637 @@ class RedeliverRequest extends $pb.GeneratedMessage {
   $core.bool hasDeliveryId() => $_has(2);
   @$pb.TagNumber(3)
   void clearDeliveryId() => $_clearField(3);
+}
+
+class ServiceAccount extends $pb.GeneratedMessage {
+  factory ServiceAccount({
+    $core.String? id,
+    $core.String? name,
+    $core.String? userId,
+    $core.String? roleId,
+    $core.String? roleName,
+    $core.bool? active,
+    $core.int? tokenCount,
+    $core.String? createdAt,
+  }) {
+    final result = ServiceAccount._();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (userId != null) result.userId = userId;
+    if (roleId != null) result.roleId = roleId;
+    if (roleName != null) result.roleName = roleName;
+    if (active != null) result.active = active;
+    if (tokenCount != null) result.tokenCount = tokenCount;
+    if (createdAt != null) result.createdAt = createdAt;
+    return result;
+  }
+
+  ServiceAccount._();
+
+  factory ServiceAccount.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccount()..mergeFromBuffer(data, registry);
+  factory ServiceAccount.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccount()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccount',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccount.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'userId')
+    ..aOS(4, _omitFieldNames ? '' : 'roleId')
+    ..aOS(5, _omitFieldNames ? '' : 'roleName')
+    ..aOB(6, _omitFieldNames ? '' : 'active')
+    ..aI(7, _omitFieldNames ? '' : 'tokenCount')
+    ..aOS(8, _omitFieldNames ? '' : 'createdAt')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccount clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccount copyWith(void Function(ServiceAccount) updates) =>
+      super.copyWith((message) => updates(message as ServiceAccount))
+          as ServiceAccount;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ServiceAccount() / ServiceAccount.new instead')
+  static ServiceAccount create() => ServiceAccount._();
+  static $pb.GeneratedMessage $_createMessage() => ServiceAccount._();
+  @$core.override
+  ServiceAccount createEmptyInstance() => ServiceAccount._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccount getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServiceAccount>(
+          ServiceAccount.$_createMessage);
+  static ServiceAccount? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get userId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set userId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasUserId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUserId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get roleId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set roleId($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasRoleId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRoleId() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get roleName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set roleName($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasRoleName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRoleName() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get active => $_getBF(5);
+  @$pb.TagNumber(6)
+  set active($core.bool value) => $_setBool(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasActive() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearActive() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get tokenCount => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set tokenCount($core.int value) => $_setSignedInt32(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasTokenCount() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearTokenCount() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get createdAt => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set createdAt($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCreatedAt() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCreatedAt() => $_clearField(8);
+}
+
+class ServiceAccountAnswer extends $pb.GeneratedMessage {
+  factory ServiceAccountAnswer({
+    ServiceAccount? account,
+  }) {
+    final result = ServiceAccountAnswer._();
+    if (account != null) result.account = account;
+    return result;
+  }
+
+  ServiceAccountAnswer._();
+
+  factory ServiceAccountAnswer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountAnswer()..mergeFromBuffer(data, registry);
+  factory ServiceAccountAnswer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountAnswer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountAnswer',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountAnswer.$_createMessage)
+    ..aOM<ServiceAccount>(1, _omitFieldNames ? '' : 'account',
+        subBuilder: ServiceAccount.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountAnswer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountAnswer copyWith(void Function(ServiceAccountAnswer) updates) =>
+      super.copyWith((message) => updates(message as ServiceAccountAnswer))
+          as ServiceAccountAnswer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountAnswer() / ServiceAccountAnswer.new instead')
+  static ServiceAccountAnswer create() => ServiceAccountAnswer._();
+  static $pb.GeneratedMessage $_createMessage() => ServiceAccountAnswer._();
+  @$core.override
+  ServiceAccountAnswer createEmptyInstance() => ServiceAccountAnswer._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountAnswer getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountAnswer>(
+          ServiceAccountAnswer.$_createMessage);
+  static ServiceAccountAnswer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  ServiceAccount get account => $_getN(0);
+  @$pb.TagNumber(1)
+  set account(ServiceAccount value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAccount() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccount() => $_clearField(1);
+  @$pb.TagNumber(1)
+  ServiceAccount ensureAccount() => $_ensure(0);
+}
+
+class ServiceAccountCreateRequest extends $pb.GeneratedMessage {
+  factory ServiceAccountCreateRequest({
+    $core.String? workspaceId,
+    $core.String? name,
+    $core.String? roleId,
+  }) {
+    final result = ServiceAccountCreateRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (name != null) result.name = name;
+    if (roleId != null) result.roleId = roleId;
+    return result;
+  }
+
+  ServiceAccountCreateRequest._();
+
+  factory ServiceAccountCreateRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountCreateRequest()..mergeFromBuffer(data, registry);
+  factory ServiceAccountCreateRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountCreateRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountCreateRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountCreateRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'roleId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountCreateRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountCreateRequest copyWith(
+          void Function(ServiceAccountCreateRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as ServiceAccountCreateRequest))
+          as ServiceAccountCreateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountCreateRequest() / ServiceAccountCreateRequest.new instead')
+  static ServiceAccountCreateRequest create() =>
+      ServiceAccountCreateRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      ServiceAccountCreateRequest._();
+  @$core.override
+  ServiceAccountCreateRequest createEmptyInstance() =>
+      ServiceAccountCreateRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountCreateRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountCreateRequest>(
+          ServiceAccountCreateRequest.$_createMessage);
+  static ServiceAccountCreateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get roleId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set roleId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRoleId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoleId() => $_clearField(3);
+}
+
+class ServiceAccountDeleteRequest extends $pb.GeneratedMessage {
+  factory ServiceAccountDeleteRequest({
+    $core.String? workspaceId,
+    $core.String? accountId,
+  }) {
+    final result = ServiceAccountDeleteRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (accountId != null) result.accountId = accountId;
+    return result;
+  }
+
+  ServiceAccountDeleteRequest._();
+
+  factory ServiceAccountDeleteRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountDeleteRequest()..mergeFromBuffer(data, registry);
+  factory ServiceAccountDeleteRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountDeleteRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountDeleteRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountDeleteRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'accountId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountDeleteRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountDeleteRequest copyWith(
+          void Function(ServiceAccountDeleteRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as ServiceAccountDeleteRequest))
+          as ServiceAccountDeleteRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountDeleteRequest() / ServiceAccountDeleteRequest.new instead')
+  static ServiceAccountDeleteRequest create() =>
+      ServiceAccountDeleteRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      ServiceAccountDeleteRequest._();
+  @$core.override
+  ServiceAccountDeleteRequest createEmptyInstance() =>
+      ServiceAccountDeleteRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountDeleteRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountDeleteRequest>(
+          ServiceAccountDeleteRequest.$_createMessage);
+  static ServiceAccountDeleteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accountId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accountId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAccountId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccountId() => $_clearField(2);
+}
+
+class ServiceAccountDeleted extends $pb.GeneratedMessage {
+  factory ServiceAccountDeleted({
+    $core.String? id,
+  }) {
+    final result = ServiceAccountDeleted._();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  ServiceAccountDeleted._();
+
+  factory ServiceAccountDeleted.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountDeleted()..mergeFromBuffer(data, registry);
+  factory ServiceAccountDeleted.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountDeleted()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountDeleted',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountDeleted.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountDeleted clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountDeleted copyWith(
+          void Function(ServiceAccountDeleted) updates) =>
+      super.copyWith((message) => updates(message as ServiceAccountDeleted))
+          as ServiceAccountDeleted;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountDeleted() / ServiceAccountDeleted.new instead')
+  static ServiceAccountDeleted create() => ServiceAccountDeleted._();
+  static $pb.GeneratedMessage $_createMessage() => ServiceAccountDeleted._();
+  @$core.override
+  ServiceAccountDeleted createEmptyInstance() => ServiceAccountDeleted._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountDeleted getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountDeleted>(
+          ServiceAccountDeleted.$_createMessage);
+  static ServiceAccountDeleted? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+}
+
+class ServiceAccountList extends $pb.GeneratedMessage {
+  factory ServiceAccountList({
+    $core.Iterable<ServiceAccount>? accounts,
+  }) {
+    final result = ServiceAccountList._();
+    if (accounts != null) result.accounts.addAll(accounts);
+    return result;
+  }
+
+  ServiceAccountList._();
+
+  factory ServiceAccountList.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountList()..mergeFromBuffer(data, registry);
+  factory ServiceAccountList.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountList()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountList',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountList.$_createMessage)
+    ..pPM<ServiceAccount>(1, _omitFieldNames ? '' : 'accounts',
+        subBuilder: ServiceAccount.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountList clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountList copyWith(void Function(ServiceAccountList) updates) =>
+      super.copyWith((message) => updates(message as ServiceAccountList))
+          as ServiceAccountList;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use ServiceAccountList() / ServiceAccountList.new instead')
+  static ServiceAccountList create() => ServiceAccountList._();
+  static $pb.GeneratedMessage $_createMessage() => ServiceAccountList._();
+  @$core.override
+  ServiceAccountList createEmptyInstance() => ServiceAccountList._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountList getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountList>(
+          ServiceAccountList.$_createMessage);
+  static ServiceAccountList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<ServiceAccount> get accounts => $_getList(0);
+}
+
+class ServiceAccountListRequest extends $pb.GeneratedMessage {
+  factory ServiceAccountListRequest({
+    $core.String? workspaceId,
+  }) {
+    final result = ServiceAccountListRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    return result;
+  }
+
+  ServiceAccountListRequest._();
+
+  factory ServiceAccountListRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountListRequest()..mergeFromBuffer(data, registry);
+  factory ServiceAccountListRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountListRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountListRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountListRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountListRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountListRequest copyWith(
+          void Function(ServiceAccountListRequest) updates) =>
+      super.copyWith((message) => updates(message as ServiceAccountListRequest))
+          as ServiceAccountListRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountListRequest() / ServiceAccountListRequest.new instead')
+  static ServiceAccountListRequest create() => ServiceAccountListRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      ServiceAccountListRequest._();
+  @$core.override
+  ServiceAccountListRequest createEmptyInstance() =>
+      ServiceAccountListRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountListRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountListRequest>(
+          ServiceAccountListRequest.$_createMessage);
+  static ServiceAccountListRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+}
+
+class ServiceAccountSetRoleRequest extends $pb.GeneratedMessage {
+  factory ServiceAccountSetRoleRequest({
+    $core.String? workspaceId,
+    $core.String? accountId,
+    $core.String? roleId,
+  }) {
+    final result = ServiceAccountSetRoleRequest._();
+    if (workspaceId != null) result.workspaceId = workspaceId;
+    if (accountId != null) result.accountId = accountId;
+    if (roleId != null) result.roleId = roleId;
+    return result;
+  }
+
+  ServiceAccountSetRoleRequest._();
+
+  factory ServiceAccountSetRoleRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountSetRoleRequest()..mergeFromBuffer(data, registry);
+  factory ServiceAccountSetRoleRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      ServiceAccountSetRoleRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ServiceAccountSetRoleRequest',
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'config.developer'),
+      createEmptyInstance: ServiceAccountSetRoleRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'workspaceId')
+    ..aOS(2, _omitFieldNames ? '' : 'accountId')
+    ..aOS(3, _omitFieldNames ? '' : 'roleId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountSetRoleRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ServiceAccountSetRoleRequest copyWith(
+          void Function(ServiceAccountSetRoleRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as ServiceAccountSetRoleRequest))
+          as ServiceAccountSetRoleRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use ServiceAccountSetRoleRequest() / ServiceAccountSetRoleRequest.new instead')
+  static ServiceAccountSetRoleRequest create() =>
+      ServiceAccountSetRoleRequest._();
+  static $pb.GeneratedMessage $_createMessage() =>
+      ServiceAccountSetRoleRequest._();
+  @$core.override
+  ServiceAccountSetRoleRequest createEmptyInstance() =>
+      ServiceAccountSetRoleRequest._();
+  @$core.pragma('dart2js:noInline')
+  static ServiceAccountSetRoleRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ServiceAccountSetRoleRequest>(
+          ServiceAccountSetRoleRequest.$_createMessage);
+  static ServiceAccountSetRoleRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workspaceId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workspaceId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasWorkspaceId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkspaceId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accountId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accountId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAccountId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccountId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get roleId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set roleId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasRoleId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoleId() => $_clearField(3);
 }
 
 class Webhook extends $pb.GeneratedMessage {

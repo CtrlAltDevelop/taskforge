@@ -10,6 +10,7 @@ import 'package:taskforge/features/automations/application/automations_providers
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/action_cards.dart';
 import 'package:taskforge/features/automations/presentation/condition_editor.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Opens the builder; returns true when a rule was saved.
 Future<bool?> showRuleBuilder(
@@ -22,7 +23,7 @@ Future<bool?> showRuleBuilder(
   builder: (_) => Dialog(
     insetPadding: MediaQuery.sizeOf(context).width < 600
         ? EdgeInsets.zero
-        : const EdgeInsets.all(24),
+        : const EdgeInsets.all(TfSpace.xl),
     child: ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 680),
       child: RuleBuilder(projectId: projectId, rule: rule, readOnly: readOnly),
@@ -191,7 +192,12 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 8, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            20,
+            TfSpace.lg,
+            TfSpace.sm,
+            0,
+          ),
           child: Row(
             children: [
               Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
@@ -206,14 +212,14 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
         ),
         Flexible(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(TfSpace.lg),
             child: Column(
               key: ValueKey(_generation),
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (_rule?.wasSwitchedOffByServer ?? false)
                   DisabledBanner(reason: _rule!.disabledReason),
-                const SizedBox(height: 12),
+                const SizedBox(height: TfSpace.md),
                 TextField(
                   key: const Key('rule-name'),
                   controller: _name,
@@ -224,7 +230,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                     border: const OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: TfSpace.md),
                 _Section(
                   keyName: 'when',
                   label: context.l10n.grpGWhen,
@@ -270,7 +276,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                       onChanged: (x) => _setAction(i, x),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: TfSpace.sm),
                 ],
                 if (!_ro)
                   Align(
@@ -288,7 +294,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                   ),
                 if (_error != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(top: TfSpace.md),
                     child: Text(
                       _error!,
                       key: const Key('rule-error'),
@@ -311,7 +317,12 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
         ),
         if (!_ro)
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              TfSpace.lg,
+              0,
+              TfSpace.lg,
+              TfSpace.md,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -322,7 +333,7 @@ class _RuleBuilderState extends ConsumerState<RuleBuilder> {
                       ? null
                       : () => Navigator.of(context).pop(false),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: TfSpace.sm),
                 TfButton(
                   key: const Key('rule-save'),
                   label: _rule == null
@@ -357,12 +368,12 @@ class _Section extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.only(top: TfSpace.md),
       child: TfPanel(
         key: Key('card-$keyName'),
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -379,7 +390,7 @@ class _Section extends StatelessWidget {
                   ?trailing,
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               child,
             ],
           ),
@@ -433,7 +444,7 @@ class _Arrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Padding(
-    padding: EdgeInsets.only(top: 4),
+    padding: EdgeInsets.only(top: TfSpace.xs),
     child: TfIcon(TfIcons.arrowDown, size: 20),
   );
 }
@@ -449,8 +460,8 @@ class DisabledBanner extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Container(
       key: const Key('disabled-banner'),
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: TfSpace.md),
+      padding: const EdgeInsets.all(TfSpace.md),
       decoration: BoxDecoration(
         color: scheme.errorContainer,
         borderRadius: TfRadius.panel,

@@ -15,6 +15,7 @@ class ChangePasswordScreen extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final changed = context.l10n.passwordChanged;
     return AuthForm(
+      showLogo: false,
       title: context.l10n.changePassword,
       submitLabel: context.l10n.changePassword,
       fields: [

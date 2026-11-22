@@ -10,6 +10,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/fields/presentation/field_input.dart';
 import 'package:taskforge/features/members/domain/members.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 const optionPalette = [
   '#E5484D',
@@ -162,7 +163,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 counterText: '',
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             TfSelectField<FieldType>(
               key: const Key('field-type'),
               options: {for (final t in _types) t: t.labelIn(context.l10n)},
@@ -171,9 +172,9 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
               label: context.l10n.grpEType,
               expand: true,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             if (_type.hasOptions) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: TfSpace.lg),
               Text(
                 context.l10n.grpEOptions,
                 style: Theme.of(context).textTheme.labelLarge,
@@ -260,7 +261,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
                 members: widget.members,
                 onChanged: (v) => setState(() => _default = v),
               ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             Text(
               context.l10n.grpEShowIn,
               style: Theme.of(context).textTheme.labelLarge,
@@ -283,7 +284,7 @@ class _FieldEditorDialogState extends State<FieldEditorDialog> {
             ),
             if (_problem != null)
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.only(top: TfSpace.md),
                 child: Text(
                   _problem!,
                   key: const Key('field-problem'),
@@ -342,7 +343,7 @@ class _RemapDialogState extends State<RemapDialog> {
       children: [
         for (final e in widget.usage.entries)
           Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: TfSpace.md),
             child: TfSelectField(
               key: Key('remap-${e.key}'),
               options: {

@@ -1,3 +1,6 @@
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
+import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
+import 'package:taskforge/core/ui/tf/tf_tabs.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -64,11 +67,12 @@ class PlanningTaskRow extends StatelessWidget {
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Checkbox(
+                    TfCheckbox(
                       key: Key('select-${task.id}'),
                       value: selected,
-                      onChanged: (v) => onToggle(v ?? false),
+                      onChanged: onToggle,
                     ),
+                    const SizedBox(width: TfSpace.sm),
                     Draggable<SprintTask>(
                       key: Key('drag-${task.id}'),
                       data: task,
@@ -94,13 +98,15 @@ class PlanningTaskRow extends StatelessWidget {
                   ],
                 )
               : null,
-          trailing: ActionChip(
-            key: Key('points-${task.id}'),
-            label: Text(
-              points == null ? '—' : context.localDigits(pointsText(points)),
+          trailing: Tooltip(
+            message: context.l10n.grpGStoryPoints,
+            child: TfChip(
+              key: Key('points-${task.id}'),
+              label: points == null
+                  ? '—'
+                  : context.localDigits(pointsText(points)),
+              onTap: onPoints,
             ),
-            tooltip: context.l10n.grpGStoryPoints,
-            onPressed: onPoints,
           ),
         ),
       ),
@@ -167,7 +173,10 @@ class CapacityBar extends StatelessWidget {
     );
     final cap = capacity.capacity;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: TfSpace.md,
+        vertical: TfSpace.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -195,22 +204,15 @@ class CapacityBar extends StatelessWidget {
                   tooltip: context.l10n.grpGSetCapacity,
                   onPressed: onEdit,
                 ),
-              SegmentedButton<bool>(
+              const SizedBox(width: TfSpace.sm),
+              TfSegmented<bool>(
                 key: const Key('capacity-unit'),
-                showSelectedIcon: false,
-                style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                segments: [
-                  ButtonSegment(
-                    value: false,
-                    label: Text(context.l10n.grpGPoints),
-                  ),
-                  ButtonSegment(
-                    value: true,
-                    label: Text(context.l10n.grpGHours),
-                  ),
-                ],
-                selected: {hours},
-                onSelectionChanged: (s) => onHours(s.first),
+                options: {
+                  false: context.l10n.grpGPoints,
+                  true: context.l10n.grpGHours,
+                },
+                value: hours,
+                onChanged: onHours,
               ),
             ],
           ),
@@ -218,7 +220,7 @@ class CapacityBar extends StatelessWidget {
             key: const Key('capacity-bar'),
             value: capacity.fraction,
             color: capacity.over ? theme.colorScheme.error : null,
-            minHeight: 8,
+            minHeight: TfSpace.sm,
           ),
           if (capacity.over)
             Text(
@@ -268,7 +270,12 @@ class TaskListPane extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 8, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              TfSpace.md,
+              TfSpace.md,
+              TfSpace.md,
+              TfSpace.sm,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -279,7 +286,10 @@ class TaskListPane extends ConsumerWidget {
                     style: theme.textTheme.titleMedium,
                   ),
                 ),
-                ...actions,
+                for (final a in actions) ...[
+                  const SizedBox(width: TfSpace.sm),
+                  a,
+                ],
               ],
             ),
           ),
@@ -291,6 +301,10 @@ class TaskListPane extends ConsumerWidget {
                 title: emptyTitle,
               ),
               AsyncData(:final value) => ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TfSpace.md,
+                  vertical: TfSpace.xs,
+                ),
                 children: [for (final t in value) rowBuilder(t)],
               ),
               AsyncError(:final error) => TfError(

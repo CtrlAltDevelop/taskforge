@@ -8,6 +8,7 @@ import 'package:taskforge/features/filters/application/filters_providers.dart';
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
 import 'package:taskforge/features/filters/presentation/tfql_editor.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// How long after the last keystroke the condition is checked by the server.
 const conditionCheckDelay = Duration(milliseconds: 350);
@@ -139,7 +140,7 @@ class ConditionEditorState extends ConsumerState<ConditionEditor> {
         ),
         if (local != null)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: TfSpace.xs),
             child: Text(
               local,
               style: TextStyle(color: Theme.of(context).colorScheme.error),

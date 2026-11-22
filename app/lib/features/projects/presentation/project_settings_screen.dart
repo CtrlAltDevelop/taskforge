@@ -1,5 +1,8 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
-import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,46 +74,41 @@ class _Sections extends StatelessWidget {
     children: [
       if (project.isArchived) ArchivedBanner(project: project),
       Expanded(
-        child: ContentWidth(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // Keyed so a save, a refresh or a conflict starts the form afresh.
-              GeneralSection(
-                key: ValueKey('${project.id}/${project.version}'),
-                project: project,
+        child: TfPage(
+          children: [
+            // Keyed so a save, a refresh or a conflict starts the form afresh.
+            GeneralSection(
+              key: ValueKey('${project.id}/${project.version}'),
+              project: project,
+            ),
+            TfPanel(
+              padding: EdgeInsets.zero,
+              child: TfRow(
+                key: const Key('open-workflow'),
+                leading: const TfIcon(TfIcons.network),
+                title: context.l10n.grpHWorkflow,
+                subtitle: context.l10n.grpHWorkflowHint,
+                trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
+                onTap: () => context.go('/projects/${project.id}/workflow'),
               ),
-              const SizedBox(height: 24),
-              Card(
-                child: ListTile(
-                  key: const Key('open-workflow'),
-                  leading: const TfIcon(TfIcons.network),
-                  title: Text(context.l10n.grpHWorkflow),
-                  subtitle: Text(context.l10n.grpHWorkflowHint),
-                  trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
-                  onTap: () => context.go('/projects/${project.id}/workflow'),
-                ),
+            ),
+            const SizedBox(height: TfSpace.xs),
+            TfPanel(
+              padding: EdgeInsets.zero,
+              child: TfRow(
+                key: const Key('open-fields'),
+                leading: const TfIcon(TfIcons.tune),
+                title: context.l10n.grpHFields,
+                subtitle: context.l10n.grpHFieldsHint,
+                trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
+                onTap: () => context.go('/projects/${project.id}/fields'),
               ),
-              const SizedBox(height: 12),
-              Card(
-                child: ListTile(
-                  key: const Key('open-fields'),
-                  leading: const TfIcon(TfIcons.tune),
-                  title: Text(context.l10n.grpHFields),
-                  subtitle: Text(context.l10n.grpHFieldsHint),
-                  trailing: DirectionalIcon(TfIcons.chevronEnd.glyph),
-                  onTap: () => context.go('/projects/${project.id}/fields'),
-                ),
-              ),
-              const SizedBox(height: 24),
-              FeaturesSection(project: project, info: featureInfo),
-              if (project.isPrivate) ...[
-                const SizedBox(height: 24),
-                MembersSection(project: project),
-              ],
-              ArchiveZone(project: project),
-            ],
-          ),
+            ),
+            const SizedBox(height: TfSpace.lg),
+            FeaturesSection(project: project, info: featureInfo),
+            if (project.isPrivate) MembersSection(project: project),
+            ArchiveZone(project: project),
+          ],
         ),
       ),
     ],

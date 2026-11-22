@@ -9290,4 +9290,121 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get dashPinFailed => 'تغییر سنجاق ممکن نشد.';
+
+  @override
+  String get devAccountsTab => 'حساب‌های سرویس';
+
+  @override
+  String get devAccountsHint =>
+      'حساب سرویس هویتی برای یک یکپارچه‌سازی است، نه یک شخص. توکن‌های آن با نقشی که به آن می‌دهید کار می‌کنند و به دامنه‌هایی که انتخاب می‌کنید محدود می‌شوند.';
+
+  @override
+  String get devAccountNew => 'حساب سرویس جدید';
+
+  @override
+  String get devAccountName => 'نام';
+
+  @override
+  String get devAccountRole => 'نقش';
+
+  @override
+  String get devAccountCreate => 'ایجاد';
+
+  @override
+  String get devAccountSave => 'ذخیره';
+
+  @override
+  String get devAccountsEmpty => 'هنوز حساب سرویسی نیست.';
+
+  @override
+  String devAccountSubtitle(String role, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count توکن',
+      one: '۱ توکن',
+      zero: 'بدون توکن',
+    );
+    return '$role · $_temp0';
+  }
+
+  @override
+  String get devAccountTokens => 'توکن‌ها';
+
+  @override
+  String get devAccountChangeRole => 'تغییر نقش';
+
+  @override
+  String get devAccountDelete => 'حذف';
+
+  @override
+  String devAccountDeleteTitle(String name) {
+    return '«$name» حذف شود؟';
+  }
+
+  @override
+  String get devAccountDeleteBody =>
+      'توکن‌های آن فوراً از کار می‌افتند و از فضای کار خارج می‌شود. این کار قابل بازگشت نیست.';
+
+  @override
+  String devAccountTokensTitle(String name) {
+    return 'توکن‌های $name';
+  }
+
+  @override
+  String get devAccountTokensEmpty => 'هنوز توکنی برای این حساب نیست.';
+
+  @override
+  String get inboxNkWebhookDisabled => 'وب‌هوک خاموش شد';
+
+  @override
+  String get inboxNkGoalReached => 'اهداف تحقق‌یافته';
+
+  @override
+  String get inboxNkGoalAtRisk => 'اهداف در خطر';
+
+  @override
+  String get inboxNotifWebhookDisabled => 'وب‌هوک خاموش شد:';
+
+  @override
+  String get inboxNotifGoalReached => 'هدف محقق شد:';
+
+  @override
+  String get inboxNotifGoalAtRisk => 'هدف در خطر است:';
+
+  @override
+  String inboxGoalProgress(int percent) {
+    return '$percent٪ از هدف';
+  }
+
+  @override
+  String get dashWkGoals => 'اهداف';
+
+  @override
+  String dashPercent(String value) {
+    return '$value٪';
+  }
+
+  @override
+  String get dashGoalLimit => 'تعداد اهداف';
+
+  @override
+  String get formsDefaultValues => 'مقادیر پیش‌فرض';
+
+  @override
+  String get formsDefaultValuesHint =>
+      'هر کاری که با این فرم ساخته می‌شود با این مقادیر فیلدهای پروژه شروع می‌شود. برای برچسب‌ها از یک فیلد چندانتخابی به نام «برچسب‌ها» استفاده کنید.';
+
+  @override
+  String get formsLogoUpload => 'بارگذاری تصویر';
+
+  @override
+  String get formsLogoRemove => 'حذف لوگو';
+
+  @override
+  String get formsLogoUploaded => 'تصویر بارگذاری‌شده';
+
+  @override
+  String get formsLogoSaveFirst =>
+      'برای بارگذاری لوگو ابتدا فرم را ذخیره کنید.';
 }

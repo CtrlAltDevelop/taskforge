@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
@@ -172,7 +173,7 @@ class _ImageDialogState extends State<_ImageDialog> {
           errorText: _error,
           autofocus: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TfTextField(
           key: const Key('image-alt'),
           controller: _alt,
@@ -263,7 +264,7 @@ class _TaskPickerState extends ConsumerState<_TaskPicker> {
               },
               autofocus: true,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             if (pasted != null)
               TfRow(
                 key: const Key('task-use-pasted'),
@@ -520,7 +521,7 @@ class _ShareDialogState extends ConsumerState<ShareDialog> {
                   ),
               if (!canManage)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: TfSpace.sm),
                   child: Text(context.l10n.grpBShareNeedPermission),
                 ),
               if (_error != null)

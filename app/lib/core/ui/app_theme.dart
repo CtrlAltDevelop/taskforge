@@ -88,7 +88,14 @@ ThemeData buildAppTheme({
         textStyle: type.label,
       ),
     ),
-    chipTheme: ChipThemeData(shape: shape, side: line, labelStyle: type.small),
+    chipTheme: ChipThemeData(
+      shape: shape,
+      side: line,
+      labelStyle: type.small.copyWith(color: c.text),
+      backgroundColor: c.surface,
+      selectedColor: c.selected,
+      checkmarkColor: c.accentTone.fg,
+    ),
     dialogTheme: DialogThemeData(
       backgroundColor: c.raised,
       surfaceTintColor: tfClear,

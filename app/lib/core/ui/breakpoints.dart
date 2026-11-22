@@ -30,7 +30,7 @@ enum ScreenSize {
 /// Outer page gutter for the screen size: tighter on phones.
 double pageGutter(ScreenSize size) => switch (size) {
   ScreenSize.compact => 12,
-  ScreenSize.medium => 20,
+  ScreenSize.medium => 16,
   ScreenSize.expanded => 28,
 };
 

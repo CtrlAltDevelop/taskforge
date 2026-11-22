@@ -9,6 +9,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workflows/domain/workflow.dart';
 import 'package:taskforge/features/workflows/domain/workflow_draft.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Asks where the tasks of [status] go before it is deleted. Returns the key of
 /// the chosen status, or null when cancelled.
@@ -58,7 +59,7 @@ class _MigrationDialogState extends State<_MigrationDialog> {
             widget.message ?? context.l10n.grpITasksInStatus(count),
             key: const Key('migration-explain'),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: TfSpace.lg),
           TfSelectField(
             key: const Key('migrate-target'),
             options: {
@@ -157,7 +158,7 @@ class _ConditionsDialogState extends State<_ConditionsDialog> {
           label: context.l10n.grpIWhoMayMove,
           expand: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TfToggle(
           key: const Key('condition-assignee'),
           value: _assignee,

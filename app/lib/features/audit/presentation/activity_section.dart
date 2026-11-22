@@ -61,13 +61,13 @@ class ActivityList extends ConsumerWidget {
     final now = ref.watch(auditNowProvider)();
     if (state.loading) {
       return const Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(TfSpace.lg),
         child: Center(child: CircularProgressIndicator()),
       );
     }
     if (state.entries.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(TfSpace.sm),
         child: state.error == null
             ? TfEmpty(
                 key: const Key('activity-empty'),
@@ -94,7 +94,10 @@ class ActivityList extends ConsumerWidget {
         heading = h;
         children.add(
           Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 2),
+            padding: const EdgeInsets.only(
+              top: TfSpace.sm,
+              bottom: TfSpace.xxs,
+            ),
             child: Text(h, style: Theme.of(context).textTheme.labelMedium),
           ),
         );

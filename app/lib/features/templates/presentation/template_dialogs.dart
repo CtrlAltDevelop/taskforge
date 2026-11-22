@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -147,7 +148,7 @@ class _ApplyState extends ConsumerState<_ApplyDialog> {
                       }
                     },
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: TfSpace.md),
                   TextFormField(
                     key: const Key('tpl-project-key'),
                     controller: _key,
@@ -176,7 +177,7 @@ class _ApplyState extends ConsumerState<_ApplyDialog> {
                     validator: (v) => v == null ? t.tplRequired : null,
                     onChanged: (v) => setState(() => _projectId = v ?? ''),
                   ),
-                const SizedBox(height: 12),
+                const SizedBox(height: TfSpace.md),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(t.tplStartDate),
@@ -202,7 +203,7 @@ class _ApplyState extends ConsumerState<_ApplyDialog> {
                 ],
                 if (_error != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: TfSpace.sm),
                     child: Text(
                       _error!,
                       key: const Key('tpl-error'),
@@ -361,7 +362,7 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                 t.tplSaveTitle,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextFormField(
                 key: const Key('tpl-save-name'),
                 controller: _name,
@@ -370,14 +371,14 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                 validator: (v) =>
                     (v ?? '').trim().isEmpty ? t.tplRequired : null,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextFormField(
                 controller: _description,
                 maxLength: 500,
                 maxLines: 2,
                 decoration: InputDecoration(labelText: t.tplDescription),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               Text(
                 t.tplVisibility,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -398,7 +399,7 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                     setState(() => _visibility = s.first),
               ),
               if (!_isTask) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: TfSpace.sm),
                 Text(
                   t.tplInclude,
                   style: Theme.of(context).textTheme.titleSmall,
@@ -429,7 +430,7 @@ class _SaveState extends ConsumerState<_SaveSheet> {
                   key: const Key('tpl-error'),
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: FilledButton(
@@ -470,14 +471,14 @@ Future<bool> showEditTemplateDialog(
                 maxLength: 80,
                 decoration: InputDecoration(labelText: ctx.l10n.tplName),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 controller: description,
                 maxLength: 500,
                 maxLines: 2,
                 decoration: InputDecoration(labelText: ctx.l10n.tplDescription),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               SegmentedButton<TemplateVisibility>(
                 segments: [
                   ButtonSegment(

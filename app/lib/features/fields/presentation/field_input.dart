@@ -7,6 +7,7 @@ import 'package:taskforge/core/i18n/date_picker.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
 import 'package:taskforge/features/members/domain/members.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 Color? optionColor(FieldOption option) {
   final hex = option.color;
@@ -290,7 +291,7 @@ class _MoneyInputState extends State<_MoneyInput> {
           onSubmitted: (_) => _commit(),
         ),
       ),
-      const SizedBox(width: 8),
+      const SizedBox(width: TfSpace.sm),
       Expanded(
         flex: 2,
         child: TextField(
@@ -411,7 +412,7 @@ class _Choice<T> extends StatelessWidget {
             children: [
               if (i.color != null) ...[
                 TfIcon(TfIcons.circle, size: 12, color: i.color),
-                const SizedBox(width: 8),
+                const SizedBox(width: TfSpace.sm),
               ],
               Flexible(child: Text(i.label, overflow: TextOverflow.ellipsis)),
             ],

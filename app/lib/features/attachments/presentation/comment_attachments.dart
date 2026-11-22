@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/features/attachments/application/attachments_providers.dart';
@@ -47,7 +48,7 @@ class CommentAttachments extends ConsumerWidget {
 
     return Padding(
       key: Key('comment-files-$commentId'),
-      padding: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.only(top: TfSpace.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

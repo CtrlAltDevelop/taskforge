@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -184,7 +185,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 maxLength: 160,
                 decoration: InputDecoration(labelText: t.goalsName),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('goal-description'),
                 controller: _description,
@@ -192,7 +193,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 maxLength: 2000,
                 decoration: InputDecoration(labelText: t.goalsDescription),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfButton(
                 key: const Key('goal-period'),
                 label: t.goalsPeriod(
@@ -202,7 +203,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 icon: TfIcons.calendarRange,
                 onPressed: _pickPeriod,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('goal-owner'),
                 options: {for (final m in widget.members) m.userId: m.label},
@@ -213,7 +214,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 label: t.goalsOwner,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('goal-parent'),
                 options: {
@@ -225,7 +226,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 label: t.goalsParent,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('goal-folder'),
                 options: {
@@ -239,7 +240,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 label: t.goalsFolder,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('goal-weight'),
                 options: {for (final w in goalWeights) w: w},
@@ -248,7 +249,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 label: t.goalsWeight,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               if (editing)
                 TfSelectField(
                   key: const Key('goal-status'),
@@ -262,7 +263,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                   label: t.goalsStatusLabel,
                   expand: true,
                 ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfToggleTile(
                 key: const Key('goal-private'),
                 value: _private,
@@ -275,7 +276,7 @@ class _GoalDialogState extends State<_GoalDialog> {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               Wrap(
-                spacing: 6,
+                spacing: TfSpace.xs,
                 children: [
                   for (final m in widget.members)
                     if (m.userId != _owner)
@@ -379,7 +380,7 @@ class _KrDialogState extends State<_KrDialog> {
   }
 
   Widget _number(String key, TextEditingController c, String label) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.only(bottom: TfSpace.md),
     child: TextField(
       key: Key(key),
       controller: c,
@@ -410,7 +411,7 @@ class _KrDialogState extends State<_KrDialog> {
                 maxLength: 160,
                 decoration: InputDecoration(labelText: t.goalsKrName),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField<KrType>(
                 key: const Key('kr-type'),
                 options: {for (final k in KrType.values) k: _typeLabel(k)},
@@ -419,13 +420,13 @@ class _KrDialogState extends State<_KrDialog> {
                 label: t.goalsKrType,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               if (_type == KrType.number) ...[
                 _number('kr-start', _start, t.goalsKrStart),
                 _number('kr-target', _target, t.goalsKrTarget),
                 if (!editing) _number('kr-current', _current, t.goalsKrCurrent),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: TfSpace.xs),
                   child: Text(
                     t.goalsKrDirectionHint,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -444,11 +445,11 @@ class _KrDialogState extends State<_KrDialog> {
                 ),
                 if (editing && widget.kr!.taskIds.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: TfSpace.sm),
                     child: Text(t.goalsKrPicked(widget.kr!.taskIds.length)),
                   ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfSelectField(
                 key: const Key('kr-weight'),
                 options: {for (final w in goalWeights) w: w},
@@ -577,7 +578,7 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
                   ),
                   decoration: InputDecoration(labelText: t.goalsCheckInValue),
                 ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextField(
                 key: const Key('checkin-note'),
                 controller: _note,
@@ -585,7 +586,7 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
                 maxLength: 2000,
                 decoration: InputDecoration(labelText: t.goalsCheckInNote),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               if (_error != null)
                 Text(
                   _error!,
@@ -598,7 +599,7 @@ class _CheckInDialogState extends ConsumerState<_CheckInDialog> {
               ),
               history.when(
                 loading: () => const Padding(
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(TfSpace.md),
                   child: LinearProgressIndicator(),
                 ),
                 error: (e, _) => TfError(
@@ -640,7 +641,7 @@ class _History extends StatelessWidget {
     final t = context.l10n;
     if (rows.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
         child: Text(t.goalsCheckInEmpty),
       );
     }
@@ -648,7 +649,7 @@ class _History extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Sparkline(points: [for (final r in rows.reversed) r.progress]),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         for (final r in rows.take(12))
           TfRow(
             key: Key('checkin-${r.id}'),

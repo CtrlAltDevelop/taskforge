@@ -1,6 +1,9 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
@@ -106,10 +109,10 @@ class _CapacityDialogState extends State<_CapacityDialog> {
                 errorText: _error,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TfSpace.lg),
             Text(t.wlWorkingDays),
             Wrap(
-              spacing: 6,
+              spacing: TfSpace.xs,
               children: [
                 for (var d = 0; d < 7; d++)
                   FilterChip(
@@ -185,41 +188,49 @@ class _CapacityTab extends ConsumerWidget {
         details: '$e',
         onRetry: () => ref.invalidate(capacitiesProvider),
       ),
-      data: (list) => ListView(
+      data: (list) => TfPage(
+        lazy: true,
         children: [
-          for (final c in list)
-            TfRow(
-              key: Key('capacity-${c.userId}'),
-              title:
-                  members
-                      .where((m) => m.userId == c.userId)
-                      .firstOrNull
-                      ?.label ??
-                  c.userId,
-              subtitle: c.isSet
-                  ? t.wlCapacitySummary(
-                      context.localDigits(hoursText(c.secondsPerDay)),
-                      context.localDigits('${c.workingDays.length}'),
-                    )
-                  : t.wlNoCapacity,
-              trailing: manage
-                  ? TfIconButton(
-                      icon: TfIcons.edit,
-                      tooltip: t.wlSetCapacity,
-                      onPressed: () => editCapacity(
-                        context,
-                        ref,
-                        c.userId,
+          TfPanel(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (final c in list)
+                  TfRow(
+                    key: Key('capacity-${c.userId}'),
+                    title:
                         members
-                                .where((m) => m.userId == c.userId)
-                                .firstOrNull
-                                ?.label ??
-                            c.userId,
-                        c,
-                      ),
-                    )
-                  : null,
+                            .where((m) => m.userId == c.userId)
+                            .firstOrNull
+                            ?.label ??
+                        c.userId,
+                    subtitle: c.isSet
+                        ? t.wlCapacitySummary(
+                            context.localDigits(hoursText(c.secondsPerDay)),
+                            context.localDigits('${c.workingDays.length}'),
+                          )
+                        : t.wlNoCapacity,
+                    trailing: manage
+                        ? TfIconButton(
+                            icon: TfIcons.edit,
+                            tooltip: t.wlSetCapacity,
+                            onPressed: () => editCapacity(
+                              context,
+                              ref,
+                              c.userId,
+                              members
+                                      .where((m) => m.userId == c.userId)
+                                      .firstOrNull
+                                      ?.label ??
+                                  c.userId,
+                              c,
+                            ),
+                          )
+                        : null,
+                  ),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -304,27 +315,35 @@ class _TimeOffTab extends ConsumerWidget {
                 illustration: TfIllustrationKind.tasks,
                 title: t.wlNoTimeOff,
               )
-            : ListView(
+            : TfPage(
+                lazy: true,
                 children: [
-                  for (final r in list)
-                    TfRow(
-                      title:
-                          '${members.where((m) => m.userId == r.userId).firstOrNull?.label ?? r.userId}'
-                          ' · ${_kindLabel(t, r.kind)}',
-                      subtitle:
-                          '${context.localDate(r.start)} – ${context.localDate(r.end)}'
-                          '${r.note.isEmpty ? '' : '\n${r.note}'}',
-                      trailing: manage || r.userId == me
-                          ? TfIconButton(
-                              icon: TfIcons.trash,
-                              tooltip: t.wlDelete,
-                              onPressed: () => _delete(context, ref, r),
-                            )
-                          : null,
-                      onTap: manage || r.userId == me
-                          ? () => _add(context, ref, r)
-                          : null,
+                  TfPanel(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        for (final r in list)
+                          TfRow(
+                            title:
+                                '${members.where((m) => m.userId == r.userId).firstOrNull?.label ?? r.userId}'
+                                ' · ${_kindLabel(t, r.kind)}',
+                            subtitle:
+                                '${context.localDate(r.start)} – ${context.localDate(r.end)}'
+                                '${r.note.isEmpty ? '' : '\n${r.note}'}',
+                            trailing: manage || r.userId == me
+                                ? TfIconButton(
+                                    icon: TfIcons.trash,
+                                    tooltip: t.wlDelete,
+                                    onPressed: () => _delete(context, ref, r),
+                                  )
+                                : null,
+                            onTap: manage || r.userId == me
+                                ? () => _add(context, ref, r)
+                                : null,
+                          ),
+                      ],
                     ),
+                  ),
                 ],
               ),
       ),
@@ -412,7 +431,7 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
                 label: t.wlPerson,
                 expand: true,
               ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             TfButton(
               key: const Key('time-off-dates'),
               label:
@@ -420,7 +439,7 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
               icon: TfIcons.calendarRange,
               onPressed: _pick,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             TfSelectField(
               options: {
                 for (final k in TimeOffKind.values) k: _kindLabel(t, k),
@@ -430,7 +449,7 @@ class _TimeOffDialogState extends State<_TimeOffDialog> {
               label: t.wlKind,
               expand: true,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             TextField(
               controller: _note,
               maxLength: 300,
@@ -527,21 +546,29 @@ class _HolidaysTab extends ConsumerWidget {
                 illustration: TfIllustrationKind.tasks,
                 title: t.wlNoHolidays,
               )
-            : ListView(
+            : TfPage(
+                lazy: true,
                 children: [
-                  for (final h in list)
-                    TfRow(
-                      title: h.name,
-                      subtitle: context.localDate(h.date, long: true),
-                      trailing: manage
-                          ? TfIconButton(
-                              icon: TfIcons.trash,
-                              tooltip: t.wlDelete,
-                              onPressed: () => _delete(context, ref, h),
-                            )
-                          : null,
-                      onTap: manage ? () => _edit(context, ref, h) : null,
+                  TfPanel(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        for (final h in list)
+                          TfRow(
+                            title: h.name,
+                            subtitle: context.localDate(h.date, long: true),
+                            trailing: manage
+                                ? TfIconButton(
+                                    icon: TfIcons.trash,
+                                    tooltip: t.wlDelete,
+                                    onPressed: () => _delete(context, ref, h),
+                                  )
+                                : null,
+                            onTap: manage ? () => _edit(context, ref, h) : null,
+                          ),
+                      ],
                     ),
+                  ),
                 ],
               ),
       ),
@@ -592,7 +619,7 @@ class _HolidayDialogState extends State<_HolidayDialog> {
             maxLength: 120,
             decoration: InputDecoration(labelText: t.wlHolidayName),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           TfButton(
             label: context.localDate(_date),
             icon: TfIcons.calendar,

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -282,11 +283,14 @@ class _TextBlockViewState extends State<TextBlockView> {
 
   Widget _prefix(BuildContext context) => switch (_block.type) {
     BlockType.bullet => const Padding(
-      padding: EdgeInsetsDirectional.only(end: 8, top: 2),
+      padding: EdgeInsetsDirectional.only(end: TfSpace.sm, top: TfSpace.xxs),
       child: Text('•'),
     ),
     BlockType.numbered => Padding(
-      padding: const EdgeInsetsDirectional.only(end: 8, top: 2),
+      padding: const EdgeInsetsDirectional.only(
+        end: TfSpace.sm,
+        top: TfSpace.xxs,
+      ),
       child: Text('${widget.number}.', key: Key('number-${_block.id}')),
     ),
     BlockType.checklist => SizedBox(
@@ -308,33 +312,38 @@ class _TextBlockViewState extends State<TextBlockView> {
     key: const Key('floating-toolbar'),
     elevation: 3,
     borderRadius: TfRadius.panel,
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final (id, icon, tip, mark) in [
-          ('bold', TfIcons.bold, context.l10n.grpJBold, boldMark),
-          ('italic', TfIcons.italic, context.l10n.grpJItalic, italicMark),
-          (
-            'strike',
-            TfIcons.strikethrough,
-            context.l10n.grpJStrikethrough,
-            strikeMark,
-          ),
-          ('code', TfIcons.code, context.l10n.grpJCode, codeMark),
-        ])
+    // The overlay hands down the whole window's height, and an icon button
+    // grows to fill it: pin the bar to one touch target.
+    child: SizedBox(
+      height: TfDensity.minTouchTarget,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final (id, icon, tip, mark) in [
+            ('bold', TfIcons.bold, context.l10n.grpJBold, boldMark),
+            ('italic', TfIcons.italic, context.l10n.grpJItalic, italicMark),
+            (
+              'strike',
+              TfIcons.strikethrough,
+              context.l10n.grpJStrikethrough,
+              strikeMark,
+            ),
+            ('code', TfIcons.code, context.l10n.grpJCode, codeMark),
+          ])
+            TfIconButton(
+              key: Key('tb-$id'),
+              icon: icon,
+              tooltip: tip,
+              onPressed: () => _toggle(mark),
+            ),
           TfIconButton(
-            key: Key('tb-$id'),
-            icon: icon,
-            tooltip: tip,
-            onPressed: () => _toggle(mark),
+            key: const Key('tb-link'),
+            icon: TfIcons.link,
+            tooltip: context.l10n.grpJLink,
+            onPressed: _link,
           ),
-        TfIconButton(
-          key: const Key('tb-link'),
-          icon: TfIcons.link,
-          tooltip: context.l10n.grpJLink,
-          onPressed: _link,
-        ),
-      ],
+        ],
+      ),
     ),
   );
 
@@ -394,7 +403,7 @@ class _TextBlockViewState extends State<TextBlockView> {
     );
     if (_block.type == BlockType.quote) {
       field = Container(
-        padding: const EdgeInsetsDirectional.only(start: 12),
+        padding: const EdgeInsetsDirectional.only(start: TfSpace.md),
         decoration: BoxDecoration(
           border: BorderDirectional(
             start: BorderSide(color: theme.colorScheme.outline, width: 3),

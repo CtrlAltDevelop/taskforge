@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/core/ui/tf/tf_avatar.dart';
 import 'package:taskforge/core/ui/tf/tf_chip.dart';
@@ -96,7 +97,7 @@ class BoardCard extends StatelessWidget {
                         task.displayId,
                         style: tf.typography.mono.copyWith(
                           color: c.textMuted,
-                          fontSize: 11,
+                          fontSize: TfFontSize.caption,
                         ),
                       ),
                       if (task.isBlocked) ...[
@@ -176,7 +177,7 @@ class BoardCard extends StatelessWidget {
           // Chips are not controls here: a tap on them opens the card.
           child: IgnorePointer(
             child: Wrap(
-              spacing: TfSpace.xs,
+              spacing: TfSpace.sm,
               runSpacing: TfSpace.xs,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: chips,

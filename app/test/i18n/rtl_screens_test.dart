@@ -99,6 +99,8 @@ class ScreenEnv {
     FakeInboxClient? inbox,
     FakeTimeClient? time,
     chatfakes.FakeChatClient? chatServer,
+    FakeSystemClient? system,
+    FakeSecurityClient? security,
     String role = 'Owner',
   }) async {
     final prefs = MemoryPrefs();
@@ -123,6 +125,8 @@ class ScreenEnv {
       sprints: sprints ?? _sprints(),
       inbox: inbox ?? _inbox(),
       chat: chatServer,
+      system: system,
+      security: security,
       time: time ?? _time(),
       overrides: [
         localPrefsProvider.overrideWithValue(prefs),
@@ -204,6 +208,10 @@ FakeTimeClient _time() =>
 
 FakeDashboardsClient _dashboards() => (FakeDashboardsClient([
   dashboardOf('d1', 'Team', [widgetOf('w1', WidgetKind.number, title: 'Open')]),
+  dashboardOf('d2', 'Sprint health', [
+    widgetOf('w2', WidgetKind.number, title: 'Open'),
+    widgetOf('w3', WidgetKind.number, title: 'Done this week'),
+  ], projectId: 'p1'),
 ]));
 
 chatfakes.FakeChatClient _chatServer() => chatfakes.FakeChatClient(

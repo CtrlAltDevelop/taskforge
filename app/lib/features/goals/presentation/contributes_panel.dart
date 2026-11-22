@@ -38,7 +38,7 @@ class ContributesPanel extends ConsumerWidget {
         children: [
           if (options.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               child: Text(c.l10n.goalsNoLinkedKr),
             ),
           for (final (g, kr) in options)

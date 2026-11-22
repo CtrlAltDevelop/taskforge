@@ -16,6 +16,7 @@ class ApiToken {
     required this.expiresAt,
     required this.lastUsedAt,
     required this.createdAt,
+    this.serviceAccountId = '',
   });
 
   final String id;
@@ -29,7 +30,34 @@ class ApiToken {
   final String lastUsedAt;
   final String createdAt;
 
+  /// The service account this token acts as; empty for a personal token.
+  final String serviceAccountId;
+
   bool get isActive => status == 'active';
+}
+
+/// A non-person identity of the workspace whose tokens act with its [roleName].
+@immutable
+class ServiceAccount {
+  const ServiceAccount({
+    required this.id,
+    required this.name,
+    required this.userId,
+    required this.roleId,
+    required this.roleName,
+    required this.active,
+    required this.tokenCount,
+    required this.createdAt,
+  });
+
+  final String id;
+  final String name;
+  final String userId;
+  final String roleId;
+  final String roleName;
+  final bool active;
+  final int tokenCount;
+  final String createdAt;
 }
 
 /// A token just made: [secret] exists here and nowhere else, once.

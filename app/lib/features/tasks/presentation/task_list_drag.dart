@@ -27,7 +27,10 @@ mixin _TaskListDrag on ConsumerState<TaskListView>, _TaskListOps {
     onDragStarted: () => _dragStarted(task),
     onDragEnd: (_) => _dragEnded(),
     child: const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: TfSpace.sm,
+        vertical: TfSpace.lg,
+      ),
       child: TfIcon(TfIcons.grip),
     ),
   );
@@ -61,8 +64,8 @@ mixin _TaskListDrag on ConsumerState<TaskListView>, _TaskListOps {
       final hot = candidates.isNotEmpty;
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: TfSpace.md),
+        margin: const EdgeInsets.all(TfSpace.sm),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: hot ? c.selected : null,

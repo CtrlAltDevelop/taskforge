@@ -52,9 +52,9 @@ class ImportScreen extends ConsumerWidget {
           : TfPage(
               children: const [
                 ImportWizardCard(),
-                SizedBox(height: 24),
+                SizedBox(height: TfSpace.xl),
                 ImportHistory(),
-                SizedBox(height: 24),
+                SizedBox(height: TfSpace.xl),
                 PlaceholdersPanel(),
               ],
             ),
@@ -104,7 +104,7 @@ class ImportHistory extends ConsumerWidget {
           ),
           data: (list) => list.isEmpty
               ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
                   child: Text(
                     context.l10n.grpCImpNothing,
                     key: const Key('history-empty'),

@@ -63,6 +63,7 @@ class TaskForgeApp extends ConsumerWidget {
     final highContrast = ref.watch(contrastProvider);
     final reduceMotion = ref.watch(reduceMotionProvider);
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(
           disableAnimations:

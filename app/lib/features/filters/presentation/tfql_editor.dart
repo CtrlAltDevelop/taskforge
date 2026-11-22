@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 import 'package:taskforge/features/filters/domain/saved_filters.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
@@ -218,10 +219,10 @@ class TfqlEditorState extends State<TfqlEditor> {
         onTap: () =>
             widget.onCursor(controller.text, controller.selection.baseOffset),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: TfSpace.md),
       if (widget.problems.isNotEmpty)
         Padding(
-          padding: const EdgeInsets.only(top: 6),
+          padding: const EdgeInsets.only(top: TfSpace.sm),
           child: Text(
             key: const Key('tfql-error'),
             '${widget.problems.first.message} '
@@ -231,7 +232,7 @@ class TfqlEditorState extends State<TfqlEditor> {
         ),
       if (widget.suggestions.isNotEmpty)
         Padding(
-          padding: const EdgeInsets.only(top: 6),
+          padding: const EdgeInsets.only(top: TfSpace.sm),
           child: Wrap(
             key: const Key('tfql-suggestions'),
             spacing: 6,

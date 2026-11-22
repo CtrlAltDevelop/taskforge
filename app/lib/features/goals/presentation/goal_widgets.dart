@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ohlcv_chart/ohlcv_chart.dart';
@@ -31,7 +32,10 @@ class GoalStatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = goalStatusColor(context.tf.colors, status);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: TfSpace.sm,
+        vertical: TfSpace.xxs,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: TfRadius.dialog,
@@ -73,7 +77,7 @@ class GoalProgressBar extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: TfSpace.sm),
         SizedBox(
           width: 44,
           child: Text(

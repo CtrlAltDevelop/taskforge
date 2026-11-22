@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/timeline/application/timeline_providers.dart';
@@ -116,7 +117,7 @@ class _WorkingDaysDialogState extends State<_WorkingDaysDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.grpIWorkingDaysHint),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Wrap(
             spacing: 6,
             children: [
@@ -130,7 +131,7 @@ class _WorkingDaysDialogState extends State<_WorkingDaysDialog> {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           TextField(
             key: const Key('holidays-field'),
             controller: _holidays,

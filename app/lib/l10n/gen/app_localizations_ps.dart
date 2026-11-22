@@ -9249,4 +9249,121 @@ class AppLocalizationsPs extends AppLocalizations {
 
   @override
   String get dashPinFailed => 'ځوړندول بدل نه شو.';
+
+  @override
+  String get devAccountsTab => 'د خدمت حسابونه';
+
+  @override
+  String get devAccountsHint =>
+      'د خدمت حساب د یو ادغام پېژندنه ده، نه یو کس. د هغه ټوکنونه د هغه رول سره کار کوي چې تاسو یې ورکوئ، او په هغو ساحو محدود دي چې تاسو یې غوره کوئ.';
+
+  @override
+  String get devAccountNew => 'نوی د خدمت حساب';
+
+  @override
+  String get devAccountName => 'نوم';
+
+  @override
+  String get devAccountRole => 'رول';
+
+  @override
+  String get devAccountCreate => 'جوړول';
+
+  @override
+  String get devAccountSave => 'ساتل';
+
+  @override
+  String get devAccountsEmpty => 'تر اوسه د خدمت حسابونه نشته.';
+
+  @override
+  String devAccountSubtitle(String role, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ټوکنونه',
+      one: '۱ ټوکن',
+      zero: 'ټوکن نشته',
+    );
+    return '$role · $_temp0';
+  }
+
+  @override
+  String get devAccountTokens => 'ټوکنونه';
+
+  @override
+  String get devAccountChangeRole => 'رول بدلول';
+
+  @override
+  String get devAccountDelete => 'ړنګول';
+
+  @override
+  String devAccountDeleteTitle(String name) {
+    return '«$name» ړنګ شي؟';
+  }
+
+  @override
+  String get devAccountDeleteBody =>
+      'د هغه ټوکنونه سمدستي کار بندوي او له کاري ځای وځي. دا بیرته نشي کېدای.';
+
+  @override
+  String devAccountTokensTitle(String name) {
+    return 'د $name ټوکنونه';
+  }
+
+  @override
+  String get devAccountTokensEmpty => 'د دې حساب لپاره تر اوسه ټوکن نشته.';
+
+  @override
+  String get inboxNkWebhookDisabled => 'ویب‌هوک بند شو';
+
+  @override
+  String get inboxNkGoalReached => 'ترلاسه شوي موخې';
+
+  @override
+  String get inboxNkGoalAtRisk => 'په خطر کې موخې';
+
+  @override
+  String get inboxNotifWebhookDisabled => 'ویب‌هوک بند شو:';
+
+  @override
+  String get inboxNotifGoalReached => 'موخه ترلاسه شوه:';
+
+  @override
+  String get inboxNotifGoalAtRisk => 'موخه په خطر کې ده:';
+
+  @override
+  String inboxGoalProgress(int percent) {
+    return 'د موخې $percent٪';
+  }
+
+  @override
+  String get dashWkGoals => 'موخې';
+
+  @override
+  String dashPercent(String value) {
+    return '$value٪';
+  }
+
+  @override
+  String get dashGoalLimit => 'د موخو شمېر';
+
+  @override
+  String get formsDefaultValues => 'تلپاتې ارزښتونه';
+
+  @override
+  String get formsDefaultValuesHint =>
+      'هره دنده چې د دې فورمې له لارې جوړېږي د پروژې د ساحو له دې ارزښتونو سره پیلېږي. د نښو لپاره د «نښې» په نوم یوه څو‌ټاکنه ساحه وکاروئ.';
+
+  @override
+  String get formsLogoUpload => 'انځور پورته کړئ';
+
+  @override
+  String get formsLogoRemove => 'لوګو لرې کړئ';
+
+  @override
+  String get formsLogoUploaded => 'پورته شوی انځور';
+
+  @override
+  String get formsLogoSaveFirst =>
+      'د لوګو د پورته کولو لپاره لومړی فورمه وساتئ.';
 }

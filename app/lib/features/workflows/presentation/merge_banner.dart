@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/workflows/domain/workflow_merge.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Shown after someone else saved first and the editor merged their work with
 /// the draft: everything that was taken, kept or given up, in words. Saving is
@@ -31,7 +32,7 @@ class MergeBanner extends StatelessWidget {
       key: const Key('merge-banner'),
       color: theme.colorScheme.tertiaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(TfSpace.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -39,17 +40,17 @@ class MergeBanner extends StatelessWidget {
               context.l10n.grpIMergeTitle,
               style: theme.textTheme.titleSmall,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: TfSpace.xs),
             Text(context.l10n.grpIMergeBody),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             for (final (i, note) in notes.indexed)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.xxs),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const TfIcon(TfIcons.cornerDownRight, size: 18),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: TfSpace.xs),
                     Expanded(
                       child: Text(
                         note.text(context.l10n),
@@ -59,7 +60,7 @@ class MergeBanner extends StatelessWidget {
                   ],
                 ),
               ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Wrap(
               spacing: 8,
               runSpacing: 8,

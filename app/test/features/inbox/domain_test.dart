@@ -47,6 +47,59 @@ void main() {
       },
     );
 
+    test(
+      'a webhook switched off and goal notices name what they are about',
+      () {
+        final hook = note(
+          '1',
+          'webhook.disabled',
+          task: '',
+          project: '',
+          actor: '',
+          payload: {
+            'webhook': 'Build bot',
+            'webhook_id': 'h1',
+            'reason': '10 failures in a row',
+          },
+        );
+        expect(hook.kind, NotificationKind.webhookDisabled);
+        expect(hook.subject, 'Build bot');
+        expect(hook.reason, '10 failures in a row');
+        expect(hook.route, '/developer/webhooks/h1');
+
+        final reached = note(
+          '2',
+          'goal.reached',
+          task: '',
+          project: '',
+          payload: {'goal': 'Launch', 'goal_id': 'g1', 'progress': 1.0},
+        );
+        expect(reached.kind, NotificationKind.goalReached);
+        expect(reached.subject, 'Launch');
+        expect(reached.route, '/goals/g1');
+
+        final risk = note(
+          '3',
+          'goal.at_risk',
+          task: '',
+          project: '',
+          payload: {'goal': 'Launch', 'goal_id': 'g1', 'progress': 0.256},
+        );
+        expect(risk.kind, NotificationKind.goalAtRisk);
+        expect(risk.progressPercent, 26);
+      },
+    );
+
+    test('a task notification routes to its task, one without ids nowhere', () {
+      expect(note('1', 'task.assigned').route, '/projects/p1?task=a');
+      expect(note('2', 'task.assigned', task: '', project: '').route, isNull);
+      expect(
+        note('3', 'goal.reached', task: '', project: '', payload: {}).route,
+        isNull,
+        reason: 'no goal id in the payload',
+      );
+    });
+
     test('payload fields are read as text', () {
       final n = note(
         '1',

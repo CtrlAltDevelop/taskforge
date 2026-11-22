@@ -1,4 +1,6 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -69,7 +71,7 @@ class _PresenceStripState extends ConsumerState<PresenceStrip> {
       children: [
         for (final u in others.take(4))
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 4),
+            padding: const EdgeInsetsDirectional.only(end: TfSpace.xs),
             child: Tooltip(
               message: u.editing
                   ? context.l10n.grpFPresenceEditing(_nameOf(ref, u.id))
@@ -82,7 +84,7 @@ class _PresenceStripState extends ConsumerState<PresenceStrip> {
                     : null,
                 child: Text(
                   _nameOf(ref, u.id).characters.first.toUpperCase(),
-                  style: const TextStyle(fontSize: 11),
+                  style: const TextStyle(fontSize: TfFontSize.caption),
                 ),
               ),
             ),
@@ -111,7 +113,7 @@ class EditingHint extends ConsumerWidget {
     final names = editing.map((u) => _nameOf(ref, u.id)).toSet().toList();
     final l10n = context.l10n;
     return Padding(
-      padding: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.only(top: TfSpace.xs),
       child: Row(
         key: const Key('editing-hint'),
         children: [
@@ -120,7 +122,7 @@ class EditingHint extends ConsumerWidget {
             size: 14,
             color: Theme.of(context).colorScheme.tertiary,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: TfSpace.sm),
           Expanded(
             child: Text(
               names.length == 1

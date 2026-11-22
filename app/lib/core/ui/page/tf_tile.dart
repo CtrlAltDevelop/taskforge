@@ -64,34 +64,39 @@ class TfTile extends StatelessWidget {
           borderRadius: TfRadius.control,
           border: states.contains(WidgetState.focused) ? tfFocusRing(c) : null,
         ),
-        child: Row(
-          children: [
-            if (leading != null) ...[
-              leading!,
-              const SizedBox(width: TfSpace.md),
-            ],
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DefaultTextStyle.merge(
-                    style: tf.typography.body.copyWith(color: c.text),
-                    child: title,
-                  ),
-                  if (subtitle != null)
+        child: LayoutBuilder(
+          builder: (context, box) => Row(
+            children: [
+              if (leading != null) ...[
+                leading!,
+                const SizedBox(width: TfSpace.md),
+              ],
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     DefaultTextStyle.merge(
-                      style: tf.typography.small.copyWith(color: c.textMuted),
-                      child: subtitle!,
+                      style: tf.typography.body.copyWith(color: c.text),
+                      child: title,
                     ),
-                ],
+                    if (subtitle != null)
+                      DefaultTextStyle.merge(
+                        style: tf.typography.small.copyWith(color: c.textMuted),
+                        child: subtitle!,
+                      ),
+                  ],
+                ),
               ),
-            ),
-            if (trailing != null) ...[
-              const SizedBox(width: TfSpace.md),
-              Flexible(child: trailing!),
+              if (trailing != null) ...[
+                const SizedBox(width: TfSpace.md),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: box.maxWidth * 0.6),
+                  child: trailing!,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

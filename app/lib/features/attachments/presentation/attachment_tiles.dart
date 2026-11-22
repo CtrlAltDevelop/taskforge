@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -70,7 +71,7 @@ class AttachmentTile extends StatelessWidget {
                       child: thumbnailOf(file),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: TfSpace.xs),
                   Text(
                     file.filename,
                     maxLines: 1,
@@ -137,7 +138,7 @@ class AttachmentChip extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 48, maxWidth: 220),
                 child: Padding(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(TfSpace.xs),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -149,7 +150,7 @@ class AttachmentChip extends StatelessWidget {
                           child: thumbnailOf(file, iconSize: 22),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: TfSpace.sm),
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +224,7 @@ class UploadRow extends StatelessWidget {
     final id = item.localId;
     final failed = item.state == UploadState.failed;
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: TfSpace.sm),
       child: Row(
         children: [
           Expanded(

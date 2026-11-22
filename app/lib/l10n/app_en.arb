@@ -5804,5 +5804,75 @@
   "dashPinFailed": "Could not change the pin.",
   "@dashPinFailed": {
     "description": "Phase 48 Home, My work, onboarding."
-  }
+  },
+  "devAccountsTab": "Service accounts",
+  "devAccountsHint": "A service account is an identity for an integration, not a person. Its tokens work with the role you give it, narrowed to the scopes you pick.",
+  "devAccountNew": "New service account",
+  "devAccountName": "Name",
+  "devAccountRole": "Role",
+  "devAccountCreate": "Create",
+  "devAccountSave": "Save",
+  "devAccountsEmpty": "No service accounts yet.",
+  "devAccountSubtitle": "{role} · {count, plural, =0{No tokens} =1{1 token} other{{count} tokens}}",
+  "@devAccountSubtitle": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "devAccountTokens": "Tokens",
+  "devAccountChangeRole": "Change role",
+  "devAccountDelete": "Delete",
+  "devAccountDeleteTitle": "Delete \"{name}\"?",
+  "@devAccountDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devAccountDeleteBody": "Its tokens stop working at once and it leaves the workspace. This cannot be undone.",
+  "devAccountTokensTitle": "Tokens of {name}",
+  "@devAccountTokensTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devAccountTokensEmpty": "No tokens for this account yet.",
+  "inboxNkWebhookDisabled": "Webhook switched off",
+  "inboxNkGoalReached": "Goals reached",
+  "inboxNkGoalAtRisk": "Goals at risk",
+  "inboxNotifWebhookDisabled": "Webhook switched off:",
+  "inboxNotifGoalReached": "Goal reached:",
+  "inboxNotifGoalAtRisk": "Goal at risk:",
+  "inboxGoalProgress": "{percent}% of the target",
+  "@inboxGoalProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "dashWkGoals": "Goals",
+  "dashPercent": "{value}%",
+  "@dashPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "dashGoalLimit": "How many goals",
+  "formsDefaultValues": "Default values",
+  "formsDefaultValuesHint": "Every task made by this form starts with these project field values. Use a multi-select field named Labels for labels.",
+  "formsLogoUpload": "Upload image",
+  "formsLogoRemove": "Remove logo",
+  "formsLogoUploaded": "Uploaded image",
+  "formsLogoSaveFirst": "Save the form first to upload a logo."
 }

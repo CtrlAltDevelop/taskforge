@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -289,9 +290,9 @@ class _BoardViewState extends ConsumerState<BoardView> {
                 for (final lane in lanes) ...[
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(
-                      12,
-                      12,
-                      12,
+                      TfSpace.md,
+                      TfSpace.md,
+                      TfSpace.md,
                       0,
                     ),
                     child: Text(

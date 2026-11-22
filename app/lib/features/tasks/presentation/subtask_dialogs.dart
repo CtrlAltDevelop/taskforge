@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -109,7 +110,7 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                     ListTile(
                       key: Key('pick-parent-${t.id}'),
                       contentPadding: EdgeInsetsDirectional.only(
-                        start: 16.0 + t.depth * 16,
+                        start: TfSpace.lg + t.depth * TfSpace.lg,
                       ),
                       title: Text(
                         '${t.displayId}  ${t.title}',
@@ -120,7 +121,7 @@ Future<String?> pickParent(BuildContext context, TaskTree tree, Task task) =>
                 if (candidates.where((t) => t.id != task.parentId).isEmpty &&
                     task.parentId.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(TfSpace.lg),
                     child: Text(
                       context.l10n.grpFNoOtherParent,
                       key: const Key('pick-parent-none'),

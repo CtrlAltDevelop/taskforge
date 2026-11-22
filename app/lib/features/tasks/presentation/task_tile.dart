@@ -17,6 +17,7 @@ import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_status.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
 import 'package:taskforge/features/tasks/presentation/work/work_style.dart';
 import 'package:taskforge/features/home/presentation/sample_badge.dart';
 
@@ -179,36 +180,34 @@ class TaskTile extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: TfSpace.xs),
-                    Row(
+                    // Wraps instead of cutting the date or the pill short.
+                    Wrap(
                       spacing: TfSpace.sm,
+                      runSpacing: TfSpace.xs,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
                           isolateLtr(task.displayId),
                           style: tf.typography.mono.copyWith(
                             color: c.textMuted,
-                            fontSize: 11,
+                            fontSize: TfFontSize.caption,
                           ),
                         ),
-                        Flexible(
-                          // Not a control here: a tap on it opens the card.
-                          child: IgnorePointer(
-                            child: TfStatusPill(
-                              label: task.statusName,
-                              kind: tfStatusKindOf(task.statusCategory),
-                            ),
+                        // Not a control here: a tap on it opens the card.
+                        IgnorePointer(
+                          child: TfStatusPill(
+                            label: task.statusName,
+                            kind: tfStatusKindOf(task.statusCategory),
                           ),
                         ),
-                        if (task.dueDate.isNotEmpty)
-                          Flexible(child: DueText(task)),
+                        if (task.dueDate.isNotEmpty) DueText(task),
                         if (fieldSummary.isNotEmpty)
-                          Flexible(
-                            child: Text(
-                              fieldSummary,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: tf.typography.small.copyWith(
-                                color: c.textMuted,
-                              ),
+                          Text(
+                            fieldSummary,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: tf.typography.small.copyWith(
+                              color: c.textMuted,
                             ),
                           ),
                       ],

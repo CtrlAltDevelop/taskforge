@@ -166,7 +166,7 @@ class _TimeSectionState extends ConsumerState<TimeSection> {
         if (summary != null) _SummaryLine(summary, canEstimate, _estimate),
         if (_message != null)
           Padding(
-            padding: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.only(top: TfSpace.xs),
             child: Text(
               _message!,
               key: const Key('time-error'),
@@ -206,7 +206,7 @@ class _SummaryLine extends StatelessWidget {
           )
         : context.l10n.grpJTimeLogged(durationText(summary.loggedSec));
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -277,7 +277,7 @@ class _EntryTile extends StatelessWidget {
             '${entry.billable ? ' · ${context.l10n.grpJBillableSuffix}' : ''}',
           ),
           subtitle: Wrap(
-            spacing: 8,
+            spacing: TfSpace.sm,
             children: [
               if (entry.note.isNotEmpty) Text(entry.note),
               if (entry.overlaps)

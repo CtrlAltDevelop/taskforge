@@ -1,5 +1,8 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -37,7 +40,7 @@ class MembersSection extends ConsumerWidget {
         children: [
           if (candidates.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               child: Text(dialog.l10n.grpHAllAreMembers),
             ),
           for (final m in candidates)
@@ -66,67 +69,81 @@ class MembersSection extends ConsumerWidget {
       Perm.projectMemberManage,
     );
     final canManage = allowed && !project.isArchived;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                context.l10n.grpHMembers,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            if (allowed)
-              TextButton.icon(
-                key: const Key('add-project-member'),
-                onPressed: canManage ? () => _add(context, ref) : null,
-                icon: const TfIcon(TfIcons.userPlus),
-                label: Text(context.l10n.grpHAddMember),
-              ),
-          ],
-        ),
-        switch (members) {
-          AsyncData(:final value) => Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: TfSpace.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              for (final m in value)
-                Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
+              Expanded(
+                child: Text(
+                  context.l10n.grpHMembers,
+                  style: context.tf.typography.lead.copyWith(
+                    color: context.tf.colors.text,
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: ListTile(
-                    key: Key('project-member-${m.userId}'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(m.label),
-                    subtitle: m.displayName.isEmpty ? null : Text(m.email),
-                    trailing: allowed
-                        ? IconButton(
-                            key: Key('remove-project-member-${m.userId}'),
-                            tooltip: context.l10n.grpHRemove,
-                            icon: const TfIcon(TfIcons.userMinus),
-                            onPressed: canManage
-                                ? () => runProjectAction(
-                                    context,
-                                    () => ref
-                                        .read(projectsControllerProvider)
-                                        .removeMember(project.id, m.userId),
-                                  )
-                                : null,
-                          )
-                        : null,
-                  ),
+                ),
+              ),
+              if (allowed)
+                TextButton.icon(
+                  key: const Key('add-project-member'),
+                  onPressed: canManage ? () => _add(context, ref) : null,
+                  icon: const TfIcon(TfIcons.userPlus),
+                  label: Text(context.l10n.grpHAddMember),
                 ),
             ],
           ),
-          AsyncError() => TextButton(
-            onPressed: () => ref.invalidate(projectMembersProvider),
-            child: Text(context.l10n.grpHLoadMembersRetry),
-          ),
-          _ => const LinearProgressIndicator(),
-        },
-      ],
+          switch (members) {
+            AsyncData(:final value) => Column(
+              children: [
+                for (final m in value)
+                  Padding(
+                    padding: const EdgeInsets.only(top: TfSpace.xs),
+                    child: TfPanel(
+                      padding: EdgeInsets.zero,
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: ListTile(
+                          key: Key('project-member-${m.userId}'),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: TfSpace.md,
+                          ),
+                          title: Text(m.label),
+                          subtitle: m.displayName.isEmpty
+                              ? null
+                              : Text(m.email),
+                          trailing: allowed
+                              ? IconButton(
+                                  key: Key('remove-project-member-${m.userId}'),
+                                  tooltip: context.l10n.grpHRemove,
+                                  icon: const TfIcon(TfIcons.userMinus),
+                                  onPressed: canManage
+                                      ? () => runProjectAction(
+                                          context,
+                                          () => ref
+                                              .read(projectsControllerProvider)
+                                              .removeMember(
+                                                project.id,
+                                                m.userId,
+                                              ),
+                                        )
+                                      : null,
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            AsyncError() => TextButton(
+              onPressed: () => ref.invalidate(projectMembersProvider),
+              child: Text(context.l10n.grpHLoadMembersRetry),
+            ),
+            _ => const LinearProgressIndicator(),
+          },
+        ],
+      ),
     );
   }
 }

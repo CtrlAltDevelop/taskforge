@@ -87,6 +87,7 @@ class DocsScreen extends ConsumerWidget {
                 : RevisionsPanel(docId: id, canEdit: canEditPage),
             body: wide
                 ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(width: _treeWidth, child: tree()),
                       const VerticalDivider(width: 1),

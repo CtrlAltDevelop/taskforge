@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,7 +61,7 @@ class CalendarTray extends ConsumerWidget {
               ref.read(trayProvider(projectId).notifier).loadMore();
             });
             return const Padding(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(TfSpace.md),
               child: LinearProgressIndicator(),
             );
           }
@@ -94,7 +95,7 @@ class CalendarTray extends ConsumerWidget {
             feedback: Material(
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(TfSpace.sm),
                 child: Text(task.title),
               ),
             ),
@@ -108,7 +109,7 @@ class CalendarTray extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Text(
             context.l10n.grpFUnscheduled,
             style: Theme.of(context).textTheme.titleSmall,

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -215,6 +216,17 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
     );
   }
 
+  /// The line of help under a field.
+  Widget _help(String text) => Padding(
+    padding: const EdgeInsets.only(top: TfSpace.xs),
+    child: Text(
+      text,
+      style: context.tf.typography.small.copyWith(
+        color: context.tf.colors.textMuted,
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final t = context.l10n;
@@ -223,7 +235,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 640),
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TfSpace.lg),
           children: [
             Text(t.ssoRedirectHelp),
             CopyableValue(
@@ -241,50 +253,43 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               controller: _name,
               label: t.ssoName,
             ),
-            const SizedBox(height: 12),
-            TextField(
+            const SizedBox(height: TfSpace.md),
+            TfTextField(
               key: const Key('sso-issuer'),
               controller: _issuer,
-              keyboardType: TextInputType.url,
-              decoration: InputDecoration(
-                labelText: t.ssoIssuer,
-                helperText: t.ssoIssuerHelp,
-              ),
+              label: t.ssoIssuer,
             ),
-            const SizedBox(height: 12),
+            _help(t.ssoIssuerHelp),
+            const SizedBox(height: TfSpace.md),
             TfTextField(
               key: const Key('sso-client-id'),
               controller: _clientId,
               label: t.ssoClientId,
             ),
-            const SizedBox(height: 12),
-            TextField(
+            const SizedBox(height: TfSpace.md),
+            TfTextField(
               key: const Key('sso-client-secret'),
               controller: _secret,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: t.ssoClientSecret,
-                helperText: widget.provider.hasSecret
-                    ? t.ssoSecretKept
-                    : t.ssoSecretNeeded,
-              ),
+              obscure: true,
+              label: t.ssoClientSecret,
             ),
-            const SizedBox(height: 12),
+            _help(
+              widget.provider.hasSecret ? t.ssoSecretKept : t.ssoSecretNeeded,
+            ),
+            const SizedBox(height: TfSpace.md),
             TfTextField(
               key: const Key('sso-scopes'),
               controller: _scopes,
               label: t.ssoScopes,
             ),
-            const SizedBox(height: 12),
-            TextField(
+            const SizedBox(height: TfSpace.md),
+            TfTextField(
               key: const Key('sso-domains'),
               controller: _domains,
-              decoration: InputDecoration(
-                labelText: t.ssoDomains,
-                helperText: t.ssoDomainsHelp,
-              ),
+              label: t.ssoDomains,
             ),
-            const SizedBox(height: 12),
+            _help(t.ssoDomainsHelp),
+            const SizedBox(height: TfSpace.md),
             TfToggleTile(
               key: const Key('sso-auto-create'),
               value: _autoCreate,
@@ -292,21 +297,21 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
               title: t.ssoAutoCreate,
               subtitle: t.ssoAutoCreateSub,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Text(t.ssoRoles, style: Theme.of(context).textTheme.titleSmall),
             TfTextField(
               key: const Key('sso-group-claim'),
               controller: _groupClaim,
               label: t.ssoGroupClaim,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             _roleMenu(
               _defaultRole,
               (v) => setState(() => _defaultRole = v),
               key: const Key('sso-default-role'),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.only(top: TfSpace.xs),
               child: Text(t.ssoDefaultRole),
             ),
             for (var i = 0; i < _rows.length; i++)
@@ -318,7 +323,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                       label: t.ssoGroup,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: TfSpace.sm),
                   Expanded(
                     child: _roleMenu(
                       _rows[i].roleId,
@@ -354,7 +359,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
             ),
             if (_error != null)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
                 child: Text(_error!, style: TextStyle(color: colors.error)),
               ),
             if (_check case final check?)
@@ -367,7 +372,7 @@ class _SsoFormState extends ConsumerState<_SsoForm> {
                   color: check.ok ? context.tf.colors.success.fg : colors.error,
                 ),
               ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TfSpace.sm),
             Wrap(
               spacing: 8,
               children: [

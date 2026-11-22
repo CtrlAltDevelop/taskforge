@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:taskforge/app_router.dart';
 import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 
@@ -44,6 +45,9 @@ Future<void> pickMenu(WidgetTester tester, String id, String item) async {
 
 String badgeText(WidgetTester tester) =>
     tester.widget<Badge>(key('inbox-badge').first).label.toString();
+
+String _path(Pumped p) =>
+    p.container.read(routerProvider).routeInformationProvider.value.uri.path;
 
 void main() {
   testWidgets('shows who did what to which task, unread first in style', (
@@ -128,6 +132,67 @@ void main() {
       find.descendant(of: key('open-inbox'), matching: find.text('1')),
       findsNothing,
     ); // the badge went away
+  });
+
+  testWidgets('a switched-off webhook shows its name and why, and opens it', (
+    tester,
+  ) async {
+    final o = await open(
+      tester,
+      items: [
+        note(
+          'n1',
+          'webhook.disabled',
+          task: '',
+          project: '',
+          actor: '',
+          payload: {
+            'webhook': 'Build bot',
+            'webhook_id': 'h1',
+            'reason': '10 failures in a row',
+          },
+        ),
+      ],
+    );
+    expect(find.text('Webhook switched off: Build bot'), findsOneWidget);
+    expect(find.text('10 failures in a row'), findsOneWidget);
+
+    await tester.tap(key('notification-n1'));
+    await tester.pumpAndSettle();
+    expect(_path(o.pumped), '/developer/webhooks/h1');
+    expect(o.inbox.markReads.single.ids, ['n1']);
+  });
+
+  testWidgets('goal notices say reached or at risk with the percent', (
+    tester,
+  ) async {
+    final o = await open(
+      tester,
+      items: [
+        note(
+          'n1',
+          'goal.reached',
+          task: '',
+          project: '',
+          payload: {'goal': 'Launch', 'goal_id': 'g1', 'progress': 1.0},
+        ),
+        note(
+          'n2',
+          'goal.at_risk',
+          task: '',
+          project: '',
+          payload: {'goal': 'Hire', 'goal_id': 'g2', 'progress': 0.4},
+          updatedAt: noon.subtract(const Duration(hours: 2)),
+        ),
+      ],
+    );
+    expect(find.text('Goal reached: Launch'), findsOneWidget);
+    expect(find.text('Goal at risk: Hire'), findsOneWidget);
+    expect(find.text('40% of the target'), findsOneWidget);
+
+    await tester.tap(key('notification-n2'));
+    await tester.pumpAndSettle();
+    expect(_path(o.pumped), '/goals/g2');
   });
 
   testWidgets('a notification without a task only gets marked read', (

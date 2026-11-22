@@ -9358,4 +9358,123 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dashPinFailed => 'تعذر تغيير التثبيت.';
+
+  @override
+  String get devAccountsTab => 'حسابات الخدمة';
+
+  @override
+  String get devAccountsHint =>
+      'حساب الخدمة هوية لتكامل برمجي وليس شخصًا. تعمل رموزه بالدور الذي تمنحه له، ومقيَّدة بالنطاقات التي تختارها.';
+
+  @override
+  String get devAccountNew => 'حساب خدمة جديد';
+
+  @override
+  String get devAccountName => 'الاسم';
+
+  @override
+  String get devAccountRole => 'الدور';
+
+  @override
+  String get devAccountCreate => 'إنشاء';
+
+  @override
+  String get devAccountSave => 'حفظ';
+
+  @override
+  String get devAccountsEmpty => 'لا توجد حسابات خدمة بعد.';
+
+  @override
+  String devAccountSubtitle(String role, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count رمز',
+      many: '$count رمزًا',
+      few: '$count رموز',
+      two: 'رمزان',
+      one: 'رمز واحد',
+      zero: 'بلا رموز',
+    );
+    return '$role · $_temp0';
+  }
+
+  @override
+  String get devAccountTokens => 'الرموز';
+
+  @override
+  String get devAccountChangeRole => 'تغيير الدور';
+
+  @override
+  String get devAccountDelete => 'حذف';
+
+  @override
+  String devAccountDeleteTitle(String name) {
+    return 'حذف «$name»؟';
+  }
+
+  @override
+  String get devAccountDeleteBody =>
+      'تتوقف رموزه عن العمل فورًا ويغادر مساحة العمل. لا يمكن التراجع عن ذلك.';
+
+  @override
+  String devAccountTokensTitle(String name) {
+    return 'رموز $name';
+  }
+
+  @override
+  String get devAccountTokensEmpty => 'لا توجد رموز لهذا الحساب بعد.';
+
+  @override
+  String get inboxNkWebhookDisabled => 'تم إيقاف webhook';
+
+  @override
+  String get inboxNkGoalReached => 'أهداف تم بلوغها';
+
+  @override
+  String get inboxNkGoalAtRisk => 'أهداف في خطر';
+
+  @override
+  String get inboxNotifWebhookDisabled => 'تم إيقاف webhook:';
+
+  @override
+  String get inboxNotifGoalReached => 'تم بلوغ الهدف:';
+
+  @override
+  String get inboxNotifGoalAtRisk => 'الهدف في خطر:';
+
+  @override
+  String inboxGoalProgress(int percent) {
+    return '$percent٪ من الهدف';
+  }
+
+  @override
+  String get dashWkGoals => 'الأهداف';
+
+  @override
+  String dashPercent(String value) {
+    return '$value٪';
+  }
+
+  @override
+  String get dashGoalLimit => 'عدد الأهداف';
+
+  @override
+  String get formsDefaultValues => 'القيم الافتراضية';
+
+  @override
+  String get formsDefaultValuesHint =>
+      'كل مهمة تُنشأ بهذا النموذج تبدأ بقيم حقول المشروع هذه. استخدم حقل اختيار متعدد باسم «الوسوم» للوسوم.';
+
+  @override
+  String get formsLogoUpload => 'رفع صورة';
+
+  @override
+  String get formsLogoRemove => 'إزالة الشعار';
+
+  @override
+  String get formsLogoUploaded => 'صورة مرفوعة';
+
+  @override
+  String get formsLogoSaveFirst => 'احفظ النموذج أولًا لرفع شعار.';
 }

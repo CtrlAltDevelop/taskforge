@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:async';
@@ -74,7 +75,12 @@ class _TimerChipState extends ConsumerState<TimerChip> {
       elevation: 4,
       shape: const StadiumBorder(),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 4, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          TfSpace.lg,
+          TfSpace.xs,
+          TfSpace.xs,
+          TfSpace.xs,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -84,14 +90,14 @@ class _TimerChipState extends ConsumerState<TimerChip> {
               color: context.tf.colors.danger.fg,
               semanticLabel: context.l10n.grpJTimerRunning,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: TfSpace.sm),
             InkWell(
               key: const Key('timer-open-task'),
               onTap: () => context.go(
                 '/projects/${entry.projectId}?task=${entry.taskId}',
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: TfSpace.md),
                 child: Text(
                   entry.key,
                   overflow: TextOverflow.ellipsis,
@@ -99,7 +105,7 @@ class _TimerChipState extends ConsumerState<TimerChip> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: TfSpace.md),
             Text(
               clockText(state.elapsedAt(ref.read(timeNowProvider)())),
               key: const Key('timer-elapsed'),

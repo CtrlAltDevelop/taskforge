@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=TaskForge
+Comment=Project and task manager
+# Install: replace INSTALL_DIR, copy to ~/.local/share/applications/, then
+#   xdg-mime default taskforge.desktop x-scheme-handler/taskforge
+Exec=INSTALL_DIR/taskforge %u
+Icon=INSTALL_DIR/data/app_icon.png
+Terminal=false
+Categories=Office;ProjectManagement;
+MimeType=x-scheme-handler/taskforge;

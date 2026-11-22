@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -260,7 +261,7 @@ class ConflictDialog extends StatelessWidget {
           theirs.isEmpty ? context.l10n.grpFEmpty : theirs,
           key: const Key('theirs'),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         Text(context.l10n.grpFYours),
         Text(
           mine.isEmpty ? context.l10n.grpFEmpty : mine,

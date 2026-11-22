@@ -15,6 +15,20 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use fieldDefaultDescriptor instead')
+const FieldDefault$json = {
+  '1': 'FieldDefault',
+  '2': [
+    {'1': 'field_id', '3': 1, '4': 1, '5': 9, '10': 'fieldId'},
+    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+};
+
+/// Descriptor for `FieldDefault`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List fieldDefaultDescriptor = $convert.base64Decode(
+    'CgxGaWVsZERlZmF1bHQSGQoIZmllbGRfaWQYASABKAlSB2ZpZWxkSWQSFAoFdmFsdWUYAiABKA'
+    'lSBXZhbHVl');
+
 @$core.Deprecated('Use formAnswerDescriptor instead')
 const FormAnswer$json = {
   '1': 'FormAnswer',
@@ -66,6 +80,14 @@ const FormCreateRequest$json = {
     {'1': 'notify_status', '3': 12, '4': 1, '5': 8, '10': 'notifyStatus'},
     {'1': 'brand_color', '3': 13, '4': 1, '5': 9, '10': 'brandColor'},
     {'1': 'logo_url', '3': 14, '4': 1, '5': 9, '10': 'logoUrl'},
+    {
+      '1': 'field_defaults',
+      '3': 15,
+      '4': 3,
+      '5': 11,
+      '6': '.config.forms.FieldDefault',
+      '10': 'fieldDefaults'
+    },
   ],
 };
 
@@ -79,7 +101,9 @@ final $typed_data.Uint8List formCreateRequestDescriptor = $convert.base64Decode(
     'lSC2Fzc2lnbmVlSWRzEhgKB2VuYWJsZWQYCSABKAhSB2VuYWJsZWQSIwoNcmVxdWlyZV9lbWFp'
     'bBgKIAEoCFIMcmVxdWlyZUVtYWlsEisKEXNlbmRfY29uZmlybWF0aW9uGAsgASgIUhBzZW5kQ2'
     '9uZmlybWF0aW9uEiMKDW5vdGlmeV9zdGF0dXMYDCABKAhSDG5vdGlmeVN0YXR1cxIfCgticmFu'
-    'ZF9jb2xvchgNIAEoCVIKYnJhbmRDb2xvchIZCghsb2dvX3VybBgOIAEoCVIHbG9nb1VybA==');
+    'ZF9jb2xvchgNIAEoCVIKYnJhbmRDb2xvchIZCghsb2dvX3VybBgOIAEoCVIHbG9nb1VybBJBCg'
+    '5maWVsZF9kZWZhdWx0cxgPIAMoCzIaLmNvbmZpZy5mb3Jtcy5GaWVsZERlZmF1bHRSDWZpZWxk'
+    'RGVmYXVsdHM=');
 
 @$core.Deprecated('Use formDeleteRequestDescriptor instead')
 const FormDeleteRequest$json = {
@@ -175,6 +199,14 @@ const FormUpdateRequest$json = {
     {'1': 'notify_status', '3': 15, '4': 1, '5': 8, '10': 'notifyStatus'},
     {'1': 'brand_color', '3': 16, '4': 1, '5': 9, '10': 'brandColor'},
     {'1': 'logo_url', '3': 17, '4': 1, '5': 9, '10': 'logoUrl'},
+    {
+      '1': 'field_defaults',
+      '3': 18,
+      '4': 3,
+      '5': 11,
+      '6': '.config.forms.FieldDefault',
+      '10': 'fieldDefaults'
+    },
   ],
 };
 
@@ -190,7 +222,8 @@ final $typed_data.Uint8List formUpdateRequestDescriptor = $convert.base64Decode(
     'MSGAoHZW5hYmxlZBgMIAEoCFIHZW5hYmxlZBIjCg1yZXF1aXJlX2VtYWlsGA0gASgIUgxyZXF1'
     'aXJlRW1haWwSKwoRc2VuZF9jb25maXJtYXRpb24YDiABKAhSEHNlbmRDb25maXJtYXRpb24SIw'
     'oNbm90aWZ5X3N0YXR1cxgPIAEoCFIMbm90aWZ5U3RhdHVzEh8KC2JyYW5kX2NvbG9yGBAgASgJ'
-    'UgpicmFuZENvbG9yEhkKCGxvZ29fdXJsGBEgASgJUgdsb2dvVXJs');
+    'UgpicmFuZENvbG9yEhkKCGxvZ29fdXJsGBEgASgJUgdsb2dvVXJsEkEKDmZpZWxkX2RlZmF1bH'
+    'RzGBIgAygLMhouY29uZmlnLmZvcm1zLkZpZWxkRGVmYXVsdFINZmllbGREZWZhdWx0cw==');
 
 @$core.Deprecated('Use intakeFieldDescriptor instead')
 const IntakeField$json = {
@@ -252,6 +285,14 @@ const IntakeForm$json = {
     {'1': 'owner_id', '3': 20, '4': 1, '5': 9, '10': 'ownerId'},
     {'1': 'created_at', '3': 21, '4': 1, '5': 9, '10': 'createdAt'},
     {'1': 'updated_at', '3': 22, '4': 1, '5': 9, '10': 'updatedAt'},
+    {
+      '1': 'field_defaults',
+      '3': 23,
+      '4': 3,
+      '5': 11,
+      '6': '.config.forms.FieldDefault',
+      '10': 'fieldDefaults'
+    },
   ],
 };
 
@@ -269,7 +310,9 @@ final $typed_data.Uint8List intakeFormDescriptor = $convert.base64Decode(
     'ISGQoIbG9nb191cmwYECABKAlSB2xvZ29VcmwSGAoHdmVyc2lvbhgRIAEoBVIHdmVyc2lvbhIp'
     'ChBzdWJtaXNzaW9uX2NvdW50GBIgASgFUg9zdWJtaXNzaW9uQ291bnQSGAoHcHJvYmxlbRgTIA'
     'EoCVIHcHJvYmxlbRIZCghvd25lcl9pZBgUIAEoCVIHb3duZXJJZBIdCgpjcmVhdGVkX2F0GBUg'
-    'ASgJUgljcmVhdGVkQXQSHQoKdXBkYXRlZF9hdBgWIAEoCVIJdXBkYXRlZEF0');
+    'ASgJUgljcmVhdGVkQXQSHQoKdXBkYXRlZF9hdBgWIAEoCVIJdXBkYXRlZEF0EkEKDmZpZWxkX2'
+    'RlZmF1bHRzGBcgAygLMhouY29uZmlnLmZvcm1zLkZpZWxkRGVmYXVsdFINZmllbGREZWZhdWx0'
+    'cw==');
 
 @$core.Deprecated('Use intakeSubmissionDescriptor instead')
 const IntakeSubmission$json = {

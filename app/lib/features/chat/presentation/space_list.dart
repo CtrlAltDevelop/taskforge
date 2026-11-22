@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +49,12 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 4),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            TfSpace.md,
+            TfSpace.md,
+            TfSpace.md,
+            TfSpace.xs,
+          ),
           child: TextField(
             key: const Key('chat-search'),
             decoration: InputDecoration(
@@ -100,7 +106,12 @@ class _SpaceListPaneState extends ConsumerState<SpaceListPane> {
     }
     final now = ref.watch(chatNowProvider)();
     Widget header(String text, String key) => Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        TfSpace.lg,
+        TfSpace.md,
+        TfSpace.lg,
+        TfSpace.xs,
+      ),
       child: Text(
         text,
         key: Key(key),
@@ -179,7 +190,12 @@ class _ListSkeleton extends StatelessWidget {
       children: [
         for (var i = 0; i < 5; i++)
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              TfSpace.lg,
+              TfSpace.lg,
+              TfSpace.lg,
+              0,
+            ),
             child: Container(
               height: 12,
               decoration: BoxDecoration(

@@ -14,6 +14,7 @@ import 'package:taskforge/features/members/presentation/pending_tab.dart';
 import 'package:taskforge/features/roles/application/roles_providers.dart';
 import 'package:taskforge/features/roles/domain/roles.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 class InviteDialog extends StatelessWidget {
   const InviteDialog({super.key});
@@ -151,7 +152,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
   Widget build(BuildContext context) {
     final result = _result;
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TfSpace.lg),
       shrinkWrap: true,
       children: [
         TextField(
@@ -194,14 +195,14 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
         ),
         if (_error != null)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               _error!,
               key: const Key('invite-error'),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         TfButton(
           key: const Key('send-invites'),
           label: _emails.isEmpty
@@ -211,7 +212,7 @@ class _EmailInviteTabState extends ConsumerState<EmailInviteTab> {
           onPressed: _busy || _emails.isEmpty ? null : _send,
         ),
         if (result != null) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           Text(
             context.l10n.grpJInvited(result.invitations.length),
             key: const Key('invite-sent'),
@@ -297,7 +298,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
   Widget build(BuildContext context) {
     final token = _token;
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TfSpace.lg),
       shrinkWrap: true,
       children: [
         TfSelectField(
@@ -308,7 +309,7 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
           label: context.l10n.grpJExpiresAfter,
           expand: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TextField(
           key: const Key('link-max-uses'),
           controller: _maxUses,
@@ -326,14 +327,14 @@ class _LinkInviteTabState extends ConsumerState<LinkInviteTab> {
         ),
         if (_error != null)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               _error!,
               key: const Key('link-error'),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TfButton(
           key: const Key('create-link'),
           label: context.l10n.grpJCreateLink,
@@ -384,7 +385,7 @@ class InviteRoleField extends ConsumerWidget {
     if (!canView || roles == null) return const SizedBox.shrink();
     final values = {for (final r in roles) _valueOf(r)};
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
       child: DropdownButtonFormField<String>(
         key: Key(name),
         initialValue: values.contains(roleId) ? roleId : null,

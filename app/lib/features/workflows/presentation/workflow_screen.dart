@@ -22,6 +22,8 @@ import 'package:taskforge/features/workflows/presentation/status_dialogs.dart';
 import 'package:taskforge/features/workflows/presentation/validation_panel.dart';
 import 'package:taskforge/features/workflows/presentation/workflow_graph.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 
 /// Width from which the problems and the graph sit beside the status list.
 const wideWorkflowBreakpoint = 900.0;
@@ -65,7 +67,7 @@ class WorkflowScreen extends ConsumerWidget {
                   : null,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: TfSpace.xs),
               child: TfButton(
                 key: const Key('workflow-save'),
                 label: editor.saving
@@ -128,20 +130,20 @@ class WorkflowScreen extends ConsumerWidget {
             onKeep: notifier.acknowledgeMerge,
             onReload: notifier.load,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
         ],
         ValidationPanel(problems: problems),
         if (editor.saveError != null &&
             editor.saveError!.failure != WorkflowFailure.invalid)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Text(
               workflowErrorMessage(editor.saveError!, context.l10n),
               key: const Key('save-error'),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         WorkflowGraph(draft: draft),
       ],
     );
@@ -155,7 +157,7 @@ class WorkflowScreen extends ConsumerWidget {
               SizedBox(
                 width: 380,
                 child: ListView(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(TfSpace.lg),
                   children: [side],
                 ),
               ),
@@ -165,7 +167,7 @@ class WorkflowScreen extends ConsumerWidget {
         return TfPage(
           children: [
             side,
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             ..._listChildren(context, editor, notifier, roles, canEdit),
           ],
         );
@@ -183,22 +185,32 @@ List<Widget> _listChildren(
   List<Role> roles,
   bool canEdit,
 ) => [
-  TfToggleTile(
-    key: const Key('restrict-switch'),
-    value: editor.draft!.restrict,
-    onChanged: canEdit ? (v) => notifier.edit((d) => d.setRestrict(v)) : null,
-    title: context.l10n.grpIRestrictTransitions,
-    subtitle: context.l10n.grpIRestrictTransitionsHint,
+  TfPanel(
+    padding: EdgeInsets.zero,
+    child: Column(
+      children: [
+        TfToggleTile(
+          key: const Key('restrict-switch'),
+          value: editor.draft!.restrict,
+          onChanged: canEdit
+              ? (v) => notifier.edit((d) => d.setRestrict(v))
+              : null,
+          title: context.l10n.grpIRestrictTransitions,
+          subtitle: context.l10n.grpIRestrictTransitionsHint,
+        ),
+        TfToggleTile(
+          key: const Key('restrict-creation-switch'),
+          value: editor.draft!.restrictCreation,
+          onChanged: canEdit
+              ? (v) => notifier.edit((d) => d.setRestrictCreation(v))
+              : null,
+          title: context.l10n.grpIRestrictCreation,
+          subtitle: context.l10n.grpIRestrictCreationHint,
+        ),
+      ],
+    ),
   ),
-  TfToggleTile(
-    key: const Key('restrict-creation-switch'),
-    value: editor.draft!.restrictCreation,
-    onChanged: canEdit
-        ? (v) => notifier.edit((d) => d.setRestrictCreation(v))
-        : null,
-    title: context.l10n.grpIRestrictCreation,
-    subtitle: context.l10n.grpIRestrictCreationHint,
-  ),
+  const SizedBox(height: TfSpace.lg),
   ReorderableListView(
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
@@ -238,7 +250,7 @@ List<Widget> _listChildren(
     ),
   if (canEdit)
     Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
       child: Align(
         alignment: AlignmentDirectional.centerStart,
         child: TfButton(
@@ -334,12 +346,12 @@ class _NeedsTarget extends StatelessWidget {
     key: Key('needs-target-${gone.key}'),
     color: Theme.of(context).colorScheme.errorContainer,
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(TfSpace.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.grpIDeletedStillHasTasks(gone.name)),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           TfSelectField<String>(
             key: Key('migrate-${gone.key}'),
             options: {
@@ -377,7 +389,7 @@ class _StatusList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.all(16),
+    padding: const EdgeInsets.all(TfSpace.lg),
     children: _listChildren(context, editor, notifier, roles, canEdit),
   );
 }

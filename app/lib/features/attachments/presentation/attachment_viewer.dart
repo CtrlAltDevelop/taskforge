@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 import 'dart:async';
 
@@ -78,7 +79,12 @@ class AttachmentViewer extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 8, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                TfSpace.lg,
+                TfSpace.md,
+                TfSpace.sm,
+                0,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -124,7 +130,7 @@ class AttachmentViewer extends ConsumerWidget {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(TfSpace.lg),
                 child: _Body(file: file),
               ),
             ),
@@ -207,7 +213,7 @@ class _TextPreview extends ConsumerWidget {
           ),
           if (preview.truncated)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: TfSpace.sm),
               child: Text(
                 context.l10n.grpHTextTruncated(
                   context.localDigits(
@@ -382,7 +388,7 @@ class _Fallback extends StatelessWidget {
           )
         else
           plain,
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Text(file.mime, style: Theme.of(context).textTheme.bodySmall),
       ],
     );

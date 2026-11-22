@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
+import 'package:taskforge/core/ui/page/tf_form.dart';
+import 'package:taskforge/core/ui/theme_extension.dart';
 import 'package:taskforge/features/projects/application/project_access.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
@@ -99,14 +101,9 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
         !p.isArchived;
     return Form(
       key: _form,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: TfFormSection(
+        title: context.l10n.grpHGeneral,
         children: [
-          Text(
-            context.l10n.grpHGeneral,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-name'),
             controller: _name,
@@ -114,7 +111,6 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             decoration: InputDecoration(labelText: context.l10n.grpHName),
             validator: validateProjectName,
           ),
-          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-key'),
             controller: _key,
@@ -133,7 +129,6 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             ),
             validator: validateProjectKey,
           ),
-          const SizedBox(height: 12),
           TextFormField(
             key: const Key('settings-description'),
             controller: _description,
@@ -143,7 +138,6 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
               labelText: context.l10n.grpHDescription,
             ),
           ),
-          const SizedBox(height: 16),
           ProjectLookPicker(
             icon: _icon,
             color: _color,
@@ -151,28 +145,26 @@ class _GeneralSectionState extends ConsumerState<GeneralSection> {
             onIcon: (v) => setState(() => _icon = v),
             onColor: (v) => setState(() => _color = v),
           ),
-          const SizedBox(height: 16),
           VisibilityPicker(
             value: _visibility,
             enabled: canEdit,
             onChanged: (v) => setState(() => _visibility = v),
           ),
-          if (_error != null) ...[
-            const SizedBox(height: 12),
+          if (_error != null)
             Text(
               _error!,
               key: const Key('settings-error'),
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              style: TextStyle(color: context.tf.colors.danger.fg),
             ),
-          ],
-          if (canEdit) ...[
-            const SizedBox(height: 16),
-            FilledButton(
-              key: const Key('save-project'),
-              onPressed: _busy ? null : _save,
-              child: Text(context.l10n.grpHSaveChanges),
+          if (canEdit)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: FilledButton(
+                key: const Key('save-project'),
+                onPressed: _busy ? null : _save,
+                child: Text(context.l10n.grpHSaveChanges),
+              ),
             ),
-          ],
         ],
       ),
     );

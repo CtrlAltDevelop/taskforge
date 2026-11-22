@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 
 import 'dart:async';
@@ -299,7 +300,12 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
     final now = ref.watch(chatNowProvider)();
     final live = ref.watch(spacesProvider).list.byId(_space.id) ?? _space;
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 4, 4),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        TfSpace.lg,
+        TfSpace.xs,
+        TfSpace.xs,
+        TfSpace.xs,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -343,7 +349,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
     if (state.loading) {
       return const SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(TfSpace.lg),
         child: CommentsSkeleton(key: Key('chat-loading')),
       );
     }
@@ -385,8 +391,8 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
           controller: _scroll,
           reverse: true,
           padding: const EdgeInsetsDirectional.symmetric(
-            horizontal: 16,
-            vertical: 8,
+            horizontal: TfSpace.lg,
+            vertical: TfSpace.sm,
           ),
           itemCount: rows.length,
           itemBuilder: (_, i) => rows[rows.length - 1 - i],
@@ -435,7 +441,9 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
         Expanded(
           child: ListView(
             key: const Key('thread-messages'),
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: TfSpace.lg,
+            ),
             children: [
               _tile(parent, state.messages, me, members),
               const Divider(),
@@ -450,7 +458,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
   Widget _footer(BuildContext context, AppLocalizations l10n, String thread) {
     final space = ref.watch(spacesProvider).list.byId(_space.id) ?? _space;
     Widget banner(String key, String text, {Widget? action}) => Padding(
-      padding: const EdgeInsetsDirectional.all(12),
+      padding: const EdgeInsetsDirectional.all(TfSpace.md),
       child: Row(
         children: [
           Expanded(child: Text(text, key: Key(key))),
@@ -482,7 +490,7 @@ class _ConversationPaneState extends ConsumerState<ConversationPane> {
         maxHeight: MediaQuery.sizeOf(context).height * 0.4,
       ),
       child: SingleChildScrollView(
-        padding: const EdgeInsetsDirectional.all(12),
+        padding: const EdgeInsetsDirectional.all(TfSpace.md),
         child: _composer(parentId: thread),
       ),
     );

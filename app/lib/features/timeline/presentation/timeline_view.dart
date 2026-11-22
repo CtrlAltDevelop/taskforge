@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:material_ui/material_ui.dart';
@@ -380,7 +381,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
       final task = row.task;
       if (task == null) {
         return Padding(
-          padding: const EdgeInsetsDirectional.only(start: 8),
+          padding: const EdgeInsetsDirectional.only(start: TfSpace.sm),
           child: Align(
             alignment: AlignmentDirectional.centerStart,
             child: Text(
@@ -395,8 +396,8 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
         onTap: () => widget.onOpen(task),
         child: Padding(
           padding: EdgeInsetsDirectional.only(
-            start: 8 + 12.0 * row.depth,
-            end: 4,
+            start: TfSpace.sm + TfSpace.md * row.depth,
+            end: TfSpace.xs,
           ),
           child: Align(
             alignment: AlignmentDirectional.centerStart,
@@ -415,7 +416,12 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
   );
 
   Widget _footer(bool canMove, bool archived) => Padding(
-    padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+    padding: const EdgeInsetsDirectional.fromSTEB(
+      TfSpace.md,
+      TfSpace.xs,
+      TfSpace.md,
+      TfSpace.xs,
+    ),
     child: Row(
       children: [
         Expanded(

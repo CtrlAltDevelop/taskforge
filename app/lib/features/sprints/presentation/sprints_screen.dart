@@ -1,4 +1,8 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
+import 'package:taskforge/core/ui/tf/tf_tabs.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/scroll_if_short.dart';
@@ -245,46 +249,46 @@ class _SprintsState extends ConsumerState<_Sprints> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                SegmentedButton<bool>(
-                  key: const Key('sprints-tabs'),
-                  showSelectedIcon: false,
-                  segments: [
-                    ButtonSegment(
-                      value: false,
-                      label: Text(context.l10n.grpAPlanning),
-                    ),
-                    ButtonSegment(
-                      value: true,
-                      label: Text(context.l10n.grpAReports),
-                    ),
-                  ],
-                  selected: {_reports},
-                  onSelectionChanged: (s) => setState(() => _reports = s.first),
-                ),
-                if (all.length > 1)
-                  TfSelectField(
-                    key: const Key('sprint-picker'),
-                    options: {for (final s in all) s.id: s.name},
-                    value: current?.id,
-                    onChanged: (v) => setState(() {
-                      _picked = v;
-                      _selected.clear();
-                    }),
+            padding: EdgeInsets.symmetric(
+              horizontal: pageGutter(ScreenSize.of(context)),
+              vertical: TfSpace.sm,
+            ),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Wrap(
+                spacing: TfSpace.sm,
+                runSpacing: TfSpace.sm,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  TfSegmented<bool>(
+                    key: const Key('sprints-tabs'),
+                    options: {
+                      false: context.l10n.grpAPlanning,
+                      true: context.l10n.grpAReports,
+                    },
+                    value: _reports,
+                    onChanged: (v) => setState(() => _reports = v),
                   ),
-                if (canManage)
-                  FilledButton.tonalIcon(
-                    key: const Key('new-sprint'),
-                    icon: const TfIcon(TfIcons.plus, size: 24),
-                    label: Text(context.l10n.grpANewSprint),
-                    onPressed: () => _form(all),
-                  ),
-              ],
+                  if (all.length > 1)
+                    TfSelectField(
+                      key: const Key('sprint-picker'),
+                      options: {for (final s in all) s.id: s.name},
+                      value: current?.id,
+                      onChanged: (v) => setState(() {
+                        _picked = v;
+                        _selected.clear();
+                      }),
+                    ),
+                  if (canManage)
+                    TfButton(
+                      key: const Key('new-sprint'),
+                      icon: TfIcons.plus,
+                      label: context.l10n.grpANewSprint,
+                      variant: TfButtonVariant.secondary,
+                      onPressed: () => _form(all),
+                    ),
+                ],
+              ),
             ),
           ),
           if (current != null)
@@ -453,7 +457,10 @@ class _Header extends ConsumerWidget {
     final today = ref.watch(sprintTodayProvider)();
     final left = daysLeft(sprint, today);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: pageGutter(ScreenSize.of(context)),
+        vertical: TfSpace.sm,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -461,14 +468,14 @@ class _Header extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: 8,
+                  spacing: TfSpace.sm,
+                  runSpacing: TfSpace.xs,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(sprint.name, style: theme.textTheme.titleLarge),
-                    Chip(
+                    TfChip(
                       key: const Key('sprint-state'),
-                      label: Text(sprint.state.name),
-                      visualDensity: VisualDensity.compact,
+                      label: sprint.state.name,
                     ),
                     Text(
                       context.l10n.grpADatesRange(
@@ -493,7 +500,8 @@ class _Header extends ConsumerWidget {
               ],
             ),
           ),
-          if (sprint.isActive)
+          if (sprint.isActive) ...[
+            const SizedBox(width: TfSpace.sm),
             TfButton(
               key: const Key('sprint-on-board'),
               label: context.l10n.grpAShowOnBoard,
@@ -506,27 +514,33 @@ class _Header extends ConsumerWidget {
                 context.go('/projects/${sprint.projectId}?view=board');
               },
             ),
+          ],
           if (canManage) ...[
+            const SizedBox(width: TfSpace.sm),
             TfIconButton(
               key: const Key('edit-sprint'),
               icon: TfIcons.edit,
               tooltip: context.l10n.grpAEditSprint,
               onPressed: onEdit,
             ),
-            if (sprint.isPlanned)
+            if (sprint.isPlanned) ...[
+              const SizedBox(width: TfSpace.sm),
               TfButton(
                 key: const Key('start-sprint'),
                 label: context.l10n.grpAStartSprint,
                 variant: TfButtonVariant.primary,
                 onPressed: onStart,
               ),
-            if (sprint.isActive)
+            ],
+            if (sprint.isActive) ...[
+              const SizedBox(width: TfSpace.sm),
               TfButton(
                 key: const Key('complete-sprint'),
                 label: context.l10n.grpACompleteSprint,
                 variant: TfButtonVariant.primary,
                 onPressed: onComplete,
               ),
+            ],
           ],
         ],
       ),
@@ -555,7 +569,7 @@ class _Reports extends StatelessWidget {
       lazy: true,
       children: [
         BurndownPanel(projectId: projectId, sprint: s),
-        const SizedBox(height: 24),
+        const SizedBox(height: TfSpace.xl),
         VelocityPanel(projectId: projectId, sprint: s),
       ],
     );

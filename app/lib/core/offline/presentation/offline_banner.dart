@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,11 +39,14 @@ class OfflineBanner extends ConsumerWidget {
       key: const Key('offline-banner'),
       color: attention > 0 ? colors.errorContainer : colors.tertiaryContainer,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: TfSpace.md,
+          vertical: TfSpace.sm,
+        ),
         child: Row(
           children: [
             TfIcon(online ? TfIcons.refresh : TfIcons.cloudOff),
-            const SizedBox(width: 10),
+            const SizedBox(width: TfSpace.md),
             Expanded(
               child: Text(_message(context.l10n, online, waiting, attention)),
             ),
@@ -104,7 +108,7 @@ class PendingMark extends ConsumerWidget {
     );
     if (pending != true) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 6),
+      padding: const EdgeInsetsDirectional.only(end: TfSpace.sm),
       child: TfIcon(
         TfIcons.clock,
         key: Key('pending-$id'),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 
 import 'package:taskforge/core/ui/tf_icons.dart';
@@ -14,6 +15,9 @@ import 'package:taskforge/features/inbox/application/inbox_providers.dart';
 import 'package:taskforge/features/inbox/domain/inbox.dart';
 import 'package:taskforge/features/inbox/presentation/snooze_sheet.dart';
 import 'package:taskforge/l10n/gen/app_localizations.dart';
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
@@ -60,9 +64,8 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
           ..showSnackBar(SnackBar(content: Text(inboxErrorMessage(e, l10n))));
       }),
     );
-    if (n.canOpen) {
-      context.go('/projects/${n.projectId}?task=${n.taskId}');
-    }
+    final route = n.route;
+    if (route != null) context.go(route);
   }
 
   Future<void> _menu(InboxNotification n, NotificationMenu choice) async {
@@ -87,6 +90,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(inboxProvider(_filter));
     final now = ref.watch(inboxNowProvider)();
+    final gutter = pageGutter(ScreenSize.of(context));
     return Scaffold(
       appBar: TfAppBar(
         title: Text(context.l10n.grpEInbox),
@@ -107,50 +111,63 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
-            child: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    context.l10n.grpHInbox,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: TfPageWidth.wide),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(
+                  gutter,
+                  TfSpace.lg,
+                  gutter,
+                  TfSpace.sm,
                 ),
-                if (state.unread > 0) ...[
-                  const SizedBox(width: 8),
-                  Chip(
-                    key: const Key('unread-total'),
-                    label: Text(context.l10n.grpHUnreadCount(state.unread)),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                for (final f in InboxFilter.values)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: ChoiceChip(
-                      key: Key('filter-${f.wire}'),
-                      label: Text(f.labelIn(context.l10n)),
-                      selected: _filter == f,
-                      onSelected: (_) => setState(() => _filter = f),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        context.l10n.grpHInbox,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                     ),
-                  ),
-              ],
-            ),
+                    if (state.unread > 0) ...[
+                      const SizedBox(width: TfSpace.sm),
+                      TfChip(
+                        key: const Key('unread-total'),
+                        label: context.l10n.grpHUnreadCount(state.unread),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: gutter),
+                child: Row(
+                  children: [
+                    for (final f in InboxFilter.values)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          end: TfSpace.sm,
+                        ),
+                        child: TfChip(
+                          key: Key('filter-${f.wire}'),
+                          label: f.labelIn(context.l10n),
+                          selected: _filter == f,
+                          onTap: () => setState(() => _filter = f),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: TfSpace.sm),
+              Expanded(child: _body(state, now)),
+            ],
           ),
-          const Divider(height: 1),
-          Expanded(child: _body(state, now)),
-        ],
+        ),
       ),
     );
   }
@@ -182,11 +199,14 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
       onRefresh: _notifier.refresh,
       child: ListView.builder(
         key: const Key('inbox-list'),
+        padding: EdgeInsets.symmetric(
+          horizontal: pageGutter(ScreenSize.of(context)),
+        ),
         itemCount: state.items.length + (state.hasMore ? 1 : 0),
         itemBuilder: (context, i) {
           if (i == state.items.length) {
             return Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(TfSpace.sm),
               child: Center(
                 child: state.loadingMore
                     ? const CircularProgressIndicator()
@@ -244,17 +264,21 @@ class NotificationTile extends StatelessWidget {
     final n = notification;
     final theme = Theme.of(context);
     final unread = !n.isRead;
-    final title = '${n.whatIn(context.l10n)} ${n.taskLabel}'.trim();
+    final title = '${n.whatIn(context.l10n)} ${n.subject}'.trim();
     final detail = n.excerpt.isNotEmpty
         ? n.excerpt
         : n.dueDate.isNotEmpty
         ? context.l10n.grpHDueDate(n.dueDate)
+        : n.reason.isNotEmpty
+        ? n.reason
+        : n.kind == NotificationKind.goalAtRisk
+        ? context.l10n.inboxGoalProgress(n.progressPercent)
         : null;
     return Semantics(
       label: unread ? context.l10n.grpHUnreadPrefix(title) : title,
       container: true,
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        margin: const EdgeInsets.symmetric(vertical: TfSpace.xs),
         clipBehavior: Clip.antiAlias,
         color: unread ? theme.colorScheme.primaryContainer.withAlpha(60) : null,
         child: ListTile(
@@ -305,7 +329,7 @@ class NotificationTile extends StatelessWidget {
                     ),
                   ),
                   if (n.count > 1) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: TfSpace.sm),
                     Chip(
                       key: Key('count-${n.id}'),
                       visualDensity: VisualDensity.compact,

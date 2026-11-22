@@ -4,6 +4,7 @@ import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
+import 'package:taskforge/core/ui/tf/tf_chip.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -75,7 +76,7 @@ class SessionsScreen extends ConsumerWidget {
         data: (items) => TfPage(
           children: [
             for (final s in items) _SessionTile(session: s, onRevoke: _revoke),
-            const Divider(),
+            const SizedBox(height: TfSpace.md),
             const DevicePrivacyNote(),
           ],
         ),
@@ -171,26 +172,23 @@ class _SessionTile extends ConsumerWidget {
             ],
           ),
           subtitle: Wrap(
-            spacing: 8,
+            spacing: TfSpace.sm,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               if (session.current)
-                Chip(
+                TfChip(
                   key: const Key('chip-current'),
-                  label: Text(l10n.grpIThisDevice),
-                  visualDensity: VisualDensity.compact,
+                  label: l10n.grpIThisDevice,
                 ),
               if (session.newDevice)
-                Chip(
+                TfChip(
                   key: const Key('chip-new'),
-                  label: Text(l10n.devSessionNew),
-                  visualDensity: VisualDensity.compact,
+                  label: l10n.devSessionNew,
                 ),
               if (session.keyChanged)
-                Chip(
+                TfChip(
                   key: const Key('chip-key-changed'),
-                  label: Text(l10n.devSessionKeyChanged),
-                  visualDensity: VisualDensity.compact,
+                  label: l10n.devSessionKeyChanged,
                 ),
               if (details.isNotEmpty) Text(details),
             ],

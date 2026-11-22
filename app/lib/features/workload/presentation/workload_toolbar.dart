@@ -1,3 +1,5 @@
+import 'package:taskforge/core/ui/breakpoints.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_tabs.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
@@ -32,10 +34,13 @@ class WorkloadToolbar extends ConsumerWidget {
     final projects = ref.watch(projectCatalogProvider(false)).value;
     final members = ref.watch(membersProvider).value ?? const <Member>[];
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: pageGutter(ScreenSize.of(context)),
+        vertical: TfSpace.sm,
+      ),
       child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+        spacing: TfSpace.sm,
+        runSpacing: TfSpace.sm,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           TfSegmented<WorkloadZoom>(
@@ -160,16 +165,19 @@ class WorkloadLegend extends StatelessWidget {
             borderRadius: TfRadius.chip,
           ),
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: TfSpace.xs),
         Flexible(child: Text(text, style: theme.textTheme.bodySmall)),
       ],
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: pageGutter(ScreenSize.of(context)),
+        vertical: TfSpace.xs,
+      ),
       child: Wrap(
         key: const Key('workload-legend'),
-        spacing: 16,
-        runSpacing: 4,
+        spacing: TfSpace.lg,
+        runSpacing: TfSpace.xs,
         children: [
           item(LoadLevel.under, t.wlLegendUnder),
           item(LoadLevel.ok, t.wlLegendOk),

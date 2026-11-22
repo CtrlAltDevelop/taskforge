@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
@@ -176,9 +177,9 @@ class _PublicFormViewState extends State<PublicFormView> {
             t.formsThanksTitle,
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TfSpace.sm),
           SelectableText(t.formsThanksBody(_reference)),
-          const SizedBox(height: 16),
+          const SizedBox(height: TfSpace.lg),
           TfButton(
             key: const Key('form-another'),
             label: t.formsAnother,
@@ -192,13 +193,13 @@ class _PublicFormViewState extends State<PublicFormView> {
       children: [
         for (final q in widget.form.questions) ...[
           _question(q),
-          const SizedBox(height: 16),
+          const SizedBox(height: TfSpace.lg),
         ],
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         _emailField(),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         if (widget.form.captcha case final captcha?) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: TfSpace.lg),
           if (widget.preview)
             Text(t.formsCaptchaPreview)
           else
@@ -212,10 +213,10 @@ class _PublicFormViewState extends State<PublicFormView> {
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
         ],
-        const SizedBox(height: 20),
+        const SizedBox(height: TfSpace.xl),
         if (_failure.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: TfSpace.md),
             child: Text(
               _failure,
               key: const Key('form-failure'),

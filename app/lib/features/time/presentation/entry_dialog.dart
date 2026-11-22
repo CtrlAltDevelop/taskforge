@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
 import 'package:taskforge/core/ui/tf/tf_row.dart';
 import 'package:taskforge/core/ui/tf/tf_field.dart';
@@ -147,7 +148,7 @@ class _EntryDialogState extends State<_EntryDialog> {
               onSubmitted: (_) => _save(),
               autofocus: true,
             ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           if (widget.day == null && widget.existing?.running != true)
             TfRow(
               key: const Key('entry-date'),
@@ -155,14 +156,14 @@ class _EntryDialogState extends State<_EntryDialog> {
               trailing: const TfIcon(TfIcons.calendar),
               onTap: _pickDate,
             ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           TextField(
             key: const Key('entry-note'),
             controller: _note,
             maxLength: 500,
             decoration: InputDecoration(labelText: context.l10n.grpANote),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           TfToggle(
             key: const Key('entry-billable'),
             value: _billable,

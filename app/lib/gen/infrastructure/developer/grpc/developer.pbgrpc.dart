@@ -156,6 +156,147 @@ abstract class ApiTokenControllerServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.ApiTokenRevokeRequest request);
 }
 
+@$pb.GrpcServiceName('config.developer.ServiceAccountController')
+class ServiceAccountControllerClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
+  ServiceAccountControllerClient(super.channel,
+      {super.options, super.interceptors});
+
+  $grpc.ResponseFuture<$0.ServiceAccountAnswer> create(
+    $0.ServiceAccountCreateRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$create, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ServiceAccountDeleted> delete(
+    $0.ServiceAccountDeleteRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$delete, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ServiceAccountList> list(
+    $0.ServiceAccountListRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$list, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ServiceAccountAnswer> setRole(
+    $0.ServiceAccountSetRoleRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setRole, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$create = $grpc.ClientMethod<$0.ServiceAccountCreateRequest,
+          $0.ServiceAccountAnswer>(
+      '/config.developer.ServiceAccountController/Create',
+      ($0.ServiceAccountCreateRequest value) => value.writeToBuffer(),
+      $0.ServiceAccountAnswer.fromBuffer);
+  static final _$delete = $grpc.ClientMethod<$0.ServiceAccountDeleteRequest,
+          $0.ServiceAccountDeleted>(
+      '/config.developer.ServiceAccountController/Delete',
+      ($0.ServiceAccountDeleteRequest value) => value.writeToBuffer(),
+      $0.ServiceAccountDeleted.fromBuffer);
+  static final _$list =
+      $grpc.ClientMethod<$0.ServiceAccountListRequest, $0.ServiceAccountList>(
+          '/config.developer.ServiceAccountController/List',
+          ($0.ServiceAccountListRequest value) => value.writeToBuffer(),
+          $0.ServiceAccountList.fromBuffer);
+  static final _$setRole = $grpc.ClientMethod<$0.ServiceAccountSetRoleRequest,
+          $0.ServiceAccountAnswer>(
+      '/config.developer.ServiceAccountController/SetRole',
+      ($0.ServiceAccountSetRoleRequest value) => value.writeToBuffer(),
+      $0.ServiceAccountAnswer.fromBuffer);
+}
+
+@$pb.GrpcServiceName('config.developer.ServiceAccountController')
+abstract class ServiceAccountControllerServiceBase extends $grpc.Service {
+  $core.String get $name => 'config.developer.ServiceAccountController';
+
+  ServiceAccountControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.ServiceAccountCreateRequest,
+            $0.ServiceAccountAnswer>(
+        'Create',
+        create_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ServiceAccountCreateRequest.fromBuffer(value),
+        ($0.ServiceAccountAnswer value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ServiceAccountDeleteRequest,
+            $0.ServiceAccountDeleted>(
+        'Delete',
+        delete_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ServiceAccountDeleteRequest.fromBuffer(value),
+        ($0.ServiceAccountDeleted value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ServiceAccountListRequest,
+            $0.ServiceAccountList>(
+        'List',
+        list_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ServiceAccountListRequest.fromBuffer(value),
+        ($0.ServiceAccountList value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ServiceAccountSetRoleRequest,
+            $0.ServiceAccountAnswer>(
+        'SetRole',
+        setRole_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ServiceAccountSetRoleRequest.fromBuffer(value),
+        ($0.ServiceAccountAnswer value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.ServiceAccountAnswer> create_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ServiceAccountCreateRequest> $request) async {
+    return create($call, await $request);
+  }
+
+  $async.Future<$0.ServiceAccountAnswer> create(
+      $grpc.ServiceCall call, $0.ServiceAccountCreateRequest request);
+
+  $async.Future<$0.ServiceAccountDeleted> delete_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ServiceAccountDeleteRequest> $request) async {
+    return delete($call, await $request);
+  }
+
+  $async.Future<$0.ServiceAccountDeleted> delete(
+      $grpc.ServiceCall call, $0.ServiceAccountDeleteRequest request);
+
+  $async.Future<$0.ServiceAccountList> list_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ServiceAccountListRequest> $request) async {
+    return list($call, await $request);
+  }
+
+  $async.Future<$0.ServiceAccountList> list(
+      $grpc.ServiceCall call, $0.ServiceAccountListRequest request);
+
+  $async.Future<$0.ServiceAccountAnswer> setRole_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ServiceAccountSetRoleRequest> $request) async {
+    return setRole($call, await $request);
+  }
+
+  $async.Future<$0.ServiceAccountAnswer> setRole(
+      $grpc.ServiceCall call, $0.ServiceAccountSetRoleRequest request);
+}
+
 @$pb.GrpcServiceName('config.developer.WebhookController')
 class WebhookControllerClient extends $grpc.Client {
   /// The hostname for this service.

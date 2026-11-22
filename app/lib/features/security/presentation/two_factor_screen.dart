@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
@@ -101,11 +102,11 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: ListView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(TfSpace.xl),
             shrinkWrap: true,
             children: [
               Text(_recovery ? t.secEnterRecovery : t.secEnterAppCode),
-              const SizedBox(height: 16),
+              const SizedBox(height: TfSpace.lg),
               TextField(
                 key: const Key('two-factor-code'),
                 controller: _code,
@@ -120,7 +121,7 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
                 ),
                 onSubmitted: (_) => _busy ? null : _submit(),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TfToggleTile(
                 key: const Key('two-factor-remember'),
                 value: _remember,
@@ -130,7 +131,7 @@ class _TwoFactorScreenState extends ConsumerState<TwoFactorScreen> {
               ),
               if (_error != null) ...[
                 Text(_error!, style: TextStyle(color: colors.error)),
-                const SizedBox(height: 8),
+                const SizedBox(height: TfSpace.sm),
               ],
               FilledButton(
                 key: const Key('two-factor-submit'),

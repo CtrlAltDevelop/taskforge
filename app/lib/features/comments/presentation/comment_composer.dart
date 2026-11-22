@@ -1,4 +1,6 @@
 import 'package:taskforge/core/ui/tokens/shape.dart';
+import 'package:taskforge/core/ui/tokens/typography.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -281,7 +283,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
                           p.displayName.isEmpty
                               ? '?'
                               : p.displayName[0].toUpperCase(),
-                          style: const TextStyle(fontSize: 11),
+                          style: const TextStyle(fontSize: TfFontSize.caption),
                         ),
                       ),
                       title: Text(p.displayName),
@@ -318,7 +320,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
         ),
         if (_files.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: TfSpace.sm),
             child: Wrap(
               key: const Key('chosen-files'),
               spacing: 6,
@@ -342,7 +344,7 @@ class _CommentComposerState extends ConsumerState<CommentComposer> {
               ],
             ),
           ),
-        const SizedBox(height: 6),
+        const SizedBox(height: TfSpace.sm),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

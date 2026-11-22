@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -94,7 +95,7 @@ class _QuickAddState extends ConsumerState<QuickAdd> {
   }
 
   Widget _field() => Padding(
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(TfSpace.md),
     child: TextField(
       key: const Key('quick-add'),
       controller: _controller,

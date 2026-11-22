@@ -47,3 +47,21 @@ final deliveriesProvider = FutureProvider.autoDispose
       if (ws == null) return const DeliveryPage([], '');
       return ref.watch(developerClientProvider).deliveries(ws, webhookId);
     }, retry: (_, _) => null);
+
+/// The workspace's service accounts (the caller must manage webhooks).
+final serviceAccountsProvider =
+    FutureProvider.autoDispose<List<ServiceAccount>>((ref) async {
+      final ws = ref.watch(workspaceScopeProvider);
+      if (ws == null) return const [];
+      return ref.watch(developerClientProvider).serviceAccounts(ws);
+    }, retry: (_, _) => null);
+
+/// One service account's tokens.
+final serviceAccountTokensProvider = FutureProvider.autoDispose
+    .family<List<ApiToken>, String>((ref, accountId) async {
+      final ws = ref.watch(workspaceScopeProvider);
+      if (ws == null) return const [];
+      return ref
+          .watch(developerClientProvider)
+          .tokens(ws, serviceAccountId: accountId);
+    }, retry: (_, _) => null);

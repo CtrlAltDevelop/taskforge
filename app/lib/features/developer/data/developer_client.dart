@@ -9,14 +9,31 @@ import 'package:taskforge/gen/infrastructure/developer/grpc/developer.pbgrpc.dar
 
 abstract interface class DeveloperClient {
   Future<DeveloperCatalog> catalog(String workspaceId);
-  Future<List<ApiToken>> tokens(String workspaceId);
+  Future<List<ApiToken>> tokens(
+    String workspaceId, {
+    String serviceAccountId = '',
+  });
   Future<IssuedToken> createToken(
     String workspaceId, {
     required String name,
     required List<String> scopes,
     required int expiresInDays,
+    String serviceAccountId = '',
   });
   Future<ApiToken> revokeToken(String workspaceId, String tokenId);
+
+  Future<List<ServiceAccount>> serviceAccounts(String workspaceId);
+  Future<ServiceAccount> createServiceAccount(
+    String workspaceId, {
+    required String name,
+    required String roleId,
+  });
+  Future<ServiceAccount> setServiceAccountRole(
+    String workspaceId,
+    String accountId,
+    String roleId,
+  );
+  Future<void> deleteServiceAccount(String workspaceId, String accountId);
 
   Future<List<Webhook>> webhooks(String workspaceId);
   Future<Webhook> createWebhook(String workspaceId, WebhookDraft draft);
@@ -79,6 +96,18 @@ ApiToken tokenFromPb(pb.ApiToken t) => ApiToken(
   expiresAt: t.expiresAt,
   lastUsedAt: t.lastUsedAt,
   createdAt: t.createdAt,
+  serviceAccountId: t.serviceAccountId,
+);
+
+ServiceAccount serviceAccountFromPb(pb.ServiceAccount a) => ServiceAccount(
+  id: a.id,
+  name: a.name,
+  userId: a.userId,
+  roleId: a.roleId,
+  roleName: a.roleName,
+  active: a.active,
+  tokenCount: a.tokenCount,
+  createdAt: a.createdAt,
 );
 
 Webhook webhookFromPb(pb.Webhook w) => Webhook(
@@ -116,9 +145,11 @@ Delivery deliveryFromPb(pb.Delivery d) => Delivery(
 class GrpcDeveloperClient implements DeveloperClient {
   GrpcDeveloperClient(ClientChannelBase channel, this._session)
     : _tokens = pb.ApiTokenControllerClient(channel),
-      _hooks = pb.WebhookControllerClient(channel);
+      _hooks = pb.WebhookControllerClient(channel),
+      _accounts = pb.ServiceAccountControllerClient(channel);
 
   final pb.ApiTokenControllerClient _tokens;
+  final pb.ServiceAccountControllerClient _accounts;
   final pb.WebhookControllerClient _hooks;
   final AuthSession _session;
 
@@ -150,9 +181,15 @@ class GrpcDeveloperClient implements DeveloperClient {
   });
 
   @override
-  Future<List<ApiToken>> tokens(String workspaceId) => _run(() async {
+  Future<List<ApiToken>> tokens(
+    String workspaceId, {
+    String serviceAccountId = '',
+  }) => _run(() async {
     final r = await _tokens.list(
-      pb.ApiTokenListRequest(workspaceId: workspaceId),
+      pb.ApiTokenListRequest(
+        workspaceId: workspaceId,
+        serviceAccountId: serviceAccountId,
+      ),
       options: _options,
     );
     return List.unmodifiable(r.tokens.map(tokenFromPb));
@@ -164,6 +201,7 @@ class GrpcDeveloperClient implements DeveloperClient {
     required String name,
     required List<String> scopes,
     required int expiresInDays,
+    String serviceAccountId = '',
   }) => _run(() async {
     final r = await _tokens.create(
       pb.ApiTokenCreateRequest(
@@ -171,6 +209,7 @@ class GrpcDeveloperClient implements DeveloperClient {
         name: name.trim(),
         scopes: scopes,
         expiresInDays: expiresInDays,
+        serviceAccountId: serviceAccountId,
       ),
       options: _options,
     );
@@ -185,6 +224,62 @@ class GrpcDeveloperClient implements DeveloperClient {
           options: _options,
         );
         return tokenFromPb(r.token);
+      });
+
+  @override
+  Future<List<ServiceAccount>> serviceAccounts(String workspaceId) =>
+      _run(() async {
+        final r = await _accounts.list(
+          pb.ServiceAccountListRequest(workspaceId: workspaceId),
+          options: _options,
+        );
+        return List.unmodifiable(r.accounts.map(serviceAccountFromPb));
+      });
+
+  @override
+  Future<ServiceAccount> createServiceAccount(
+    String workspaceId, {
+    required String name,
+    required String roleId,
+  }) => _run(() async {
+    final r = await _accounts.create(
+      pb.ServiceAccountCreateRequest(
+        workspaceId: workspaceId,
+        name: name.trim(),
+        roleId: roleId,
+      ),
+      options: _options,
+    );
+    return serviceAccountFromPb(r.account);
+  });
+
+  @override
+  Future<ServiceAccount> setServiceAccountRole(
+    String workspaceId,
+    String accountId,
+    String roleId,
+  ) => _run(() async {
+    final r = await _accounts.setRole(
+      pb.ServiceAccountSetRoleRequest(
+        workspaceId: workspaceId,
+        accountId: accountId,
+        roleId: roleId,
+      ),
+      options: _options,
+    );
+    return serviceAccountFromPb(r.account);
+  });
+
+  @override
+  Future<void> deleteServiceAccount(String workspaceId, String accountId) =>
+      _run(() async {
+        await _accounts.delete(
+          pb.ServiceAccountDeleteRequest(
+            workspaceId: workspaceId,
+            accountId: accountId,
+          ),
+          options: _options,
+        );
       });
 
   @override

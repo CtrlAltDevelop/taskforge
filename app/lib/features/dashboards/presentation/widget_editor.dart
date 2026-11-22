@@ -27,6 +27,9 @@ Future<DashboardWidget?> showWidgetEditor(
   builder: (_) => WidgetEditor(initial: initial, projectId: projectId),
 );
 
+/// How many goals a goals widget may list (the server caps the rest).
+const _goalLimits = [5, 10, 12, 20];
+
 class WidgetEditor extends ConsumerStatefulWidget {
   const WidgetEditor({
     super.key,
@@ -113,6 +116,10 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
     if (kind == WidgetKind.workload) {
       c = c.copyWith(groupBy: 'assignee', scope: Scope.open);
     }
+    if (kind.isGoals) {
+      c = c.copyWith(groupBy: '', measure: Measure.count, tfql: '');
+      _tfql.clear();
+    }
     _change(_w.copyWith(kind: kind, config: c));
   }
 
@@ -164,7 +171,7 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                     value: _w.kind,
                     onChanged: (k) => _kind(k),
                   ),
-                  if (_w.kind != WidgetKind.burndown)
+                  if (_w.kind != WidgetKind.burndown && !_w.kind.isGoals)
                     TfSelectField(
                       key: const Key('widget-measure'),
                       options: {
@@ -199,11 +206,21 @@ class _WidgetEditorState extends ConsumerState<WidgetEditor> {
                       value: _w.config.scope,
                       onChanged: (s) => _config(_w.config.copyWith(scope: s)),
                     ),
+                  if (_w.kind.isGoals)
+                    TfSelectField(
+                      key: const Key('widget-limit'),
+                      options: {for (final n in _goalLimits) n: '$n'},
+                      value: _goalLimits.contains(_w.config.limit)
+                          ? _w.config.limit
+                          : null,
+                      onChanged: (n) => _config(_w.config.copyWith(limit: n)),
+                      hint: context.l10n.dashGoalLimit,
+                    ),
                 ],
               ),
               if (_w.kind == WidgetKind.burndown) _sprintPicker(project),
               const SizedBox(height: 12),
-              if (_w.kind != WidgetKind.burndown)
+              if (_w.kind != WidgetKind.burndown && !_w.kind.isGoals)
                 TfTextField(
                   key: const Key('widget-tfql'),
                   controller: _tfql,

@@ -5,6 +5,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_avatar.dart';
 import 'package:taskforge/core/ui/tokens/colors.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Icon and color choice from the fixed sets; [enabled] false makes it inert.
 class ProjectLookPicker extends StatelessWidget {
@@ -39,7 +40,7 @@ class ProjectLookPicker extends StatelessWidget {
             ),
         ],
       ),
-      const SizedBox(height: 8),
+      const SizedBox(height: TfSpace.sm),
       Wrap(
         spacing: 8,
         children: [
@@ -100,7 +101,7 @@ class VisibilityPicker extends StatelessWidget {
         selected: {value},
         onSelectionChanged: enabled ? (s) => onChanged(s.first) : null,
       ),
-      const SizedBox(height: 4),
+      const SizedBox(height: TfSpace.xs),
       Text(
         value == ProjectVisibility.open
             ? context.l10n.grpHVisOpenHint

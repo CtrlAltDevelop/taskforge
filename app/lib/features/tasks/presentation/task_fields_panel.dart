@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -39,10 +40,10 @@ class TaskFieldsPanel extends ConsumerWidget {
           context.l10n.grpFFields,
           style: Theme.of(context).textTheme.labelLarge,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         for (final f in fields)
           Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: TfSpace.md),
             // Keyed by the value so a rollback or someone else's edit shows.
             child: KeyedSubtree(
               key: ValueKey('${f.id}=${task.fieldValues[f.id] ?? ''}'),
@@ -136,10 +137,10 @@ class _RequiredFieldsDialogState extends State<RequiredFieldsDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(context.l10n.grpFRequiredFieldsIntro),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             for (final f in widget.fields)
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: TfSpace.md),
                 child: FieldInput(
                   field: f,
                   value: _values[f.id] ?? '',

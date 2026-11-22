@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -25,8 +26,8 @@ class TemplatePreview extends StatelessWidget {
         if (content.statuses.isNotEmpty) ...[
           _Heading(t.tplStatuses),
           Wrap(
-            spacing: 6,
-            runSpacing: 6,
+            spacing: TfSpace.xs,
+            runSpacing: TfSpace.xs,
             children: [
               for (final s in content.statuses)
                 Chip(
@@ -40,8 +41,8 @@ class TemplatePreview extends StatelessWidget {
         if (content.fields.isNotEmpty) ...[
           _Heading(t.tplFields),
           Wrap(
-            spacing: 6,
-            runSpacing: 6,
+            spacing: TfSpace.xs,
+            runSpacing: TfSpace.xs,
             children: [
               for (final f in content.fields)
                 Chip(visualDensity: VisualDensity.compact, label: Text(f)),
@@ -78,7 +79,7 @@ class TemplatePreview extends StatelessWidget {
                         : TfIcons.cornerDownRight.glyph,
                     size: 16,
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: TfSpace.xs),
                   Expanded(child: Text(row.task.title)),
                   if (row.task.dueOffset != null)
                     Text(
@@ -100,7 +101,7 @@ class _Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 12, bottom: 6),
+    padding: const EdgeInsets.only(top: TfSpace.md, bottom: TfSpace.xs),
     child: Text(text, style: Theme.of(context).textTheme.titleSmall),
   );
 }

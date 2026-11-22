@@ -4,10 +4,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/breakpoints.dart';
 import 'package:taskforge/core/ui/content_width.dart';
+import 'package:taskforge/core/ui/frame_scope.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf/tf_checkbox.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf/tf_tabs.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:taskforge/core/ui/theme_extension.dart';
@@ -28,8 +30,12 @@ class MyWorkScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
     final size = ScreenSize.of(context);
+    // A framed phone's top bar already names the page: no empty bar under it.
+    final bare =
+        (AppFrameScope.maybeOf(context)?.hasAccountMenu ?? false) &&
+        size.isCompact;
     return Scaffold(
-      appBar: TfAppBar(title: Text(l.mwTitle)),
+      appBar: bare ? null : TfAppBar(title: Text(l.mwTitle)),
       body: ContentWidth(
         maxWidth: 960,
         child: Column(
@@ -133,7 +139,9 @@ class _MyWorkList extends ConsumerWidget {
       onRefresh: notifier.reload,
       child: ListView(
         key: const Key('mywork-list'),
-        padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
+        padding: EdgeInsets.symmetric(
+          horizontal: pageGutter(ScreenSize.of(context)),
+        ),
         children: [
           if (state.stale)
             Padding(
@@ -147,13 +155,19 @@ class _MyWorkList extends ConsumerWidget {
               ),
             ),
           for (final item in items)
-            HomeTaskRow(
-              task: item.task,
-              today: today,
-              notes: [
-                if (item.assigned) l.mwAssigned,
-                if (item.watching) l.mwWatching,
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TfSpace.xs),
+              child: TfPanel(
+                padding: EdgeInsets.zero,
+                child: HomeTaskRow(
+                  task: item.task,
+                  today: today,
+                  notes: [
+                    if (item.assigned) l.mwAssigned,
+                    if (item.watching) l.mwWatching,
+                  ],
+                ),
+              ),
             ),
           if (state.error != null)
             TfError(

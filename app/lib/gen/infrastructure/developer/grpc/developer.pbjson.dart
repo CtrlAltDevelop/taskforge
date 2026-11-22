@@ -28,6 +28,13 @@ const ApiToken$json = {
     {'1': 'last_used_at', '3': 7, '4': 1, '5': 9, '10': 'lastUsedAt'},
     {'1': 'revoked_at', '3': 8, '4': 1, '5': 9, '10': 'revokedAt'},
     {'1': 'created_at', '3': 9, '4': 1, '5': 9, '10': 'createdAt'},
+    {
+      '1': 'service_account_id',
+      '3': 10,
+      '4': 1,
+      '5': 9,
+      '10': 'serviceAccountId'
+    },
   ],
 };
 
@@ -37,7 +44,8 @@ final $typed_data.Uint8List apiTokenDescriptor = $convert.base64Decode(
     'gYAyABKAlSBnByZWZpeBIWCgZzY29wZXMYBCADKAlSBnNjb3BlcxIWCgZzdGF0dXMYBSABKAlS'
     'BnN0YXR1cxIdCgpleHBpcmVzX2F0GAYgASgJUglleHBpcmVzQXQSIAoMbGFzdF91c2VkX2F0GA'
     'cgASgJUgpsYXN0VXNlZEF0Eh0KCnJldm9rZWRfYXQYCCABKAlSCXJldm9rZWRBdBIdCgpjcmVh'
-    'dGVkX2F0GAkgASgJUgljcmVhdGVkQXQ=');
+    'dGVkX2F0GAkgASgJUgljcmVhdGVkQXQSLAoSc2VydmljZV9hY2NvdW50X2lkGAogASgJUhBzZX'
+    'J2aWNlQWNjb3VudElk');
 
 @$core.Deprecated('Use apiTokenAnswerDescriptor instead')
 const ApiTokenAnswer$json = {
@@ -67,6 +75,13 @@ const ApiTokenCreateRequest$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'scopes', '3': 3, '4': 3, '5': 9, '10': 'scopes'},
     {'1': 'expires_in_days', '3': 4, '4': 1, '5': 5, '10': 'expiresInDays'},
+    {
+      '1': 'service_account_id',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'serviceAccountId'
+    },
   ],
 };
 
@@ -74,7 +89,8 @@ const ApiTokenCreateRequest$json = {
 final $typed_data.Uint8List apiTokenCreateRequestDescriptor = $convert.base64Decode(
     'ChVBcGlUb2tlbkNyZWF0ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3Jrc3BhY2'
     'VJZBISCgRuYW1lGAIgASgJUgRuYW1lEhYKBnNjb3BlcxgDIAMoCVIGc2NvcGVzEiYKD2V4cGly'
-    'ZXNfaW5fZGF5cxgEIAEoBVINZXhwaXJlc0luRGF5cw==');
+    'ZXNfaW5fZGF5cxgEIAEoBVINZXhwaXJlc0luRGF5cxIsChJzZXJ2aWNlX2FjY291bnRfaWQYBS'
+    'ABKAlSEHNlcnZpY2VBY2NvdW50SWQ=');
 
 @$core.Deprecated('Use apiTokenCreatedDescriptor instead')
 const ApiTokenCreated$json = {
@@ -122,13 +138,20 @@ const ApiTokenListRequest$json = {
   '1': 'ApiTokenListRequest',
   '2': [
     {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {
+      '1': 'service_account_id',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'serviceAccountId'
+    },
   ],
 };
 
 /// Descriptor for `ApiTokenListRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List apiTokenListRequestDescriptor = $convert.base64Decode(
     'ChNBcGlUb2tlbkxpc3RSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYWNlSW'
-    'Q=');
+    'QSLAoSc2VydmljZV9hY2NvdW50X2lkGAIgASgJUhBzZXJ2aWNlQWNjb3VudElk');
 
 @$core.Deprecated('Use apiTokenRevokeRequestDescriptor instead')
 const ApiTokenRevokeRequest$json = {
@@ -312,6 +335,142 @@ final $typed_data.Uint8List redeliverRequestDescriptor = $convert.base64Decode(
     'ChBSZWRlbGl2ZXJSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3NwYWNlSWQSHQ'
     'oKd2ViaG9va19pZBgCIAEoCVIJd2ViaG9va0lkEh8KC2RlbGl2ZXJ5X2lkGAMgASgJUgpkZWxp'
     'dmVyeUlk');
+
+@$core.Deprecated('Use serviceAccountDescriptor instead')
+const ServiceAccount$json = {
+  '1': 'ServiceAccount',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'user_id', '3': 3, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'role_id', '3': 4, '4': 1, '5': 9, '10': 'roleId'},
+    {'1': 'role_name', '3': 5, '4': 1, '5': 9, '10': 'roleName'},
+    {'1': 'active', '3': 6, '4': 1, '5': 8, '10': 'active'},
+    {'1': 'token_count', '3': 7, '4': 1, '5': 5, '10': 'tokenCount'},
+    {'1': 'created_at', '3': 8, '4': 1, '5': 9, '10': 'createdAt'},
+  ],
+};
+
+/// Descriptor for `ServiceAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountDescriptor = $convert.base64Decode(
+    'Cg5TZXJ2aWNlQWNjb3VudBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIXCg'
+    'd1c2VyX2lkGAMgASgJUgZ1c2VySWQSFwoHcm9sZV9pZBgEIAEoCVIGcm9sZUlkEhsKCXJvbGVf'
+    'bmFtZRgFIAEoCVIIcm9sZU5hbWUSFgoGYWN0aXZlGAYgASgIUgZhY3RpdmUSHwoLdG9rZW5fY2'
+    '91bnQYByABKAVSCnRva2VuQ291bnQSHQoKY3JlYXRlZF9hdBgIIAEoCVIJY3JlYXRlZEF0');
+
+@$core.Deprecated('Use serviceAccountAnswerDescriptor instead')
+const ServiceAccountAnswer$json = {
+  '1': 'ServiceAccountAnswer',
+  '2': [
+    {
+      '1': 'account',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.config.developer.ServiceAccount',
+      '10': 'account'
+    },
+  ],
+};
+
+/// Descriptor for `ServiceAccountAnswer`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountAnswerDescriptor = $convert.base64Decode(
+    'ChRTZXJ2aWNlQWNjb3VudEFuc3dlchI6CgdhY2NvdW50GAEgASgLMiAuY29uZmlnLmRldmVsb3'
+    'Blci5TZXJ2aWNlQWNjb3VudFIHYWNjb3VudA==');
+
+@$core.Deprecated('Use serviceAccountCreateRequestDescriptor instead')
+const ServiceAccountCreateRequest$json = {
+  '1': 'ServiceAccountCreateRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'role_id', '3': 3, '4': 1, '5': 9, '10': 'roleId'},
+  ],
+};
+
+/// Descriptor for `ServiceAccountCreateRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountCreateRequestDescriptor =
+    $convert.base64Decode(
+        'ChtTZXJ2aWNlQWNjb3VudENyZWF0ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3'
+        'Jrc3BhY2VJZBISCgRuYW1lGAIgASgJUgRuYW1lEhcKB3JvbGVfaWQYAyABKAlSBnJvbGVJZA==');
+
+@$core.Deprecated('Use serviceAccountDeleteRequestDescriptor instead')
+const ServiceAccountDeleteRequest$json = {
+  '1': 'ServiceAccountDeleteRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'account_id', '3': 2, '4': 1, '5': 9, '10': 'accountId'},
+  ],
+};
+
+/// Descriptor for `ServiceAccountDeleteRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountDeleteRequestDescriptor =
+    $convert.base64Decode(
+        'ChtTZXJ2aWNlQWNjb3VudERlbGV0ZVJlcXVlc3QSIQoMd29ya3NwYWNlX2lkGAEgASgJUgt3b3'
+        'Jrc3BhY2VJZBIdCgphY2NvdW50X2lkGAIgASgJUglhY2NvdW50SWQ=');
+
+@$core.Deprecated('Use serviceAccountDeletedDescriptor instead')
+const ServiceAccountDeleted$json = {
+  '1': 'ServiceAccountDeleted',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `ServiceAccountDeleted`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountDeletedDescriptor = $convert
+    .base64Decode('ChVTZXJ2aWNlQWNjb3VudERlbGV0ZWQSDgoCaWQYASABKAlSAmlk');
+
+@$core.Deprecated('Use serviceAccountListDescriptor instead')
+const ServiceAccountList$json = {
+  '1': 'ServiceAccountList',
+  '2': [
+    {
+      '1': 'accounts',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.config.developer.ServiceAccount',
+      '10': 'accounts'
+    },
+  ],
+};
+
+/// Descriptor for `ServiceAccountList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountListDescriptor = $convert.base64Decode(
+    'ChJTZXJ2aWNlQWNjb3VudExpc3QSPAoIYWNjb3VudHMYASADKAsyIC5jb25maWcuZGV2ZWxvcG'
+    'VyLlNlcnZpY2VBY2NvdW50UghhY2NvdW50cw==');
+
+@$core.Deprecated('Use serviceAccountListRequestDescriptor instead')
+const ServiceAccountListRequest$json = {
+  '1': 'ServiceAccountListRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+  ],
+};
+
+/// Descriptor for `ServiceAccountListRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountListRequestDescriptor =
+    $convert.base64Decode(
+        'ChlTZXJ2aWNlQWNjb3VudExpc3RSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd29ya3'
+        'NwYWNlSWQ=');
+
+@$core.Deprecated('Use serviceAccountSetRoleRequestDescriptor instead')
+const ServiceAccountSetRoleRequest$json = {
+  '1': 'ServiceAccountSetRoleRequest',
+  '2': [
+    {'1': 'workspace_id', '3': 1, '4': 1, '5': 9, '10': 'workspaceId'},
+    {'1': 'account_id', '3': 2, '4': 1, '5': 9, '10': 'accountId'},
+    {'1': 'role_id', '3': 3, '4': 1, '5': 9, '10': 'roleId'},
+  ],
+};
+
+/// Descriptor for `ServiceAccountSetRoleRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serviceAccountSetRoleRequestDescriptor =
+    $convert.base64Decode(
+        'ChxTZXJ2aWNlQWNjb3VudFNldFJvbGVSZXF1ZXN0EiEKDHdvcmtzcGFjZV9pZBgBIAEoCVILd2'
+        '9ya3NwYWNlSWQSHQoKYWNjb3VudF9pZBgCIAEoCVIJYWNjb3VudElkEhcKB3JvbGVfaWQYAyAB'
+        'KAlSBnJvbGVJZA==');
 
 @$core.Deprecated('Use webhookDescriptor instead')
 const Webhook$json = {

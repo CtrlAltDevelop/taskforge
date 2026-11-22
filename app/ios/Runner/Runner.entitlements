@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Universal links for https://<your domain>/invite/<token>. Replace the host with
+	     TASKFORGE_DOMAIN. Needs the Associated Domains capability (paid team); only
+	     Profile and Release builds use this file, Debug stays unsigned-friendly. -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:tasks.example.com</string>
+	</array>
+</dict>
+</plist>

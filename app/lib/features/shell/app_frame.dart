@@ -17,7 +17,6 @@ import 'package:taskforge/features/shell/sidebar.dart';
 import 'package:taskforge/features/shell/sidebar_item.dart';
 import 'package:taskforge/features/shell/top_bar.dart';
 import 'package:taskforge/features/shortcuts/presentation/shortcut_host.dart';
-import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/features/time/presentation/timer_chip.dart';
 
 /// The frame around every signed-in page (the router's shell): by width, a
@@ -129,13 +128,7 @@ class _AppFrameState extends ConsumerState<AppFrame>
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const TimerChip(),
-                      if (size.isCompact) ...[
-                        const SizedBox(height: TfSpace.sm),
-                        const QuickActionsButton(),
-                      ],
-                    ],
+                    children: const [TimerChip()],
                   ),
             bottomNavigationBar: size.isCompact ? const _BottomBar() : null,
             body: size.isCompact

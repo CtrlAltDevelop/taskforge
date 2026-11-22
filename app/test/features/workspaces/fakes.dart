@@ -188,11 +188,17 @@ Future<ProviderContainer> pumpSignedIn(
   FakeRecurrenceClient? recurrence,
   FakeLocalNotifier? localNotifier,
 
+  /// What answers sign-in and sign-out (a mock that answers nothing by default).
+  AuthApi? authApi,
+
   /// Home, My work and the checklist (empty by default).
   FakeHomeClient? home,
 
   /// What the server says its version is (default: nothing to update).
   FakeSystemClient? system,
+
+  /// The workspace's two-factor policy (default: none required).
+  FakeSecurityClient? security,
 
   /// The live connection: none unless a test brings its own.
   Override? sync,
@@ -201,7 +207,7 @@ Future<ProviderContainer> pumpSignedIn(
   await store.write(
     const AuthTokens(accessToken: 'a.b.c', refreshToken: 'r', sessionId: 's'),
   );
-  final session = AuthSession(api: MockAuthApi(), store: store);
+  final session = AuthSession(api: authApi ?? MockAuthApi(), store: store);
   await session.restore();
   final container = ProviderContainer(
     overrides: [
@@ -242,7 +248,9 @@ Future<ProviderContainer> pumpSignedIn(
         shortcuts ?? FakeShortcutsClient(),
       ),
       // The router asks both on every launch: answer "nothing required, nothing to update".
-      securityClientProvider.overrideWithValue(FakeSecurityClient()),
+      securityClientProvider.overrideWithValue(
+        security ?? FakeSecurityClient(),
+      ),
       systemClientProvider.overrideWithValue(system ?? FakeSystemClient()),
       goalsClientProvider.overrideWithValue(FakeGoalsClient()),
       homeClientProvider.overrideWithValue(home ?? FakeHomeClient()),

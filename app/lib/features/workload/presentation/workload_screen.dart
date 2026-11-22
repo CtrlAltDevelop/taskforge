@@ -83,6 +83,7 @@ class WorkloadScreen extends ConsumerWidget {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const WorkloadToolbar(),
           const WorkloadLegend(),
@@ -183,11 +184,11 @@ class _Note extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+    padding: const EdgeInsets.fromLTRB(TfSpace.md, TfSpace.xs, TfSpace.md, 0),
     child: Row(
       children: [
         Icon(icon, size: 18),
-        const SizedBox(width: 8),
+        const SizedBox(width: TfSpace.sm),
         Expanded(child: Text(text)),
         ?action,
       ],
@@ -329,7 +330,7 @@ class _NameCell extends ConsumerWidget {
     return Container(
       width: _nameWidth,
       height: cellHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
       decoration: BoxDecoration(
         border: BorderDirectional(
           end: BorderSide(color: theme.dividerColor),
@@ -345,7 +346,7 @@ class _NameCell extends ConsumerWidget {
               style: theme.textTheme.labelSmall,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: TfSpace.sm),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

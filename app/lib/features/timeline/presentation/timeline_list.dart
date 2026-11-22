@@ -83,8 +83,8 @@ class TimelineList extends StatelessWidget {
           child: ListTile(
             key: Key('timeline-row-${task.id}'),
             contentPadding: EdgeInsetsDirectional.only(
-              start: 16.0 + 16 * row.depth,
-              end: 16,
+              start: TfSpace.lg + TfSpace.lg * row.depth,
+              end: TfSpace.lg,
             ),
             title: Text(
               task.title,

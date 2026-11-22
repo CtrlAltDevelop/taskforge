@@ -59,7 +59,7 @@ class _CodeBlockViewState extends State<CodeBlockView> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(TfSpace.sm),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
         borderRadius: TfRadius.control,
@@ -261,7 +261,7 @@ class _CellFieldState extends State<_CellField> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6),
+    padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
     child: TextField(
       key: widget.fieldKey,
       controller: _c,
@@ -318,7 +318,7 @@ class ImageBlockView extends StatelessWidget {
                   semanticLabel: block.alt,
                   errorBuilder: (_, _, _) => Container(
                     key: const Key('image-broken'),
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(TfSpace.md),
                     child: Text(
                       block.alt.isEmpty
                           ? context.l10n.grpJImageLoadFailed
@@ -412,7 +412,7 @@ class UnknownBlockView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     key: Key('unknown-${block.id}'),
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(TfSpace.md),
     decoration: BoxDecoration(
       border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       borderRadius: TfRadius.control,
@@ -420,7 +420,7 @@ class UnknownBlockView extends StatelessWidget {
     child: Row(
       children: [
         const TfIcon(TfIcons.puzzle, size: 18),
-        const SizedBox(width: 8),
+        const SizedBox(width: TfSpace.sm),
         Expanded(child: Text(context.l10n.grpJUnknownBlock(block.type))),
       ],
     ),

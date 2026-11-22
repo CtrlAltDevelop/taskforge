@@ -36,7 +36,7 @@ class HomeCardFrame extends ConsumerWidget {
   /// When the saved copy was made (ISO), shown with the stale mark.
   final String computedAt;
 
-  /// A link under the title row, e.g. "Open inbox".
+  /// A link in the title row, before the menu, e.g. "Open inbox".
   final Widget? action;
 
   @override
@@ -62,6 +62,10 @@ class HomeCardFrame extends ConsumerWidget {
                   ),
                 ),
               ),
+              if (action != null) ...[
+                const SizedBox(width: TfSpace.xs),
+                action!,
+              ],
               TfMenu(
                 key: Key('home-card-menu-$id'),
                 items: [
@@ -83,8 +87,6 @@ class HomeCardFrame extends ConsumerWidget {
               ),
             ],
           ),
-          if (action != null)
-            Align(alignment: AlignmentDirectional.centerStart, child: action),
           if (stale)
             Padding(
               padding: const EdgeInsets.only(top: TfSpace.xs),

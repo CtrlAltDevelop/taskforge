@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -18,10 +19,14 @@ const _expiryChoices = [0, 30, 90, 365];
 Future<IssuedToken?> showCreateTokenDialog(
   BuildContext context,
   WidgetRef ref,
-  String workspaceId,
-) => showDialog<IssuedToken>(
+  String workspaceId, {
+  String serviceAccountId = '',
+}) => showDialog<IssuedToken>(
   context: context,
-  builder: (_) => _CreateTokenDialog(workspaceId: workspaceId),
+  builder: (_) => _CreateTokenDialog(
+    workspaceId: workspaceId,
+    serviceAccountId: serviceAccountId,
+  ),
 );
 
 /// Shows the secret once, with a copy button. It cannot be shown again.
@@ -33,9 +38,13 @@ Future<void> showSecretDialog(BuildContext context, IssuedToken issued) =>
     );
 
 class _CreateTokenDialog extends ConsumerStatefulWidget {
-  const _CreateTokenDialog({required this.workspaceId});
+  const _CreateTokenDialog({
+    required this.workspaceId,
+    this.serviceAccountId = '',
+  });
 
   final String workspaceId;
+  final String serviceAccountId;
 
   @override
   ConsumerState<_CreateTokenDialog> createState() => _CreateTokenState();
@@ -77,6 +86,7 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
             name: _name.text,
             scopes: _scopes.toList(),
             expiresInDays: _days,
+            serviceAccountId: widget.serviceAccountId,
           );
       if (mounted) Navigator.of(context).pop(issued);
     } on DeveloperException catch (e) {
@@ -109,7 +119,7 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
                   labelText: context.l10n.devTokenName,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               Text(
                 context.l10n.devTokenScopes,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -132,7 +142,7 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
                 ],
                 orElse: () => const [LinearProgressIndicator()],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               TfSelectField(
                 key: const Key('token-expiry'),
                 options: {for (final d in _expiryChoices) d: _expiryText(d)},
@@ -141,10 +151,10 @@ class _CreateTokenState extends ConsumerState<_CreateTokenDialog> {
                 label: context.l10n.devTokenExpiry,
                 expand: true,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               if (_error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: TfSpace.md),
                   child: Text(
                     _error!,
                     key: const Key('token-error'),
@@ -202,7 +212,7 @@ class _SecretDialogState extends State<_SecretDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.devTokenCreatedBody),
-          const SizedBox(height: 12),
+          const SizedBox(height: TfSpace.md),
           SelectableText(
             widget.issued.secret,
             key: const Key('token-secret'),

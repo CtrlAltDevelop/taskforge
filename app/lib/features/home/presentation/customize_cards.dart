@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
@@ -55,7 +56,7 @@ class _CustomizeBody extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l.homeCustomizeHint),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         for (var i = 0; i < cards.order.length; i++)
           Row(
             key: Key('home-customize-${cards.order[i]}'),

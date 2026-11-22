@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/page/tf_tile.dart';
 import 'package:taskforge/core/ui/page/tf_select_field.dart';
 import 'package:taskforge/core/ui/page/tf_dialog_frame.dart';
@@ -8,12 +9,14 @@ import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/fields/application/fields_providers.dart';
 import 'package:taskforge/features/fields/domain/field.dart';
+import 'package:taskforge/features/fields/presentation/field_input.dart';
 import 'package:taskforge/features/forms/application/forms_providers.dart';
 import 'package:taskforge/features/forms/domain/forms.dart';
 import 'package:taskforge/features/forms/presentation/forms_screen.dart';
@@ -21,6 +24,7 @@ import 'package:taskforge/features/forms/presentation/public_form_page.dart';
 import 'package:taskforge/features/members/application/members_providers.dart';
 import 'package:taskforge/features/workflows/application/workflows_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
+import 'package:taskforge/features/workspaces/presentation/logo_picker.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
 import 'package:taskforge/core/ui/tf/tf_illustration.dart';
 
@@ -89,12 +93,22 @@ class _BuilderState extends ConsumerState<_Builder> {
   late bool _requireEmail;
   late bool _sendConfirmation;
   late bool _notifyStatus;
+  late Map<String, String> _fieldDefaults;
+
+  /// The form as the server last had it: an upload moves its version.
+  late IntakeForm? _existing;
+
+  /// The logo text was edited or removed here; until then it is left alone.
+  bool _logoTouched = false;
+  bool _logoUploaded = false;
   bool _saving = false;
 
   @override
   void initState() {
     super.initState();
     final f = widget.existing;
+    _existing = f;
+    _fieldDefaults = {...?f?.fieldDefaults};
     _name = TextEditingController(text: f?.name ?? '');
     _description = TextEditingController(text: f?.description ?? '');
     _color = TextEditingController(text: f?.brandColor ?? '');
@@ -152,6 +166,8 @@ class _BuilderState extends ConsumerState<_Builder> {
     notifyStatus: _notifyStatus,
     brandColor: _color.text,
     logoUrl: _logo.text,
+    fieldDefaults: _fieldDefaults,
+    keepLogo: !_logoTouched,
   );
 
   Future<void> _save() async {
@@ -163,7 +179,7 @@ class _BuilderState extends ConsumerState<_Builder> {
     setState(() => _saving = true);
     try {
       final client = ref.read(formsClientProvider);
-      final existing = widget.existing;
+      final existing = _existing;
       if (existing == null) {
         await client.create(ws, widget.projectId, _draft());
       } else {
@@ -183,6 +199,41 @@ class _BuilderState extends ConsumerState<_Builder> {
       if (mounted) setState(() => _saving = false);
     }
   }
+
+  void _setDefault(String fieldId, String value) => setState(() {
+    final next = {..._fieldDefaults};
+    value.isEmpty ? next.remove(fieldId) : next[fieldId] = value;
+    _fieldDefaults = next;
+  });
+
+  Future<void> _uploadLogo() async {
+    final form = _existing;
+    final ws = ref.read(workspaceScopeProvider);
+    if (form == null || ws == null) return;
+    final picked = await ref.read(logoPickerProvider)();
+    if (picked == null || !mounted) return;
+    try {
+      final done = await ref
+          .read(formsClientProvider)
+          .uploadLogo(ws, form, bytes: picked.bytes, filename: picked.filename);
+      if (!mounted) return;
+      setState(() {
+        _existing = form.withLogo(logoUrl: done.logoUrl, version: done.version);
+        _logo.text = done.logoUrl;
+        _logoUploaded = true;
+        _logoTouched = false;
+      });
+      ref.invalidate(formsProvider);
+    } on FormsException catch (e) {
+      if (mounted) sayForms(context, formsErrorMessage(e, context.l10n));
+    }
+  }
+
+  void _clearLogo() => setState(() {
+    _logo.clear();
+    _logoUploaded = false;
+    _logoTouched = true;
+  });
 
   void _move(int from, int to) {
     final next = [..._questions];
@@ -210,7 +261,7 @@ class _BuilderState extends ConsumerState<_Builder> {
         children: [
           if (available.isEmpty)
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(TfSpace.xl),
               child: Text(c.l10n.formsNoFields),
             ),
           for (final f in available)
@@ -324,22 +375,22 @@ class _BuilderState extends ConsumerState<_Builder> {
     final t = context.l10n;
     final workflow = ref.watch(workflowProvider(widget.projectId)).value;
     final members = ref.watch(membersProvider).value ?? const [];
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return TfPage(
+      lazy: true,
       children: [
         TfTextField(
           key: const Key('form-name-field'),
           controller: _name,
           label: t.formsNameLabel,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TfTextField(
           key: const Key('form-description-field'),
           controller: _description,
           label: t.formsDescriptionLabel,
           maxLines: 3,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: TfSpace.xl),
         Text(t.formsQuestions, style: Theme.of(context).textTheme.titleMedium),
         ReorderableListView(
           shrinkWrap: true,
@@ -405,7 +456,7 @@ class _BuilderState extends ConsumerState<_Builder> {
         ),
         const Divider(height: 40),
         Text(t.formsTarget, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         TfSelectField(
           key: const Key('form-status'),
           options: {
@@ -419,7 +470,7 @@ class _BuilderState extends ConsumerState<_Builder> {
           label: t.formsStatusLabel,
           expand: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         TfSelectField(
           key: const Key('form-priority'),
           options: {for (final p in priorities) p: _priorityLabel(p)},
@@ -428,7 +479,7 @@ class _BuilderState extends ConsumerState<_Builder> {
           label: t.formsPriorityLabel,
           expand: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: TfSpace.md),
         Text(t.formsAssigneesLabel),
         Wrap(
           spacing: 8,
@@ -444,6 +495,24 @@ class _BuilderState extends ConsumerState<_Builder> {
               ),
           ],
         ),
+        const Divider(height: 40),
+        Text(
+          t.formsDefaultValues,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: TfSpace.xs),
+        Text(t.formsDefaultValuesHint),
+        const SizedBox(height: TfSpace.sm),
+        for (final f in fields)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
+            child: FieldInput(
+              field: _optional(f),
+              value: _fieldDefaults[f.id] ?? '',
+              members: members,
+              onChanged: (v) => _setDefault(f.id, v),
+            ),
+          ),
         const Divider(height: 40),
         TfToggle(
           key: const Key('form-enabled'),
@@ -472,19 +541,45 @@ class _BuilderState extends ConsumerState<_Builder> {
         ),
         const Divider(height: 40),
         Text(t.formsBranding, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         TfTextField(
           key: const Key('form-color'),
           controller: _color,
           label: t.formsColorLabel,
           hint: '#1a73e8',
         ),
-        const SizedBox(height: 12),
-        TextField(
-          key: const Key('form-logo'),
-          controller: _logo,
-          keyboardType: TextInputType.url,
-          decoration: InputDecoration(labelText: t.formsLogoLabel),
+        const SizedBox(height: TfSpace.md),
+        if (_logoUploaded)
+          Text(t.formsLogoUploaded, key: const Key('form-logo-uploaded'))
+        else
+          TextField(
+            key: const Key('form-logo'),
+            controller: _logo,
+            keyboardType: TextInputType.url,
+            onChanged: (_) => setState(() => _logoTouched = true),
+            decoration: InputDecoration(labelText: t.formsLogoLabel),
+          ),
+        const SizedBox(height: TfSpace.sm),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            TfButton(
+              key: const Key('form-logo-upload'),
+              label: t.formsLogoUpload,
+              icon: TfIcons.upload,
+              onPressed: _existing == null ? null : _uploadLogo,
+            ),
+            if (_logoUploaded || _logo.text.trim().isNotEmpty)
+              TfButton(
+                key: const Key('form-logo-clear'),
+                label: t.formsLogoRemove,
+                variant: TfButtonVariant.ghost,
+                onPressed: _clearLogo,
+              ),
+            if (_existing == null) Text(t.formsLogoSaveFirst),
+          ],
         ),
       ],
     );
@@ -512,6 +607,20 @@ class _BuilderState extends ConsumerState<_Builder> {
     return '$kind$suffix';
   }
 }
+
+/// [f] as an optional field: a default may always be cleared again.
+CustomField _optional(CustomField f) => CustomField(
+  id: f.id,
+  projectId: f.projectId,
+  name: f.name,
+  type: f.type,
+  options: f.options,
+  defaultValue: f.defaultValue,
+  hiddenViews: f.hiddenViews,
+  position: f.position,
+  version: f.version,
+  archivedAt: f.archivedAt,
+);
 
 class _QuestionDialog extends StatefulWidget {
   const _QuestionDialog({required this.question});
@@ -551,20 +660,20 @@ class _QuestionDialogState extends State<_QuestionDialog> {
               label: t.formsQuestionLabel,
               onChanged: (_) => setState(() {}),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             TfTextField(
               key: const Key('question-help'),
               controller: _help,
               label: t.formsQuestionHelp,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             TfToggle(
               key: const Key('question-required'),
               value: _required || isTitle,
               onChanged: isTitle ? null : (v) => setState(() => _required = v),
               label: t.formsQuestionRequired,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: TfSpace.md),
             if (widget.question.kind == QuestionKind.file)
               TfSelectField(
                 key: const Key('question-max-files'),

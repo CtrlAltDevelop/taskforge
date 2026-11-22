@@ -19,6 +19,7 @@ import 'package:taskforge/features/system/application/system_providers.dart';
 import 'package:taskforge/features/workspaces/application/workspace_providers.dart';
 
 import '../features/security/fakes.dart';
+import '../support/golden_fakes.dart';
 import '../features/system/fakes.dart';
 import '../features/workspaces/fakes.dart'
     show FakeAccounts, FakeWorkspaceClient, MockAuthApi;
@@ -52,9 +53,6 @@ const _notPictured = {
       'a spinner or an error; covered by test/features/auth',
   '/f/:token': 'public intake form: needs a live form by token (forms tests)',
   '/forms/new': 'form builder opens on a live record (forms tests)',
-  '/forms/:id': 'form builder needs a seeded form (forms tests)',
-  '/forms/:id/submissions': 'needs a seeded form with answers (forms tests)',
-  '/developer/webhooks/:id': 'needs a seeded webhook (developer tests)',
   '/goals/:id': 'needs a seeded goal (goals tests)',
   '/debug/gallery': 'debug-only; its own sweep is test/core/ui/gallery_test',
 };
@@ -76,6 +74,9 @@ const _sample = {
   '/projects/:id/workflow': '/projects/p1/workflow',
   '/projects/:id/fields': '/projects/p1/fields',
   '/projects/:id/dashboards': '/projects/p1/dashboards',
+  '/forms/:id': '/forms/f1',
+  '/forms/:id/submissions': '/forms/f1/submissions',
+  '/developer/webhooks/:id': '/developer/webhooks/h1',
   '/docs/:id': '/docs/a',
   '/chat/:spaceId': '/chat/gen',
   '/invite/:token': '/invite/tok',
@@ -160,7 +161,10 @@ Future<ProviderContainer> _open(
     tester,
     location,
     workspaces: path == '/onboarding' ? const [] : const ['w1'],
+    security: goldenSecurity(),
+    system: goldenSystem(),
     overrides: [
+      ...goldenDataOverrides(),
       if (path == '/update-required')
         updateRequiredProvider.overrideWithValue(true),
     ],

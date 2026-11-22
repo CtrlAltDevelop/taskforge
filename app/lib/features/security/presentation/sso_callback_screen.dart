@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -84,7 +85,7 @@ class _SsoCallbackScreenState extends ConsumerState<SsoCallbackScreen> {
         child: message == null
             ? const CircularProgressIndicator()
             : Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(TfSpace.xl),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -96,7 +97,7 @@ class _SsoCallbackScreenState extends ConsumerState<SsoCallbackScreen> {
                         color: Theme.of(context).colorScheme.error,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: TfSpace.lg),
                     TfButton(
                       key: const Key('sso-back'),
                       label: t.secBackToSignIn,

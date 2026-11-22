@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -114,7 +115,7 @@ class SubtasksPanel extends ConsumerWidget {
               context.l10n.grpFSubtasks,
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: TfSpace.sm),
             if (!progress.isEmpty)
               Text(
                 '${progress.done}/${progress.total}',
@@ -124,7 +125,7 @@ class SubtasksPanel extends ConsumerWidget {
         ),
         if (!progress.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.symmetric(vertical: TfSpace.sm),
             child: LinearProgressIndicator(
               key: const Key('subtasks-bar'),
               value: progress.fraction,
@@ -155,7 +156,7 @@ class SubtasksPanel extends ConsumerWidget {
         if (canCreate && !project.isArchived)
           tooDeep
               ? Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: TfSpace.xs),
                   child: Text(
                     context.l10n.grpFSubtaskDepthLimit,
                     key: const Key('subtask-depth-limit'),
@@ -249,7 +250,7 @@ class _AddSubtaskFieldState extends ConsumerState<AddSubtaskField> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 4),
+    padding: const EdgeInsets.only(top: TfSpace.xs),
     child: TextField(
       key: Key('add-subtask-${widget.parentId}'),
       controller: _controller,

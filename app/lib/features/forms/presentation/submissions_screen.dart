@@ -5,6 +5,7 @@ import 'package:taskforge/core/ui/tf/tf_button.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tf_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:taskforge/core/ui/page/tf_page.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +62,8 @@ class SubmissionsScreen extends ConsumerWidget {
                 illustration: TfIllustrationKind.docs,
                 title: context.l10n.formsNoSubmissions,
               )
-            : ListView(
+            : TfPage(
+                lazy: true,
                 children: [
                   for (final s in data.submissions)
                     Padding(

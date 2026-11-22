@@ -2,10 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 import 'package:taskforge/core/auth/auth_providers.dart';
 import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/core/ui/frame_scope.dart';
+
+/// A page bar is 48 high: the frame's top bar above it already costs 48.
+const double tfPageBarHeight = 48;
 
 /// The app bar every page uses: an [AppBar] that always has a way back (the
 /// previous page, else home) and, inside the router, a profile menu.
@@ -29,7 +33,7 @@ class TfAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0));
+      Size.fromHeight(tfPageBarHeight + (bottom?.preferredSize.height ?? 0));
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +42,23 @@ class TfAppBar extends StatelessWidget implements PreferredSizeWidget {
     // The frame has the account menu and the way home: a page keeps only its
     // own title, actions and (pushed pages) the back button.
     final framed = AppFrameScope.maybeOf(context)?.hasAccountMenu ?? false;
+    final back = leading ?? (framed ? null : _back(context, router, atHome));
+    final hasBack =
+        back != null ||
+        (automaticallyImplyLeading &&
+            (ModalRoute.of(context)?.canPop ?? false));
+    // On a phone the frame's top bar already names the page.
+    final hasContent =
+        hasBack || (actions?.isNotEmpty ?? false) || bottom != null;
+    final phoneFramed =
+        framed && hasContent && MediaQuery.sizeOf(context).width < 600;
     return AppBar(
-      title: title,
+      title: phoneFramed ? null : title,
       bottom: bottom,
-      leading: leading ?? (framed ? null : _back(context, router, atHome)),
+      toolbarHeight: tfPageBarHeight,
+      leadingWidth: 48,
+      titleSpacing: hasBack ? TfSpace.xs : TfSpace.lg,
+      leading: back,
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: [
         ...?actions,

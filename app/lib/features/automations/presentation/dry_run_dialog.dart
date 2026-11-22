@@ -8,6 +8,7 @@ import 'package:taskforge/features/automations/application/automations_providers
 import 'package:taskforge/features/automations/domain/automations.dart';
 import 'package:taskforge/features/automations/presentation/runs_panel.dart';
 import 'package:taskforge/core/ui/tf/tf_feedback.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Tries [rule] on a chosen task without changing anything.
 Future<void> showDryRun(BuildContext context, Automation rule) =>
@@ -68,7 +69,7 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(context.l10n.grpGDryRunIntro),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               switch (tasks) {
                 AsyncData(:final value) => DropdownButtonFormField<String>(
                   key: const Key('dry-task'),
@@ -104,7 +105,7 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
               },
               if (_error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: TfSpace.sm),
                   child: Text(
                     _error!,
                     key: const Key('dry-error'),
@@ -122,7 +123,7 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
                 ),
                 if (result.explanation.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: TfSpace.xs),
                     child: Text(
                       result.explanation,
                       key: const Key('dry-explanation'),
@@ -130,14 +131,14 @@ class _DryRunDialogState extends ConsumerState<DryRunDialog> {
                   ),
                 if (result.error.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: TfSpace.xs),
                     child: Text(
                       result.error,
                       key: const Key('dry-result-error'),
                       style: TextStyle(color: scheme.error),
                     ),
                   ),
-                const SizedBox(height: 8),
+                const SizedBox(height: TfSpace.sm),
                 StepsView(steps: result.steps),
               ],
             ],

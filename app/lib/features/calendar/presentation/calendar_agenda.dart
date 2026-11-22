@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:taskforge/core/i18n/context_dates.dart';
@@ -151,7 +152,7 @@ class MonthDots extends StatelessWidget {
       onTap: () => onSelect(d),
       child: Container(
         height: 44,
-        margin: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(TfSpace.xxs),
         decoration: BoxDecoration(
           color: isSelected ? c.selected : null,
           border: d == today ? Border.all(color: c.accent) : null,
@@ -189,7 +190,7 @@ class MonthDots extends StatelessWidget {
                 ),
               )
             else
-              const SizedBox(height: 6),
+              const SizedBox(height: TfSpace.sm),
           ],
         ),
       ),

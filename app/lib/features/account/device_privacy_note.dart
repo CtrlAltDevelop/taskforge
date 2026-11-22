@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/page/tf_tile.dart';
+import 'package:taskforge/core/ui/tf/tf_panel.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -9,10 +10,13 @@ class DevicePrivacyNote extends StatelessWidget {
   const DevicePrivacyNote({super.key});
 
   @override
-  Widget build(BuildContext context) => TfTile(
-    key: const Key('device-privacy-note'),
-    title: Text(context.l10n.devPrivacyTitle),
-    subtitle: Text(context.l10n.devPrivacyBody),
-    leading: const TfIcon(TfIcons.shield),
+  Widget build(BuildContext context) => TfPanel(
+    padding: EdgeInsets.zero,
+    child: TfTile(
+      key: const Key('device-privacy-note'),
+      title: Text(context.l10n.devPrivacyTitle),
+      subtitle: Text(context.l10n.devPrivacyBody),
+      leading: const TfIcon(TfIcons.shield),
+    ),
   );
 }

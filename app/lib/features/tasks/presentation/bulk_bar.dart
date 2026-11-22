@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/theme_extension.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:taskforge/core/ui/tokens/shape.dart';
 import 'package:material_ui/material_ui.dart';
@@ -181,7 +182,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                const SizedBox(width: 12),
+                const SizedBox(width: TfSpace.md),
                 Text(
                   busy
                       ? context.l10n.grpFBulkUpdating(
@@ -191,7 +192,7 @@ class _BulkBarState extends ConsumerState<BulkBar> {
                       : context.l10n.grpFBulkSelected(selection.length),
                   key: const Key('bulk-count'),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: TfSpace.sm),
                 if (widget.canUpdate && statuses.isNotEmpty)
                   PopupMenuButton<WorkflowStatus>(
                     key: const Key('bulk-status'),
@@ -266,10 +267,17 @@ class _BarLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    padding: const EdgeInsets.symmetric(
+      horizontal: TfSpace.sm,
+      vertical: TfSpace.sm,
+    ),
     child: Row(
       mainAxisSize: MainAxisSize.min,
-      children: [TfIcon(icon, size: 18), const SizedBox(width: 4), Text(label)],
+      children: [
+        TfIcon(icon, size: 18),
+        const SizedBox(width: TfSpace.xs),
+        Text(label),
+      ],
     ),
   );
 }

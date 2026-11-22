@@ -82,9 +82,9 @@ class OfflineScreen extends ConsumerWidget {
           : TfPage(
               children: [
                 _Changes(workspace: workspace),
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 const _Storage(),
-                const SizedBox(height: 24),
+                const SizedBox(height: TfSpace.xl),
                 const _KeptProjects(),
               ],
             ),
@@ -116,7 +116,7 @@ class _Changes extends ConsumerWidget {
           context.l10n.grpAOfflineNeedsAttention,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         if (attention.isEmpty)
           Text(
             context.l10n.grpAOfflineNothingToDecide,
@@ -124,7 +124,7 @@ class _Changes extends ConsumerWidget {
           ),
         for (final e in attention)
           _AttentionCard(key: Key('attention-${e.id}'), entry: e),
-        const SizedBox(height: 24),
+        const SizedBox(height: TfSpace.xl),
         Row(
           children: [
             Expanded(
@@ -224,7 +224,7 @@ class _AttentionCard extends ConsumerWidget {
       child: TfPanel(
         padding: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(TfSpace.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -232,10 +232,10 @@ class _AttentionCard extends ConsumerWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold),
                 child: _Summary(entry: entry),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: TfSpace.xs),
               Text(reasonText(entry.error, context.l10n)),
               if (conflict && info.field.isNotEmpty) ...[
-                const SizedBox(height: 4),
+                const SizedBox(height: TfSpace.xs),
                 Text(
                   context.l10n.grpAOfflineClash(
                     info.field,
@@ -245,7 +245,7 @@ class _AttentionCard extends ConsumerWidget {
                   key: Key('clash-${entry.id}'),
                 ),
               ],
-              const SizedBox(height: 8),
+              const SizedBox(height: TfSpace.sm),
               Wrap(
                 spacing: 8,
                 children: [
@@ -371,7 +371,7 @@ class _Storage extends ConsumerWidget {
           context.l10n.grpAStorage,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         Text(
           usage == null
               ? context.l10n.grpAReading
@@ -384,7 +384,7 @@ class _Storage extends ConsumerWidget {
         Row(
           children: [
             Expanded(child: Text(context.l10n.grpAMostItMayHold)),
-            const SizedBox(width: 12),
+            const SizedBox(width: TfSpace.md),
             TfSelectField(
               key: const Key('cache-cap'),
               options: {
@@ -412,7 +412,7 @@ class _Storage extends ConsumerWidget {
                 : () => _clear(context, ref, workspace),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: TfSpace.xs),
         Text(
           context.l10n.grpAStorageNote,
           style: Theme.of(context).textTheme.bodySmall,
@@ -472,7 +472,7 @@ class _KeptProjects extends ConsumerWidget {
           context.l10n.grpAKeepOfflineTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: TfSpace.xs),
         Text(context.l10n.grpAKeepOfflineBody),
         for (final p in projects)
           Builder(

@@ -482,6 +482,66 @@ void main() {
     await tester.pump();
     expect(key('palette-row-nav.dashboards'), findsOneWidget);
   });
+
+  group('goals widget', () {
+    FakeDashboardsClient goalsClient() =>
+        (FakeDashboardsClient([
+            dashboardOf('d1', 'Team', [
+              widgetOf('g', WidgetKind.goals, title: 'Goal progress'),
+            ]),
+          ])
+          ..dataOf['g'] = const WidgetData(
+            total: '37.50',
+            buckets: [
+              Bucket('g1', 'Launch', '75.00'),
+              Bucket('g2', 'Hire', '0.00'),
+            ],
+          ));
+
+    testWidgets('draws one bar per goal in percent', (tester) async {
+      await open(tester, client: goalsClient());
+      expect(find.text('Launch'), findsOneWidget);
+      expect(find.text('75%'), findsOneWidget);
+      expect(find.text('0%'), findsOneWidget);
+      expect(key('bar-g1'), findsOneWidget);
+    });
+
+    testWidgets('a bar opens its goal, not a task list', (tester) async {
+      final h = await open(tester, client: goalsClient());
+      await tester.tap(key('bar-g1'));
+      await tester.pumpAndSettle();
+      expect(location(h.pumped), '/goals/g1');
+      expect(h.fake.drills, isEmpty);
+    });
+
+    testWidgets(
+      'the editor offers scope and a limit, not measure or grouping',
+      (tester) async {
+        final h = await open(tester, client: goalsClient());
+        await tester.tap(key('edit-dashboard'));
+        await tester.pumpAndSettle();
+        await tester.tap(key('add-widget'));
+        await tester.pumpAndSettle();
+        await tester.tap(key('widget-kind'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Goals').last);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+        expect(h.fake.previews.last.kind, WidgetKind.goals);
+        expect(key('widget-measure'), findsNothing);
+        expect(key('widget-group'), findsNothing);
+        expect(key('widget-tfql'), findsNothing);
+        expect(key('widget-scope'), findsOneWidget);
+        expect(key('widget-limit'), findsOneWidget);
+
+        await tester.tap(key('widget-limit'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('5').last);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+        expect(h.fake.previews.last.config.limit, 5);
+      },
+    );
+  });
 }
 
 /// One grid row, as the grid draws it.

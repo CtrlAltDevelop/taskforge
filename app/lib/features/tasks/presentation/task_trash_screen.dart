@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_app_bar.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,7 +33,10 @@ class TaskTrashScreen extends ConsumerWidget {
           children: [
             for (final task in value)
               Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: TfSpace.md,
+                  vertical: TfSpace.xs,
+                ),
                 clipBehavior: Clip.antiAlias,
                 child: ListTile(
                   key: Key('trashed-${task.id}'),

@@ -1,3 +1,4 @@
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:taskforge/core/ui/tf_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +46,7 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
         onRetry: () => ref.invalidate(burndownProvider(key)),
       ),
       _ => const Padding(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(TfSpace.xl),
         child: Center(child: CircularProgressIndicator()),
       ),
     };
@@ -89,10 +90,10 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         if (chart.isEmpty)
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(TfSpace.lg),
             child: Text(
               context.l10n.grpABurndownEmpty,
               key: const Key('burndown-empty'),
@@ -122,9 +123,9 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
               ),
             ),
           ),
-        const SizedBox(height: 4),
+        const SizedBox(height: TfSpace.xs),
         Wrap(
-          spacing: 16,
+          spacing: TfSpace.lg,
           children: [
             _Legend(
               color: theme.colorScheme.primary,
@@ -148,7 +149,7 @@ class _BurndownPanelState extends ConsumerState<BurndownPanel> {
                     size: 12,
                     color: theme.colorScheme.primary,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: TfSpace.xs),
                   Text(
                     context.l10n.grpALegendBackfilled,
                     style: theme.textTheme.bodySmall,
@@ -173,7 +174,7 @@ class _Legend extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       Container(width: 12, height: 3, color: color),
-      const SizedBox(width: 4),
+      const SizedBox(width: TfSpace.xs),
       Text(label, style: Theme.of(context).textTheme.bodySmall),
     ],
   );
@@ -307,7 +308,7 @@ class VelocityPanel extends ConsumerWidget {
           key: const Key('velocity-title'),
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: TfSpace.sm),
         SizedBox(
           height: 160,
           child: Semantics(
@@ -334,7 +335,7 @@ class VelocityPanel extends ConsumerWidget {
           ),
         ),
         Wrap(
-          spacing: 16,
+          spacing: TfSpace.lg,
           children: [
             _Legend(
               color: theme.colorScheme.outline,

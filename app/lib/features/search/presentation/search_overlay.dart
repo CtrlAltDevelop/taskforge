@@ -1,4 +1,5 @@
 import 'package:taskforge/core/ui/tf_icons.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -95,7 +96,12 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
     final results = state.results;
     return Dialog(
       alignment: Alignment.topCenter,
-      insetPadding: const EdgeInsets.fromLTRB(16, 56, 16, 16),
+      insetPadding: const EdgeInsets.fromLTRB(
+        TfSpace.lg,
+        56,
+        TfSpace.lg,
+        TfSpace.lg,
+      ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 640, maxHeight: 560),
         child: Column(
@@ -104,7 +110,7 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
             Focus(
               onKeyEvent: _keys,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(TfSpace.md),
                 child: TextField(
                   key: const Key('search-field'),
                   controller: _text,
@@ -119,7 +125,7 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
                     ),
                     suffixIcon: state.loading
                         ? const Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(TfSpace.md),
                             child: SizedBox.square(
                               dimension: 16,
                               child: CircularProgressIndicator(strokeWidth: 2),
@@ -133,7 +139,7 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: TfSpace.md),
               child: Wrap(
                 spacing: 8,
                 children: [
@@ -184,7 +190,12 @@ class _SearchOverlayState extends ConsumerState<SearchOverlay> {
         if (state.error != null)
           Padding(
             key: const Key('search-more-error'),
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 4),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              TfSpace.lg,
+              TfSpace.xs,
+              TfSpace.lg,
+              TfSpace.xs,
+            ),
             child: Text(searchErrorMessage(state.error!, context.l10n)),
           ),
         if (results.jump != null)
@@ -235,7 +246,12 @@ class _Section extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          TfSpace.lg,
+          TfSpace.sm,
+          TfSpace.lg,
+          TfSpace.xs,
+        ),
         child: Text(title, style: Theme.of(context).textTheme.labelLarge),
       ),
       ...children,
@@ -332,7 +348,12 @@ class _Recent extends StatelessWidget {
       shrinkWrap: true,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 4),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            TfSpace.lg,
+            TfSpace.sm,
+            TfSpace.lg,
+            TfSpace.xs,
+          ),
           child: Text(context.l10n.grpFRecent),
         ),
         for (final q in recent)
@@ -355,7 +376,7 @@ class _Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(24),
+    padding: const EdgeInsets.all(TfSpace.xl),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [Text(text, textAlign: TextAlign.center)],

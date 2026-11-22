@@ -7,6 +7,7 @@ import 'package:taskforge/core/i18n/l10n_context.dart';
 import 'package:taskforge/features/projects/application/projects_providers.dart';
 import 'package:taskforge/features/projects/domain/projects.dart';
 import 'package:taskforge/features/projects/presentation/project_look_picker.dart';
+import 'package:taskforge/core/ui/tokens/spacing.dart';
 
 /// Opens the create dialog and, on success, the new project.
 Future<void> createProject(BuildContext context) async {
@@ -103,7 +104,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
                 validator: validateProjectName,
                 onChanged: _nameChanged,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextFormField(
                 key: const Key('project-key'),
                 controller: _key,
@@ -124,7 +125,7 @@ class _State extends ConsumerState<CreateProjectDialog> {
                   if (_keyError != null) setState(() => _keyError = null);
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: TfSpace.md),
               TextFormField(
                 key: const Key('project-description'),
                 controller: _description,
@@ -133,21 +134,21 @@ class _State extends ConsumerState<CreateProjectDialog> {
                   labelText: context.l10n.grpHDescription,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: TfSpace.lg),
               ProjectLookPicker(
                 icon: _icon,
                 color: _color,
                 onIcon: (v) => setState(() => _icon = v),
                 onColor: (v) => setState(() => _color = v),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: TfSpace.lg),
               VisibilityPicker(
                 value: _visibility,
                 onChanged: (v) => setState(() => _visibility = v),
               ),
               if (_error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: TfSpace.md),
                   child: Text(
                     _error!,
                     key: const Key('project-error'),

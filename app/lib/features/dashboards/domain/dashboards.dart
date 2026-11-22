@@ -18,7 +18,8 @@ enum WidgetKind {
   pie('pie', 'Pie chart'),
   table('table', 'Table'),
   burndown('burndown', 'Burndown'),
-  workload('workload', 'Workload');
+  workload('workload', 'Workload'),
+  goals('goals', 'Goals');
 
   const WidgetKind(this.wire, this.label);
 
@@ -34,6 +35,7 @@ enum WidgetKind {
     table => l.grpMWkTable,
     burndown => l.grpMWkBurndown,
     workload => l.grpMWkWorkload,
+    goals => l.dashWkGoals,
   };
 
   static WidgetKind of(String wire) =>
@@ -41,6 +43,10 @@ enum WidgetKind {
 
   /// Needs a grouping of its own choosing.
   bool get picksGrouping => this == bar || this == pie || this == table;
+
+  /// About goals, not tasks: no measure, grouping or filter, and a bar opens
+  /// the goal instead of listing tasks.
+  bool get isGoals => this == goals;
 }
 
 enum Measure {
