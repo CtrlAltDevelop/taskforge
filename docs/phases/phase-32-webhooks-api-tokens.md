@@ -16,7 +16,7 @@ A user (or admin for service accounts) creates a **token** with a name, scopes (
 **Out:** OAuth app marketplace, GraphQL, inbound “apps” platform.
 
 ## Data model
-- `ApiToken(id, workspace, owner, name, prefix, hash, scopes[], expires_at, last_used_at, revoked_at)`
+- `ApiToken(id, workspace, owner, name, prefix, hash, scopes[], expires_at, last_used_at, revoked_at)`; `ServiceAccount(id, workspace, user, name, created_by, deleted_at)`
 - `Webhook(id, workspace, project nullable, url, secret, events[], active)`
 - `WebhookDelivery(id, webhook, event, payload, status_code, response_snippet, attempt, next_retry_at, at)`
 
@@ -48,7 +48,9 @@ Phases 01, 04, 06; event catalog shared with 16/24/27.
 
 ## Implementation notes
 Accepted deviations from the plan above:
-- Tokens are personal only; there are no service-account tokens (the plan's "or admin for service accounts" is not built).
+- Service accounts (added after the first build): `ServiceAccount` is a workspace-owned identity backed by a user nobody can sign in as (no password, no email) and an ordinary membership, which is where its role lives. It is never an Owner. A token of an account is an `ApiToken` owned by that user, so it is limited exactly like a person's: the role's permissions intersected with the token's scopes. Managing accounts and their tokens needs `webhook.manage` (no new permission key), and the caller must hold every permission of the role they give. gRPC `ServiceAccountController` (`List`, `Create`, `SetRole`, `Delete`), `ApiTokenController.Create/List` take an optional `service_account_id`, REST `/api/v1/service-accounts` (+ `/{id}/tokens`); a token is revoked at `DELETE /tokens/{id}` by its owner or by anyone who manages webhooks. Deleting an account revokes its tokens, removes it from the members and frees its name. Two-factor enforcement does not block it. Audit: `serviceaccount.created`, `.role_changed`, `.deleted`; `token.created` / `token.revoked` also name the account.
 - A token can never manage tokens or webhooks (a leaked token cannot mint a longer-lived one).
-- A webhook switched off after 24 hours of failures shows `disabled_reason` and a `webhook.disabled` audit entry, not an inbox notice.
+- A webhook switched off after 24 hours of failures shows `disabled_reason`, writes a `webhook.disabled` audit entry and puts a `webhook.disabled` notice in the inbox of everyone who holds `webhook.manage`.
 - The public task schema omits the description.
+
+- App: Settings → Developer has a third tab, Service accounts (shown to anyone with `webhook.manage`): list with role and token count, create (name and a role other than Owner), change role, delete after a confirmation, and a dialog per account to list, revoke and create its tokens (`ApiTokenController` with `service_account_id`), with the same show-once secret dialog as a person's tokens. The inbox row for `webhook.disabled` opens that webhook's delivery log.

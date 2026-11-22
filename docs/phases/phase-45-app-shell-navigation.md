@@ -55,5 +55,9 @@ Widget tests per width; permission-gating; reorder persistence; breadcrumb mappi
 ## Built differently / deferred
 - The frame is part of each page route (`framedPage`), not a nested `ShellRoute`: a nested navigator made `Navigator.of(pageContext).pop()` in dialogs pop the page.
 - Nav prefs stay local (`nav.v1`); no `NavPref` server table.
-- Not done: the "My work" entry and phone tab (its page is phase 48), the draggable desktop title area, real names for doc, goal, space and task in breadcrumbs (generic words for now), the sign-in → create project → open task → breadcrumbs integration test (widget tests cover each step), and go-to keys for System.
+- Breadcrumbs name the project, task, doc, goal, chat space and form once they are loaded (`currentCrumbs`); a name still loading, or not visible, keeps the generic word. A doc inside a project is looked up in the workspace tree only, so it keeps the generic word. A direct message has no name and keeps it too.
+- "My work" is in the sidebar and in the phone's More sheet (the bar holds Home, Inbox and Chat).
+- The sign-in → create project → open task → breadcrumbs flow is `integration_test/breadcrumbs_flow_test.dart` (runs with `make integration`).
+- The draggable desktop title area does not apply: the app uses the operating system's own title bar, which already drags. It becomes work only if a custom title bar is added (macOS `fullSizeContentView`, Windows/Linux runner changes).
+- Not done: go-to keys for System.
 - Tablets: the strip carries the workspace avatar (switcher) and the settings gear; the full sidebar is the overlay.

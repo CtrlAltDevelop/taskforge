@@ -43,3 +43,8 @@ Public endpoint isolation, rate limiting, upload limits, field validation reuse,
 
 ## Depends on
 Phases 10, 18, 19.
+
+## Implementation notes
+- Tasks have no separate label concept, so "labels" in a form's defaults are project field values: `defaults.field_defaults` maps custom field ids to wire values (labels are a multi-select field named Labels). They are checked like a typed value when the form is saved; a default that stopped fitting (field archived, option removed) is left out at submit time, never a reason to refuse a visitor. A visitor's own answer to the same field wins. gRPC: `FieldDefault{field_id, value}` on `FormCreateRequest`, `FormUpdateRequest` (with `changed: ["defaults"]`) and `IntakeForm`.
+- The logo can be uploaded: `POST /api/v1/forms/{form_id}/logo` (multipart `file` + `expected_version`, `X-Workspace`; PNG, JPEG or WebP read from the bytes, at most 2 MB; needs `form.manage`). It replaces a linked logo and a previous upload; linking a web address (or clearing `logo_url`) through `Update` removes the upload. `IntakeForm.logo_url` and the public page show whichever is set.
+- App: the form builder lists every project field under "Default values" with the field's own input (the saved value in its wire form, cleared by emptying it) and sends it as `field_defaults`. The logo has Upload image (REST multipart; disabled until the form is saved, because the upload needs the form's version), the link field and Remove logo. The builder cannot tell an uploaded logo from a linked one in `logo_url`, so it leaves `logo_url` out of the save until the person edits or removes it; saving never turns an upload into a link. An upload moves the form's version, which the builder keeps for the next save.

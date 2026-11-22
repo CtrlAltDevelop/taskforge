@@ -44,3 +44,8 @@ Progress math (both directions, zero denominators), rollup, risk hint, debounce 
 
 ## Depends on
 Phases 14, 19; fits with 26 widgets.
+
+## Implementation notes
+- Inbox: `goal.reached` (progress crossed 100 %) and `goal.at_risk` (status moved from on track to at risk or off track) go to the goal's owner and contributors who are still members, never to the person who caused the change; nothing is sent to a private goal's outsiders because only those people are told. They fire when progress moves; a goal nobody touches is not re-judged as its period runs out.
+- Dashboards: a `goals` widget (phase 26) lists each goal the viewer may see that is not nested under another they see, at its rolled-up progress in percent, with the weighted average as its total; `scope` open/done and `limit` apply. A goal is not made of tasks, so it has no drill-down.
+- App: the inbox shows `goal.reached` and `goal.at_risk` ("Goal reached: Launch", "Goal at risk: Hire" with the percent) and a tap opens the goal. The dashboard widget picker has Goals (scope and how many goals; no measure, grouping or filter); its bars show percent and a bar opens the goal instead of a task list.

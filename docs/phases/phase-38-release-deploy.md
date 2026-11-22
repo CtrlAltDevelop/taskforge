@@ -73,3 +73,5 @@ Before pushing a `vX.Y.Z` tag (see [deploy/README.md](../../deploy/README.md)), 
 - [ ] Backend suite green on PostgreSQL, not only SQLite.
 - [ ] Upgrade from the previous tag and backup restore smoke test pass (CI `upgrade` and restore jobs).
 - [ ] README and docs screenshots still match the UI (`docs/screenshots/`).
+
+- Caddy also serves `/.well-known/assetlinks.json` and `/.well-known/apple-app-site-association` (env: `ANDROID_PACKAGE`, `ANDROID_SHA256_FINGERPRINT`, `APPLE_TEAM_ID`, `IOS_BUNDLE_ID`) and falls back to `index.html` for `/invite/*`; `make prod-config` runs `deploy/scripts/check-web.sh` (static check, plus `caddy validate` when Docker is up). Not verified on a public domain with a real device.
