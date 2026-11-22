@@ -1,8 +1,9 @@
 """API tokens and webhooks: the rules. The transports (gRPC, REST) only call these.
 
-Tokens are personal: a member makes, lists and revokes their own, in a workspace they belong to,
-and each one carries at most what its owner may do (see ``scopes``). Webhooks need
-``webhook.manage``. Neither is ever managed *with* a token. Creating and revoking a token each
+Tokens are a person's own: a member makes, lists and revokes theirs, in a workspace they belong to,
+and each one carries at most what its owner may do (see ``scopes``). A service account's tokens
+are made and revoked by those who hold ``webhook.manage`` (see ``service_accounts``). Webhooks
+need ``webhook.manage``. Neither is ever managed *with* a token. Creating and revoking a token each
 leave an audit entry naming the token and its prefix, never the secret or its hash.
 """
 
@@ -95,66 +96,75 @@ def create_token(
 ) -> Issued:
     _by_person(actor)
     access.require(actor, VIEW, workspace)
+    return mint_token(actor, workspace, actor, name, wanted_scopes, expires_in_days)
+
+
+def mint_token(
+    actor: Any,
+    workspace: Workspace,
+    owner: Any,
+    name: str,
+    wanted_scopes: Any,
+    expires_in_days: int = 0,
+    *,
+    service_account: str = "",
+) -> Issued:
+    """Make a token of ``owner`` (the caller, or a service account's user) once ``actor`` has been
+    checked by the caller. The audit entry names the token and its prefix, never the secret."""
     cleaned_name = _name(name)
     chosen = scopes.clean(wanted_scopes)
     expires_at = _expiry(expires_in_days)
     with transaction.atomic():
         live = ApiToken.objects.filter(
-            workspace=workspace, owner=actor, revoked_at__isnull=True
+            workspace=workspace, owner=owner, revoked_at__isnull=True
         ).count()
         if live >= settings.DEVELOPER_MAX_TOKENS:
-            raise _invalid("You have too many active tokens here. Revoke one first.")
+            raise _invalid("There are too many active tokens here. Revoke one first.")
         secret, prefix, digest = tokens.new_secret()
         token = ApiToken.objects.create(
             workspace=workspace,
-            owner=actor,
+            owner=owner,
             name=cleaned_name,
             prefix=prefix,
             hash=digest,
             scopes=chosen,
             expires_at=expires_at,
         )
-        _audit(
-            workspace,
-            "token.created",
-            "token",
-            token.pk,
-            {
-                "name": token.name,
-                "prefix": token.prefix,
-                "scopes": chosen,
-            },
-            actor,
-        )
+        recorded = {"name": token.name, "prefix": token.prefix, "scopes": chosen}
+        if service_account:
+            recorded["service_account"] = service_account
+        _audit(workspace, "token.created", "token", token.pk, recorded, actor)
     return Issued(token, secret)
 
 
 def revoke_token(actor: Any, workspace: Workspace, token_id: str) -> ApiToken:
+    """A person revokes their own token; whoever manages webhooks revokes a service account's.
+    Any other token is a 404, as if it did not exist."""
     _by_person(actor)
     access.require(actor, VIEW, workspace)
     with transaction.atomic():
         token = (
             ApiToken.objects.select_for_update()
-            .filter(pk=_uuid(token_id), workspace=workspace, owner=actor)
+            .select_related("owner")
+            .filter(pk=_uuid(token_id), workspace=workspace)
             .first()
         )
-        if token is None:
+        if token is None or not _may_revoke(actor, workspace, token):
             raise _not_found()
         if token.revoked_at is None:
             token.revoked_at = timezone.now()
             token.save(update_fields=["revoked_at"])
-            _audit(
-                workspace,
-                "token.revoked",
-                "token",
-                token.pk,
-                {
-                    "name": token.name,
-                    "prefix": token.prefix,
-                },
-                actor,
-            )
+            recorded = {"name": token.name, "prefix": token.prefix}
+            if token.owner_id != actor.pk:
+                recorded["service_account"] = token.owner.service_account.name
+            _audit(workspace, "token.revoked", "token", token.pk, recorded, actor)
     return token
+
+
+def _may_revoke(actor: Any, workspace: Workspace, token: ApiToken) -> bool:
+    if token.owner_id == actor.pk:
+        return True
+    return hasattr(token.owner, "service_account") and access.can(actor, MANAGE, workspace).allowed
 
 
 def _audit(

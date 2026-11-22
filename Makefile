@@ -146,6 +146,7 @@ proto-breaking:
 # Phase 38: production stack helpers (see deploy/README.md).
 prod-config:
 	docker compose -f deploy/docker-compose.prod.yml config -q
+	deploy/scripts/check-web.sh
 
 backup:
 	deploy/scripts/backup.sh

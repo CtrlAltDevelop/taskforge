@@ -71,6 +71,20 @@ def render(row: Any, actor_name: str, locale: str | None = None) -> tuple[str, s
                 tr("notify.automation_disabled.title", lang, name=name),
                 clean(payload.get("reason", "")),
             )
+        case kinds.WEBHOOK_DISABLED:
+            name = clean(payload.get("webhook", ""))
+            return (
+                tr("notify.webhook_disabled.title", lang, name=name),
+                clean(payload.get("reason", "")),
+            )
+        case kinds.GOAL_REACHED:
+            return tr("notify.goal_reached.title", lang, name=clean(payload.get("goal", ""))), ""
+        case kinds.GOAL_AT_RISK:
+            percent = round(float(payload.get("progress", 0)) * 100)
+            return (
+                tr("notify.goal_at_risk.title", lang, name=clean(payload.get("goal", ""))),
+                tr("notify.goal_at_risk.body", lang, percent=percent),
+            )
     return tr("notify.fallback.title", lang), task
 
 

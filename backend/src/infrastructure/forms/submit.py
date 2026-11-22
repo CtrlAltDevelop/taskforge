@@ -233,8 +233,21 @@ def _create_task(form: Form, reference: str, checked: Checked) -> Any:
         status=str(defaults.get("status_id") or ""),
         priority=str(defaults.get("priority") or "none"),
         assignee_ids=list(defaults.get("assignee_ids", [])),
-        field_values=checked.field_values,
+        field_values={**_usable_defaults(form), **checked.field_values},
     )
+
+
+def _usable_defaults(form: Form) -> dict[str, str]:
+    """The form's default field values that still fit the project (a field archived or an option
+    removed since the form was saved is left out, never a reason to refuse a visitor)."""
+    usable: dict[str, str] = {}
+    for key, value in (form.defaults or {}).get("field_defaults", {}).items():
+        try:
+            custom.prepare(form.project, {key: value})
+        except ApiError:
+            continue
+        usable[key] = value
+    return usable
 
 
 def _record(

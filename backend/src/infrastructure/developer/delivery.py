@@ -20,6 +20,7 @@ from django.utils import timezone
 from infrastructure.audit import recorder
 from infrastructure.developer import events, outbound, signing
 from infrastructure.developer.models import DeliveryStatus, Webhook, WebhookDelivery
+from infrastructure.workspaces.models import MemberStatus, WorkspaceMember
 
 logger = logging.getLogger(__name__)
 
@@ -179,6 +180,32 @@ def _maybe_disable(delivery: WebhookDelivery) -> None:
         project_id=hook.project_id,
         changes={"name": hook.name, "reason": reason},
         actor_type="system",
+    )
+    _tell_managers(hook, reason, delivery.pk)
+
+
+def _tell_managers(hook: Webhook, reason: str, delivery_id: Any) -> None:
+    """Everyone who may manage webhooks hears of it in their inbox (the audit log is for later)."""
+    from infrastructure.inbox import kinds, notify
+
+    managers = set(
+        WorkspaceMember.objects.filter(
+            workspace_id=hook.workspace_id,
+            status=MemberStatus.ACTIVE,
+            role__permissions__permission_key="webhook.manage",
+        ).values_list("user_id", flat=True)
+    )
+    notify.notify(
+        kind=kinds.WEBHOOK_DISABLED,
+        recipients=managers,
+        workspace=hook.workspace,
+        project=hook.project,
+        task=None,
+        actor_id=None,
+        payload={"webhook": hook.name or hook.url, "webhook_id": str(hook.pk), "reason": reason},
+        dedupe=f"webhook-off:{hook.pk}:{delivery_id}",
+        fold=False,
+        allowed=managers,
     )
 
 

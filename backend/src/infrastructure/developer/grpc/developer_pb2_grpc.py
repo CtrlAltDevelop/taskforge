@@ -226,6 +226,207 @@ class ApiTokenController:
             _registered_method=True)
 
 
+class ServiceAccountControllerStub:
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Create = channel.unary_unary(
+                '/config.developer.ServiceAccountController/Create',
+                request_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountCreateRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.FromString,
+                _registered_method=True)
+        self.Delete = channel.unary_unary(
+                '/config.developer.ServiceAccountController/Delete',
+                request_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleteRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleted.FromString,
+                _registered_method=True)
+        self.List = channel.unary_unary(
+                '/config.developer.ServiceAccountController/List',
+                request_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountListRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountList.FromString,
+                _registered_method=True)
+        self.SetRole = channel.unary_unary(
+                '/config.developer.ServiceAccountController/SetRole',
+                request_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountSetRoleRequest.SerializeToString,
+                response_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.FromString,
+                _registered_method=True)
+
+
+class ServiceAccountControllerServicer:
+    """Missing associated documentation comment in .proto file."""
+
+    def Create(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Delete(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def List(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetRole(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_ServiceAccountControllerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Create': grpc.unary_unary_rpc_method_handler(
+                    servicer.Create,
+                    request_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountCreateRequest.FromString,
+                    response_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.SerializeToString,
+            ),
+            'Delete': grpc.unary_unary_rpc_method_handler(
+                    servicer.Delete,
+                    request_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleteRequest.FromString,
+                    response_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleted.SerializeToString,
+            ),
+            'List': grpc.unary_unary_rpc_method_handler(
+                    servicer.List,
+                    request_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountListRequest.FromString,
+                    response_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountList.SerializeToString,
+            ),
+            'SetRole': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetRole,
+                    request_deserializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountSetRoleRequest.FromString,
+                    response_serializer=infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'config.developer.ServiceAccountController', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('config.developer.ServiceAccountController', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class ServiceAccountController:
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Create(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.developer.ServiceAccountController/Create',
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountCreateRequest.SerializeToString,
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Delete(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.developer.ServiceAccountController/Delete',
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleteRequest.SerializeToString,
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountDeleted.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def List(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.developer.ServiceAccountController/List',
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountListRequest.SerializeToString,
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountList.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetRole(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/config.developer.ServiceAccountController/SetRole',
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountSetRoleRequest.SerializeToString,
+            infrastructure_dot_developer_dot_grpc_dot_developer__pb2.ServiceAccountAnswer.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
 class WebhookControllerStub:
     """Missing associated documentation comment in .proto file."""
 

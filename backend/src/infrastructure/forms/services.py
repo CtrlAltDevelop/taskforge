@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Any, Final
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import transaction
 from django.db.models import Count
 from django.utils import timezone
@@ -25,6 +26,7 @@ from infrastructure.projects import services as projects
 from infrastructure.projects.models import Project
 from infrastructure.tasks import services as task_services
 from infrastructure.workspaces import access
+from infrastructure.workspaces import services as workspace_services
 from infrastructure.workspaces.models import MemberStatus, Workspace, WorkspaceMember
 
 MANAGE: Final = "form.manage"
@@ -202,6 +204,9 @@ def _apply(form: Form, changes: dict[str, Any]) -> dict[str, Any]:
         "defaults": lambda raw: spec.clean_defaults(raw, form.project),
     }
     done: dict[str, Any] = {}
+    if "logo_url" in changes and form.logo:
+        form.logo = ""  # a linked (or cleared) logo replaces an uploaded one
+        done["logo"] = "removed"
     for key, raw in changes.items():
         if key not in EDITABLE:
             raise ApiError(f"Cannot change {key}.")
@@ -231,6 +236,7 @@ def update(
                 "The form changed since you opened it.", 409, title=ResponseTitle.VERSION_CONFLICT
             )
         projects.writable(form.project)
+        replaced_logo = form.logo.name if "logo_url" in changes else ""
         done = _apply(form, changes)
         _check_ready(form.project, form.fields, form.enabled)
         form.owner = actor
@@ -238,6 +244,44 @@ def update(
         form.updated_at = timezone.now()
         form.save()
         _audit(form, "form.updated", done, actor)
+    if replaced_logo:
+        form.logo.storage.delete(replaced_logo)
+    return _view(form)
+
+
+def set_logo(
+    actor: Any, workspace: Workspace, form_id: str, content: bytes, expected_version: int
+) -> FormView:
+    """Store an uploaded PNG, JPEG or WebP (read from its bytes, at most 2 MB) as the form's logo.
+    It replaces a linked logo and a previous upload; the saver becomes the owner, as in any save."""
+    _gate(actor, workspace)
+    extension = workspace_services.logo_extension(content)
+    if extension is None:
+        raise ApiError(
+            "The logo must be a PNG, JPEG or WebP image of at most 2 MB.",
+            title=ResponseTitle.UPLOAD_INVALID,
+        )
+    with transaction.atomic():
+        form = _form(workspace, form_id, lock=True)
+        task_services.project_for_view(actor, workspace, str(form.project_id))
+        if form.version != expected_version:
+            raise ApiError(
+                "The form changed since you opened it.", 409, title=ResponseTitle.VERSION_CONFLICT
+            )
+        projects.writable(form.project)
+        previous = form.logo.name
+        stored = form.logo.storage.save(
+            f"forms/logos/{form.pk}-{uuid.uuid4().hex[:8]}.{extension}", ContentFile(content)
+        )
+        form.logo = stored
+        form.logo_url = ""
+        form.owner = actor
+        form.version += 1
+        form.updated_at = timezone.now()
+        form.save()
+        _audit(form, "form.updated", {"logo": "uploaded"}, actor)
+    if previous:
+        form.logo.storage.delete(previous)
     return _view(form)
 
 

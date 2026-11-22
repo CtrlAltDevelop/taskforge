@@ -40,6 +40,7 @@ class Form(models.Model):
     notify_status = models.BooleanField(default=False)
     brand_color = models.CharField(max_length=7, blank=True)
     logo_url = models.CharField(max_length=500, blank=True)
+    logo = models.FileField(upload_to="forms/logos", blank=True)  # an upload; excludes logo_url
     created_by = models.ForeignKey(
         django_settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+"
     )
@@ -55,6 +56,11 @@ class Form(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def logo_src(self) -> str:
+        """What the public page shows: the uploaded logo, else the linked one, else nothing."""
+        return self.logo.url if self.logo else self.logo_url
 
     @property
     def actor_label(self) -> str:

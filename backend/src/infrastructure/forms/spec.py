@@ -178,7 +178,29 @@ def clean_defaults(raw: dict[str, Any], project: Project) -> dict[str, Any]:
         ).count()
         if members != len(assignees):
             raise invalid("A default assignee is not a member of this workspace.")
-    return {"status_id": status_id, "priority": priority, "assignee_ids": assignees}
+    return {
+        "status_id": status_id,
+        "priority": priority,
+        "assignee_ids": assignees,
+        "field_defaults": _clean_field_defaults(raw.get("field_defaults") or {}, project),
+    }
+
+
+def _clean_field_defaults(raw: Any, project: Project) -> dict[str, str]:
+    """Project field values every task of the form starts with (labels: a multi-select field).
+    Checked with the app's own validation, so a default is refused exactly as a typed value is."""
+    from infrastructure.customfields import values as custom
+
+    if not isinstance(raw, dict):
+        raise invalid("The default field values are an object of field id to value.")
+    sent = {str(k): str(v).strip() for k, v in raw.items() if str(v).strip()}
+    try:
+        custom.prepare(project, sent)
+    except ApiError as error:
+        if error.title != ResponseTitle.FIELD_INVALID:
+            raise
+        raise invalid(f"A default field value does not fit: {error}") from None
+    return sent
 
 
 def public_fields(fields: list[dict[str, Any]], project: Project) -> list[dict[str, Any]]:

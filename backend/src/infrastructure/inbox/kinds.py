@@ -14,6 +14,9 @@ DUE_SOON: Final = "task.due_soon"
 TIMER_LONG: Final = "timer.long"
 AUTOMATION: Final = "automation.notice"
 AUTOMATION_DISABLED: Final = "automation.disabled"
+WEBHOOK_DISABLED: Final = "webhook.disabled"
+GOAL_REACHED: Final = "goal.reached"
+GOAL_AT_RISK: Final = "goal.at_risk"
 CHAT_MENTIONED: Final = "chat.mentioned"
 CHAT_DM: Final = "chat.dm"
 CHAT_CHANNEL_ALL: Final = "chat.channel_all"
@@ -40,6 +43,9 @@ KINDS: Final = (
     Kind(TIMER_LONG, "Your timer has been running for a long time", push=True),
     Kind(AUTOMATION, "An automation sends you a message"),
     Kind(AUTOMATION_DISABLED, "An automation of yours was switched off", push=True),
+    Kind(WEBHOOK_DISABLED, "A webhook of your workspace was switched off", push=True),
+    Kind(GOAL_REACHED, "A goal of yours reached 100 %"),
+    Kind(GOAL_AT_RISK, "A goal of yours is falling behind", push=True),
     Kind(CHAT_MENTIONED, "Someone mentions you in chat", push=True),
     Kind(CHAT_DM, "Someone sends you a direct message", push=True),
     Kind(CHAT_CHANNEL_ALL, "Someone writes @channel or @here in a space of yours", push=True),

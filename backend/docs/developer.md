@@ -21,7 +21,7 @@ Personal access tokens for the public REST API and signed outbound webhooks. Pha
 <!-- generated:models -->
 #### `ApiToken`
 
-A personal access token for one workspace. Only ``prefix`` (shown in lists, used to find
+An access token for one workspace: a person's own, or (``owner`` is its user) a service
 
 | Field | Type | Notes |
 | --- | --- | --- |
@@ -36,6 +36,20 @@ A personal access token for one workspace. Only ``prefix`` (shown in lists, used
 | `last_used_at` | DateTime | nullable |
 | `revoked_at` | DateTime | nullable |
 | `created_at` | DateTime |  |
+
+#### `ServiceAccount`
+
+An identity that belongs to a workspace, not to a person, for scripts and integrations.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | UUID | primary key, not editable |
+| `workspace` | ForeignKey | → `workspaces.Workspace` |
+| `user` | OneToOne | unique, → `accounts.User` |
+| `name` | Char |  |
+| `created_by` | ForeignKey | → `accounts.User`, nullable |
+| `created_at` | DateTime |  |
+| `deleted_at` | DateTime | nullable |
 
 #### `Webhook`
 

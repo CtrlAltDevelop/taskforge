@@ -335,6 +335,8 @@ def _too_heavy() -> ApiError:
 
 def compute(scope: Scope, kind: str, config: dict[str, Any], tfql: str, now: datetime) -> Result:
     """The widget's numbers, every query under the time limit (not only a filtered one)."""
+    if kind == cfg.GOALS:
+        return _goals(scope, config)
     where = where_of(scope, tfql) if kind != cfg.BURNDOWN else Q()
     try:
         if kind == cfg.BURNDOWN:
@@ -372,6 +374,31 @@ def _compute(scope: Scope, kind: str, config: dict[str, Any], where: Q) -> Resul
     return result
 
 
+def _goals(scope: Scope, config: dict[str, Any]) -> Result:
+    """Each goal the viewer may see that is not nested under another they see, at its rolled-up
+    progress in percent; ``total`` is their weighted average. ``scope`` keeps the unfinished
+    (``open``) or the finished (``done``) ones."""
+    from infrastructure.goals import progress as goal_math
+    from infrastructure.goals import services as goal_services
+
+    views = goal_services.list_goals(scope.actor, scope.workspace)
+    shown = {v.goal.pk for v in views}
+    top = [v for v in views if v.goal.parent_id is None or v.goal.parent_id not in shown]
+    wanted = config["scope"]
+    if wanted != "all":
+        top = [v for v in top if (v.progress >= 1.0) == (wanted == "done")]
+    result = Result()
+    result.total = _money(
+        Decimal(goal_math.weighted((v.progress, v.goal.weight) for v in top)) * 100
+    )
+    limit = config["limit"]
+    result.truncated = len(top) > limit
+    result.buckets = [
+        Bucket(str(v.goal.pk), v.goal.name, _money(Decimal(v.progress) * 100)) for v in top[:limit]
+    ]
+    return result
+
+
 def _within_range(pairs: list[tuple[str, Decimal]], scope: Scope, config: dict[str, Any]) -> Any:
     """Time buckets of the last ``range_days`` days, oldest first (a no-date bucket stays out)."""
     start = scope.today - timedelta(days=config["range_days"])
@@ -398,6 +425,8 @@ def _burndown(scope: Scope, config: dict[str, Any], now: datetime) -> Result:
 
 def drilldown(scope: Scope, kind: str, config: dict[str, Any], tfql: str, bucket: str) -> Any:
     """The tasks a widget's number (or one bucket of it) counts: the same query, one more filter."""
+    if kind == cfg.GOALS:
+        return Task.objects.none()  # a goal is not made of tasks: the app opens the goal instead
     if kind == cfg.BURNDOWN:
         # The open tasks of the sprint, in the project the chart is about (the number is what
         # remains of their points), whatever project the dashboard itself is filed under.

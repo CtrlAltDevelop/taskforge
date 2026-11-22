@@ -31,6 +31,7 @@ class ApiToken(_message.Message):
     LAST_USED_AT_FIELD_NUMBER: _builtins.int
     REVOKED_AT_FIELD_NUMBER: _builtins.int
     CREATED_AT_FIELD_NUMBER: _builtins.int
+    SERVICE_ACCOUNT_ID_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     name: _builtins.str
     prefix: _builtins.str
@@ -39,6 +40,7 @@ class ApiToken(_message.Message):
     last_used_at: _builtins.str
     revoked_at: _builtins.str
     created_at: _builtins.str
+    service_account_id: _builtins.str
     @_builtins.property
     def scopes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
@@ -53,10 +55,11 @@ class ApiToken(_message.Message):
         last_used_at: _builtins.str = ...,
         revoked_at: _builtins.str = ...,
         created_at: _builtins.str = ...,
+        service_account_id: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["created_at", b"created_at", "expires_at", b"expires_at", "id", b"id", "last_used_at", b"last_used_at", "name", b"name", "prefix", b"prefix", "revoked_at", b"revoked_at", "scopes", b"scopes", "status", b"status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["created_at", b"created_at", "expires_at", b"expires_at", "id", b"id", "last_used_at", b"last_used_at", "name", b"name", "prefix", b"prefix", "revoked_at", b"revoked_at", "scopes", b"scopes", "service_account_id", b"service_account_id", "status", b"status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -90,9 +93,11 @@ class ApiTokenCreateRequest(_message.Message):
     NAME_FIELD_NUMBER: _builtins.int
     SCOPES_FIELD_NUMBER: _builtins.int
     EXPIRES_IN_DAYS_FIELD_NUMBER: _builtins.int
+    SERVICE_ACCOUNT_ID_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     name: _builtins.str
     expires_in_days: _builtins.int
+    service_account_id: _builtins.str
     @_builtins.property
     def scopes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
@@ -102,10 +107,11 @@ class ApiTokenCreateRequest(_message.Message):
         name: _builtins.str = ...,
         scopes: _abc.Iterable[_builtins.str] | None = ...,
         expires_in_days: _builtins.int = ...,
+        service_account_id: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["expires_in_days", b"expires_in_days", "name", b"name", "scopes", b"scopes", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["expires_in_days", b"expires_in_days", "name", b"name", "scopes", b"scopes", "service_account_id", b"service_account_id", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -159,15 +165,18 @@ class ApiTokenListRequest(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
     WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    SERVICE_ACCOUNT_ID_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
+    service_account_id: _builtins.str
     def __init__(
         self,
         *,
         workspace_id: _builtins.str = ...,
+        service_account_id: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["service_account_id", b"service_account_id", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -419,6 +428,196 @@ class RedeliverRequest(_message.Message):
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
 Global___RedeliverRequest: _TypeAlias = RedeliverRequest  # noqa: Y015
+
+@_typing.final
+class ServiceAccount(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ID_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    USER_ID_FIELD_NUMBER: _builtins.int
+    ROLE_ID_FIELD_NUMBER: _builtins.int
+    ROLE_NAME_FIELD_NUMBER: _builtins.int
+    ACTIVE_FIELD_NUMBER: _builtins.int
+    TOKEN_COUNT_FIELD_NUMBER: _builtins.int
+    CREATED_AT_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    name: _builtins.str
+    user_id: _builtins.str
+    role_id: _builtins.str
+    role_name: _builtins.str
+    active: _builtins.bool
+    token_count: _builtins.int
+    created_at: _builtins.str
+    def __init__(
+        self,
+        *,
+        id: _builtins.str = ...,
+        name: _builtins.str = ...,
+        user_id: _builtins.str = ...,
+        role_id: _builtins.str = ...,
+        role_name: _builtins.str = ...,
+        active: _builtins.bool = ...,
+        token_count: _builtins.int = ...,
+        created_at: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["active", b"active", "created_at", b"created_at", "id", b"id", "name", b"name", "role_id", b"role_id", "role_name", b"role_name", "token_count", b"token_count", "user_id", b"user_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccount: _TypeAlias = ServiceAccount  # noqa: Y015
+
+@_typing.final
+class ServiceAccountAnswer(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ACCOUNT_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def account(self) -> Global___ServiceAccount: ...
+    def __init__(
+        self,
+        *,
+        account: Global___ServiceAccount | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["account", b"account"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["account", b"account"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountAnswer: _TypeAlias = ServiceAccountAnswer  # noqa: Y015
+
+@_typing.final
+class ServiceAccountCreateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    ROLE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    name: _builtins.str
+    role_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        name: _builtins.str = ...,
+        role_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "role_id", b"role_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountCreateRequest: _TypeAlias = ServiceAccountCreateRequest  # noqa: Y015
+
+@_typing.final
+class ServiceAccountDeleteRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    ACCOUNT_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    account_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        account_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["account_id", b"account_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountDeleteRequest: _TypeAlias = ServiceAccountDeleteRequest  # noqa: Y015
+
+@_typing.final
+class ServiceAccountDeleted(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ID_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    def __init__(
+        self,
+        *,
+        id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountDeleted: _TypeAlias = ServiceAccountDeleted  # noqa: Y015
+
+@_typing.final
+class ServiceAccountList(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ACCOUNTS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def accounts(self) -> _containers.RepeatedCompositeFieldContainer[Global___ServiceAccount]: ...
+    def __init__(
+        self,
+        *,
+        accounts: _abc.Iterable[Global___ServiceAccount] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accounts", b"accounts"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountList: _TypeAlias = ServiceAccountList  # noqa: Y015
+
+@_typing.final
+class ServiceAccountListRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountListRequest: _TypeAlias = ServiceAccountListRequest  # noqa: Y015
+
+@_typing.final
+class ServiceAccountSetRoleRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WORKSPACE_ID_FIELD_NUMBER: _builtins.int
+    ACCOUNT_ID_FIELD_NUMBER: _builtins.int
+    ROLE_ID_FIELD_NUMBER: _builtins.int
+    workspace_id: _builtins.str
+    account_id: _builtins.str
+    role_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        workspace_id: _builtins.str = ...,
+        account_id: _builtins.str = ...,
+        role_id: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["account_id", b"account_id", "role_id", b"role_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___ServiceAccountSetRoleRequest: _TypeAlias = ServiceAccountSetRoleRequest  # noqa: Y015
 
 @_typing.final
 class Webhook(_message.Message):

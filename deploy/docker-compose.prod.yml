@@ -152,6 +152,10 @@ services:
     environment:
       TASKFORGE_DOMAIN: ${TASKFORGE_DOMAIN:?set TASKFORGE_DOMAIN}
       ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+      ANDROID_PACKAGE: ${ANDROID_PACKAGE:-dev.taskforge.taskforge}
+      ANDROID_SHA256_FINGERPRINT: ${ANDROID_SHA256_FINGERPRINT:-}
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-QUR28ALR75}
+      IOS_BUNDLE_ID: ${IOS_BUNDLE_ID:-dev.taskforge.taskforge}
     ports: ["80:80", "443:443", "443:443/udp"]
     volumes:
       - static:/srv/static:ro

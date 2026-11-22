@@ -1,6 +1,7 @@
-"""Tokens and webhooks over REST: ``/api/v1/tokens`` and ``/api/v1/webhooks``.
+"""Tokens, service accounts and webhooks over REST: ``/api/v1/tokens``,
+``/api/v1/service-accounts`` and ``/api/v1/webhooks``.
 
-Both name the workspace with the ``X-Workspace`` header, need a signed-in person (an API token is
+All name the workspace with the ``X-Workspace`` header, need a signed-in person (an API token is
 refused) and call the same services as the gRPC controllers the app uses.
 """
 
@@ -11,11 +12,12 @@ from django.http import HttpRequest
 from ninja import Router, Schema
 
 from infrastructure.auth.core.sessions import api_auth
-from infrastructure.developer import services
+from infrastructure.developer import service_accounts, services
 from infrastructure.developer.models import ApiToken, Webhook, WebhookDelivery
 from infrastructure.workspaces.scoping import workspace_from_request
 
 tokens_router = Router()
+accounts_router = Router()
 webhooks_router = Router()
 
 
@@ -38,6 +40,26 @@ class TokenOut(Schema):
 
 class TokenCreated(TokenOut):
     secret: str  # shown once
+
+
+class AccountIn(Schema):
+    name: str
+    role_id: str
+
+
+class AccountRolePatch(Schema):
+    role_id: str
+
+
+class AccountOut(Schema):
+    id: str
+    name: str
+    user_id: str
+    role_id: str
+    role_name: str
+    active: bool
+    token_count: int
+    created_at: str
 
 
 class WebhookIn(Schema):
@@ -105,6 +127,20 @@ def _token(row: ApiToken) -> dict[str, Any]:
     }
 
 
+def _account(view: service_accounts.AccountView) -> dict[str, Any]:
+    account = view.account
+    return {
+        "id": str(account.pk),
+        "name": account.name,
+        "user_id": str(account.user_id),
+        "role_id": str(view.role.pk),
+        "role_name": view.role.name,
+        "active": view.active,
+        "token_count": view.token_count,
+        "created_at": account.created_at.isoformat(),
+    }
+
+
 def _hook(row: Webhook) -> WebhookOut:
     return WebhookOut(
         id=str(row.pk),
@@ -160,6 +196,70 @@ def create_token(request: HttpRequest, payload: TokenIn) -> tuple[int, dict[str,
 def revoke_token(request: HttpRequest, token_id: str) -> dict[str, Any]:
     workspace = workspace_from_request(request)
     return _token(services.revoke_token(request.user, workspace, token_id))
+
+
+@accounts_router.get(
+    "", response=list[AccountOut], auth=api_auth, summary="List the service accounts"
+)
+def list_accounts(request: HttpRequest) -> list[dict[str, Any]]:
+    workspace = workspace_from_request(request)
+    return [_account(v) for v in service_accounts.list_accounts(request.user, workspace)]
+
+
+@accounts_router.post(
+    "",
+    response={201: AccountOut},
+    auth=api_auth,
+    summary="Create a service account (not an owner; a role you hold in full)",
+)
+def create_account(request: HttpRequest, payload: AccountIn) -> tuple[int, dict[str, Any]]:
+    workspace = workspace_from_request(request)
+    view = service_accounts.create_account(request.user, workspace, payload.name, payload.role_id)
+    return 201, _account(view)
+
+
+@accounts_router.patch(
+    "/{account_id}", response=AccountOut, auth=api_auth, summary="Change its role"
+)
+def set_account_role(
+    request: HttpRequest, account_id: str, payload: AccountRolePatch
+) -> dict[str, Any]:
+    workspace = workspace_from_request(request)
+    view = service_accounts.set_role(request.user, workspace, account_id, payload.role_id)
+    return _account(view)
+
+
+@accounts_router.delete(
+    "/{account_id}", response={204: None}, auth=api_auth, summary="Delete it and end its tokens"
+)
+def delete_account(request: HttpRequest, account_id: str) -> tuple[int, None]:
+    workspace = workspace_from_request(request)
+    service_accounts.delete_account(request.user, workspace, account_id)
+    return 204, None
+
+
+@accounts_router.get(
+    "/{account_id}/tokens", response=list[TokenOut], auth=api_auth, summary="Its tokens"
+)
+def list_account_tokens(request: HttpRequest, account_id: str) -> list[dict[str, Any]]:
+    workspace = workspace_from_request(request)
+    return [_token(t) for t in service_accounts.list_tokens(request.user, workspace, account_id)]
+
+
+@accounts_router.post(
+    "/{account_id}/tokens",
+    response={201: TokenCreated},
+    auth=api_auth,
+    summary="Create a token for it (the secret is in this answer only; revoke with DELETE /tokens)",
+)
+def create_account_token(
+    request: HttpRequest, account_id: str, payload: TokenIn
+) -> tuple[int, dict[str, Any]]:
+    workspace = workspace_from_request(request)
+    issued = service_accounts.create_token(
+        request.user, workspace, account_id, payload.name, payload.scopes, payload.expires_in_days
+    )
+    return 201, {**_token(issued.token), "secret": issued.secret}
 
 
 @webhooks_router.get("", response=list[WebhookOut], auth=api_auth, summary="List webhooks")

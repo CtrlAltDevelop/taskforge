@@ -9,6 +9,13 @@ service ApiTokenController {
     rpc Revoke(ApiTokenRevokeRequest) returns (ApiTokenAnswer) {}
 }
 
+service ServiceAccountController {
+    rpc Create(ServiceAccountCreateRequest) returns (ServiceAccountAnswer) {}
+    rpc Delete(ServiceAccountDeleteRequest) returns (ServiceAccountDeleted) {}
+    rpc List(ServiceAccountListRequest) returns (ServiceAccountList) {}
+    rpc SetRole(ServiceAccountSetRoleRequest) returns (ServiceAccountAnswer) {}
+}
+
 service WebhookController {
     rpc Create(WebhookCreateRequest) returns (WebhookAnswer) {}
     rpc Delete(WebhookDeleteRequest) returns (WebhookDeleted) {}
@@ -29,6 +36,7 @@ message ApiToken {
     string last_used_at = 7;
     string revoked_at = 8;
     string created_at = 9;
+    string service_account_id = 10;
 }
 
 message ApiTokenAnswer {
@@ -40,6 +48,7 @@ message ApiTokenCreateRequest {
     string name = 2;
     repeated string scopes = 3;
     int32 expires_in_days = 4;
+    string service_account_id = 5;
 }
 
 message ApiTokenCreated {
@@ -53,6 +62,7 @@ message ApiTokenList {
 
 message ApiTokenListRequest {
     string workspace_id = 1;
+    string service_account_id = 2;
 }
 
 message ApiTokenRevokeRequest {
@@ -113,6 +123,50 @@ message RedeliverRequest {
     string workspace_id = 1;
     string webhook_id = 2;
     string delivery_id = 3;
+}
+
+message ServiceAccount {
+    string id = 1;
+    string name = 2;
+    string user_id = 3;
+    string role_id = 4;
+    string role_name = 5;
+    bool active = 6;
+    int32 token_count = 7;
+    string created_at = 8;
+}
+
+message ServiceAccountAnswer {
+    ServiceAccount account = 1;
+}
+
+message ServiceAccountCreateRequest {
+    string workspace_id = 1;
+    string name = 2;
+    string role_id = 3;
+}
+
+message ServiceAccountDeleteRequest {
+    string workspace_id = 1;
+    string account_id = 2;
+}
+
+message ServiceAccountDeleted {
+    string id = 1;
+}
+
+message ServiceAccountList {
+    repeated ServiceAccount accounts = 1;
+}
+
+message ServiceAccountListRequest {
+    string workspace_id = 1;
+}
+
+message ServiceAccountSetRoleRequest {
+    string workspace_id = 1;
+    string account_id = 2;
+    string role_id = 3;
 }
 
 message Webhook {

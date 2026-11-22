@@ -19,6 +19,28 @@ else:
 DESCRIPTOR: _descriptor.FileDescriptor
 
 @_typing.final
+class FieldDefault(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    FIELD_ID_FIELD_NUMBER: _builtins.int
+    VALUE_FIELD_NUMBER: _builtins.int
+    field_id: _builtins.str
+    value: _builtins.str
+    def __init__(
+        self,
+        *,
+        field_id: _builtins.str = ...,
+        value: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["field_id", b"field_id", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___FieldDefault: _TypeAlias = FieldDefault  # noqa: Y015
+
+@_typing.final
 class FormAnswer(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -56,6 +78,7 @@ class FormCreateRequest(_message.Message):
     NOTIFY_STATUS_FIELD_NUMBER: _builtins.int
     BRAND_COLOR_FIELD_NUMBER: _builtins.int
     LOGO_URL_FIELD_NUMBER: _builtins.int
+    FIELD_DEFAULTS_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     project_id: _builtins.str
     name: _builtins.str
@@ -72,6 +95,8 @@ class FormCreateRequest(_message.Message):
     def form_fields(self) -> _containers.RepeatedCompositeFieldContainer[Global___IntakeField]: ...
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def field_defaults(self) -> _containers.RepeatedCompositeFieldContainer[Global___FieldDefault]: ...
     def __init__(
         self,
         *,
@@ -89,10 +114,11 @@ class FormCreateRequest(_message.Message):
         notify_status: _builtins.bool = ...,
         brand_color: _builtins.str = ...,
         logo_url: _builtins.str = ...,
+        field_defaults: _abc.Iterable[Global___FieldDefault] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "description", b"description", "enabled", b"enabled", "form_fields", b"form_fields", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "priority", b"priority", "project_id", b"project_id", "require_email", b"require_email", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "description", b"description", "enabled", b"enabled", "field_defaults", b"field_defaults", "form_fields", b"form_fields", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "priority", b"priority", "project_id", b"project_id", "require_email", b"require_email", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -202,6 +228,7 @@ class FormUpdateRequest(_message.Message):
     NOTIFY_STATUS_FIELD_NUMBER: _builtins.int
     BRAND_COLOR_FIELD_NUMBER: _builtins.int
     LOGO_URL_FIELD_NUMBER: _builtins.int
+    FIELD_DEFAULTS_FIELD_NUMBER: _builtins.int
     workspace_id: _builtins.str
     form_id: _builtins.str
     expected_version: _builtins.int
@@ -222,6 +249,8 @@ class FormUpdateRequest(_message.Message):
     def form_fields(self) -> _containers.RepeatedCompositeFieldContainer[Global___IntakeField]: ...
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def field_defaults(self) -> _containers.RepeatedCompositeFieldContainer[Global___FieldDefault]: ...
     def __init__(
         self,
         *,
@@ -242,10 +271,11 @@ class FormUpdateRequest(_message.Message):
         notify_status: _builtins.bool = ...,
         brand_color: _builtins.str = ...,
         logo_url: _builtins.str = ...,
+        field_defaults: _abc.Iterable[Global___FieldDefault] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "changed", b"changed", "description", b"description", "enabled", b"enabled", "expected_version", b"expected_version", "form_fields", b"form_fields", "form_id", b"form_id", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "priority", b"priority", "require_email", b"require_email", "rotate_token", b"rotate_token", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "changed", b"changed", "description", b"description", "enabled", b"enabled", "expected_version", b"expected_version", "field_defaults", b"field_defaults", "form_fields", b"form_fields", "form_id", b"form_id", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "priority", b"priority", "require_email", b"require_email", "rotate_token", b"rotate_token", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 
@@ -314,6 +344,7 @@ class IntakeForm(_message.Message):
     OWNER_ID_FIELD_NUMBER: _builtins.int
     CREATED_AT_FIELD_NUMBER: _builtins.int
     UPDATED_AT_FIELD_NUMBER: _builtins.int
+    FIELD_DEFAULTS_FIELD_NUMBER: _builtins.int
     id: _builtins.str
     workspace_id: _builtins.str
     project_id: _builtins.str
@@ -338,6 +369,8 @@ class IntakeForm(_message.Message):
     def form_fields(self) -> _containers.RepeatedCompositeFieldContainer[Global___IntakeField]: ...
     @_builtins.property
     def assignee_ids(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def field_defaults(self) -> _containers.RepeatedCompositeFieldContainer[Global___FieldDefault]: ...
     def __init__(
         self,
         *,
@@ -363,10 +396,11 @@ class IntakeForm(_message.Message):
         owner_id: _builtins.str = ...,
         created_at: _builtins.str = ...,
         updated_at: _builtins.str = ...,
+        field_defaults: _abc.Iterable[Global___FieldDefault] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "created_at", b"created_at", "description", b"description", "enabled", b"enabled", "form_fields", b"form_fields", "id", b"id", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "owner_id", b"owner_id", "priority", b"priority", "problem", b"problem", "project_id", b"project_id", "require_email", b"require_email", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "submission_count", b"submission_count", "token", b"token", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["assignee_ids", b"assignee_ids", "brand_color", b"brand_color", "created_at", b"created_at", "description", b"description", "enabled", b"enabled", "field_defaults", b"field_defaults", "form_fields", b"form_fields", "id", b"id", "logo_url", b"logo_url", "name", b"name", "notify_status", b"notify_status", "owner_id", b"owner_id", "priority", b"priority", "problem", b"problem", "project_id", b"project_id", "require_email", b"require_email", "send_confirmation", b"send_confirmation", "status_id", b"status_id", "submission_count", b"submission_count", "token", b"token", "updated_at", b"updated_at", "version", b"version", "workspace_id", b"workspace_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

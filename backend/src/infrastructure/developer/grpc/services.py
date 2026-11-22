@@ -1,12 +1,14 @@
-"""API tokens and webhooks over gRPC: ``ApiTokenController`` and ``WebhookController``. The rules
-are in ``infrastructure.developer.services``.
+"""API tokens, service accounts and webhooks over gRPC: ``ApiTokenController``,
+``ServiceAccountController`` and ``WebhookController``. The rules are in
+``infrastructure.developer.services`` and ``service_accounts``.
 
 A token's secret is returned once, by ``ApiToken.Create`` (``secret``); lists carry the prefix
 only. ``Webhook.Update`` names what it changes in ``fields`` (name, url, events, active, project)
 and carries ``expected_version`` (a stale one is ABORTED). ``Webhook.Deliveries`` pages newest
 first (``before`` is the returned ``cursor``); ``Redeliver`` sends a delivery again; ``Test``
-sends a ping now. PERMISSION_DENIED without ``webhook.manage``, and for any caller that is an API
-token: tokens and webhooks are managed by people.
+sends a ping now. PERMISSION_DENIED without ``webhook.manage`` (service accounts and their tokens
+need it too) and for any caller that is an API token: people manage tokens, service accounts and
+webhooks.
 """
 
 import json
@@ -19,8 +21,14 @@ from django_socio_grpc.decorators import grpc_action
 from infrastructure.common.errors import ApiError
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
-from infrastructure.developer import events, scopes, services
-from infrastructure.developer.grpc.serializers import ApiToken, CatalogItem, Delivery, Webhook
+from infrastructure.developer import events, scopes, service_accounts, services
+from infrastructure.developer.grpc.serializers import (
+    ApiToken,
+    CatalogItem,
+    Delivery,
+    ServiceAccount,
+    Webhook,
+)
 from infrastructure.developer.models import WebhookDelivery
 from infrastructure.workspaces.scoping import require_workspace
 
@@ -43,7 +51,9 @@ def _iso(value: Any) -> str:
 
 def token_message(token: Any) -> Any:
     status = "revoked" if token.revoked_at else ("active" if token.is_active else "expired")
+    account = getattr(token.owner, "service_account", None)
     return _pb().ApiToken(
+        service_account_id=str(account.pk) if account else "",
         id=str(token.pk),
         name=token.name,
         prefix=token.prefix,
@@ -53,6 +63,20 @@ def token_message(token: Any) -> Any:
         last_used_at=_iso(token.last_used_at),
         revoked_at=_iso(token.revoked_at),
         created_at=_iso(token.created_at),
+    )
+
+
+def account_message(view: service_accounts.AccountView) -> Any:
+    account = view.account
+    return _pb().ServiceAccount(
+        id=str(account.pk),
+        name=account.name,
+        user_id=str(account.user_id),
+        role_id=str(view.role.pk),
+        role_name=view.role.name,
+        active=view.active,
+        token_count=view.token_count,
+        created_at=_iso(account.created_at),
     )
 
 
@@ -112,17 +136,21 @@ def _hook_answer(hook: Any) -> Any:
 
 class ApiTokenService(generics.GenericService):
     @grpc_action(
-        request=WS,
+        request=[*WS, {"name": "service_account_id", "type": "string"}],
         request_name="ApiTokenListRequest",
         response=[{"name": "tokens", "cardinality": "repeated", "type": ApiToken}],
         response_name="ApiTokenList",
     )
     @action
     async def List(self, request: Any, context: Any) -> Any:
+        """Your own tokens, or (``service_account_id`` set) those of a service account."""
         user, workspace = await _scope(request, context)
 
         def run() -> Any:
-            rows = services.list_tokens(user, workspace)
+            if request.service_account_id:
+                rows = service_accounts.list_tokens(user, workspace, request.service_account_id)
+            else:
+                rows = services.list_tokens(user, workspace)
             return _pb().ApiTokenList(tokens=[token_message(t) for t in rows])
 
         return await sync_to_async(run)()
@@ -133,6 +161,7 @@ class ApiTokenService(generics.GenericService):
             {"name": "name", "type": "string"},
             {"name": "scopes", "cardinality": "repeated", "type": "string"},
             {"name": "expires_in_days", "type": "int32"},
+            {"name": "service_account_id", "type": "string"},
         ],
         request_name="ApiTokenCreateRequest",
         response=[
@@ -143,12 +172,23 @@ class ApiTokenService(generics.GenericService):
     )
     @action
     async def Create(self, request: Any, context: Any) -> Any:
+        """A token of yours, or (``service_account_id`` set) of a service account."""
         user, workspace = await _scope(request, context)
 
         def run() -> Any:
-            issued = services.create_token(
-                user, workspace, request.name, list(request.scopes), request.expires_in_days
-            )
+            if request.service_account_id:
+                issued = service_accounts.create_token(
+                    user,
+                    workspace,
+                    request.service_account_id,
+                    request.name,
+                    list(request.scopes),
+                    request.expires_in_days,
+                )
+            else:
+                issued = services.create_token(
+                    user, workspace, request.name, list(request.scopes), request.expires_in_days
+                )
             return _pb().ApiTokenCreated(token=token_message(issued.token), secret=issued.secret)
 
         return await sync_to_async(run)()
@@ -186,6 +226,78 @@ class ApiTokenService(generics.GenericService):
             scopes=[pb.CatalogItem(key=s, label=scopes.SCOPE_LABELS[s]) for s in scopes.SCOPES],
             events=[pb.CatalogItem(key=e.key, label=e.label) for e in events.CATALOG],
         )
+
+
+class ServiceAccountService(generics.GenericService):
+    @grpc_action(
+        request=WS,
+        request_name="ServiceAccountListRequest",
+        response=[{"name": "accounts", "cardinality": "repeated", "type": ServiceAccount}],
+        response_name="ServiceAccountList",
+    )
+    @action
+    async def List(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+
+        def run() -> Any:
+            rows = service_accounts.list_accounts(user, workspace)
+            return _pb().ServiceAccountList(accounts=[account_message(v) for v in rows])
+
+        return await sync_to_async(run)()
+
+    @grpc_action(
+        request=[*WS, {"name": "name", "type": "string"}, {"name": "role_id", "type": "string"}],
+        request_name="ServiceAccountCreateRequest",
+        response=[{"name": "account", "type": ServiceAccount}],
+        response_name="ServiceAccountAnswer",
+    )
+    @action
+    async def Create(self, request: Any, context: Any) -> Any:
+        """``role_id`` is any role but Owner that the caller holds in full."""
+        user, workspace = await _scope(request, context)
+
+        def run() -> Any:
+            view = service_accounts.create_account(user, workspace, request.name, request.role_id)
+            return _pb().ServiceAccountAnswer(account=account_message(view))
+
+        return await sync_to_async(run)()
+
+    @grpc_action(
+        request=[
+            *WS,
+            {"name": "account_id", "type": "string"},
+            {"name": "role_id", "type": "string"},
+        ],
+        request_name="ServiceAccountSetRoleRequest",
+        response=[{"name": "account", "type": ServiceAccount}],
+        response_name="ServiceAccountAnswer",
+    )
+    @action
+    async def SetRole(self, request: Any, context: Any) -> Any:
+        user, workspace = await _scope(request, context)
+
+        def run() -> Any:
+            view = service_accounts.set_role(user, workspace, request.account_id, request.role_id)
+            return _pb().ServiceAccountAnswer(account=account_message(view))
+
+        return await sync_to_async(run)()
+
+    @grpc_action(
+        request=[*WS, {"name": "account_id", "type": "string"}],
+        request_name="ServiceAccountDeleteRequest",
+        response=[{"name": "id", "type": "string"}],
+        response_name="ServiceAccountDeleted",
+    )
+    @action
+    async def Delete(self, request: Any, context: Any) -> Any:
+        """Ends the account: every token of it stops working and it leaves the members."""
+        user, workspace = await _scope(request, context)
+
+        def run() -> Any:
+            service_accounts.delete_account(user, workspace, request.account_id)
+            return _pb().ServiceAccountDeleted(id=request.account_id)
+
+        return await sync_to_async(run)()
 
 
 class WebhookService(generics.GenericService):
@@ -349,4 +461,4 @@ class WebhookService(generics.GenericService):
         return await sync_to_async(run)()
 
 
-GRPC_SERVICES = [ApiTokenService, WebhookService]
+GRPC_SERVICES = [ApiTokenService, ServiceAccountService, WebhookService]

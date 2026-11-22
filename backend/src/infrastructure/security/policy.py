@@ -85,6 +85,8 @@ def is_blocked(user: Any, workspace: Any) -> bool:
     state = policy_state(workspace)
     if not state.enforcing:
         return False
+    if hasattr(user, "service_account"):
+        return False  # nobody can sign in as a service account; its tokens are the credential
     return not (has_totp(user) or covered_by_sso(user, workspace))
 
 

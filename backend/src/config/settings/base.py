@@ -1420,6 +1420,7 @@ DEVELOPER_WEBHOOK_ALLOWLIST = tuple(
 # Most webhooks one workspace may have, and most tokens one person may have in a workspace.
 DEVELOPER_MAX_WEBHOOKS = int(os.getenv("DJANGO_DEVELOPER_MAX_WEBHOOKS", "20"))
 DEVELOPER_MAX_TOKENS = int(os.getenv("DJANGO_DEVELOPER_MAX_TOKENS", "20"))
+DEVELOPER_MAX_SERVICE_ACCOUNTS = int(os.getenv("DJANGO_DEVELOPER_MAX_SERVICE_ACCOUNTS", "20"))
 
 # Phase 33: intake forms. Limits for what an anonymous visitor may send. Rates are "N/period"
 # (second, minute, hour, day); the per-IP one counts a keyed hash of the address. The key signs

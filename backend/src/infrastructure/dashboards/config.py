@@ -9,10 +9,10 @@ from infrastructure.common.responses import ResponseTitle
 MAX_WIDGETS: Final = 20
 GRID_COLUMNS: Final = 12
 
-NUMBER, BAR, LINE, PIE, TABLE, BURNDOWN, WORKLOAD = (
-    "number", "bar", "line", "pie", "table", "burndown", "workload"
+NUMBER, BAR, LINE, PIE, TABLE, BURNDOWN, WORKLOAD, GOALS = (
+    "number", "bar", "line", "pie", "table", "burndown", "workload", "goals"
 )  # fmt: skip
-TYPES: Final = (NUMBER, BAR, LINE, PIE, TABLE, BURNDOWN, WORKLOAD)
+TYPES: Final = (NUMBER, BAR, LINE, PIE, TABLE, BURNDOWN, WORKLOAD, GOALS)
 
 COUNT, POINTS, ESTIMATE_HOURS, LOGGED_HOURS, CYCLE_DAYS = (
     "count", "points", "estimate_hours", "logged_hours", "cycle_days"
@@ -115,6 +115,9 @@ def _fit(kind: str, cfg: dict[str, Any]) -> None:
             raise invalid("A line widget groups by created_day, created_week or due_week.")
     elif kind == WORKLOAD:
         cfg["group_by"], cfg["scope"] = "assignee", "open"
+    elif kind == GOALS:
+        # About goals, not tasks: only the scope (all / open / done) and the limit apply.
+        cfg["group_by"], cfg["measure"] = "", COUNT
     elif kind == BURNDOWN:
         if not cfg["sprint_id"]:
             raise invalid("A burndown widget needs a sprint.")

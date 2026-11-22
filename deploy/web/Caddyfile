@@ -41,6 +41,17 @@
 		file_server
 	}
 
+	# Universal / app links: the OS fetches these to let the app open https://<domain>/invite/*.
+	handle /.well-known/assetlinks.json {
+		header Content-Type application/json
+		respond `[{"relation":["delegate_permission/common.handle_all_urls"],"target":{"namespace":"android_app","package_name":"{$ANDROID_PACKAGE:dev.taskforge.taskforge}","sha256_cert_fingerprints":["{$ANDROID_SHA256_FINGERPRINT:}"]}}]` 200
+	}
+	handle /.well-known/apple-app-site-association {
+		header Content-Type application/json
+		respond `{"applinks":{"details":[{"appIDs":["{$APPLE_TEAM_ID:QUR28ALR75}.{$IOS_BUNDLE_ID:dev.taskforge.taskforge}"],"components":[{"/":"/invite/*"}]}]}}` 200
+	}
+
+	# Single-page app: any other path (e.g. /invite/<token>) serves index.html.
 	handle {
 		root * /srv/web
 		header /index.html Cache-Control "no-cache"

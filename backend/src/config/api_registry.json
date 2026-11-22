@@ -80,10 +80,24 @@
       },
       {
         "app_config": "infrastructure.developer.apps.DeveloperConfig",
+        "prefix": "/service-accounts",
+        "router": "infrastructure.developer.rest.manage.accounts_router",
+        "tag": "Service accounts",
+        "description": "Workspace-owned identities for scripts: make one with a role, issue and list its tokens (revoke them at DELETE /tokens/{id}). A token holds the account's role intersected with its scopes."
+      },
+      {
+        "app_config": "infrastructure.developer.apps.DeveloperConfig",
         "prefix": "/webhooks",
         "router": "infrastructure.developer.rest.manage.webhooks_router",
         "tag": "Webhooks",
         "description": "Signed event deliveries to a URL: manage them, read the delivery log, send a delivery again or a test ping."
+      },
+      {
+        "app_config": "infrastructure.forms.apps.FormsConfig",
+        "prefix": "/forms",
+        "router": "infrastructure.forms.rest.manage.router",
+        "tag": "Forms",
+        "description": "Upload the logo of an intake form (PNG, JPEG or WebP, up to 2 MB). Everything else about forms is gRPC."
       },
       {
         "app_config": "infrastructure.forms.apps.FormsConfig",

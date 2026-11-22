@@ -5,7 +5,8 @@ from rest_framework import serializers
 
 class ApiToken(serializers.Serializer[dict[str, object]]):
     """``prefix`` identifies the token in lists; the secret is only ever in ``ApiTokenCreated``.
-    ``status``: active | expired | revoked."""
+    ``status``: active | expired | revoked. ``service_account_id`` is set for a service account's
+    token."""
 
     id = serializers.CharField()
     name = serializers.CharField()
@@ -15,6 +16,22 @@ class ApiToken(serializers.Serializer[dict[str, object]]):
     expires_at = serializers.CharField()
     last_used_at = serializers.CharField()
     revoked_at = serializers.CharField()
+    created_at = serializers.CharField()
+    service_account_id = serializers.CharField()  # empty for a person's own token
+
+
+class ServiceAccount(serializers.Serializer[dict[str, object]]):
+    """A workspace-owned identity for scripts. ``user_id`` is the member row it acts as (it shows
+    in the member list), ``role_id`` / ``role_name`` what its tokens may do at most. ``active`` is
+    false when someone removed it from the members."""
+
+    id = serializers.CharField()
+    name = serializers.CharField()
+    user_id = serializers.CharField()
+    role_id = serializers.CharField()
+    role_name = serializers.CharField()
+    active = serializers.BooleanField()
+    token_count = serializers.IntegerField()
     created_at = serializers.CharField()
 
 

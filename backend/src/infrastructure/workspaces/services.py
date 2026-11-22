@@ -163,15 +163,24 @@ def update(
         return _versioned_update(workspace, expected_version, **changes)
 
 
+def logo_extension(content: bytes) -> str | None:
+    """``png``, ``jpg`` or ``webp`` by the file's own first bytes (never by what the client says),
+    ``None`` for anything else or for more than ``LOGO_MAX_BYTES``."""
+    if len(content) > LOGO_MAX_BYTES:
+        return None
+    extension = next((ext for sig, ext in LOGO_SIGNATURES if content.startswith(sig)), None)
+    if extension is None and content[:4] == b"RIFF" and content[8:12] == b"WEBP":
+        extension = "webp"
+    return extension
+
+
 def set_logo(
     actor: Any, workspace_id: str, content: bytes, expected_version: int | None = None
 ) -> Workspace:
     """Store an uploaded PNG/JPEG (checked by magic bytes, not client claims)."""
     workspace = _find(actor, workspace_id, "workspace.update")
-    extension = next((ext for sig, ext in LOGO_SIGNATURES if content.startswith(sig)), None)
-    if extension is None and content[:4] == b"RIFF" and content[8:12] == b"WEBP":
-        extension = "webp"
-    if extension is None or len(content) > LOGO_MAX_BYTES:
+    extension = logo_extension(content)
+    if extension is None:
         raise ApiError(
             "The logo must be a PNG, JPEG or WebP image of at most 2 MB.",
             title=ResponseTitle.UPLOAD_INVALID,

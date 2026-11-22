@@ -4,15 +4,52 @@ import uuid
 
 from django.conf import settings as django_settings
 from django.db import models
+from django.db.models import Q
+from django.db.models.functions import Lower
 from django.utils import timezone
 
 from infrastructure.projects.models import Project
 from infrastructure.workspaces.models import Workspace
 
 
+class ServiceAccount(models.Model):
+    """An identity that belongs to a workspace, not to a person, for scripts and integrations.
+
+    It is a real user (no password, no email, so no way to sign in) with an ordinary membership,
+    which is where its role lives: a token of the account holds the role's permissions intersected
+    with the token's scopes, exactly as a person's token does. ``deleted_at`` keeps the row for
+    the audit trail once the account, its tokens and its membership are gone."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
+    user = models.OneToOneField(
+        django_settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_account"
+    )
+    name = models.CharField(max_length=80)
+    created_by = models.ForeignKey(
+        django_settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+"
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                "workspace",
+                condition=Q(deleted_at__isnull=True),
+                name="service_account_name_unique",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class ApiToken(models.Model):
-    """A personal access token for one workspace. Only ``prefix`` (shown in lists, used to find
-    the row) and ``hash`` (SHA-256 of the secret) are stored; the secret itself is shown once."""
+    """An access token for one workspace: a person's own, or (``owner`` is its user) a service
+    account's. Only ``prefix`` (shown in lists, used to find the row) and ``hash`` (SHA-256 of the
+    secret) are stored; the secret itself is shown once."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")

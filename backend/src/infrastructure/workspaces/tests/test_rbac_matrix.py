@@ -1967,6 +1967,26 @@ ENDPOINTS += (
         ),
     ),
     Endpoint(
+        "ServiceAccountController.List",
+        "webhook.manage",
+        _grpc(
+            devstubs.ServiceAccountControllerStub,
+            "List",
+            lambda w: devpb.ServiceAccountListRequest(workspace_id=w.ws),
+        ),
+    ),
+    Endpoint(
+        "ServiceAccountController.Create",
+        "webhook.manage",
+        _grpc(
+            devstubs.ServiceAccountControllerStub,
+            "Create",
+            lambda w: devpb.ServiceAccountCreateRequest(
+                workspace_id=w.ws, name="bot", role_id=str(access.builtin_role("Member").pk)
+            ),
+        ),
+    ),
+    Endpoint(
         "ApiTokenController.List",
         "workspace.view",
         _grpc(
@@ -2169,6 +2189,7 @@ _SIGN_IN = "public sign-in: the provider, signed state and one-time ticket are t
 _GRPC_LATER = {
     "WebhookController": ("Update", "Delete", "Test", "Deliveries", "Redeliver"),
     "ApiTokenController": ("Revoke",),
+    "ServiceAccountController": ("SetRole", "Delete"),
     "FormController": ("Create", "Delete", "List", "Submissions", "Update"),
     "GoalController": ("Get", "Update", "Delete", "DeleteFolder"),
     "KeyResultController": ("Create", "Delete", "ForTask", "Update"),
@@ -2200,6 +2221,13 @@ EXEMPT.update(
         "GET /tokens": _LATER,
         "POST /tokens": _LATER,
         "DELETE /tokens/{token_id}": _LATER,
+        "GET /service-accounts": _LATER,
+        "POST /service-accounts": _LATER,
+        "PATCH /service-accounts/{account_id}": _LATER,
+        "DELETE /service-accounts/{account_id}": _LATER,
+        "GET /service-accounts/{account_id}/tokens": _LATER,
+        "POST /service-accounts/{account_id}/tokens": _LATER,
+        "POST /forms/{form_id}/logo": _LATER,
         "GET /workspaces": _TOKEN_API,
     }
 )

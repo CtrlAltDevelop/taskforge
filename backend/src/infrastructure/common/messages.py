@@ -94,6 +94,30 @@ TEXT: dict[str, dict[str, str]] = {
         "ar": "تم إيقاف الأتمتة: {name}",
         "ps": "اتومات بند شو: {name}",
     },
+    "notify.webhook_disabled.title": {
+        "en": "Webhook switched off: {name}",
+        "fa": "وب‌هوک خاموش شد: {name}",
+        "ar": "تم إيقاف الويب هوك: {name}",
+        "ps": "ویب هوک بند شو: {name}",
+    },
+    "notify.goal_reached.title": {
+        "en": "Goal reached: {name}",
+        "fa": "هدف محقق شد: {name}",
+        "ar": "تم تحقيق الهدف: {name}",
+        "ps": "موخه ترسره شوه: {name}",
+    },
+    "notify.goal_at_risk.title": {
+        "en": "Goal falling behind: {name}",
+        "fa": "هدف عقب افتاده است: {name}",
+        "ar": "الهدف يتأخر: {name}",
+        "ps": "موخه شاته پاتې کیږي: {name}",
+    },
+    "notify.goal_at_risk.body": {
+        "en": "Now at {percent} %",
+        "fa": "اکنون {percent}٪",
+        "ar": "الآن {percent}٪",
+        "ps": "اوس {percent}٪",
+    },
     "notify.chat_mentioned.title": {
         "en": "{who} mentioned you in {space}",
         "fa": "{who} شما را در {space} نام برد",

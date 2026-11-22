@@ -75,6 +75,55 @@ class ApiTokenControllerServicer(metaclass=_abc_1.ABCMeta):
 
 def add_ApiTokenControllerServicer_to_server(servicer: ApiTokenControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
 
+class ServiceAccountControllerStub:
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> ServiceAccountControllerAsyncStub: ...
+    Create: _grpc.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountCreateRequest, _developer_pb2.ServiceAccountAnswer]
+    Delete: _grpc.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountDeleteRequest, _developer_pb2.ServiceAccountDeleted]
+    List: _grpc.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountListRequest, _developer_pb2.ServiceAccountList]
+    SetRole: _grpc.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountSetRoleRequest, _developer_pb2.ServiceAccountAnswer]
+
+@_typing.type_check_only
+class ServiceAccountControllerAsyncStub(ServiceAccountControllerStub):
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Create: _aio.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountCreateRequest, _developer_pb2.ServiceAccountAnswer]  # type: ignore[assignment]
+    Delete: _aio.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountDeleteRequest, _developer_pb2.ServiceAccountDeleted]  # type: ignore[assignment]
+    List: _aio.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountListRequest, _developer_pb2.ServiceAccountList]  # type: ignore[assignment]
+    SetRole: _aio.UnaryUnaryMultiCallable[_developer_pb2.ServiceAccountSetRoleRequest, _developer_pb2.ServiceAccountAnswer]  # type: ignore[assignment]
+
+class ServiceAccountControllerServicer(metaclass=_abc_1.ABCMeta):
+    @_abc_1.abstractmethod
+    def Create(
+        self,
+        request: _developer_pb2.ServiceAccountCreateRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_developer_pb2.ServiceAccountAnswer, _abc.Awaitable[_developer_pb2.ServiceAccountAnswer]]: ...
+
+    @_abc_1.abstractmethod
+    def Delete(
+        self,
+        request: _developer_pb2.ServiceAccountDeleteRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_developer_pb2.ServiceAccountDeleted, _abc.Awaitable[_developer_pb2.ServiceAccountDeleted]]: ...
+
+    @_abc_1.abstractmethod
+    def List(
+        self,
+        request: _developer_pb2.ServiceAccountListRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_developer_pb2.ServiceAccountList, _abc.Awaitable[_developer_pb2.ServiceAccountList]]: ...
+
+    @_abc_1.abstractmethod
+    def SetRole(
+        self,
+        request: _developer_pb2.ServiceAccountSetRoleRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_developer_pb2.ServiceAccountAnswer, _abc.Awaitable[_developer_pb2.ServiceAccountAnswer]]: ...
+
+def add_ServiceAccountControllerServicer_to_server(servicer: ServiceAccountControllerServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
 class WebhookControllerStub:
     @_typing.overload
     def __new__(cls, channel: _grpc.Channel) -> _Self: ...

@@ -137,6 +137,7 @@ READS = frozenset(
         "WorkflowController.Validate",
         "WorkspaceController.ListDeleted",
         "WebhookController.List",
+        "ServiceAccountController.List",
         "ApiTokenController.List",
         "ApiTokenController.Catalog",
         "GoalController.List",

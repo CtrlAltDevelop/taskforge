@@ -13,6 +13,7 @@ from infrastructure.chat.signals import chat_notice
 from infrastructure.comments import body as comment_body
 from infrastructure.comments.models import Comment, CommentMention
 from infrastructure.comments.signals import comment_changed, user_mentioned
+from infrastructure.goals.signals import goal_progress_changed
 from infrastructure.inbox import kinds, notify, render, watchers
 from infrastructure.tasks.models import Task
 from infrastructure.tasks.signals import task_activity
@@ -159,7 +160,15 @@ def _chat(sender: Any, **kw: Any) -> None:
     chat_notices.handle(**kw)
 
 
+@_guarded
+def _goal(sender: Any, **kw: Any) -> None:
+    from infrastructure.inbox import goal_notices
+
+    goal_notices.handle(**kw)
+
+
 def connect() -> None:
+    goal_progress_changed.connect(_goal, dispatch_uid=f"{UID}.goal")
     chat_notice.connect(_chat, dispatch_uid=f"{UID}.chat")
     task_activity.connect(_activity, dispatch_uid=f"{UID}.activity")
     user_mentioned.connect(_mentioned, dispatch_uid=f"{UID}.mentioned")

@@ -3,8 +3,8 @@
 ``Update`` names what it changes in ``changed`` (name, description, fields, defaults, enabled,
 require_email, send_confirmation, notify_status, brand_color, logo_url, rotate_token) and carries
 ``expected_version`` (a stale one is ABORTED). ``form_fields`` is the whole ordered list of
-questions; ``defaults`` is status_id, priority and assignee_ids. PERMISSION_DENIED without
-``form.manage`` and for any caller that is an API token. ``Submissions`` pages newest first
+questions; ``defaults`` is status_id, priority, assignee_ids and field_defaults. PERMISSION_DENIED
+without ``form.manage`` and for any caller that is an API token. ``Submissions`` pages newest first
 (``before`` is the returned ``cursor``).
 """
 
@@ -18,7 +18,12 @@ from infrastructure.common.errors import ApiError
 from infrastructure.common.grpc.errors import action, require_caller
 from infrastructure.common.identity import grpc_caller
 from infrastructure.forms import services
-from infrastructure.forms.grpc.serializers import IntakeField, IntakeForm, IntakeSubmission
+from infrastructure.forms.grpc.serializers import (
+    FieldDefault,
+    IntakeField,
+    IntakeForm,
+    IntakeSubmission,
+)
 from infrastructure.workspaces.scoping import require_workspace
 
 WS = [{"name": "workspace_id", "type": "string"}]
@@ -36,6 +41,7 @@ CONTENT = [
     {"name": "notify_status", "type": "bool"},
     {"name": "brand_color", "type": "string"},
     {"name": "logo_url", "type": "string"},
+    {"name": "field_defaults", "cardinality": "repeated", "type": FieldDefault},
 ]
 ANSWER = [{"name": "form", "type": IntakeForm}]
 
@@ -81,7 +87,11 @@ def form_message(view: services.FormView) -> Any:
         send_confirmation=form.send_confirmation,
         notify_status=form.notify_status,
         brand_color=form.brand_color,
-        logo_url=form.logo_url,
+        logo_url=form.logo_src,
+        field_defaults=[
+            _pb().FieldDefault(field_id=k, value=v)
+            for k, v in (defaults.get("field_defaults") or {}).items()
+        ],
         version=form.version,
         submission_count=view.submission_count,
         problem=view.problem,
@@ -127,6 +137,7 @@ def _defaults(request: Any) -> dict[str, Any]:
         "status_id": request.status_id,
         "priority": request.priority,
         "assignee_ids": list(request.assignee_ids),
+        "field_defaults": {d.field_id: d.value for d in request.field_defaults},
     }
 
 

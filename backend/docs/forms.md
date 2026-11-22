@@ -34,6 +34,7 @@ A shareable form that creates a task in ``project``.
 | `notify_status` | Boolean |  |
 | `brand_color` | Char |  |
 | `logo_url` | Char |  |
+| `logo` | File |  |
 | `created_by` | ForeignKey | → `accounts.User`, nullable |
 | `owner` | ForeignKey | → `accounts.User`, nullable |
 | `version` | PositiveInteger |  |

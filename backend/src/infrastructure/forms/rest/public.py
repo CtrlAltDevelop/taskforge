@@ -71,7 +71,7 @@ def _definition(token: str) -> dict[str, Any]:
         "name": form.name,
         "description": form.description,
         "brand_color": form.brand_color,
-        "logo_url": form.logo_url,
+        "logo_url": form.logo_src,
         "require_email": form.require_email,
         "offers_updates": form.notify_status or form.send_confirmation,
         "honeypot_field": "website",

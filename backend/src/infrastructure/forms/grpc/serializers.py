@@ -17,10 +17,21 @@ class IntakeField(serializers.Serializer[dict[str, object]]):
     max_files = serializers.IntegerField()
 
 
+class FieldDefault(serializers.Serializer[dict[str, object]]):
+    """A project field value every task of the form starts with: ``field_id`` is a custom field
+    of the project, ``value`` its wire value (a multi-select's option ids joined by commas).
+    Labels are a multi-select field."""
+
+    field_id = serializers.CharField()
+    value = serializers.CharField()
+
+
 class IntakeForm(serializers.Serializer[dict[str, object]]):
     """A form. ``token`` is the secret in its public URL (``/f/<token>``). ``problem`` says why
     submissions would fail now (empty when none): the owner lost a permission, the project was
-    archived. ``owner_id`` is the member whose permissions create the tasks."""
+    archived. ``owner_id`` is the member whose permissions create the tasks. ``logo_url`` is what
+    the public page shows: the uploaded logo (``POST /api/v1/forms/{id}/logo``) or the linked
+    one."""
 
     id = serializers.CharField()
     workspace_id = serializers.CharField()
@@ -38,6 +49,7 @@ class IntakeForm(serializers.Serializer[dict[str, object]]):
     notify_status = serializers.BooleanField()
     brand_color = serializers.CharField()
     logo_url = serializers.CharField()
+    field_defaults = FieldDefault(many=True)
     version = serializers.IntegerField()
     submission_count = serializers.IntegerField()
     problem = serializers.CharField()
