@@ -25,4 +25,18 @@ Captured from the running web app against a seeded demo workspace (`make seed`; 
 | **Dark mode** | **Persian (right to left)** |
 | ![Board, dark](docs/screenshots/board-dark.png) | ![Board, Persian](docs/screenshots/board-fa-rtl.png) |
 
+### macOS
+
+The desktop app (`make macos`) on the same demo workspace, over native gRPC.
+
+![Home on macOS](docs/screenshots/macos-home.png)
+
+### iOS
+
+The same seeded workspace in the iOS Simulator (iPhone 18 Pro Max), over native gRPC.
+
+| Home | List | Board |
+|------|------|-------|
+| ![Home on iOS](docs/screenshots/ios-home.png) | ![List on iOS](docs/screenshots/ios-project.png) | ![Board on iOS](docs/screenshots/ios-board.png) |
+
 Status: **planning complete; phase 00 (foundation) implemented.** See [AGENTS.md](AGENTS.md#commands) to run it.
