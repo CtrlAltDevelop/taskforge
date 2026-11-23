@@ -76,9 +76,17 @@ def _limit() -> None:  # runs in the child, before it execs: a cap on memory and
     try:
         import resource
 
+        # The memory cap goes last: in a parent already bigger than the cap (a test run, a fat web
+        # worker) any Python allocation after it raises MemoryError inside preexec_fn.
+        cpu = max(1, int(WORKER_SECONDS))  # setrlimit takes whole seconds
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
         resource.setrlimit(resource.RLIMIT_AS, (WORKER_MEMORY_BYTES, WORKER_MEMORY_BYTES))
-        resource.setrlimit(resource.RLIMIT_CPU, (WORKER_SECONDS, WORKER_SECONDS))
-    except (ImportError, ValueError, OSError):  # not on this platform: the wall clock still applies
+    except (
+        ImportError,
+        ValueError,
+        OSError,
+        TypeError,
+    ):  # not on this platform: the wall clock still applies
         pass
 
 
@@ -94,7 +102,7 @@ def make_isolated(path: Path, mime: str) -> bytes | None:
             check=False,
             preexec_fn=_limit,  # noqa: PLW1509
         )
-    except (subprocess.TimeoutExpired, OSError):
+    except (subprocess.SubprocessError, OSError):  # a timeout, or the child failing to start
         logger.warning("thumbnail worker failed for %s", path.name)
         return None
     return done.stdout or None if done.returncode == 0 else None
