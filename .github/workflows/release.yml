@@ -266,7 +266,7 @@ jobs:
             echo "    TASKFORGE_VERSION=${{ needs.verify.outputs.version }}"
             echo "Upgrade: see deploy/README.md. Older clients are refused only if DJANGO_MIN_CLIENT_VERSION is raised."
           } > CHANGELOG.md
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           body_path: CHANGELOG.md
           files: dist/*
