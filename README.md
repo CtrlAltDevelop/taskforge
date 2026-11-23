@@ -3,6 +3,7 @@
 A free, self-hostable alternative to **Jira** and **ClickUp** — no paywalled basics,
 fast, offline-capable, and consistent on web, mobile and desktop.
 
+- **Website:** <https://ctrlaltdevelop.github.io/taskforge/>
 - **Client:** Flutter (web, mobile, desktop)
 - **Backend:** Django Ninja (REST) + gRPC (typed data/streaming) + WebSocket (realtime)
 
