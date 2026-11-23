@@ -62,7 +62,7 @@ asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
 # still work; there is just no thumbnail.
 media = ["pillow>=11,<13", "pypdfium2>=4.30,<6.0"]
 # Error reporting to Sentry or a compatible service (DJANGO_SENTRY_DSN).
-sentry = ["sentry-sdk>=2.0,<3.0"]
+sentry = ["sentry-sdk>=2.75.0,<3.0"]
 all = ["backend[oauth,redis,s3,totp,asgi,media]"]
 dev = [
   "backend[all]",
