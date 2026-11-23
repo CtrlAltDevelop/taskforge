@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate seed purge tick web proto gen proto-lint proto-breaking check test integration perf prod-config backup restore-smoke version
+.PHONY: setup dev down run run-lite macos dev-macos serve grpc migrate seed purge tick web proto proto-py proto-dart gen proto-lint proto-breaking check test integration perf prod-config backup restore-smoke version
 
 PATH := $(PATH):$(HOME)/.pub-cache/bin
 VENV := backend/.venv/bin
@@ -125,8 +125,12 @@ DART_PROTOS := infrastructure/common/grpc/common.proto \
 	infrastructure/security/grpc/security.proto \
 	infrastructure/oauth/rotation/grpc/oauth_rotation.proto \
 	infrastructure/system/grpc/system.proto
-proto:
+proto: proto-py proto-dart
+
+proto-py:
 	cd backend && ../$(VENV)/python manage.py protos
+
+proto-dart:
 	rm -rf app/lib/gen && mkdir -p app/lib/gen
 	protoc -I backend/src --dart_out=grpc:app/lib/gen $(DART_PROTOS)
 	rm -rf app/lib/gen/google

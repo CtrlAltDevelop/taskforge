@@ -103,12 +103,7 @@ jobs:
       - run: dart pub global activate protoc_plugin 25.1.0  # same version the stubs were generated with
       - run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
-          rm -rf app/lib/gen && mkdir -p app/lib/gen
-          protoc -I backend/src --dart_out=grpc:app/lib/gen \
-            infrastructure/common/grpc/common.proto \
-            infrastructure/accounts/grpc/accounts.proto \
-            infrastructure/oauth/rotation/grpc/oauth_rotation.proto
-          rm -rf app/lib/gen/google
+          make proto-dart
           git diff --exit-code -- app/lib/gen
 
   deploy:
