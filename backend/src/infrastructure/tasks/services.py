@@ -237,7 +237,10 @@ def present_many(tasks: Sequence[Task], actor: Any, workspace: Workspace) -> lis
 
 def reload(actor: Any, workspace: Workspace, project_id: str, task_id: str) -> Task:
     """The task as it is now, trashed or not (for reporting what a batch did to it)."""
-    project = _writable_project(actor, workspace, project_id, "task.delete")
+    # No row lock: this only reads, and a replayed mutation answers outside any transaction, where
+    # PostgreSQL refuses SELECT ... FOR UPDATE.
+    project = _project(actor, workspace, project_id, "task.delete", False)
+    projects.writable(project)
     return _reload(_load_task(project, task_id, trashed=True), actor, workspace)
 
 
