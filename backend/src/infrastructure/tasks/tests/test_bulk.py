@@ -1,14 +1,13 @@
 """Bulk edits: one outcome per task, atomic per task, and the whole call checked up front."""
 
-import os
 import time
 from typing import Any
 
 import pytest
-from django.db import connection
 
 from infrastructure.common.errors import ApiError
 from infrastructure.common.responses import ResponseTitle
+from infrastructure.common.tests.perf import budget
 from infrastructure.tasks import bulk, services
 from infrastructure.tasks.models import Task
 from infrastructure.workflows import services as workflows
@@ -18,12 +17,8 @@ from infrastructure.workspaces import access
 pytestmark = pytest.mark.django_db
 
 BUDGET_SECONDS = 2.0
-# Each task costs a few dozen queries; in-process SQLite makes those free, PostgreSQL pays a
-# network round trip for each (about 8 s for 200 tasks on a laptop or a CI runner).
-# Shared CI runners (which set CI) are several times slower than a laptop even on SQLite (10 s).
-# ponytail: budget scaled x10 on PostgreSQL or CI, bulk.py batching the per-task queries would
-# remove it.
-SLOW_FACTOR = 10
+# Each task costs a few dozen queries (about 8 s for 200 tasks on PostgreSQL): see perf.budget.
+# ponytail: scaled budget, bulk.py batching the per-task queries would remove the need.
 
 
 def _make(team: Any, project: Any, title: str = "t", **kw: Any) -> Any:
@@ -213,6 +208,4 @@ def test_two_hundred_tasks_change_inside_the_budget(team: Any, project: Any) -> 
     elapsed = time.perf_counter() - started
 
     assert len(results) == 200 and all(r.error is None for r in results)
-    slow = connection.vendor == "postgresql" or bool(os.environ.get("CI"))
-    factor = SLOW_FACTOR if slow else 1
-    assert elapsed < BUDGET_SECONDS * factor
+    assert elapsed < budget(BUDGET_SECONDS)

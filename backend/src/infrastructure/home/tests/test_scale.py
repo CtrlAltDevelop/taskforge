@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from django.core.cache import cache
 from django.utils import timezone
 
+from infrastructure.common.tests.perf import budget
 from infrastructure.home import summary
 from infrastructure.home.tests.conftest import World
 from infrastructure.tasks.models import Task, TaskAssignee
@@ -57,4 +58,4 @@ def test_summary_over_50k_tasks_is_under_150ms(world: World) -> None:
         timings.append(time.perf_counter() - started)
 
     assert got.overdue_count > 0 and got.today_count > 0
-    assert sorted(timings)[int(len(timings) * 0.95) - 1] < BUDGET_SECONDS, timings  # p95
+    assert sorted(timings)[int(len(timings) * 0.95) - 1] < budget(BUDGET_SECONDS), timings  # p95
