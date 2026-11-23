@@ -30,7 +30,9 @@ Captured from the running web app against a seeded demo workspace (`make seed`; 
 
 The desktop app (`make macos`) on the same demo workspace, over native gRPC.
 
-![Home on macOS](docs/screenshots/macos-home.png)
+| Home | List | Board |
+|------|------|-------|
+| ![Home on macOS](docs/screenshots/macos-home.png) | ![List on macOS](docs/screenshots/macos-list.png) | ![Board on macOS](docs/screenshots/macos-board.png) |
 
 ### iOS
 
