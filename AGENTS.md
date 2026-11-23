@@ -58,7 +58,7 @@ taskforge/
 
 ## Backend skeleton: reuse `django-ninja-starter`
 
-The backend starts from the user's own `/Users/m.zarif/GitHub/django-ninja-starter`
+The backend starts from the author's own `django-ninja-starter` (a sibling checkout)
 (generate with `django-ninja-starter backend`), not from an empty Django project.
 It already ships Ninja, gRPC via `django-socio-grpc`, a WebSocket/ASGI setup,
 env-based settings, JWT auth (password/email-code/magic-link, TOTP and other
