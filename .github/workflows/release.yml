@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Image names (lower case)
         run: echo "OWNER=$(echo '${{ github.repository_owner }}' | tr 'A-Z' 'a-z')" >> "$GITHUB_ENV"
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: .
           file: backend/Dockerfile
@@ -56,7 +56,7 @@ jobs:
             ghcr.io/${{ env.OWNER }}/taskforge-backend:latest
           cache-from: type=gha,scope=backend
           cache-to: type=gha,scope=backend,mode=max
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: .
           file: deploy/web/Dockerfile
