@@ -79,7 +79,7 @@ jobs:
           cd app && flutter pub get
           flutter build web --release --dart-define=SAME_ORIGIN=true --dart-define=APP_VERSION=${{ needs.verify.outputs.version }}
           cd build/web && zip -r "$GITHUB_WORKSPACE/taskforge-web-${{ needs.verify.outputs.version }}.zip" .
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: web, path: "taskforge-web-*.zip" }
 
   android:
@@ -111,7 +111,7 @@ jobs:
           flutter build appbundle --release --dart-define=APP_VERSION=${{ needs.verify.outputs.version }}
           cp build/app/outputs/flutter-apk/app-release.apk "$GITHUB_WORKSPACE/taskforge-${{ needs.verify.outputs.version }}.apk"
           cp build/app/outputs/bundle/release/app-release.aab "$GITHUB_WORKSPACE/taskforge-${{ needs.verify.outputs.version }}.aab"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: android, path: "taskforge-*.*" }
 
   windows:
@@ -146,7 +146,7 @@ jobs:
           "@
           Set-Content -Path installer.iss -Value $iss
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: windows, path: "taskforge-*windows*" }
 
   linux:
@@ -170,7 +170,7 @@ jobs:
           ln -s /opt/taskforge/taskforge "$PKG/usr/bin/taskforge"
           printf 'Package: taskforge\nVersion: %s\nArchitecture: amd64\nMaintainer: TaskForge\nDescription: TaskForge desktop client\nDepends: libgtk-3-0, libsecret-1-0\n' "${V//-/~}" > "$PKG/DEBIAN/control"
           dpkg-deb --build "$PKG" "$GITHUB_WORKSPACE/taskforge-$V-linux-amd64.deb"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: linux, path: "taskforge-*linux*" }
 
   macos:
@@ -188,7 +188,7 @@ jobs:
           STAGE="$(mktemp -d)"; cp -R "$APP" "$STAGE/"; ln -s /Applications "$STAGE/Applications"
           hdiutil create -volname TaskForge -srcfolder "$STAGE" -ov -format UDZO "$GITHUB_WORKSPACE/taskforge-$V-macos.dmg"
           echo "::warning::The app is not notarized: users must allow it in System Settings"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: macos, path: "taskforge-*.dmg" }
 
   # iOS needs an Apple developer account. The job runs only when all signing secrets exist.
@@ -239,7 +239,7 @@ jobs:
           cd app && flutter pub get
           flutter build ipa --release --export-options-plist="$RUNNER_TEMP/ExportOptions.plist" --dart-define=APP_VERSION=$V
           cp build/ios/ipa/*.ipa "$GITHUB_WORKSPACE/taskforge-$V.ipa"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: ios, path: "taskforge-*.ipa" }
 
   release:
