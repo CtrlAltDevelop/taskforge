@@ -57,7 +57,7 @@ totp = ["pyotp>=2.9,<3.0"]
 # speaks no WebSocket -- it needs one of these alongside it. `watchfiles` is what
 # lets `make serve --reload` notice a changed template: uvicorn's own reloader
 # watches Python files and refuses `--reload-include` without it.
-asgi = ["uvicorn>=0.52,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
+asgi = ["uvicorn>=0.54.0,<1.0", "watchfiles>=1.0,<2.0", "websockets>=15,<18"]
 # Thumbnails of images (Pillow) and of the first page of a PDF (pypdfium2). Without them uploads
 # still work; there is just no thumbnail.
 media = ["pillow>=11,<13", "pypdfium2>=4.30,<6.0"]
