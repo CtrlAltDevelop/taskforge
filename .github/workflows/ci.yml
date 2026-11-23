@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
@@ -47,7 +47,7 @@ jobs:
       DJANGO_DB_HOST: 127.0.0.1
       DJANGO_DB_PORT: "5432"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
@@ -61,7 +61,7 @@ jobs:
       run:
         working-directory: app
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -74,7 +74,7 @@ jobs:
   proto:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # `buf breaking` compares against another ref
       - uses: bufbuild/buf-setup-action@v1
@@ -110,7 +110,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Production compose is valid
         working-directory: deploy
         run: |
@@ -128,7 +128,7 @@ jobs:
       run:
         working-directory: deploy
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Throwaway environment
         run: |
           {
@@ -210,7 +210,7 @@ jobs:
       DJANGO_DB_HOST: 127.0.0.1
       DJANGO_DB_PORT: "5432"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v6
