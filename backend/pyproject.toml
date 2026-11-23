@@ -47,7 +47,7 @@ dependencies = [
 # Social sign-in, for talking to the providers.
 oauth = ["httpx>=0.28,<1.0"]
 # The challenge store that survives a restart and reaches every worker.
-redis = ["redis>=5.0,<9.0"]
+redis = ["redis>=5.0,<8.2"]  # fakeredis 2.40 breaks on redis 8.2 (`__closure__` in fakeredis/_clients)
 # Authenticator-app second factors.
 # Object storage (S3, MinIO) for uploads; set DJANGO_S3_BUCKET in production.
 s3 = ["django-storages[s3]>=1.14,<2.0"]
