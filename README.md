@@ -41,3 +41,9 @@ The same seeded workspace in the iOS Simulator (iPhone 18 Pro Max), over native 
 | ![Home on iOS](docs/screenshots/ios-home.png) | ![List on iOS](docs/screenshots/ios-project.png) | ![Board on iOS](docs/screenshots/ios-board.png) |
 
 Status: **planning complete; phase 00 (foundation) implemented.** See [AGENTS.md](AGENTS.md#commands) to run it.
+
+## Licence
+
+[GNU AGPL-3.0](LICENSE). You may use, modify and self-host TaskForge freely; if you run a modified
+version as a network service, you must offer its source to your users. See also
+[CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
