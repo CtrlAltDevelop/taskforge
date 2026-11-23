@@ -181,10 +181,7 @@ class _SessionTile extends ConsumerWidget {
                   label: l10n.grpIThisDevice,
                 ),
               if (session.newDevice)
-                TfChip(
-                  key: const Key('chip-new'),
-                  label: l10n.devSessionNew,
-                ),
+                TfChip(key: const Key('chip-new'), label: l10n.devSessionNew),
               if (session.keyChanged)
                 TfChip(
                   key: const Key('chip-key-changed'),

@@ -23,7 +23,7 @@ if [ -n "${DJANGO_S3_BUCKET:-}" ] && [ -n "${DJANGO_S3_ENDPOINT_URL:-}" ]; then
      && mc mirror --overwrite src/'$DJANGO_S3_BUCKET' /backup/storage"
 else
   echo "Archiving the media volume ..."
-  "${COMPOSE[@]}" run --rm --no-deps -T -v "$(cd "$OUT" && pwd):/backup" backend \
+  "${COMPOSE[@]}" run --rm --no-deps -T --user root -v "$(cd "$OUT" && pwd):/backup" backend \
     tar -czf /backup/media.tar.gz -C /data/media .
 fi
 ( cd "$OUT" && sha256sum db.dump > SHA256SUMS )

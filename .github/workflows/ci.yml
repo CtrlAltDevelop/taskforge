@@ -65,6 +65,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
           cache: true
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
@@ -78,6 +79,8 @@ jobs:
         with:
           fetch-depth: 0  # `buf breaking` compares against another ref
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
       - run: buf lint
       # Compatibility gate: no change that breaks a released client (removed/renumbered field,
       # changed type). A pull request is compared with its base branch, a push with the last tag.
@@ -95,6 +98,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
       - run: dart pub global activate protoc_plugin 25.1.0  # same version the stubs were generated with
       - run: |
