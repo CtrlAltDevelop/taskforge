@@ -46,9 +46,12 @@ class TopBar extends ConsumerWidget {
       overflow: TextOverflow.ellipsis,
       style: context.tf.typography.lead.copyWith(color: c.text),
     );
+    // On iOS the status bar / Dynamic Island sits over the app: the bar's
+    // background extends under it and its content starts below.
+    final inset = MediaQuery.paddingOf(context).top;
     return Container(
-      height: topBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: TfSpace.sm),
+      height: topBarHeight + inset,
+      padding: EdgeInsets.fromLTRB(TfSpace.sm, inset, TfSpace.sm, 0),
       decoration: BoxDecoration(
         color: c.surface,
         border: Border(bottom: BorderSide(color: c.border)),

@@ -42,6 +42,17 @@ The same seeded workspace in the iOS Simulator (iPhone 18 Pro Max), over native 
 |------|------|-------|
 | ![Home on iOS](docs/screenshots/ios-home.png) | ![List on iOS](docs/screenshots/ios-project.png) | ![Board on iOS](docs/screenshots/ios-board.png) |
 
+### iPad
+
+The same seeded workspace on an iPad Pro 13-inch in the Simulator, over native gRPC.
+
+| | | |
+|---|---|---|
+| ![Home on iPad](docs/screenshots/ipad-home.png) | ![List on iPad](docs/screenshots/ipad-list.png) | ![Board on iPad](docs/screenshots/ipad-board.png) |
+| ![Task and chat on iPad](docs/screenshots/ipad-task.png) | ![Calendar on iPad](docs/screenshots/ipad-calendar.png) | ![Timeline on iPad](docs/screenshots/ipad-timeline.png) |
+| ![Sprints on iPad](docs/screenshots/ipad-sprints.png) | ![Dashboards on iPad](docs/screenshots/ipad-dashboards.png) | ![Chat on iPad](docs/screenshots/ipad-chat.png) |
+| ![Inbox on iPad](docs/screenshots/ipad-inbox.png) | ![My work on iPad](docs/screenshots/ipad-my-work.png) |  |
+
 Status: **planning complete; phase 00 (foundation) implemented.** See [AGENTS.md](AGENTS.md#commands) to run it.
 
 ## Licence

@@ -243,10 +243,17 @@ void main() {
   ) async {
     final o = await open(tester);
 
+    // Start from a zone no machine is in, so a runner already on the default
+    // (UTC) still has something to change.
+    await tester.enterText(key('timezone-field'), 'Pacific/Kiritimati');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    final before = o.inbox.settingsSets.length;
+
     await toggle(tester, 'timezone-device');
 
     // Either a zone with this machine's offset was saved, or it says to type.
-    final saved = o.inbox.settingsSets.isNotEmpty;
+    final saved = o.inbox.settingsSets.length > before;
     expect(
       saved || find.textContaining('Type your time zone').evaluate().isNotEmpty,
       isTrue,

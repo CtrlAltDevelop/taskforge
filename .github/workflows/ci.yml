@@ -1,22 +1,64 @@
 name: CI
 
+# Runs only on pull requests into main, and only the two quick jobs (a few
+# minutes). Nothing runs on pushes. The full suite (backend on SQLite and
+# PostgreSQL, Flutter tests, proto, deploy, upgrade) is kept for starting by
+# hand from the Actions tab.
 on:
-  push:
-    branches: [main, stage, develop]
   pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  quick-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: ruff check --no-cache .
+      - run: ruff format --check --no-cache .
+      - run: python3 manage.py check
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+      - run: pytest src/infrastructure/common/tests --no-cov -q -x
+
+  quick-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+
   backend:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
@@ -25,6 +67,7 @@ jobs:
       - run: make test
 
   backend-postgres:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -47,8 +90,8 @@ jobs:
       DJANGO_DB_HOST: 127.0.0.1
       DJANGO_DB_PORT: "5432"
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
@@ -56,15 +99,17 @@ jobs:
       - run: make -f Makefile test-postgres
 
   app:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
           cache: true
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
@@ -72,12 +117,15 @@ jobs:
       - run: flutter test --coverage
 
   proto:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # `buf breaking` compares against another ref
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
       - run: buf lint
       # Compatibility gate: no change that breaks a released client (removed/renumbered field,
       # changed type). A pull request is compared with its base branch, a push with the last tag.
@@ -95,22 +143,19 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
       - run: dart pub global activate protoc_plugin 25.1.0  # same version the stubs were generated with
       - run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
-          rm -rf app/lib/gen && mkdir -p app/lib/gen
-          protoc -I backend/src --dart_out=grpc:app/lib/gen \
-            infrastructure/common/grpc/common.proto \
-            infrastructure/accounts/grpc/accounts.proto \
-            infrastructure/oauth/rotation/grpc/oauth_rotation.proto
-          rm -rf app/lib/gen/google
+          make proto-dart
           git diff --exit-code -- app/lib/gen
 
   deploy:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Production compose is valid
         working-directory: deploy
         run: |
@@ -122,13 +167,14 @@ jobs:
   # Phase 38: the production compose stack really starts, migrates and answers. Caddy is left out
   # (it needs ports 80/443 and a certificate); the probes go through the backend container.
   compose-smoke:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
       run:
         working-directory: deploy
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Throwaway environment
         run: |
           {
@@ -181,6 +227,7 @@ jobs:
   # Phase 38: upgrading from the previous release (N) to this commit (N+1) migrates cleanly and
   # the app still answers. No earlier tag yet: the job reports that and passes.
   upgrade:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     services:
@@ -210,10 +257,10 @@ jobs:
       DJANGO_DB_HOST: 127.0.0.1
       DJANGO_DB_PORT: "5432"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
       - name: Find the previous release tag

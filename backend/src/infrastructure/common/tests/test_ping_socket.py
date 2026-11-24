@@ -64,7 +64,10 @@ def test_ping_socket_refuses_a_foreign_browser_origin() -> None:
     assert output == {"type": "websocket.close", "code": 4403}
 
 
-def test_ping_socket_accepts_a_localhost_origin() -> None:
+def test_ping_socket_accepts_a_localhost_origin(settings: Any) -> None:
+    # The origin check follows ALLOWED_HOSTS when nothing names origins; CI sets neither.
+    settings.WEBSOCKET_ALLOWED_ORIGINS = []
+    settings.ALLOWED_HOSTS = ["localhost"]
     output = asyncio.run(_handshake_code(b"http://localhost"))
 
     assert output["type"] == "websocket.accept"

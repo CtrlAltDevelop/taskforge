@@ -13,7 +13,8 @@ trap cleanup EXIT
 
 docker network create "$NET" >/dev/null
 docker run -d --name "$PG" --network "$NET" -e POSTGRES_PASSWORD=smoke -e POSTGRES_DB=taskforge -e POSTGRES_USER=taskforge postgres:16-alpine >/dev/null
-for _ in $(seq 1 60); do docker exec "$PG" pg_isready -U taskforge >/dev/null 2>&1 && break; sleep 1; done
+# TCP, not the socket: the image first runs a socket-only temporary server, then restarts for real.
+for _ in $(seq 1 60); do docker exec "$PG" pg_isready -h 127.0.0.1 -U taskforge >/dev/null 2>&1 && break; sleep 1; done
 docker exec -i "$PG" pg_restore -U taskforge -d taskforge --no-owner --exit-on-error < "$SRC/db.dump"
 
 # The restored schema must match this version's migrations (no unapplied ones) and be readable.

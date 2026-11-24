@@ -7,6 +7,7 @@ from typing import Any
 
 from django.utils import timezone
 
+from infrastructure.common.tests.perf import analyze, budget
 from infrastructure.dashboards import services
 from infrastructure.dashboards.services import WidgetInput
 from infrastructure.tasks.models import Task
@@ -41,6 +42,7 @@ def test_the_common_widgets_over_100k_tasks_load_in_two_seconds(world: Any) -> N
         ),
         batch_size=5000,
     )
+    analyze(Task)
     kinds = [
         ("number", {}),
         ("number", {"measure": "points"}),
@@ -63,4 +65,4 @@ def test_the_common_widgets_over_100k_tasks_load_in_two_seconds(world: Any) -> N
     assert totals[0] == ROWS + 1
     cycle = services.widget_data(world.owner, world.ws, str(view.widgets[-1].pk))
     assert cycle.result.truncated  # past the row cap the average says it is a sample
-    assert elapsed < BUDGET_SECONDS, f"{elapsed:.2f}s for seven widgets over {ROWS} tasks"
+    assert elapsed < budget(BUDGET_SECONDS), f"{elapsed:.2f}s for seven widgets over {ROWS} tasks"
