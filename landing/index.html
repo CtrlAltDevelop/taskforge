@@ -1,158 +1,168 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TaskForge — free, self-hosted project management</title>
-<meta name="description" content="A free, self-hostable alternative to Jira and ClickUp. Fast, offline-capable, keyboard-first, on web, mobile and desktop.">
+<meta name="description" content="A free, self-hostable alternative to Jira and ClickUp. Fast, offline-capable and keyboard-first on web, iOS, Android, macOS, Windows and Linux. Explore every feature in 3D.">
+<meta name="theme-color" content="#0E0E0F">
+<meta property="og:title" content="TaskForge — free, self-hosted project management">
+<meta property="og:description" content="The structure of Jira and the flexibility of ClickUp, without the paywalls, the clutter or the lag.">
 <link rel="icon" href="img/mark.svg" type="image/svg+xml">
-<style>
-  :root {
-    --canvas: #F7F7F5; --surface: #FFFFFF; --text: #171716; --muted: #55554F;
-    --line: #E3E3DE; --ember: #C2410C; --ember-ink: #FFFFFF;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --canvas: #0E0E0F; --surface: #161618; --text: #F4F4F6; --muted: #B4B4BC;
-      --line: #2A2A2E; --ember: #FB923C; --ember-ink: #161618;
-    }
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--canvas); color: var(--text);
-    font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  a { color: var(--ember); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
-  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--text); text-decoration: none; }
-  .brand img { width: 32px; height: 32px; border-radius: 8px; }
-  nav .links { display: flex; gap: 20px; font-size: 14px; }
-  nav .links a { color: var(--muted); text-decoration: none; }
-  nav .links a:hover { color: var(--text); }
-  .hero { text-align: center; padding: 56px 0 40px; }
-  .hero h1 { font-size: clamp(32px, 6vw, 56px); line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
-  .hero h1 em { font-style: normal; color: var(--ember); }
-  .hero p { max-width: 640px; margin: 0 auto 28px; color: var(--muted); font-size: 18px; }
-  .btn {
-    display: inline-block; padding: 12px 22px; border-radius: 8px; font-weight: 600;
-    text-decoration: none; border: 1px solid var(--line); color: var(--text); background: var(--surface);
-  }
-  .btn.primary { background: var(--ember); border-color: var(--ember); color: var(--ember-ink); }
-  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .shot { margin: 40px auto 0; }
-  .shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); }
-  .shot .dark { display: none; }
-  @media (prefers-color-scheme: dark) { .shot .light { display: none; } .shot .dark { display: block; } }
-  section { padding: 56px 0; }
-  h2 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.01em; }
-  .lead { color: var(--muted); margin: 0 0 32px; max-width: 640px; }
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-  .card h3 { margin: 0 0 6px; font-size: 16px; }
-  .card p { margin: 0; color: var(--muted); font-size: 14px; }
-  table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; }
-  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
-  tr:last-child td { border-bottom: 0; }
-  .table-scroll { overflow-x: auto; }
-  .gallery { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .gallery figure { margin: 0; }
-  .gallery img { width: 100%; max-height: 640px; object-fit: contain; object-position: top; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
-  .gallery figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
-  .phones { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-  .phones img { width: 220px; max-width: 45%; height: auto; border-radius: 24px; border: 1px solid var(--line); }
-  pre {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-    padding: 16px; overflow-x: auto; font: 14px/1.6 ui-monospace, "SF Mono", Menlo, monospace;
-  }
-  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 14px; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Set the theme before first paint: saved choice, else the system's.
+  try {
+    var t = localStorage.getItem('tf-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.dataset.theme = t;
+  } catch (e) {}
+  document.documentElement.classList.add('js');
+</script>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+<script src="vendor/lenis.min.js" defer></script>
+<script type="module" src="js/main.js"></script>
 </head>
 <body>
-<div class="wrap">
-  <nav>
-    <a class="brand" href="#"><img src="img/mark.svg" alt="">TaskForge</a>
-    <div class="links"><a href="#why">Why</a><a href="#features">Features</a><a href="#screens">Screens</a><a href="#start">Get started</a></div>
+<div id="preloader" aria-hidden="true">
+  <span>TaskForge</span><span id="pct">0%</span><span>Free project management</span>
+</div>
+
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
+<div id="tip" role="presentation" hidden></div>
+<div id="cursor" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"><i></i></div>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="TaskForge, back to top"><img src="img/mark.svg" alt="" width="30" height="30"><span>TaskForge</span></a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#why">Why</a><a href="#views">Views</a><a href="#index">Features</a><a href="#screens">Screens</a><a href="#stack">Stack</a>
   </nav>
+  <div class="nav-end">
+    <button id="theme" class="icon-btn" type="button" aria-label="Switch between light and dark theme"><span aria-hidden="true"></span></button>
+    <a class="pill solid" href="#start">Get started</a>
+  </div>
+</header>
+<nav id="rail" class="rail" aria-label="Page progress"></nav>
 
-  <header class="hero">
-    <h1>Project management that is <em>free</em>, fast and yours.</h1>
-    <p>The structure of Jira and the flexibility of ClickUp, without the paywalls, the clutter or the lag. Self-host it, own your data, use it everywhere.</p>
-    <div class="cta">
-      <a class="btn primary" href="#start">Run it in minutes</a>
-      <a class="btn" href="https://github.com/CtrlAltDevelop/taskforge">Source on GitHub</a>
+<main id="top">
+  <section id="hero" class="hero" data-layout="hero" data-place="center" data-dim="1">
+    <div class="hero-bottom">
+      <h1>Project management that is <em>free</em>, fast and&nbsp;yours.</h1>
+      <div class="hero-side">
+        <p class="sub">The structure of Jira and the flexibility of ClickUp, without the paywalls, the clutter or the lag. Drag the cards. Click to throw sparks.</p>
+        <div class="cta">
+          <a class="btn primary" href="#start">Run it in minutes</a>
+          <a class="btn" href="#index">See every feature</a>
+        </div>
+      </div>
     </div>
-    <div class="shot">
-      <img class="light" src="img/board-light.png" alt="TaskForge board view, light theme">
-      <img class="dark" src="img/board-dark.png" alt="TaskForge board view, dark theme">
-    </div>
-  </header>
+    <dl class="stats">
+      <div><dt data-count="features">51</dt><dd>features</dd></div>
+      <div><dt>6</dt><dd>platforms</dd></div>
+      <div><dt>3</dt><dd>transports</dd></div>
+      <div><dt>0</dt><dd>paywalls</dd></div>
+    </dl>
+  </section>
 
-  <section id="why">
+  <div class="marquee" aria-hidden="true"><div id="marquee" class="marquee-track"></div></div>
+
+  <section id="statement" class="screen statement" data-layout="hero" data-place="side" data-dim="0.5">
+    <p class="eyebrow"><span>01</span> What it is</p>
+    <p class="reveal" data-reveal>Your tasks, docs, chat and goals in one place. Every core feature is free for everyone. No seat limits, no run counts, no locked tiers. Host it yourself, own your data, and use it on every screen you have.</p>
+  </section>
+
+  <section id="why" class="screen why" data-layout="sphere" data-place="side" data-dim="0.3">
+    <p class="eyebrow"><span>02</span> Why TaskForge</p>
     <h2>Fixes what annoys you in the others</h2>
-    <p class="lead">Every core feature is available to everyone. No seat limits, no run counts, no locked tiers.</p>
-    <div class="table-scroll">
-      <table>
-        <tr><th>Problem elsewhere</th><th>TaskForge</th></tr>
-        <tr><td>Paywalls on automations, time tracking, dashboards, audit</td><td>All free, self-hosted, no seat limits</td></tr>
-        <tr><td>Slow UI on big projects</td><td>Paginated streaming, local cache, optimistic updates</td></tr>
-        <tr><td>Weak or missing offline mode</td><td>Local-first cache with queued changes that sync when you reconnect</td></tr>
-        <tr><td>Too many clicks, maze-like admin</td><td>Command palette and keyboard shortcuts everywhere</td></tr>
-        <tr><td>Notification overload</td><td>Per-event channels, quiet hours and digests</td></tr>
-        <tr><td>Poor right-to-left support</td><td>Persian, Arabic and Pashto from the start</td></tr>
-        <tr><td>Lock-in and painful export</td><td>Import from Jira, ClickUp and CSV; full export</td></tr>
-      </table>
+    <div class="compare" role="table" aria-label="Problems elsewhere and how TaskForge answers them">
+      <div class="compare-head" role="row"><span role="columnheader">Elsewhere</span><span role="columnheader">TaskForge</span></div>
+      <ul id="gaps" class="gaps"></ul>
     </div>
   </section>
 
-  <section id="features">
-    <h2>Everything in one place</h2>
-    <p class="lead">One feature per release, each one tested and documented.</p>
-    <div class="grid">
-      <div class="card"><h3>Many views</h3><p>List, board, calendar, timeline and dashboards over the same tasks, with saved filters.</p></div>
-      <div class="card"><h3>Sprints and workflows</h3><p>Backlog, burndown and carry-over; a visual workflow editor with safe defaults.</p></div>
-      <div class="card"><h3>Tasks that nest</h3><p>Unlimited-depth subtasks and typed dependencies with cycle checks.</p></div>
-      <div class="card"><h3>Docs, chat, goals</h3><p>Docs with history, channels and direct messages, goals with key results.</p></div>
-      <div class="card"><h3>Automations</h3><p>Unlimited rule runs, a run history and dry-run mode.</p></div>
-      <div class="card"><h3>Time tracking</h3><p>Built-in timer, manual entries, estimates, workload and capacity.</p></div>
-      <div class="card"><h3>Audit and access</h3><p>Immutable audit log, a role matrix and a "why can't I see this" explainer.</p></div>
-      <div class="card"><h3>Realtime</h3><p>Live updates and presence over WebSocket, so boards are never stale.</p></div>
+  <div id="views" class="story" aria-label="Views of your work"></div>
+
+  <section id="index" class="screen index" data-layout="sphere" data-place="side" data-dim="0.08">
+    <div class="index-head">
+      <p class="eyebrow"><span>04</span> Feature index</p>
+      <h2>Everything in the app <span class="count" id="index-count"></span></h2>
+      <p class="lead">Each row is one shipped feature. Hover or tap for the detail.</p>
+      <div class="tools">
+        <div id="chips" class="chips" role="group" aria-label="Filter by area"></div>
+        <label class="search"><span class="sr">Search features</span><input id="q" type="search" placeholder="Search features" autocomplete="off"></label>
+      </div>
     </div>
+    <ol id="rows" class="rows"></ol>
+    <p id="none" class="label" hidden>Nothing matches. Try another word.</p>
   </section>
 
-  <section id="screens">
-    <h2>One app, every screen</h2>
-    <p class="lead">A single Flutter codebase for web, iOS, Android, macOS, Windows and Linux.</p>
-    <div class="gallery">
-      <figure><img src="img/list-light.png" alt="List view" loading="lazy"><figcaption>List</figcaption></figure>
-      <figure><img src="img/task-modal-light.png" alt="Task with comment" loading="lazy"><figcaption>Task and comments</figcaption></figure>
-      <figure><img src="img/board-fa-rtl.png" alt="Board in Persian, right to left" loading="lazy"><figcaption>Persian, right to left</figcaption></figure>
-      <figure><img src="img/macos-board.png" alt="Board on macOS" loading="lazy"><figcaption>macOS desktop</figcaption></figure>
-      <figure><img src="img/ipad-board.png" alt="Board on iPad" loading="lazy"><figcaption>iPad board</figcaption></figure>
-      <figure><img src="img/ipad-task.png" alt="Task with chat on iPad" loading="lazy"><figcaption>iPad task and chat</figcaption></figure>
+  <section id="screens" class="screen screens" data-layout="board" data-place="side" data-dim="0.06">
+    <div class="screens-head">
+      <p class="eyebrow"><span>05</span> One codebase</p>
+      <h2>Every screen you own</h2>
+      <p class="lead">A single Flutter app for web, iOS, Android, macOS, Windows and Linux. These are real captures of the seeded demo workspace.</p>
+      <div id="tabs" class="chips" role="tablist" aria-label="Device"></div>
     </div>
-    <div class="phones">
-      <img src="img/ios-home.png" alt="Home on iOS" loading="lazy">
-      <img src="img/ios-board.png" alt="Board on iOS" loading="lazy">
-    </div>
+    <div id="strip" class="strip" tabindex="0" aria-live="polite"></div>
   </section>
 
-  <section id="start">
-    <h2>Get started</h2>
-    <p class="lead">Needs Python, Flutter and make. No Docker required for a first look.</p>
-<pre>git clone &lt;your-fork-or-this-repo&gt; taskforge &amp;&amp; cd taskforge
+  <section id="stack" class="screen stack" data-layout="calendar" data-place="side" data-dim="0.08">
+    <p class="eyebrow"><span>06</span> Under the hood</p>
+    <h2>Three transports, one contract</h2>
+    <svg class="flow" viewBox="0 0 900 260" role="img" aria-label="The Flutter app talks to Django over REST, gRPC and WebSocket, backed by PostgreSQL and Redis">
+      <g class="box"><rect x="10" y="80" width="170" height="100" rx="14"/><text x="95" y="124" class="t1">Flutter app</text><text x="95" y="148" class="t2">web · mobile · desktop</text></g>
+      <g class="box"><rect x="430" y="40" width="170" height="180" rx="14"/><text x="515" y="124" class="t1">Django</text><text x="515" y="148" class="t2">one contract</text></g>
+      <g class="box"><rect x="720" y="40" width="170" height="80" rx="14"/><text x="805" y="86" class="t1">PostgreSQL</text></g>
+      <g class="box"><rect x="720" y="140" width="170" height="80" rx="14"/><text x="805" y="186" class="t1">Redis</text></g>
+      <path class="wire" d="M180 110 C 300 60, 320 60, 430 80"/>
+      <path class="wire w2" d="M180 130 L 430 130"/>
+      <path class="wire w3" d="M180 150 C 300 200, 320 200, 430 180"/>
+      <path class="wire w4" d="M600 100 L 720 80"/>
+      <path class="wire w5" d="M600 160 L 720 180"/>
+      <text x="305" y="58" class="lab">REST</text><text x="305" y="122" class="lab">gRPC</text><text x="305" y="214" class="lab">WebSocket</text>
+    </svg>
+    <div class="transports">
+      <article><span class="num">REST</span><h3>Django Ninja</h3><p>Sign-in, uploads, webhooks and the public API.</p></article>
+      <article><span class="num">gRPC</span><h3>django-socio-grpc</h3><p>Typed app data, streaming and bulk operations. gRPC-Web for the browser.</p></article>
+      <article><span class="num">WS</span><h3>Django Channels</h3><p>Live events and presence, so boards are never stale.</p></article>
+    </div>
+    <p class="fine">Every request is bound to the device with a DPoP proof. PostgreSQL and Redis behind it; SQLite and an in-memory broker for a first look without Docker. Every query is scoped to a workspace.</p>
+  </section>
+
+  <section id="start" class="screen start" data-layout="chart" data-place="side" data-dim="0.14">
+    <p class="eyebrow"><span>07</span> Get started</p>
+    <h2>Run it in minutes</h2>
+    <p class="lead">Needs Python, Flutter and make. No Docker for a first look.</p>
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>~/taskforge</span><button id="copy" class="pill" type="button">Copy</button></div>
+<pre id="cmd">git clone https://github.com/CtrlAltDevelop/taskforge.git &amp;&amp; cd taskforge
 make setup      # backend venv, deps, Flutter packages
 make seed       # demo workspace "Acme Studio"
 make run-lite   # REST + gRPC, no Docker
 make macos      # or: make web</pre>
-    <p class="lead">Sign in with a demo account from <code>docs/demo-guide.md</code>.</p>
+    </div>
+    <p class="fine">Sign in with a demo account from <code>docs/demo-guide.md</code>. Licensed <a href="https://github.com/CtrlAltDevelop/taskforge/blob/main/LICENSE">AGPL-3.0</a>: use, change and self-host freely.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/CtrlAltDevelop/taskforge">Source on GitHub</a>
+      <a class="btn" href="https://github.com/CtrlAltDevelop/taskforge/blob/main/CONTRIBUTING.md">Contribute</a>
+    </div>
   </section>
+</main>
 
-  <footer>
-    TaskForge is free software. Built with Flutter, Django Ninja, gRPC and WebSocket.
-  </footer>
-</div>
+<footer class="foot">
+  <p class="wordmark" aria-hidden="true">TaskForge</p>
+  <div class="foot-row">
+    <span>Free software, built by <a href="https://github.com/CtrlAltDevelop">CtrlAltDevelop</a></span>
+    <span><a href="https://github.com/CtrlAltDevelop/taskforge">GitHub</a> · <a href="https://github.com/CtrlAltDevelop/taskforge/blob/main/SECURITY.md">Security</a> · <a href="https://github.com/CtrlAltDevelop/taskforge/blob/main/LICENSE">AGPL-3.0</a></span>
+  </div>
+</footer>
+
+<noscript><style>#preloader{display:none}.reveal span{opacity:1}</style></noscript>
 </body>
 </html>
