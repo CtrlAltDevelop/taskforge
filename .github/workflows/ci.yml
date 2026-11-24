@@ -1,15 +1,57 @@
 name: CI
 
+# Pull requests run only the two quick jobs (a few minutes). The full suite
+# (backend on SQLite and PostgreSQL, Flutter tests, proto, deploy, upgrade)
+# runs on pushes to main, stage and develop, and from the Actions tab.
 on:
   push:
     branches: [main, stage, develop]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  quick-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: ruff check --no-cache .
+      - run: ruff format --check --no-cache .
+      - run: python3 manage.py check
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+      - run: pytest src/infrastructure/common/tests --no-cov -q -x
+
+  quick-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.50.0"  # pinned: formatter output changes between releases
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+
   backend:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,6 +67,7 @@ jobs:
       - run: make test
 
   backend-postgres:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -56,6 +99,7 @@ jobs:
       - run: make -f Makefile test-postgres
 
   app:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -73,6 +117,7 @@ jobs:
       - run: flutter test --coverage
 
   proto:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -107,6 +152,7 @@ jobs:
           git diff --exit-code -- app/lib/gen
 
   deploy:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -121,6 +167,7 @@ jobs:
   # Phase 38: the production compose stack really starts, migrates and answers. Caddy is left out
   # (it needs ports 80/443 and a certificate); the probes go through the backend container.
   compose-smoke:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -180,6 +227,7 @@ jobs:
   # Phase 38: upgrading from the previous release (N) to this commit (N+1) migrates cleanly and
   # the app still answers. No earlier tag yet: the job reports that and passes.
   upgrade:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     services:
