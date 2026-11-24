@@ -74,7 +74,7 @@ dev = [
   # Type stubs for the generated protobuf messages, so a misspelled field is a
   # type error rather than an AttributeError raised while answering a call.
   "mypy-protobuf>=3.6",
-  "pytest>=8.3",
+  "pytest>=9.2.0",
   "pytest-cov>=6.0",
   "pytest-django>=4.11",
   "ruff>=0.11",
