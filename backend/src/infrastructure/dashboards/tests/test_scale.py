@@ -7,7 +7,7 @@ from typing import Any
 
 from django.utils import timezone
 
-from infrastructure.common.tests.perf import budget
+from infrastructure.common.tests.perf import analyze, budget
 from infrastructure.dashboards import services
 from infrastructure.dashboards.services import WidgetInput
 from infrastructure.tasks.models import Task
@@ -42,6 +42,7 @@ def test_the_common_widgets_over_100k_tasks_load_in_two_seconds(world: Any) -> N
         ),
         batch_size=5000,
     )
+    analyze(Task)
     kinds = [
         ("number", {}),
         ("number", {"measure": "points"}),
