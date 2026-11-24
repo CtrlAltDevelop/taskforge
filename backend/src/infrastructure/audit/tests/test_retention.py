@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 from django.core.management import call_command
-from django.db import models
+from django.db import connection, models
 from django.utils import timezone
 
 from infrastructure.audit import recorder, retention
@@ -16,7 +16,19 @@ def _entry(days_old: int, action: str = "x.y") -> AuditEntry:
     entry = recorder.record(workspace_id="11111111-1111-1111-1111-111111111111", action=action,
                             target_type="x", target_id="1")  # fmt: skip
     entry.at = timezone.now() - timedelta(days=days_old)
-    models.Model.save(entry, force_update=True)  # bypasses the guard: the fixture sets an age
+    # Bypasses the guards: the fixture sets an age. On PostgreSQL the immutability trigger refuses
+    # the UPDATE too, so it is off for this one statement (transactional: the test rollback and
+    # the ENABLE below both restore it).
+    postgres = connection.vendor == "postgresql"
+    if postgres:
+        connection.cursor().execute(
+            "ALTER TABLE audit_auditentry DISABLE TRIGGER audit_entry_no_change"
+        )
+    models.Model.save(entry, force_update=True)
+    if postgres:
+        connection.cursor().execute(
+            "ALTER TABLE audit_auditentry ENABLE TRIGGER audit_entry_no_change"
+        )
     return entry
 
 

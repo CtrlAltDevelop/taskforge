@@ -85,7 +85,7 @@ class ImportedRef(models.Model):
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name="+")
     job = models.ForeignKey(ImportJob, on_delete=models.CASCADE, related_name="refs")
     family = models.CharField(max_length=10)
-    entity_type = models.CharField(max_length=10)  # task comment link sprint status field project
+    entity_type = models.CharField(max_length=20)  # task comment link sprint status field project
     source_id = models.CharField(max_length=300)
     entity_id = models.UUIDField()
     meta = models.JSONField(default=dict, blank=True)

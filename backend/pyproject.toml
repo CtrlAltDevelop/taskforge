@@ -47,7 +47,7 @@ dependencies = [
 # Social sign-in, for talking to the providers.
 oauth = ["httpx>=0.28,<1.0"]
 # The challenge store that survives a restart and reaches every worker.
-redis = ["redis>=5.0,<9.0"]
+redis = ["redis>=5.0,<8.2"]  # fakeredis 2.40 breaks on redis 8.2 (`__closure__` in fakeredis/_clients)
 # Authenticator-app second factors.
 # Object storage (S3, MinIO) for uploads; set DJANGO_S3_BUCKET in production.
 s3 = ["django-storages[s3]>=1.14,<2.0"]
@@ -67,6 +67,9 @@ all = ["backend[oauth,redis,s3,totp,asgi,media]"]
 dev = [
   "backend[all]",
   "fakeredis>=2.26,<3.0",
+  # The committed *_pb2_grpc.py stubs embed the grpcio-tools version that wrote them, so
+  # `manage.py protos --check` fails on any other one. Bump this and run `make protos` together.
+  "grpcio-tools==1.85.1",
   "mypy>=1.15",
   # Type stubs for the generated protobuf messages, so a misspelled field is a
   # type error rather than an AttributeError raised while answering a call.

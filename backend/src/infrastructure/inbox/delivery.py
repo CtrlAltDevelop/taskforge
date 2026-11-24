@@ -249,11 +249,14 @@ def _claim(now: datetime, *, digest: bool, limit: int) -> list[Delivery]:
         )
         if digest:
             wanted = wanted.filter(channel=Channel.DIGEST)
-            people = list(
-                wanted.order_by("due_at")
-                .values_list("notification__user_id", flat=True)
-                .distinct()[:limit]
-            )
+            # No DISTINCT: PostgreSQL refuses it together with FOR UPDATE.
+            people: dict[int, None] = {}
+            for user_id in wanted.order_by("due_at").values_list(
+                "notification__user_id", flat=True
+            ):
+                people.setdefault(user_id)
+                if len(people) >= limit:
+                    break
             ids = list(wanted.filter(notification__user_id__in=people).values_list("pk", flat=True))
         else:
             ids = list(

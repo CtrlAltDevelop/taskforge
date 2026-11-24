@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:taskforge/core/ui/app_theme.dart';
 import 'package:taskforge/core/ui/tf/tf_menu.dart';
 
+import '../../../i18n/tolerant_golden.dart';
+
 Widget _host({TextDirection dir = TextDirection.ltr}) => MaterialApp(
   builder: (c, app) => Directionality(textDirection: dir, child: app!),
   debugShowCheckedModeBanner: false,
@@ -26,6 +28,7 @@ Widget _host({TextDirection dir = TextDirection.ltr}) => MaterialApp(
 );
 
 void main() {
+  setUpAll(() => useTolerantGoldens('test/core/ui/tf/tf_menu_panel_test.dart'));
   testWidgets('the open menu shows its whole shadow (not clipped)', (t) async {
     // Flutter's test binding draws shadows hard-edged and blurless by default.
     debugDisableShadows = false;

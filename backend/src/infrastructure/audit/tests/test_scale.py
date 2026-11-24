@@ -13,6 +13,7 @@ from django.utils import timezone
 
 from infrastructure.audit import services
 from infrastructure.audit.models import AuditEntry
+from infrastructure.common.tests.perf import analyze
 
 ROWS = 100_000
 BUDGET_SECONDS = 0.3
@@ -37,6 +38,7 @@ def big(db: None) -> Any:
         ),
         batch_size=5000,
     )
+    analyze(AuditEntry)
     return ws, people, start
 
 

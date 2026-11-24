@@ -73,7 +73,7 @@ def test_query_string_is_ignored_in_htu() -> None:
         ({"htm": "GET"}, Reason.METHOD_MISMATCH),
         ({"htu": "https://evil.test/api/v1/things"}, Reason.URL_MISMATCH),
         ({"iat": 1}, Reason.IAT_STALE),
-        ({"iat": int(time.time()) + 3600}, Reason.IAT_FUTURE),
+        ({"iat": 4_000_000_000}, Reason.IAT_FUTURE),  # year 2096: not relative to collection time,
         ({"iat": "now"}, Reason.BAD_CLAIM),
         ({"jti": ""}, Reason.BAD_CLAIM),
         ({"jti": "x" * 500}, Reason.BAD_CLAIM),

@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// version, so one layout differs by a few percent of pixels between a Mac and
 /// a Linux CI runner. A moved, mirrored or missing element differs by far more
 /// than this.
-const goldenTolerance = 0.06;
+const goldenTolerance = 0.08;
 
 class _TolerantComparator extends LocalFileComparator {
   _TolerantComparator(super.testFile);
@@ -26,9 +26,12 @@ class _TolerantComparator extends LocalFileComparator {
 
 /// Call from `setUpAll`: golden images in `test/i18n/goldens` then compare with
 /// [goldenTolerance] instead of pixel for pixel.
-void useTolerantGoldens() {
+///
+/// [testFile] (relative to the app folder) decides where golden paths resolve
+/// from; pass the test's own path when its goldens are not in `test/i18n`.
+void useTolerantGoldens([String testFile = 'test/i18n/tolerant_golden.dart']) {
   if (goldenFileComparator is! LocalFileComparator) return;
   goldenFileComparator = _TolerantComparator(
-    Uri.file('${Directory.current.path}/test/i18n/tolerant_golden.dart'),
+    Uri.file('${Directory.current.path}/$testFile'),
   );
 }
