@@ -83,6 +83,14 @@ void main() {
     expect(homeColumns(ScreenSize.expanded), 3);
   });
 
+  test('fewer columns when the width cannot give each card enough room', () {
+    expect(fitColumns(3, 1200), 3);
+    expect(fitColumns(3, 750), 2);
+    expect(fitColumns(3, 500), 1);
+    expect(fitColumns(2, 2000), 2);
+    expect(fitColumns(3, 100), 1);
+  });
+
   group('what is new', () {
     test('first install shows nothing, whatever the version', () {
       expect(notesFor(null, '1.1.0'), isEmpty);

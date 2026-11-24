@@ -29,6 +29,14 @@ int homeColumns(ScreenSize size) => switch (size) {
   ScreenSize.expanded => 3,
 };
 
+/// Narrowest a card may get before a column is dropped (a tablet with the
+/// sidebar open has less room than its screen size suggests).
+const homeCardMinWidth = 280.0;
+
+/// [wanted] columns, fewer if [width] cannot give each [homeCardMinWidth].
+int fitColumns(int wanted, double width) =>
+    (width / homeCardMinWidth).floor().clamp(1, wanted);
+
 Widget _card(String id) => switch (id) {
   'checklist' => const ChecklistCard(),
   'today' => const TodayCard(),
@@ -141,7 +149,12 @@ class _CardGrid extends StatelessWidget {
   final int columns;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) =>
+        _grid(context, fitColumns(columns, box.maxWidth)),
+  );
+
+  Widget _grid(BuildContext context, int columns) {
     if (ids.isEmpty) {
       return TfEmpty(
         key: const Key('home-all-hidden'),
