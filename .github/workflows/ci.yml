@@ -1,13 +1,12 @@
 name: CI
 
-# Pull requests and pushes to develop run only the two quick jobs (a few
-# minutes). The full suite (backend on SQLite and PostgreSQL, Flutter tests,
-# proto, deploy, upgrade) runs on pushes to main and stage, and from the
-# Actions tab.
+# Runs only on pull requests into main, and only the two quick jobs (a few
+# minutes). Nothing runs on pushes. The full suite (backend on SQLite and
+# PostgreSQL, Flutter tests, proto, deploy, upgrade) is kept for starting by
+# hand from the Actions tab.
 on:
-  push:
-    branches: [main, stage, develop]
   pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -52,7 +51,7 @@ jobs:
       - run: flutter analyze --fatal-infos
 
   backend:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -68,7 +67,7 @@ jobs:
       - run: make test
 
   backend-postgres:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -100,7 +99,7 @@ jobs:
       - run: make -f Makefile test-postgres
 
   app:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -118,7 +117,7 @@ jobs:
       - run: flutter test --coverage
 
   proto:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -153,7 +152,7 @@ jobs:
           git diff --exit-code -- app/lib/gen
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -168,7 +167,7 @@ jobs:
   # Phase 38: the production compose stack really starts, migrates and answers. Caddy is left out
   # (it needs ports 80/443 and a certificate); the probes go through the backend container.
   compose-smoke:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -228,7 +227,7 @@ jobs:
   # Phase 38: upgrading from the previous release (N) to this commit (N+1) migrates cleanly and
   # the app still answers. No earlier tag yet: the job reports that and passes.
   upgrade:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name != 'develop')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     services:
