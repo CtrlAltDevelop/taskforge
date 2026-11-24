@@ -1,9 +1,17 @@
 name: Pages
 
 # Publishes the static landing page (landing/) to GitHub Pages. No separate
-# branch: the page is built from main whenever it changes.
+# branch. It runs when main changes and on pull requests into main, so a PR
+# shows its landing page on the live site (there is one Pages site, so the
+# newest deploy wins). Needs the github-pages environment to allow
+# refs/pull/*/merge: see docs/landing-publishing.md.
 on:
   push:
+    branches: [main]
+    paths:
+      - "landing/**"
+      - ".github/workflows/pages.yml"
+  pull_request:
     branches: [main]
     paths:
       - "landing/**"
