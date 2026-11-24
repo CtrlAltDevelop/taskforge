@@ -59,7 +59,7 @@
   .table-scroll { overflow-x: auto; }
   .gallery { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
   .gallery figure { margin: 0; }
-  .gallery img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  .gallery img { width: 100%; max-height: 640px; object-fit: contain; object-position: top; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
   .gallery figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
   .phones { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
   .phones img { width: 220px; max-width: 45%; height: auto; border-radius: 24px; border: 1px solid var(--line); }
@@ -130,6 +130,8 @@
       <figure><img src="img/task-modal-light.png" alt="Task with comment" loading="lazy"><figcaption>Task and comments</figcaption></figure>
       <figure><img src="img/board-fa-rtl.png" alt="Board in Persian, right to left" loading="lazy"><figcaption>Persian, right to left</figcaption></figure>
       <figure><img src="img/macos-board.png" alt="Board on macOS" loading="lazy"><figcaption>macOS desktop</figcaption></figure>
+      <figure><img src="img/ipad-board.png" alt="Board on iPad" loading="lazy"><figcaption>iPad board</figcaption></figure>
+      <figure><img src="img/ipad-task.png" alt="Task with chat on iPad" loading="lazy"><figcaption>iPad task and chat</figcaption></figure>
     </div>
     <div class="phones">
       <img src="img/ios-home.png" alt="Home on iOS" loading="lazy">
