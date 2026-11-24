@@ -40,7 +40,7 @@ dependencies = [
   # Recurring tasks: RRULE expansion, and the time-zone database a slim image does not ship.
   "python-dateutil>=2.9,<3.0",
   "tzdata>=2024.1",
-  "strawberry-graphql-django>=0.88,<1.0",
+  "strawberry-graphql-django>=0.96.3,<1.0",
 ]
 
 [project.optional-dependencies]
