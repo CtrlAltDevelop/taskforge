@@ -252,22 +252,29 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: actions/download-artifact@v8
         with: { path: dist, merge-multiple: true }
-      - name: Changelog (commits since the previous tag, grouped by type)
+      - name: Release notes (the CHANGELOG.md section for this version, else commits grouped by type)
         run: |
-          PREV="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
-          RANGE="${PREV:+$PREV..}${GITHUB_REF_NAME}"
+          V="${{ needs.verify.outputs.version }}"
+          if grep -q "^## \[$V\]" CHANGELOG.md 2>/dev/null; then
+            awk -v v="$V" '$0 ~ "^## \\[" v "\\]" { on = 1 } on && /^\[[0-9]/ { exit } on { print }' CHANGELOG.md > RELEASE_NOTES.md
+          else
+            PREV="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
+            RANGE="${PREV:+$PREV..}${GITHUB_REF_NAME}"
+            {
+              echo "## ${GITHUB_REF_NAME}"; echo
+              for TYPE in add fix upgrade perf refactor remove security; do
+                LINES="$(git log --no-merges --pretty='- %s (%h)' "$RANGE" | grep -E "^- [^ ]+ ${TYPE}(\\(|:)" || true)"
+                [ -n "$LINES" ] && { echo "### ${TYPE}"; echo "$LINES"; echo; }
+              done
+            } > RELEASE_NOTES.md
+          fi
           {
-            echo "## ${GITHUB_REF_NAME}"; echo
-            for TYPE in add fix upgrade perf refactor remove security; do
-              LINES="$(git log --no-merges --pretty='- %s (%h)' "$RANGE" | grep -E "^- [^ ]+ ${TYPE}(\\(|:)" || true)"
-              [ -n "$LINES" ] && { echo "### ${TYPE}"; echo "$LINES"; echo; }
-            done
-            echo "### Docker"; echo
-            echo "    TASKFORGE_VERSION=${{ needs.verify.outputs.version }}"
+            echo; echo "### Docker"; echo
+            echo "    TASKFORGE_VERSION=$V"
             echo "Upgrade: see deploy/README.md. Older clients are refused only if DJANGO_MIN_CLIENT_VERSION is raised."
-          } > CHANGELOG.md
+          } >> RELEASE_NOTES.md
       - uses: softprops/action-gh-release@v2
         with:
-          body_path: CHANGELOG.md
+          body_path: RELEASE_NOTES.md
           files: dist/*
           prerelease: ${{ needs.verify.outputs.prerelease == 'true' }}
