@@ -96,7 +96,12 @@ class _AppFrameState extends ConsumerState<AppFrame>
       children: [
         TopBar(size: size, onMenu: size == ScreenSize.medium ? toggle : null),
         Expanded(
-          child: FadeTransition(opacity: _fade, child: widget.child),
+          // The top bar already took the status-bar inset.
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: FadeTransition(opacity: _fade, child: widget.child),
+          ),
         ),
       ],
     );
