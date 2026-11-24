@@ -180,6 +180,13 @@ jobs:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with: { channel: "${{ env.FLUTTER_CHANNEL }}", cache: true }
+      - name: Build without the maintainer's Apple team (ad-hoc signed; the Xcode project names a personal team)
+        run: |
+          P=app/macos/Runner.xcodeproj/project.pbxproj
+          sed -i '' -e '/DEVELOPMENT_TEAM = /d' \
+            -e 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/' \
+            -e 's/"CODE_SIGN_IDENTITY\[sdk=macosx\*\]" = "Apple Development";/"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";/' "$P"
+          ! grep -q "Apple Development\|DEVELOPMENT_TEAM" "$P"
       - run: |
           V="${{ needs.verify.outputs.version }}"
           cd app && flutter pub get
