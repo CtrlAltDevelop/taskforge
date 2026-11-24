@@ -5,7 +5,7 @@
 # Flutter is cloned at an exact tag (the prebuilt images lag behind the SDK range in
 # app/pubspec.yaml); keep FLUTTER_VERSION in step with it.
 FROM debian:bookworm-slim AS build
-ARG FLUTTER_VERSION=3.47.9
+ARG FLUTTER_VERSION=3.50.0
 RUN apt-get update && apt-get install -y --no-install-recommends git curl ca-certificates unzip xz-utils \
  && rm -rf /var/lib/apt/lists/* \
  && git clone --depth 1 --branch ${FLUTTER_VERSION} https://github.com/flutter/flutter.git /flutter
